@@ -73,7 +73,7 @@ importers:
         version: 4.16.7(@types/node@20.12.7)(rollup@4.24.0)(sass@1.77.7)(typescript@5.6.3)
       camera-controls:
         specifier: ^2.8.5
-        version: 2.8.5(three@0.170.0)
+        version: 2.8.5(three@0.171.0)
       gl-noise:
         specifier: ^1.6.1
         version: 1.6.1
@@ -97,7 +97,7 @@ importers:
         version: 10.16.0
       three-custom-shader-material:
         specifier: ^6.1.1
-        version: 6.1.1(react@18.2.0)(three@0.170.0)
+        version: 6.1.1(react@18.2.0)(three@0.171.0)
     devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.14.0
@@ -110,13 +110,13 @@ importers:
         version: 3.2.0
       '@lumaai/luma-web':
         specifier: ^0.1.15
-        version: 0.1.15(@types/three@0.169.0)(three@0.170.0)
+        version: 0.1.15(@types/three@0.171.0)(three@0.171.0)
       '@macfja/svelte-persistent-store':
         specifier: ^2.2.1
         version: 2.2.1(svelte@5.1.10)
       '@pmndrs/vanilla':
         specifier: ^1.14.1
-        version: 1.14.1(three@0.170.0)
+        version: 1.14.1(three@0.171.0)
       '@stackblitz/sdk':
         specifier: ^1.8.2
         version: 1.8.2
@@ -154,8 +154,8 @@ importers:
         specifier: ^3.1.7
         version: 3.1.7
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@types/three-nebula':
         specifier: ^10.0.4
         version: 10.0.4
@@ -185,7 +185,7 @@ importers:
         version: 3.0.1
       postprocessing:
         specifier: ^6.36.3
-        version: 6.36.3(three@0.170.0)
+        version: 6.36.3(three@0.171.0)
       rehype-autolink-headings:
         specifier: ^7.1.0
         version: 7.1.0
@@ -229,14 +229,14 @@ importers:
         specifier: ^3.4.4
         version: 3.4.4(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3))
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       three-mesh-bvh:
         specifier: ^0.7.5
-        version: 0.7.5(three@0.170.0)
+        version: 0.7.5(three@0.171.0)
       three.quarks:
         specifier: ^0.15.0
-        version: 0.15.0(three@0.170.0)
+        version: 0.15.0(three@0.171.0)
       tsx:
         specifier: ^3.13.0
         version: 3.13.0
@@ -266,8 +266,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.6.3))(eslint@8.57.0)(typescript@5.6.3)
@@ -311,8 +311,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.10)(typescript@5.6.3)
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -379,22 +379,22 @@ importers:
     dependencies:
       '@threejs-kit/instanced-sprite-mesh':
         specifier: ^2.5.0
-        version: 2.5.0(@types/three@0.169.0)(three@0.170.0)
+        version: 2.5.0(@types/three@0.171.0)(three@0.171.0)
       camera-controls:
         specifier: ^2.9.0
-        version: 2.9.0(three@0.170.0)
+        version: 2.9.0(three@0.171.0)
       three-mesh-bvh:
         specifier: ^0.7.4
-        version: 0.7.4(three@0.170.0)
+        version: 0.7.4(three@0.171.0)
       three-perf:
         specifier: github:jerzakm/three-perf#three-kit-threlte-fork
-        version: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.170.0)
+        version: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.171.0)
       three-viewport-gizmo:
         specifier: ^2.0.2
-        version: 2.0.2(three@0.170.0)
+        version: 2.0.2(three@0.171.0)
       troika-three-text:
         specifier: ^0.50.3
-        version: 0.50.3(three@0.170.0)
+        version: 0.50.3(three@0.171.0)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.3.1
@@ -418,8 +418,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.6.3))(eslint@8.57.0)(typescript@5.6.3)
@@ -463,8 +463,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.10)(typescript@5.6.3)
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -509,8 +509,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.6.3))(eslint@9.0.0)(typescript@5.6.3)
@@ -554,8 +554,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.10)(typescript@5.6.3)
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -660,8 +660,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@8.57.0)(typescript@5.6.3))(eslint@8.57.0)(typescript@5.6.3)
@@ -705,8 +705,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.10)(typescript@5.6.3)
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -733,7 +733,7 @@ importers:
         version: 0.3.0(tweakpane@4.0.3)
       camera-controls:
         specifier: ^2.9.0
-        version: 2.9.0(three@0.170.0)
+        version: 2.9.0(three@0.171.0)
       estree-walker:
         specifier: ^3.0.3
         version: 3.0.3
@@ -784,8 +784,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.4.5))(eslint@9.0.0)(typescript@5.4.5)
@@ -832,8 +832,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.10(svelte@5.1.10)(typescript@5.4.5)
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -878,8 +878,8 @@ importers:
         specifier: ^20.12.7
         version: 20.12.7
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.6.3))(eslint@9.0.0)(typescript@5.6.3)
@@ -923,8 +923,8 @@ importers:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.1.10)(typescript@5.6.3)
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -956,8 +956,8 @@ importers:
         specifier: workspace:*
         version: link:../core
       '@types/three':
-        specifier: ^0.169.0
-        version: 0.169.0
+        specifier: ^0.171.0
+        version: 0.171.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.6.0
         version: 7.6.0(@typescript-eslint/parser@7.6.0(eslint@9.0.0)(typescript@5.6.3))(eslint@9.0.0)(typescript@5.6.3)
@@ -986,8 +986,8 @@ importers:
         specifier: ^3.6.9
         version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.1.10)
       three:
-        specifier: ^0.170.0
-        version: 0.170.0
+        specifier: ^0.171.0
+        version: 0.171.0
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -3060,8 +3060,8 @@ packages:
   '@types/three-nebula@10.0.4':
     resolution: {integrity: sha512-EPecFcF13FP/Ltj9qjRzRh6BCGAzJhTf1OQcA7OBny7lD5rT82lmCSBlEPtqL5TELM5lLPgZEcHRj5Z/3uilFA==}
 
-  '@types/three@0.169.0':
-    resolution: {integrity: sha512-oan7qCgJBt03wIaK+4xPWclYRPG9wzcg7Z2f5T8xYTNEF95kh0t0lklxLLYBDo7gQiGLYzE6iF4ta7nXF2bcsw==}
+  '@types/three@0.171.0':
+    resolution: {integrity: sha512-oLuT1SAsT+CUg/wxUTFHo0K3NtJLnx9sJhZWQJp/0uXqFpzSk1hRHmvWvpaAWSfvx2db0lVKZ5/wV0I0isD2mQ==}
 
   '@types/unist@2.0.7':
     resolution: {integrity: sha512-cputDpIbFgLUaGQn6Vqg3/YsJwxUwHLO13v3i5ouxT4lat0khip9AEWxtERujXV9wxIB1EyF97BSJFt6vpdI8g==}
@@ -7565,8 +7565,8 @@ packages:
   three@0.122.0:
     resolution: {integrity: sha512-bgYMo0WdaQhf7DhLE8OSNN/rVFO5J4K1A2VeeKqoV4MjjuHjfCP6xLpg8Xedhns7NlEnN3sZ6VJROq19Qyl6Sg==}
 
-  three@0.170.0:
-    resolution: {integrity: sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==}
+  three@0.171.0:
+    resolution: {integrity: sha512-Y/lAXPaKZPcEdkKjh0JOAHVv8OOnv/NDJqm0wjfCzyQmfKxV7zvkwsnBgPBKTzJHToSOhRGQAGbPJObT59B/PQ==}
 
   through2@0.6.5:
     resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
@@ -9690,10 +9690,10 @@ snapshots:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
 
-  '@lumaai/luma-web@0.1.15(@types/three@0.169.0)(three@0.170.0)':
+  '@lumaai/luma-web@0.1.15(@types/three@0.171.0)(three@0.171.0)':
     dependencies:
-      '@types/three': 0.169.0
-      three: 0.170.0
+      '@types/three': 0.171.0
+      three: 0.171.0
 
   '@macfja/serializer@1.1.2': {}
 
@@ -9873,10 +9873,10 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@pmndrs/vanilla@1.14.1(three@0.170.0)':
+  '@pmndrs/vanilla@1.14.1(three@0.171.0)':
     dependencies:
-      three: 0.170.0
-      troika-three-text: 0.47.2(three@0.170.0)
+      three: 0.171.0
+      troika-three-text: 0.47.2(three@0.171.0)
 
   '@polka/url@1.0.0-next.24': {}
 
@@ -10418,14 +10418,14 @@ snapshots:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
-  '@threejs-kit/instanced-sprite-mesh@2.5.0(@types/three@0.169.0)(three@0.170.0)':
+  '@threejs-kit/instanced-sprite-mesh@2.5.0(@types/three@0.171.0)(three@0.171.0)':
     dependencies:
       diet-sprite: 0.0.1
       earcut: 2.2.4
-      maath: 0.10.7(@types/three@0.169.0)(three@0.170.0)
-      three: 0.170.0
-      three-instanced-uniforms-mesh: 0.52.0(three@0.170.0)
-      troika-three-utils: 0.52.0(three@0.170.0)
+      maath: 0.10.7(@types/three@0.171.0)(three@0.171.0)
+      three: 0.171.0
+      three-instanced-uniforms-mesh: 0.52.0(three@0.171.0)
+      troika-three-utils: 0.52.0(three@0.171.0)
     transitivePeerDependencies:
       - '@types/three'
 
@@ -10581,9 +10581,9 @@ snapshots:
 
   '@types/three-nebula@10.0.4':
     dependencies:
-      '@types/three': 0.169.0
+      '@types/three': 0.171.0
 
-  '@types/three@0.169.0':
+  '@types/three@0.171.0':
     dependencies:
       '@tweenjs/tween.js': 23.1.3
       '@types/stats.js': 0.17.0
@@ -11357,13 +11357,13 @@ snapshots:
 
   camelcase@8.0.0: {}
 
-  camera-controls@2.8.5(three@0.170.0):
+  camera-controls@2.8.5(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
-  camera-controls@2.9.0(three@0.170.0):
+  camera-controls@2.9.0(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
   caniuse-lite@1.0.30001579: {}
 
@@ -13577,10 +13577,10 @@ snapshots:
     dependencies:
       react: 18.2.0
 
-  maath@0.10.7(@types/three@0.169.0)(three@0.170.0):
+  maath@0.10.7(@types/three@0.171.0)(three@0.171.0):
     dependencies:
-      '@types/three': 0.169.0
-      three: 0.170.0
+      '@types/three': 0.171.0
+      three: 0.171.0
 
   magic-string@0.26.7:
     dependencies:
@@ -15036,9 +15036,9 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postprocessing@6.36.3(three@0.170.0):
+  postprocessing@6.36.3(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
   potpack@1.0.2: {}
 
@@ -16376,29 +16376,29 @@ snapshots:
     dependencies:
       any-promise: 1.3.0
 
-  three-custom-shader-material@6.1.1(react@18.2.0)(three@0.170.0):
+  three-custom-shader-material@6.1.1(react@18.2.0)(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
     optionalDependencies:
       react: 18.2.0
 
-  three-instanced-uniforms-mesh@0.52.0(three@0.170.0):
+  three-instanced-uniforms-mesh@0.52.0(three@0.171.0):
     dependencies:
-      three: 0.170.0
-      troika-three-utils: 0.52.0(three@0.170.0)
+      three: 0.171.0
+      troika-three-utils: 0.52.0(three@0.171.0)
 
-  three-mesh-bvh@0.7.4(three@0.170.0):
+  three-mesh-bvh@0.7.4(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
-  three-mesh-bvh@0.7.5(three@0.170.0):
+  three-mesh-bvh@0.7.5(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
-  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.170.0):
+  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.171.0):
     dependencies:
-      three: 0.170.0
-      troika-three-text: 0.52.2(three@0.170.0)
+      three: 0.171.0
+      troika-three-text: 0.52.2(three@0.171.0)
       tweakpane: 3.1.10
 
   three-stdlib@2.21.8(three@0.122.0):
@@ -16416,18 +16416,18 @@ snapshots:
       three: 0.122.0
       zstddec: 0.0.2
 
-  three-viewport-gizmo@2.0.2(three@0.170.0):
+  three-viewport-gizmo@2.0.2(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
-  three.quarks@0.15.0(three@0.170.0):
+  three.quarks@0.15.0(three@0.171.0):
     dependencies:
       quarks.core: 0.15.0
-      three: 0.170.0
+      three: 0.171.0
 
   three@0.122.0: {}
 
-  three@0.170.0: {}
+  three@0.171.0: {}
 
   through2@0.6.5:
     dependencies:
@@ -16491,41 +16491,41 @@ snapshots:
 
   trim-newlines@4.0.2: {}
 
-  troika-three-text@0.47.2(three@0.170.0):
+  troika-three-text@0.47.2(three@0.171.0):
     dependencies:
       bidi-js: 1.0.2
-      three: 0.170.0
-      troika-three-utils: 0.47.2(three@0.170.0)
+      three: 0.171.0
+      troika-three-utils: 0.47.2(three@0.171.0)
       troika-worker-utils: 0.47.2
       webgl-sdf-generator: 1.1.1
 
-  troika-three-text@0.50.3(three@0.170.0):
+  troika-three-text@0.50.3(three@0.171.0):
     dependencies:
       bidi-js: 1.0.2
-      three: 0.170.0
-      troika-three-utils: 0.50.3(three@0.170.0)
+      three: 0.171.0
+      troika-three-utils: 0.50.3(three@0.171.0)
       troika-worker-utils: 0.50.0
       webgl-sdf-generator: 1.1.1
 
-  troika-three-text@0.52.2(three@0.170.0):
+  troika-three-text@0.52.2(three@0.171.0):
     dependencies:
       bidi-js: 1.0.2
-      three: 0.170.0
-      troika-three-utils: 0.52.0(three@0.170.0)
+      three: 0.171.0
+      troika-three-utils: 0.52.0(three@0.171.0)
       troika-worker-utils: 0.52.0
       webgl-sdf-generator: 1.1.1
 
-  troika-three-utils@0.47.2(three@0.170.0):
+  troika-three-utils@0.47.2(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
-  troika-three-utils@0.50.3(three@0.170.0):
+  troika-three-utils@0.50.3(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
-  troika-three-utils@0.52.0(three@0.170.0):
+  troika-three-utils@0.52.0(three@0.171.0):
     dependencies:
-      three: 0.170.0
+      three: 0.171.0
 
   troika-worker-utils@0.47.2: {}
 
