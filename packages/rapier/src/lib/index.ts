@@ -2,6 +2,7 @@
 export { useRapier } from './hooks/useRapier'
 export { useCollisionGroups } from './hooks/useCollisionGroups'
 export { useRigidBody } from './hooks/useRigidBody'
+export { usePhysicsTask } from './hooks/usePhysicsTask'
 
 // Joints
 export { useRevoluteJoint } from './hooks/useRevoluteJoint'

@@ -7,10 +7,10 @@
     OrbitControls,
     type IntersectionEvent
   } from '@threlte/extras'
+  import { AutoColliders, Debug } from '@threlte/rapier'
   import { DoubleSide, type Vector3Tuple } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Rope from './Rope.svelte'
-  import { Debug, AutoColliders } from '@threlte/rapier'
 
   let { debug, damping, segments }: { debug: boolean; damping: number; segments: number } = $props()
 
@@ -19,6 +19,7 @@
   let ropeEnd = $state<Vector3Tuple>([0, 0, 0])
 
   const onpointermove = (e: IntersectionEvent<PointerEvent>) => {
+    e.point.x -= 0.2
     ropeEnd = e.point.toArray()
   }
 </script>
@@ -51,6 +52,16 @@
     color="#0A0F19"
     side={DoubleSide}
   />
+</T.Mesh>
+
+<T.Mesh position={[-5, 0, 0]}>
+  <T.SphereGeometry args={[0.2]} />
+  <T.MeshStandardMaterial color="#335086" />
+</T.Mesh>
+
+<T.Mesh position={ropeEnd}>
+  <T.SphereGeometry args={[0.2]} />
+  <T.MeshStandardMaterial color="#335086" />
 </T.Mesh>
 
 <AutoColliders shape="cuboid">
