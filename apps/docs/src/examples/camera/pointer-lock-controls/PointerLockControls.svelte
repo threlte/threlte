@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isInstanceOf, useParent, useThrelte, useDOM } from '@threlte/core'
+  import { isInstanceOf, useParent, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Euler } from 'three'
 
@@ -14,8 +14,7 @@
 
   let isLocked = false
 
-  const { invalidate } = useThrelte()
-  const { dom } = useDOM()
+  const { dom, invalidate } = useThrelte()
 
   const camera = useParent()
 

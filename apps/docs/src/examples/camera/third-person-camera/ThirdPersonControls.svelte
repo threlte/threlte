@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isInstanceOf, useDOM, useParent, useTask, useThrelte } from '@threlte/core'
+  import { isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import type { EventHandler } from 'svelte/elements'
   import { Quaternion, Vector2, Vector3 } from 'three'
@@ -34,8 +34,7 @@
   const axis = new Vector3(0, 1, 0)
   const rotationQuat = new Quaternion()
 
-  const { invalidate } = useThrelte()
-  const { dom } = useDOM()
+  const { dom, invalidate } = useThrelte()
 
   const camera = useParent()
 

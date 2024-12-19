@@ -25,6 +25,7 @@
     renderStage,
     renderer,
     canvas,
+    dom,
     scene: defaultScene,
     size
   } = useThrelte()
@@ -61,10 +62,10 @@
   $effect(() => {
     canvas.style.opacity = '0'
     const last = asciiEffect.domElement
-    canvas.parentNode?.appendChild(last)
+    dom.appendChild(last)
     return () => {
       canvas.style.opacity = '1'
-      canvas.parentNode?.removeChild(last)
+      dom.removeChild(last)
     }
   })
 

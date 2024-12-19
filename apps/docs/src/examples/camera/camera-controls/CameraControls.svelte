@@ -2,7 +2,7 @@
   module
   lang="ts"
 >
-  import { T, useTask, useParent, useThrelte, useDOM, type Props } from '@threlte/core'
+  import { T, useTask, useParent, useThrelte, type Props } from '@threlte/core'
   import {
     Box3,
     Matrix4,
@@ -48,13 +48,12 @@
   }: CameraControlsProps = $props()
 
   const parent = useParent()
-  const { dom } = useDOM()
 
   if (!$parent) {
     throw new Error('CameraControls must be a child of a ThreeJS camera')
   }
 
-  const { invalidate } = useThrelte()
+  const { dom, invalidate } = useThrelte()
 
   const controls = new CameraControls($parent as PerspectiveCamera, dom)
 
