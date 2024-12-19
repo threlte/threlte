@@ -39,7 +39,7 @@ export type ThrelteUseTaskOptions = {
 }
 
 /**
- * Adds a handler to threltes unified render loop.∏
+ * Adds a handler to threltes unified render loop.
  *
  * `start` and `stop` functions are returned and the options allow setting the
  * handler to not start automatically.
