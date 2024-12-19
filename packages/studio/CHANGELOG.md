@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.25
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
 ## 0.1.0-next.24
 
 ### Patch Changes

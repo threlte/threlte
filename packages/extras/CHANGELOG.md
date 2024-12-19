@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.0.0-next.49
+
+### Patch Changes
+
+- 213026c: Fix RoundedBoxGeometry types
+- a257643: Update Svelte + Three.js deps
+
 ## 9.0.0-next.48
 
 ### Minor Changes
