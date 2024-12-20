@@ -6,8 +6,7 @@ name: 'interactivity'
 type: 'plugin'
 ---
 
-To add click, pointer and wheel events to your Threlte app, import the plugin `interactivity` from
-`'@threlte/extras'` and call it in your main scene component.
+To add click, pointer and wheel events to your Threlte app use the `interactivity` plugin.
 
 ```svelte title="Scene.svelte" {2,3}+
 <script>
@@ -16,7 +15,9 @@ To add click, pointer and wheel events to your Threlte app, import the plugin `i
 </script>
 ```
 
-All child components now receive events.
+<Example path="extras/interactivity" />
+
+All child components can now make use of the new events.
 
 ```svelte title="Scene.svelte" {7-9}+
 <script>

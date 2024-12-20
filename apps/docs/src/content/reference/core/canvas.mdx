@@ -82,16 +82,24 @@ The `<Canvas>` component is the root of your Threlte scene. It provides contexts
   type="tip"
   title="Structuring Your App"
 >
-
-Check out our [guide on structuring your
-app](/docs/learn/basics/app-structure) for a fail-safe app architecture recipe.
-
+  Check out our [guide on structuring your app](/docs/learn/basics/app-structure) for a fail-safe
+  app architecture recipe.
 </Tip>
 
-By default, the `<canvas>` element and the renderer will resize to fit the parent element whenever the window resizes. Provide the property `size` to set a fixed `<canvas>` size.
+By default, the `<canvas>` element and the renderer will resize to fit the parent
+element whenever the window resizes. Provide the property `size` to set a fixed
+`<canvas>` size.
 
 `<Canvas>` also provides a default camera, located at `{ z: 5 }`.
 
 If `renderMode` is set to `on-demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.<br />
 If `renderMode` is set to `always` a re-render is automatically scheduled every frame.<br />
 If `renderMode` is set to `manual` a re-render must manually be triggered with `useThrelte().advance()`.
+
+<Tip
+  type="note"
+  title="Events"
+>
+  It's recommended to use the `dom` element given from the `useThrelte` hook to add events to rather
+  than the `canvas`.
+</Tip>

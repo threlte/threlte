@@ -83,7 +83,7 @@
 
   visible = true
 
-  const { renderer, camera, scene, size } = useThrelte()
+  const { camera, scene, size, dom, canvas } = useThrelte()
 
   const group = new Group()
 
@@ -116,12 +116,12 @@
   $effect.pre(() => {
     if (occlude === 'blending') {
       activeOccludeInstances += 1
-      modifyCanvas(renderer.domElement, zIndexRange[0])
+      modifyCanvas(canvas, zIndexRange[0])
     }
 
     return () => {
       activeOccludeInstances -= 1
-      modifyCanvas(renderer.domElement, zIndexRange[0])
+      modifyCanvas(canvas, zIndexRange[0])
     }
   })
 
@@ -274,7 +274,7 @@
   })
 
   const portalAction = (el: HTMLElement) => {
-    const target = portal ?? renderer.domElement.parentElement
+    const target = portal ?? dom
     if (!target) {
       console.warn('<HTML>: target is undefined.')
       return

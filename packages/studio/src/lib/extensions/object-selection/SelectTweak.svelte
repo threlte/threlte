@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useCanvas, useThrelte } from '@threlte/core'
+  import { useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import * as THREE from 'three'
   import { Raycaster } from 'three'
@@ -11,8 +11,7 @@
   const { clearSelection, selectObjects, toggleSelection } = useObjectSelection()
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
-  const { camera, scene } = useThrelte()
-  const { wrapper, size } = useCanvas()
+  const { camera, scene, dom, size } = useThrelte()
 
   const down = new THREE.Vector2()
   const up = new THREE.Vector2()
@@ -65,12 +64,12 @@
   }
 
   onMount(() => {
-    wrapper.addEventListener('pointerdown', recordDown)
-    wrapper.addEventListener('pointerup', raycast)
+    dom.addEventListener('pointerdown', recordDown)
+    dom.addEventListener('pointerup', raycast)
 
     return () => {
-      wrapper.removeEventListener('pointerdown', recordDown)
-      wrapper.removeEventListener('pointerup', raycast)
+      dom.removeEventListener('pointerdown', recordDown)
+      dom.removeEventListener('pointerup', raycast)
     }
   })
 </script>

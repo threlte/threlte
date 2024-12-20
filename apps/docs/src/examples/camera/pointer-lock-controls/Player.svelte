@@ -24,12 +24,12 @@
 
   const lockControls = () => lock()
 
-  const { renderer } = useThrelte()
+  const { dom } = useThrelte()
 
-  renderer.domElement.addEventListener('click', lockControls)
+  dom.addEventListener('click', lockControls)
 
   onDestroy(() => {
-    renderer.domElement.removeEventListener('click', lockControls)
+    dom.removeEventListener('click', lockControls)
   })
 
   useTask(() => {

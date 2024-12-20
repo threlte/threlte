@@ -36,7 +36,9 @@ toneMapping.set(THREE.LinearToneMapping)
 
 ```ts
 const {
-  size, // Readable<Size>
+  dom, // HTMLElement
+  size, // Readable<DOMRect>
+  canvas, // HTMLCanvasElement
   camera, // CurrentWritable<Camera>
   scene, // Scene
   dpr, // CurrentWritable<number>
