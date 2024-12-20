@@ -3,7 +3,7 @@ import { onDestroy } from 'svelte'
 import { get, writable, type Writable } from 'svelte/store'
 import type { LiteralUnion } from 'type-fest'
 
-type Cursor = LiteralUnion<
+type Style = LiteralUnion<
   | 'alias'
   | 'all-scroll'
   | 'auto'
@@ -42,9 +42,66 @@ type Cursor = LiteralUnion<
   string
 >
 
+export class Hovering {
+  #current = $state(false)
+  #hoverStyle = $state('pointer')
+  #unhoverStyle = $state('auto')
+  #element = $state(document.body)
+  constructor(
+    hoverStyle: Style = 'pointer',
+    unhoverStyle: Style = 'auto',
+    element = document.body
+  ) {
+    this.#hoverStyle = hoverStyle
+    this.#unhoverStyle = unhoverStyle
+    this.#element = element
+    $effect(() => {
+      if (this.#current) {
+        this.#element.style.cursor = this.#hoverStyle
+        return () => {
+          this.#element.style.cursor = this.#unhoverStyle
+        }
+      }
+    })
+  }
+
+  get current() {
+    return this.#current
+  }
+
+  static of(
+    hoverStyle: () => Style = () => 'pointer',
+    unhoverStyle: () => Style = () => 'auto',
+    element: () => HTMLElement = () => document.body
+  ) {
+    const hovering = new Hovering(hoverStyle(), unhoverStyle(), element())
+
+    $effect(() => {
+      hovering.#hoverStyle = hoverStyle()
+    })
+
+    $effect(() => {
+      hovering.#unhoverStyle = unhoverStyle()
+    })
+
+    $effect(() => {
+      hovering.#unhoverStyle = unhoverStyle()
+    })
+
+    return hovering
+  }
+
+  hover() {
+    this.#current = true
+  }
+  unhover() {
+    this.#current = false
+  }
+}
+
 export const useCursor = (
-  onPointerOver: Cursor | Writable<Cursor> = 'pointer',
-  onPointerOut: Cursor | Writable<Cursor> = 'auto',
+  onPointerOver: Style | Writable<Style> = 'pointer',
+  onPointerOut: Style | Writable<Style> = 'auto',
   target: HTMLElement | undefined = undefined
 ): {
   onPointerEnter: () => void
