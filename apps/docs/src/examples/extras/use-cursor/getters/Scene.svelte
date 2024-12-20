@@ -73,10 +73,11 @@
   textAlign="center"
   anchorX="center"
 />
+
 <Text
   text="click the box to cycle through all of the cursor styles"
   fontSize={0.5}
-  position.y={-2}
+  position.y={-1}
   maxWidth={5}
   textAlign="center"
   anchorX="center"
@@ -86,6 +87,7 @@
   scale={2}
   rotation.x={0.25 * Math.PI}
   rotation.y={0.25 * Math.PI}
+  position.y={0.5}
   onclick={() => {
     index = (index + 1) % hoverStyles.length
   }}

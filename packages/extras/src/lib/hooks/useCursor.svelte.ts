@@ -44,17 +44,18 @@ type Style = LiteralUnion<
 
 export class Hovering {
   #current = $state(false)
-  #hoverStyle = $state('pointer')
-  #unhoverStyle = $state('auto')
   #element = $state(document.body)
+  #hoverStyle: Style = $state('pointer')
+  #unhoverStyle: Style = $state('auto')
   constructor(
     hoverStyle: Style = 'pointer',
     unhoverStyle: Style = 'auto',
     element = document.body
   ) {
+    this.#element = element
     this.#hoverStyle = hoverStyle
     this.#unhoverStyle = unhoverStyle
-    this.#element = element
+
     $effect(() => {
       if (this.#current) {
         this.#element.style.cursor = this.#hoverStyle
@@ -94,6 +95,7 @@ export class Hovering {
   hover() {
     this.#current = true
   }
+
   unhover() {
     this.#current = false
   }
