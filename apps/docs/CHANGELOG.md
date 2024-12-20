@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.14.0-next.6
+
+### Patch Changes
+
+- 21271b8: fixes types in the MarchingCubes example and makes it a little less libraryish
+
 ## 0.14.0-next.5
 
 ### Patch Changes
