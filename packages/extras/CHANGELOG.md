@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.50
+
+### Minor Changes
+
+- 6ead49a: Added new View component. Adjusted core and other components to make use of the changes.
+
 ## 9.0.0-next.49
 
 ### Patch Changes
