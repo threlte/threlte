@@ -1,7 +1,6 @@
 <script lang="ts">
   import {
     currentWritable,
-    useTask,
     useThrelte,
     createCameraContext,
     createSceneContext,
@@ -10,18 +9,18 @@
     createDOMContext,
     type ThrelteContext
   } from '@threlte/core'
-  import { onMount, setContext } from 'svelte'
-  import { Color, Vector4 } from 'three'
+  import { setContext } from 'svelte'
   import type { ViewProps } from './types'
+  import InnerView from './InnerView.svelte'
 
   let { dom, children }: ViewProps = $props()
+  let isOffscreen = $state(false)
 
   const parentContext = useThrelte()
-  const { renderer, canvas, renderStage } = useThrelte()
   const { camera } = createCameraContext()
   const { scene } = createSceneContext()
-  // @ts-ignore The DOM element might not be their on creation. Can be assigned or re-assigned later
-  createDOMContext({ dom })
+  // @ts-ignore
+  createDOMContext({ dom, canvas: parentContext.canvas })
   createParentContext(scene)
   createParentObject3DContext(scene)
   // we also want to make a new context for the user context
@@ -40,86 +39,36 @@
     camera: viewContextOverrides.camera
   }
 
-  onMount(() => {
-    // Only render the view scene if it has children, otherwise render the
-    // default scene.
-    if (!viewContextOverrides.scene.children.length) {
-      viewContext.scene = parentContext.scene
-      viewContext.camera = parentContext.camera
-    }
-  })
+  // Only render the view scene if it has children, otherwise render the default scene.
+  if (!viewContextOverrides.scene.children.length) {
+    viewContext.scene = parentContext.scene
+    viewContext.camera = parentContext.camera
+  }
 
   setContext<ThrelteContext>('threlte', viewContext)
 
-  const originalViewport = new Vector4()
-  const originalScissor = new Vector4()
-  let originalScissorTest: boolean
-  const clearColor = new Color()
+  $effect(() => {
+    if (dom) {
+      // If we don't recreate the context then we the resizeObserver has no target
+      createDOMContext({ dom, canvas: parentContext.canvas })
+      // We'll add a intersection observer so the innerView doesn't waste effort rendering things offscreen
+      const observer = new IntersectionObserver((entries) => {
+        for (const entry of entries) {
+          isOffscreen = !entry.isIntersecting
+        }
+      })
 
-  function computeContainerPosition(
-    canvas: HTMLCanvasElement,
-    trackingElement: HTMLElement
-  ): {
-    position: { left: number; width: number; bottom: number; height: number }
-    isOffscreen: boolean
-  } {
-    const trackRect = trackingElement.getBoundingClientRect()
-    const canvasRect = canvas.getBoundingClientRect()
-    const { right, top, left: trackLeft, bottom: trackBottom, width, height } = trackRect
+      observer.observe(dom)
 
-    const isOffscreen =
-      trackRect.bottom < 0 ||
-      top > canvasRect.height ||
-      right < 0 ||
-      trackRect.left > canvasRect.width
-
-    const canvasBottom = canvasRect.top + canvasRect.height
-    const bottom = canvasBottom - trackBottom
-    const left = trackLeft - canvasRect.left
-
-    return { position: { width, height, left, bottom }, isOffscreen }
-  }
-
-  useTask(
-    () => {
-      if (!dom) return
-      const {
-        position: { left, bottom, width, height },
-        isOffscreen
-      } = computeContainerPosition(canvas, dom)
-
-      if (viewContext.size.current.width !== width || viewContext.size.current.height !== height) {
-        viewContext.size.current = dom.getBoundingClientRect()
+      return () => {
+        observer.disconnect()
       }
-
-      // save original state
-      renderer.getScissor(originalScissor)
-      renderer.getViewport(originalViewport)
-      originalScissorTest = renderer.getScissorTest()
-
-      // apply scissor
-      renderer.setViewport(left, bottom, width, height)
-      renderer.setScissor(left, bottom, width, height)
-      renderer.setScissorTest(true)
-
-      // render or clear depending on offscreen status
-      if (isOffscreen) {
-        renderer.getClearColor(clearColor)
-        renderer.setClearColor(clearColor, renderer.getClearAlpha())
-        renderer.clear(true, true)
-      } else {
-        renderer.render(viewContext.scene, viewContext.camera.current)
-      }
-
-      // reset state
-      renderer.setViewport(originalViewport)
-      renderer.setScissor(originalScissor)
-      renderer.setScissorTest(originalScissorTest)
-    },
-    {
-      stage: renderStage
     }
-  )
+  })
 </script>
 
-{@render children?.()}
+{#if dom}
+  <InnerView {isOffscreen}>
+    {@render children?.()}
+  </InnerView>
+{/if}
