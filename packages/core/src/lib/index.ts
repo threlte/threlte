@@ -41,6 +41,7 @@ export { createParentObject3DContext, useParentObject3D } from './context/fragme
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte'
 export { createSceneContext, useScene } from './context/fragments/scene'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte'
+export { createUserContext } from './context/fragments/user'
 
 // utils
 export * from './utilities'
