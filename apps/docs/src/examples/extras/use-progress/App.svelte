@@ -1,21 +1,18 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { useProgress } from '@threlte/extras'
-  import { tweened } from 'svelte/motion'
+  import { Progress } from '@threlte/extras'
+  import { Tween } from 'svelte/motion'
   import { fade } from 'svelte/transition'
   import Scene from './Scene.svelte'
 
-  const { progress } = useProgress()
-
-  const tweenedProgress = tweened($progress, {
-    duration: 150
-  })
-  $: tweenedProgress.set($progress)
+  const progress = new Progress()
+  const tween = new Tween.of(() => progress.progress, { duration: 150 })
+  const width = $derived(tween.current * 100)
 </script>
 
-{#if $tweenedProgress < 1}
+{#if tween.current < 1}
   <div
-    transition:fade|local={{
+    transition:fade={{
       duration: 200
     }}
     class="wrapper"
@@ -24,13 +21,13 @@
     <div class="bar-wrapper">
       <div
         class="bar"
-        style="width: {$tweenedProgress * 100}%"
+        style="width: {width}%"
       ></div>
     </div>
   </div>
 {/if}
 
-<div class="main">
+<div class="h-full">
   <Canvas>
     <Scene />
   </Canvas>
