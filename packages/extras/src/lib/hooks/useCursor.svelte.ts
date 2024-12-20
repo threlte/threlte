@@ -74,7 +74,7 @@ export class Hovering {
     unhoverStyle: () => Style = () => 'auto',
     element: () => HTMLElement = () => document.body
   ) {
-    const hovering = new Hovering(hoverStyle(), unhoverStyle(), element())
+    const hovering = new Hovering()
 
     $effect(() => {
       hovering.#hoverStyle = hoverStyle()
@@ -85,7 +85,7 @@ export class Hovering {
     })
 
     $effect(() => {
-      hovering.#unhoverStyle = unhoverStyle()
+      hovering.#element = element()
     })
 
     return hovering
