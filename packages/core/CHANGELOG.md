@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.37
+
+### Major Changes
+
+- 6ead49a: Added new View component. Adjusted core and other components to make use of the changes.
+
 ## 8.0.0-next.36
 
 ### Patch Changes
