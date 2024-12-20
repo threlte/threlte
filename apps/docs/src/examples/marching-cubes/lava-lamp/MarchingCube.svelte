@@ -4,14 +4,13 @@
 
   import type { MarchingCubeProps } from './types'
 
-  let { ref = $bindable(), children, ...props }: MarchingCubeProps = $props()
+  let { children, ...props }: MarchingCubeProps = $props()
 
   const cube = new MarchingCube()
 </script>
 
 <T
   is={cube}
-  bind:ref
   {...props}
 >
   {@render children?.({ ref: cube })}

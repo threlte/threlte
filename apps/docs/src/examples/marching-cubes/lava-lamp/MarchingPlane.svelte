@@ -5,14 +5,13 @@
 
   type MarchingPlaneProps = Props<MarchingPlane>
 
-  let { ref = $bindable(), children, ...props }: MarchingPlaneProps = $props()
+  let { children, ...props }: MarchingPlaneProps = $props()
 
   const plane = new MarchingPlane()
 </script>
 
 <T
   is={plane}
-  bind:ref
   {...props}
 >
   {@render children?.({ ref: plane })}

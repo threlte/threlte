@@ -2,7 +2,7 @@
   import MarchingCube from './MarchingCube.svelte'
   import MarchingCubes from './MarchingCubes.svelte'
   import MarchingPlane from './MarchingPlane.svelte'
-  import type { MarchingPlaneAxis } from './MarchingPlane'
+  import type { MarchingPlaneAxis } from './types'
   import { Color, Vector2 } from 'three'
   import { OrbitControls } from '@threlte/extras'
   import { T, useTask } from '@threlte/core'
