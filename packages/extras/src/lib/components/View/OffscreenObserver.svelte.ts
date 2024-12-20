@@ -1,5 +1,4 @@
 import { observe } from '@threlte/core'
-import { untrack } from 'svelte'
 
 export class OffscreenObserver {
   isOffscreen = $state(false)
@@ -10,13 +9,15 @@ export class OffscreenObserver {
       ([element]) => {
         const observer = new IntersectionObserver((entries) => {
           for (const entry of entries) {
-            untrack(() => {
-              this.isOffscreen = !entry.isIntersecting
-            })
+            this.isOffscreen = !entry.isIntersecting
           }
         })
 
         observer.observe(element)
+
+        return () => {
+          observer.disconnect()
+        }
       }
     )
   }
