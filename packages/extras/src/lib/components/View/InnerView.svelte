@@ -1,19 +1,43 @@
 <script lang="ts">
-  import { useTask, useThrelte } from '@threlte/core'
-  import { Color, Vector4 } from 'three'
+  import {
+    createCacheContext,
+    createCameraContext,
+    createDOMContext,
+    createParentContext,
+    createParentObject3DContext,
+    createSceneContext,
+    createUserContext,
+    useTask,
+    useThrelte
+  } from '@threlte/core'
+  import type { Snippet } from 'svelte'
+  import { Vector4 } from 'three'
+  import { OffscreenObserver } from './OffscreenObserver.svelte'
 
-  let { isOffscreen = false, children } = $props()
+  let { dom, children }: { dom: HTMLElement; children: Snippet<[]> } = $props()
 
-  const { renderer, renderStage, scene, camera, canvas, dom } = useThrelte()
+  const offscreenObserver = new OffscreenObserver(() => dom)
+
+  const parentContext = useThrelte()
+
+  createDOMContext({ dom, canvas: parentContext.canvas })
+  createCacheContext()
+  const { scene } = createSceneContext()
+  createParentContext(scene)
+  createParentObject3DContext(scene)
+  const { camera } = createCameraContext()
+  createUserContext()
+
+  const { renderer, renderStage, canvas } = useThrelte()
 
   const originalViewport = new Vector4()
   const originalScissor = new Vector4()
   let originalScissorTest: boolean
-  const clearColor = new Color()
 
-  useTask(
+  const { start, stop } = useTask(
+    Symbol('<View>'),
     () => {
-      if (isOffscreen) return
+      if (offscreenObserver.isOffscreen) return
 
       const { left: trackLeft, bottom: trackBottom, width, height } = dom.getBoundingClientRect()
       const { bottom: canvasBottom, left: canvasLeft } = canvas.getBoundingClientRect()
@@ -30,14 +54,8 @@
       renderer.setScissor(left, bottom, width, height)
       renderer.setScissorTest(true)
 
-      // render or clear depending on offscreen status
-      if (isOffscreen) {
-        renderer.getClearColor(clearColor)
-        renderer.setClearColor(clearColor, renderer.getClearAlpha())
-        renderer.clear(true, true)
-      } else {
-        renderer.render(scene, camera.current)
-      }
+      // render
+      renderer.render(scene, camera.current)
 
       // reset state
       renderer.setViewport(originalViewport)
@@ -45,9 +63,19 @@
       renderer.setScissorTest(originalScissorTest)
     },
     {
-      stage: renderStage
+      stage: renderStage,
+      autoStart: false,
+      autoInvalidate: false
     }
   )
+
+  $effect(() => {
+    if (offscreenObserver.isOffscreen) {
+      stop()
+    } else {
+      start()
+    }
+  })
 </script>
 
 {@render children?.()}

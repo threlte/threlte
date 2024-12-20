@@ -10,7 +10,7 @@
     // object.rotateOnAxis(rotationAxis, rotationAngle)
     idealOffset?: any
     idealLookAt?: any
-    change: EventHandler
+    change?: EventHandler
   }
 
   let {
@@ -148,20 +148,6 @@
         break
     }
   }
-  // if (object) {
-  // console.log(object)
-  // object.position.y = 10
-  // // Calculate the direction vector towards (0, 0, 0)
-  // const target = new Vector3(0, 0, 0)
-  // const direction = target.clone().sub(object.position).normalize()
-  // // Extract the forward direction from the object's current rotation matrix
-  // const currentDirection = new Vector3(0, 1, 0)
-  // currentDirection.applyQuaternion(object.quaternion)
-  // // Calculate the axis and angle to rotate the object
-  // const rotationAxis = currentDirection.clone().cross(direction).normalize()
-  // const rotationAngle = Math.acos(currentDirection.dot(direction))
-  // // Rotate the object using rotateOnAxis()
-  // }
 </script>
 
 <svelte:window

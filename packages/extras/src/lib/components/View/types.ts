@@ -7,6 +7,6 @@ export type ViewProps = {
   /**
    * The target dom element.
    */
-  dom: HTMLElement | undefined | null
+  dom: HTMLElement | undefined
   children: Snippet
 }

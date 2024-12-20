@@ -55,7 +55,7 @@ export const getInteractivityContext = () => {
 }
 
 export const setInteractivityContext = (options?: InteractivityOptions) => {
-  const target = currentWritable(options?.target ?? (useDOM().dom as HTMLElement))
+  const target = currentWritable(options?.target ?? useDOM().dom)
 
   const context: InteractivityContext = {
     enabled: currentWritable(options?.enabled ?? true),
