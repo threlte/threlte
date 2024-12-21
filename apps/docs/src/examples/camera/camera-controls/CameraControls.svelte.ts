@@ -1,4 +1,6 @@
+import { useTask, useThrelte } from '@threlte/core'
 import CC from 'camera-controls'
+import { onDestroy } from 'svelte'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 import {
   Box3,
@@ -12,10 +14,9 @@ import {
   Vector4
 } from 'three'
 
-export default class CameraControls {
+export default class CameraControls extends CC {
   static installed = false
-  controls: CC
-  constructor(camera: OrthographicCamera | PerspectiveCamera, getElement: () => HTMLElement) {
+  constructor(camera: OrthographicCamera | PerspectiveCamera, element: HTMLElement) {
     if (!CameraControls.installed) {
       CC.install({
         THREE: {
@@ -33,13 +34,23 @@ export default class CameraControls {
       CameraControls.installed = true
     }
 
-    this.controls = new CC(camera)
+    super(camera)
 
-    $effect(() => {
-      this.controls.connect(getElement())
-      return () => {
-        this.controls.disconnect()
-      }
+    const { invalidate } = useThrelte()
+
+    this.connect(element)
+
+    onDestroy(() => {
+      this.dispose()
     })
+
+    useTask(
+      (delta) => {
+        if (this.update(delta)) {
+          invalidate()
+        }
+      },
+      { autoInvalidate: false }
+    )
   }
 }

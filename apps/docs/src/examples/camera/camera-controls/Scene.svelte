@@ -1,12 +1,11 @@
 <script lang="ts">
-  import CC from 'camera-controls'
-  import CameraControls from './CameraControls.svelte'
+  import { T, useThrelte } from '@threlte/core'
   import { Grid } from '@threlte/extras'
+  import CC from 'camera-controls'
   import { Mesh, PerspectiveCamera } from 'three'
-  import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
-  import { fromStore } from 'svelte/store'
+  import CameraControls from './CameraControls.svelte'
 
-  const { camera: defaultCamera, dom, invalidate } = useThrelte()
+  const { dom } = useThrelte()
 
   type Props = {
     controls: CC
@@ -15,50 +14,31 @@
 
   let { controls = $bindable(), mesh }: Props = $props()
 
-  // controls can be attached and detached to different dom elements
-  const element = $state(dom)
-
-  const currentCamera = fromStore(defaultCamera).current
-  const camera =
-    isInstanceOf(currentCamera, 'PerspectiveCamera') ||
-    isInstanceOf(currentCamera, 'OrthographicCamera')
-      ? currentCamera
-      : new PerspectiveCamera()
-  camera.position.set(5, 5, 5)
-
-  // note that `camera` is not reactive
-  // `controls.camera = camera` doesn't do all the stuff that happens in the constructor.
-  controls = new CameraControls(camera, () => element).controls
-
-  const color = '#ff3e00'
-
-  useTask(
-    (delta) => {
-      if (controls.update(delta)) {
-        invalidate()
-      }
-    },
-    { autoInvalidate: false }
-  )
-
-  const y = 0.5
+  const camera = new PerspectiveCamera()
+  controls = new CameraControls(camera, dom)
+  controls.setPosition(5, 5, 5)
 </script>
+
+<T
+  is={camera}
+  makeDefault
+/>
 
 <T.DirectionalLight position={[3, 10, 7]} />
 
 <T
   is={mesh}
-  position.y={y}
+  position.y={0.5}
 >
   <T.BoxGeometry />
   <T.MeshBasicMaterial
-    {color}
+    color="#ff3e00"
     wireframe
   />
 </T>
 
 <Grid
-  sectionColor={color}
+  sectionColor="#ff3e00"
   sectionThickness={1}
   cellColor={'#cccccc'}
   gridSize={40}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
-  import type { CameraControls } from 'camera-controls'
+  import type CameraControls from './CameraControls.svelte'
   import { Button, Checkbox, Pane, Separator } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
@@ -132,7 +132,7 @@
   <Button
     title="saveState"
     on:click={() => {
-      controls?.saveState(true)
+      controls?.saveState()
     }}
   />
   <Separator />
