@@ -1,13 +1,12 @@
-You may have come up against limitations with `<OrbitalControls/>` from three.js. [Camera Controls](https://github.com/yomotsu/camera-controls) is an existing project which supports smooth transitions and has many more features.
+You may have come up against limitations with ThreeJS's `<OrbitalControls/>`. [Camera Controls](https://github.com/yomotsu/camera-controls) is an alternative which supports smooth transitions and a variety of features.
 
-The example below has a component with a basic implementation of camera-controls and functions equivelant to this [camera-controls doc example](https://yomotsu.github.io/camera-controls/examples/basic.html). Your project may need specific features in which case, [visit their docs](https://github.com/yomotsu/camera-controls) and adjust the component to suit.
+Thes example below demonstrates how to incorporate the camera controls library into threlte.
+
+<Example path="camera/camera-controls" />
+
+The only difference between the class in the example and the export from the camera controls library is that the example's `CameraControls` will automatically connect and disconnect to the dom element that is sent into its constructor. Although you can update the control's camera in the same way, it won't work as intended because there's a lot of setup involved in the constructor. It is possible but in order to do it you'd have to create a new CameraControls instance if you wanted to be sure that anytime the camera changed, the controls were updated to match.
 
 <Tip type="info">
   The camera-controls package features include first-person, third-person, pointer-lock,
   fit-to-bounding-sphere and much more!
 </Tip>
-
-<Example
-  path="camera/camera-controls"
-  iframe
-/>
