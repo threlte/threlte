@@ -7,14 +7,13 @@ into threlte.
 
 <Example path="camera/camera-controls" />
 
-The only difference between the class in the example and the export from the
-camera controls library is that the example's `CameraControls` will
-automatically connect and disconnect to the dom element that is sent into its
-constructor. Although you can update the control's camera in the same way, it
-won't work as intended because there's a lot of setup involved in the
-constructor. It is possible but in order to do it you'd have to create a new
-CameraControls instance if you wanted to be sure that anytime the camera
-changed, the controls were updated to match.
+The `CameraControls` class in the example _extends_ the camera controls library's
+`CameraControls` class.
+
+It automatically installs `camera-controls` if not already installed, connects
+and disconnects to the dom element that is sent into its constructor, updates
+the controls and potentially invalidates the scene and cleans up after itself
+when the component it is instantiated in is destroyed.
 
 <Tip type="info">
   The camera-controls package features include first-person, third-person, pointer-lock,
