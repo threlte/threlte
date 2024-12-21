@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.51
+
+### Patch Changes
+
+- 1a5d639: AutoInvalidate View components within their task as dom elements may move around
+
 ## 9.0.0-next.50
 
 ### Minor Changes
