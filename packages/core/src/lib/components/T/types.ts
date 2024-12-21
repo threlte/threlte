@@ -1,6 +1,5 @@
 import type { Snippet } from 'svelte'
 import type { Object3D } from 'three'
-import type { DisposableObject } from '../../context/fragments/disposal'
 
 /** Inlined from type-fest */
 type ConditionalKeys<Base, Condition> = {
@@ -56,6 +55,11 @@ export type AnyProps = Record<string, any>
  * ### Base Props
  */
 export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]> = {
+  /**
+   * If true, the object will be deeply disposed when the component unmounts.
+   */
+  dispose?: boolean
+
   attach?:
     | string
     | Object3D
@@ -66,21 +70,6 @@ export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstan
 
   oncreate?: CreateEvent<Type>
 }
-
-/**
- * ### Disposable Props
- */
-export type DisposableProps<Type> =
-  MaybeInstance<Type> extends DisposableObject
-    ? {
-        /**
-         * If true, the object will be deeply disposed when the component unmounts.
-         */
-        dispose?: boolean
-      }
-    : {
-        dispose?: never
-      }
 
 /**
  * ### Class Props
@@ -188,7 +177,6 @@ export type Props<
   Type,
   ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]
 > = AnyProps &
-  DisposableProps<Type> &
   RefProps<Type> &
   BaseProps<Type, ChildrenArgs> &
   ClassProps<Type> &
