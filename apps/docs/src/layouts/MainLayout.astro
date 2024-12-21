@@ -11,6 +11,8 @@ export interface Props {
 }
 
 const title = Astro.props.title
+
+const isBlog = Astro.url.pathname.startsWith('/blog')
 ---
 
 <AppLayout {title}>
@@ -44,6 +46,12 @@ const title = Astro.props.title
           class="hover:text-white"
           href="/docs/learn/getting-started/introduction"
           >Documentation</a
+        >
+        <a
+          class="hover:text-white"
+          class:list={[isBlog && 'text-orange']}
+          href="/blog"
+          >Blog</a
         >
       </nav>
     </div>
