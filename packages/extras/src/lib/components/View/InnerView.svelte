@@ -64,8 +64,7 @@
     },
     {
       stage: renderStage,
-      autoStart: false,
-      autoInvalidate: false
+      autoStart: false
     }
   )
 
