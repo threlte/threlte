@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.38
+
+### Patch Changes
+
+- 6a442b9: Allow dispose prop on every T instance
+
 ## 8.0.0-next.37
 
 ### Major Changes
