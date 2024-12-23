@@ -122,7 +122,7 @@ start()
 stop()
 
 // check if the task is started
-$: console.log($started)
+$inspect($started)
 ```
 
 ### `useTask` and On-Demand Rendering
@@ -263,8 +263,12 @@ effects using the library
   }
 
   // We need to set up the passes according to the camera in use
-  $: setupEffectComposer($camera)
-  $: composer.setSize($size.width, $size.height)
+  $effect(() => {
+    setupEffectComposer($camera)
+  })
+  $effect(() => {
+    composer.setSize($size.width, $size.height)
+  })
 
   const { renderStage, autoRender } = useThrelte()
 
