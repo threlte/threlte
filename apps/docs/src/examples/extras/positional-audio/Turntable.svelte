@@ -13,6 +13,7 @@
   } from 'three'
   import Button from './Button.svelte'
   import Disc from './Disc.svelte'
+  import type { TurntableProps } from './types'
 
   let discSpeed = tweened(0, {
     duration: 1e3
@@ -20,8 +21,7 @@
 
   let armPos = spring(0)
 
-  let started = false
-  export let isPlaying = false
+  let started = $state(false)
 
   export const toggle = async () => {
     if (!started) {
@@ -39,12 +39,14 @@
     }
   }
 
-  let audio: ThreePositionalAudio
+  let audio: ThreePositionalAudio = $state()
   const { context } = useAudioListener()
   const analyser = context.createAnalyser()
-  $: if (audio) audio.getOutput().connect(analyser)
+  $effect(() => {
+    if (audio) audio.getOutput().connect(analyser)
+  })
   const pcmData = new Float32Array(analyser.fftSize)
-  export let volume = 0
+  let { isPlaying = $bindable(false), volume = $bindable(0), ...rest }: TurntableProps = $props()
   useTask(() => {
     if (!audio) return
     analyser.getFloatTimeDomainData(pcmData)
@@ -57,17 +59,17 @@
 
   let sideA = '/audio/side_a.mp3'
   let sideB = '/audio/side_b.mp3'
-  let source = sideA
+  let source = $state(sideA)
   const changeSide = () => {
     source = source === sideA ? sideB : sideA
   }
 
-  let coverOpen = false
+  let coverOpen = $state(false)
   const coverAngle = spring(0)
-  $: {
+  $effect(() => {
     if (coverOpen) coverAngle.set(80)
     else coverAngle.set(0)
-  }
+  })
 
   const { onPointerEnter, onPointerLeave } = useCursor()
 
@@ -77,14 +79,16 @@
     }
     materials: {}
   }>('/models/turntable/cover.glb')
-  let coverGeometry: BufferGeometry | undefined
-  $: if ($gltf) {
-    const coverMesh = $gltf.nodes.Cover as Mesh
-    coverGeometry = coverMesh.geometry
-  }
+  let coverGeometry: BufferGeometry | undefined = $state()
+  $effect(() => {
+    if ($gltf) {
+      const coverMesh = $gltf.nodes.Cover as Mesh
+      coverGeometry = coverMesh.geometry
+    }
+  })
 </script>
 
-<T.Group {...$$restProps}>
+<T.Group {...rest}>
   <!-- DISC -->
   <Disc
     position.x={0.5}

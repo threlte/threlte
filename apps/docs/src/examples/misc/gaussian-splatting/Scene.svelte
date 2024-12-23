@@ -52,8 +52,8 @@
   position={[-1.48, -0.51, 2.15]}
   rotation.y={57 * DEG2RAD}
   scale={0.7}
-  bind:materials={gltfMaterials}
   url="/models/splat-example/porsche_959.glb"
+  bind:materials={gltfMaterials}
 />
 
 <T.PerspectiveCamera

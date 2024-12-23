@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { SpaceshipProps } from './Spaceship.svelte'
+  import type { SpaceshipProps } from './types'
   import { T } from '@threlte/core'
   import { useGltf, useSuspense } from '@threlte/extras'
 

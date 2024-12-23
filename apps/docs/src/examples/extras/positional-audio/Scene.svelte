@@ -6,16 +6,17 @@
   import Speaker from './Speaker.svelte'
   import Turntable from './Turntable.svelte'
 
-  let volume = 0
-  let isPlaying = false
+  let volume = $state(0)
+  let isPlaying = $state(false)
 
   const smoothVolume = spring(0)
-  $: smoothVolume.set(volume)
+  $effect(() => {
+    smoothVolume.set(volume)
+  })
 
   const { size } = useThrelte()
 
-  let zoom = $size.width / 18
-  $: zoom = $size.width / 18
+  let zoom = $derived($size.width / 18)
 
   interactivity({
     filter: (hits) => {
