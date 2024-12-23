@@ -14,25 +14,15 @@ export type CreateDOMContextOptions = {
 }
 
 export const createDOMContext = (options: CreateDOMContextOptions) => {
-  const domRect = options.dom.getBoundingClientRect()
-
-  let lastWidth = domRect.width
-  let lastHeight = domRect.height
-
-  const size = currentWritable(domRect)
+  const dom = options.dom
+  const size = currentWritable(dom.getBoundingClientRect())
 
   onMount(() => {
-    const resizeObserver = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const { width, height } = entry.contentRect
-        if (width === lastWidth && height === lastHeight) return
-        lastWidth = width
-        lastHeight = height
-        size.set(entry.contentRect)
-      }
+    const resizeObserver = new ResizeObserver(() => {
+      size.set(dom.getBoundingClientRect())
     })
 
-    resizeObserver.observe(options.dom)
+    resizeObserver.observe(dom)
 
     return () => {
       resizeObserver.disconnect()
@@ -40,7 +30,7 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
   })
 
   const context: DOMContext = {
-    dom: options.dom,
+    dom,
     canvas: options.canvas,
     size: toCurrentReadable(size)
   }
