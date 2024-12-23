@@ -51,6 +51,11 @@ function Search({ visible }: { visible: boolean }) {
               visible: false
             }}
             search={{
+              getTitle(ref) {
+                return ref.hierarchy.lvl1.replace(/&[lg]t;/g, (match) =>
+                  match === '&lt;' ? '<' : '>'
+                )
+              },
               enabled: true,
               provider: {
                 name: 'algolia',
