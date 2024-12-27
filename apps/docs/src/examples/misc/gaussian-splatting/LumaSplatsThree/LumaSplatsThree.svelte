@@ -16,7 +16,7 @@
     ...rest
   }: LumaSplatsThreeProps = $props()
 
-  const { invalidate, renderer, scene } = $state(useThrelte())
+  const { invalidate, renderer, scene } = useThrelte()
 
   const { remember } = useCache()
   const suspend = useSuspense()
