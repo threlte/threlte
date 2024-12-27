@@ -82,7 +82,7 @@
   let coverGeometry: BufferGeometry | undefined = $state()
   $effect(() => {
     if ($gltf) {
-      const coverMesh = $gltf.nodes.Cover as Mesh
+      const coverMesh = $gltf.nodes.Cover
       coverGeometry = coverMesh.geometry
     }
   })
