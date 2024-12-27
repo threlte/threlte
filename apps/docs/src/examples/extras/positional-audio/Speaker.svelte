@@ -4,13 +4,14 @@
   import { cubicIn, cubicOut } from 'svelte/easing'
   import { tweened } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import type { SpeakerProps } from './types'
 
-  export let volume: number = 0
+  let { volume = 0, ...rest }: SpeakerProps = $props()
 
   let jumpOffsetY = tweened(0)
   let jumpRotationX = tweened(0)
   let jumpRotationZ = tweened(0)
-  let isJumping = false
+  let isJumping = $state(false)
 
   const randomSign = () => Math.round(Math.random()) * 2 - 1
 
@@ -53,10 +54,12 @@
     }, upDuration)
   }
 
-  $: if (volume > 0.25 && !isJumping) jump()
+  $effect(() => {
+    if (volume > 0.25 && !isJumping) jump()
+  })
 </script>
 
-<T.Group {...$$restProps}>
+<T.Group {...rest}>
   <T.Group
     position.y={$jumpOffsetY}
     rotation.z={DEG2RAD * $jumpRotationZ}

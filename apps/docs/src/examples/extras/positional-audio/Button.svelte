@@ -3,19 +3,19 @@
   import { Edges, Text, useCursor } from '@threlte/extras'
   import { spring } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import type { ButtonProps } from './types'
 
-  export let text: string
-  export let onClick: () => void
+  let { text, onClick, ...rest }: ButtonProps = $props()
 
   const buttonOffsetY = spring(0)
 
-  let buttonColor = '#111111'
-  let textColor = '#eedbcb'
+  let buttonColor = $state('#111111')
+  let textColor = $state('#eedbcb')
 
   const { onPointerEnter, onPointerLeave } = useCursor()
 </script>
 
-<T.Group {...$$restProps}>
+<T.Group {...rest}>
   <T.Group position.y={0.05 - $buttonOffsetY}>
     <T.Mesh
       onclick={onClick}

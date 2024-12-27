@@ -9,8 +9,7 @@
 
   scene.background = new Color('black')
 
-  let zoom = $size.width / 50
-  $: zoom = $size.width / 50
+  let zoom = $derived($size.width / 50)
 </script>
 
 <T.OrthographicCamera
