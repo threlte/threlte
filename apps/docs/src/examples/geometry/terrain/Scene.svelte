@@ -19,15 +19,13 @@
 
   const noise = new SimplexNoise()
 
-  $effect(() => {
-    for (let i = 0; i < vertices.count; i += 1) {
-      const x = vertices.getX(i)
-      const y = vertices.getY(i)
-      vertices.setZ(i, noise.noise(x / flatness, y / flatness))
-    }
-    // needed for lighting
-    geometry.computeVertexNormals()
-  })
+  for (let i = 0; i < vertices.count; i += 1) {
+    const x = vertices.getX(i)
+    const y = vertices.getY(i)
+    vertices.setZ(i, noise.noise(x / flatness, y / flatness))
+  }
+  // needed for lighting
+  geometry.computeVertexNormals()
 </script>
 
 <Debug visible={showCollider} />
