@@ -1,5 +1,12 @@
 # @threlte/docs-next
 
+## 0.14.0-next.7
+
+### Patch Changes
+
+- 8c682f9: simplify camera controls example and turn it into a reactive class. update docs and note that `camera` is not reactive unless you want to create a new camera controls instance each time the camera updates
+- 612a2cb: converts the helmet example to svelte 5
+
 ## 0.14.0-next.6
 
 ### Patch Changes
