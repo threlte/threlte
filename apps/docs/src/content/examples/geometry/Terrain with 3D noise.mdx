@@ -1,13 +1,10 @@
 The key to creating "random" yet smooth terrain is using "noise".
 
-To create a terrain map, we want to be able to input the x and y coordinate , and return a height value.
-Therefore we want to utilise 2D noise, and this example uses the function `createNoise2D` from the package `simplex-noise`.
+To create a terrain map, we want to be able to input the x and y coordinate , and return a height value. To get the height we want to utilise 2D noise. There's a [SimplexNoise](https://github.com/mrdoob/three.js/blob/d24a6b48deae76f508af2b9870ae45340f68ba36/examples/jsm/math/SimplexNoise.js) class in the Three.js addons that produces noise values from an x and y inputs.
 
 <Example path="geometry/terrain" />
 
-### How is this done?
-
-In Scene.svelte:
+## How is this done?
 
 1. Create noise map
 
@@ -18,36 +15,21 @@ In Scene.svelte:
 `const geometry = new PlaneGeometry(10, 10, 100, 100)`
 
 <Tip type="tip">
-Reminder that planes are on their side by default!
-
-i.e. they extend in the x and y directions, and the z value of each vertex is 0
-
+  Plane geometries are defined in the xy-plane, to place it in the xz-plane, simply rotate the mesh
+  that uses the geometry.
 </Tip>
 
-3. Extract the "position" (vertices) array from the PlaneGeometry
-
-   `const geometry = geometry.getAttribute('position').array`
-
-4. Loop over the vertices, setting each `z` value, using our noise map
+3. Loop over the vertices, setting each `z` value, to the noise value.
 
 ```ts
-for (let i = 0; i < vertices.length; i += 3) {
-  const x = vertices[i]
-  const y = vertices[i + 1]
-  // @ts-ignore
-  vertices[i + 2] = noise(x / 4, y / 4)
+for (let i = 0; i < vertices.count; i += 1) {
+  const x = vertices.getX(i)
+  const y = vertices.getY(i)
+  vertices.setZ(i, noise(x / 4, y / 4))
 }
 ```
 
-<Tip type="tip">
-Why `i+=3`?
-
-The position array is a **flat** array of vertices, in the recurring format "x y z x y z..."
-So if we want to set each vertex's z value from it's x and y, we need to loop in triplets.
-
-</Tip>
-
-5. Attach the plane geometry to a mesh, and rotate
+4. Attach the plane geometry to a mesh, and rotate it so that the plane lies flat.
 
 ```svelte
 <T.Mesh
@@ -55,12 +37,3 @@ So if we want to set each vertex's z value from it's x and y, we need to loop in
 	rotation.x={DEG2RAD * -90}
 >
 ```
-
-<Tip type="tip">
-This example intentionally used only part of the noise map (the middle 25%), in order to generate gentler terrain.
-
-To "see" the noise map in full, change `noise(x/4, y/4)` to `noise(x, y)`.
-
-You'll see that the terrain is much more hilly!
-
-</Tip>

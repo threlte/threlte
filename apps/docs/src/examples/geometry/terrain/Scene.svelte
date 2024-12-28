@@ -1,29 +1,36 @@
 <script lang="ts">
-  import { PlaneGeometry } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { createNoise2D } from 'simplex-noise'
-  import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
   import { AutoColliders, Debug } from '@threlte/rapier'
-  import { showCollider, autoRotate } from './state'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { OrbitControls } from '@threlte/extras'
+  import { PlaneGeometry } from 'three'
+  import { SimplexNoise } from 'three/examples/jsm/Addons.js'
+  import { T } from '@threlte/core'
+
+  let {
+    autoRotate = false,
+    showCollider = false
+  }: { autoRotate?: boolean; showCollider?: boolean } = $props()
 
   const geometry = new PlaneGeometry(10, 10, 100, 100)
 
-  const noise = createNoise2D()
-  const vertices = geometry.getAttribute('position').array
+  const vertices = geometry.getAttribute('position')
 
-  for (let i = 0; i < vertices.length; i += 3) {
-    const x = vertices[i]
-    const y = vertices[i + 1]
-    // @ts-ignore
-    vertices[i + 2] = noise(x / 4, y / 4)
-  }
+  const flatness = 4
 
-  // needed for lighting
-  geometry.computeVertexNormals()
+  const noise = new SimplexNoise()
+
+  $effect(() => {
+    for (let i = 0; i < vertices.count; i += 1) {
+      const x = vertices.getX(i)
+      const y = vertices.getY(i)
+      vertices.setZ(i, noise.noise(x / flatness, y / flatness))
+    }
+    // needed for lighting
+    geometry.computeVertexNormals()
+  })
 </script>
 
-<Debug visible={$showCollider} />
+<Debug visible={showCollider} />
 
 <T.PerspectiveCamera
   makeDefault
@@ -32,8 +39,7 @@
   lookAt.y={2}
 >
   <OrbitControls
-    autoRotate={$autoRotate}
-    enableZoom={false}
+    {autoRotate}
     maxPolarAngle={DEG2RAD * 80}
   />
 </T.PerspectiveCamera>

@@ -4,21 +4,22 @@
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { OrbitControls } from '@threlte/extras'
   import { PlaneGeometry, Vector3 } from 'three'
+  import { SimplexNoise } from 'three/examples/jsm/Addons.js'
   import { T } from '@threlte/core'
   import { Tween } from 'svelte/motion'
-  import { createNoise2D } from 'simplex-noise'
   import { interactivity } from '@threlte/extras'
   import { quadOut } from 'svelte/easing'
 
   // Terrain setup
   const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
-  const noise = createNoise2D()
-  const vertices = geometry.getAttribute('position').array
-  for (let i = 0; i < vertices.length; i += 3) {
-    const x = vertices[i] ?? 0
-    const y = vertices[i + 1] ?? 0
-    vertices[i + 2] = noise(x / 5, y / 5) * 2 + noise(x / 40, y / 40) * 3
+  const noise = new SimplexNoise()
+
+  const vertices = geometry.getAttribute('position')
+  for (let i = 0; i < vertices.count; i += 1) {
+    const x = vertices.getX(i)
+    const y = vertices.getY(i)
+    vertices.setZ(i, noise.noise(x / 5, y / 5) * 2 + noise.noise(x / 40, y / 40) * 3)
   }
   geometry.computeVertexNormals()
 
