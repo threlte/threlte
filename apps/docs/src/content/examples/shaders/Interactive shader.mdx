@@ -68,7 +68,7 @@ Both `pulsePosition` and `pulseTimer` will be updated in the `onclick` event cal
 Configuring uniforms for our `ShaderMaterial` is straightforward and closely aligns with standard Three.js practices.
 To update the `pulseTimer` and `pulsePosition` uniform value, we'll use a pierced property: `uniforms.pulseTimer.value={pulseTimer.current}`.
 
-```svelte title="Scene.svelte" {2-8}+ {15-22}+ {27-35}+
+```svelte title="Scene.svelte" {2-8}+ {15-22}+ {28-37}+
 <script>
   import { Tween } from 'svelte/motion'
   import { quadOut } from 'svelte/easing'
