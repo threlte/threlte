@@ -1,15 +1,11 @@
 <script lang="ts">
-  import { AutoColliders, Debug } from '@threlte/rapier'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { OrbitControls } from '@threlte/extras'
   import { PlaneGeometry } from 'three'
   import { SimplexNoise } from 'three/examples/jsm/Addons.js'
   import { T } from '@threlte/core'
 
-  let {
-    autoRotate = false,
-    showCollider = false
-  }: { autoRotate?: boolean; showCollider?: boolean } = $props()
+  let { autoRotate = false }: { autoRotate?: boolean } = $props()
 
   const geometry = new PlaneGeometry(10, 10, 100, 100)
 
@@ -30,8 +26,6 @@
   })
 </script>
 
-<Debug visible={showCollider} />
-
 <T.PerspectiveCamera
   makeDefault
   position.y={5}
@@ -47,11 +41,9 @@
 <T.DirectionalLight position={[3, 10, 10]} />
 <T.HemisphereLight intensity={0.2} />
 
-<AutoColliders shape="trimesh">
-  <T.Mesh
-    {geometry}
-    rotation.x={DEG2RAD * -90}
-  >
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-</AutoColliders>
+<T.Mesh
+  {geometry}
+  rotation.x={DEG2RAD * -90}
+>
+  <T.MeshStandardMaterial />
+</T.Mesh>

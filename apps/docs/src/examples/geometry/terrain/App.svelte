@@ -5,20 +5,14 @@
   import { World } from '@threlte/rapier'
 
   let autoRotate = $state(true)
-  let showCollider = $state(false)
 </script>
 
 <Pane
-  title=""
+  title="3D noise terrain"
   position="fixed"
 >
   <Checkbox
-    label="Show Collider"
-    bind:value={showCollider}
-  />
-
-  <Checkbox
-    label="Auto Rotate"
+    label="Auto Rotate Camera"
     bind:value={autoRotate}
   />
 </Pane>
@@ -26,10 +20,7 @@
 <div>
   <Canvas>
     <World>
-      <Scene
-        {autoRotate}
-        {showCollider}
-      />
+      <Scene {autoRotate} />
     </World>
   </Canvas>
 </div>
