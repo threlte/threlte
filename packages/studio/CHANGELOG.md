@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.0-next.26
+
+### Patch Changes
+
+- 0f3dd0d: Use dom property of useThrelte context
+
 ## 0.1.0-next.25
 
 ### Patch Changes
