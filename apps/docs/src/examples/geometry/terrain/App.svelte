@@ -1,9 +1,11 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import { World } from '@threlte/rapier'
   import Scene from './Scene.svelte'
-  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
-  import { showCollider, autoRotate } from './state'
+  import { Canvas } from '@threlte/core'
+  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import { World } from '@threlte/rapier'
+
+  let autoRotate = $state(true)
+  let showCollider = $state(false)
 </script>
 
 <Pane
@@ -12,18 +14,22 @@
 >
   <Checkbox
     label="Show Collider"
-    bind:value={$showCollider}
+    bind:value={showCollider}
   />
+
   <Checkbox
-    label="AutoRotate"
-    bind:value={$autoRotate}
+    label="Auto Rotate"
+    bind:value={autoRotate}
   />
 </Pane>
 
 <div>
   <Canvas>
     <World>
-      <Scene />
+      <Scene
+        {autoRotate}
+        {showCollider}
+      />
     </World>
   </Canvas>
 </div>
