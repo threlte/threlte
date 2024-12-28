@@ -1,13 +1,20 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
+
+  let element: HTMLElement | undefined = $state()
 </script>
 
-<div id="css-renderer-target" />
+<div
+  id="css-renderer-target"
+  bind:this={element}
+/>
 
 <div id="main">
   <Canvas>
-    <Scene />
+    {#if element !== undefined}
+      <Scene {element} />
+    {/if}
   </Canvas>
 </div>
 
@@ -17,8 +24,8 @@
   }
   #css-renderer-target {
     left: 0;
-    position: absolute;
     pointer-events: none;
+    position: absolute;
     top: 0;
   }
 </style>

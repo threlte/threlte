@@ -3,7 +3,7 @@ import type { Box3, Group } from 'three'
 
 export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
   /**
-   * If true, will automatically resize when children or added or removed
+   * If true, will automatically resize when children are added or removed
    * @default false
    */
   auto?: boolean
