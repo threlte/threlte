@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { interactivity } from '@threlte/extras'
   import CursorLine from './CursorLine.svelte'
+  import { T } from '@threlte/core'
+  import type { Vector3Tuple } from 'three'
+  import { interactivity } from '@threlte/extras'
 
   interactivity()
 
-  let cursorPosition = { x: 0, z: 0 }
-  let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f9a', '#1e168d']
+  let cursorPosition: Vector3Tuple = $state.raw([0, 0, 0])
+  const colors = ['#fc6435', '#ff541f', '#f53c02', '#261f9a', '#1e168d']
 </script>
 
 {#each colors as color, i}
@@ -24,16 +25,18 @@
   zoom={50}
   makeDefault
   position.y={10}
-  oncreate={(ref) => ref.lookAt(0, 0, 0)}
+  oncreate={(ref) => {
+    ref.lookAt(0, 0, 0)
+  }}
 />
 
 <T.Mesh
   visible={false}
   onpointermove={(event) => {
-    cursorPosition.x = event.point.x
-    cursorPosition.z = event.point.z
+    cursorPosition = event.point.toArray()
   }}
+  scale={100}
+  rotation.x={-1 * 0.5 * Math.PI}
 >
-  <T.BoxGeometry args={[20, 0.1, 20]} />
-  <T.MeshBasicMaterial />
+  <T.PlaneGeometry />
 </T.Mesh>
