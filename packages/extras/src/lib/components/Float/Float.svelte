@@ -1,5 +1,6 @@
 <script lang="ts">
   import { MathUtils, Group } from 'three'
+  import type { Vector2Tuple } from 'three'
   import { useTask, T } from '@threlte/core'
   import type { FloatProps } from './types'
 
@@ -9,7 +10,7 @@
     floatingRange = [-0.1, 0.1],
     rotationSpeed = 0,
     rotationIntensity = 0,
-    seed = Math.random() * 10000,
+    seed = 10_000 * Math.random(),
     ref = $bindable(),
     children,
     ...props
@@ -28,7 +29,7 @@
       ? floatIntensity
       : [floatIntensity, floatIntensity, floatIntensity]
   )
-  let fRange: [x: [number, number], y: [number, number], z: [number, number]] = $derived(
+  let fRange: [x: Vector2Tuple, y: Vector2Tuple, z: Vector2Tuple] = $derived(
     floatingRange.length === 3 ? floatingRange : [[0, 0], floatingRange, [0, 0]]
   )
   // Rotation
