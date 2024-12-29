@@ -3,14 +3,6 @@
   import Scene from './Scene.svelte'
 </script>
 
-<div>
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div>
-
-<style>
-  div {
-    height: 100%;
-  }
-</style>
+<Canvas>
+  <Scene />
+</Canvas>

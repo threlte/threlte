@@ -1,12 +1,15 @@
-Here we use `<MeshLineGeometry>` and `<MeshLineMaterial>` to create a scene where a group of lines follow the cursor. Inspired by the <a href="https://oframe.github.io/ogl/examples/?src=polylines.html" target="_blank">OGL PolyLines example</a>.
+This example was inspired by [OGL's Polyline example](https://oframe.github.io/ogl/examples/?src=polylines.html) and used [`<MeshLineMaterial>`](/docs/reference/extras/meshline-material) and [`<MeshLineGeometry>`](/docs/reference/extras/meshline-geometry) to create a similar effect. Notethis effect is probably better suited for the fragment shader but
+
+<Tip type="tip">
+  This effect is probably better implemented as a fragment shader but the example highlights some
+  interesting and effective techniques for various threlte components and functions.
+</Tip>
 
 <Example path="meshline/cursor-lines" />
 
-## How does it work?
+## How Does it Work?
 
-First we create a scene with an OrthographicCamera and a Mesh that will act as our background.
-We move the camera up in the Y axis and use the lookAt property to point the camera back down at the Mesh.
-We use a BoxGeometry large enough in the X and Z axis to fill the screen.
+First we create a scene with an orthographic camera and a mesh. The mesh's only purpose is to capture pointer move events so it needs to be big enough to fill the entire screen. The camera is placed above the mesh and is rotated to look down upon the mesh using the `lookAt` property.
 
 ```svelte
 <T.OrthographicCamera
@@ -14,144 +17,92 @@ We use a BoxGeometry large enough in the X and Z axis to fill the screen.
   makeDefault
   position.y={10}
   oncreate={(ref) => {
-    ref.lookAt(new Vector3(0, 0, 0))
+    ref.lookAt(0, 0, 0)
   }}
 />
 
-<T.Mesh>
-  <T.BoxGeometry args={[20, 0.1, 20]} />
-  <T.MeshBasicMaterial />
+<T.Mesh
+  rotation.x={-1 * 0.5 * Math.PI}
+  scale={100}
+  visible={false}
+>
+  <T.PlaneGeometry />
 </T.Mesh>
 ```
 
-### Get the cursor position
+The mesh is rotated so that it lies flat on the xz-plane and is made invisible.
 
-To get the cursor position we use Threlte's <a href="/docs/reference/extras/interactivity" target="_blank">interacivity</a> plugin.
+### Getting the Cursor Position
+
+To get the cursor position we use Threlte's [interactivity](/docs/reference/extras/interactivity) plugin. The event object that is passed to the `onpointermove` callback has a point property which tells you where the cursor position was when the event was triggered. The cursor positions is updated and sent into the `<CursorLine>` component as a prop.
 
 ```svelte
 <script lang="ts">
   interactivity()
-  let cursorPosition = { x: 0, z: 0 }
+  let cursorPosition: Vector3Tuple = $state.raw([0, 0, 0])
 </script>
 
 <T.Mesh
-  visible={false}
-  onpointermove={(e) => {
-    cursorPosition.x = e.point.x
-    cursorPosition.z = e.point.z
+  onpointermove={(event) => {
+    cursorPosition = event.point.toArray()
   }}
 >
-  <T.BoxGeometry args={[20, 0.1, 20]} />
-  <T.MeshBasicMaterial />
+  <!-- ...  -->
 </T.Mesh>
 ```
 
-### Create our CursorLine component
+<Tip type="info">
+  `$state.raw` is used over `$state` to store the position because we don't care about making each
+  entry in the tuple reactive. More on this in the next section.
+</Tip>
 
-We create a component called CursorLine where we will implement `<MeshLineMaterial>` and `<MeshLineGeometry>` to create out lines.
-We need to initialise the `<MeshLineGeometry>` component with an array of points so we create an array of points positioned at x:0, y:0, z:0.
-To give each line a different color and with we export these propertys to be set in our parent scene, along with the cursorPosition.
+### Inside the CursorLine Component
 
-```svelte
-<script lang="ts">
-  export let cursorPosition: { x: number; z: number }
-  export let color: string
-  export let width: number
+The `<CursorLine>` component receives the current pointer position and uses a [Spring](https://svelte.dev/docs/svelte/svelte-motion#Spring) to interpolate between updates. To create the "trailing" effect two lists of `Vector3` points are created - a back and a front. Each frame, the back set of points is updated then swapped with the front set of points. This swap causes anything that reads from the front set of points to get updated.
 
-  let points: Vector3[] = []
+#### Making Use of $state.raw
 
-  for (let j = 0; j < 50; j++) {
-    points.push(new Vector3(0, 0, 0))
-  }
-</script>
+The reason that two sets of points are used is so that [`$state.raw`](https://svelte.dev/docs/svelte/$state#$state.raw) can be used. `$state.raw` is great when you have a large object such as an array and you don't want to make the object deeply reactive. In our case we know we're only ever going to be updating everything in the array all at once and nothing depends on updates to the individual objects in the array. In other words, we only care about when the entire array updates, specific when `front` updates. The back set of points doesn't need to be made reactive at all because nothing is listening to it.
 
-<T.Mesh {...$$restProps}>
-  <MeshLineGeometry
-    {points}
-    shape={'taper'}
-  />
-  <MeshLineMaterial
-    {width}
-    {color}
-    scaleDown={0.1}
-    attenuate={false}
-  />
-</T.Mesh>
+#### Updating Points
+
+Before the back and front points are swapped, the points are updated. The first point in the array is set to the current value of the spring.
+
+```typescript
+back[0].fromArray(spring.current)
 ```
 
-To give each line a bit of individual character we can use Svelte's spring function.
-We will set the stiffness and dampening values in the parent scene.
+Then each consecutive pair of points, `[first, secend]` is taken and the second point is interpolated to the first by a small amount. This update happens every frame and eventually all points are interpolated to the cursor position.
 
-```ts
-export let stiffness: number
-export let damping: number
-
-// Here we create our new svelte store that will
-// automatically 'spring' any future values we set
-let sprungCursor = spring(
-  { x: 0, z: 0 },
-  {
-    stiffness,
-    damping
+```typescript
+useTask((delta) => {
+  const alpha = 1e-6 ** delta
+  for (let i = 1; i < count; i += 1) {
+    const first = back[i - 1]
+    const second = back[i]
+    second?.lerp(first, alpha)
   }
-)
-
-// We set the sprungCursor value to the
-// cursorPosition whenever it updates
-$: sprungCursor.set(cursorPosition)
-```
-
-Now we need to move our line!
-
-We do this by linking the first point in the line to our cursor position.
-For the rest of the points in the line we use the lerp function to move each point towards the one before it.
-The lerp function is a method of <a href="https://threejs.org/docs/#api/en/math/Vector3" target="_blank">THREE.Vector3</a> and is useful for moving an object towards a set point each frame.
-
-```ts
-$: {
-  if (points[0]) {
-    // We set the first point in the array to equal
-    // our sprungCursor store whenever it updates
-    points[0].x = $sprungCursor.x
-    points[0].z = $sprungCursor.z
-    points = points
-  }
-}
-
-useTask(() => {
-  let previousPoint = points[0]
-  // Every frame we loop through each point ...
-  points.forEach((point, i) => {
-    if (previousPoint && i > 0) {
-      // ... and for every point (except the first)
-      // we lerp it towards the point before it
-      point.lerp(previousPoint, 0.75)
-      previousPoint = point
-    }
-  })
-  points = points
+  // ...
 })
 ```
 
-### Link it all together
+<Tip type="info">
+  The value for `alpha` is a little arbitrary but certain values may look may appealing than others.
+  For example, if `alpha` is > 1, the lerp will overshoot and you'll get very "jumpy" interpolations
+  that won't ever settle. You also don't want the value to be too small because then it won't
+  interpolate quickly enough to look "smooth". An value somewhere around `.8` gives a good look and
+  feel.
+</Tip>
 
-All that is left to do is to is implement our new CursorLine component in our scene.
-To create our five lines we create an array of five colors, then loop through them to create out CursorLine components.
-We use the index to give each line slightly different position, stiffness, dampening and width propertys.
+Lastly the two point-lists are swapped which triggers anything reading `front` to update.
 
-```svelte
-<script lang="ts">
-  let colors = ['#fc6435', '#ff541f', '#f53c02', '#261f79', '#1e165c']
-</script>
-
-{#each colors as color, i}
-  <CursorLine
-    {color}
-    {cursorPosition}
-    position.y={5 - i}
-    stiffness={0.02 * i + 0.02}
-    damping={0.25 - 0.04 * i}
-    width={15 + i * 10}
-  />
-{/each}
+```typescript
+useTask((delta) => {
+  //...
+  const temp = front
+  front = back
+  back = temp
+})
 ```
+
+In summary, we update the "back" set of points and swap it with the "front" once all points have been updated. This is very similar to a the double-buffering strategy used by many graphics software.
