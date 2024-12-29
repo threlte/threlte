@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mesh } from 'three'
   import { useTask, useThrelte } from '@threlte/core'
   import {
     BlendFunction,
@@ -7,41 +8,53 @@
     OutlineEffect,
     RenderPass
   } from 'postprocessing'
-  import { onMount } from 'svelte'
 
-  export let selectedMesh: THREE.Mesh
+  type Props = {
+    mesh: Mesh
+  }
+
+  let { mesh }: Props = $props()
 
   const { scene, renderer, camera, size, autoRender, renderStage } = useThrelte()
 
   const composer = new EffectComposer(renderer)
 
-  const setupEffectComposer = (camera: THREE.Camera, selectedMesh: THREE.Mesh) => {
-    composer.removeAllPasses()
-    composer.addPass(new RenderPass(scene, camera))
-
-    const outlineEffect = new OutlineEffect(scene, camera, {
-      blendFunction: BlendFunction.ALPHA,
-      edgeStrength: 100,
-      pulseSpeed: 0.0,
-      visibleEdgeColor: 0xffffff,
-      hiddenEdgeColor: 0x9900ff,
-      xRay: true,
-      blur: true
-    })
-    if (selectedMesh !== undefined) {
-      outlineEffect.selection.add(selectedMesh)
-    }
-    composer.addPass(new EffectPass(camera, outlineEffect))
+  const renderPass = $derived(new RenderPass(scene, $camera))
+  const outlineEffectOptions: ConstructorParameters<typeof OutlineEffect>[2] = {
+    blendFunction: BlendFunction.ALPHA,
+    edgeStrength: 100,
+    pulseSpeed: 0.0,
+    visibleEdgeColor: 0xffffff,
+    hiddenEdgeColor: 0x9900ff,
+    xRay: true,
+    blur: true
   }
 
-  $: setupEffectComposer($camera, selectedMesh)
-  $: composer.setSize($size.width, $size.height)
+  const outlineEffect = $derived.by(() => {
+    const effect = new OutlineEffect(scene, $camera, outlineEffectOptions)
+    effect.selection.add(mesh)
+    return effect
+  })
 
-  onMount(() => {
-    let before = autoRender.current
+  const outlineEffectPass = $derived(new EffectPass($camera, outlineEffect))
+
+  $effect(() => {
+    composer.addPass(renderPass)
+    composer.addPass(outlineEffectPass)
+    return () => {
+      composer.removeAllPasses()
+    }
+  })
+
+  $effect(() => {
+    composer.setSize($size.width, $size.height)
+  })
+
+  $effect(() => {
+    const last = autoRender.current
     autoRender.set(false)
     return () => {
-      autoRender.set(before)
+      autoRender.set(last)
     }
   })
 
