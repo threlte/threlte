@@ -1,67 +1,69 @@
 <script lang="ts">
-  import { Canvas, T } from '@threlte/core'
-  import { Grid } from '@threlte/extras'
-  import { Pane, Slider, Checkbox, Folder, List, Color } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
+  import { Canvas, T } from '@threlte/core'
+  import { Checkbox, Color, Folder, Pane, List, Slider } from 'svelte-tweakpane-ui'
+  import { Grid } from '@threlte/extras'
   import { PlaneGeometry } from 'three'
-  import { createNoise2D } from 'simplex-noise'
+  import { SimplexNoise } from 'three/examples/jsm/Addons.js'
 
-  let cellSize = 1
-  let cellColor = '#cccccc'
-  let cellThickness = 1.4
-  let sectionSize = 5
-  let sectionColor = '#ff3e00'
-  let sectionThickness = 2
+  let cellSize = $state(1)
+  let cellColor = $state('#cccccc')
+  let cellThickness = $state(1.4)
+  let sectionSize = $state(5)
+  let sectionColor = $state('#ff3e00')
+  let sectionThickness = $state(2)
 
-  let gridSize1 = 20
-  let gridSize2 = 20
-  let plane: 'xz' | 'xy' | 'zy' = 'xz'
-  let planeOptions = {
+  let gridSize = $state([20, 20])
+  const planeOptions = {
     xz: 'xz',
     xy: 'xy',
     zy: 'zy'
   }
+  let plane: keyof typeof planeOptions = $state('xz')
 
-  let followCamera = false
-  let infiniteGrid = false
-  let fadeDistance = 100
-  let backGroundColor = '#003eff'
-  let backgroundOpacity = 0
-  let fadeStrength = 1
-  let gridGeometry = 'default'
-  let gridGeometryOptions = {
+  let followCamera = $state(false)
+  let infiniteGrid = $state(false)
+  let fadeDistance = $state(100)
+  let backgroundColor = $state('#003eff')
+  let backgroundOpacity = $state(0)
+  let fadeStrength = $state(1)
+  const gridGeometryOptions = {
     plane: 'default',
-    terrain: 'Terrain'
+    terrain: 'terrain'
   }
 
-  let gridType: 'polar' | 'grid' | 'lines' | 'circular' = 'polar'
-  let gridTypeOptions = {
+  let gridGeometry = $state('default')
+  const gridGeometryIsTerrain = $derived(gridGeometry === 'terrain')
+
+  const gridTypeOptions = {
     polar: 'polar',
     grid: 'grid',
     lines: 'lines',
     circular: 'circular'
   }
-  let linesAxis = 'x'
-  let linesAxisOptions = {
+  let gridType: keyof typeof gridTypeOptions = $state('polar')
+
+  const linesAxisOptions = {
     x: 'x',
     y: 'y',
     z: 'z'
   }
-  let maxRadius = 10
-  let cellDividers = 6
-  let sectionDividers = 2
+  let linesAxis: keyof typeof linesAxisOptions = $state('x')
 
-  let paneExpanded = false
+  let maxRadius = $state(10)
+  let cellDividers = $state(6)
+  let sectionDividers = $state(2)
 
   const terrainSize = 30
-  const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
-  const noise = createNoise2D()
-  const vertices = geometry.getAttribute('position').array
-  for (let i = 0; i < vertices.length; i += 3) {
-    const x = vertices[i]
-    const y = vertices[i + 1]
-    // @ts-ignore
-    vertices[i + 2] = noise(x / 5, y / 5) * 1 + noise(x / 40, y / 40) * 2
+  const segments = 100
+  const noise = new SimplexNoise()
+  const geometry = new PlaneGeometry(terrainSize, terrainSize, segments, segments)
+  const positions = geometry.getAttribute('position')
+  for (let i = 0; i < positions.count; i += 1) {
+    const x = positions.getX(i)
+    const y = positions.getY(i)
+    const height = noise.noise(x / 5, y / 5) * 1 + noise.noise(x / 40, y / 40) * 2
+    positions.setZ(i, height)
   }
   geometry.computeVertexNormals()
 </script>
@@ -69,7 +71,6 @@
 <Pane
   title="Grid"
   position="fixed"
-  bind:expanded={paneExpanded}
 >
   <Folder title="Cells">
     <Slider
@@ -113,14 +114,14 @@
   </Folder>
   <Folder title="General">
     <Slider
-      bind:value={gridSize1}
+      bind:value={gridSize[0]}
       label="size 1"
       step={1}
       min={1}
       max={100}
     />
     <Slider
-      bind:value={gridSize2}
+      bind:value={gridSize[1]}
       label="size 2"
       step={1}
       min={1}
@@ -147,7 +148,7 @@
       max={400}
     />
     <Color
-      bind:value={backGroundColor}
+      bind:value={backgroundColor}
       label="background color"
     />
     <Slider
@@ -213,7 +214,7 @@
 
 <div>
   <Canvas>
-    {#if gridGeometry == 'Terrain'}
+    {#if gridGeometryIsTerrain}
       <Grid
         position.y={-2}
         {plane}
@@ -227,8 +228,8 @@
         {infiniteGrid}
         {fadeDistance}
         {fadeStrength}
-        gridSize={[gridSize1, gridSize2]}
-        backgroundColor={backGroundColor}
+        {gridSize}
+        {backgroundColor}
         {backgroundOpacity}
         type={gridType}
         axis={linesAxis}
@@ -251,8 +252,8 @@
         {infiniteGrid}
         {fadeDistance}
         {fadeStrength}
-        gridSize={[gridSize1, gridSize2]}
-        backgroundColor={backGroundColor}
+        {gridSize}
+        {backgroundColor}
         {backgroundOpacity}
         type={gridType}
         axis={linesAxis}
