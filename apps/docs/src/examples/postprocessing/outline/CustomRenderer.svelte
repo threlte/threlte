@@ -42,7 +42,7 @@
     composer.addPass(renderPass)
     composer.addPass(outlineEffectPass)
     return () => {
-      composer.removeAllPasses()
+      composer.removeAllPasses() // always remove all passes anytime the effect needs to rerun
     }
   })
 
