@@ -29,7 +29,6 @@
     "three": "*",
     "tslib": "*",
     "typescript": "*",
-    "vite": "*",
-    "simplex-noise": "^4.0.1"
+    "vite": "*"
   }
 }

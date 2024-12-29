@@ -76,7 +76,6 @@
     "runed": "^0.15.3",
     "sharp": "^0.31.3",
     "shiki": "^0.14.3",
-    "simplex-noise": "^4.0.1",
     "svelte": "^5.14.4",
     "svelte-portal": "^2.2.1",
     "svelte-preprocess": "^5.1.3",
