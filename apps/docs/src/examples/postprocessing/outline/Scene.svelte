@@ -1,86 +1,92 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import type { Mesh, Vector3Tuple } from 'three'
+  import type { Wall } from './types'
+  import { DoubleSide } from 'three'
+  import { Environment, OrbitControls } from '@threlte/extras'
+  import { T, useTask } from '@threlte/core'
+  import { Tween } from 'svelte/motion'
   import { quadInOut } from 'svelte/easing'
-  import { tweened } from 'svelte/motion'
 
-  import { T } from '@threlte/core'
-  import { OrbitControls, Grid } from '@threlte/extras'
+  type Props = {
+    autoRotate?: boolean
+    mesh: Mesh
+    play?: boolean
+    positions?: Vector3Tuple[]
+    walls?: Wall[]
+  }
 
-  import Maze from './Maze.svelte'
-  import CustomRenderer from './CustomRenderer.svelte'
+  let { autoRotate = true, mesh, positions = [], play = true, walls = [] }: Props = $props()
 
-  const route = [
-    [0, 1, -3],
-    [0, 1, 1.5],
-    [4.7, 1, 1.5],
-    [4.7, 1, 5],
-    [2, 1, 5],
-    [2, 1, 9],
-    [8, 1, 9],
-    [8, 1, -3]
-  ]
-  let routeIndex = 0
-  let cubePosition = tweened(route[routeIndex], {
+  let positionIndex = $state(0)
+  const position = $derived(positions[positionIndex])
+
+  const positionTween = Tween.of(() => position, {
     duration: 400,
     easing: quadInOut
   })
-  let outlinedCube: THREE.Mesh
 
-  onMount(() => {
-    const interval = setInterval(nextCubePosition, 500)
+  let time = $state(0)
 
-    return () => {
-      clearInterval(interval)
+  const { start, stop } = useTask((delta) => {
+    time += delta
+    if (time > 0.5) {
+      positionIndex = (positionIndex + 1) % positions.length
+      time = 0
     }
   })
 
-  const nextCubePosition = () => {
-    if (routeIndex < route.length - 1) {
-      routeIndex++
-    } else {
-      routeIndex = 0
+  $effect(() => {
+    if (play) {
+      start()
+      return () => {
+        stop()
+      }
     }
-    cubePosition.set(route[routeIndex])
-  }
+  })
 </script>
 
-<Maze />
+{#each walls as { position, rotation, size }}
+  <T.Mesh
+    {position}
+    {rotation}
+  >
+    <T.BoxGeometry args={size} />
+    <T.MeshStandardMaterial color="silver" />
+  </T.Mesh>
+{/each}
 
-<T.Mesh
-  position={$cubePosition}
-  bind:ref={outlinedCube}
->
-  <T.MeshToonMaterial color="gold" />
-  <T.BoxGeometry />
-</T.Mesh>
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
-<CustomRenderer selectedMesh={outlinedCube} />
+<T.Group position={positionTween.current ?? [0, 0, 0]}>
+  <T
+    is={mesh}
+    castShadow
+  >
+    <T.MeshStandardMaterial color="gold" />
+    <T.BoxGeometry />
+  </T>
+</T.Group>
 
 <T.PerspectiveCamera
   makeDefault
   position={[0, 6, -10]}
-  fov={15}
-  zoom={0.2}
+  fov={60}
 >
   <OrbitControls
-    enableZoom={true}
+    {autoRotate}
     enableDamping
     target={[0, 0, 5]}
   />
 </T.PerspectiveCamera>
 
-<T.DirectionalLight
-  intensity={0.8}
-  position.x={5}
-  position.y={10}
-/>
-<T.AmbientLight intensity={0.2} />
-
-<Grid
-  gridSize={18}
-  position={[0, -0.001, 5]}
-  cellColor="#ffffff"
-  sectionColor="#ffffff"
-  sectionThickness={0}
-  fadeDistance={25}
-/>
+<T.Mesh
+  scale={100}
+  rotation.x={-1 * 0.5 * Math.PI}
+  receiveShadow
+>
+  <T.PlaneGeometry />
+  <T.MeshStandardMaterial
+    color="green"
+    side={DoubleSide}
+  />
+</T.Mesh>
