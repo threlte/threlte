@@ -14,7 +14,7 @@ export type CreateDOMContextOptions = {
 }
 
 export const createDOMContext = (options: CreateDOMContextOptions) => {
-  const dom = options.dom
+  const { dom, canvas } = options
   const size = currentWritable(dom.getBoundingClientRect())
 
   onMount(() => {
@@ -31,7 +31,7 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
 
   const context: DOMContext = {
     dom,
-    canvas: options.canvas,
+    canvas,
     size: toCurrentReadable(size)
   }
 
