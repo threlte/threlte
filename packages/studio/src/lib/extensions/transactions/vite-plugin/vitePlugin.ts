@@ -8,6 +8,7 @@ import * as fileUtils from './utils/fileUtils'
 import { toMagicString } from './utils/magicStringUtils'
 import indexToPosition from 'index-to-position'
 import colors from 'kleur'
+import { transformStaticState } from './static-state'
 
 const HmrIgnoredModuleTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
 const HmrIgnoredModuleIds = new Set<string>()
@@ -33,6 +34,7 @@ export const plugin: () => Plugin = () => {
     enforce: 'pre',
     apply: 'serve',
     transform(code, id) {
+      code = transformStaticState(code, id)
       try {
         if (!id.endsWith('.svelte')) return
         if (!hasTComponent(code)) return

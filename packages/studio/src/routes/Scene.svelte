@@ -1,5 +1,5 @@
 <script>
-  import { T, useTask } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import { StudioState } from '@threlte/studio'
 
