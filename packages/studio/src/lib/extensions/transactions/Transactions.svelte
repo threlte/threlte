@@ -47,6 +47,10 @@
   }>('sync', (args) => {
     if (!args.props.threlteStudio) return
 
+    if (typeof args.ref.userData === 'undefined') {
+      args.ref.userData = {}
+    }
+
     args.ref.userData.threlteStudio = args.props.threlteStudio
 
     // go through the properties and apply the studio props to the properties

@@ -15,6 +15,7 @@
   import Toolbar from './Toolbar.svelte'
   import NestedComponents from './NestedComponents.svelte'
   import StudioObjectsRegistry from '../extensions/studio-objects-registry/StudioObjectsRegistry.svelte'
+  import StaticState from '../extensions/static-state/StaticState.svelte'
 
   type Props = {
     namespace?: string
@@ -39,7 +40,8 @@
     Grid,
     Helpers,
     SceneHierarchy,
-    Inspector
+    Inspector,
+    StaticState
   ]
 
   const allExtensions = [...defaultExtensions, ...(extensions ?? [])]

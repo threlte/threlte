@@ -27,5 +27,5 @@
 
 <T.Mesh>
   <T.BoxGeometry />
-  <T.MeshStandardMaterial color={s.color} />
+  <T.MeshStandardMaterial color="hotpink" />
 </T.Mesh>
