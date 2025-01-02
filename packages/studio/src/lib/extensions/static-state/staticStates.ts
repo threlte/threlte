@@ -3,14 +3,14 @@ import type { StudioState } from '../../state/StudioState'
 
 const staticStates = new SvelteSet<StudioState>()
 
-export function addStaticState(state: StudioState) {
+export const addStaticState = (state: StudioState) => {
   staticStates.add(state)
 }
 
-export function removeStaticState(state: StudioState) {
+export const removeStaticState = (state: StudioState) => {
   staticStates.delete(state)
 }
 
-export function getStaticStates() {
+export const getStaticStates = () => {
   return staticStates
 }

@@ -1,3 +1,4 @@
+import { onDestroy } from 'svelte'
 import { addStaticState, removeStaticState } from '../extensions/static-state/staticStates'
 
 export const register = Symbol('register')
@@ -28,6 +29,14 @@ export abstract class StudioState {
     this[accessors] = getters.filter((getter) => setters.includes(getter))
 
     this[register]()
+
+    try {
+      onDestroy(() => {
+        this[unregister]()
+      })
+    } catch {
+      // ignore
+    }
   }
 
   [register]() {
