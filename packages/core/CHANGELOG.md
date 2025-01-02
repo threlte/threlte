@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.39
+
+### Patch Changes
+
+- f102bfb: Simplify resizeObserver.
+
 ## 8.0.0-next.38
 
 ### Patch Changes
