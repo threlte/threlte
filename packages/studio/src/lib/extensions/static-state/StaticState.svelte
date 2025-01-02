@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import { AutoValue, Element, Pane } from 'svelte-tweakpane-ui'
+  import { AutoValue, Element, Folder, Pane } from 'svelte-tweakpane-ui'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
@@ -62,15 +62,17 @@
   >
     {#if states.size > 0}
       {#each states as state}
-        {#each state[accessors] as accessor (accessor)}
-          <AutoValue
-            value={getValue(state, accessor)}
-            label={accessor}
-            on:change={(e) => {
-              setValue(state, accessor, e.detail.value)
-            }}
-          />
-        {/each}
+        <Folder title={state.constructor.name}>
+          {#each state[accessors] as accessor (accessor)}
+            <AutoValue
+              value={getValue(state, accessor)}
+              label={accessor}
+              on:change={(e) => {
+                setValue(state, accessor, e.detail.value)
+              }}
+            />
+          {/each}
+        </Folder>
       {/each}
       <Element>
         <div style="display: flex; justify-content: end; margin-bottom: 4px;"></div>

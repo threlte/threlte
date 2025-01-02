@@ -5,14 +5,14 @@
 
   interactivity()
 
-  class MyState extends StudioState {
+  class SceneConfig extends StudioState {
     count = $state(0)
     name = $state('')
     color = $state('#ff00ff')
     position = $state({ x: 10, y: 10, z: 10 })
   }
 
-  const s = new MyState()
+  const s = new SceneConfig()
 </script>
 
 <T.PerspectiveCamera
