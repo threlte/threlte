@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.12.1
+
+### Patch Changes
+
+- be8f4aa: Fix uncaught exception thrown in `<Grid>`
+
 ## 8.12.0
 
 ### Minor Changes
