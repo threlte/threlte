@@ -188,6 +188,8 @@
   }
 
   useTask(() => {
+    if (!ref) return
+
     gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(ref.matrixWorld)
 
     const material = ref.material as ShaderMaterial
