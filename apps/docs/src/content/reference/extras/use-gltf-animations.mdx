@@ -6,7 +6,7 @@ name: useGltfAnimations
 type: 'hook'
 ---
 
-Convenience hook to use animations loaded with a `<GLTF>` Threlte component.
+Convenience hook to use animations loaded with a `<GLTF>` Threlte component or the `useGltf` hook.
 
 <Example path="extras/use-gltf-animations" />
 
@@ -17,7 +17,7 @@ Convenience hook to use animations loaded with a `<GLTF>` Threlte component.
 
 ## Examples
 
-### Basic Example
+### Basic
 
 ```svelte
 <script lang="ts">
@@ -28,14 +28,16 @@ Convenience hook to use animations loaded with a `<GLTF>` Threlte component.
 
   // Play them whenever you need
   export const triggerAnimation = () => {
-    if ($mixer) $mixer.timeScale = 0.5
+    if ($mixer) {
+      $mixer.timeScale = 0.5
+    }
     $actions['All Animations']?.play()
   }
 </script>
 
 <!-- Bind the store `gltf` -->
 <GLTF
-  url={'/Bengal.glb'}
+  url="/Bengal.glb"
   bind:gltf={$gltf}
 />
 ```
@@ -56,17 +58,19 @@ Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-
   const { actions, mixer } = useGltfAnimations<'All Animations'>(gltf)
 
   // play the animation as soon as it's loaded
-  $: $actions['All Animations']?.play()
+  $effect(() => {
+    $actions['All Animations']?.play()
+  })
 </script>
 
-{#if $gltf}
-  <T is={$gltf.scene} />
-{/if}
+{#await gltf then { scene }}
+  <T is={scene} />
+{/await}
 ```
 
-### Applying animations to a different root
+### Applying Animations to a Different Root
 
-Sometimes you want to apply the animations to a different root than the GLTF scene. In this case, pass the root as the second argument to the hook `useGltfAnimations`.
+Sometimes you want to apply the animations to a root other than the GLTF scene. In this case, pass the root as the second argument.
 
 ```svelte
 <script>
@@ -80,11 +84,11 @@ Sometimes you want to apply the animations to a different root than the GLTF sce
   const { root } = useGltfAnimations(gltf, group)
 </script>
 
-{#if $gltf}
+{#await gltf then { scene }}
   <T is={group}>
-    <T is={$gltf.scene}>
+    <T is={scene} />
   </T>
-{/if}
+{/await}
 ```
 
 This can also be done after the animations have been loaded. In this case, you can use the `bind:ref` directive to bind the root to the `root` store returned by the hook.
@@ -99,16 +103,16 @@ This can also be done after the animations have been loaded. In this case, you c
   const { root } = useGltfAnimations(gltf, group)
 </script>
 
-{#if $gltf}
+{#await gltf then { scene }}
   <T.Group bind:ref={$root}>
-    <T is={$gltf.scene}>
-  </T>
-{/if}
+    <T is={scene} />
+  </T.Group>
+{/await}
 ```
 
 ## Types
 
-```ts
+```typescript
 const {
   gltf, // Writable<GLTF | undefined>
   mixer, // AnimationMixer

@@ -1,26 +1,22 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
-  import { Color } from 'three'
-  import Tokyo from './Tokyo.svelte'
+  import { Environment, OrbitControls, useDraco, useGltf, useGltfAnimations } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { fromStore } from 'svelte/store'
 
-  const { scene } = useThrelte()
-  scene.background = new Color(0xeae8e2)
+  const dracoLoader = useDraco()
+  const gltf = useGltf('/models/LittlestTokyo.glb', { dracoLoader })
+  const { actions, mixer } = useGltfAnimations<'Take 001'>(gltf)
 
-  let showTokyo = true
+  const s = fromStore(actions)
+  const getActions = () => s.current
+  export { getActions, mixer }
 </script>
-
-<svelte:window
-  on:keypress={() => {
-    showTokyo = !showTokyo
-  }}
-/>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[600, 200, 600]}
+  position={[600, 200, -600]}
   near={10}
-  far={10000}
+  far={10_000}
 >
   <OrbitControls
     autoRotate
@@ -31,9 +27,11 @@
   />
 </T.PerspectiveCamera>
 
-<T.AmbientLight />
-<T.DirectionalLight position={[5, 10, 5]} />
+<Environment
+  url="/textures/equirectangular/hdr/industrial_sunset_puresky_1k.hdr"
+  isBackground
+/>
 
-{#if showTokyo}
-  <Tokyo />
-{/if}
+{#await gltf then { scene }}
+  <T is={scene} />
+{/await}
