@@ -1,16 +1,18 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { interactivity, Text, useCursor } from '@threlte/extras'
+  import { interactivity, Text, Hovering } from '@threlte/extras'
+  import { fromStore } from 'svelte/store'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
-  const { hovering, onPointerEnter, onPointerLeave } = useCursor()
+  const hovering = new Hovering()
 
-  $: color = $hovering ? '#dddddd' : '#FE3D00'
+  const color = $derived(hovering.current ? '#dddddd' : '#fe3d00')
 
   const { size } = useThrelte()
 
-  let zoom = $size.width / 7
-  $: zoom = $size.width / 7
+  const sizeStore = fromStore(size)
+
+  const zoom = $derived(sizeStore.current.width / 7)
 
   interactivity()
 </script>
@@ -30,24 +32,28 @@
 />
 <T.AmbientLight intensity={0.2} />
 
-<Text
-  text="HOVER"
-  interactive
-  onpointerenter={onPointerEnter}
-  onpointerleave={onPointerLeave}
-  fontSize={0.5}
-  anchorY="100%"
-  anchorX="50%"
-  rotation.y={90 * DEG2RAD}
-  position.y={1}
-  position.x={-1}
-  {color}
-/>
-
-<T.Mesh
-  onpointerenter={onPointerEnter}
-  onpointerleave={onPointerLeave}
+<T.Group
+  onpointerenter={() => {
+    hovering.hover()
+  }}
+  onpointerleave={() => {
+    hovering.unhover()
+  }}
 >
-  <T.MeshStandardMaterial {color} />
-  <T.BoxGeometry args={[2, 2, 2]} />
-</T.Mesh>
+  <Text
+    text="HOVER"
+    interactive
+    fontSize={0.5}
+    anchorY="100%"
+    anchorX="50%"
+    rotation.y={90 * DEG2RAD}
+    position.y={1}
+    position.x={-1}
+    {color}
+  />
+
+  <T.Mesh>
+    <T.MeshStandardMaterial {color} />
+    <T.BoxGeometry args={[2, 2, 2]} />
+  </T.Mesh>
+</T.Group>
