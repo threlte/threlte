@@ -1,13 +1,13 @@
 import { SvelteSet } from 'svelte/reactivity'
-import type { StudioState } from '../../state/StudioState'
+import type { StaticState } from './StaticState'
 
-const staticStates = new SvelteSet<StudioState>()
+const staticStates = new SvelteSet<StaticState>()
 
-export const addStaticState = (state: StudioState) => {
+export const addStaticState = (state: StaticState) => {
   staticStates.add(state)
 }
 
-export const removeStaticState = (state: StudioState) => {
+export const removeStaticState = (state: StaticState) => {
   staticStates.delete(state)
 }
 

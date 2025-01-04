@@ -1,32 +1,15 @@
+import indexToPosition from 'index-to-position'
+import colors from 'kleur'
 import type { Plugin } from 'vite'
 import { createRPCServer } from 'vite-dev-rpc'
 import type { ClientFunctions, ServerFunctions } from '../rpc'
+import * as hmr from './hmr'
+import { mutateStaticState, transformStaticState } from './static-state'
 import * as componentParser from './utils/componentParser'
 import { addStudioRuntimeProps, hasTComponent } from './utils/componentParser'
 import * as componentUtils from './utils/componentUtils'
 import * as fileUtils from './utils/fileUtils'
 import { toMagicString } from './utils/magicStringUtils'
-import indexToPosition from 'index-to-position'
-import colors from 'kleur'
-import { transformStaticState } from './static-state'
-
-const HmrIgnoredModuleTimeouts = new Map<string, ReturnType<typeof setTimeout>>()
-const HmrIgnoredModuleIds = new Set<string>()
-
-const cancelModuleHmrAbility = (moduleId: string) => {
-  const timneout = HmrIgnoredModuleTimeouts.get(moduleId)
-  if (timneout) clearTimeout(timneout)
-}
-
-const scheduleModuleHmrAbility = (moduleId: string) => {
-  cancelModuleHmrAbility(moduleId)
-  HmrIgnoredModuleTimeouts.set(
-    moduleId,
-    setTimeout(() => {
-      HmrIgnoredModuleIds.delete(moduleId)
-    }, 500)
-  )
-}
 
 export const plugin: () => Plugin = () => {
   return {
@@ -35,10 +18,11 @@ export const plugin: () => Plugin = () => {
     apply: 'serve',
     transform(code, id) {
       code = transformStaticState(code, id)
+      return { code }
       try {
-        if (!id.endsWith('.svelte')) return
-        if (!hasTComponent(code)) return
-        if (id.includes('node_modules')) return
+        if (!id.endsWith('.svelte')) return { code }
+        if (!hasTComponent(code)) return { code }
+        if (id.includes('node_modules')) return { code }
         const { markup, script, scriptModule, style } = componentUtils.disassembleComponent(code)
         const magicMarkup = toMagicString(markup)
         addStudioRuntimeProps(magicMarkup, id)
@@ -58,10 +42,7 @@ export const plugin: () => Plugin = () => {
       }
     },
     handleHotUpdate({ file }) {
-      if (HmrIgnoredModuleIds.has(file)) {
-        scheduleModuleHmrAbility(file)
-        return []
-      }
+      return hmr.scheduleModuleHmrAvailability(file)
     },
     config() {
       return {
@@ -72,6 +53,10 @@ export const plugin: () => Plugin = () => {
     },
     configureServer(server) {
       createRPCServer<ClientFunctions, ServerFunctions>('threlte-studio', server.ws, {
+        mutateStaticState(id, className, propertyName, value) {
+          hmr.disableModuleHmr(id)
+          mutateStaticState(id, className, propertyName, value)
+        },
         syncTransactions(transactions) {
           const transactionsByModuleId = new Map<string, typeof transactions>()
           transactions.forEach((transaction) => {
@@ -81,7 +66,7 @@ export const plugin: () => Plugin = () => {
           })
 
           for (const [moduleId, transactions] of transactionsByModuleId.entries()) {
-            const code = fileUtils.readComponent(moduleId)
+            const code = fileUtils.readFile(moduleId)
             if (!hasTComponent(code)) {
               console.error('Component does not need transform')
               continue
@@ -116,13 +101,12 @@ export const plugin: () => Plugin = () => {
               scriptModule,
               style
             )
-            cancelModuleHmrAbility(moduleId)
-            HmrIgnoredModuleIds.add(moduleId)
-            fileUtils.writeComponent(moduleId, finalComponent)
+            hmr.disableModuleHmr(moduleId)
+            fileUtils.writeFile(moduleId, finalComponent)
           }
         },
         getColumnAndRow(moduleId, componentIndex, signature) {
-          const code = fileUtils.readComponent(moduleId)
+          const code = fileUtils.readFile(moduleId)
           if (!hasTComponent(code)) {
             console.error('Component does not need transform')
             return { column: 0, row: 0 }

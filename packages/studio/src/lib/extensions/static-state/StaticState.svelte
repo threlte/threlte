@@ -5,15 +5,16 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import { useStudio } from '../../internal/extensions'
-  import { accessors, type StudioState } from '../../state/StudioState'
+  import { clientRpc } from '../transactions/vite-plugin/clientRpc'
+  import { accessors, moduleIdKey, type StaticState } from './StaticState'
   import { getStaticStates } from './staticStates'
-  import { staticStateScope, type StaticState, type StaticStateActions } from './types'
+  import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
 
   let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
 
-  const extension = createExtension<StaticState, StaticStateActions>({
+  const extension = createExtension<StaticStateState, StaticStateActions>({
     scope: staticStateScope,
     state({ persist }) {
       return {
@@ -31,12 +32,14 @@
 
   const states = getStaticStates()
 
-  const getValue = (state: StudioState, accessor: string) => {
-    return $state.snapshot(state[accessor as unknown as keyof StudioState])
+  const getValue = (state: StaticState, accessor: string) => {
+    return $state.snapshot(state[accessor as unknown as keyof StaticState])
   }
 
-  const setValue = (state: StudioState, accessor: string, value: any) => {
-    state[accessor as unknown as keyof StudioState] = value
+  const setValue = (state: StaticState, accessor: string, value: any) => {
+    state[accessor as unknown as keyof StaticState] = value
+    const className = state.constructor.name
+    clientRpc?.mutateStaticState(state[moduleIdKey], className, accessor, value)
   }
 </script>
 

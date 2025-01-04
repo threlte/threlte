@@ -1,11 +1,15 @@
 import { onDestroy } from 'svelte'
-import { addStaticState, removeStaticState } from '../extensions/static-state/staticStates'
+import { addStaticState, removeStaticState } from './staticStates'
 
 export const register = Symbol('register')
 export const unregister = Symbol('unregister')
 export const accessors = Symbol('accessors')
 
-export abstract class StudioState {
+export const moduleIdKey = 'akeywithverylongnameandhopefullynoonewilluseit' as const
+
+export abstract class StaticState {
+  [moduleIdKey]!: string;
+
   [accessors]: string[] = []
 
   constructor() {

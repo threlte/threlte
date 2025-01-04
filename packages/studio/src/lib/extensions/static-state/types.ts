@@ -1,6 +1,6 @@
 export const staticStateScope = 'static-state'
 
-export type StaticState = {
+export type StaticStateState = {
   editorEnabled: boolean
 }
 

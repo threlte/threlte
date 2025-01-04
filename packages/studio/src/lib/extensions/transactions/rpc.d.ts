@@ -14,6 +14,7 @@ export type ServerFunctions = {
     componentIndex: number,
     signature: string
   ) => { column: number; row: number }
+  mutateStaticState: (id: string, className: string, propertyName: string, value: unknown) => void
 }
 
 export type ClientFunctions = Record<string, never>
