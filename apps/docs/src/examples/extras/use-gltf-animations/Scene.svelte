@@ -1,15 +1,10 @@
 <script lang="ts">
   import { Environment, OrbitControls, useDraco, useGltf, useGltfAnimations } from '@threlte/extras'
   import { T } from '@threlte/core'
-  import { fromStore } from 'svelte/store'
 
   const dracoLoader = useDraco()
   const gltf = useGltf('/models/LittlestTokyo.glb', { dracoLoader })
-  const { actions, mixer } = useGltfAnimations<'Take 001'>(gltf)
-
-  const s = fromStore(actions)
-  const getActions = () => s.current
-  export { getActions, mixer }
+  export const { actions, mixer } = useGltfAnimations<'Take 001'>(gltf)
 </script>
 
 <T.PerspectiveCamera
