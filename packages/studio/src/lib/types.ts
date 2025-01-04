@@ -8,3 +8,24 @@ export type StudioProps = {
   signature: string
   pathItems?: string[]
 }
+
+export type Modifier = {
+  name: string
+  value: string
+}
+
+export type Member = {
+  name: string
+  argument: {
+    start: number
+    end: number
+  }
+  modifiers: Modifier[]
+}
+
+export type Members = Member[]
+
+export type StaticStateMeta = {
+  id: string
+  members: Member[]
+}

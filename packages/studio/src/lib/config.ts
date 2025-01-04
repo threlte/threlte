@@ -1,1 +1,1 @@
-export const moduleIdKey = 'akeywithverylongnameandhopefullynoonewilluseit' as const
+export const staticStateMetaKey = 'akeywithverylongnameandhopefullynoonewilluseit' as const

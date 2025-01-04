@@ -1,13 +1,14 @@
 import { onDestroy } from 'svelte'
-import { moduleIdKey } from '../../config'
+import { staticStateMetaKey } from '../../config'
 import { addStaticState, removeStaticState } from './staticStates'
+import type { StaticStateMeta } from '../../types'
 
 export const register = Symbol('register')
 export const unregister = Symbol('unregister')
 export const accessors = Symbol('accessors')
 
 export abstract class StaticState {
-  [moduleIdKey]!: string;
+  [staticStateMetaKey]!: StaticStateMeta;
 
   [accessors]: string[] = []
 

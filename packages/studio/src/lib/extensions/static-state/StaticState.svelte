@@ -8,8 +8,9 @@
   import { accessors, type StaticState } from './StaticState'
   import { getStaticStates } from './staticStates'
   import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
-  import { moduleIdKey } from '../../config'
+  import { staticStateMetaKey } from '../../config'
   import { clientRpc } from '../../rpc/clientRpc'
+  import type { Modifier } from '../../types'
 
   let { children }: { children?: Snippet } = $props()
 
@@ -40,7 +41,27 @@
   const setValue = (state: StaticState, accessor: string, value: any) => {
     state[accessor as unknown as keyof StaticState] = value
     const className = state.constructor.name
-    clientRpc?.mutateStaticState(state[moduleIdKey], className, accessor, value)
+    clientRpc?.mutateStaticState(state[staticStateMetaKey].id, className, accessor, value)
+  }
+
+  const findModifiers = (state: StaticState, accessor: string) => {
+    const member = state[staticStateMetaKey].members.find((m) => m.name === accessor)
+    if (!member) return []
+    return member.modifiers
+  }
+
+  const buildOptionsFromModifiers = (modifiers: Modifier[]) => {
+    const options: Record<string, any> = {}
+    modifiers.forEach((modifier) => {
+      let v = modifier.value
+      try {
+        v = JSON.parse(v)
+      } catch (error) {
+        // ignore
+      }
+      options[modifier.name] = v
+    })
+    return options
   }
 </script>
 
@@ -70,6 +91,7 @@
           {#each state[accessors] as accessor (accessor)}
             <AutoValue
               value={getValue(state, accessor)}
+              options={buildOptionsFromModifiers(findModifiers(state, accessor))}
               label={accessor}
               on:change={(e) => {
                 setValue(state, accessor, e.detail.value)

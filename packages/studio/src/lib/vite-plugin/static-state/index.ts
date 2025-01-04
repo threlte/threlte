@@ -3,7 +3,8 @@ import { readFile, writeFile } from '../utils/fileUtils'
 import { toMagicString } from '../utils/magicStringUtils'
 import util from 'node:util'
 import * as hmr from '../hmr'
-import { moduleIdKey } from '../../config'
+import { staticStateMetaKey } from '../../config'
+import type { Members, Modifier, StaticStateMeta } from '../../types'
 
 const allowedExtensions = ['.svelte.ts', '.svelte.js']
 const isAllowedExtension = (id: string) => {
@@ -16,9 +17,9 @@ const hasStaticState = (code: string) => {
 
 const regex = /extends StaticState[^\{]*{/gm
 
-const appendMeta = (code: string, id: string) => {
+const appendMeta = (code: string, id: string, meta: StaticStateMeta) => {
   // add meta info to the code: id
-  return code.replace(regex, `$& ${moduleIdKey} = '${id}'`)
+  return code.replace(regex, `$& ${staticStateMetaKey} = ${JSON.stringify(meta)}`)
 }
 
 const extractScript = (code: string) => {
@@ -41,20 +42,17 @@ const isClassWithName = (node: ts.ClassDeclaration, name: string): boolean => {
   return true
 }
 
-type Member = {
-  name: string
-  argument: {
-    start: number
-    end: number
-  }
-}
-
-type Members = Member[]
-
 const extractMembers = (node: ts.ClassDeclaration): Members => {
   const members: Members = []
   node.members.forEach((member) => {
     if (member.kind !== ts.SyntaxKind.PropertyDeclaration) return
+    const modifiers: Modifier[] = []
+    ts.getJSDocTags(member).forEach((tag) => {
+      modifiers.push({
+        name: tag.tagName.getText(),
+        value: tag.comment?.toString() ?? ''
+      })
+    })
     if (!member.name || member.name.kind !== ts.SyntaxKind.Identifier) return
     const m = member as ts.PropertyDeclaration
     if (!m.initializer || m.initializer.kind !== ts.SyntaxKind.CallExpression) return
@@ -67,7 +65,8 @@ const extractMembers = (node: ts.ClassDeclaration): Members => {
       argument: {
         start: arg.pos,
         end: arg.end
-      }
+      },
+      modifiers
     })
   })
   return members
@@ -76,7 +75,28 @@ const extractMembers = (node: ts.ClassDeclaration): Members => {
 export const transformStaticState = (code: string, id: string) => {
   if (!isAllowedExtension(id)) return code
   if (!hasStaticState(code)) return code
-  return appendMeta(code, id)
+
+  const ast = ts.createSourceFile(id, code, ts.ScriptTarget.ESNext, true)
+
+  const members: Members = []
+
+  // Recursive function to traverse the AST
+  function traverse(node: ts.Node, depth = 0) {
+    if (isExtendsStaticState(node)) {
+      members.push(...extractMembers(node))
+    }
+    ts.forEachChild(node, (childNode) => traverse(childNode, depth + 1))
+  }
+
+  // Start traversing the AST from the source file
+  traverse(ast)
+
+  const meta: StaticStateMeta = {
+    id,
+    members
+  }
+
+  return appendMeta(code, id, meta)
 }
 
 export const mutateStaticState = (
