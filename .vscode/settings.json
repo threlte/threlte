@@ -87,6 +87,13 @@
         "color": "#FE3D00",
         "singleInstance": true,
         "command": " pnpm dev"
+      },
+      {
+        "cwd": "${workspaceFolder}/packages/studio",
+        "name": "$(package) studio",
+        "color": "#FE3D00",
+        "singleInstance": true,
+        "command": " pnpm dev"
       }
     ]
   },
