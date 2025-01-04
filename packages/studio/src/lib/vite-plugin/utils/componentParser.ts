@@ -3,7 +3,7 @@ import { walk, type Node } from 'estree-walker'
 import MagicString from 'magic-string'
 import { createHash } from 'node:crypto'
 import { parse } from 'svelte/compiler'
-import type { StudioProps } from '../types'
+import type { StudioProps } from '../../types'
 
 export const hasTComponent = (code: string): boolean => {
   return code.includes('<T.') || code.includes('<T ') || code.includes('<T\n')

@@ -3,18 +3,18 @@
   import { onMount } from 'svelte'
   import { Checkbox, Element, RadioGrid } from 'svelte-tweakpane-ui'
   import DropDownPane from '../../components/DropDownPane.svelte'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
+  import { clientRpc } from '../../rpc/clientRpc'
+  import type { StudioProps } from '../../types'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import Changes from './Changes.svelte'
+  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData'
   import { TransactionQueue } from './TransactionQueue/TransactionQueue.svelte'
   import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
-  import { clientRpc } from './vite-plugin/clientRpc'
-  import { getThrelteStudioUserData } from './vite-plugin/runtimeUtils'
-  import type { StudioProps } from './vite-plugin/types'
-  import { vitePluginEnabled } from './vite-plugin/vitePluginEnabled'
+  import { vitePluginEnabled } from './vitePluginEnabled'
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()

@@ -2,7 +2,7 @@ import { useStudio } from '../../internal/extensions'
 import type { TransactionQueue } from './TransactionQueue/TransactionQueue.svelte'
 import { buildTransaction } from './TransactionQueue/buildTransaction'
 import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
-import { vitePluginEnabled } from './vite-plugin/vitePluginEnabled'
+import { vitePluginEnabled } from './vitePluginEnabled'
 
 export const useTransactions = () => {
   const { useExtension } = useStudio()

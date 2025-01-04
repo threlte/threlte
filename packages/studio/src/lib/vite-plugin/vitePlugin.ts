@@ -1,11 +1,11 @@
 import type { Plugin } from 'vite'
 import { createRPCServer } from 'vite-dev-rpc'
-import type { ClientFunctions, ServerFunctions } from '../rpc'
 import * as hmr from './hmr'
 import * as openInEditor from './open-in-editor'
 import * as staticState from './static-state'
 import * as transactions from './transactions'
 import * as logger from './utils/logger'
+import type * as rpc from '../rpc/rpc'
 
 export const plugin: () => Plugin = () => {
   return {
@@ -53,7 +53,7 @@ export const plugin: () => Plugin = () => {
       }
     },
     configureServer(server) {
-      createRPCServer<ClientFunctions, ServerFunctions>('threlte-studio', server.ws, {
+      createRPCServer<rpc.ClientFunctions, rpc.ServerFunctions>('threlte-studio', server.ws, {
         mutateStaticState(id, className, propertyName, value) {
           return staticState.mutateStaticState(id, className, propertyName, value)
         },

@@ -5,10 +5,11 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import { useStudio } from '../../internal/extensions'
-  import { clientRpc } from '../transactions/vite-plugin/clientRpc'
-  import { accessors, moduleIdKey, type StaticState } from './StaticState'
+  import { accessors, type StaticState } from './StaticState'
   import { getStaticStates } from './staticStates'
   import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
+  import { moduleIdKey } from '../../config'
+  import { clientRpc } from '../../rpc/clientRpc'
 
   let { children }: { children?: Snippet } = $props()
 

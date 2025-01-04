@@ -222,4 +222,4 @@ max-height: 50vh;
   }
 </script>
 
-<div use:replace />
+<div use:replace></div>

@@ -46,7 +46,7 @@
     }
   }}
   options={{
-    format: (n) => `${n}°`,
+    format: (n: number) => `${n}°`,
     step: snapping.enabled ? snapping.rotate : undefined
   }}
 />
