@@ -16,11 +16,6 @@ const hasStaticState = (code: string) => {
 
 const regex = /extends StaticState[^\{]*{/gm
 
-type Meta = {
-  id: string
-  classNames: string[]
-}
-
 const appendMeta = (code: string, id: string) => {
   // add meta info to the code: id
   return code.replace(regex, `$& ${moduleIdKey} = '${id}'`)
