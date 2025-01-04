@@ -3,6 +3,7 @@ import { readFile, writeFile } from '../utils/fileUtils'
 import { toMagicString } from '../utils/magicStringUtils'
 import util from 'node:util'
 import { moduleIdKey } from '../../../static-state/StaticState'
+import * as hmr from '../hmr'
 
 const allowedExtensions = ['.svelte.ts', '.svelte.js']
 const isAllowedExtension = (id: string) => {
@@ -121,5 +122,6 @@ export const mutateStaticState = (
 
   if (needsRewrite) {
     writeFile(id, ms.toString())
+    hmr.disableModuleHmr(id)
   }
 }
