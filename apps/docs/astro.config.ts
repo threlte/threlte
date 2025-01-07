@@ -89,7 +89,11 @@ export default defineConfig({
       }
     },
     build: {
-      target: 'esnext'
+      target: 'esnext',
+      minify: 'terser',
+      terserOptions: {
+        keep_classnames: true
+      }
     }
   },
   markdown: {

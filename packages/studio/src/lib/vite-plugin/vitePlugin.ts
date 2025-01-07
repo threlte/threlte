@@ -7,11 +7,15 @@ import * as transactions from './transactions'
 import * as logger from './utils/logger'
 import type * as rpc from '../rpc/rpc'
 
-export const plugin: () => Plugin = () => {
+type Options = {
+  apply?: 'serve' | 'build'
+}
+
+export const plugin: (options?: Options) => Plugin = (options) => {
   return {
     name: 'Threlte Studio',
     enforce: 'pre',
-    apply: 'serve',
+    apply: options?.apply,
     async transform(code, id) {
       // do not transform node_modules
       if (id.includes('node_modules')) return

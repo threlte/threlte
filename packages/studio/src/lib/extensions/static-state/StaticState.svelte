@@ -10,12 +10,10 @@
   import type { Modifier } from '../../types'
   import { accessors, instances, setValue, StaticState } from './StaticState'
   import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
-  import { useTransactions } from '../transactions/useTransactions'
 
   let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
-  const { vitePluginEnabled } = useTransactions()
 
   const extension = createExtension<StaticStateState, StaticStateActions>({
     scope: staticStateScope,
@@ -107,6 +105,10 @@
       options: options
     } as any
   }
+
+  const hasStates = $derived.by(() => {
+    return [...StaticState[instances]].some(([_, ix]) => ix.size > 0)
+  })
 </script>
 
 <ToolbarItem position="left">
@@ -121,7 +123,7 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-{#if extension.state.editorEnabled && vitePluginEnabled}
+{#if extension.state.editorEnabled}
   <Pane
     title="Static State"
     position="fixed"
@@ -129,32 +131,41 @@
     x={browser ? innerWidth - 6 - 320 : 6}
     y={6 + 60 + 6}
   >
-    {#each StaticState[instances].entries() as [constructor, ix]}
-      {#if ix.size > 0}
-        <Folder title={constructor.name}>
-          {@const [instance] = ix}
-          {#each instance[accessors] as accessor (accessor)}
-            <AutoValue
-              value={getValue(instance, accessor)}
-              label={accessor}
-              on:change={(e) => {
-                setStateValue(instance, accessor, e.detail.value)
-              }}
-              {...buildAutoValueOptions(instance, accessor)}
-            />
-          {/each}
-        </Folder>
-      {/if}
-    {/each}
-    <Element>
-      <div style="display: flex; justify-content: end; margin-bottom: 4px;"></div>
-    </Element>
-    <!-- {:else}
+    {#if hasStates}
+      {#each StaticState[instances].entries() as [constructor, ix]}
+        {#if ix.size > 0}
+          <Folder title={constructor.name}>
+            {@const [instance] = ix}
+            {#each instance[accessors] as accessor (accessor)}
+              <AutoValue
+                value={getValue(instance, accessor)}
+                label={accessor}
+                on:change={(e) => {
+                  setStateValue(instance, accessor, e.detail.value)
+                }}
+                {...buildAutoValueOptions(instance, accessor)}
+              />
+            {/each}
+          </Folder>
+        {/if}
+      {/each}
+    {:else}
       <Element>
-        <p>No static states found</p>
+        <div>
+          <p>No static states found</p>
+        </div>
       </Element>
-    {/if} -->
+    {/if}
   </Pane>
 {/if}
 
 {@render children?.()}
+
+<style>
+  div {
+    padding: 0.25rem 4px;
+    font-family: monospace;
+    font-size: 11px;
+    color: var(--lbl-fg);
+  }
+</style>

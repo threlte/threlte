@@ -49,6 +49,8 @@ export abstract class StaticState {
       })
       .map(([key]) => key)
 
+    let isRegistered = false
+
     // populate from cached values
     queueMicrotask(() => {
       this[accessors].forEach((property) => {
@@ -57,16 +59,19 @@ export abstract class StaticState {
           this[property as keyof this] = value
         }
       })
-    })
 
-    // Add the state to the UI
-    this[register]()
+      if (!this[staticStateMetaKey]) return
+
+      // Add the state to the UI
+      this[register]()
+      isRegistered = true
+    })
 
     // If we're part of a component lifecycle, we need to unregister when the
     // component is destroyed
     try {
       onDestroy(() => {
-        this[unregister]()
+        if (isRegistered) this[unregister]()
       })
     } catch {
       // ignore
