@@ -4,6 +4,7 @@ import MagicString from 'magic-string'
 import { inspect } from 'node:util'
 import { parse } from 'svelte/compiler'
 import type { StudioProps } from '../../types'
+import json5 from 'json5'
 
 export const hasTComponent = (code: string): boolean => {
   return code.includes('<T.') || code.includes('<T ') || code.includes('<T\n')
@@ -322,7 +323,7 @@ export const readAttribute = (markup: MagicString, node: TComponentNode, attribu
     return attribute.value[0].data
   } else if (isAttributeWithMustacheTagValue(attribute)) {
     const firstValue = attribute.value[0]
-    return JSON.parse(markup.slice(firstValue.start + 1, firstValue.end - 1))
+    return json5.parse(markup.slice(firstValue.start + 1, firstValue.end - 1))
   } else if (isAttributeWithShorthandValue(attribute)) {
     throw new Error('Shorthand props are not supported.')
   } else {
