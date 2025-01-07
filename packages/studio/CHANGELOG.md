@@ -1,5 +1,15 @@
 # @threlte/studio
 
+## 0.1.0-next.27
+
+### Minor Changes
+
+- 2965b29: Add StaticState
+
+### Patch Changes
+
+- f9c1f2d: Refactor component parsing and mutation
+
 ## 0.1.0-next.26
 
 ### Patch Changes
