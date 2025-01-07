@@ -2,10 +2,11 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { Studio } from '../lib'
+  import { NoToneMapping } from 'three'
 </script>
 
 <div>
-  <Canvas>
+  <Canvas toneMapping={NoToneMapping}>
     <Studio>
       <Scene />
     </Studio>

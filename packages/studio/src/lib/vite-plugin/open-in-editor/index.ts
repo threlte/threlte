@@ -5,7 +5,7 @@ import { toMagicString } from '../utils/magicStringUtils'
 import indexToPosition from 'index-to-position'
 import * as logger from '../utils/logger'
 
-export const getColumnAndRow = (moduleId: string, componentIndex: number, signature: string) => {
+export const getColumnAndRow = async (moduleId: string, componentIndex: number) => {
   const code = fileUtils.readFile(moduleId)
   if (!componentParser.hasTComponent(code)) {
     logger.logError({
@@ -14,7 +14,7 @@ export const getColumnAndRow = (moduleId: string, componentIndex: number, signat
     })
     return { column: 0, row: 0 }
   }
-  const { markup, script, scriptModule, style } = componentUtils.disassembleComponent(code)
+  const { markup, reassemble } = await componentUtils.disassembleComponent(code)
   const magicMarkup = toMagicString(markup)
   const node = componentParser.findNodeByIndex(magicMarkup, componentIndex)
   if (!node) {
@@ -24,20 +24,12 @@ export const getColumnAndRow = (moduleId: string, componentIndex: number, signat
     })
     return { column: 0, row: 0 }
   }
-  const serverSignature = componentParser.markupSignature(magicMarkup)
-  if (serverSignature !== signature) {
-    logger.logError({
-      context: 'Signature mismatch',
-      moduleId
-    })
-    return { column: 0, row: 0 }
-  }
   const start = node.start
   const sliceTo = start + 1 + node.name.length
   // slice the markup to the start of the node
-  const slice = toMagicString(markup.slice(0, sliceTo))
+  const slice = markup.slice(0, sliceTo)
   // assemble the component back together to get the index
-  const finalComponent = componentUtils.assembleComponent(slice, script, scriptModule, style)
+  const finalComponent = await reassemble(slice)
   // get the index of the last character
   const index = finalComponent.length - 1
   // convert the index to a position

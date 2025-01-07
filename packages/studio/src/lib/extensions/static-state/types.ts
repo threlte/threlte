@@ -5,5 +5,7 @@ export type StaticStateState = {
 }
 
 export type StaticStateActions = {
-  toggleEditorEnabled: () => void
+  enableEditor: () => void
+  disableEditor: () => void
+  toggleEditor: () => void
 }

@@ -205,8 +205,13 @@ max-height: 50vh;
     observeChanges = true
     return () => {
       observeChanges = false
+
       treeItems.forEach((treeitem) => {
-        treeitem.selected = false
+        try {
+          treeitem.selected = false
+        } catch (error) {
+          // ignore
+        }
       })
       observeChanges = true
     }

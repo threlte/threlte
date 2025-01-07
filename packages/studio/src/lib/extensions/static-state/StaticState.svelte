@@ -4,17 +4,18 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { accessors, type StaticState } from './StaticState'
-  import { getStaticStates } from './staticStates'
-  import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
   import { staticStateMetaKey } from '../../config'
+  import { useStudio } from '../../internal/extensions'
   import { clientRpc } from '../../rpc/clientRpc'
   import type { Modifier } from '../../types'
+  import { accessors, instances, setValue, StaticState } from './StaticState'
+  import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
+  import { useTransactions } from '../transactions/useTransactions'
 
   let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
+  const { vitePluginEnabled } = useTransactions()
 
   const extension = createExtension<StaticStateState, StaticStateActions>({
     scope: staticStateScope,
@@ -24,24 +25,58 @@
       }
     },
     actions: {
-      toggleEditorEnabled({ state }) {
+      toggleEditor({ state }) {
         state.editorEnabled = !state.editorEnabled
+      },
+      enableEditor({ state }) {
+        state.editorEnabled = true
+      },
+      disableEditor({ state }) {
+        state.editorEnabled = false
       }
     }
   })
 
   const browser = typeof window !== 'undefined'
 
-  const states = getStaticStates()
-
   const getValue = (state: StaticState, accessor: string) => {
     return $state.snapshot(state[accessor as unknown as keyof StaticState])
   }
 
-  const setValue = (state: StaticState, accessor: string, value: any) => {
-    state[accessor as unknown as keyof StaticState] = value
+  let debounceTimeouts: Record<string, ReturnType<typeof setTimeout>> = {}
+
+  /**
+   * Syncs the value back to the code. Debounced to prevent multiple calls.
+   */
+  const syncValue = (
+    moduleId: string,
+    module: boolean,
+    className: string,
+    accessor: string,
+    value: any
+  ) => {
+    const debounceKey = `${moduleId}-${module}-${className}-${accessor}`
+
+    if (debounceTimeouts[debounceKey]) {
+      clearTimeout(debounceTimeouts[debounceKey])
+    }
+
+    debounceTimeouts[debounceKey] = setTimeout(() => {
+      clientRpc?.mutateStaticState(moduleId, module, className, accessor, value)
+      delete debounceTimeouts[debounceKey]
+    }, 500)
+  }
+
+  const setStateValue = (state: StaticState, accessor: string, value: any) => {
+    StaticState[setValue](state.constructor, accessor, value)
     const className = state.constructor.name
-    clientRpc?.mutateStaticState(state[staticStateMetaKey].id, className, accessor, value)
+    syncValue(
+      state[staticStateMetaKey].id,
+      state[staticStateMetaKey].module,
+      className,
+      accessor,
+      value
+    )
   }
 
   const findModifiers = (state: StaticState, accessor: string) => {
@@ -63,12 +98,21 @@
     })
     return options
   }
+
+  const buildAutoValueOptions = (state: StaticState, accessor: string) => {
+    const modifiers = findModifiers(state, accessor)
+    const options = buildOptionsFromModifiers(modifiers)
+    // must be any because of the way the AutoValue component works
+    return {
+      options: options
+    } as any
+  }
 </script>
 
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={extension.toggleEditorEnabled}
+      on:click={extension.toggleEditor}
       active={extension.state.editorEnabled}
       label="Static State"
       icon="mdiAppsBox"
@@ -77,7 +121,7 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-{#if extension.state.editorEnabled}
+{#if extension.state.editorEnabled && vitePluginEnabled}
   <Pane
     title="Static State"
     position="fixed"
@@ -85,29 +129,31 @@
     x={browser ? innerWidth - 6 - 320 : 6}
     y={6 + 60 + 6}
   >
-    {#if states.size > 0}
-      {#each states as state}
-        <Folder title={state.constructor.name}>
-          {#each state[accessors] as accessor (accessor)}
+    {#each StaticState[instances].entries() as [constructor, ix]}
+      {#if ix.size > 0}
+        <Folder title={constructor.name}>
+          {@const [instance] = ix}
+          {#each instance[accessors] as accessor (accessor)}
             <AutoValue
-              value={getValue(state, accessor)}
-              options={buildOptionsFromModifiers(findModifiers(state, accessor))}
+              value={getValue(instance, accessor)}
               label={accessor}
               on:change={(e) => {
-                setValue(state, accessor, e.detail.value)
+                setStateValue(instance, accessor, e.detail.value)
               }}
+              {...buildAutoValueOptions(instance, accessor)}
             />
           {/each}
         </Folder>
-      {/each}
-      <Element>
-        <div style="display: flex; justify-content: end; margin-bottom: 4px;"></div>
-      </Element>
-    {:else}
+      {/if}
+    {/each}
+    <Element>
+      <div style="display: flex; justify-content: end; margin-bottom: 4px;"></div>
+    </Element>
+    <!-- {:else}
       <Element>
         <p>No static states found</p>
       </Element>
-    {/if}
+    {/if} -->
   </Pane>
 {/if}
 

@@ -1,7 +1,7 @@
 import type { Expression } from 'estree'
 import { walk, type Node } from 'estree-walker'
 import MagicString from 'magic-string'
-import { createHash } from 'node:crypto'
+import { inspect } from 'node:util'
 import { parse } from 'svelte/compiler'
 import type { StudioProps } from '../../types'
 
@@ -168,64 +168,24 @@ export const findNodeByIndex = (markup: MagicString, index: number): TComponentN
   return finalNode
 }
 
-export const tComponentNodeSignature = (markup: MagicString, node: TComponentNode): string => {
-  const name = node.name
-  const attributes = node.attributes
-    .filter((attr) => isValueAttribute(attr))
-    .toSorted((a, b) => a.name.localeCompare(b.name))
-    .map((attribute) => {
-      const attr = attribute as ValueAttribute
-      const value = attr.value
-      if (typeof value === 'boolean') return JSON.stringify({ name: attr.name, value })
-      const firstValue = value[0]
-      let valueString = ''
-      valueString =
-        firstValue.type === 'Text'
-          ? firstValue.data
-          : markup.slice(firstValue.start, firstValue.end)
-      return JSON.stringify({ name: attr.name, value: valueString })
-    })
-    .join(',')
-
-  return createHash('sha256').update(`${name}:${attributes}`).digest('hex')
-}
-
-// The signature of a module is a hash of all T component names, their index and their attributes.
-export const markupSignature = (markup: MagicString): string => {
-  const ast = parse(markup.toString())
-  const nodes: [name: string, index: number, attributes: string][] = []
-  let index = 0
-  walk((ast as any).html as Node, {
-    enter(node) {
-      if (!isTComponentNode(node)) return
-      const name = node.name
-      const attributes = node.attributes
-        .filter((attr) => isValueAttribute(attr))
-        .toSorted((a, b) => a.name.localeCompare(b.name))
-        .map((attribute) => {
-          const attr = attribute as ValueAttribute
-          const value = attr.value
-          if (typeof value === 'boolean') return JSON.stringify({ name: attr.name, value })
-          const firstValue = value[0]
-          let valueString = ''
-          valueString =
-            firstValue.type === 'Text'
-              ? firstValue.data
-              : markup.slice(firstValue.start, firstValue.end)
-          return JSON.stringify({ name: attr.name, value: valueString })
-        })
-        .join(',')
-      nodes.push([name, index, attributes])
-      index += 1
-    }
-  })
-
-  return createHash('sha256').update(JSON.stringify(nodes)).digest('hex')
-}
-
+/**
+ * Stringifies any value with a set precision (default 4).
+ */
 const stringifyAttributeValue = (value: unknown, precision = 4): string => {
-  return JSON.stringify(value, (_, val) => {
-    return val.toFixed ? Number(val.toFixed(precision)) : val
+  const reducedPrecision = JSON.parse(
+    JSON.stringify(
+      value,
+      (_, val) => {
+        return val.toFixed ? Number(val.toFixed(precision)) : val
+      },
+      ' '
+    )
+  )
+  return inspect(reducedPrecision, {
+    depth: Infinity,
+    breakLength: Infinity,
+    maxArrayLength: Infinity,
+    maxStringLength: Infinity
   })
 }
 
@@ -373,11 +333,10 @@ export const readAttribute = (markup: MagicString, node: TComponentNode, attribu
 export const addStudioRuntimeProps = (markup: MagicString, id: string): void => {
   const ast = parse(markup.toString())
   let index = 0
-  const signature = markupSignature(markup)
   walk((ast as any).html as Node, {
     enter(node) {
       if (!isTComponentNode(node)) return
-      const props: StudioProps = { moduleId: id, index, signature }
+      const props: StudioProps = { moduleId: id, index }
       upsertAttribute(markup, node, 'threlteStudio', props, 'last')
       index += 1
     }

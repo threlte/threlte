@@ -12,13 +12,13 @@ export const plugin: () => Plugin = () => {
     name: 'Threlte Studio',
     enforce: 'pre',
     apply: 'serve',
-    transform(code, id) {
+    async transform(code, id) {
       // do not transform node_modules
       if (id.includes('node_modules')) return
 
       // transform static state
       try {
-        code = staticState.transformStaticState(code, id)
+        code = await staticState.transformStaticState(code, id)
       } catch (err) {
         logger.logError({
           moduleId: id,
@@ -30,7 +30,7 @@ export const plugin: () => Plugin = () => {
 
       // transform component
       try {
-        code = transactions.transformComponent(code, id)
+        code = await transactions.transformComponent(code, id)
       } catch (err) {
         logger.logError({
           moduleId: id,
@@ -54,14 +54,14 @@ export const plugin: () => Plugin = () => {
     },
     configureServer(server) {
       createRPCServer<rpc.ClientFunctions, rpc.ServerFunctions>('threlte-studio', server.ws, {
-        mutateStaticState(id, className, propertyName, value) {
-          return staticState.mutateStaticState(id, className, propertyName, value)
+        mutateStaticState(id, module, className, propertyName, value) {
+          return staticState.mutateStaticState(id, module, className, propertyName, value)
         },
-        syncTransactions(t) {
-          return transactions.syncTransactions(t)
+        async syncTransactions(t) {
+          return await transactions.syncTransactions(t)
         },
-        getColumnAndRow(moduleId, componentIndex, signature) {
-          return openInEditor.getColumnAndRow(moduleId, componentIndex, signature)
+        async getColumnAndRow(moduleId, componentIndex) {
+          return await openInEditor.getColumnAndRow(moduleId, componentIndex)
         }
       })
     }

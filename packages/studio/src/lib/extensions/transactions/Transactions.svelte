@@ -107,11 +107,7 @@
         if (!clientRpc) return
         const userData = getThrelteStudioUserData(object)
         if (!userData) return
-        const pos = await clientRpc.getColumnAndRow(
-          userData.moduleId,
-          userData.index,
-          userData.signature
-        )
+        const pos = await clientRpc.getColumnAndRow(userData.moduleId, userData.index)
         const fileLoc = `${userData.moduleId}:${pos.row}:${pos.column + 1}`
         fetch(`/__open-in-editor?file=${encodeURIComponent(fileLoc)}`)
       },

@@ -86,6 +86,7 @@
     "three-mesh-bvh": "^0.7.5",
     "three.quarks": "^0.15.0",
     "tsx": "^3.13.0",
+    "vite": "^5.2.8",
     "vite-plugin-mkcert": "^1.17.5"
   },
   "overrides": {

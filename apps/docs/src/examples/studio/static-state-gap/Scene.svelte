@@ -1,16 +1,28 @@
 <script lang="ts">
   import { T } from '@threlte/core'
+  import { StaticState } from '@threlte/studio'
   import { useStaticState } from '@threlte/studio/extensions'
   import Box from './Box.svelte'
-  import { SceneConfig } from './config.svelte'
   import Icosahedron from './Icosahedron.svelte'
   import Sphere from './Sphere.svelte'
 
   const staticStateExtension = useStaticState()
   staticStateExtension.enableEditor()
 
-  const config = new SceneConfig()
+  class SceneConfig extends StaticState {
+    /**
+     * @min 1.5
+     * @max 5
+     */
+    gap = $state(2)
+  }
+
+  const sceneConfig = new SceneConfig()
 </script>
+
+<Icosahedron position={[-sceneConfig.gap, 0, 0]} />
+<Box position={[0, 0, 0]} />
+<Sphere position={[sceneConfig.gap, 0, 0]} />
 
 <T.PerspectiveCamera
   makeDefault
@@ -23,13 +35,7 @@
 
 <T.DirectionalLight
   position={[3, 10, 7]}
-  intensity={config.directionalLightIntensity}
+  intensity={2.7}
 />
 
-<T.AmbientLight intensity={config.ambientLightIntensity} />
-
-<Icosahedron position={[-2, 0, 0]} />
-{#if config.showBox}
-  <Box position={[0, 0, 0]} />
-{/if}
-<Sphere position={[2, 0, 0]} />
+<T.AmbientLight intensity={0.13} />

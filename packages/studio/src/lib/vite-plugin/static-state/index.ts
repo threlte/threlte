@@ -1,14 +1,24 @@
-import ts from 'typescript'
-import { readFile, writeFile } from '../utils/fileUtils'
-import { toMagicString } from '../utils/magicStringUtils'
 import util from 'node:util'
-import * as hmr from '../hmr'
+import { preprocess } from 'svelte/compiler'
+import ts from 'typescript'
 import { staticStateMetaKey } from '../../config'
 import type { Members, Modifier, StaticStateMeta } from '../../types'
+import * as hmr from '../hmr'
+import { readFile, writeFile } from '../utils/fileUtils'
+import { toMagicString } from '../utils/magicStringUtils'
+import { isModule } from '../utils/componentUtils'
 
-const allowedExtensions = ['.svelte.ts', '.svelte.js']
+const createAst = (code: string, id: string) => {
+  return ts.createSourceFile(id, code, ts.ScriptTarget.Latest, true)
+}
+
+const allowedExtensions = ['.svelte.ts', '.svelte.js', '.svelte']
 const isAllowedExtension = (id: string) => {
   return allowedExtensions.some((ext) => id.endsWith(ext))
+}
+
+const isSvelteComponent = (id: string) => {
+  return id.endsWith('.svelte')
 }
 
 const hasStaticState = (code: string) => {
@@ -17,14 +27,9 @@ const hasStaticState = (code: string) => {
 
 const regex = /extends StaticState[^\{]*{/gm
 
-const appendMeta = (code: string, id: string, meta: StaticStateMeta) => {
+const appendMeta = (code: string, meta: StaticStateMeta) => {
   // add meta info to the code: id
   return code.replace(regex, `$& ${staticStateMetaKey} = ${JSON.stringify(meta)}`)
-}
-
-const extractScript = (code: string) => {
-  // CURRENTLY WORKS ONLY FOR .svelte.ts and .svelte.js
-  return code
 }
 
 const isExtendsStaticState = (node: ts.Node): node is ts.ClassDeclaration => {
@@ -72,12 +77,7 @@ const extractMembers = (node: ts.ClassDeclaration): Members => {
   return members
 }
 
-export const transformStaticState = (code: string, id: string) => {
-  if (!isAllowedExtension(id)) return code
-  if (!hasStaticState(code)) return code
-
-  const ast = ts.createSourceFile(id, code, ts.ScriptTarget.ESNext, true)
-
+const transformScript = (code: string, id: string, module: boolean) => {
   const members: Members = []
 
   // Recursive function to traverse the AST
@@ -89,27 +89,54 @@ export const transformStaticState = (code: string, id: string) => {
   }
 
   // Start traversing the AST from the source file
-  traverse(ast)
+  traverse(createAst(code, id))
 
   const meta: StaticStateMeta = {
     id,
-    members
+    members,
+    module
   }
 
-  return appendMeta(code, id, meta)
+  return appendMeta(code, meta)
 }
 
-export const mutateStaticState = (
+export const transformStaticState = async (code: string, id: string) => {
+  if (!isAllowedExtension(id)) return code
+  if (!hasStaticState(code)) return code
+
+  if (isSvelteComponent(id)) {
+    const processed = await preprocess(
+      code,
+      {
+        script: ({ content, attributes }) => {
+          const module = isModule(attributes)
+          return {
+            code: transformScript(content, id, module)
+          }
+        }
+      },
+      {
+        filename: id
+      }
+    )
+    return processed.code
+  } else {
+    return transformScript(code, id, false)
+  }
+}
+
+const mutateScript = (
+  code: string,
   id: string,
   className: string,
   propertyName: string,
   value: unknown
-) => {
+): {
+  needsRewrite: boolean
+  code: string
+} => {
   let needsRewrite = false
-  const code = readFile(id)
   const ms = toMagicString(code)
-
-  const ast = ts.createSourceFile(id, code, ts.ScriptTarget.ESNext, true)
 
   // Recursive function to traverse the AST
   function traverse(node: ts.Node, depth = 0) {
@@ -133,10 +160,57 @@ export const mutateStaticState = (
   }
 
   // Start traversing the AST from the source file
-  traverse(ast)
+  traverse(createAst(code, id))
 
-  if (needsRewrite) {
-    writeFile(id, ms.toString())
-    hmr.disableModuleHmr(id)
+  return {
+    code: ms.toString(),
+    needsRewrite
+  }
+}
+
+export const mutateStaticState = async (
+  id: string,
+  module: boolean,
+  className: string,
+  propertyName: string,
+  value: unknown
+) => {
+  if (!isAllowedExtension(id)) return
+  const content = readFile(id)
+  if (!hasStaticState(content)) return
+
+  if (isSvelteComponent(id)) {
+    let needsRewrite = false
+    const processed = await preprocess(
+      content,
+      {
+        script: ({ content, attributes }) => {
+          // If the module attribute is different from the module flag, the
+          // class we're looking for is in a different script block, skip the
+          // mutation
+          if (isModule(attributes) !== module) return
+          if (!hasStaticState(content)) return
+          const mutatedScript = mutateScript(content, id, className, propertyName, value)
+          needsRewrite = mutatedScript.needsRewrite
+          return {
+            code: mutatedScript.code
+          }
+        }
+      },
+      {
+        filename: id
+      }
+    )
+
+    if (needsRewrite) {
+      writeFile(id, processed.code)
+      hmr.disableModuleHmr(id)
+    }
+  } else {
+    const { code, needsRewrite } = mutateScript(content, id, className, propertyName, value)
+    if (needsRewrite) {
+      writeFile(id, code)
+      hmr.disableModuleHmr(id)
+    }
   }
 }

@@ -1,84 +1,66 @@
-import MagicString from 'magic-string'
-import { isMagicString } from './magicStringUtils'
+import { preprocess } from 'svelte/compiler'
 
-/**
- * The process of modifying a Svelte component markup is as follows:
- * - dissassemble the component:
- *   - find the script, script module, and style and replace them with dummy
- *     values as the script and style blocks may contain code that must be
- *     preprocessed
- *   - do work on the markup
- *   - assemble the component back together
- */
-
-const dummyScript = '<script>"ABC"</script>'
-const dummyScriptModule = '<script context="module">"ABC"</script>'
-const dummyStyle = '<style></style>'
+export const isModule = (attributes: Record<string, string | boolean>) => {
+  if (attributes.module && typeof attributes.module === 'boolean') {
+    return attributes.module
+  } else if (attributes.context && attributes.context === 'module') {
+    return true
+  }
+  return false
+}
 
 /**
  * Disassembles a Svelte component into its parts: markup, script, script module,
  * and style. The script and style blocks are replaced with dummy values.
  */
-export const disassembleComponent = (code: string) => {
-  // to parse the markup, we first need to remove the script and the style blocks
-  const scriptRegex = /<script(?![^>]*module)[^>]*>[\s\S]*?<\/script>/gu
-  const scriptModuleRegex = /<script[^>]*module[^>]*>[\S\s]*?<\/script>/gu
-  const styleRegex = /<style[^>]*>[\S\s]*?<\/style>/gu
-  const scriptMatch = code.match(scriptRegex)
-  const scriptModuleMatch = code.match(scriptModuleRegex)
-  const styleMatch = code.match(styleRegex)
-  const hasMultipleScripts = scriptMatch && scriptMatch.length > 1
-  if (hasMultipleScripts) {
-    throw new Error('Multiple script blocks found in component')
-  }
-  const hasMultipleScriptModules = scriptModuleMatch && scriptModuleMatch.length > 1
-  if (hasMultipleScriptModules) {
-    throw new Error('Multiple script module blocks found in component')
-  }
-  const hasScript = Boolean(scriptMatch)
-  const hasScriptModule = Boolean(scriptModuleMatch)
-  const hasStyle = Boolean(styleMatch)
+export const disassembleComponent = async (code: string) => {
+  let script: string | undefined
+  let scriptModule: string | undefined
+  let style: string | undefined
 
-  let markup = code
+  const disassembled = await preprocess(code, {
+    script: ({ content, attributes }) => {
+      if (isModule(attributes)) {
+        scriptModule = content
+      } else {
+        script = content
+      }
+      return {
+        code: '/* DUMMY SCRIPT */'
+      }
+    },
+    style: ({ content }) => {
+      style = content
+      return {
+        code: '/* DUMMY STYLE */'
+      }
+    }
+  })
 
-  if (hasScriptModule) {
-    markup = markup.replaceAll(scriptModuleRegex, dummyScriptModule)
-  }
-  if (hasScript) {
-    markup = markup.replaceAll(scriptRegex, dummyScript)
-  }
-  if (hasStyle) {
-    markup = markup.replaceAll(styleRegex, dummyStyle)
+  const reassemble = async (newCode: string) => {
+    const assembled = await preprocess(newCode, {
+      script: ({ attributes }) => {
+        if (isModule(attributes)) {
+          return {
+            code: scriptModule!
+          }
+        } else {
+          return {
+            code: script!
+          }
+        }
+      },
+      style: () => {
+        return {
+          code: style!
+        }
+      }
+    })
+    return assembled.code
   }
 
   return {
-    markup,
-    scriptModule: hasScriptModule ? scriptModuleMatch![0] : undefined,
-    script: hasScript ? scriptMatch![0] : undefined,
-    style: hasStyle ? styleMatch![0] : undefined
+    markup: disassembled.code,
+    reassemble
   }
-}
-
-/**
- * Assembles a Svelte component from its parts: markup, script, script module,
- * and style. The script and style blocks are replaced with the original values.
- * This is the reverse of `disassembleComponent`.
- */
-export const assembleComponent = (
-  markup: MagicString,
-  script: string | undefined,
-  scriptModule: string | undefined,
-  style: string | undefined
-) => {
-  let component = isMagicString(markup) ? markup.toString() : markup
-  if (scriptModule) {
-    component = component.replace(dummyScriptModule, scriptModule)
-  }
-  if (script) {
-    component = component.replace(dummyScript, script)
-  }
-  if (style) {
-    component = component.replace(dummyStyle, style)
-  }
-  return component
 }

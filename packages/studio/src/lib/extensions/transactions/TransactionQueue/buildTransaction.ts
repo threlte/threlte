@@ -70,8 +70,7 @@ export const buildTransaction = <T>({
         ? {
             attributeName: [...(userData.pathItems ?? []), propertyPath].join('.'),
             componentIndex: userData.index,
-            moduleId: userData.moduleId,
-            signature: userData.signature
+            moduleId: userData.moduleId
           }
         : undefined
   }

@@ -12,8 +12,6 @@ export type SyncRequest = {
   componentIndex: number
   /** The module id of the component */
   moduleId: string
-  /** The signature of the component */
-  signature: string
   /** The decimal precision of floats, defaults to 4 */
   precision?: number
 }

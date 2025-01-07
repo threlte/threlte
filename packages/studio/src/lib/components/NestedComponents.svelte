@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { Snippet } from 'svelte'
+  import type { Component, Snippet } from 'svelte'
   import NestedComponents from './NestedComponents.svelte'
 
   type Props = {
-    extensions: ConstructorOfATypedSvelteComponent[]
+    extensions: Component[]
     children: Snippet
   }
 

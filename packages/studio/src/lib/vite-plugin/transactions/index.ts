@@ -1,28 +1,28 @@
+import * as hmr from '../hmr'
+import * as componentParser from '../utils/componentParser'
 import { addStudioRuntimeProps, hasTComponent } from '../utils/componentParser'
-import { toMagicString } from '../utils/magicStringUtils'
 import * as componentUtils from '../utils/componentUtils'
 import * as fileUtils from '../utils/fileUtils'
-import * as componentParser from '../utils/componentParser'
-import * as hmr from '../hmr'
+import { toMagicString } from '../utils/magicStringUtils'
 
-export const transformComponent = (code: string, id: string) => {
+export const transformComponent = async (code: string, id: string) => {
   if (!id.endsWith('.svelte')) return code
   if (!hasTComponent(code)) return code
   if (id.includes('node_modules')) return code
-  const { markup, script, scriptModule, style } = componentUtils.disassembleComponent(code)
+
+  const { markup, reassemble } = await componentUtils.disassembleComponent(code)
   const magicMarkup = toMagicString(markup)
   addStudioRuntimeProps(magicMarkup, id)
-  const finalComponent = componentUtils.assembleComponent(magicMarkup, script, scriptModule, style)
+  const finalComponent = await reassemble(magicMarkup.toString())
   return finalComponent
 }
 
-export const syncTransactions = (
+export const syncTransactions = async (
   transactions: {
     attributeName: string
     attributeValue: unknown
     componentIndex: number
     moduleId: string
-    signature: string
     precision?: number
   }[]
 ) => {
@@ -39,7 +39,7 @@ export const syncTransactions = (
       console.error('Component does not need transform')
       continue
     }
-    const { markup, script, scriptModule, style } = componentUtils.disassembleComponent(code)
+    const { markup, reassemble } = await componentUtils.disassembleComponent(code)
 
     let currentMarkup = markup
 
@@ -62,12 +62,7 @@ export const syncTransactions = (
       currentMarkup = magicMarkup.toString()
     })
 
-    const finalComponent = componentUtils.assembleComponent(
-      toMagicString(currentMarkup),
-      script,
-      scriptModule,
-      style
-    )
+    const finalComponent = await reassemble(currentMarkup)
     fileUtils.writeFile(moduleId, finalComponent)
     hmr.disableModuleHmr(moduleId)
   }

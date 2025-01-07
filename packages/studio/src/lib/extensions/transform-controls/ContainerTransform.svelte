@@ -135,8 +135,7 @@
             ? {
                 attributeName: [...(userData.pathItems ?? []), 'position'].join('.'),
                 componentIndex: userData.index,
-                moduleId: userData.moduleId,
-                signature: userData.signature
+                moduleId: userData.moduleId
               }
             : undefined
         } satisfies Transaction<any, any>
