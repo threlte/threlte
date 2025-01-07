@@ -1,13 +1,13 @@
-<script lang="ts">
+<script>
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Studio } from '../lib'
+  import { Studio } from '@threlte/studio'
   import { NoToneMapping } from 'three'
 </script>
 
 <div>
   <Canvas toneMapping={NoToneMapping}>
-    <Studio>
+    <Studio transient>
       <Scene />
     </Studio>
   </Canvas>
@@ -15,12 +15,11 @@
 
 <style>
   :global(body) {
-    background: #333333;
     margin: 0;
   }
 
   div {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
   }
 </style>

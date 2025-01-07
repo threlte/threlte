@@ -15,9 +15,9 @@
     type TransformControlsActions,
     type TransformControlsState
   } from './types'
-  import { getThrelteStudioUserData } from '../transactions/vite-plugin/runtimeUtils'
   import { useTransactions } from '../transactions/useTransactions'
   import type { Transaction } from '../transactions/TransactionQueue/TransactionQueue.svelte'
+  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData'
 
   const objectSelection = useObjectSelection()
   const { useExtension } = useStudio()
@@ -135,8 +135,7 @@
             ? {
                 attributeName: [...(userData.pathItems ?? []), 'position'].join('.'),
                 componentIndex: userData.index,
-                moduleId: userData.moduleId,
-                signature: userData.signature
+                moduleId: userData.moduleId
               }
             : undefined
         } satisfies Transaction<any, any>

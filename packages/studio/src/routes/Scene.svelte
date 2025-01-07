@@ -1,58 +1,64 @@
-<script lang="ts">
+<script>
   import { T } from '@threlte/core'
-  import { PerspectiveCamera } from 'three'
+  import { Instance, InstancedMesh, RoundedBoxGeometry } from '@threlte/extras'
+  import { BaseConfig } from './config.svelte'
+  import { StaticState } from '@threlte/studio'
+
+  class SceneConfig extends StaticState {
+    /**
+     * @min 0
+     * @max 5
+     * @step 1
+     */
+    grid = $state({ x: 5, y: 5 })
+    color = $state('#fe3d00')
+    camera = $state({ x: 0, y: 4, z: 22 })
+  }
+
+  const baseConfig = new BaseConfig()
+  const sceneConfig = new SceneConfig()
+
+  const countFloor = $derived({
+    x: Math.max(Math.floor(sceneConfig.grid.x), 1),
+    y: Math.max(Math.floor(sceneConfig.grid.y), 1)
+  })
+
+  const center = $derived({
+    x: countFloor.x * -1 + 1,
+    y: countFloor.y * -1 + 1
+  })
 </script>
 
 <T.PerspectiveCamera
+  position={[ 0, 2, 22 ]}
   makeDefault
-  position={[0, 1.5, 8.9958]}
-  fov={33.25}
+  oncreate={(ref) => {
+    ref.lookAt(0, 1, 0)
+  }}
 />
 
 <T.DirectionalLight
-  intensity={1}
-  position={[-8.8163, 15.0192, 0]}
-  castShadow
+  position={[3, 10, 7]}
+  intensity={Math.PI}
 />
-<T.AmbientLight intensity={0.2} />
 
-<T.Mesh
-  name="Floor"
-  rotation={[-1.5708, 0, 0]}
-  receiveShadow
->
-  <T.CircleGeometry args={[3, 64]} />
-  <T.MeshBasicMaterial color="#e9e9e9" />
-</T.Mesh>
+<T.Group position={[center.x, center.y, 0]}>
+  <InstancedMesh>
+    <RoundedBoxGeometry
+      radius={0.2}
+      args={[1.5, 1.5, 1.5]}
+    />
+    <T.MeshStandardMaterial
+      color={sceneConfig.color}
+      transparent
+      opacity={baseConfig.opacity}
+      alphaToCoverage
+    />
 
-<T.Mesh
-  name="Box"
-  scale={[1.5, 1.5, 1.5]}
-  position={[0, 0.75, -1.6]}
-  castShadow
->
-  <T.BoxGeometry />
-  <T.MeshStandardMaterial color="#0059BA" />
-</T.Mesh>
-
-<T.Mesh
-  name="Torus"
-  position={[1.2, 3.0923, 0.75]}
-  castShadow
->
-  <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
-  <T.MeshStandardMaterial
-    color="#F85122"
-    roughness={0.4348}
-  />
-</T.Mesh>
-
-<T.Mesh
-  name="Icosahedron"
-  position={[-1.4, 0.8494, 0.75]}
-  castShadow
-  visible
->
-  <T.IcosahedronGeometry />
-  <T.MeshStandardMaterial color="#F8EBCE" />
-</T.Mesh>
+    {#each { length: countFloor.x } as _, i (i)}
+      {#each { length: countFloor.y } as _, j (j)}
+        <Instance position={[i * 2, j * 2, 0]} />
+      {/each}
+    {/each}
+  </InstancedMesh>
+</T.Group>

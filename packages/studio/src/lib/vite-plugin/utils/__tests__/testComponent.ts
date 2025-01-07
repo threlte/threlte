@@ -24,7 +24,7 @@ export const markup = `<T.Mesh
 </T.Mesh>`
 
 export const markupWithUpdatedProps = `<T.Mesh
-  position={[1,1,1]}
+  position={[ 1, 1, 1 ]}
   {scale}
 >
   <!-- Comment -->
@@ -45,12 +45,12 @@ export const markupWithRemovedProps = `<T.Mesh
 export const markupWithStudioProps = `<T.Mesh
   position={[0, 1, 0]}
   {scale}
-  threlteStudio={{"moduleId":"Test.svelte","index":0,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}}
+  threlteStudio={{ moduleId: 'Test.svelte', index: 0 }}
 >
   <!-- Comment -->
-  <T.BoxGeometry args={[1, 1, 1]} threlteStudio={{"moduleId":"Test.svelte","index":1,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}} />
-  <T is={MeshStandardMaterial} color="red" threlteStudio={{"moduleId":"Test.svelte","index":2,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}} />
-  <T.MeshBasicMaterial threlteStudio={{"moduleId":"Test.svelte","index":3,"signature":"25ee57eeeef0ef1876f1e64830e2c78412b25aed716abc2fab1c3f49e66ff5b0"}} />
+  <T.BoxGeometry args={[1, 1, 1]} threlteStudio={{ moduleId: 'Test.svelte', index: 1 }} />
+  <T is={MeshStandardMaterial} color="red" threlteStudio={{ moduleId: 'Test.svelte', index: 2 }} />
+  <T.MeshBasicMaterial threlteStudio={{ moduleId: 'Test.svelte', index: 3 }} />
 </T.Mesh>`
 
 export const markupWithProps = `<T.Mesh
@@ -126,17 +126,17 @@ export const updatePropsMarkup = `<T.Mesh
 export const expectedUpdatePropsMarkup = `<T.Mesh
   mustache1
   mustache2="string"
-  mustache3={["mustache value"]}
+  mustache3={[ 'mustache value' ]}
   bool1
   bool2={false}
   bool3="string in bool prop"
-  bool4={["mustache value in bool prop"]}
+  bool4={[ 'mustache value in bool prop' ]}
   string1
   string2="string2"
-  string3={["mustache value in string prop"]}
+  string3={[ 'mustache value in string prop' ]}
   shorthand1
   shorthand2="string in shorthand prop"
-  shorthand3={["mustache value in shorthand prop"]}
+  shorthand3={[ 'mustache value in shorthand prop' ]}
 />
 `
 

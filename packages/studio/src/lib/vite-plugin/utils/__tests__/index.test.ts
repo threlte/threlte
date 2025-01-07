@@ -2,18 +2,14 @@ import { describe, expect, test } from 'vitest'
 import {
   addStudioRuntimeProps,
   findNodeByIndex,
-  markupSignature,
   readAttribute,
   removeAttribute,
   upsertAttribute
 } from '../componentParser'
-import { assembleComponent, disassembleComponent } from '../componentUtils'
+import { disassembleComponent } from '../componentUtils'
 import { recreateMagicString } from '../magicStringUtils'
 import {
   buildTestComponent,
-  dummyScript,
-  dummyScriptModule,
-  dummyStyle,
   expectedInsertPropsMarkup,
   expectedUpdatePropsMarkup,
   insertPropsMarkup,
@@ -29,42 +25,21 @@ import {
 } from './testComponent'
 
 describe('sync utilities', () => {
-  test('disassemble component', () => {
+  test('disassemble and reassemble component', async () => {
     const input = buildTestComponent({
       scriptModule,
       script,
       markup,
       style
     })
-    const expectedMarkup = buildTestComponent({
-      scriptModule: dummyScriptModule,
-      script: dummyScript,
-      markup,
-      style: dummyStyle
-    })
-    const { markup: m, script: s, scriptModule: sm, style: st } = disassembleComponent(input)
-    expect(m).toEqual(expectedMarkup)
-    expect(s).toEqual(script)
-    expect(sm).toEqual(scriptModule)
-    expect(st).toEqual(style)
-  })
 
-  test('assemble component', () => {
-    const input = buildTestComponent({
-      scriptModule: dummyScriptModule,
-      script: dummyScript,
-      markup,
-      style: dummyStyle,
-      as: 'magic-string'
-    })
-    const expectedComponent = buildTestComponent({
-      scriptModule,
-      script,
-      markup,
-      style
-    })
-    const assembledComponent = assembleComponent(input, script, scriptModule, style)
-    expect(assembledComponent).toEqual(expectedComponent)
+    const { markup: m, reassemble } = await disassembleComponent(input)
+    expect(m).toContain('<script lang="ts" context="module">/* DUMMY SCRIPT */</script>')
+    expect(m).toContain('<script lang="ts">/* DUMMY SCRIPT */</script>')
+    expect(m).toContain('<style>/* DUMMY STYLE */</style>')
+
+    const assembledComponent = await reassemble(m)
+    expect(assembledComponent).toEqual(input)
   })
 
   test('find node by index', () => {
@@ -91,27 +66,6 @@ describe('sync utilities', () => {
     // undefined
     const undefinedNode = findNodeByIndex(input, 4)
     expect(undefinedNode).toBeUndefined()
-  })
-
-  test('get markup signature', () => {
-    const input = buildTestComponent({
-      markup,
-      as: 'magic-string'
-    })
-
-    const signature = markupSignature(input)
-    const sameSignature = markupSignature(input)
-
-    expect(signature).toEqual(sameSignature)
-
-    const input2 = buildTestComponent({
-      markup: markupWithUpdatedProps,
-      as: 'magic-string'
-    })
-
-    const signature2 = markupSignature(input2)
-
-    expect(signature).not.toEqual(signature2)
   })
 
   test('insert attributes', () => {

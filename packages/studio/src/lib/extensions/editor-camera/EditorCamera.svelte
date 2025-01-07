@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { T, useThrelte, watch } from '@threlte/core'
+  import { observe, T, useThrelte, watch } from '@threlte/core'
   import type CC from 'camera-controls'
   import { onDestroy } from 'svelte'
   import { Checkbox, RadioGrid } from 'svelte-tweakpane-ui'
   import { Box3, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from 'three'
   import DropDownPane from '../../components/DropDownPane.svelte'
+  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import { useStudio } from '../../internal/extensions'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
   import CameraControls from './CameraControls.svelte'
   import DefaultCamera from './DefaultCamera.svelte'
   import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
 
   const { createExtension } = useStudio()
   const { camera } = useThrelte()
@@ -128,15 +128,16 @@
     }
   })
 
-  $effect(() => {
-    if (editorCameraEnabled) {
-      camera.set(editorCamera)
-    } else {
-      if (defaultCameraObject) {
+  observe(
+    () => [defaultCameraObject, editorCameraEnabled, editorCamera],
+    ([defaultCameraObject, editorCameraEnabled, editorCamera]) => {
+      if (editorCameraEnabled) {
+        camera.set(editorCamera)
+      } else if (defaultCameraObject) {
         camera.set(defaultCameraObject)
       }
     }
-  })
+  )
 
   onDestroy(() => {
     if (defaultCameraObject) camera.set(defaultCameraObject)

@@ -4,6 +4,7 @@ export { useSpace } from './extensions/space/useSpace'
 export { useStudioObjectsRegistry } from './extensions/studio-objects-registry/useStudioObjectsRegistry.svelte'
 export { useTransformControls } from './extensions/transform-controls/useTransformControls'
 export { useTransactions } from './extensions/transactions/useTransactions'
+export { useStaticState } from './extensions/static-state/useStaticState'
 
-// TODO: DOCUMENTE THESE
+// TODO: DOCUMENT THESE
 export { useEditorCamera } from './extensions/editor-camera/useEditorCamera.svelte'

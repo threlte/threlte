@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import type { Color, Euler, Vector3 } from 'three'
-import { clientRpc } from '../vite-plugin/clientRpc'
+import { clientRpc } from '../../../rpc/clientRpc'
 
 export type SyncRequest = {
   /** The name of the component attribute, e.g. `"position"` or `"position.x"` */
@@ -12,8 +12,6 @@ export type SyncRequest = {
   componentIndex: number
   /** The module id of the component */
   moduleId: string
-  /** The signature of the component */
-  signature: string
   /** The decimal precision of floats, defaults to 4 */
   precision?: number
 }

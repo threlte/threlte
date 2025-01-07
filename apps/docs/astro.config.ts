@@ -5,6 +5,8 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
+import { threlteStudio } from '@threlte/studio/vite'
+import type { Plugin } from 'vite'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
@@ -69,7 +71,9 @@ export default defineConfig({
     server: {
       ...(process.argv.includes('--https') ? { https: {} } : {})
     },
-    plugins: process.argv.includes('--https') ? [mkcert()] : [],
+    plugins: process.argv.includes('--https')
+      ? [threlteStudio() as unknown as Plugin, mkcert()]
+      : [threlteStudio() as unknown as Plugin],
     ssr: {
       // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
@@ -85,7 +89,11 @@ export default defineConfig({
       }
     },
     build: {
-      target: 'esnext'
+      target: 'esnext',
+      minify: 'terser',
+      terserOptions: {
+        keep_classnames: true
+      }
     }
   },
   markdown: {

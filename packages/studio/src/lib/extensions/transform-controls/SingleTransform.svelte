@@ -10,12 +10,12 @@
   import { useSpace } from '../space/useSpace'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
   import { useTransactions } from '../transactions/useTransactions'
-  import { getThrelteStudioUserData } from '../transactions/vite-plugin/runtimeUtils'
   import {
     transformControlsScope,
     type TransformControlsActions,
     type TransformControlsState
   } from './types'
+  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData'
 
   const { useExtension } = useStudio()
   const transformControlsExtension = useExtension<
