@@ -48,7 +48,7 @@
       class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12"
     >
       <button
-        on:click={() => {
+        onclick={() => {
           resumeContext()
           state.set('intro')
         }}
@@ -62,7 +62,7 @@
   <div class="absolute right-6 top-6">
     <button
       class="rounded-full bg-white p-2 [&>*]:h-7 [&>*]:w-7"
-      on:click={() => ($muted = !$muted)}
+      onclick={() => ($muted = !$muted)}
     >
       {#if $muted}
         <svg
