@@ -17,7 +17,7 @@
   position="fixed"
   title="backdrop"
 >
-  <Folder title="backdrop props">
+  <Folder title="component props">
     <Slider
       bind:value={floor}
       min={0}
