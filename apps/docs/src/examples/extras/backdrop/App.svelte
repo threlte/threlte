@@ -3,7 +3,7 @@
   import { Canvas } from '@threlte/core'
   import { Checkbox, Color, Folder, Slider, Pane } from 'svelte-tweakpane-ui'
 
-  let floor = $state(0.25)
+  let floor = $state(0.5)
   let receiveShadow = $state(true)
   let segments = $state(20)
 

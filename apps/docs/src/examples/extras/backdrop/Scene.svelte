@@ -97,7 +97,7 @@
 
 {#await gltf then { scene }}
   <Resize
-    scale={3}
+    scale={4}
     position.z={1}
     rotation.y={Math.PI}
   >
