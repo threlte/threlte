@@ -16,10 +16,8 @@
   import { Vector2 } from 'three'
   import { gameState } from './game/state'
 
-  const ctx = useThrelte()
-
   const { state, arcadeMachineScene } = gameState
-  const { camera, renderer } = ctx
+  const { camera, renderer, autoRender, renderStage } = useThrelte()
 
   let bloomEffect: BloomEffect | undefined = undefined
 
@@ -82,10 +80,10 @@
 
   // When using PostProcessing, we need to disable autoRender
   onMount(() => {
-    let before = ctx.autoRender.current
-    ctx.autoRender.set(false)
+    let before = autoRender.current
+    autoRender.set(false)
     return () => {
-      ctx.autoRender.set(before)
+      autoRender.set(before)
       composer.removeAllPasses()
     }
   })
@@ -94,6 +92,6 @@
     (delta) => {
       composer.render(delta)
     },
-    { stage: ctx.renderStage }
+    { stage: renderStage }
   )
 </script>
