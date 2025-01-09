@@ -45,7 +45,7 @@
 </script>
 
 <T.Group
-  {scale}
+  scale={scale.current}
   position.y={2}
 >
   <!-- Centered UI background -->
@@ -103,7 +103,7 @@
   fontSize={0.7}
   color={game.baseColor}
   position={[-4.56, 1, -3]}
-  text={game.levelIndex + 1}
+  text={(game.levelIndex + 1).toString()}
 />
 
 <!-- SCORE (right column) -->
@@ -128,5 +128,5 @@
   fontSize={0.7}
   color={game.baseColor}
   position={[4.56, 1, -3]}
-  text={game.score}
+  text={game.score.toString()}
 />
