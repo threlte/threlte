@@ -1,5 +1,5 @@
 import { AudioLoader } from 'three'
-import { gameState } from './game/state'
+// import { game} from './game/GameState.svelte'
 
 const sounds = {
   bounce1: '/audio/ball_bounce_1.mp3',
@@ -68,6 +68,7 @@ const loadAudioBuffer = (url: string): Promise<AudioBuffer> => {
 const init = async () => {
   context = new AudioContext()
   globalGainNode = context.createGain()
+  globalGainNode.gain.value = 0 // todo: remove this line when done
   globalGainNode.connect(context.destination)
   const promises = Object.entries(sounds).map(async ([sound, url]) => {
     if (!context) return
@@ -89,7 +90,7 @@ const addEventListener = () => {
 
 if (typeof window !== 'undefined') {
   init()
-  addEventListener()
+  // addEventListener()
 }
 
 type PlayOptions = {
@@ -122,8 +123,9 @@ const handleMuted = (muted: boolean) => {
     globalGainNode.gain.value = 1
   }
 }
-const { muted } = gameState
-muted.subscribe(handleMuted)
+
+// const { muted } = gameState
+// muted.subscribe(handleMuted)
 
 export const play = (sound: Sound, options?: PlayOptions): ArcadeAudio | undefined => {
   if (!context || !globalGainNode) return
@@ -202,6 +204,6 @@ export const play = (sound: Sound, options?: PlayOptions): ArcadeAudio | undefin
 }
 export const playFromGroup = (group: Groups, options?: PlayOptions) => {
   const sound = groups[group][Math.floor(Math.random() * groups[group].length)]
-  const source = play(sound, options)
+  const source = play(sound!, options)
   return source
 }
