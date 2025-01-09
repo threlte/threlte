@@ -58,7 +58,7 @@ export { default as RadialGradientTexture } from './components/GradientTexture/r
 export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
-export { Backdrop, type BackdropProps } from './components/Backdrop'
+export { default as Backdrop, type BackdropProps } from './components/Backdrop'
 
 // Transitions
 export { transitions } from './transitions/transltions.svelte'
