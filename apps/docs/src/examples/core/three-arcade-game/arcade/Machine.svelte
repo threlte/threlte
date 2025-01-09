@@ -32,18 +32,16 @@
   }
 
   type Props = {
-    stick: StickPosition
-    button: Button
-    gameTexture: Texture | undefined
-    screenEmissive: number
-    screenClicked: () => void
+    joystick?: StickPosition
+    button?: Button
+    screenTexture?: Texture | undefined
+    screenClicked?: () => void
   }
 
   let {
-    stick = StickPosition.Idle,
+    joystick = StickPosition.Idle,
     button = Button.Idle,
-    gameTexture,
-    screenEmissive = 0,
+    screenTexture,
     screenClicked
   }: Props = $props()
 
@@ -67,9 +65,9 @@
   })
 
   $effect(() => {
-    if (stick == StickPosition.Left) {
+    if (joystick == StickPosition.Left) {
       stickRotation.set(-15 * MathUtils.DEG2RAD)
-    } else if (stick == StickPosition.Right) {
+    } else if (joystick == StickPosition.Right) {
       stickRotation.set(15 * MathUtils.DEG2RAD)
     } else {
       stickRotation.set(0)
@@ -114,7 +112,7 @@
       geometry={model.nodes.joystick_stick_application.geometry}
       material={model.materials['joystick base']}
       position={[0.1336, 0.9653, -0.1984]}
-      rotation={[-0.1939, 0, stickRotation]}
+      rotation={[-0.1939, 0, stickRotation.current]}
     >
       <T.Mesh
         geometry={model.nodes.joystick_stick.geometry}
@@ -154,31 +152,24 @@
       scale={1.0055}
       onpointerenter={onPointerEnter}
       onpointerleave={onPointerLeave}
-      onclick={screenClicked?.()}
+      onclick={() => {
+        screenClicked?.()
+      }}
     >
       {#await scanLinesTexture then texture}
-        {#if gameTexture}
+        {#if screenTexture}
           <T.MeshStandardMaterial
             metalness={0.9}
             roughness={0.2}
-            color={'#141414'}
-            map={texture}
+            map={screenTexture}
             metalnessMap={texture}
-            emissiveMap={gameTexture}
-            emissive={screenEmissive}
-            emissiveIntensity={1.2}
-            envMapIntensity={0}
           />
         {:else}
           <T.MeshStandardMaterial
             metalness={0.9}
             roughness={0.2}
-            color={'#141414'}
-            map={texture}
+            color="#141414"
             metalnessMap={texture}
-            emissive={screenEmissive}
-            emissiveIntensity={1.2}
-            envMapIntensity={0}
           />
         {/if}
       {/await}
