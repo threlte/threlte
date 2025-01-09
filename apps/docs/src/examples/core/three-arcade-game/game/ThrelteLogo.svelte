@@ -1,14 +1,11 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges } from '@threlte/extras'
-  import { BoxGeometry, Group, Mesh, MeshBasicMaterial } from 'three'
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { gameState } from './state'
+  import { game } from './Game.svelte'
 
-  const { baseColor } = gameState
-
-  export let scale = 1
-  export let positionZ = 0
+  let { scale = 1, positionZ = 0 } = $props()
 
   const geometry = new BoxGeometry(1, 1, 1)
   const material = new MeshBasicMaterial({
@@ -24,7 +21,7 @@
     }
   }
 
-  let rotationY = 0
+  let rotationY = $state(0)
   let dir = 1
   useTask((delta) => {
     rotationY += delta * dir
@@ -33,61 +30,45 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<T
-  is={Group}
+<T.Group
   rotation.x={-65 * DEG2RAD}
   rotation.y={rotationY}
   position.z={positionZ}
   {scale}
 >
-  <T is={Mesh}>
+  <T.Mesh>
     <T is={geometry} />
     <T is={material} />
-    <Edges color={$baseColor} />
-  </T>
+    <Edges color={game.baseColor} />
+  </T.Mesh>
 
-  <T
-    is={Mesh}
-    position.x={1}
-  >
+  <T.Mesh position.x={1}>
     <T is={geometry} />
     <T is={material} />
-    <Edges color={$baseColor} />
-  </T>
+    <Edges color={game.baseColor} />
+  </T.Mesh>
 
-  <T
-    is={Mesh}
-    position.x={-1}
-  >
+  <T.Mesh position.x={-1}>
     <T is={geometry} />
     <T is={material} />
-    <Edges color={$baseColor} />
-  </T>
+    <Edges color={game.baseColor} />
+  </T.Mesh>
 
-  <T
-    is={Mesh}
-    position.z={1}
-  >
+  <T.Mesh position.z={1}>
     <T is={geometry} />
     <T is={material} />
-    <Edges color={$baseColor} />
-  </T>
+    <Edges color={game.baseColor} />
+  </T.Mesh>
 
-  <T
-    is={Mesh}
-    position.z={-1}
-  >
+  <T.Mesh position.z={-1}>
     <T is={geometry} />
     <T is={material} />
-    <Edges color={$baseColor} />
-  </T>
+    <Edges color={game.baseColor} />
+  </T.Mesh>
 
-  <T
-    is={Mesh}
-    position.y={1}
-  >
+  <T.Mesh position.y={1}>
     <T is={geometry} />
     <T is={material} />
-    <Edges color={$baseColor} />
-  </T>
-</T>
+    <Edges color={game.baseColor} />
+  </T.Mesh>
+</T.Group>

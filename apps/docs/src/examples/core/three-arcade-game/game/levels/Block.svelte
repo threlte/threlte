@@ -1,70 +1,50 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
+  import type { BlockData } from './types'
   import { T } from '@threlte/core'
   import { Edges } from '@threlte/extras'
   import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
-  import { createEventDispatcher } from 'svelte'
   import { cubicIn } from 'svelte/easing'
-  import { tweened } from 'svelte/motion'
-  import type { Writable } from 'svelte/store'
+  import { Tween } from 'svelte/motion'
   import { clamp } from 'three/src/math/MathUtils.js'
   import { playFromGroup } from '../../sound'
-  import { blinkClock } from '../state'
-
-  export type BlockData = {
-    position: {
-      x: number
-      z: number
-    }
-    staticColors: Writable<{
-      inner: string
-      outer: string
-    }>
-    blinkingColors: Writable<
-      | {
-          innerA: string
-          innerB: string
-          outerA: string
-          outerB: string
-        }
-      | undefined
-    >
-    hit: Writable<boolean>
-    size: number
-    freeze: Writable<boolean>
-  }
+  import { game } from '../Game.svelte'
 </script>
 
 <script lang="ts">
-  export let position: BlockData['position']
-  export let size: BlockData['size']
-  export let hit: BlockData['hit']
-  export let freeze: BlockData['freeze']
-  export let staticColors: BlockData['staticColors']
-  export let blinkingColors: BlockData['blinkingColors']
+  type Props = {
+    position: BlockData['position']
+    size: BlockData['size']
+    hit: BlockData['hit']
+    freeze: BlockData['freeze']
+    staticColors: BlockData['staticColors']
+    blinkingColors: BlockData['blinkingColors']
+    onHit: () => void
+  }
+  let { position, size, hit, freeze, staticColors, blinkingColors, onHit }: Props = $props()
 
-  const dispatch = createEventDispatcher<{
-    hit: void
-  }>()
-
-  const scale = tweened(0)
+  const scale = new Tween(0)
   scale.set(1, {
     easing: cubicIn
   })
 
-  $: innerColor = $blinkingColors
-    ? $blinkClock === 0
-      ? $blinkingColors.innerA
-      : $blinkingColors.innerB
-    : $staticColors.inner
+  let innerColor = $derived(
+    blinkingColors
+      ? game.blinkClock === 0
+        ? blinkingColors.innerA
+        : blinkingColors.innerB
+      : staticColors.inner
+  )
 
-  $: outerColor = $blinkingColors
-    ? $blinkClock === 0
-      ? $blinkingColors.outerA
-      : $blinkingColors.outerB
-    : $staticColors.outer
+  let outerColor = $derived(
+    blinkingColors
+      ? game.blinkClock === 0
+        ? blinkingColors.outerA
+        : blinkingColors.outerB
+      : staticColors.outer
+  )
 
   const onContact = (e: ContactEvent) => {
     if (e.detail.totalForceMagnitude > 2000 || e.detail.totalForceMagnitude < 300) return
@@ -80,19 +60,19 @@
   position.z={position.z}
 >
   <RigidBody
-    type={!$hit || $freeze ? 'fixed' : 'dynamic'}
+    type={!hit || freeze ? 'fixed' : 'dynamic'}
     canSleep={false}
-    dominance={$hit ? -1 : 1}
+    dominance={hit ? -1 : 1}
     enabledTranslations={[true, false, true]}
   >
     <Collider
       shape="cuboid"
       args={[size / 2, 1 / 2, size / 2]}
       oncontact={onContact}
-      oncollisionexit={() => dispatch('hit')}
+      oncollisionexit={() => onHit?.()}
       mass={1}
     >
-      <T.Mesh scale={$scale}>
+      <T.Mesh scale={scale.current}>
         <T.BoxGeometry args={[size, 1, size]} />
         <T.MeshStandardMaterial
           color={innerColor}

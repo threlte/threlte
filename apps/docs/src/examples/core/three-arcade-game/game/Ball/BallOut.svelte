@@ -6,9 +6,7 @@
   import { Group } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { useTimeout } from '../hooks/useTimeout'
-  import { blinkClock, gameState } from '../state'
-
-  const { ballPosition } = gameState
+  import { game } from '../Game.svelte'
 
   const geometry = new BoxGeometry(1, 0.01, 0.1)
   const material = new MeshBasicMaterial({
@@ -24,9 +22,9 @@
 </script>
 
 <T.Group
-  visible={!$blinkClock || noBlink}
-  position.z={$ballPosition.z}
-  position.x={$ballPosition.x}
+  visible={!game.blinkClock || noBlink}
+  position.z={game.ballPosition.z}
+  position.x={game.ballPosition.x}
   rotation.y={DEG2RAD * 45}
 >
   <T.Mesh>

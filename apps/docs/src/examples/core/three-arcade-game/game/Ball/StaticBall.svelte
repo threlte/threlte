@@ -1,19 +1,16 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { derived } from 'svelte/store'
   import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
-  import { gameState } from '../state'
+  import { game } from '../Game.svelte'
   import { ballGeometry, ballMaterial } from './common'
 
-  const { playerPosition, ballPosition, state } = gameState
   const startAtPosZ = arenaHeight / 2 - playerHeight - playerToBorderDistance * 2
 
-  const usePreviousBallPosition = derived(state, (state) => {
-    return state === 'game-over' || state === 'level-complete'
-  })
-
-  $: combinedPosZ = $usePreviousBallPosition ? $ballPosition.z : startAtPosZ
-  $: combinedPosX = $usePreviousBallPosition ? $ballPosition.x : $playerPosition
+  let usePreviousBallPosition = $derived(
+    game.state === 'game-over' || game.state === 'level-complete'
+  )
+  let combinedPosZ = $derived(usePreviousBallPosition ? game.ballPosition.z : startAtPosZ)
+  let combinedPosX = $derived(usePreviousBallPosition ? game.ballPosition.x : game.playerPosition)
 </script>
 
 <T.Mesh

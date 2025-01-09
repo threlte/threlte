@@ -2,99 +2,70 @@
   import { T } from '@threlte/core'
   import { Edges, Text } from '@threlte/extras'
   import { cubicIn, cubicOut } from 'svelte/easing'
-  import { tweened } from 'svelte/motion'
-  import { derived } from 'svelte/store'
-  import { Group, Mesh, MeshBasicMaterial, PlaneGeometry } from 'three'
+  import { Tween } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { gameState } from './state'
+  import { game } from './Game.svelte'
 
-  const { state, score, levelIndex, baseColor } = gameState
-  const mainUiTexts = derived(
-    [state, score],
-    ([state, score]):
-      | {
-          text: string
-          size: {
-            width: number
-            height: number
-          }
+  let mainUiTexts = $derived.by(() => {
+    if (game.state === 'game-over')
+      return {
+        text: `Game Over\nScore: ${game.score}`,
+        size: {
+          width: 7,
+          height: 2.5
         }
-      | undefined => {
-      if (state === 'game-over')
-        return {
-          text: `Game Over\nScore: ${score}`,
-          size: {
-            width: 7,
-            height: 2.5
-          }
+      }
+    if (game.state === 'menu')
+      return {
+        text: 'Press Space\nto Start',
+        size: {
+          width: 7.5,
+          height: 2.5
         }
-      if (state === 'menu')
-        return {
-          text: 'Press Space\nto Start',
-          size: {
-            width: 7.5,
-            height: 2.5
-          }
+      }
+    if (game.state === 'level-complete')
+      return {
+        text: `Level ${game.levelIndex + 1} Complete\nScore: ${game.score}`,
+        size: {
+          width: 10,
+          height: 2.5
         }
-      if (state === 'level-complete')
-        return {
-          text: `Level ${$levelIndex + 1} Complete\nScore: ${score}`,
-          size: {
-            width: 10,
-            height: 2.5
-          }
-        }
-      return undefined
-    }
-  )
-
-  const scoreNewLines = derived(score, (score) => {
-    return score.toString().split('').join('\n')
+      }
+    return undefined
   })
 
-  const levelIndexNewLines = derived(levelIndex, (levelIndex) => {
-    return (levelIndex + 1).toString().split('').join('\n')
-  })
+  const scale = new Tween(0)
 
-  const scale = tweened(0)
-  $: {
-    const inAnim = !!$mainUiTexts
+  $effect(() => {
+    const inAnim = !!mainUiTexts
     scale.set(inAnim ? 0.8 : 0, {
       easing: inAnim ? cubicIn : cubicOut
     })
-  }
+  })
 </script>
 
-<T
-  is={Group}
-  scale={$scale}
+<T.Group
+  {scale}
   position.y={2}
 >
   <!-- Centered UI background -->
-  {#key `${[($mainUiTexts?.size.width ?? 6.5).toString(), ($mainUiTexts?.size.height ?? 2.5).toString()].join('')}`}
-    <T
-      is={Mesh}
+  {#key `${[(mainUiTexts?.size.width ?? 6.5).toString(), (mainUiTexts?.size.height ?? 2.5).toString()].join('')}`}
+    <T.Mesh
       rotation.x={-90 * DEG2RAD}
       position.y={0.8}
     >
-      <T
-        is={PlaneGeometry}
-        args={[$mainUiTexts?.size.width ?? 6.5, $mainUiTexts?.size.height ?? 2.5]}
-      />
-      <T
-        is={MeshBasicMaterial}
-        color="#08060a"
-      />
+      <T.PlaneGeometry args={[mainUiTexts?.size.width ?? 6.5, mainUiTexts?.size.height ?? 2.5]} />
+      <T.MeshBasicMaterial color="#08060a" />
 
       <Edges
-        color={$baseColor}
+        color={game.baseColor}
         scale={1.01}
       />
-    </T>
+    </T.Mesh>
   {/key}
 
   <!-- Centered UI Text -->
-  {#if $mainUiTexts?.text}
+  {#if mainUiTexts?.text}
     <Text
       font="/fonts/beefd.ttf"
       rotation.x={DEG2RAD * -90}
@@ -103,12 +74,12 @@
       textAlign="center"
       fontSize={0.4}
       lineHeight={2}
-      color={$baseColor}
+      color={game.baseColor}
       position.y={1}
-      text={$mainUiTexts?.text}
+      text={mainUiTexts?.text}
     />
   {/if}
-</T>
+</T.Group>
 
 <!-- LEVEL (left column) -->
 <Text
@@ -118,7 +89,7 @@
   anchorY="50%"
   textAlign="center"
   fontSize={0.3}
-  color={$baseColor}
+  color={game.baseColor}
   position={[-4.56, 1, -3.4]}
   text="LVL"
 />
@@ -130,9 +101,9 @@
   font="/fonts/beefd.ttf"
   lineHeight={1.4}
   fontSize={0.7}
-  color={$baseColor}
+  color={game.baseColor}
   position={[-4.56, 1, -3]}
-  text={$levelIndexNewLines}
+  text={game.levelIndex + 1}
 />
 
 <!-- SCORE (right column) -->
@@ -143,7 +114,7 @@
   textAlign="center"
   fontSize={0.3}
   font="/fonts/beefd.ttf"
-  color={$baseColor}
+  color={game.baseColor}
   position={[4.56, 1, -3.4]}
   text="SCR"
 />
@@ -155,7 +126,7 @@
   font="/fonts/beefd.ttf"
   textAlign="center"
   fontSize={0.7}
-  color={$baseColor}
+  color={game.baseColor}
   position={[4.56, 1, -3]}
-  text={$scoreNewLines}
+  text={game.score}
 />

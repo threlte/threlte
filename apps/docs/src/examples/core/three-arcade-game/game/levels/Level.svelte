@@ -1,20 +1,18 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import { get, writable } from 'svelte/store'
   import { play, type ArcadeAudio } from '../../sound'
   import { arenaBorderWidth, arenaHeight, arenaWidth, blockGap } from '../config'
   import { useTimeout } from '../hooks/useTimeout'
   import { levels } from '../levels'
-  import { gameState } from '../state'
-  import Block, { type BlockData } from './Block.svelte'
+  import { game } from '../Game.svelte'
+  import Block from './Block.svelte'
+  import type { BlockData } from './types'
 
-  let blocks: BlockData[] = []
+  let blocks: BlockData[] = $state([])
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
   let bgVolume = 0.6
-
-  const { state, score, levelIndex } = gameState
 
   let levelBackgroundAudio: ArcadeAudio | undefined = undefined
 
@@ -26,7 +24,7 @@
     levelBackgroundAudio = play('levelSlow', {
       loop: true,
       volume: bgVolume,
-      playbackRate: map($levelIndex, 0, levels.length - 1, 1.0, 2)
+      playbackRate: map(game.levelIndex, 0, levels.length - 1, 1.0, 2)
     })
   }
 
@@ -41,8 +39,8 @@
 
   let levelStarted = false
   const buildBlocks = async () => {
-    if ($state !== 'level-loading') return
-    const { rows, columns } = levels[get(levelIndex)]!
+    if (game.state !== 'level-loading') return
+    const { rows, columns } = levels[game.levelIndex]!
 
     const blockSize =
       (arenaWidth - arenaBorderWidth - ((columns - 1) * blockGap + 2 * blockGap)) / columns
@@ -56,14 +54,14 @@
             x: startAtX + blockGap + j * blockGap + j * blockSize,
             z: startAtZ + i * blockGap + i * blockSize
           },
-          hit: writable(false),
+          hit: false,
           size: blockSize,
-          freeze: writable(false),
-          staticColors: writable({
+          freeze: false,
+          staticColors: {
             inner: 'blue',
             outer: 'red'
-          }),
-          blinkingColors: writable(undefined)
+          },
+          blinkingColors: undefined
         })
         blocks = blocks
         await wait(16)
@@ -71,7 +69,7 @@
     }
 
     levelStarted = true
-    state.set('await-ball-spawn')
+    game.state = 'await-ball-spawn'
   }
 
   const { timeout } = useTimeout()
@@ -81,35 +79,35 @@
   const onGameOver = async () => {
     if (!levelStarted) return
     blocks.forEach((block) => {
-      block.freeze.set(true)
-      if (!get(block.hit)) {
-        block.blinkingColors.set({
+      block.freeze = true
+      if (!block.hit) {
+        block.blinkingColors = {
           innerA: 'red',
           innerB: 'black',
           outerA: 'red',
           outerB: 'red'
-        })
+        }
       } else {
-        block.blinkingColors.set(undefined)
-        block.staticColors.set({
+        block.blinkingColors = undefined
+        block.staticColors = {
           inner: 'black',
           outer: 'red'
-        })
+        }
       }
     })
     timeout(() => {
       blocks.forEach((block) => {
-        block.blinkingColors.set(undefined)
-        if (!get(block.hit)) {
-          block.staticColors.set({
+        block.blinkingColors = undefined
+        if (!block.hit) {
+          block.staticColors = {
             inner: 'red',
             outer: 'red'
-          })
+          }
         } else {
-          block.staticColors.set({
+          block.staticColors = {
             inner: 'black',
             outer: 'red'
-          })
+          }
         }
       })
     }, 1e3)
@@ -120,21 +118,21 @@
   const onLevelComplete = async () => {
     if (!levelStarted) return
     blocks.forEach((block) => {
-      block.freeze.set(true)
-      block.blinkingColors.set({
+      block.freeze = true
+      block.blinkingColors = {
         innerA: 'black',
         innerB: 'green',
         outerA: 'white',
         outerB: 'white'
-      })
+      }
     })
     timeout(() => {
       blocks.forEach((block) => {
-        block.staticColors.set({
+        block.staticColors = {
           inner: 'green',
           outer: 'white'
-        })
-        block.blinkingColors.set(undefined)
+        }
+        block.blinkingColors = undefined
       })
     }, 1e3)
     if (levelBackgroundAudio) levelBackgroundAudio.fade(0.2, 200)
@@ -142,20 +140,22 @@
     if (levelBackgroundAudio) levelBackgroundAudio.fade(bgVolume, 200)
   }
 
-  $: if ($state === 'game-over') onGameOver()
-  $: if ($state === 'level-complete') onLevelComplete()
+  $effect(() => {
+    if (game.state === 'game-over') onGameOver()
+    if (game.state === 'level-complete') onLevelComplete()
+  })
 
   const onHit = (block: BlockData) => {
-    if ($state === 'game-over' || $state === 'level-complete') return
-    score.update((score) => score + 1)
-    block.hit.set(true)
-    block.blinkingColors.set(undefined)
-    block.staticColors.set({
+    if (game.state === 'game-over' || game.state === 'level-complete') return
+    game.score += 1
+    block.hit = true
+    block.blinkingColors = undefined
+    block.staticColors = {
       inner: 'yellow',
       outer: 'red'
-    })
-    if (blocks.every((block) => get(block.hit))) {
-      state.set('level-complete')
+    }
+    if (blocks.every((block) => block.hit)) {
+      game.state = 'level-complete'
     }
   }
 </script>
@@ -163,6 +163,8 @@
 {#each blocks as block, index (index)}
   <Block
     {...block}
-    on:hit={() => onHit(block)}
+    onHit={() => {
+      onHit(block)
+    }}
   />
 {/each}

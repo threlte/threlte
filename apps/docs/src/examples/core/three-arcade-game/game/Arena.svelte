@@ -43,7 +43,7 @@
     <T.MeshBasicMaterial
       color="green"
       transparent
-      opacity={$leftOpacity}
+      opacity={leftOpacity}
     />
   </T.Mesh>
 </T.CustomGridHelper>
@@ -65,7 +65,7 @@
     <T.MeshBasicMaterial
       color="green"
       transparent
-      opacity={$rightOpacity}
+      opacity={rightOpacity}
     />
   </T.Mesh>
 </T.CustomGridHelper>
@@ -88,7 +88,7 @@
     <T.MeshBasicMaterial
       color="green"
       transparent
-      opacity={$topOpacity}
+      opacity={topOpacity}
     />
   </T.Mesh>
 </T.CustomGridHelper>
