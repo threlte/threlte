@@ -3,10 +3,10 @@
   import { play, type ArcadeAudio } from '../../sound'
   import { arenaBorderWidth, arenaHeight, arenaWidth, blockGap } from '../config'
   import { useTimeout } from '../hooks/useTimeout'
-  import { levels } from '../levels'
+  import { levels } from './levels'
   import { game } from '../Game.svelte'
-  import Block from './Block.svelte'
-  import type { BlockData } from './types'
+  import Block from '../objects/Block.svelte'
+  import type { BlockData } from '../objects/types'
 
   let blocks: BlockData[] = $state([])
 

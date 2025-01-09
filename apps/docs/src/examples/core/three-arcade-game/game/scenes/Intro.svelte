@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Edges, Text } from '@threlte/extras'
   import { onDestroy } from 'svelte'
   import { Tween } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { play, type ArcadeAudio } from '../sound'
-  import { useTimeout } from './hooks/useTimeout'
-  import { game } from './Game.svelte'
-  import ThrelteLogo from './ThrelteLogo.svelte'
+  import { play, type ArcadeAudio } from '../../sound'
+  import { useTimeout } from '../hooks/useTimeout'
+  import { game } from '../Game.svelte'
+  import ThrelteLogo from '../objects/ThrelteLogo.svelte'
 
   const { timeout } = useTimeout()
   let audio: ArcadeAudio | undefined = undefined
+  let direction: 1 | -1 = $state(1)
 
   const logoScale = new Tween(0)
 
@@ -34,8 +35,9 @@
     textRotation.set(0)
   }, showThrelteAfter)
 
-  let showPressSpaceToStart = false
-  let blinkClock: 0 | 1 = 0
+  let showPressSpaceToStart = $state(false)
+  let blinkClock: 0 | 1 = $state(0)
+
   timeout(() => {
     showPressSpaceToStart = true
   }, showPressSpaceToStartAfter)
@@ -50,17 +52,11 @@
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
-      dir = -1
+      direction = -1
     } else if (e.key === 'ArrowRight') {
-      dir = 1
+      direction = 1
     }
   }
-
-  let rotationY = 0
-  let dir = 1
-  useTask((delta) => {
-    rotationY += delta * dir
-  })
 
   onDestroy(() => {
     audio?.source.stop()
@@ -73,6 +69,7 @@
   <ThrelteLogo
     positionZ={-1.2}
     scale={logoScale.current}
+    {direction}
   />
 
   <T.Group

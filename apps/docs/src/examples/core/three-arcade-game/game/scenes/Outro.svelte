@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Edges, Text } from '@threlte/extras'
   import { onDestroy } from 'svelte'
   import { Tween } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { play, type ArcadeAudio } from '../sound'
-  import { useTimeout } from './hooks/useTimeout'
-  import { game } from './Game.svelte'
-  import ThrelteLogo from './ThrelteLogo.svelte'
+  import { play, type ArcadeAudio } from '../../sound'
+  import { useTimeout } from '../hooks/useTimeout'
+  import { game } from '../Game.svelte'
+  import ThrelteLogo from '../objects/ThrelteLogo.svelte'
 
   const { timeout } = useTimeout()
-
+  let direction = $state(1)
   const logoScale = new Tween(0)
   timeout(() => {
     logoScale.set(1)
@@ -50,26 +50,23 @@
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
-      dir = -1
+      direction = -1
     } else if (e.key === 'ArrowRight') {
-      dir = 1
+      direction = 1
     }
   }
-
-  let rotationY = 0
-  let dir = 1
-  useTask((delta) => {
-    rotationY += delta * dir
-  })
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
 
 <T.Group position.z={-0.35}>
-  <ThrelteLogo positionZ={-1.2} />
+  <ThrelteLogo
+    positionZ={-1.2}
+    {direction}
+  />
 
   <T.Group
-    scale={textScale}
+    scale={textScale.current}
     position.z={1.3}
     rotation.x={-90 * DEG2RAD}
     rotation.z={textRotation}
@@ -96,7 +93,7 @@
 
 {#if showPressSpaceToStart}
   <T.Group
-    scale={textScale}
+    scale={textScale.current}
     position.z={3.3}
     rotation.x={-90 * DEG2RAD}
     visible={!!blinkClock}
