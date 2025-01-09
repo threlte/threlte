@@ -1,19 +1,17 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import type { PointLight } from 'three'
   import { Tween } from 'svelte/motion'
-  import { gameState } from '../game/state'
+  import type { Color } from 'three'
 
-  const { state, averageScreenColor } = gameState
+  type Props = {
+    lightColor: Color
+    machineIsOff?: boolean
+    pointLightsOff?: boolean
+  }
 
-  let pointlight: PointLight
-  let nodes = undefined
+  let { machineIsOff = false, pointLightsOff = false, lightColor }: Props = $props()
 
-  let basePointLightIntensity = new Tween(0)
-
-  let pointLightIntensity = basePointLightIntensity
-
-  let machineIsOff = $derived($state === 'off' ? true : false)
+  let pointLightIntensity = new Tween(0)
 
   const blueLightIntensity = new Tween(2, {
     duration: 3e3
@@ -32,6 +30,22 @@
   })
 
   $effect(() => {
+    if (pointLightsOff) {
+      pointLightIntensity.set(1)
+    } else {
+      pointLightIntensity.set(0)
+    }
+  })
+
+  $effect(() => {
+    setTimeout(() => {
+      pointLightIntensity.set(1, {
+        duration: 200
+      })
+    }, 1000)
+  })
+
+  $effect(() => {
     blueLightIntensity.set(machineIsOff ? 2 : 2)
     redLightIntensity.set(machineIsOff ? 2 : 2)
     whiteLightIntensity.set(machineIsOff ? 0 : 0)
@@ -40,31 +54,28 @@
 </script>
 
 <!-- This PointLight replicates the light emitted by the screen -->
-{#if nodes}
-  <T.PointLight
-    args={['black']}
-    position.y={1.376583185239323}
-    position.z={-0.12185962320246482}
-    intensity={25 * pointLightIntensity}
-    distance={1.2}
-    decay={2}
-    color={averageScreenColor}
-    bind:ref={pointlight}
-  />
-{/if}
+<T.PointLight
+  args={['black']}
+  position.y={1.376583185239323}
+  position.z={-0.12185962320246482}
+  intensity={25 * pointLightIntensity.current}
+  distance={1.2}
+  decay={2}
+  color={lightColor}
+/>
 
 <T.AmbientLight
   intensity={8}
-  color={averageScreenColor}
+  color={lightColor}
 />
 <T.AmbientLight
-  intensity={whiteAmbientLightIntensity}
+  intensity={whiteAmbientLightIntensity.current}
   color={'white'}
 />
 
 <!-- Red light -->
 <T.DirectionalLight
-  intensity={redLightIntensity}
+  intensity={redLightIntensity.current}
   color="#F67F55"
   position.x={-2.2}
   position.y={3.5}
@@ -73,7 +84,7 @@
 
 <!-- Blue light -->
 <T.DirectionalLight
-  intensity={blueLightIntensity}
+  intensity={blueLightIntensity.current}
   position.x={2.2}
   position.y={3.4}
   position.z={2.6}
@@ -82,7 +93,7 @@
 
 <!-- White light -->
 <T.DirectionalLight
-  intensity={whiteLightIntensity}
+  intensity={whiteLightIntensity.current}
   position.x={-1}
   position.y={2.5}
   position.z={1}
