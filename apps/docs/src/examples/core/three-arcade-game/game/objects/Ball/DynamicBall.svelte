@@ -5,10 +5,17 @@
   } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
-  import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
-  import { game } from '../Game.svelte'
+  import { arenaHeight, playerHeight, playerToBorderDistance } from '../../config'
+  import { game } from '../../Game.svelte'
   import { ballGeometry, ballMaterial } from './common'
+  import { onMount } from 'svelte'
 
+  type Props = {
+    startAtPosX: number
+  }
+  let { startAtPosX }: Props = $props()
+
+  let posX = $state(0)
   let rigidBody: RapierRigidBody | undefined = $state()
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
@@ -16,7 +23,7 @@
   }
 
   const ballSpeed = $derived.by(() => {
-    return map(game.levelIndex, 0, 9, 0.1, 0.5)
+    return map(game.levelIndex, 0, 9, 0.1, 0.3)
   })
 
   let ballIsSpawned = false
@@ -50,9 +57,12 @@
   $effect(() => {
     if (rigidBody) game.ballRigidBody = rigidBody
   })
+  onMount(() => {
+    posX = startAtPosX
+  })
 </script>
 
-<T.Group position={[game.playerPosition, 0, startAtPosZ]}>
+<T.Group position={[posX, 0, startAtPosZ]}>
   <RigidBody
     bind:rigidBody
     type={'dynamic'}

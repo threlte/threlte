@@ -2,7 +2,7 @@
   lang="ts"
   module
 >
-  import type { BlockData } from './types'
+  import type { BlockData } from '../objects/types'
   import { T } from '@threlte/core'
   import { Edges } from '@threlte/extras'
   import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
@@ -47,8 +47,8 @@
   )
 
   const onContact = (e: ContactEvent) => {
-    if (e.detail.totalForceMagnitude > 2000 || e.detail.totalForceMagnitude < 300) return
-    const volume = clamp(Math.max(e.detail.totalForceMagnitude, 0) / 2000, 0, 1)
+    if (e.totalForceMagnitude > 2000 || e.totalForceMagnitude < 300) return
+    const volume = clamp(Math.max(e.totalForceMagnitude, 0) / 2000, 0, 1)
     playFromGroup('bounce', {
       volume
     })
@@ -68,8 +68,14 @@
     <Collider
       shape="cuboid"
       args={[size / 2, 1 / 2, size / 2]}
-      oncontact={onContact}
-      oncollisionexit={() => onHit?.()}
+      oncontact={(e: ContactEvent) => {
+        onContact(e)
+      }}
+      oncollisionexit={() => {
+        if (!hit) {
+          onHit?.()
+        }
+      }}
       mass={1}
     >
       <T.Mesh scale={scale.current}>

@@ -2,8 +2,8 @@
   import { T } from '@threlte/core'
   import { Collider } from '@threlte/rapier'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { arenaDepth, arenaHeight, arenaWidth } from './config'
-  import { useArenaCollisionEnterEvent } from './hooks/useArenaCollider'
+  import { arenaDepth, arenaHeight, arenaWidth } from '../config'
+  import { useArenaCollisionEnterEvent } from '../hooks/useArenaCollider'
 
   const colliderWidth = 10
 

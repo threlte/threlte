@@ -3,9 +3,14 @@
   import { Edges } from '@threlte/extras'
   import { BoxGeometry, MeshBasicMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { game } from './Game.svelte'
+  import { game } from '../Game.svelte'
 
-  let { scale = 1, positionZ = 0 } = $props()
+  type Props = {
+    scale?: number
+    positionZ?: number
+    direction?: 1 | -1
+  }
+  let { scale = 1, positionZ = 0, direction = 1 }: Props = $props()
 
   const geometry = new BoxGeometry(1, 1, 1)
   const material = new MeshBasicMaterial({
@@ -13,22 +18,12 @@
     opacity: 0
   })
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      dir = -1
-    } else if (e.key === 'ArrowRight') {
-      dir = 1
-    }
-  }
-
   let rotationY = $state(0)
-  let dir = 1
+
   useTask((delta) => {
-    rotationY += delta * dir
+    rotationY += delta * direction
   })
 </script>
-
-<svelte:window on:keydown={onKeyDown} />
 
 <T.Group
   rotation.x={-65 * DEG2RAD}

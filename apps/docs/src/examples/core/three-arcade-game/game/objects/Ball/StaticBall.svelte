@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
-  import { game } from '../Game.svelte'
+  import { arenaHeight, playerHeight, playerToBorderDistance } from '../../config'
+  import { game } from '../../Game.svelte'
   import { ballGeometry, ballMaterial } from './common'
 
   const startAtPosZ = arenaHeight / 2 - playerHeight - playerToBorderDistance * 2

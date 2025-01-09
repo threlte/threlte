@@ -5,8 +5,8 @@
   import { Mesh } from 'three'
   import { Group } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { useTimeout } from '../hooks/useTimeout'
-  import { game } from '../Game.svelte'
+  import { useTimeout } from '../../hooks/useTimeout'
+  import { game } from '../../Game.svelte'
 
   const geometry = new BoxGeometry(1, 0.01, 0.1)
   const material = new MeshBasicMaterial({

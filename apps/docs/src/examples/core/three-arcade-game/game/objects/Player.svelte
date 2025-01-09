@@ -5,8 +5,8 @@
   import { AutoColliders } from '@threlte/rapier'
   import type { Mesh } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { arenaHeight, arenaWidth, playerHeight, playerSpeed, playerWidth } from './config'
-  import { game } from './Game.svelte'
+  import { arenaHeight, arenaWidth, playerHeight, playerSpeed, playerWidth } from '../config'
+  import { game } from '../Game.svelte'
 
   let positionZ = $derived(arenaHeight / 2 - playerHeight)
   let positionX = $state(0)
