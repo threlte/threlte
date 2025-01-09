@@ -3,15 +3,15 @@
   import { Tween } from 'svelte/motion'
   import { BackSide, Color, PerspectiveCamera, Scene } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import Arena from './Arena.svelte'
-  import Ball from './Ball/Ball.svelte'
+  import Arena from './objects/Arena.svelte'
+  import Ball from './objects/Ball/Ball.svelte'
   import Renderer from './Renderer.svelte'
-  import Intro from './Intro.svelte'
-  import Level from './levels/Level.svelte'
-  import Outro from './Outro.svelte'
-  import Player from './Player.svelte'
+  import Intro from './scenes/Intro.svelte'
+  import Level from './scenes/Level.svelte'
+  import Outro from './scenes/Outro.svelte'
+  import Player from './objects/Player.svelte'
   import { game } from './Game.svelte'
-  import Ui from './UI.svelte'
+  import GUI from './GUI.svelte'
 
   const onKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'd') {
@@ -104,6 +104,6 @@
         <Level />
       {/key}
     {/if}
-    <Ui />
+    <GUI />
   {/if}
 </T.Scene>
