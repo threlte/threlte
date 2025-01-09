@@ -3,13 +3,14 @@
   import { useProgress } from '@threlte/extras'
   import { World } from '@threlte/rapier'
   import { CustomGridHelper } from './game/CustomGridHelper'
-  import { gameState } from './game/state'
-  import MainScene from './MainScene.svelte'
+  import { game } from './game/Game.svelte'
+  import Scene from './Scene.svelte'
   import { resumeContext } from './sound'
   import { WebGLRenderer } from 'three'
 
   const { progress, finishedOnce } = useProgress()
-  const { state, muted } = gameState
+
+  $inspect(game.state)
 
   extend({
     CustomGridHelper
@@ -22,7 +23,7 @@
     class:opacity-0={!$finishedOnce}
   >
     <Canvas
-      createRenderer={(canvas) => {
+      createRenderer={(canvas: HTMLCanvasElement) => {
         return new WebGLRenderer({
           canvas,
           powerPreference: 'high-performance',
@@ -33,7 +34,7 @@
       }}
     >
       <World gravity={[0, 0, 0]}>
-        <MainScene />
+        <Scene />
       </World>
     </Canvas>
   </div>
@@ -41,16 +42,16 @@
     <div
       class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12 text-2xl text-white"
     >
-      {$progress.toFixed()} %
+      {($progress * 100).toFixed()} %
     </div>
-  {:else if $state === 'off'}
+  {:else if game.state === 'off'}
     <div
       class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12"
     >
       <button
         onclick={() => {
           resumeContext()
-          state.set('intro')
+          game.state = 'intro'
         }}
         class="pointer-events-auto rounded-full bg-white px-8 py-4 text-2xl text-black"
       >
@@ -62,9 +63,9 @@
   <div class="absolute right-6 top-6">
     <button
       class="rounded-full bg-white p-2 [&>*]:h-7 [&>*]:w-7"
-      onclick={() => ($muted = !$muted)}
+      onclick={() => (game.muted = !game.muted)}
     >
-      {#if $muted}
+      {#if game.muted}
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="192"
