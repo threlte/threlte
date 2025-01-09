@@ -12,29 +12,40 @@
     SMAAPreset
   } from 'postprocessing'
   import { onMount } from 'svelte'
-  import { tweened } from 'svelte/motion'
+  import { Tween } from 'svelte/motion'
   import { Vector2 } from 'three'
-  import { gameState } from './game/state'
+  import { game } from './game/Game.svelte'
 
-  const { state, arcadeMachineScene } = gameState
   const { camera, renderer, autoRender, renderStage } = useThrelte()
 
   let bloomEffect: BloomEffect | undefined = undefined
 
-  const bloomIntensity = tweened($state === 'off' ? 0 : 1, {
+  let machineIsOff = $derived(game.state === 'off' ? true : false)
+
+  const bloomIntensity = new Tween(0, {
     duration: 3e3
   })
-  $: bloomIntensity.set($state === 'off' ? 0 : 1)
-  $: if (bloomEffect) bloomEffect.intensity = $bloomIntensity
+
+  $effect(() => {
+    bloomIntensity.set(machineIsOff ? 0 : 1)
+  })
+  $effect(() => {
+    if (bloomEffect) bloomEffect.intensity = bloomIntensity.current
+  })
+  $effect(() => {
+    if ($camera && game.arcadeMachineScene) {
+      addComposerAndPasses()
+    }
+  })
 
   const composer = new EffectComposer(renderer)
 
   const addComposerAndPasses = () => {
     composer.removeAllPasses()
 
-    composer.addPass(new RenderPass($arcadeMachineScene, $camera))
+    composer.addPass(new RenderPass(game.arcadeMachineScene, $camera))
     bloomEffect = new BloomEffect({
-      intensity: $bloomIntensity,
+      intensity: bloomIntensity.current,
       luminanceThreshold: 0.15,
       height: 512,
       width: 512,
@@ -72,10 +83,6 @@
         })
       )
     )
-  }
-
-  $: if ($camera && $arcadeMachineScene) {
-    addComposerAndPasses()
   }
 
   // When using PostProcessing, we need to disable autoRender
