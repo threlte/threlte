@@ -1,5 +1,5 @@
 import { Color, PerspectiveCamera, Scene, Texture } from 'three'
-import { levels } from './levels'
+import { levels } from './scenes/levels'
 import type { RigidBody } from '@dimforge/rapier3d-compat'
 
 type GameStates =
@@ -28,7 +28,7 @@ class Game {
     if (this.state == 'outro') return 'green'
     return 'red'
   })
-  muted = $state(true)
+  muted = $state(false)
   blinkClock: 0 | 1 = $state(0)
   arcadeMachineScene: Scene | undefined = $state(undefined)
   averageScreenColor = $state(new Color('black'))
