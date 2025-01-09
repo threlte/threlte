@@ -2,15 +2,13 @@
   import { Canvas, extend } from '@threlte/core'
   import { useProgress } from '@threlte/extras'
   import { World } from '@threlte/rapier'
-  import { CustomGridHelper } from './game/CustomGridHelper'
+  import { CustomGridHelper } from './game/objects/CustomGridHelper'
   import { game } from './game/Game.svelte'
   import Scene from './Scene.svelte'
   import { resumeContext } from './sound'
   import { WebGLRenderer } from 'three'
 
   const { progress, finishedOnce } = useProgress()
-
-  $inspect(game.state)
 
   extend({
     CustomGridHelper
