@@ -4,7 +4,7 @@
   import { onDestroy } from 'svelte'
   import { Tween } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { play, type ArcadeAudio } from '../../sound'
+  import type { ArcadeAudio } from '../sound'
   import { useTimeout } from '../hooks/useTimeout'
   import { game } from '../Game.svelte'
   import ThrelteLogo from '../objects/ThrelteLogo.svelte'
@@ -20,7 +20,7 @@
   const showPressSpaceToStartAfter = showThrelteAfter + 2e3
 
   timeout(() => {
-    audio = play('levelSlow', {
+    audio = game.sound.play('levelSlow', {
       loop: true,
       volume: 1
     })

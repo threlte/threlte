@@ -1,6 +1,7 @@
 import { Color, PerspectiveCamera, Scene, Texture } from 'three'
 import { levels } from './scenes/levels'
 import type { RigidBody } from '@dimforge/rapier3d-compat'
+import { Sound } from './sound'
 
 type GameStates =
   | 'off'
@@ -16,6 +17,7 @@ type GameStates =
 
 class Game {
   state: GameStates = $state('off')
+  sound = new Sound()
   levelIndex: number = $state(0)
   score = $state(0)
   gameOver = $state(false)

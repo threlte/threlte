@@ -9,7 +9,6 @@
   import { cubicIn } from 'svelte/easing'
   import { Tween } from 'svelte/motion'
   import { clamp } from 'three/src/math/MathUtils.js'
-  import { playFromGroup } from '../../sound'
   import { game } from '../Game.svelte'
 </script>
 
@@ -49,7 +48,7 @@
   const onContact = (e: ContactEvent) => {
     if (e.totalForceMagnitude > 2000 || e.totalForceMagnitude < 300) return
     const volume = clamp(Math.max(e.totalForceMagnitude, 0) / 2000, 0, 1)
-    playFromGroup('bounce', {
+    game.sound.playFromGroup('bounce', {
       volume
     })
   }

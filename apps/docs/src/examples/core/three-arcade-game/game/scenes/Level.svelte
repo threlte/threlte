@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import { play, type ArcadeAudio } from '../../sound'
+  import type { ArcadeAudio } from '../sound'
   import { arenaBorderWidth, arenaHeight, arenaWidth, blockGap } from '../config'
   import { useTimeout } from '../hooks/useTimeout'
   import { levels } from './levels'
@@ -21,7 +21,7 @@
   }
 
   const playLevelSound = () => {
-    levelBackgroundAudio = play('levelSlow', {
+    levelBackgroundAudio = game.sound.play('levelSlow', {
       loop: true,
       volume: bgVolume,
       playbackRate: map(game.levelIndex, 0, levels.length - 1, 1.0, 2)
@@ -112,7 +112,7 @@
       })
     }, 1e3)
     if (levelBackgroundAudio) levelBackgroundAudio.fade(0, 300)
-    play('gameOver2', { volume: 0.5 })?.onEnded()
+    game.sound.play('gameOver2', { volume: 0.5 })?.onEnded()
   }
 
   const onLevelComplete = async () => {
@@ -136,7 +136,7 @@
       })
     }, 1e3)
     if (levelBackgroundAudio) levelBackgroundAudio.fade(0.2, 200)
-    await play('levelComplete')?.onEnded()
+    await game.sound.play('levelComplete')?.onEnded()
     if (levelBackgroundAudio) levelBackgroundAudio.fade(bgVolume, 200)
   }
 

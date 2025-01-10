@@ -4,13 +4,13 @@
   import { onDestroy } from 'svelte'
   import { Tween } from 'svelte/motion'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { play, type ArcadeAudio } from '../../sound'
+  import type { ArcadeAudio } from '../sound'
   import { useTimeout } from '../hooks/useTimeout'
   import { game } from '../Game.svelte'
   import ThrelteLogo from '../objects/ThrelteLogo.svelte'
 
   const { timeout } = useTimeout()
-  let direction = $state(1)
+  let direction: 1 | -1 = $state(1)
   const logoScale = new Tween(0)
   timeout(() => {
     logoScale.set(1)
@@ -40,7 +40,7 @@
   })
 
   let audio: ArcadeAudio | undefined = undefined
-  audio = play('intro', {
+  audio = game.sound.play('intro', {
     loop: true,
     volume: 1
   })
