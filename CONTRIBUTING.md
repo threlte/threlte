@@ -12,7 +12,7 @@ The Threlte project is open to different kinds of support:
 
 ## Setup
 
-Setting up the repo:
+If you don't already have these, install [git](https://git-scm.com/), [node](https://nodejs.org/) and [pnpm](https://pnpm.io/); then:
 
 1. **Clone** the repo with `git clone git@github.com:threlte/threlte.git`
 2. **Install** the packages by running `pnpm install:all` in the root of the repo
