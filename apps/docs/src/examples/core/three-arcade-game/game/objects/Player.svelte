@@ -3,44 +3,46 @@
   import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
-  import { writable } from 'svelte/store'
-  import { Group, Mesh, MeshStandardMaterial } from 'three'
+  import type { Mesh } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { arenaHeight, arenaWidth, playerHeight, playerSpeed, playerWidth } from './config'
-  import { gameState } from './state'
+  import { arenaHeight, arenaWidth, playerHeight, playerSpeed, playerWidth } from '../config'
+  import { game } from '../Game.svelte'
 
-  $: positionZ = arenaHeight / 2 - playerHeight
-  const positionX = writable(0)
+  let positionZ = $derived(arenaHeight / 2 - playerHeight)
+  let positionX = $state(0)
 
   let leftPressed = false
   let rightPressed = false
 
   // 0.12 is a magic number that makes the player barely touch the border
   let posXMax = arenaWidth / 2 - playerWidth / 2 - 0.12
-  const { state, playerPosition, baseColor } = gameState
-  $: playerCanMove =
-    $state === 'playing' || $state === 'await-ball-spawn' || $state === 'level-loading'
-  $: centerPlayer = $state === 'menu' || $state === 'level-loading'
+  let playerCanMove = $derived(
+    game.state === 'playing' || game.state === 'await-ball-spawn' || game.state === 'level-loading'
+  )
+  let centerPlayer = $derived(game.state === 'menu' || game.state === 'level-loading')
+
   useTask((delta) => {
     if (!playerCanMove) {
       if (centerPlayer) {
-        positionX.set(0)
+        positionX = 0
       } else {
-        positionX.set($positionX)
+        positionX = positionX
       }
       return
     }
     if (!leftPressed && !rightPressed) return
     if (leftPressed && rightPressed) return
     if (leftPressed) {
-      positionX.update((x) => Math.max(x - (playerSpeed * delta * 60) / 2, -posXMax))
+      positionX = Math.max(positionX - (playerSpeed * delta * 60) / 2, -posXMax)
     }
     if (rightPressed) {
-      positionX.update((x) => Math.min(x + (playerSpeed * delta * 60) / 2, posXMax))
+      positionX = Math.min(positionX + (playerSpeed * delta * 60) / 2, posXMax)
     }
   })
 
-  $: playerPosition.set($positionX)
+  $effect(() => {
+    game.playerPosition = positionX
+  })
 
   const onKeyUp = (e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
@@ -67,12 +69,12 @@
     materials: Record<string, never>
   }>('/models/ball-game/player/player-simple.glb')
 
-  let colliders: Collider[] = []
+  let colliders: Collider[] = $state([])
 
   useTask(() => {
     if (colliders.length) {
       const collider = colliders[0]!
-      collider.setTranslation({ x: $positionX, y: 0, z: positionZ })
+      collider.setTranslation({ x: positionX, y: 0, z: positionZ })
     }
   })
 </script>
@@ -83,32 +85,28 @@
 />
 
 {#if $gltf?.nodes.Player}
-  <T is={Group}>
+  <T.Group>
     <AutoColliders
       shape="convexHull"
       bind:colliders
     >
-      <T
-        is={Mesh}
+      <T.Mesh
         position.z={positionZ}
-        position.x={$positionX}
+        position.x={positionX}
         rotation.x={DEG2RAD * -90}
         rotation.y={DEG2RAD * 90}
         scale.x={0.5}
         scale.y={0.3}
       >
         <T is={$gltf.nodes.Player.geometry} />
-        <T
-          is={MeshStandardMaterial}
-          color="blue"
-        />
+        <T.MeshStandardMaterial color="blue" />
 
         <Edges
           scale={[1, 1.1, 1.1]}
           thresholdAngle={10}
-          color={$baseColor}
+          color={game.baseColor}
         />
-      </T>
+      </T.Mesh>
     </AutoColliders>
-  </T>
+  </T.Group>
 {/if}

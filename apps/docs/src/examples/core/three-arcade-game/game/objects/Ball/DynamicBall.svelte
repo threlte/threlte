@@ -5,23 +5,25 @@
   } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
-  import { derived } from 'svelte/store'
-  import { arenaHeight, playerHeight, playerToBorderDistance } from '../config'
-  import { gameState } from '../state'
+  import { arenaHeight, playerHeight, playerToBorderDistance } from '../../config'
+  import { game } from '../../Game.svelte'
   import { ballGeometry, ballMaterial } from './common'
+  import { onMount } from 'svelte'
 
-  const { state, levelIndex, playerPosition, ballPosition, ballRigidBody } = gameState
+  type Props = {
+    startAtPosX: number
+  }
+  let { startAtPosX }: Props = $props()
 
-  let rigidBody: RapierRigidBody
-
-  $: if (rigidBody) ballRigidBody.set(rigidBody)
+  let posX = $state(0)
+  let rigidBody: RapierRigidBody | undefined = $state()
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
   }
 
-  const ballSpeed = derived(levelIndex, (levelIndex) => {
-    return map(levelIndex, 0, 9, 5, 10)
+  const ballSpeed = $derived.by(() => {
+    return map(game.levelIndex, 0, 9, 0.1, 0.3)
   })
 
   let ballIsSpawned = false
@@ -29,15 +31,15 @@
     if (!rigidBody) return
     ballIsSpawned = true
     const randomSign = Math.random() > 0.5 ? 1 : -1
-    const randomX = (randomSign * Math.random() * $ballSpeed) / 2
-    rigidBody.applyImpulse({ x: randomX, y: 0, z: -$ballSpeed }, true)
+    const randomX = (randomSign * Math.random() * ballSpeed) / 2
+    rigidBody.applyImpulse({ x: randomX, y: 0, z: -ballSpeed }, true)
   }
 
   const startAtPosZ = arenaHeight / 2 - playerHeight - playerToBorderDistance * 2
 
   const onSensorEnter = () => {
-    if ($state === 'playing') {
-      state.set('game-over')
+    if (game.state === 'playing') {
+      game.state = 'game-over'
     }
   }
 
@@ -47,14 +49,20 @@
       stop()
     }
     const rbTranslation = rigidBody?.translation()
-    ballPosition.set({
+    game.ballPosition = {
       x: rbTranslation?.x ?? 0,
       z: rbTranslation?.z ?? 0
-    })
+    }
+  })
+  $effect(() => {
+    if (rigidBody) game.ballRigidBody = rigidBody
+  })
+  onMount(() => {
+    posX = startAtPosX
   })
 </script>
 
-<T.Group position={[$playerPosition, 0, startAtPosZ]}>
+<T.Group position={[posX, 0, startAtPosZ]}>
   <RigidBody
     bind:rigidBody
     type={'dynamic'}
