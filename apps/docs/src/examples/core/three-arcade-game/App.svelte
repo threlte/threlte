@@ -5,10 +5,13 @@
   import { CustomGridHelper } from './game/objects/CustomGridHelper'
   import { game } from './game/Game.svelte'
   import Scene from './Scene.svelte'
-  import { resumeContext } from './sound'
   import { WebGLRenderer } from 'three'
 
   const { progress, finishedOnce } = useProgress()
+
+  $effect(() => {
+    game.sound.handleMuted(game.muted)
+  })
 
   extend({
     CustomGridHelper
@@ -48,7 +51,7 @@
     >
       <button
         onclick={() => {
-          resumeContext()
+          game.sound.resume()
           game.state = 'intro'
         }}
         class="pointer-events-auto rounded-full bg-white px-8 py-4 text-2xl text-black"
