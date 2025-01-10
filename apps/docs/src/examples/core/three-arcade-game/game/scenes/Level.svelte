@@ -32,7 +32,6 @@
 
   onDestroy(() => {
     if (levelBackgroundAudio) {
-      console.log('stopping audio')
       levelBackgroundAudio.source.stop()
     }
   })
