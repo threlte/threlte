@@ -1,4 +1,4 @@
-A small [MarchingCubes](https://en.wikipedia.org/wiki/Marching_cubes) example using [Threejs's marching cubes addon](https://threejs.org/examples/webgl_marchingcubes.html).
+A small [MarchingCubes](https://en.wikipedia.org/wiki/Marching_cubes) example using [three.js's marching cubes addon](https://threejs.org/examples/webgl_marchingcubes.html).
 
 <Example path="marching-cubes/lava-lamp" />
 
@@ -23,26 +23,12 @@ The original example only allows for planes positioned at x = -1, y = -1, and z 
 
 ## Materials
 
-The example above utilizes vertex coloring but the original threejs example has support for any kind of material. Vertex coloring requires a little more memory since each vertex now carries a color with it. If you're not using vertex colors, you can leave `enableColors` turned off. The `<MarchingCubes>` component uses the same default material that `Three.Mesh`es do. Setting different materials is the same process as setting different materials for `<T.Mesh>`.
+The example above utilizes vertex coloring but the original three.js example has support for any kind of material. Vertex coloring requires a little more memory since each vertex now carries a color with it. If you're not using vertex colors, you can leave `enableColors` turned off. The `<MarchingCubes>` component uses the same default material that `Three.Mesh`es do. Setting different materials is the same process as setting different materials for `<T.Mesh>`.
 
 ```svelte
 <MarchingCubes>
   <T.MeshNormalMaterial />
-  <MarchingCube />
-</MarchingCubes>
-```
-
-or
-
-```svelte
-<script>
-  import { MeshNormalMaterial } from 'three'
-
-  const material = new MeshNormalMaterial()
-</script>
-
-<MarchingCubes {material}>
-  <MarchingCube />
+  <T is={cube} />
 </MarchingCubes>
 ```
 
@@ -61,7 +47,7 @@ Note that the example above enables both uvs and vertex coloring for demonstrati
 <script>
   // ...
 
-  // don't allocate buffer space for vertex colors nor uvs
+  // don't allocate space for vertex colors nor uvs
   const marchingCubes = new MarchingCubes(resolution, material, false, false, 20_000)
 
   // ...
