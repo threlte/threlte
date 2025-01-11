@@ -1,47 +1,45 @@
 <script lang="ts">
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { OrbitControls } from '@threlte/extras'
-  import { PlaneGeometry } from 'three'
+  import { Environment, OrbitControls } from '@threlte/extras'
+  import { DoubleSide, PlaneGeometry } from 'three'
   import { SimplexNoise } from 'three/examples/jsm/Addons.js'
   import { T } from '@threlte/core'
 
-  let { autoRotate = false }: { autoRotate?: boolean } = $props()
+  let { autoRotate = false, flatness = 4 }: { autoRotate?: boolean; flatness?: number } = $props()
 
   const geometry = new PlaneGeometry(10, 10, 100, 100)
-
-  const vertices = geometry.getAttribute('position')
-
-  const flatness = 4
+  const positions = geometry.getAttribute('position')
 
   const noise = new SimplexNoise()
 
-  for (let i = 0; i < vertices.count; i += 1) {
-    const x = vertices.getX(i)
-    const y = vertices.getY(i)
-    vertices.setZ(i, noise.noise(x / flatness, y / flatness))
-  }
-  // needed for lighting
-  geometry.computeVertexNormals()
+  $effect(() => {
+    for (let i = 0; i < positions.count; i += 1) {
+      const x = positions.getX(i) / flatness
+      const y = positions.getY(i) / flatness
+      positions.setZ(i, noise.noise(x, y))
+    }
+
+    positions.needsUpdate = true
+
+    // needed for lighting
+    geometry.computeVertexNormals()
+  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position.y={5}
-  position.z={10}
-  lookAt.y={2}
+  position={10}
 >
   <OrbitControls
     {autoRotate}
-    maxPolarAngle={DEG2RAD * 80}
+    autoRotateSpeed={0.5}
   />
 </T.PerspectiveCamera>
 
-<T.DirectionalLight position={[3, 10, 10]} />
-<T.HemisphereLight intensity={0.2} />
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.Mesh
   {geometry}
-  rotation.x={DEG2RAD * -90}
+  rotation.x={-1 * 0.5 * Math.PI}
 >
-  <T.MeshStandardMaterial />
+  <T.MeshStandardMaterial side={DoubleSide} />
 </T.Mesh>
