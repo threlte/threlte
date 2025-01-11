@@ -3,9 +3,7 @@
   import { T } from '@threlte/core'
   import { MarchingPlane } from './MarchingPlane'
 
-  type MarchingPlaneProps = Props<MarchingPlane>
-
-  let { children, ...props }: MarchingPlaneProps = $props()
+  let { children, ...props }: Props<MarchingPlane> = $props()
 
   const plane = new MarchingPlane()
 </script>
