@@ -18,7 +18,7 @@
     cursorPosition: Vector3Tuple
   }
 
-  let { cursorPosition, color, width, children, ...props }: CursorLineProps = $props()
+  let { cursorPosition, children, ...props }: CursorLineProps = $props()
 
   const count = 50
   let front = $state.raw(createPoints(count))
