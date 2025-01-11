@@ -2,7 +2,8 @@
   import { Pane, Button } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { buttonIdle, buttonWalk, buttonRun } from './state'
+  import type { CharacterActions } from './types'
+  let action: CharacterActions = $state('idle')
 </script>
 
 <Pane
@@ -12,26 +13,26 @@
   <Button
     title="Idle"
     on:click={() => {
-      $buttonIdle = !$buttonIdle
+      action = 'idle'
     }}
   />
   <Button
     title="Walk"
     on:click={() => {
-      $buttonWalk = !$buttonWalk
+      action = 'walk'
     }}
   />
   <Button
     title="Run"
     on:click={() => {
-      $buttonRun = !$buttonRun
+      action = 'run'
     }}
   />
 </Pane>
 
 <div>
   <Canvas>
-    <Scene />
+    <Scene {action} />
   </Canvas>
 </div>
 
