@@ -1,26 +1,4 @@
-<script lang="ts">
-  import type { Props } from '@threlte/core'
-  import type { Vector3Tuple } from 'three'
-  import { Mesh, Vector3 } from 'three'
-  import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras'
-  import { Spring } from 'svelte/motion'
-  import { T, useTask } from '@threlte/core'
-
-  type CursorLineProps = Props<typeof Mesh> & {
-    color: string
-    cursorPosition: Vector3Tuple
-    damping: number
-    stiffness: number
-    width: number
-  }
-
-  let { cursorPosition, color, width, stiffness, damping, ...props }: CursorLineProps = $props()
-
-  const tween = Spring.of(() => cursorPosition, {
-    damping,
-    stiffness
-  })
-
+<script module>
   const createPoints = (count = 50) => {
     const points: Vector3[] = []
     for (let i = 0; i < count; i += 1) {
@@ -28,14 +6,26 @@
     }
     return points
   }
+</script>
+
+<script lang="ts">
+  import type { Props } from '@threlte/core'
+  import type { Vector3Tuple } from 'three'
+  import { Mesh, Vector3 } from 'three'
+  import { T, useTask } from '@threlte/core'
+
+  type CursorLineProps = Props<typeof Mesh, [{ getPoints(): Vector3[] }]> & {
+    cursorPosition: Vector3Tuple
+  }
+
+  let { cursorPosition, color, width, children, ...props }: CursorLineProps = $props()
 
   const count = 50
   let front = $state.raw(createPoints(count))
-  // back doesn't need to be reactive because we're only concerned when `front` updates
   let back = createPoints(count)
 
   useTask((delta) => {
-    back[0]?.fromArray(tween.current)
+    back[0]?.fromArray(cursorPosition)
     const alpha = 1e-6 ** delta
     for (let i = 1; i < count; i += 1) {
       const first = back[i - 1]
@@ -49,14 +39,9 @@
 </script>
 
 <T.Mesh {...props}>
-  <MeshLineGeometry
-    points={front}
-    shape="taper"
-  />
-  <MeshLineMaterial
-    {width}
-    {color}
-    scaleDown={0.1}
-    attenuate={false}
-  />
+  {@render children?.({
+    getPoints() {
+      return front
+    }
+  })}
 </T.Mesh>
