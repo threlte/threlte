@@ -1,5 +1,4 @@
-import { Color } from 'three'
-import { Group } from 'three'
+import { Color, Group } from 'three'
 
 export class MarchingCube extends Group {
   constructor(
