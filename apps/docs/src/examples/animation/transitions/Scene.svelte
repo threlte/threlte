@@ -1,6 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import Character from './Character.svelte'
+  let { action } = $props()
 </script>
 
 <T.PerspectiveCamera
@@ -14,7 +15,7 @@
 <T.AmbientLight />
 <T.DirectionalLight position={[10, 5, 5]} />
 
-<Character />
+<Character actionKey={action} />
 
 <T.Mesh rotation.x={-90 * (Math.PI / 180)}>
   <T.CircleGeometry args={[3, 72]} />
