@@ -2,14 +2,24 @@
   import { T } from '@threlte/core'
   import { AnimatedSpriteMaterial } from '@threlte/extras'
 
-  export let show: boolean
-
-  let animation: 'Hidden' | 'In' | 'Out' = 'Hidden'
-  $: if (show) {
-    animation = 'In'
-  } else if (!show && animation === 'In') {
-    animation = 'Out'
+  interface Props {
+    show: boolean
   }
+
+  let { show }: Props = $props()
+
+  let animation: 'Hidden' | 'In' | 'Out' = $state('Hidden')
+  let mounted = false
+
+  $effect(() => {
+    if (mounted && show) {
+      animation = 'In'
+    } else if (!show && animation === 'In') {
+      animation = 'Out'
+    } else {
+      mounted = true
+    }
+  })
 </script>
 
 <T.Sprite
