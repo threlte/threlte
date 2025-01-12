@@ -54,7 +54,7 @@
     <Slider
       bind:value={near}
       label="near"
-      max={100}
+      max={15}
       min={0.1}
     />
   </Folder>
