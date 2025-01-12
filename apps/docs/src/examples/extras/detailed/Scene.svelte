@@ -24,13 +24,17 @@
   })
 </script>
 
-<Detailed bind:ref={detailed}>
+<Detailed
+  oncreate={(ref) => {
+    detailed = ref
+  }}
+>
   {#each items as { color, distance }, i}
     {@const detail = items.length - i - 1}
     <T.Mesh
       {distance}
       geometry={new IcosahedronGeometry(1, detail)}
-      material.wireframe={true}
+      material.wireframe
       material.color={color}
     />
   {/each}
