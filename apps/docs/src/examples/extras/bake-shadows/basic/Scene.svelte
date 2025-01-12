@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mesh } from 'three'
   import { BakeShadows } from '@threlte/extras'
   import { T, useTask } from '@threlte/core'
 
@@ -8,9 +9,11 @@
 
   let { bake }: Props = $props()
 
-  let rotation = $state(0)
+  let rotation = 0
+  let mesh = $state<Mesh>()
   useTask((delta) => {
     rotation += delta
+    mesh?.rotation.set(0, rotation, 0)
   })
 </script>
 
@@ -28,12 +31,14 @@
 />
 
 <T.Mesh
+  oncreate={(ref) => {
+    mesh = ref
+  }}
   castShadow
   position.y={1}
-  rotation.y={rotation}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
-  <T.MeshStandardMaterial color="hotpink" />
+  <T.MeshStandardMaterial color="orangered" />
 </T.Mesh>
 
 <T.Mesh
