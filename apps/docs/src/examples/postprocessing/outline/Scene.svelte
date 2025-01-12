@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Mesh, Vector3Tuple } from 'three'
+  import type { ExtrudeGeometryOptions, Mesh, Vector3Tuple } from 'three'
   import type { Wall } from './types'
   import { DoubleSide } from 'three'
   import { Environment, OrbitControls } from '@threlte/extras'
@@ -17,20 +17,27 @@
 
   let { autoRotate = true, mesh, positions = [], play = true, walls = [] }: Props = $props()
 
-  let positionIndex = $state(0)
-  const position = $derived(positions[positionIndex])
-
-  const positionTween = Tween.of(() => position, {
+  let positionIndex = 0
+  const positionTween = new Tween(positions[positionIndex], {
     duration: 400,
     easing: quadInOut
   })
+  let time = 0
 
-  let time = $state(0)
+  // if `positions` changes, restart
+  $effect(() => {
+    positions
+    positionIndex = 0
+    positionTween.set(positions[positionIndex], { duration: 0 })
+    time = 0
+  })
 
   const { start, stop } = useTask((delta) => {
     time += delta
     if (time > 0.5) {
-      positionIndex = (positionIndex + 1) % positions.length
+      positionIndex += 1
+      positionIndex %= positions.length
+      positionTween.set(positions[positionIndex])
       time = 0
     }
   })
@@ -38,55 +45,51 @@
   $effect(() => {
     if (play) {
       start()
-      return () => {
-        stop()
-      }
+    }
+    return () => {
+      stop()
     }
   })
-</script>
 
-{#each walls as { position, rotation, size }}
-  <T.Mesh
-    {position}
-    {rotation}
-  >
-    <T.BoxGeometry args={size} />
-    <T.MeshStandardMaterial color="silver" />
-  </T.Mesh>
-{/each}
+  const extrudeOptions: ExtrudeGeometryOptions = { bevelEnabled: false }
+</script>
 
 <Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
-<T.Group position={positionTween.current ?? [0, 0, 0]}>
-  <T
-    is={mesh}
-    castShadow
-  >
-    <T.MeshStandardMaterial color="gold" />
-    <T.BoxGeometry />
-  </T>
-</T.Group>
-
-<T.PerspectiveCamera
+<T.OrthographicCamera
   makeDefault
-  position={[0, 6, -10]}
-  fov={60}
+  position={[10, 10, 10]}
+  zoom={50}
 >
   <OrbitControls
     {autoRotate}
     enableDamping
-    target={[0, 0, 5]}
   />
-</T.PerspectiveCamera>
+</T.OrthographicCamera>
 
-<T.Mesh
-  scale={100}
-  rotation.x={-1 * 0.5 * Math.PI}
-  receiveShadow
->
-  <T.PlaneGeometry />
-  <T.MeshStandardMaterial
-    color="green"
-    side={DoubleSide}
-  />
-</T.Mesh>
+<T.Group rotation.x={-1 * 0.5 * Math.PI}>
+  {#each walls as { height, shape }}
+    <T.Mesh scale.z={height}>
+      <T.ExtrudeGeometry args={[shape, extrudeOptions]} />
+      <T.MeshStandardMaterial color="silver" />
+    </T.Mesh>
+  {/each}
+
+  <T.Group position={positionTween.current ?? positions[0] ?? [0, 0, 0]}>
+    <T is={mesh}>
+      <T.MeshStandardMaterial color="gold" />
+      <T.BoxGeometry />
+    </T>
+  </T.Group>
+
+  <T.Mesh
+    scale={100}
+    position.z={-1.01}
+  >
+    <T.PlaneGeometry />
+    <T.MeshStandardMaterial
+      color="green"
+      side={DoubleSide}
+    />
+  </T.Mesh>
+</T.Group>
