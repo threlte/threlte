@@ -60,7 +60,9 @@
   ): value is (typeof supportedDirections)[number] => {
     const isSupported = supportedDirections.includes(value as (typeof supportedDirections)[number])
     if (!isSupported) {
-      console.warn(`Unsupported sprite animation direction "${value}"`)
+      console.warn(
+        `frame tag direction: "${value}" is not supported.${dataUrl != '' ? `\nsource dataURL: ${dataUrl}` : `\ntexture URL: ${textureUrl}`}`
+      )
     }
     return isSupported
   }
@@ -191,7 +193,11 @@
     if (!json) return
 
     frameTag = json?.meta.frameTags.find((tag) => tag.name === name)
-    direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
+
+    direction = 'forward'
+    if (frameTag?.direction) {
+      direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
+    }
 
     currentFrame = direction === 'forward' ? frameTag?.from ?? 0 : frameTag?.to ?? numFrames - 1
 

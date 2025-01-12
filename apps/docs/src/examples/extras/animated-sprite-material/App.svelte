@@ -3,17 +3,15 @@
   import Scene from './Scene.svelte'
 </script>
 
-<div class="wrapper">
+<div class="h-full">
   <Canvas>
     <Scene />
   </Canvas>
 </div>
 
 <style>
-  div.wrapper {
+  div {
     background-color: black;
-    position: relative;
-    width: 100%;
     height: 100%;
   }
 </style>
