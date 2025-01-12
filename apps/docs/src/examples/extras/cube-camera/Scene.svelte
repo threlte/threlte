@@ -47,8 +47,10 @@
   const groups: Group[] = []
   useTask((delta) => {
     time += delta
-    for (let i = 0, l = groups.length; i < l; i += 1) {
-      groups[i].position.setY(2 * Math.sin(time + i))
+    let i = 0
+    for (const group of groups) {
+      group.position.setY(2 * Math.sin(time + i))
+      i += 1
     }
   })
 
