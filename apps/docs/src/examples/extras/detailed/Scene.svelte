@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { LOD } from 'three'
   import { Detailed } from '@threlte/extras'
   import { IcosahedronGeometry } from 'three'
   import { T, useTask } from '@threlte/core'
@@ -14,11 +15,12 @@
     { color: 0x00_00_ff, distance: 10 }
   ]
 
-  let time = $state(0)
-  const z = $derived(5 + 10 * Math.sin(time))
+  let detailed = $state<LOD>()
 
+  let time = 0
   useTask((delta) => {
     time += delta
+    detailed?.position.setZ(5 + 10 * Math.sin(time))
   })
 </script>
 
@@ -27,7 +29,7 @@
   position.z={18}
 />
 
-<Detailed position.z={z}>
+<Detailed bind:ref={detailed}>
   {#each items as { color, distance }, i}
     {@const detail = items.length - i - 1}
     <T.Mesh
