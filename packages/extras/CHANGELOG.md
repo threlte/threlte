@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.52
+
+### Patch Changes
+
+- 61c0403: Animated Sprite Material's console warning is more helpful
+
 ## 9.0.0-next.51
 
 ### Patch Changes
