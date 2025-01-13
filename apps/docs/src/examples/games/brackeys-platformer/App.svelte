@@ -11,6 +11,7 @@
   $effect(() => {
     game.sound.handleMuted(game.muted)
   })
+  $inspect(GameStates[game.state])
 </script>
 
 <div class="absolute h-full w-full overflow-hidden">
@@ -30,14 +31,14 @@
     >
       {($progress * 100).toFixed()} %
     </div>
-  {:else if game.state === GameStates.gameOver}
+  {:else if game.state === GameStates.Intro}
     <div
       class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12"
     >
       <button
         onclick={() => {
           game.sound.resume()
-          game.state = GameStates.intro
+          game.state = GameStates.LoadingLevel
         }}
         class="pointer-events-auto rounded-full bg-white px-8 py-4 text-2xl text-black"
       >

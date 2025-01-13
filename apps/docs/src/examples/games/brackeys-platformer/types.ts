@@ -1,9 +1,8 @@
 export enum GameStates {
-  intro,
-  menu,
-  gameOver,
-  playing,
-  levelLoading,
-  levelComplete,
-  outro
+  Menu,
+  LoadingLevel,
+  Playing,
+  GameOver,
+  Intro,
+  Outro
 }

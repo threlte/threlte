@@ -4,9 +4,9 @@ import { GameStates } from './types'
 import { CameraControls } from './lib'
 
 class Game {
-  state: GameStates = $state(GameStates.intro)
+  state: GameStates = $state(GameStates.Intro)
   gameOver = $state(false)
-  camera: CameraControls | undefined = $state(undefined)
+  cameraControls: CameraControls | undefined = $state(undefined)
   sound = new Sound()
   muted = $state(false)
 
@@ -21,11 +21,11 @@ class Game {
 
   restart() {
     this.reset()
-    this.state = GameStates.menu
+    this.state = GameStates.Menu
   }
 
   reset() {
-    this.state = GameStates.intro
+    this.state = GameStates.Intro
     this.levelIndex = 0
     this.gameOver = false
     this.score = 0
@@ -34,7 +34,7 @@ class Game {
   nextLevel() {}
 
   startGame() {
-    this.state = GameStates.levelLoading
+    this.state = GameStates.LoadingLevel
   }
 }
 
