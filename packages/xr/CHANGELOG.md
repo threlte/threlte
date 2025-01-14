@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.0-next.16
+
+### Patch Changes
+
+- b8ea70d: Fix teleport plugin
+
 ## 1.0.0-next.15
 
 ### Patch Changes
