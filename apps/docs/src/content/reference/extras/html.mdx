@@ -69,19 +69,29 @@ componentSignature:
   }
 ---
 
-This component is a port of [drei's `<Html>` component](https://github.com/pmndrs/drei#html). It allows you to tie HTML content to any object of your scene. It will be projected to the objects whereabouts automatically.
+This component is a port of [drei's `<Html>`
+component](https://github.com/pmndrs/drei#html). It allows you to tie HTML
+content to any object of your scene. It will be projected to the objects
+whereabouts automatically.
 
 <Tip type="warning">
-The container of your `<Canvas>` component needs to be set to `position: relative | absolute | sticky | fixed`. This is because the DOM element will be mounted as a sibling to the `<canvas>` element.
+	The container of your `<Canvas>` component needs to be set to `position:
+	relative | absolute | sticky | fixed`. This is because the DOM element will
+	be mounted as a sibling to the `<canvas>` element.
 </Tip>
 
 <Example path="extras/html/basic" />
 
 ## Stopping and Starting the Task
 
-`<HTML>` has an `autoRender` prop that you can use to turn off and on its render task. If at some point in your application, you no longer need to update the hmtl, you can set `autoRender` to `false`. If you need to resume the task, set `autoRender` back to `true`.
+`<HTML>` has an `autoRender` prop that you can use to turn off and on its
+render task. If at some point in your application, you no longer need to update
+the hmtl, you can set `autoRender` to `false`. If you need to resume the task,
+set `autoRender` back to `true`.
 
-`<HTML>` also exports it's internal render task and the `startRendering`, `stopRendering`, and `render` functions so you can either manually render the html or start and stop the internal task at your will.
+`<HTML>` also exports it's internal render task and the `startRendering`,
+`stopRendering`, and `render` functions so you can either manually render the
+html or start and stop the internal task at your will.
 
 ```svelte title="Manually-Rendering"
 <script>
@@ -130,7 +140,8 @@ The container of your `<Canvas>` component needs to be set to `position: relativ
 </HTML>
 ```
 
-In both cases you should set `autoRender` to `false` so that the render task doesn't automatically begin.
+In both cases you should set `autoRender` to `false` so that the render task
+doesn't automatically begin.
 
 Lastly, you can access these functions from the `<HTML>`'s children snippet.
 
@@ -189,19 +200,22 @@ Lastly, you can access these functions from the `<HTML>`'s children snippet.
 </HTML>
 ```
 
-Setting `occlude` to `"blending"` will allow objects to partially occlude the `<HTML>` component.
+Setting `occlude` to `"blending"` will allow objects to partially occlude the
+`<HTML>` component.
 
 <Tip type="warning">
-This occlusion mode requires the `<canvas>` element to have `pointer-events` set to `none`.
-Therefore, any events like those in `OrbitControls` must be set on the canvas parent. Extras components
-like `<OrbitControls>` do this automatically.
+	This occlusion mode requires the `<canvas>` element to have `pointer-events`
+	set to `none`. Therefore, any events like those in `OrbitControls` must be
+	set on the canvas parent. Extras components like `<OrbitControls>` do this
+	automatically.
 </Tip>
 
 <Example path="extras/html/phone" />
 
 ### Visibility Change Event
 
-Use the property `occlude` and bind to the event `visibilitychange` to implement a custom hide/show behaviour.
+Use the property `occlude` and bind to the event `visibilitychange` to
+implement a custom hide/show behaviour.
 
 ```svelte
 <script lang="ts">
@@ -222,12 +236,14 @@ Use the property `occlude` and bind to the event `visibilitychange` to implement
 ```
 
 <Tip type="info">
-When binding to the event `visibilitychange` the contents of `<HTML>` is _not_ automatically hidden when it's occluded.
+	When binding to the event `visibilitychange` the contents of `<HTML>` is
+	_not_ automatically hidden when it's occluded.
 </Tip>
 
 ### Sprite Rendering
 
-Use the property `sprite` in `transform` mode to render the contents of `<HTML>` as a sprite.
+Use the property `sprite` in `transform` mode to render the contents of
+`<HTML>` as a sprite.
 
 ```svelte
 <script lang="ts">
@@ -258,8 +274,9 @@ Add a -50%/-50% css transform with `center` when _not_ in `transform` mode.
 
 ### Portal
 
-Use the property `portal` to mount the contents of the `<HTML>` component on another `HTMLElement`.
-By default the contents are mounted as a sibling to the rendering `<canvas>`.
+Use the property `portal` to mount the contents of the `<HTML>` component on
+another `HTMLElement`. By default the contents are mounted as a sibling to the
+rendering `<canvas>`.
 
 ```svelte
 <script lang="ts">
@@ -270,3 +287,12 @@ By default the contents are mounted as a sibling to the rendering `<canvas>`.
   <h1>Hello World</h1>
 </HTML>
 ```
+
+## uikit
+
+An alternative to using HTML for UI is
+[uikit](https://pmndrs.github.io/uikit/docs/getting-started/vanilla). The
+vanilla code has be wrapped into
+[threlte-uikit](https://github.com/michealparks/threlte-uikit) for use in
+threlte projects. There are situations where this package is necessary, for
+instance the `<HTML/>` component cannot be used within XR sessions.
