@@ -11,3 +11,18 @@ video is about [Godot](https://godotengine.org/), we've remixed it for threlte ð
 Give it a whirl, copy parts, remix it - have fun ðŸ˜„
 
 <Example path="games/brackeys-platformer" />
+
+# The journey
+
+## Basics
+
+Threejs's `Sprite` is a plane that always face the camera and cannot cast
+shadows. The `SpriteMaterial` is transparent by default, isn't affected by
+lighting and generally has a single static texture. All of that can be a
+drawback so using a normal `Mesh`, `PlaneGeometry` and `MeshStandardMaterial`
+is a valid option.
+
+### SpriteSheets
+
+A common pattern in 2D graphics is to pack sprites into one texture called a
+spritesheet.

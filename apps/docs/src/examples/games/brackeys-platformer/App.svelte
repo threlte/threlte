@@ -25,7 +25,7 @@
       </World>
     </Canvas>
   </div>
-  {#if !$finishedOnce}
+  <!-- {#if !$finishedOnce}
     <div
       class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12 text-2xl text-white"
     >
@@ -45,7 +45,7 @@
         Play
       </button>
     </div>
-  {/if}
+  {/if} -->
 
   <div class="absolute right-6 top-6">
     <button
