@@ -89,7 +89,7 @@
     <T is={lineGeometry} />
     <T
       is={LineMaterial}
-      linewidth={0.004}
+      linewidth={3}
     />
   </T>
 {/if}
