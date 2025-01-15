@@ -156,7 +156,7 @@ export function useTask(
   }
 
   onDestroy(() => {
-    if (!stage) return
+    stop()
     stage.removeTask(key)
   })
 
