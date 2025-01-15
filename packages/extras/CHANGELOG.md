@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.53
+
+### Patch Changes
+
+- e2dc870: Fixed width property of HTML component when using fullscreen property
+
 ## 9.0.0-next.52
 
 ### Patch Changes
