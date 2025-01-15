@@ -364,7 +364,7 @@
       style:transform={center ? 'translate3d(-50%,-50%,0)' : 'none'}
       style:top={fullscreen ? `${-height / 2}px` : undefined}
       style:left={fullscreen ? `${-width / 2}px` : undefined}
-      style:width={fullscreen ? `${width / 2}px` : undefined}
+      style:width={fullscreen ? `${width}px` : undefined}
       style:height={fullscreen ? `${height}px` : undefined}
       style={props.style}
       class={props.class}
