@@ -1,11 +1,14 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import Knight from '../objects/knight.svelte'
+  // import Knight from '../objects/knight.svelte'
+  import Coin from '../objects/coin.svelte'
 </script>
 
 <T.AmbientLight />
 
-<Knight />
+<!-- <Knight /> -->
+
+<Coin />
 
 <!-- the platform -->
 <!-- <T.Mesh
