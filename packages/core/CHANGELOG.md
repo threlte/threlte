@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.40
+
+### Patch Changes
+
+- 1791c99: useTask invalidation fix
+
 ## 8.0.0-next.39
 
 ### Patch Changes
