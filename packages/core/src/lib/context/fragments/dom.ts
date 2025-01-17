@@ -1,5 +1,10 @@
 import { getContext, onMount, setContext } from 'svelte'
-import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../utilities'
+import {
+  currentWritable,
+  toCurrentReadable,
+  type CurrentReadable,
+  type CurrentWritable
+} from '../../utilities'
 
 type DOMContext = {
   /** The canvas wrapper element */
@@ -15,9 +20,11 @@ export type CreateDOMContextOptions = {
 
 export const createDOMContext = (options: CreateDOMContextOptions) => {
   const { dom, canvas } = options
-  const size = currentWritable(dom.getBoundingClientRect())
+  const size = currentWritable<DOMRect | undefined>(undefined)
 
   onMount(() => {
+    size.set(dom.getBoundingClientRect())
+
     const resizeObserver = new ResizeObserver(() => {
       size.set(dom.getBoundingClientRect())
     })
@@ -32,7 +39,7 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
   const context: DOMContext = {
     dom,
     canvas,
-    size: toCurrentReadable(size)
+    size: toCurrentReadable(size as CurrentWritable<DOMRect>)
   }
 
   setContext<DOMContext>('threlte-dom-context', context)

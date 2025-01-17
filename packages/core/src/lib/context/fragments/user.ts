@@ -7,6 +7,8 @@ export const createUserContext = () => {
   const userCtx: ThrelteUserContext = currentWritable({})
 
   setContext<ThrelteUserContext>('threlte-user-context', userCtx)
+
+  return userCtx
 }
 
 /**
