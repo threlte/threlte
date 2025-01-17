@@ -11,7 +11,7 @@
 <script lang="ts">
   import { useCache, useThrelte } from '@threlte/core'
   import { CubeTextureLoader } from 'three'
-  import { HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
+  import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
   import { useSuspense } from '../../../suspense/useSuspense'
   import { useEnvironment } from '../utils/useEnvironment.svelte'
   import type { CubeEnvironmentProps } from './types'
