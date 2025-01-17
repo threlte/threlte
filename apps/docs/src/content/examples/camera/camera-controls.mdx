@@ -2,20 +2,38 @@ You may have come up against limitations with Three.js's `<OrbitalControls/>`.
 [Camera Controls](https://github.com/yomotsu/camera-controls) is an alternative
 which supports smooth transitions and a variety of features.
 
-Thes example below demonstrates how to incorporate the camera controls library
-into threlte.
-
 <Example path="camera/camera-controls" />
 
 The `CameraControls` class in the example _extends_ the camera controls library's
 `CameraControls` class.
 
-It automatically installs `camera-controls` if not already installed, connects
-and disconnects to the dom element that is sent into its constructor, updates
-the controls and potentially invalidates the scene and cleans up after itself
-when the component it is instantiated in is destroyed.
+It automatically installs `camera-controls` if not already installed and connects to the dom element that is passed into its constructor.
+
+## `<CameraControls>` component
+
+Updating the controls happens in a task in the `<CameraControls>` component.
+
+When the component unmounts, the controls are disposed of.
+
+You could put both of these actions in the constructor of the `CameraControls` class if you didn't want to make a component out of it but be careful using threlte's [`useTask`](/docs/reference/core/use-task) since it accesses context set up by the [`<Canvas>`](/docs/reference/core/canvas) component.
 
 <Tip type="info">
   The camera-controls package features include first-person, third-person, pointer-lock,
   fit-to-bounding-sphere and much more!
 </Tip>
+
+### Prevent SSR Externalization
+
+If you are using SvelteKit or Vite for building your app, you may need to externalize the `camera-controls` library.
+
+To externalize the `camera-controls` library put the following in your `vite-config.js` or `vite-config.ts`.
+
+```typescript {4-6}+
+// vite-config.ts
+export default defineConfig({
+  plugins: [sveltekit()],
+  ssr: {
+    noExternal: ['camera-controls']
+  }
+})
+```
