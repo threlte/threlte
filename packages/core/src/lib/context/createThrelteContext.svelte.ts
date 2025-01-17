@@ -23,14 +23,18 @@ export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererCont
 export const createThrelteContext = <T extends Renderer>(
   options: CreateThrelteContextOptions<T>
 ) => {
-  createDOMContext(options)
-  createCacheContext()
   const { scene } = createSceneContext()
-  createParentContext(scene)
-  createRootParentObject3DContext(scene)
-  createDisposalContext()
-  createSchedulerContext(options)
-  createCameraContext()
-  createRendererContext(options)
-  createUserContext()
+
+  return {
+    scene,
+    ...createDOMContext(options),
+    ...createCacheContext(),
+    ...createParentContext(scene),
+    ...createRootParentObject3DContext(scene),
+    ...createDisposalContext(),
+    ...createSchedulerContext(options),
+    ...createCameraContext(),
+    ...createRendererContext(options),
+    ...createUserContext()
+  }
 }
