@@ -2,8 +2,10 @@
   import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
   import { writable } from 'svelte/store'
   import { Group } from 'three'
-  import type { TransformControlsEventMap } from 'three/examples/jsm/Addons.js'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
+  import {
+    TransformControls,
+    type TransformControlsEventMap
+  } from 'three/examples/jsm/controls/TransformControls.js'
   import { useControlsContext } from '../useControlsContext'
   import type { TransformControlsProps } from './types'
 
