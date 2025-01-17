@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.54
+
+### Patch Changes
+
+- 6378e37: Remove non-tree-shakable three/addons import use
+
 ## 9.0.0-next.53
 
 ### Patch Changes
