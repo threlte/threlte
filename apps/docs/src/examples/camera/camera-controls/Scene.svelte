@@ -11,7 +11,7 @@
     controls = $bindable(),
     mesh
   }: {
-    color: ColorRepresentation
+    color?: ColorRepresentation
     controls: CC
     mesh: Mesh
   } = $props()
