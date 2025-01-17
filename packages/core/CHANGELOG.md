@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.0-next.41
+
+### Patch Changes
+
+- 9f00bd3: Return context from createThrelteContext
+
 ## 8.0.0-next.40
 
 ### Patch Changes
