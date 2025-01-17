@@ -12,7 +12,7 @@
   const camera = new PerspectiveCamera()
   const controls = new CameraControls(camera, dom)
   game.cameraControls = controls
-  controls.setLookAt(0, 2, 5, 0, 0, 0, false)
+  controls.setLookAt(0, 2, 10, 0, 0, 0, false)
 
   interactivity()
 </script>

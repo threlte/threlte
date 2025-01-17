@@ -36,26 +36,35 @@ The fruit example:
 ```svelte
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { SpriteSheetMaterial, type SpriteFrames } from '@threlte/extras'
+  import { SpriteSheetMaterial, type SpriteSheetData } from '@threlte/extras'
 
   const data = {
-    someName: {
-      x: 0,
-      y: 0,
-      width: 16,
-      height: 16
-    },
-    otherName: {
-      x: 16,
-      y: 0,
-      width: 16,
-      height: 16
-    }
-  } satisfies SpriteFrames
+    frames: [
+      {
+        x: 0,
+        y: 48,
+        width: 16,
+        height: 16,
+        name: 'apple_red'
+      },
+      {
+        x: 16,
+        y: 16,
+        width: 16,
+        height: 16,
+        name: 'pear_orange'
+      },
+      {
+        x: 32,
+        y: 0,
+        width: 16,
+        height: 16,
+        name: 'grapes_green'
+      }
+    ]
+  } satisfies SpriteSheetData
 
-  type Thing = keyof typeof data
-
-  const selectedFrame: Thing = 'someName'
+  const selectedSprite = 'apple_red'
 </script>
 
 <T.Mesh>
@@ -63,11 +72,13 @@ The fruit example:
   <SpriteSheetMaterial
     textureUrl="/textures/sprites/fruit.png"
     {data}
-    {selectedFrame}
+    {selectedSprite}
   />
 </T.Mesh>
 ```
 
 ### Animated Sprites
 
-The coin and the knight
+The coin
+
+...and the knight

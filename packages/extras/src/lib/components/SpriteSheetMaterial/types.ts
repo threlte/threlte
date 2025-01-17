@@ -1,50 +1,36 @@
 import type { Props } from '@threlte/core'
 import { Material } from 'three'
 
-// later is pivot/center point
 export type SpriteFrame = {
   x: number
   y: number
   width: number
   height: number
+  name?: string
 }
 
-export type SpriteFrames = Record<string, SpriteFrame>
+export type SpriteFrames = SpriteFrame[]
 
 export type SpriteSheetData = {
   frames: SpriteFrames
-  // animations: { [name: string]: [frameId: number, duration: number][] }
-  sheetSize: { width: number; height: number }
+  animations?: Record<string, SpriteSheetAnimation>
 }
 
-export type FrameTag = {
+export type SpriteSheetUserData = {
+  frames?: SpriteFrames
+  animations?: Record<string, SpriteSheetAnimation>
+}
+
+export type SpriteSheetAnimation = {
   name: string
   from: number
   to: number
-  direction: string
-}
-
-export type SpriteJsonHashData = {
-  frames: Record<string, SpriteFrame>
-  meta: {
-    app: string
-    image: string
-    version: string
-    format: string
-    size: { w: number; h: number }
-    scale: number
-    frameTags: FrameTag[]
-  }
+  direction: 'forward' | 'reverse'
 }
 
 export type SpriteSheetProps = Props<Material> & {
   /** The URL of the spritesheet texture image. */
   textureUrl: string
-
-  /** The URL of the spritesheet JSON. */
-  dataUrl?: string
-  /** The frame to use from the spritesheet. Defaults to the first frame.	 */
-  selectedFrame?: string
 
   /**
    * The texture filtering applied to the spritesheet.
@@ -75,6 +61,14 @@ export type SpriteSheetProps = Props<Material> & {
    * @default false
    */
   flipX?: boolean
+
+  /** The URL of the spritesheet JSON. */
+  dataUrl?: string
+  /** The user created data for the spritesheet. */
+  data?: SpriteSheetData
+
+  /** The frame to use from the spritesheet. Defaults to the first frame.	 */
+  select?: number | string
 
   /**
    * The total number of frames in the spritesheet.

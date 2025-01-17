@@ -1,6 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   // import Knight from '../objects/knight.svelte'
+  import Fruits from '../objects/fruits.svelte'
   import Coin from '../objects/coin.svelte'
 </script>
 
@@ -8,6 +9,7 @@
 
 <!-- <Knight /> -->
 
+<Fruits />
 <Coin />
 
 <!-- the platform -->
