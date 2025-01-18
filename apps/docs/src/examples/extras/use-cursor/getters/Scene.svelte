@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Environment, Hovering, Text, interactivity } from '@threlte/extras'
+  import { Environment, Cursor, Text, interactivity } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
   import { fromStore } from 'svelte/store'
 
@@ -44,7 +44,10 @@
 
   const hoverStyle = $derived(hoverStyles[index] ?? 'pointer')
 
-  const hovering = Hovering.of(() => hoverStyle)
+  const cursor = new Cursor()
+  $effect(() => {
+    cursor.hoverStyle = hoverStyle
+  })
 
   const { size } = useThrelte()
   const sizeStore = fromStore(size)
@@ -92,10 +95,10 @@
     index = (index + 1) % hoverStyles.length
   }}
   onpointerenter={() => {
-    hovering.hover()
+    cursor.hovering = true
   }}
   onpointerleave={() => {
-    hovering.unhover()
+    cursor.hovering = false
   }}
 >
   <T.MeshStandardMaterial color="orangered" />

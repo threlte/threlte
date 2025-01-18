@@ -42,62 +42,20 @@ type Style = LiteralUnion<
   string
 >
 
-export class Hovering {
-  #current = $state(false)
-  #element = $state(document.body)
-  #hoverStyle: Style = $state('pointer')
-  #unhoverStyle: Style = $state('auto')
-  constructor(
-    hoverStyle: Style = 'pointer',
-    unhoverStyle: Style = 'auto',
-    element = document.body
-  ) {
-    this.#element = element
-    this.#hoverStyle = hoverStyle
-    this.#unhoverStyle = unhoverStyle
-
+export class Cursor {
+  hovering = $state(false)
+  element = $state(document.body)
+  hoverStyle: Style = $state('pointer')
+  unhoverStyle: Style = $state('auto')
+  constructor() {
     $effect(() => {
-      if (this.#current) {
-        this.#element.style.cursor = this.#hoverStyle
+      if (this.hovering) {
+        this.element.style.cursor = this.hoverStyle
         return () => {
-          this.#element.style.cursor = this.#unhoverStyle
+          this.element.style.cursor = this.unhoverStyle
         }
       }
     })
-  }
-
-  get current() {
-    return this.#current
-  }
-
-  static of(
-    hoverStyle: () => Style = () => 'pointer',
-    unhoverStyle: () => Style = () => 'auto',
-    element: () => HTMLElement = () => document.body
-  ) {
-    const hovering = new Hovering()
-
-    $effect(() => {
-      hovering.#hoverStyle = hoverStyle()
-    })
-
-    $effect(() => {
-      hovering.#unhoverStyle = unhoverStyle()
-    })
-
-    $effect(() => {
-      hovering.#element = element()
-    })
-
-    return hovering
-  }
-
-  hover() {
-    this.#current = true
-  }
-
-  unhover() {
-    this.#current = false
   }
 }
 

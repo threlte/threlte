@@ -1,12 +1,12 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { interactivity, Text, Hovering } from '@threlte/extras'
+  import { interactivity, Text, Cursor } from '@threlte/extras'
   import { fromStore } from 'svelte/store'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
-  const hovering = new Hovering()
+  const cursor = new Cursor()
 
-  const color = $derived(hovering.current ? '#dddddd' : '#fe3d00')
+  const color = $derived(cursor.hovering ? '#dddddd' : '#fe3d00')
 
   const { size } = useThrelte()
 
@@ -34,10 +34,10 @@
 
 <T.Group
   onpointerenter={() => {
-    hovering.hover()
+    cursor.hovering = true
   }}
   onpointerleave={() => {
-    hovering.unhover()
+    cursor.hovering = false
   }}
 >
   <Text

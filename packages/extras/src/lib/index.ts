@@ -1,5 +1,5 @@
 // Hooks
-export { useCursor, Hovering } from './hooks/useCursor.svelte'
+export { useCursor, Cursor } from './hooks/useCursor.svelte'
 export { useGltf } from './hooks/useGltf'
 export { useDraco } from './hooks/useDraco'
 export { useMeshopt } from './hooks/useMeshopt'
