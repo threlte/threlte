@@ -1,5 +1,5 @@
 import type { Props } from '@threlte/core'
-import { Material } from 'three'
+import type { Material } from 'three'
 
 export type SpriteFrame = {
   x: number
@@ -64,10 +64,11 @@ export type SpriteSheetProps = Props<Material> & {
 
   /** The URL of the spritesheet JSON. */
   dataUrl?: string
-  /** The user created data for the spritesheet. */
+
+  /** User created data for the spritesheet. */
   data?: SpriteSheetData
 
-  /** The frame to use from the spritesheet. Defaults to the first frame.	 */
+  /** The frame index or name to use from the spritesheet. Defaults to the first frame. */
   select?: number | string
 
   /**
@@ -89,6 +90,63 @@ export type SpriteSheetProps = Props<Material> & {
    */
   columns?: number
 
+  /** Required to start animating. */
+  animate?: boolean
+
+  /** The name of the animation to play. */
+  animation?: string
+
+  /**
+   * The start frame of the current animation.
+   *
+   * @default 0
+   */
+  startFrame?: number
+
+  /**
+   * The end frame of the current animation.
+   *
+   * @default rows * columns - 1
+   */
+  endFrame?: number
+
+  /**
+   * Whether or not the current animation should loop.
+   *
+   * @default true
+   */
+  loop?: boolean
+
+  /**
+   * Controls whether or not to automatically run an animation on load.
+   *
+   * @default true
+   */
+  autoplay?: boolean
+
+  /**
+   * The desired frames per second of the animation
+   *
+   * This will override any frame durations specified in JSON
+   */
+  fps?: number
+
+  /**
+   * Delay the start of the animation in ms.
+   *
+   * @default 0
+   */
+  delay?: number
+
   /** Fires when all resources have loaded. */
   onload?: () => void
+
+  /** Fires when an animation starts. */
+  onstart?: () => void
+
+  /** Fires when an animation ends. */
+  onend?: () => void
+
+  /** Fires when an animation loop completes. */
+  onloop?: () => void
 }

@@ -20,7 +20,8 @@
   } from 'three'
   import { useTexture } from '../../hooks/useTexture'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type { SpriteSheetProps, SpriteFrame, SpriteSheetData } from './types'
+  import type { SpriteSheetProps, SpriteSheetData } from './types'
+  import { onDestroy } from 'svelte'
 
   let {
     textureUrl,
@@ -45,13 +46,15 @@
     is = $bindable(),
     ref = $bindable(),
     onload,
+    onstart,
+    onend,
+    onloop,
     ...props
   }: SpriteSheetProps = $props()
 
   const parent = useParent()
   const suspend = useSuspense()
-  // we assume this is not the first call to useTexture() as it is likely that the spritesheet
-  // texture was used elsewhere as well. We need to clone and update it
+  /** Assumed that the texture is used elsewhere too so we clone and update it */
   const loadedTexture = suspend(useTexture(textureUrl))
   const sheetData: AsyncWritable<SpriteSheetData | undefined> = suspend(
     dataUrl
@@ -86,6 +89,7 @@
   let texture: Texture | undefined = $derived.by(() => {
     if ($loadedTexture != undefined) {
       const t = $loadedTexture.clone()
+      // todo: don't know about these. Are they conditional on the material?
       // t.matrixAutoUpdate = false
       // t.generateMipmaps = false
       // t.premultiplyAlpha = false
@@ -98,20 +102,23 @@
   })
   let textureSize = { width: 0, height: 0 }
   let flipOffset = flipX ? -1 : 1
-  /** The index in the sprite in the sheet data frames array. Defaults to the first sprite frame */
-  let currentSpriteIndex = 0
+  /** The index in the frame in the sprite sheet data's frames array. Defaults to the first frame */
+  let currentSpriteFrameIndex = 0
   /** match a named frame with it's index in the sheetData array */
   let namedSpriteFrames: Record<string, number> = {}
   let numFrames = 0
 
+  const defaultAnimationName = 'default'
   let playQueued = false
   let timerOffset = 0
   let fpsInterval = $derived(1000 / fps)
-  /** increment `currentSpriteIndex` forwards (1) or backwards (-1) */
+  /** increment `currentSpriteFrameIndex` forwards (1) or backwards (-1) */
   let direction: 1 | -1 = 1
 
-  const setFrame = (frame: SpriteFrame) => {
-    if (!texture) return
+  const setFrame = (index: number) => {
+    if (!texture || $sheetData == undefined) return
+
+    const frame = $sheetData.frames[index]
 
     const horizontalFrames = textureSize.width / frame.width
     const verticalFrames = textureSize.height / frame.height
@@ -125,7 +132,6 @@
     const y = Math.abs(1 - frameOffsetY) - frameOffsetY * (frame.y / frame.height)
 
     texture.offset.set(x, y)
-    // texture.updateMatrix()
   }
 
   /**
@@ -145,7 +151,7 @@
         output.animations = data.animations
       }
     } else {
-      if (animate == true && !totalFrames && !columns) {
+      if (animate && !totalFrames && !columns) {
         console.error('Provide either the totalFrames or columns to animate the sprite')
       }
 
@@ -173,15 +179,15 @@
         })
       }
 
-      if (animate == true) {
+      if (animate) {
         if (columns > 1) {
-          output.animations = {
-            default: {
-              name: 'default',
-              from: 0,
-              to: output.frames.length - 1,
-              direction: 'forward'
-            }
+          // there should be enough information to create an animation
+          output.animations = {}
+          output.animations[defaultAnimationName] = {
+            name: defaultAnimationName,
+            from: 0,
+            to: output.frames.length - 1,
+            direction: 'forward'
           }
         }
       }
@@ -195,70 +201,77 @@
 
     const animation = $sheetData.animations?.[animationName]
 
-    if (!animation) return
+    if (!animation) {
+      console.error(
+        `Did not find '${animation}' within ${dataUrl != '' ? dataUrl : "the sprite sheet's animations data."}`
+      )
+      return
+    }
 
     const { from, to } = animation
-    direction = animation.direction == 'forward' ? 1 : -1
+    direction = animation.direction == 'reverse' ? -1 : 1
     startFrame = from
     endFrame = to
 
-    // frameTag = json?.meta.frameTags.find((tag) => tag.name === name)
-    // direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
+    currentSpriteFrameIndex = direction == 1 ? from ?? 0 : to ?? numFrames - 1
 
-    currentSpriteIndex = direction == 1 ? from ?? 0 : to ?? numFrames - 1
+    setFrame(currentSpriteFrameIndex)
 
-    setFrame($sheetData.frames[currentSpriteIndex])
-
-    // onstart?.()
+    onstart?.()
   }
 
   /**
    * Plays the animation.
    */
-  const play = async () => {
-    if ($loadedTexture == undefined || !sheetData == undefined) return
-    playQueued = true
-    timerOffset = performance.now() - delay
-    start()
+  export const play = async () => {
+    if (texture == undefined || !sheetData == undefined) return
+    if (animate) {
+      setupAnimation(animation ?? defaultAnimationName)
+      playQueued = true
+      timerOffset = performance.now() - delay
+      start()
+    } else {
+      console.error(`Trying to play a SpriteSheetMaterial who's 'animate' prop is '${animate}'`)
+    }
   }
 
   /**
    * Pauses the animation.
    */
-  const pause = () => {
+  export const pause = () => {
     playQueued = false
     stop()
   }
 
   const { start, stop } = useTask(
     () => {
-      if (!$sheetData) return
+      if (!$sheetData || !endFrame) return
 
       const now = performance.now()
       const diff = now - timerOffset
 
-      // const name = frameNames[currentFrame]
-      // const { frame, duration } = json.frames[name]
+      // const { duration } = json.frames[name]
       const interval = fpsInterval //duration ?? fpsInterval
 
       if (diff <= interval) return
       timerOffset = now - (diff % interval)
 
-      setFrame($sheetData.frames[currentSpriteIndex])
+      setFrame(currentSpriteFrameIndex)
 
-      currentSpriteIndex += direction
+      currentSpriteFrameIndex += direction
 
+      // If we're at the end of the animation, reset it to the start frame
       if (
-        (direction == 1 && currentSpriteIndex > endFrame) ||
-        (direction == -1 && currentSpriteIndex < endFrame)
+        (direction == 1 && currentSpriteFrameIndex > endFrame) ||
+        (direction == -1 && currentSpriteFrameIndex < endFrame)
       ) {
-        currentSpriteIndex = startFrame
+        currentSpriteFrameIndex = startFrame
 
         if (loop) {
-          // onloop?.()
+          onloop?.()
         } else {
           pause()
-          // onend?.()
+          onend?.()
         }
       }
     },
@@ -278,30 +291,31 @@
     }
 
     if (typeof select === 'number') {
-      currentSpriteIndex = select
+      currentSpriteFrameIndex = select
     } else if (typeof select === 'string') {
       if (Object.keys(namedSpriteFrames).includes(select)) {
-        currentSpriteIndex = namedSpriteFrames[select]
+        currentSpriteFrameIndex = namedSpriteFrames[select]
       }
     }
-    const spriteFrame = $sheetData.frames[currentSpriteIndex]
+    const spriteFrame = $sheetData.frames[currentSpriteFrameIndex]
 
     texture.repeat.set(
       (1 * flipOffset) / (textureSize.width / spriteFrame.width),
       1 / (textureSize.height / spriteFrame.height)
     )
 
-    if (animate == true) {
-      setupAnimation(animation ?? 'default')
-    } else {
-      setFrame(spriteFrame)
-    }
+    setFrame(currentSpriteFrameIndex)
 
     onload?.()
 
-    if (animate == true && autoplay) {
+    if (animate && autoplay) {
+      setupAnimation(animation ?? defaultAnimationName)
       play()
     }
+  })
+
+  onDestroy(() => {
+    texture?.dispose()
   })
 </script>
 
@@ -319,7 +333,7 @@
 
 {#if texture}
   {#if isMesh}
-    {@render SpriteSheetMaterial(texture!)}
+    {@render SpriteSheetMaterial(texture)}
     <T.MeshDepthMaterial
       attach="customDepthMaterial"
       depthPacking={RGBADepthPacking}
@@ -327,6 +341,6 @@
       {alphaTest}
     />
   {:else}
-    {@render SpriteSheetMaterial(texture!)}
+    {@render SpriteSheetMaterial(texture)}
   {/if}
 {/if}
