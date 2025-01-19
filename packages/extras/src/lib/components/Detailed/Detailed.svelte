@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { T, injectPlugin, isInstanceOf, observe, useParent } from '@threlte/core'
-  import { onDestroy, untrack } from 'svelte'
+  import type { DetailedProps } from './types'
   import type { Object3D } from 'three'
   import { LOD } from 'three'
-  import type { DetailedProps } from './types'
+  import { T, injectPlugin, isInstanceOf, observe, useParent } from '@threlte/core'
+  import { onDestroy, untrack } from 'svelte'
 
   let { ref = $bindable(), children, ...props }: DetailedProps = $props()
 

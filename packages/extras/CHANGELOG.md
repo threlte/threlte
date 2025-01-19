@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 9.0.0-next.54
+
+### Patch Changes
+
+- 6378e37: Remove non-tree-shakable three/addons import use
+
+## 9.0.0-next.53
+
+### Patch Changes
+
+- e2dc870: Fixed width property of HTML component when using fullscreen property
+
+## 9.0.0-next.52
+
+### Patch Changes
+
+- 61c0403: Animated Sprite Material's console warning is more helpful
+
 ## 9.0.0-next.51
 
 ### Patch Changes

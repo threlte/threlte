@@ -3,14 +3,19 @@
   import { AnimatedSpriteMaterial, Suspense } from '@threlte/extras'
   import { Mesh, MeshStandardMaterial } from 'three'
 
+  type Props = {
+    position: [number, number, number]
+  }
+  let { position = $bindable() }: Props = $props()
+
   const keyboard = { x: 0 }
   const pressed = new Set<string>()
 
-  let animation = 'IdleRight'
+  let sprite: AnimatedSpriteMaterial
+  let animation = $state('IdleRight')
 
-  export const playerPosition: [number, number, number] = [-2.0, -2.75, 0.01]
   const mesh = new Mesh()
-  mesh.position.set(...playerPosition)
+  mesh.position.set(...position)
 
   const handleKey = (key: string, value: 0 | 1) => {
     switch (key.toLowerCase()) {
@@ -34,8 +39,8 @@
     handleKey(e.key, 0)
     pressed.forEach((key) => handleKey(key, 1))
 
-    if (e.key === 'q') play()
-    if (e.key === 'e') pause()
+    if (e.key === 'q') sprite.play()
+    if (e.key === 'e') sprite.pause()
   }
 
   useTask((delta) => {
@@ -48,28 +53,24 @@
     }
 
     if (keyboard.x === 0) return
-    playerPosition[0] += -keyboard.x * (delta * 2)
-    mesh.position.set(...playerPosition)
+    position[0] += -keyboard.x * (delta * 2)
+    mesh.position.set(...position)
   })
-
-  let play: () => void
-  let pause: () => void
 </script>
 
 <svelte:window
-  on:keydown={handleKeydown}
-  on:keyup={handleKeyup}
+  onkeydown={handleKeydown}
+  onkeyup={handleKeyup}
 />
 
 <Suspense>
   <T is={mesh}>
     <AnimatedSpriteMaterial
       is={new MeshStandardMaterial()}
-      bind:play
-      bind:pause
       {animation}
       textureUrl="/textures/sprites/player.png"
       dataUrl="/textures/sprites/player.json"
+      bind:this={sprite}
     />
     <T.PlaneGeometry args={[0.5, 0.5]} />
   </T>

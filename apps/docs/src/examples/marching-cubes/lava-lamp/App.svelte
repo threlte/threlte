@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Folder, List, Slider } from 'svelte-tweakpane-ui'
   import type { Axis } from './MarchingPlane'
+  import { Canvas } from '@threlte/core'
+  import { Pane, Folder, List, Slider } from 'svelte-tweakpane-ui'
 
   let ballCount = $state(15)
   let isolation = $state(80)

@@ -11,7 +11,7 @@
     z: 'addPlaneZ'
   } as const
 
-  // reusable for calculating world position of `<MarchingCube>`s
+  // reusable for calculating world position of `MarchingCube`s
   const position = new Vector3()
 
   const defaultResolution = 50

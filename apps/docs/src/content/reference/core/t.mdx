@@ -291,11 +291,11 @@ and auto-completion.
 
 ### args
 
-Three.js objects are **class instances**. When Instantiating these objects, they
-can receive one-time constructor arguments (`new THREE.SphereGeometry(1, 32)`).
-In Threlte, constructor arguments are always passed as an array via the property
-`args`. If `args` change later on, the object must naturally get reconstructed
-from scratch!
+Three.js objects are **class instances**. When Instantiating these objects,
+they can receive one-time constructor arguments (`new THREE.SphereGeometry(1,
+32)`). In Threlte, constructor arguments are always passed as an array via the
+property `args`. Changing `args` later on should be avoided as that will
+reconstruct the class instance.
 
 - If a **class definition** such as `THREE.BoxGeometry` is provided to the
   property `is`, the property `args` is used to instantiate the class: `<T

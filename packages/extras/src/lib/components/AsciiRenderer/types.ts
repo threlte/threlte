@@ -1,4 +1,4 @@
-import type { AsciiEffect, AsciiEffectOptions } from 'three/examples/jsm/Addons.js'
+import type { AsciiEffect, AsciiEffectOptions } from 'three/examples/jsm/effects/AsciiEffect.js'
 import type { Camera, Scene } from 'three'
 import type { Snippet } from 'svelte'
 

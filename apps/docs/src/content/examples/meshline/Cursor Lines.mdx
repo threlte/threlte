@@ -9,37 +9,33 @@ This example was inspired by [OGL's Polyline example](https://oframe.github.io/o
 
 ## How Does it Work?
 
-First we create a scene with an orthographic camera and a mesh. The mesh's only purpose is to capture pointer move events so it needs to be big enough to fill the entire screen. The camera is placed above the mesh and is rotated to look down upon the mesh using the `lookAt` property.
+First we create a scene with an orthographic camera and a mesh. The mesh's only purpose is to capture pointer move events so it needs to be big enough to fill the entire screen. The mesh is placed in front of the camera. It doesn't really matter the exact position of the mesh because an orthographic camera has no perspective. All that really matters it is in fron of the camera and there is space inbetween the camera and the mesh - this is where the mesh lines will be drawn.
 
 ```svelte
 <T.OrthographicCamera
   zoom={50}
   makeDefault
-  position.y={10}
-  oncreate={(ref) => {
-    ref.lookAt(0, 0, 0)
-  }}
 />
 
 <T.Mesh
-  rotation.x={-1 * 0.5 * Math.PI}
   scale={100}
   visible={false}
+  position.z={-10}
 >
   <T.PlaneGeometry />
 </T.Mesh>
 ```
 
-The mesh is rotated so that it lies flat on the xz-plane and is made invisible.
+The camera is positioned at the origin and the mesh is positioned down the z-axis.
 
 ### Getting the Cursor Position
 
-To get the cursor position we use Threlte's [interactivity](/docs/reference/extras/interactivity) plugin. The event object that is passed to the `onpointermove` callback has a point property which tells you where the cursor position was when the event was triggered. The cursor positions is updated and sent into the `<CursorLine>` component as a prop.
+To get the cursor position we use Threlte's [interactivity](/docs/reference/extras/interactivity) plugin. The event object that is passed to the `onpointermove` callback has a point property which tells you where the cursor position was when the event was triggered. The cursor position is updated and sent into the `<CursorLine>` component as a prop.
 
 ```svelte
 <script lang="ts">
+  const cursorPosition = new Spring<Vector3Tuple>([0, 0, 0])
   interactivity()
-  let cursorPosition: Vector3Tuple = $state.raw([0, 0, 0])
 </script>
 
 <T.Mesh
@@ -51,14 +47,9 @@ To get the cursor position we use Threlte's [interactivity](/docs/reference/extr
 </T.Mesh>
 ```
 
-<Tip type="info">
-  `$state.raw` is used over `$state` to store the position because we don't care about making each
-  entry in the tuple reactive. More on this in the next section.
-</Tip>
-
 ### Inside the CursorLine Component
 
-The `<CursorLine>` component receives the current pointer position and uses a [Spring](https://svelte.dev/docs/svelte/svelte-motion#Spring) to interpolate between updates. To create the "trailing" effect two lists of `Vector3` points are created - a back and a front. Each frame, the back set of points is updated then swapped with the front set of points. This swap causes anything that reads from the front set of points to get updated.
+The `<CursorLine>` component receives the current pointer position. To create the "trailing" effect two lists of `Vector3` points are created - a back and a front. Each frame, the back set of points is updated then swapped with the front set of points. This swap causes anything that reads from the front set of points to get updated.
 
 #### Making Use of $state.raw
 
@@ -106,3 +97,17 @@ useTask((delta) => {
 ```
 
 In summary, we update the "back" set of points and swap it with the "front" once all points have been updated. This is very similar to a the double-buffering strategy used by many graphics software.
+
+A "getter" for the points is available in the `children` snippet so that its current value can be used.
+
+```svelte
+<CursorLine>
+  {#snippet children({ getPoints })}
+    <MeshLineGeometry
+      points={getPoints()}
+      shape="taper"
+    />
+    <MeshLineMaterial attenuate={false} />
+  {/snippet}
+</CursorLine>
+```
