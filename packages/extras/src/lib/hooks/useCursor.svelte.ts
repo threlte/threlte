@@ -3,7 +3,7 @@ import { onDestroy } from 'svelte'
 import { get, writable, type Writable } from 'svelte/store'
 import type { LiteralUnion } from 'type-fest'
 
-type Cursor = LiteralUnion<
+type Style = LiteralUnion<
   | 'alias'
   | 'all-scroll'
   | 'auto'
@@ -42,9 +42,26 @@ type Cursor = LiteralUnion<
   string
 >
 
+export class Cursor {
+  hovering = $state(false)
+  element = $state(document.body)
+  hoverStyle: Style = $state('pointer')
+  unhoverStyle: Style = $state('auto')
+  constructor() {
+    $effect(() => {
+      if (this.hovering) {
+        this.element.style.cursor = this.hoverStyle
+        return () => {
+          this.element.style.cursor = this.unhoverStyle
+        }
+      }
+    })
+  }
+}
+
 export const useCursor = (
-  onPointerOver: Cursor | Writable<Cursor> = 'pointer',
-  onPointerOut: Cursor | Writable<Cursor> = 'auto',
+  onPointerOver: Style | Writable<Style> = 'pointer',
+  onPointerOut: Style | Writable<Style> = 'auto',
   target: HTMLElement | undefined = undefined
 ): {
   onPointerEnter: () => void
