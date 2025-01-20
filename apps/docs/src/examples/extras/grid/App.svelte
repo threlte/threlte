@@ -54,6 +54,8 @@
   let cellDividers = $state(6)
   let sectionDividers = $state(2)
 
+  let paneExpanded = false
+
   const terrainSize = 30
   const segments = 100
   const noise = new SimplexNoise()
