@@ -38,7 +38,7 @@
 		void main() {
 			vec2 uv = gl_FragCoord.xy / uResolution.xy;
 			vec3 color = texture2D(uScene, uv).rgb;
-			color.b = uAmplitude * (1.0 + sin(uFrequency * uTime));
+			color.b = uAmplitude * 0.5 * (1.0 + sin(uFrequency * uTime));
 			gl_FragColor = vec4(color, 1.0);
 		}
 	`
