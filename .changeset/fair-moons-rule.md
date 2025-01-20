@@ -1,5 +1,4 @@
 ---
-"create-threlte": patch
 "@threlte/core": patch
 "@threlte/flex": patch
 ---
