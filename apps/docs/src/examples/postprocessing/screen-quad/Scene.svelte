@@ -46,7 +46,7 @@
     uResolution.value.set($size.width, $size.height)
   })
 
-  const gltf = useGltf('/public/models/spaceships/Bob.gltf')
+  const gltf = useGltf('/models/spaceships/Bob.gltf')
 </script>
 
 <T.PerspectiveCamera
