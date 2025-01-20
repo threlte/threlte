@@ -2,22 +2,9 @@
 interface Props {
   class?: string
   color?: 'orange' | 'blue' | 'green'
-  reverse?: boolean
-  center?: boolean
 }
 
 const { color = 'orange' } = Astro.props
-
-const reverse = Astro.props.reverse ?? false;
-const row = reverse 
-  ? 'md:flex md:flex-row-reverse' 
-  : 'md:flex-row';
-const align = reverse
-  ? 'text-right'
-  : '';
-const end = reverse
-  ? 'flex flex-col items-end'
-  : '';
 
 const glowClasses: Record<NonNullable<Props['color']>, string> = {
   orange:
@@ -71,7 +58,7 @@ text-green-400
     )
   }
 
-  <h2 class={c('text-5xl', 'font-bold', 'leading-[1.1]', align)}>
+  <h2 class="text-5xl font-bold">
     <slot name="headline" />
   </h2>
 
