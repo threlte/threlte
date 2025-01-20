@@ -12,7 +12,7 @@
    * how much the effect will come through
    * 0 -> 1 since gl colors are in this range
    */
-  let amplitude = $state(0.2)
+  let amplitude = $state(0.5)
 </script>
 
 <Pane position="fixed">
