@@ -26,7 +26,7 @@
 
   /**
    * put your interesting effects in this shader.
-   * this one oscillates the blue channel of the scene by a sine wave
+   * this one oscillates the blue channel of the scene
    */
   const fragmentShader = `
 		precision highp float;
@@ -39,7 +39,10 @@
 		void main() {
 			vec2 uv = gl_FragCoord.xy / uResolution.xy;
 			vec4 color = texture2D(uScene, uv);
-			color.b = uAmplitude * 0.5 * (1.0 + sin(uFrequency * uTime));
+			// remap sine's output from -1 -> 1 to 0 -> 1
+			float v = 0.5 * (1.0 + sin(uFrequency * uTime));
+			// uAmplitude scales v but must also be in the range 0 -> 1
+			color.b = uAmplitude * v;
 			gl_FragColor = color;
 		}
 	`

@@ -6,13 +6,13 @@
   /**
    * how fast to cycle
    */
-  let frequency = $state(2)
+  let frequency = $state(1)
 
   /**
    * how much the effect will come through
    * 0 -> 1 since gl colors are in this range
    */
-  let amplitude = $state(0.5)
+  let amplitude = $state(1)
 </script>
 
 <Pane position="fixed">
@@ -27,7 +27,7 @@
     label="frequency"
     bind:value={frequency}
     min={1}
-    max={10}
+    max={5}
     step={1}
   />
 </Pane>
