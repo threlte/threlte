@@ -24,6 +24,10 @@
     { stage: renderStage }
   )
 
+  /**
+   * put your interesting effects in this shader.
+   * this one oscillates the blue channel of the scene by a sine wave
+   */
   const fragmentShader = `
 		precision highp float;
 		uniform sampler2D uScene;
