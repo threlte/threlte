@@ -1,22 +1,30 @@
 // Hooks
 export { useCursor } from './hooks/useCursor'
 export { useGltf } from './hooks/useGltf'
+export { useDraco } from './hooks/useDraco'
+export { useMeshopt } from './hooks/useMeshopt'
+export { useKtx2 } from './hooks/useKtx2'
 export { useGltfAnimations } from './hooks/useGltfAnimations'
 export { useProgress } from './hooks/useProgress'
 export { useTexture } from './hooks/useTexture'
 export { useFBO } from './hooks/useFBO'
-export { useGamepad } from './hooks/useGamepad'
+export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad'
 export { useMask } from './hooks/useMask'
+export { useViewport } from './hooks/useViewport'
+export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
+export { default as HUD } from './components/HUD/HUD.svelte'
 export { default as Float } from './components/Float/Float.svelte'
 export { default as GLTF } from './components/GLTF/GLTF.svelte'
-export { default as Gizmo } from './components/Gizmo/Gizmo.svelte'
+export { default as Gizmo, type GizmoOptions } from './components/Gizmo/Gizmo.svelte'
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
-export { default as Environment } from './components/Environment/Environment.svelte'
+export { default as CubeEnvironment } from './components/environment/CubeEnvironment/CubeEnvironment.svelte'
+export { default as Environment } from './components/environment/Environment/Environment.svelte'
+export { default as VirtualEnvironment } from './components/environment/VirtualEnvironment/VirtualEnvironment.svelte'
 export { default as ImageMaterial } from './components/ImageMaterial/ImageMaterial.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
 export { default as RoundedBoxGeometry } from './components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
@@ -40,6 +48,22 @@ export { default as Text3DGeometry } from './components/Text3DGeometry/Text3DGeo
 export { default as PerfMonitor } from './components/PerfMonitor/PerfMonitor.svelte'
 export { default as Outlines } from './components/Outlines/Outlines.svelte'
 export { default as Mask } from './components/Mask/Mask.svelte'
+export { default as BakeShadows } from './components/BakeShadows/BakeShadows.svelte'
+export { default as Detailed } from './components/Detailed/Detailed.svelte'
+export { default as MeshDiscardMaterial } from './components/MeshDiscardMaterial/MeshDiscardMaterial.svelte'
+export { default as Resize } from './components/Resize/Resize.svelte'
+export { default as CubeCamera } from './components/CubeCamera/CubeCamera.svelte'
+export { default as LinearGradientTexture } from './components/GradientTexture/linear/LinearGradientTexture.svelte'
+export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
+export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
+export { default as View } from './components/View/View.svelte'
+export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
+
+// Transitions
+export { transitions } from './transitions/transltions.svelte'
+export { createTransition } from './transitions/createTransition'
+export { global } from './transitions/global'
+export type { TransitionProps } from './transitions/types'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
@@ -70,13 +94,9 @@ export {
   type DomEvent,
   type EventMap,
   type Intersection,
-  type IntersectionEvent
+  type IntersectionEvent,
+  type InteractivityProps
 } from './interactivity'
-
-// transitions
-export { transitions } from './transitions/transitions-plugin'
-export type { ThrelteTransition } from './transitions/types'
-export { createTransition } from './transitions/createTransition'
 
 // layers
 export { layers, type ThrelteLayers, type ThrelteLayersContext } from './layers'

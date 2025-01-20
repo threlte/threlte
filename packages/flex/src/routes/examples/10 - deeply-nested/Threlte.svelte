@@ -24,61 +24,61 @@
     gap={20}
     padding={20}
     flexDirection="Column"
-    let:width
-    let:height
   >
-    <Plane
-      color="yellow"
-      {width}
-      {height}
-      depth={1}
-    />
-
-    <Box
-      flex={1}
-      width="auto"
-      height="auto"
-      let:width
-      let:height
-    >
+    {#snippet children({ width, height })}
       <Plane
-        color="fuchsia"
+        color="yellow"
         {width}
         {height}
-        depth={2}
-      />
-    </Box>
-
-    <Box
-      flex={1}
-      width="auto"
-      height="auto"
-      justifyContent="Center"
-      alignItems="Center"
-      let:width
-      let:height
-    >
-      <Plane
-        color="orange"
-        {width}
-        {height}
-        depth={2}
+        depth={1}
       />
 
       <Box
-        width={100}
-        height={100}
-        let:width
-        let:height
+        flex={1}
+        width="auto"
+        height="auto"
       >
-        <Plane
-          color="red"
-          {width}
-          {height}
-          depth={3}
-        />
+        {#snippet children({ width, height })}
+          <Plane
+            color="fuchsia"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
       </Box>
-    </Box>
+
+      <Box
+        flex={1}
+        width="auto"
+        height="auto"
+        justifyContent="Center"
+        alignItems="Center"
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="orange"
+            {width}
+            {height}
+            depth={2}
+          />
+
+          <Box
+            width={100}
+            height={100}
+          >
+            {#snippet children({ width, height })}
+              <Plane
+                color="red"
+                {width}
+                {height}
+                depth={3}
+              />
+            {/snippet}
+          </Box>
+        {/snippet}
+      </Box>
+    {/snippet}
   </Box>
 
   <Box
@@ -87,45 +87,45 @@
     flex={0.5}
     alignItems="Stretch"
     padding={20}
-    let:width
-    let:height
   >
-    <Plane
-      color="blue"
-      {width}
-      {height}
-      depth={1}
-    />
-
-    <Box
-      flex={1}
-      width="auto"
-      height={100}
-      let:width
-      let:height
-    >
+    {#snippet children({ width, height })}
       <Plane
-        color="pink"
+        color="blue"
         {width}
         {height}
-        depth={2}
+        depth={1}
       />
-    </Box>
 
-    <Box
-      flex={1}
-      width="auto"
-      height={100}
-      alignSelf="FlexEnd"
-      let:width
-      let:height
-    >
-      <Plane
-        color="hotpink"
-        {width}
-        {height}
-        depth={2}
-      />
-    </Box>
+      <Box
+        flex={1}
+        width="auto"
+        height={100}
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="pink"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
+
+      <Box
+        flex={1}
+        width="auto"
+        height={100}
+        alignSelf="FlexEnd"
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="hotpink"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
+    {/snippet}
   </Box>
 </Flex>

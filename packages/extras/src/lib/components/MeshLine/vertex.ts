@@ -1,7 +1,7 @@
 import { ShaderChunk } from 'three'
 
 export const vertexShader = `
-	  #include <common>
+    #include <common>
     ${ShaderChunk.logdepthbuf_pars_vertex}
     ${ShaderChunk.fog_pars_vertex}
 

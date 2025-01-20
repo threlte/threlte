@@ -2,7 +2,7 @@
   import { Canvas, T } from '@threlte/core'
   import Scene from './Scene.svelte'
   import Settings from './Settings.svelte'
-  import { OrbitControls, PerfMonitor } from '@threlte/extras'
+  import { OrbitControls } from '@threlte/extras'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   let billboarding = true
@@ -11,8 +11,6 @@
 
 <div>
   <Canvas>
-    <PerfMonitor />
-
     <T.PerspectiveCamera
       makeDefault
       position.z={14}

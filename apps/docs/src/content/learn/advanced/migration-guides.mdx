@@ -4,9 +4,428 @@ title: Migration Guides
 order: 2
 ---
 
+## Threlte 8
+
+Threlte 8 adds Svelte 5 support and removes Svelte 4 support.
+
+This upgrade contains bug fixes, better average performance, smaller bundle size, and an improved development experience.
+
+There are a few notable breaking changes listed below.
+
+### Automatic Disposal
+
+[Automatic disposal](/docs/learn/basics/disposing-objects) has been improved to
+only dispose of objects that are referenced by a `<T>` component. Objects are no
+longer scanned recursively for disposable objects.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+
+  const map = useTexture('/some/texture.png')
+</script>
+
+{#if $map}
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial map={$map} />
+  </T.Mesh>
+{/if}
+```
+
+In this example, Threlte 7 also disposed of the texture when the material
+unmounted. This is no longer the case in Threlte 8. This change is introduced to
+improve performance and to make the behavior of automatic disposal more
+intuitive. When looking at simple examples like the one above, this might seem
+like a regression, but with scale the previous approach of deeply recursive
+automatic disposal was hard to reason about and a performance bottleneck.
+
+### Plugin API
+
+The plugin API has been changed to allow for greater granularity and a reactivity model that is in-line with Svelte 5.
+
+#### `createPlugin` has been removed
+
+Threlte 7 included a function called `createPlugin` that allowed to separate a
+plugin declaration from its implementation. The recommended way to create
+plugins is to export a function that invokes `injectPlugin`:
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+export const createSomePlugin = (pluginArg: string) => {
+  injectPlugin('some-plugin', () => {
+    // ... Plugin Code
+  })
+}
+```
+
+This plugin can now be implemented like this:
+
+```svelte title="Scene.svelte"
+<script>
+  import { createSomePlugin } from '$plugins'
+
+  createSomePlugin('plugin-arg')
+</script>
+```
+
+#### Plugin callbacks have been removed
+
+In Threlte 7, plugins could return an object with several callback functions
+that were invoked when:
+
+- `ref` changed
+- any prop changed (e.g. `makeDefault`, `dispose`, `attach`, etc.)
+- any "rest" prop changed (e.g. `position`, `color`, etc.)
+
+```ts title="Threlte 7"
+injectPlugin('some-plugin', ({ ref, props }) => {
+  return {
+    onRefChange(newRef) {
+      // ...
+    },
+    onPropsChange(props) {
+      // ...
+    },
+    onRestPropsChange(restProps) {
+      // ...
+    }
+  }
+})
+```
+
+These callbacks have been removed. Instead, you can use the first argument of the plugin
+callback, which is a reactive object containing all properties needed:
+
+```ts title="Threlte 8"
+injectPlugin('some-plugin', (args) => {
+  args.ref
+  args.makeDefault
+  args.args
+  args.attach
+  args.manual
+  args.makeDefault
+  args.dispose
+  args.props // All other props declared on the component
+})
+```
+
+The `args` object is reactive and will update whenever any of the referenced values change.
+
+<Tip type="info">
+  A plugin may still return an object with `pluginProps` to specify which props
+	the `<T>` component should not react to.
+</Tip>
+
+### Events
+
+Events will no longer work, and have been replaced with callback props.
+
+```svelte {2,3}m
+<T.Mesh
+  onclick={onClick}
+  onpointerenter={onPointerEnter}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+The signature of the `oncreate` callback prop has changed. Instead of receiving an object with a cleanup function,
+you may now return a cleanup function that will run when the object is destroyed or its args change. This is more in-line with other apis in svelte 5 and threlte.
+
+```svelte
+<T.Mesh
+  oncreate={(ref) => {
+    return () => {
+      console.log('cleanup')
+    }
+  }}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+The `createRawEventDispatcher` and `forwardEventHandlers` exports will no longer work.
+
+Instead of dispatching events with `createRawEventDispatcher`, invoke callback props.
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { OrbitControls } from '@threlte/extras'
+
+  type Props = {
+    onchange?: () => void
+  }
+
+  let { onchange }: Props = $props()
+
+  onchange?.()
+</script>
+
+<T.PerspectiveCamera makeDefault>
+  <OrbitControls {onchange} />
+</T.PerspectiveCamera>
+```
+
+Instead of using `forwardEventHandlers`, pass rest props
+to the component you wish to forward events to.
+
+```svelte
+<script>
+  let { ...rest } = $props()
+</script>
+
+<T.Mesh {...rest}>
+  <T.BoxGeometry />
+  <T.MeshBasicMaterial />
+</T.Mesh>
+```
+
+This will pass the new callback props mentioned in the previous section down the tree of components.
+
+### Attach API & Trait Components
+
+The signature and heuristic of the attach API of the `<T>` component has
+changed. The trait components `<HierarchicalObject>` and `<SceneGraphObject>`
+have been removed.
+
+#### `attach` Function Signature
+
+```svelte
+<!-- Threlte 7 -->
+<T.Mesh
+  attach={(parent, self) => {
+    console.log('attaching', parent, self)
+    return () => {
+      console.log('detaching', parent, self)
+    }
+  }}
+/>
+
+<!-- Threlte 8 -->
+<T.Mesh
+  attach={({ ref, parent, parentObject3D }) => {
+    console.log('attaching', ref, parent, parentObject3D)
+    return () => {
+      console.log('detaching', ref, parent, parentObject3D)
+    }
+  }}
+/>
+```
+
+#### `attach={false}`
+
+If `false` is passed to the `attach` prop, the component will not be automatically attached to
+the parent object. This is useful if you want to attach the component manually.
+
+```svelte
+<!-- "Dangling" component -->
+<T
+  is={mesh}
+  attach={false}
+/>
+```
+
+#### `attach={object3D}`
+
+If an object3D instance is passed to the `attach` prop, the component will be attached to the instance, essentially acting as a portal.
+
+<Tip type="warning">Be aware that the component still acts in the given context of the parent.</Tip>
+
+```svelte
+<!-- Attached to the provided object -->
+<T
+  is={mesh}
+  attach={object3D}
+/>
+```
+
+### Snippets
+
+Slot props will no longer work, and must be replaced with snippets.
+For example, the following components from Threlte 7 would need to be migrated from this:
+
+```svelte
+<T.PerspectiveCamera let:ref>
+  <T.OrbitControls
+    args={[ref, renderer.domElement]}
+    on:change={invalidate}
+  />
+</T.PerspectiveCamera>
+```
+
+...to this:
+
+```svelte
+<T.PerspectiveCamera>
+  {#snippet children({ ref })}
+    <T.OrbitControls
+      args={[ref, renderer.domElement]}
+      onchange={invalidate}
+    />
+  {/snippet}
+</T.PerspectiveCamera>
+```
+
+Any component that previously exposed a slot prop using the `let:` directive can follow this new pattern.
+
+### Canvas component `size` prop
+
+The `size` property on the `<Canvas>` component that allowed setting specific pixel dimensions has been removed.
+To set a specific size of your `<Canvas>`, simply wrap it in an HTML element with your desired dimensions.
+
+```svelte
+<div style="width: 500px; height: 300px;">
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+```
+
+### Canvas component `rendererParameters` prop
+
+The `renderParameters` canvas prop has been replaced with a more powerful `createRenderer` function.
+
+If you need to manually set renderer parameters, call the function and return a renderer.
+
+```svelte
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGLRenderer({
+      canvas,
+      alpha: true,
+      powerPreference: 'high-performance',
+      antialias: false,
+      depth: false,
+      premultipliedAlpha: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+Any Three renderer can be returned when calling `createRenderer`.
+
+### Transitions
+
+The transitions plugin currently does not work, we're working towards a new
+transition system.
+
+### `useGltf` and `<GLTF>`
+
+`useGltf` and `<GLTF>` no longer contain a built-in `DracoLoader`, `KTX2Loader`, or `MeshoptDecoder`.
+Instead, separate hooks can be imported and passed to these tools, improving their bundle size and flexibility.
+
+```ts
+import { useGltf, useDraco, useKtx2, useMeshopt } from '@threlte/extras'
+
+const dracoLoader = useDraco()
+const ktx2Loader = useKtx2()
+const meshoptDecoder = useMeshopt()
+
+const gltf = useGltf('./path/to/model.glb', {
+  dracoLoader,
+  ktx2Loader,
+  meshoptDecoder
+})
+```
+
+For more information, see the [`useGltf`](/docs/reference/extras/use-gltf) and [`GLTF`](/docs/reference/extras/gltf) docs.
+
+### Rapier
+
+#### Two Stage Physics
+
+In order to enable fixed frame physics, the Rapier package is introducing two
+[scheduler stages](/docs/learn/basics/scheduling-tasks#stages). So in the most
+simple physics implementation:
+
+```svelte
+<Canvas>
+  <World>
+    <Scene />
+  </World>
+</Canvas>
+```
+
+The scheduler plan will look like this:
+
+```txt
+scheduler
+├─ threlte-main-stage
+├─ simulation
+│  └─ simulation
+├─ synchronization
+│  └─ synchronization
+└─ threlte-render-stage
+```
+
+[Tasks](/docs/learn/basics/scheduling-tasks#tasks) that are added to the
+`simulation` stage will be executed according to the set
+[framerate](/docs/reference/rapier/framerate), i.e. the delta provided in these
+tasks corresponds to the delta time between physics frames. Tasks added to the
+`synchronization` stage will be executed after all tasks of the `simulation`
+stage have been executed, the delta is the regular `requestAnimationFrame` frame
+delta. The stages and tasks are available as part of the `RapierContext` with the `useRapier` hook:
+
+```ts
+import { useTask } from '@threlte/core'
+import { useRapier } from '@threlte/rapier'
+
+const { simulationTask } = useRapier()
+
+useTask(
+  () => {
+    // E.g. interact with the physics world here
+  },
+  {
+    before: simulationStage
+  }
+)
+```
+
+#### BasicPlayerController has been removed
+
+The `BasicPlayerController` component has been removed. If you need a player
+controller, Rapier comes with a pre-made, easy to implement [Character
+Controller](https://rapier.rs/docs/user_guides/javascript/character_controller).
+It's more powerful and flexible than the old component.
+
+The reason is stated in rapier's documentation as well:
+
+> Despite the fact that this built-in character controller is designed to be
+> generic enough to serve as a good starting point for many common use-cases,
+> character-control (especially for the player's character itself) is often very
+> game-specific. Therefore the builtin character controller may not work
+> perfectly out-of-the-box for all game types.
+
+#### `oncreate` event signature
+
+The `oncreate` event signature available on `<RigidBody>`, `Collider` and
+`<AutoColliders>` has been adapted to match the `oncreate` prop on `<T>`.
+
+```svelte
+<RigidBody
+  oncreate={(ref) => {
+    // ref is the created RigidBody instance
+    return () => {
+      // cleanup function
+    }
+  }}
+>
+  <!-- ... -->
+</RigidBody>
+```
+
 ## Threlte 7
 
-Threlte 7 introduces a new *Task Scheduling System* that allows you to easily
+Threlte 7 introduces a new _Task Scheduling System_ that allows you to easily
 orchestrate the task execution order of your Threlte application. For details on
 how to use it, see the [documentation](/docs/learn/basics/scheduling-tasks).
 Before, you had the option to choose between `useFrame` and `useRender` to
@@ -22,11 +441,11 @@ on the `<T>` component.
 
 ### Constant prop types on `<T>`
 
-The `<T>` component now enforces the use of *constant prop types*. This means
+The `<T>` component now enforces the use of _constant prop types_. This means
 that the type of a certain prop value must not change in the lifetime of a
 component. See this example:
 
-```svelte title="Threlte&nbsp;6"
+```svelte title="Threlte 6"
 <script>
   import { T } from '@threlte/core'
 
@@ -47,7 +466,7 @@ and a rather bad practice to start with, which allows us to optimize the
 performance of the `<T>` component by enforcing this rule. This is how you would
 migrate the above example:
 
-```svelte title="Threlte&nbsp;7" {7}m
+```svelte title="Threlte 7" {7}m
 <script>
   import { T } from '@threlte/core'
 
@@ -70,13 +489,13 @@ migrate the above example:
 `frameloop` is now called `renderMode` as it only affects the rendering of your
 Threlte application. It accepts nearly the same values as before:
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 <Canvas frameloop="always" />
 <Canvas frameloop="demand" />
 <Canvas frameloop="never" />
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 <Canvas renderMode="always" />
 <Canvas renderMode="on-demand" />
 <Canvas renderMode="manual" />
@@ -103,7 +522,7 @@ explicit here is better.
 
 The hook [`useTask`](/docs/reference/core/use-task) replaces `useFrame`. It has
 a slightly different signature and allows you to to add a `task` to Threlte's
-*Task Scheduling System*. A task may have dependencies to other tasks, which you
+_Task Scheduling System_. A task may have dependencies to other tasks, which you
 can think of as the big brother of the `order` option of `useFrame`.
 
 #### Callback Arguments
@@ -113,7 +532,7 @@ The Threlte context previously available as the first argument to the callback
 of `useFrame` should be retrieved using the hook
 [`useThrelte`](/docs/reference/core/use-threlte).
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
   // The Threlte context was previously available as the first
   // argument to the callback, followed by the delta time since the
@@ -121,7 +540,7 @@ useFrame(({ camera, scene }, delta) => {
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // The delta time since the last frame is the only
@@ -139,13 +558,13 @@ The options of `useTask` have been renamed to better reflect their purpose. The
 
 Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
   // ...
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // ...
@@ -156,25 +575,35 @@ useTask((delta) => {
 
 Migrate to `useTask` by referencing the key of the task you want to depend on.
 
-```ts title="Threlte&nbsp;6"
-useFrame((_, delta) => {
-  // This task will be executed first
-}, { order: 0 })
+```ts title="Threlte 6"
+useFrame(
+  (_, delta) => {
+    // This task will be executed first
+  },
+  { order: 0 }
+)
 
-useFrame((_, delta) => {
-  // This task will be executed second
-}, { order: 1 })
+useFrame(
+  (_, delta) => {
+    // This task will be executed second
+  },
+  { order: 1 }
+)
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 useTask('first', (delta) => {
   // ...
 })
 
-useTask('second', (delta) => {
-  // This task will be executed after the task with the
-  // key 'first' has been executed.
-}, { after: 'first' })
+useTask(
+  'second',
+  (delta) => {
+    // This task will be executed after the task with the
+    // key 'first' has been executed.
+  },
+  { after: 'first' }
+)
 ```
 
 ### `useRender`
@@ -188,17 +617,21 @@ ever executes its tasks when a re-render is needed. A task added to this stage
 can be used to render your scene. Be sure to set the option `autoInvalidate` to
 `false` to prevent Threlte from automatically invalidating the render stage.
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useRender(() => {
   // Render your scene here
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
-useTask('render', () => {
-  // Render your scene here
-}, { stage: renderStage, autoInvalidate: false })
+useTask(
+  'render',
+  () => {
+    // Render your scene here
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
 ```
 
 #### Callback Arguments
@@ -208,7 +641,7 @@ The Threlte context previously available as the first argument to the callback
 of `useRender` should be retrieved using the hook
 [`useThrelte`](/docs/reference/core/use-threlte).
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useRender(({ camera, scene }, delta) => {
   // The Threlte context was previously available as the first
   // argument to the callback, followed by the delta time since the
@@ -216,7 +649,7 @@ useRender(({ camera, scene }, delta) => {
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { camera, scene } = useThrelte()
 useTask((delta) => {
   // The delta time since the last frame is the only
@@ -228,44 +661,61 @@ useTask((delta) => {
 
 Replace `useFrame` with `useTask` and adapt accessing the Threlte context.
 
-```ts title="Threlte&nbsp;6"
+```ts title="Threlte 6"
 useRender((_{ camera, scene }_, delta) => {
   // ...
 })
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
-useTask((delta) => {
-  // ...
-}, { stage: renderStage, autoInvalidate: false })
+useTask(
+  (delta) => {
+    // ...
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
 ```
 
 #### If you used the `order` option
 
 Migrate to `useTask` by referencing the key of the task you want to depend on.
 
-```ts title="Threlte&nbsp;6"
-useRender((_, delta) => {
-  // This task will be executed first
-}, { order: 0 })
+```ts title="Threlte 6"
+useRender(
+  (_, delta) => {
+    // This task will be executed first
+  },
+  { order: 0 }
+)
 
-useRender((_, delta) => {
-  // This task will be executed second
-}, { order: 1 })
+useRender(
+  (_, delta) => {
+    // This task will be executed second
+  },
+  { order: 1 }
+)
 ```
 
-```ts title="Threlte&nbsp;7"
+```ts title="Threlte 7"
 const { renderStage } = useThrelte()
 
-useTask('first', (delta) => {
-  // ...
-}, { stage: renderStage, autoInvalidate: false })
+useTask(
+  'first',
+  (delta) => {
+    // ...
+  },
+  { stage: renderStage, autoInvalidate: false }
+)
 
-useTask('second', (delta) => {
-  // This task will be executed after the task with the
-  // key 'first' has been executed.
-}, { after: 'first', stage: renderStage, autoInvalidate: false })
+useTask(
+  'second',
+  (delta) => {
+    // This task will be executed after the task with the
+    // key 'first' has been executed.
+  },
+  { after: 'first', stage: renderStage, autoInvalidate: false }
+)
 ```
 
 ## Migrating from Threlte 5 to Threlte 6
@@ -378,7 +828,7 @@ in for instance `<T.Group>` components and apply transforms on these.
   rotation={[0, 45 * DEG2RAD, 0]}
 >
   <T.Mesh>
-    <T.BoxBufferGeometry />
+    <T.BoxGeometry />
     <T.MeshStandardMaterial />
   </T.Mesh>
 </Collider>
@@ -391,7 +841,7 @@ in for instance `<T.Group>` components and apply transforms on these.
 >
   <Collider>
     <T.Mesh>
-      <T.BoxBufferGeometry />
+      <T.BoxGeometry />
       <T.MeshStandardMaterial />
     </T.Mesh>
   </Collider>

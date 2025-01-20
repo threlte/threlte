@@ -1,44 +1,56 @@
 <script lang="ts">
-  import { PointLight } from 'three'
-  import { T, useTask } from '@threlte/core'
-  import { OrbitControls, Sky, useGltf } from '@threlte/extras'
-  import { XR, Controller, Hand } from '@threlte/xr'
   import Surfaces from './Surfaces.svelte'
-  import { createNoise2D } from 'simplex-noise'
+  import { OrbitControls, Sky, useDraco, useGltf } from '@threlte/extras'
+  import { PointLight } from 'three'
+  import { SimplexNoise } from 'three/examples/jsm/Addons.js'
+  import { T, useTask } from '@threlte/core'
+  import { XR, Controller, Hand } from '@threlte/xr'
 
-  export let showSurfaces: boolean
-  export let showBlockers: boolean
+  type Props = {
+    showBlockers: boolean
+    showSurfaces: boolean
+  }
 
-  const noise = createNoise2D()
+  let { showBlockers, showSurfaces }: Props = $props()
+
+  const noise = new SimplexNoise()
 
   const light1 = new PointLight()
   const light2 = new PointLight()
 
-  const gltf = useGltf('/models/xr/ruins.glb', {
-    useDraco: true
-  })
+  let torchX = $state(0)
+  let torchZ = $state(0)
+  let candlesX = $state(0)
+  let candlesZ = $state(0)
 
-  $: $gltf?.scene.traverse((node) => {
-    node.castShadow = node.receiveShadow = true
+  const dracoLoader = useDraco()
+  const gltf = useGltf('/models/xr/ruins.glb', {
+    dracoLoader
+  }).then((gltf) => {
+    gltf.scene.traverse((node) => {
+      node.castShadow = true
+      node.receiveShadow = true
+    })
+    torchX = gltf.nodes.Torch1.position.x
+    torchZ = gltf.nodes.Torch1.position.z
+    candlesX = gltf.nodes.Torch1.position.x
+    candlesZ = gltf.nodes.Torch1.position.z
+
+    return gltf
   })
 
   let time = 0
 
-  $: torchX = $gltf?.nodes.Torch1.position.x ?? 0
-  $: torchZ = $gltf?.nodes.Torch1.position.z ?? 0
-  $: candlesX = $gltf?.nodes.Candles1.position.x ?? 0
-  $: candlesZ = $gltf?.nodes.Candles1.position.z ?? 0
-
   useTask((delta) => {
     time += delta / 5
-    const x = noise(time, 0) / 10
-    const y = noise(0, time) / 10
-
-    light1.position.x = torchX + x
-    light1.position.z = torchZ + y
-
-    light2.position.x = candlesX + x
-    light2.position.z = candlesZ + y
+    const x = noise.noise(time, 0) / 10
+    const y = noise.noise(0, time) / 10
+    const lightPositionX = torchX + x
+    const lightPositionZ = torchZ + y
+    light1.position.x = lightPositionX
+    light2.position.x = lightPositionX
+    light1.position.z = lightPositionZ
+    light2.position.z = lightPositionZ
   })
 </script>
 
@@ -48,36 +60,38 @@
   <Hand left />
   <Hand right />
 
-  <T.PerspectiveCamera
-    slot="fallback"
-    makeDefault
-    position.y={1.8}
-    position.z={1.5}
-  >
-    <OrbitControls
-      target={[0, 1.8, 0]}
-      enablePan={false}
-      enableZoom={false}
-    />
-  </T.PerspectiveCamera>
+  {#snippet fallback()}
+    <T.PerspectiveCamera
+      makeDefault
+      position.y={1.8}
+      position.z={1.5}
+      oncreate={(ref) => ref.lookAt(0, 1.8, 0)}
+    >
+      <OrbitControls
+        target={[0, 1.8, 0]}
+        enablePan={false}
+        enableZoom={false}
+      />
+    </T.PerspectiveCamera>
+  {/snippet}
 </XR>
 
-{#if $gltf}
-  <T is={$gltf.scene} />
+{#await gltf then { scene, nodes }}
+  <T is={scene} />
   <T
     is={light1}
     intensity={8}
     color="red"
-    position.y={$gltf.nodes.Torch1.position.y + 0.45}
+    position.y={nodes.Torch1.position.y + 0.45}
   />
 
   <T
     is={light2}
     intensity={4}
     color="red"
-    position.y={$gltf.nodes.Candles1.position.y + 0.45}
+    position.y={nodes.Candles1.position.y + 0.45}
   />
-{/if}
+{/await}
 
 <Sky
   elevation={-3}

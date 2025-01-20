@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { Edges, Outlines, useGltf } from '@threlte/extras'
-  import { BufferGeometry, Color, Mesh, MeshStandardMaterial } from 'three'
+  import { Edges, Outlines, useDraco, useGltf } from '@threlte/extras'
+  import { BufferGeometry, Mesh, MeshStandardMaterial } from 'three'
   import { MathUtils } from 'three'
 
   let rotation = 0
@@ -24,6 +24,7 @@
     helmetGeometry = mesh.geometry
   }
 
+  const dracoLoader = useDraco()
   const suziGltf = useGltf<{
     nodes: {
       Suzanne: Mesh
@@ -33,7 +34,7 @@
     }
   }>(
     'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/suzanne-high-poly/model.gltf',
-    { useDraco: true }
+    { dracoLoader }
   )
 </script>
 

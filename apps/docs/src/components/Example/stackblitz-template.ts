@@ -6,7 +6,6 @@ import viteEnvDTs from './stackblitz-files/src/vite-env.d.ts?raw'
 import tsconfigJson from './stackblitz-files/stackblitz-tsconfig.json?raw'
 import tsconfigNodeJson from './stackblitz-files/stackblitz-tsconfigNode.json?raw'
 import viteConfigTs from './stackblitz-files/stackblitz-vite.config.ts?raw'
-import useTweakpaneTs from '../../lib/useTweakpane.ts?raw'
 import svelteConfigJs from './stackblitz-files/stackblitz-svelte.config.js?raw'
 
 export const files = {
@@ -19,7 +18,5 @@ export const files = {
   //src
   'src/Layout.svelte': layoutSvelte,
   'src/main.ts': mainTs,
-  'src/vite-env.d.ts': viteEnvDTs,
-  //$lib
-  'src/lib/useTweakpane.ts': useTweakpaneTs
+  'src/vite-env.d.ts': viteEnvDTs
 }

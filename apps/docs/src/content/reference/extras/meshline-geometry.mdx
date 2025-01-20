@@ -1,43 +1,41 @@
 ---
-{
-  order: 9.5,
-  category: '@threlte/extras',
-  name: <MeshLineGeometry>,
-  sourcePath: 'packages/extras/src/lib/components/MeshLine/MeshLineMaterial.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends:
+order: 5.5
+category: '@threlte/extras'
+name: <MeshLineGeometry>
+sourcePath: 'packages/extras/src/lib/components/MeshLine/MeshLineMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'BufferGeometry',
+        url: 'https://threejs.org/docs/index.html#api/en/core/BufferGeometry'
+      },
+    props:
+      [
         {
-          type: 'BufferGeometry',
-          url: 'https://threejs.org/docs/index.html#api/en/core/BufferGeometry'
+          name: 'points',
+          type: 'THREE.Vector3[]',
+          default: '[]',
+          required: true,
+          description: 'The array of points that form the line.'
         },
-      'props':
-        [
-          {
-            name: 'points',
-            type: 'THREE.Vector3[]',
-            default: '[]',
-            required: true,
-            'description': 'The array of points that form the line.'
-          },
-          {
-            name: 'shape',
-            type: "'none' | 'taper' | 'custom'",
-            default: "'none'",
-            required: false,
-            'description': "The shape of the line. Use 'custom' to use your own function."
-          },
-          {
-            name: 'shapeFunction',
-            type: '(p:number) => number',
-            default: 'p => 1',
-            required: false,
-            'description': 'A function to define the width of each point along the line. For example `p => 1 - p` will make the line taper.'
-          }
-        ]
-    }
-}
+        {
+          name: 'shape',
+          type: "'none' | 'taper' | 'custom'",
+          default: "'none'",
+          required: false,
+          description: "The shape of the line. Use 'custom' to use your own function."
+        },
+        {
+          name: 'shapeFunction',
+          type: '(p:number) => number',
+          default: 'p => 1',
+          required: false,
+          description: 'A function to define the width of each point along the line. For example `p => 1 - p` will make the line taper.'
+        }
+      ]
+  }
 ---
 
 Used in combination with [`<MeshLineMaterial>`](/docs/reference/extras/meshline-material) to create a line formed of a strip of billboarded triangles, based on <a href="https://github.com/spite/THREE.MeshLine" target="_blank">THREE.MeshLine</a>.

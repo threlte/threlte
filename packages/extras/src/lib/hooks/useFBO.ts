@@ -1,63 +1,52 @@
-/* Based on https://github.com/pmndrs/drei/blob/master/src/core/useFBO.tsx under the MIT License */
-import { useThrelte } from '@threlte/core'
-import { onDestroy, onMount } from 'svelte'
-import * as THREE from 'three'
+import type { RenderTargetOptions } from 'three'
+import { DepthTexture, WebGLRenderTarget } from 'three'
+import { onDestroy } from 'svelte'
+import { isInstanceOf, useThrelte, watch } from '@threlte/core'
 
-type UseFBOOptions = {
-  /** Defines the count of MSAA samples. Can only be used with WebGL 2. Default: 0 */
-  samples?: number
-  /** If set, the scene depth will be rendered into buffer.depthTexture. Default: false */
-  depth?: boolean
-} & THREE.WebGLRenderTargetOptions
+export type UseFBOOptions = RenderTargetOptions & {
+  /**
+   * if set, the scene depth will be rendered into buffer.depthTexture
+   */
+  depth?: { width?: number; height?: number } | DepthTexture | boolean
+  /**
+   * if set, the render target size will be set to the corresponding width and height and not use or follow the size of the canvas
+   */
+  size?: { width?: number; height?: number }
+}
 
-// 👇 uncomment when TS version supports function overloads
-// export function useFBO(options?: UseFBOOptions)
-export function useFBO(
-  /** Width in pixels, or options (will render fullscreen by default) */
-  width?: number | UseFBOOptions,
-  /** Height in pixels */
-  height?: number,
-  /** Options */
-  options?: UseFBOOptions
-): THREE.WebGLRenderTarget {
-  const { dpr, size } = useThrelte()
+export const useFBO = ({
+  depth = false,
+  size,
+  ...targetOptions
+}: UseFBOOptions = {}): WebGLRenderTarget => {
+  const target = new WebGLRenderTarget(1, 1, targetOptions)
 
-  const _width = typeof width === 'number' ? width : 1 * (dpr.current ?? 1)
-  const _height = typeof height === 'number' ? height : 1 * (dpr.current ?? 1)
-  const _options = (typeof width === 'number' ? options : (width as UseFBOOptions)) || {}
-  const { samples = 0, depth, ...targetOptions } = _options
-
-  const target = new THREE.WebGLRenderTarget(_width, _height, {
-    minFilter: THREE.LinearFilter,
-    magFilter: THREE.LinearFilter,
-    type: THREE.HalfFloatType,
-    ...targetOptions
-  })
-
-  if (depth) {
-    target.depthTexture = new THREE.DepthTexture(_width, _height, THREE.FloatType)
+  // first set the width and height because if a depth texture has to be created, it can only have its width and height set in its constructor
+  if (size === undefined) {
+    const { dpr, size } = useThrelte()
+    watch([dpr, size], ([dpr, { width, height }]) => {
+      target.setSize(dpr * width, dpr * height)
+    })
+  } else {
+    // handle when width and height are undefined or the user set them to negative numbers
+    const width = Math.max(size.width ?? 1, target.width)
+    const height = Math.max(size.height ?? 1, target.height)
+    target.setSize(width, height)
   }
 
-  target.samples = samples
-
-  onMount(() => {
-    if (samples) target.samples = samples
-  })
+  if (depth === true) {
+    target.depthTexture = new DepthTexture(target.width, target.height)
+  } else if (isInstanceOf(depth, 'DepthTexture')) {
+    target.depthTexture = depth
+  } else if (depth !== false) {
+    const width = Math.max(depth.width ?? 1, 1)
+    const height = Math.max(depth.height ?? 1, 1)
+    target.depthTexture = new DepthTexture(width, height)
+  }
 
   onDestroy(() => {
     target.dispose()
   })
-
-  const unsubscribeSize = size.subscribe((val) => {
-    // Update the width and height on size change
-    const _width = typeof width === 'number' ? width : val.width * dpr.current
-    const _height = typeof height === 'number' ? height : val.height * dpr.current
-    if (target.width !== _width && target.height !== _height) {
-      target.setSize(_width, _height)
-    }
-  })
-
-  onDestroy(unsubscribeSize)
 
   return target
 }

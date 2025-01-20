@@ -1,51 +1,45 @@
 <script lang="ts">
-  import { PlaneGeometry } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { createNoise2D } from 'simplex-noise'
+  import { Environment, OrbitControls } from '@threlte/extras'
+  import { DoubleSide, PlaneGeometry } from 'three'
+  import { SimplexNoise } from 'three/examples/jsm/Addons.js'
   import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
-  import { AutoColliders, Debug } from '@threlte/rapier'
-  import { showCollider, autoRotate } from './state'
+
+  let { autoRotate = false, flatness = 4 }: { autoRotate?: boolean; flatness?: number } = $props()
 
   const geometry = new PlaneGeometry(10, 10, 100, 100)
+  const positions = geometry.getAttribute('position')
 
-  const noise = createNoise2D()
-  const vertices = geometry.getAttribute('position').array
+  const noise = new SimplexNoise()
 
-  for (let i = 0; i < vertices.length; i += 3) {
-    const x = vertices[i]
-    const y = vertices[i + 1]
-    // @ts-ignore
-    vertices[i + 2] = noise(x / 4, y / 4)
-  }
+  $effect(() => {
+    for (let i = 0; i < positions.count; i += 1) {
+      const x = positions.getX(i) / flatness
+      const y = positions.getY(i) / flatness
+      positions.setZ(i, noise.noise(x, y))
+    }
 
-  // needed for lighting
-  geometry.computeVertexNormals()
+    positions.needsUpdate = true
+
+    // needed for lighting
+    geometry.computeVertexNormals()
+  })
 </script>
-
-<Debug visible={$showCollider} />
 
 <T.PerspectiveCamera
   makeDefault
-  position.y={5}
-  position.z={10}
-  lookAt.y={2}
+  position={10}
 >
   <OrbitControls
-    autoRotate={$autoRotate}
-    enableZoom={false}
-    maxPolarAngle={DEG2RAD * 80}
+    {autoRotate}
+    autoRotateSpeed={0.5}
   />
 </T.PerspectiveCamera>
 
-<T.DirectionalLight position={[3, 10, 10]} />
-<T.HemisphereLight intensity={0.2} />
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
-<AutoColliders shape="trimesh">
-  <T.Mesh
-    {geometry}
-    rotation.x={DEG2RAD * -90}
-  >
-    <T.MeshStandardMaterial />
-  </T.Mesh>
-</AutoColliders>
+<T.Mesh
+  {geometry}
+  rotation.x={-1 * 0.5 * Math.PI}
+>
+  <T.MeshStandardMaterial side={DoubleSide} />
+</T.Mesh>

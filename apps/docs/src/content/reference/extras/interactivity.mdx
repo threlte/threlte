@@ -1,13 +1,12 @@
 ---
-order: 3.5
+order: 2.5
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/interactivity'
 name: 'interactivity'
 type: 'plugin'
 ---
 
-To add click, pointer and wheel events to your Threlte app, import the plugin `interactivity` from
-`'@threlte/extras'` and call it in your main scene component.
+To add click, pointer and wheel events to your Threlte app use the `interactivity` plugin.
 
 ```svelte title="Scene.svelte" {2,3}+
 <script>
@@ -16,7 +15,9 @@ To add click, pointer and wheel events to your Threlte app, import the plugin `i
 </script>
 ```
 
-All child components now receive events.
+<Example path="extras/interactivity" />
+
+All child components can now make use of the new events.
 
 ```svelte title="Scene.svelte" {7-9}+
 <script>
@@ -25,7 +26,7 @@ All child components now receive events.
 </script>
 
 <T.Mesh
-  on:click={() => {
+  onclick={() => {
     console.log('clicked')
   }}
 >
@@ -34,32 +35,32 @@ All child components now receive events.
 </T.Mesh>
 ```
 
-### Available Events
+## Available Events
 
 The following interaction events are available:
 
 ```svelte
 <T.Mesh
-  on:click={(e) => console.log('click')}
-  on:contextmenu={(e) => console.log('context menu')}
-  on:dblclick={(e) => console.log('double click')}
-  on:wheel={(e) => console.log('wheel')}
-  on:pointerup={(e) => console.log('up')}
-  on:pointerdown={(e) => console.log('down')}
-  on:pointerover={(e) => console.log('over')}
-  on:pointerout={(e) => console.log('out')}
-  on:pointerenter={(e) => console.log('enter')}
-  on:pointerleave={(e) => console.log('leave')}
-  on:pointermove={(e) => console.log('move')}
-  on:pointermissed={() => console.log('missed')}
+  onclick={(e) => console.log('click')}
+  oncontextmenu={(e) => console.log('context menu')}
+  ondblclick={(e) => console.log('double click')}
+  onwheel={(e) => console.log('wheel')}
+  onpointerup={(e) => console.log('up')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerover={(e) => console.log('over')}
+  onpointerout={(e) => console.log('out')}
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointermove={(e) => console.log('move')}
+  onpointermissed={() => console.log('missed')}
 />
 ```
 
-### Event Data
+## Event Data
 
 All interaction events contain the following data:
 
-```ts
+```typescript
 type Event = THREE.Intersection & {
   intersections: THREE.Intersection[] // The first intersection of each intersected object
   object: THREE.Object3D // The object that was actually hit
@@ -70,11 +71,11 @@ type Event = THREE.Intersection & {
   pointer: Vector2 // The pointer position in normalized device coordinates
   ray: THREE.Ray // The ray used for raycasting
   stopPropagation: () => void // Function to stop propagation of the event
-  stopped: Boolean // Whether the event propagation has been stopped
+  stopped: boolean // Whether the event propagation has been stopped
 }
 ```
 
-### Event Propagation
+## Event Propagation
 
 Propagation works a bit differently to the DOM because objects can occlude each other in 3D.
 The intersections array in the event data includes all objects intersecting the ray, not just the
@@ -91,14 +92,14 @@ delivered pointerover events, they will immediately be delivered pointerout even
 an object to block pointer events from objects behind it, it needs to have an event handler as follows:
 
 ```svelte
-<T.Mesh on:click={(e) => e.stopPropagation()} />
+<T.Mesh onclick={(e) => e.stopPropagation()} />
 ```
 
 even if you don't want this object to respond to the pointer event. If you do want to handle the
 event as well as using `stopPropagation()`, remember that the `pointerout` events will happen during
 the `stopPropagation()` call. You probably want your other event handling to happen after this.
 
-### Interactivity Event Target
+## Interactivity Event Target
 
 If no event target is specified, all event handlers listen to events on the `domElement` of the
 `renderer` (which is the canvas element by default). You can specify a different target by passing
@@ -122,11 +123,14 @@ It's also possible to change the target at runtime by updating the store `target
   import { interactivity } from '@threlte/extras'
 
   const { target } = interactivity()
-  $: target.set(document)
+
+  $effect(() => {
+    target.set(document)
+  })
 </script>
 ```
 
-### Interactivity Event Compute
+## Interactivity Event Compute
 
 In the event that your event target is not the same size as the canvas, you can pass a `compute` function
 to the `interactivity` plugin. This function receives the DOM event and the interactivity state and should
@@ -147,7 +151,7 @@ as set the raycaster up for raycasting.
         p.x = (event.clientX / window.innerWidth) * 2 - 1
         p.y = -(event.clientY / window.innerHeight) * 2 + 1
 
-				return p
+        return p
       })
 
       // Update the raycaster
@@ -157,7 +161,7 @@ as set the raycaster up for raycasting.
 </script>
 ```
 
-### Interactivity Event Filtering
+## Interactivity Event Filtering
 
 You can filter and sort events by passing a `filter` to the `interactivity` plugin. The function receives all hits and the interactivity state and should return the hits that should be delivered to the event handlers in the order they should be delivered.
 
@@ -174,7 +178,7 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
-### Interactivity State
+## Interactivity State
 
 To access the interactivity state, you can use the `useInteractivity` hook in any child component of the component that implements the `interactivity` plugin as follows:
 
@@ -183,7 +187,8 @@ To access the interactivity state, you can use the `useInteractivity` hook in an
   import { useInteractivity } from '@threlte/extras'
 
   const { pointer, pointerOverTarget } = useInteractivity()
-  $: console.log($pointer, $pointerOverTarget)
+
+  $inspect($pointer, $pointerOverTarget)
 </script>
 ```
 
@@ -211,3 +216,41 @@ export type State = {
   It's a regular writable store that also has a `current` property which is the current value of the
   store. It's useful for accessing the value of a store in a non-reactive context, such as in loops.
 </Tip>
+
+## TypeScript
+
+### Prop Types
+
+By default, the `interactivity` plugin does not add any prop types to the `<T>`
+component. You can however extend the types of the `<T>` component by defining
+the `Threlte.UserProps` type in your ambient type definitions. In a typical
+SvelteKit application, you can find these [in
+`src/app.d.ts`](https://svelte.dev/docs/kit/types#app.d.ts). The interactivity
+plugin exports the `InteractivityProps` type which you can use as shown below:
+
+```ts title="src/app.d.ts"
+import type { InteractivityProps } from '@threlte/extras'
+
+declare global {
+  namespace Threlte {
+    interface UserProps extends InteractivityProps {}
+  }
+}
+
+export {}
+```
+
+Now all event handlers on `<T>` components will be type safe.
+
+```svelte title="Scene.svelte"
+<script>
+  import { interactivity } from '@threlte/extras'
+  interactivity()
+</script>
+
+<T.Mesh
+  onclick={(e) => {
+    // e: IntersectionEvent<MouseEvent>
+  }}
+/>
+```

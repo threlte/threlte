@@ -1,6 +1,12 @@
 <script lang="ts">
-  import { useParent, watch } from '@threlte/core'
+  import { isInstanceOf, useParent, watch } from '@threlte/core'
   import { usePortalContext } from '../usePortalContext'
+
+  interface Props {
+    id?: string
+  }
+
+  let { id = 'default' }: Props = $props()
 
   const parent = useParent()
 
@@ -8,12 +14,10 @@
     throw new Error('<PortalTarget> must be used within a <Canvas> component.')
   }
 
-  export let id = 'default'
-
   const { addPortal, removePortal } = usePortalContext()
 
   watch(parent, (parent) => {
-    if (!parent) return
+    if (!parent || !isInstanceOf(parent, 'Object3D')) return
     addPortal(parent, id)
     return () => {
       removePortal(id)

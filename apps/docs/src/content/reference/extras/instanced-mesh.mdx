@@ -1,44 +1,42 @@
 ---
-{
-  order: 6.2,
-  category: '@threlte/extras',
-  sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMesh.svelte',
-  name: '<InstancedMesh>',
-  type: 'component',
-  'componentSignature':
-    {
-      extends:
+order: 7.2
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMesh.svelte'
+name: '<InstancedMesh>'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'InstancedMesh',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+      },
+    props:
+      [
+        { name: 'id', type: 'string', default: 'default', required: false },
         {
-          type: 'InstancedMesh',
-          url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+          name: 'limit',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of possible <Instance> components.'
         },
-      'props':
-        [
-          { name: 'id', type: 'string', default: "'default'", required: false },
-          {
-            name: 'limit',
-            type: 'number',
-            default: '1000',
-            required: false,
-            description: 'Limits the amount of possible <Instance> components.'
-          },
-          {
-            name: 'range',
-            type: 'number',
-            default: '1000',
-            required: false,
-            description: 'Limits the amount of drawn <Instance> components.'
-          },
-          {
-            name: 'update',
-            type: 'boolean',
-            default: 'true',
-            required: false,
-            description: 'Whether the THREE.InstancedMesh should be updated.'
-          }
-        ]
-    }
-}
+        {
+          name: 'range',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of drawn <Instance> components.'
+        },
+        {
+          name: 'update',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Whether the THREE.InstancedMesh should be updated.'
+        }
+      ]
+  }
 ---
 
 The component `<InstancedMesh>` is wrapping the Three.js object InstancedMesh and provides instanced rendering support. Use `<InstancedMesh>` if you have to render a large number of objects with the same geometry and material but with different world transformations and colors. The usage of `<InstancedMesh>` will help you to reduce the number of draw calls and thus improve the overall rendering performance in your application.
@@ -125,7 +123,7 @@ Instances also support interactivity events.
   <T.BoxGeometry />
   <T.MeshStandardMaterial />
 
-  <Instance on:click={onClick} />
+  <Instance onclick={onClick} />
 </InstancedMesh>
 ```
 

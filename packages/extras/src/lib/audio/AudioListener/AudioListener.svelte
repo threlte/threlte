@@ -1,44 +1,36 @@
 <script lang="ts">
-  import { forwardEventHandlers, T } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type {
-    AudioListenerProps,
-    AudioListenerEvents,
-    AudioListenerSlots
-  } from './AudioListener.svelte'
+  import type { AudioListenerProps } from './types'
 
-  type $$Props = AudioListenerProps
-  type $$Events = AudioListenerEvents
-  type $$Slots = AudioListenerSlots
+  let { id, masterVolume, ref = $bindable(), children, ...props }: AudioListenerProps = $props()
 
-  export let id: $$Props['id'] = undefined
-  export let masterVolume: $$Props['masterVolume'] = undefined
+  const listener = new ThreeAudioListener()
 
-  export const ref = new ThreeAudioListener()
+  export const audioContext = listener.context
+  export const resumeContext = () => listener.context.resume()
 
-  export const audioContext = ref.context
-  export const resumeContext = async () => await ref.context.resume()
-
-  $: if (masterVolume !== undefined) ref.setMasterVolume(masterVolume)
+  $effect.pre(() => {
+    if (masterVolume !== undefined) {
+      listener.setMasterVolume(masterVolume)
+    }
+  })
 
   const { addAudioListener, removeAudioListener } = useThrelteAudio()
 
-  addAudioListener(ref, id)
+  addAudioListener(listener, id)
 
   onDestroy(() => {
     removeAudioListener(id)
   })
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
-  is={ref}
-  {...$$restProps}
-  let:ref
-  bind:this={$component}
+  is={listener}
+  bind:ref
+  {...props}
 >
-  <slot {ref} />
+  {@render children?.({ ref: listener })}
 </T>

@@ -34,34 +34,42 @@
 <XR>
   <Controller
     left
-    on:connected={() => console.log('connect')}
-    on:select={() => console.log('select')}
+    onconnected={() => console.log('connect')}
+    onselect={() => console.log('select')}
   >
     <T.Mesh>
       <T.CylinderGeometry args={[0.01, 0.01, 0.08]} />
       <T.MeshStandardMaterial color="orange" />
     </T.Mesh>
-    <T.Mesh slot="target-ray">
-      <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
-      <T.MeshStandardMaterial color="turquoise" />
-    </T.Mesh>
-    <T.Mesh slot="grip">
-      <T.IcosahedronGeometry args={[0.02]} />
-      <T.MeshStandardMaterial color="skyblue" />
-    </T.Mesh>
+
+    {#snippet targetRay()}
+      <T.Mesh>
+        <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
+        <T.MeshStandardMaterial color="turquoise" />
+      </T.Mesh>
+    {/snippet}
+
+    {#snippet grip()}
+      <T.Mesh>
+        <T.IcosahedronGeometry args={[0.02]} />
+        <T.MeshStandardMaterial color="skyblue" />
+      </T.Mesh>
+    {/snippet}
   </Controller>
 
   <Controller
     right
-    on:connected={() => console.log('connect')}
-    on:select={() => console.log('select')}
+    onconnected={() => console.log('connect')}
+    onselect={() => console.log('select')}
   />
 
   <Hand left>
-    <T.Mesh slot="wrist">
-      <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
-      <T.MeshStandardMaterial color="turquoise" />
-    </T.Mesh>
+    {#snippet wrist()}
+      <T.Mesh>
+        <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
+        <T.MeshStandardMaterial color="turquoise" />
+      </T.Mesh>
+    {/snippet}
   </Hand>
 
   <Hand right>
@@ -77,7 +85,7 @@
 <T.PerspectiveCamera
   makeDefault
   position={[3, 3, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  oncreate={(ref) => ref.lookAt(0, 0, 0)}
 />
 
 <T.Mesh

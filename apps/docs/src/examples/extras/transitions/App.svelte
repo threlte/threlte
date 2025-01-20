@@ -1,28 +1,46 @@
-<script lang="ts">
+<script>
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import { Suspense } from '@threlte/extras'
 
-  let showCube = true
+  let red = $state(true)
+  let blue = $state(true)
 </script>
 
-<div class="relative h-full w-full">
-  <div
-    class="pointer-events-none absolute left-0 top-0 flex h-[60%] w-full items-center justify-center"
-  >
-    <button
-      class="border-orange/5 text-orange pointer-events-auto rounded-sm border bg-orange-800/50 px-2 py-1 text-sm hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
-      on:click={() => {
-        showCube = !showCube
-      }}
-    >
-      {#if showCube}
-        Hide Cube
-      {:else}
-        Show Cube
-      {/if}
-    </button>
-  </div>
+<Pane
+  title="Transitions"
+  position="fixed"
+>
+  <Checkbox
+    bind:value={red}
+    label="Toggle Red"
+  />
+
+  <Checkbox
+    bind:value={blue}
+    label="Toggle Blue"
+  />
+</Pane>
+
+<div>
   <Canvas>
-    <Scene {showCube} />
+    <Suspense>
+      <Scene
+        {red}
+        {blue}
+      />
+    </Suspense>
   </Canvas>
 </div>
+
+<style>
+  :global(body) {
+    margin: 0;
+  }
+
+  div {
+    width: 100%;
+    height: 100%;
+  }
+</style>

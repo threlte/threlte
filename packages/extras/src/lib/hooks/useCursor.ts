@@ -1,3 +1,4 @@
+import { watch } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import { get, writable, type Writable } from 'svelte/store'
 import type { LiteralUnion } from 'type-fest'
@@ -73,35 +74,32 @@ export const useCursor = (
 
   let onPointerOverValue = typeof onPointerOver === 'string' ? onPointerOver : get(onPointerOver)
   if (typeof onPointerOver !== 'string') {
-    const unsubscribeOnPointerOver = onPointerOver.subscribe((cursorStyle) => {
+    watch(onPointerOver, (cursorStyle) => {
       onPointerOverValue = cursorStyle
       if (hovering) {
         el.style.cursor = cursorStyle
       }
     })
-    onDestroy(unsubscribeOnPointerOver)
   }
 
   let onPointerOutValue = typeof onPointerOut === 'string' ? onPointerOut : get(onPointerOut)
   if (typeof onPointerOut !== 'string') {
-    const unsubscribeOnPointerOut = onPointerOut.subscribe((cursorStyle) => {
+    watch(onPointerOut, (cursorStyle) => {
       onPointerOutValue = cursorStyle
       if (!hovering) {
         el.style.cursor = cursorStyle
       }
     })
-    onDestroy(unsubscribeOnPointerOut)
   }
 
-  const unsubscribeHovering = hoveringStore.subscribe((isHovering) => {
+  watch(hoveringStore, (isHovering) => {
     hovering = isHovering
-    if (isHovering) {
+    if (hovering) {
       el.style.cursor = onPointerOverValue
     } else {
       el.style.cursor = onPointerOutValue
     }
   })
-  onDestroy(unsubscribeHovering)
 
   // onDestroy: Reset the cursor style
   onDestroy(() => {

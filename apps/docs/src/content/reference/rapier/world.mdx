@@ -1,31 +1,29 @@
 ---
-{
-  order: 1,
-  category: '@threlte/rapier',
-  sourcePath: 'packages/rapier/src/lib/components/World/World.svelte',
-  name: '<World>',
-  type: 'component',
-  componentSignature:
-    {
-      props:
-        [
-          { name: 'gravity', type: 'Position', default: '{ y: -9.81 }', required: false },
-          { name: 'rawIntegrationParameters', type: 'RawIntegrationParameters', required: false },
-          { name: 'rawIslands', type: 'RawIslandManager', required: false },
-          { name: 'rawBroadPhase', type: 'RawBroadPhase', required: false },
-          { name: 'rawNarrowPhase', type: 'RawNarrowPhase', required: false },
-          { name: 'rawBodies', type: 'RawRigidBodySet', required: false },
-          { name: 'rawColliders', type: 'RawColliderSet', required: false },
-          { name: 'rawImpulseJoints', type: 'RawImpulseJointSet', required: false },
-          { name: 'rawMultibodyJoints', type: 'RawMultibodyJointSet', required: false },
-          { name: 'rawCCDSolver', type: 'RawCCDSolver', required: false },
-          { name: 'rawQueryPipeline', type: 'RawQueryPipeline', required: false },
-          { name: 'rawPhysicsPipeline', type: 'RawPhysicsPipeline', required: false },
-          { name: 'rawSerializationPipeline', type: 'RawSerializationPipeline', required: false },
-          { name: 'rawDebugRenderPipeline', type: 'RawDebugRenderPipeline', required: false }
-        ]
-    }
-}
+order: 1
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/components/World/World.svelte'
+name: '<World>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'gravity', type: 'Position', default: '{ y: -9.81 }', required: false },
+        { name: 'rawIntegrationParameters', type: 'RawIntegrationParameters', required: false },
+        { name: 'rawIslands', type: 'RawIslandManager', required: false },
+        { name: 'rawBroadPhase', type: 'RawBroadPhase', required: false },
+        { name: 'rawNarrowPhase', type: 'RawNarrowPhase', required: false },
+        { name: 'rawBodies', type: 'RawRigidBodySet', required: false },
+        { name: 'rawColliders', type: 'RawColliderSet', required: false },
+        { name: 'rawImpulseJoints', type: 'RawImpulseJointSet', required: false },
+        { name: 'rawMultibodyJoints', type: 'RawMultibodyJointSet', required: false },
+        { name: 'rawCCDSolver', type: 'RawCCDSolver', required: false },
+        { name: 'rawQueryPipeline', type: 'RawQueryPipeline', required: false },
+        { name: 'rawPhysicsPipeline', type: 'RawPhysicsPipeline', required: false },
+        { name: 'rawSerializationPipeline', type: 'RawSerializationPipeline', required: false },
+        { name: 'rawDebugRenderPipeline', type: 'RawDebugRenderPipeline', required: false }
+      ]
+  }
 ---
 
 This component provides the basic physics context and loads [rapier](https://rapier.rs/).
@@ -33,8 +31,6 @@ This component provides the basic physics context and loads [rapier](https://rap
 <Tip type="tip">
 	All components that rely on physics (e.g. `<RigidBody>` or `<Collider>`) must be a child of `<World>`.
 </Tip>
-
-<Example path="rapier/world" />
 
 ## Structure
 
@@ -72,7 +68,9 @@ This structure ensures that all components inside the component `<Scene>` have a
 <Canvas>
   <World>
     <Scene />
-    <FallbackScene slot="fallback" />
+    {#snippet fallback()}
+      <FallbackScene />
+    {/snippet}
   </World>
 </Canvas>
 ```

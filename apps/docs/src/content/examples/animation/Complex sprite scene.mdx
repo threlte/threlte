@@ -1,4 +1,3 @@
-
 This example demonstrates [`<InstancedSprites>`](/docs/reference/extras/instanced-sprite), showing
 a few different approaches for instancing and updating large numbers of sprites in your scene.
 
@@ -6,7 +5,6 @@ a few different approaches for instancing and updating large numbers of sprites 
   path="instancing/instanced-sprite-mania"
   iframe
 />
-
 
 ## How it works?
 
@@ -19,7 +17,6 @@ This covers step-by-step how you can configure `<InstancedSprite/>` component, s
   import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import UpdaterFlying from './UpdaterFlying.svelte'
   import type { SpritesheetMetadata } from '@threlte/extras'
-
 
   const demonSpriteMeta = [
     {
@@ -57,9 +54,9 @@ For detailed information on defining animations and using frame ranges, refer to
     count={20000}
     {spritesheet}
   >
-	<!-- User component for updating instances -->
+    <!-- User component for updating instances -->
     <UpdaterFlying /> /
-	<!-- -->
+    <!-- -->
   </InstancedSprite>
 {/await}
 ```
@@ -68,7 +65,6 @@ We add `<InstancedSprite>` to the scene with a `count` `spritesheet` - the only 
 
 To add the `<InstancedSprite>` component to the scene, you need to specify at least two essential properties:
 `count` and `spritesheet`. The `spritesheet` property is the object obtained as the result of awaiting the Promise of the `buildSpritesheet` function called earlier.
-
 
 ### Updating instances
 
@@ -82,20 +78,19 @@ This description is simplified for brevity, this is where you'd have your comple
 A working example, demonstrating basic random movement, is available in the source of the live example for this component
 (UpdaterFlying.svelte, UpdaterWalking.svelte, UpdaterFlyingHook.svelte).
 
-
 ```svelte title=FlyingBehaviour.svelte
 <script lang="ts">
-	import { useTask } from '@threlte/core'
-	import { useInstancedSprite } from '@threlte/extras'
+  import { useTask } from '@threlte/core'
+  import { useInstancedSprite } from '@threlte/extras'
 
-	const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
+  const { updatePosition, count, animationMap, sprite } = useInstancedSprite()
 
-	useTask(()=>{
-		for(let i=0; i<count;i++){
-			updatePosition(i, [0,0,0])
-			sprite.animation.setAt(i, 'fly')
-		}
-	})
+  useTask(() => {
+    for (let i = 0; i < count; i++) {
+      updatePosition(i, [0, 0, 0])
+      sprite.animation.setAt(i, 'fly')
+    }
+  })
 </script>
 ```
 

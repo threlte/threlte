@@ -1,17 +1,10 @@
 import { onDestroy } from 'svelte'
-import { createRawEventDispatcher } from '@threlte/core'
+import type { ColliderEvents, CreateEvent } from '../types/types'
 
-export const useCreateEvent = <T>() => {
-  const dispatchRaw = createRawEventDispatcher<{
-    create: {
-      ref: T
-      cleanup: (callback: () => void) => void
-    }
-  }>()
-
+export const useCreateEvent = <T>(oncreate?: CreateEvent<T>['oncreate']) => {
   const cleanupFunctions: (() => void)[] = []
 
-  let ref: T | undefined = undefined
+  let ref: T
 
   const dispatchCreateEvent = () => {
     // call every cleanup function
@@ -20,14 +13,10 @@ export const useCreateEvent = <T>() => {
     // clear the cleanup functions array
     cleanupFunctions.length = 0
 
-    const cleanup = (callback: () => void) => {
-      // add cleanup function to array
-      cleanupFunctions.push(callback)
-    }
-
     if (ref === undefined) return
 
-    dispatchRaw('create', { ref, cleanup })
+    const cleanup = oncreate?.(ref)
+    if (cleanup) cleanupFunctions.push(cleanup)
   }
 
   const updateRef = (newRef: T) => {

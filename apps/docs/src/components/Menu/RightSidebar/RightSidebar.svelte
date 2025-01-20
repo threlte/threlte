@@ -3,9 +3,7 @@
   import type { MarkdownHeading } from 'astro'
   import { onMount } from 'svelte'
   import { onDestroy } from 'svelte'
-  import type { CollectionEntry } from 'astro:content'
 
-  export let entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
   export let editUrl: string | undefined = undefined
   export let sourceUrl: string | undefined = undefined
   export let headings: MarkdownHeading[]
@@ -81,23 +79,23 @@
       {#each headings as heading}
         <li
           class={c(
-            'nav-list-item',
+            'nav-list-item text-faded',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
-              '!border-orange !text-orange font-bold'
+              '!border-orange font-bold !text-orange'
           )}
-          on:keypress={() => {
-            headingClicked(heading.slug)
-          }}
-          on:click={() => {
-            headingClicked(heading.slug)
-          }}
         >
           <a
             data-depth={heading.depth}
-            class={c('block py-2 pr-4 no-underline hover:underline lg:py-0 ')}
+            class="block py-2 pr-4 no-underline hover:underline lg:py-0"
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}
+            on:keypress={() => {
+              headingClicked(heading.slug)
+            }}
+            on:click={() => {
+              headingClicked(heading.slug)
+            }}
           >
             {heading.text}
           </a>
@@ -117,9 +115,9 @@
     class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
     on:transitionend={focusFirstDropdownLink}
   >
-    <li class={c('list-item')}>
+    <li class="text-faded list-item">
       <a
-        class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+        class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
         href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
         referrerpolicy="no-referrer"
         rel="noopener noreferrer"
@@ -144,9 +142,9 @@
     </li>
 
     {#if sourceUrl}
-      <li class={c('list-item')}>
+      <li class="text-faded list-item">
         <a
-          class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+          class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={sourceUrl}
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
@@ -172,9 +170,9 @@
     {/if}
 
     {#if editUrl}
-      <li class={c('list-item')}>
+      <li class="text-faded list-item">
         <a
-          class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+          class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={editUrl}
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
@@ -207,11 +205,11 @@
 
 <style lang="postcss">
   .nav-list-item {
-    @apply text-faded border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
+    @apply border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
   }
 
   .list-item {
-    @apply text-faded relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white;
+    @apply relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white;
   }
 
   .list-item .icon {

@@ -1,44 +1,64 @@
 <script lang="ts">
-  import { T, useTask } from '$lib'
-  import type { Mesh } from 'three'
+  import { Color } from 'three'
+  import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib'
 
-  let ref: Mesh
+  const { scene, invalidate } = useThrelte()
+  scene.background = new Color('black')
 
-  useTask(() => {
-    ref.rotation.x += 0.01
-    ref.rotation.y += 0.01
+  let posY = $state(0)
+  let makeDefault = $state(false)
+  let show = $state(false)
+  let height = $state(1)
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === ' ') {
+      posY += 1
+    }
+    if (e.key === 'Enter') {
+      makeDefault = !makeDefault
+    }
+    if (e.key === 's') {
+      show = !show
+    }
+    if (e.key === 'h') {
+      height += 1
+    }
+  })
+
+  injectPlugin('test-plugin', (args) => {
+    $effect(() => {
+      if (isInstanceOf(args.ref, 'PerspectiveCamera')) {
+        console.log(args.makeDefault)
+      }
+    })
   })
 </script>
 
 <T.PerspectiveCamera
-  makeDefault
-  position={[3, 3, 3]}
-  on:create={({ ref }) => ref.lookAt(0, 0, 0)}
+  {makeDefault}
+  position={[10, 10, 10]}
+  oncreate={(ref) => {
+    ref.lookAt(0, 0, 0)
+  }}
 />
 
-<T.Mesh
-  castShadow
-  receiveShadow
-  bind:ref
->
-  <T.MeshStandardMaterial color="hotpink" />
-  <T.BoxGeometry />
+<T.Mesh>
+  <T.MeshBasicMaterial />
+  <T.Color
+    args={['blue']}
+    attach="material.color"
+  />
+  <T.BoxGeometry>
+    <T.Mesh position.y={posY}>
+      <T.MeshBasicMaterial color="blue" />
+      <T.SphereGeometry />
+    </T.Mesh>
+  </T.BoxGeometry>
 </T.Mesh>
 
-<T.Mesh
-  receiveShadow
-  position.y={-1}
->
-  <T.MeshStandardMaterial color="turquoise" />
-  <T.CylinderGeometry args={[1, 1, 0.1]} />
-</T.Mesh>
-
-<T.AmbientLight />
-<T.DirectionalLight
-  castShadow
-  shadow.mapSize={4096}
-  shadow.camera.left={-5}
-  shadow.camera.right={5}
-  shadow.camera.top={5}
-  shadow.camera.bottom={-5}
-/>
+{#if show}
+  <T.Mesh>
+    <T.MeshBasicMaterial />
+    <T.BoxGeometry args={[1, height, 1]} />
+  </T.Mesh>
+{/if}

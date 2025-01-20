@@ -1,26 +1,22 @@
-<script lang="ts">
-  import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { resolvePropertyPath, useParent, watch, type CurrentWritable } from '@threlte/core'
+<script
+  lang="ts"
+  generics="Type"
+>
+  import { resolvePropertyPath, useParent, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
+  import { useStudio } from '../../studio/useStudio'
   import type { Transformer } from '../transfomers/types'
-  import type { AnyProp } from './Sync.svelte'
+  import { useSheet } from '../useSheet'
+  import type { AnyProp, SyncProps } from './types'
   import { getInitialValue } from './utils/getInitialValue'
   import { isComplexProp } from './utils/isComplexProp'
+  import { isStringProp } from './utils/isStringProp'
   import { makeAlphanumeric } from './utils/makeAlphanumeric'
   import { parsePropLabel } from './utils/parsePropLabel'
-  import { isStringProp } from './utils/isStringProp'
-  import { useStudio } from '../../studio/useStudio'
 
-  // used for type hinting auto props
-  export let type: any = undefined
+  let { type, children, ...rest }: SyncProps<Type> = $props()
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
-
+  const { sheetObject, addProps, removeProps } = useSheet()
   const parent = useParent()
 
   // serves as a map to map (custom) prop names to object target properties
@@ -36,34 +32,32 @@
     const props = {} as Record<string, any>
 
     // propertyPath is for example "position.x" or "intensity", so a property path on the parent object
-    Object.entries(<Record<string, AnyProp>>$$restProps).forEach(
-      ([propertyPath, propertyValue]) => {
-        // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
-        const customKey = isComplexProp(propertyValue)
-          ? propertyValue.key
-          : isStringProp(propertyValue)
-            ? propertyValue
-            : undefined
+    Object.entries(<Record<string, AnyProp>>rest).forEach(([propertyPath, propertyValue]) => {
+      // The prop might have a custom name, for example "intensity" might be mapped to "light-intensity"
+      const customKey = isComplexProp(propertyValue)
+        ? propertyValue.key
+        : isStringProp(propertyValue)
+          ? propertyValue
+          : undefined
 
-        const key = customKey ?? makeAlphanumeric(propertyPath)
+      const key = customKey ?? makeAlphanumeric(propertyPath)
 
-        // get the initial value as well as the correct transformer for the property
-        const { value, transformer } = getInitialValue(propertyPath, propertyValue, $parent)
-        const label = parsePropLabel(key, propertyValue)
+      // get the initial value as well as the correct transformer for the property
+      const { value, transformer } = getInitialValue(propertyPath, propertyValue, $parent)
+      const label = parsePropLabel(key, propertyValue)
 
-        // apply the label to the value
-        value.label = label
+      // apply the label to the value
+      value.label = label
 
-        // add the prop to the propMappings map
-        propMappings[key] = {
-          propertyPath,
-          transformer
-        }
-
-        // add the prop to the props object
-        props[key] = value
+      // add the prop to the propMappings map
+      propMappings[key] = {
+        propertyPath,
+        transformer
       }
-    )
+
+      // add the prop to the props object
+      props[key] = value
+    })
 
     // add the props to the parent IsheetObject
     addProps(props)
@@ -114,6 +108,9 @@
 
   const studio = useStudio()
 
+  /**
+   * Capture the current values of the props
+   */
   export const capture = () => {
     if (!$studio) return
     const scrub = $studio.scrub()
@@ -142,4 +139,4 @@
   })
 </script>
 
-<slot {capture} />
+{@render children?.({ capture })}

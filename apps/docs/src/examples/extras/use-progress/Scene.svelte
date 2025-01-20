@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
-  import { Environment, useGltf } from '@threlte/extras'
-  import { derived } from 'svelte/store'
   import type { Material, Mesh } from 'three'
+  import { Environment, useGltf } from '@threlte/extras'
+  import { T, useTask } from '@threlte/core'
 
   let rotation = 0
   useTask((delta) => {
@@ -22,17 +21,9 @@
   const gltf = useGltf<GLTFResult>(
     '/models/helmet/DamagedHelmet.gltf?v=' + Math.random().toString() // force a reload on every pageload
   )
-
-  const helmet = derived(gltf, (gltf) => {
-    if (!gltf || !gltf.nodes['node_damagedHelmet_-6514']) return
-    return gltf.nodes['node_damagedHelmet_-6514']
-  })
 </script>
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-/>
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera
   makeDefault
@@ -46,7 +37,7 @@
 />
 
 <T.Group rotation.y={rotation}>
-  {#if $helmet}
-    <T is={$helmet} />
-  {/if}
+  {#await gltf then { nodes }}
+    <T is={nodes['node_damagedHelmet_-6514']} />
+  {/await}
 </T.Group>

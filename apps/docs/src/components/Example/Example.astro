@@ -2,7 +2,6 @@
 import SvelteWrapper from './SvelteWrapper.svelte'
 import Code from '../Code/Code.astro'
 import CodeWrapper from './CodeWrapper.svelte'
-import { c } from '../../lib/classes'
 
 interface Props {
   /**
@@ -19,8 +18,9 @@ interface Props {
 }
 
 const allModules = import.meta.glob('../../examples/**/*', {
-  as: 'raw',
-  eager: true
+  query: '?raw',
+  eager: true,
+  import: 'default'
 }) as Record<string, string>
 
 for (const path in allModules) {
@@ -76,7 +76,7 @@ const hidePreview = Astro.props.hidePreview ?? false
             <Code
               code={mod}
               lang={(path.split('.').pop() ?? 'svelte') as any}
-              class={c('!mt-0 !mb-0 h-full rounded-none border-none')}
+              class="!mb-0 !mt-0 h-full rounded-none border-none"
             />
           </div>
         ))}

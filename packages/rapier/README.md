@@ -35,14 +35,7 @@ This is a great way to implement key features of games or simulators, such as co
 
 ### Installation
 
-For a quick interactive setup of a fresh Threlte project, run:
-
-```sh
-npm create threlte my-project
-```
-and select the `@threlte/rapier` option.
-
-Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
+Check out the [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
 
 ### Support
 

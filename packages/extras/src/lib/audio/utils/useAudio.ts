@@ -1,4 +1,4 @@
-import { createRawEventDispatcher, currentWritable, useLoader, watch } from '@threlte/core'
+import { currentWritable, useLoader, watch } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import { AudioLoader, type Audio, type PositionalAudio } from 'three'
 
@@ -25,7 +25,10 @@ export type AudioEvents = {
  * This hook handles basic audio functionality.
  * It’s used by the <Audio> and <PositionalAudio> components.
  */
-export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) => {
+export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
+  audio: T,
+  props: Record<string, (arg?: unknown) => void> = {}
+) => {
   const loaded = currentWritable(false)
   const autoplay = currentWritable(false)
   const shouldPlay = currentWritable(false)
@@ -33,15 +36,13 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
 
   const loader = useLoader(AudioLoader)
 
-  const dispatch = createRawEventDispatcher<AudioEvents>()
-
   const setSrc = async (source: AudioProps['src']) => {
     loaded.set(false)
     try {
       if (typeof source === 'string') {
         const audioBuffer = await loader.load(source, {
           onProgress(event) {
-            dispatch('progress', event)
+            props.onprogress?.(event)
           }
         })
         audio.setBuffer(audioBuffer)
@@ -55,9 +56,9 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
         audio.setMediaStreamSource(source)
       }
       loaded.set(true)
-      audio.source?.buffer ? dispatch('load', audio.source.buffer) : dispatch('load')
+      audio.buffer ? props.onload?.(audio.buffer) : props.onload?.()
     } catch (error) {
-      dispatch('error', error as ErrorEvent)
+      props.onerror?.(error as ErrorEvent)
     }
   }
 
@@ -69,7 +70,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
     audio.setPlaybackRate(playbackRate ?? 1)
   }
 
-  const play = async (delay?: number | any) => {
+  const play = async (delay?: number) => {
     // source is not loaded yet, so we should play it after it's loaded
     if (!loaded.current) {
       shouldPlay.set(true)
@@ -99,7 +100,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(audio: T) 
   }
 
   const setDetune = (value?: AudioProps['detune']) => {
-    if (audio.source && audio.source.detune) {
+    if (audio.source && audio.detune) {
       audio.setDetune(value ?? 0)
     }
   }

@@ -1,5 +1,13 @@
 import { NodeIO } from '@gltf-transform/core'
-import { simplify, weld, dedup, resample, prune, textureCompress, draco } from '@gltf-transform/functions'
+import {
+  simplify,
+  weld,
+  dedup,
+  resample,
+  prune,
+  textureCompress,
+  draco
+} from '@gltf-transform/functions'
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions'
 import { MeshoptDecoder, MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer'
 import draco3d from 'draco3dgltf'
@@ -12,7 +20,7 @@ async function transform(file, output, config = {}) {
     'draco3d.decoder': await draco3d.createDecoderModule(),
     'draco3d.encoder': await draco3d.createEncoderModule(),
     'meshopt.decoder': MeshoptDecoder,
-    'meshopt.encoder': MeshoptEncoder,
+    'meshopt.encoder': MeshoptEncoder
   })
 
   const document = await io.read(file)
@@ -28,7 +36,7 @@ async function transform(file, output, config = {}) {
     // Resize and convert textures (using webp and sharp)
     textureCompress({ targetFormat: 'webp', encoder: sharp, resize: [resolution, resolution] }),
     // Add Draco compression.
-    draco(),
+    draco()
   ]
 
   if (config.simplify) {
@@ -36,7 +44,11 @@ async function transform(file, output, config = {}) {
       // Weld vertices
       weld({ tolerance: config.weld ?? 0.0001 }),
       // Simplify meshes
-      simplify({ simplifier: MeshoptSimplifier, ratio: config.ratio ?? 0.75, error: config.error ?? 0.001 })
+      simplify({
+        simplifier: MeshoptSimplifier,
+        ratio: config.ratio ?? 0.75,
+        error: config.error ?? 0.001
+      })
     )
   }
 

@@ -1,6 +1,6 @@
-import { injectPlugin } from '@threlte/core'
+import { injectPlugin, isInstanceOf } from '@threlte/core'
 import { onDestroy, onMount } from 'svelte'
-import type { Mesh, MeshPhongMaterial, MeshStandardMaterial } from 'three'
+import type { Material, MeshPhongMaterial, MeshStandardMaterial } from 'three'
 
 type SupportedMaterial = MeshStandardMaterial | MeshPhongMaterial
 
@@ -9,12 +9,10 @@ export const useMaterials = () => {
 
   const allMaterials: Set<SupportedMaterial> = new Set()
 
-  const isSupportedMaterial = (material: any): material is SupportedMaterial => {
-    return material.isMeshStandardMaterial || material.isMeshPhongMaterial
-  }
-
-  const isMesh = (ref: any): ref is Mesh => {
-    return ref.isMesh
+  const isSupportedMaterial = (material: unknown): material is SupportedMaterial => {
+    return (
+      isInstanceOf(material, 'MeshStandardMaterial') || isInstanceOf(material, 'MeshPhongMaterial')
+    )
   }
 
   const addMaterial = (material: SupportedMaterial) => {
@@ -23,14 +21,14 @@ export const useMaterials = () => {
     setupCallback?.(material)
   }
 
-  const extractMaterials = (ref: any) => {
+  const extractMaterials = (ref: unknown) => {
     // first check if it's a material
     if (isSupportedMaterial(ref)) {
       addMaterial(ref)
     }
 
     // then check if it's a mesh
-    else if (isMesh(ref)) {
+    else if (isInstanceOf(ref, 'Mesh')) {
       if (Array.isArray(ref.material)) {
         ref.material.forEach((material) => {
           if (isSupportedMaterial(material)) {
@@ -48,7 +46,7 @@ export const useMaterials = () => {
   /**
    * Callback to set up a material for CSM
    */
-  const onNewMaterial = (callback: undefined | ((material: THREE.Material) => void)) => {
+  const onNewMaterial = (callback: undefined | ((material: Material) => void)) => {
     setupCallback = callback
   }
 
@@ -58,11 +56,11 @@ export const useMaterials = () => {
    * This plugin extracts materials from meshes and adds them to the materials
    * queue. It will not listen to prop or ref changes.
    */
-  injectPlugin('csm', ({ ref }) => {
+  injectPlugin('csm', (args) => {
     // we need to wait for mounting since otherwise the meshes probably have
     // default materials applied
     onMount(() => {
-      extractMaterials(ref)
+      extractMaterials(args.ref)
     })
   })
 

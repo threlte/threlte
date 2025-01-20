@@ -35,13 +35,7 @@ This package is the heart of the Threlte library. It's an excellent starting poi
 
 ### Installation
 
-For a quick interactive setup of a fresh Threlte project, run:
-
-```sh
-npm create threlte my-project
-```
-
-Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
+Check out the [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
 
 ### Tutorial
 

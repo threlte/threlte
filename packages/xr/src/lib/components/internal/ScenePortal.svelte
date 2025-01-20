@@ -1,12 +1,23 @@
 <script lang="ts">
-  import { useThrelte, HierarchicalObject } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
+  import { Object3D } from 'three'
 
   const { scene } = useThrelte()
+
+  const proxy = new Object3D()
+  proxy.add = (child) => {
+    scene.add(child)
+    return child
+  }
+  proxy.remove = (child) => {
+    scene.remove(child)
+    return child
+  }
 </script>
 
-<HierarchicalObject
-  onChildMount={(child) => scene.add(child)}
-  onChildDestroy={(child) => scene.remove(child)}
+<T
+  is={proxy}
+  attach={false}
 >
   <slot />
-</HierarchicalObject>
+</T>

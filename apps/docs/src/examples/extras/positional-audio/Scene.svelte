@@ -6,16 +6,17 @@
   import Speaker from './Speaker.svelte'
   import Turntable from './Turntable.svelte'
 
-  let volume = 0
-  let isPlaying = false
+  let volume = $state(0)
+  let isPlaying = $state(false)
 
   const smoothVolume = spring(0)
-  $: smoothVolume.set(volume)
+  $effect(() => {
+    smoothVolume.set(volume)
+  })
 
   const { size } = useThrelte()
 
-  let zoom = $size.width / 18
-  $: zoom = $size.width / 18
+  let zoom = $derived($size.width / 18)
 
   interactivity({
     filter: (hits) => {
@@ -26,15 +27,12 @@
   })
 </script>
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-/>
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.OrthographicCamera
   {zoom}
   makeDefault
-  on:create={({ ref }) => {
+  oncreate={(ref) => {
     ref.position.set(6, 9, 9)
     ref.lookAt(0, 1.5, 0)
   }}

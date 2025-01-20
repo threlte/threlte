@@ -1,95 +1,79 @@
 ---
-{
-    "category": "@threlte/core",
-    "name": "<Canvas>",
-    "sourcePath": "packages/core/src/lib/Canvas.svelte",
-    "order": 0,
-    "type": "component",
-    "componentSignature": {
-        "props": [
+category: '@threlte/core'
+name: '<Canvas>'
+sourcePath: 'packages/core/src/lib/Canvas.svelte'
+order: 0
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'dpr', type: 'number', default: 'window.devicePixelRatio', required: false },
+        {
+          name: 'toneMapping',
+          type:
             {
-                "name": "dpr",
-                "type": "number",
-                "default": "window.devicePixelRatio",
-                "required": false
+              name: 'THREE.ToneMapping',
+              url: 'https://threejs.org/docs/index.html#api/en/constants/Renderer'
             },
+          default: 'THREE.AgXToneMapping',
+          required: false,
+          description: 'renderer.toneMapping'
+        },
+        {
+          name: 'colorSpace',
+          type:
             {
-                "name": "toneMapping",
-                "type": {
-                    "name": "THREE.ToneMapping",
-                    "url": "https://threejs.org/docs/index.html#api/en/constants/Renderer"
-                },
-                "default": "THREE.ACESFilmicToneMapping",
-                "required": false,
-                "description": "renderer.toneMapping"
+              name: 'THREE.ColorSpace',
+              url: 'https://github.com/mrdoob/three.js/blob/705e47d035591cb5a2e9cc83aa3576e21a4bf2c0/src/constants.js#L149-L153'
             },
+          default: 'srgb',
+          required: false
+        },
+        {
+          name: 'colorManagementEnabled',
+          type:
             {
-                "name": "colorSpace",
-                "type": {
-                    "name": "THREE.ColorSpace",
-                    "url": "https://github.com/mrdoob/three.js/blob/705e47d035591cb5a2e9cc83aa3576e21a4bf2c0/src/constants.js#L149-L153"
-                },
-                "default": "srgb",
-                "required": false
+              name: 'boolean',
+              url: 'https://threejs.org/docs/#manual/en/introduction/Color-management'
             },
-            {
-                "name": "colorManagementEnabled",
-                "type": {
-                    "name": "boolean",
-                    "url": "https://threejs.org/docs/#manual/en/introduction/Color-management"
-                },
-                "default": "true",
-                "required": false
-            },
-            {
-                "name": "useLegacyLights",
-                "type": "boolean",
-                "default": "true",
-                "required": false,
-                "description": "Whether to use legacy lighting mode or physically correct lighting mode. Physically correct lighting mode is more physically accurate, but legacy lighting mode may be more intuitive."
-            },
-            {
-                "name": "renderMode",
-                "type": "'always' | 'on-demand' | 'manual'",
-                "default": "'on-demand'",
-                "required": false
-            },
-            {
-                "name": "autoRender",
-                "type": "boolean",
-                "default": "true",
-                "required": false,
-								"description": "Whether to automatically render the scene every frame. Set to `false` to implement custom render pipelines."
-            },
-            {
-                "name": "shadows",
-                "type": "boolean | THREE.ShadowMapType",
-                "default": "THREE.PCFSoftShadowMap",
-                "required": false
-            },
-            {
-                "name": "size",
-                "type": "{ width: number, height: number }",
-                "required": false,
-                "description": "If not provided, the dimensions of the parent element will be used."
-            },
-            {
-                "name": "rendererParameters",
-                "type": "THREE.WebGLRendererParameters",
-                "required": false
-            }
-        ],
-        "bindings": [
-            {
-                "name": "ctx",
-                "type": {
-                    "name": "ThrelteContext",
-                    "url": "/docs/reference/core/hooks#usethrelte"
-                }
-            }
-        ]
-    }
-}
+          default: 'true',
+          required: false
+        },
+        {
+          name: 'renderMode',
+          type: "'always' | 'on-demand' | 'manual'",
+          default: "'on-demand'",
+          required: false
+        },
+        {
+          name: 'autoRender',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Whether to automatically render the scene every frame. Set to `false` to implement custom render pipelines.'
+        },
+        {
+          name: 'shadows',
+          type: 'boolean | THREE.ShadowMapType',
+          default: 'THREE.PCFSoftShadowMap',
+          required: false
+        },
+        {
+          name: 'createRenderer',
+          type: '(canvas: HTMLCanvasElement) => THREE.Renderer',
+          required: false,
+          description: 'To set up a custom renderer, pass a function that returns a new renderer instance.'
+        }
+      ],
+    bindings:
+      [
+        {
+          name: 'ctx',
+          type: { name: 'ThrelteContext', url: '/docs/reference/core/hooks#usethrelte' }
+        }
+      ]
+  }
 ---
 
 The `<Canvas>` component is the root of your Threlte scene. It provides contexts that all other components and many hooks are depending on. This means they need to be **child components** to the `<Canvas>` component.
@@ -98,16 +82,24 @@ The `<Canvas>` component is the root of your Threlte scene. It provides contexts
   type="tip"
   title="Structuring Your App"
 >
-
-Check out our [guide on structuring your
-app](/docs/learn/basics/app-structure) for a fail-safe app architecture recipe.
-
+  Check out our [guide on structuring your app](/docs/learn/basics/app-structure) for a fail-safe
+  app architecture recipe.
 </Tip>
 
-By default, the `<canvas>` element and the renderer will resize to fit the parent element whenever the window resizes. Provide the property `size` to set a fixed `<canvas>` size.
+By default, the `<canvas>` element and the renderer will resize to fit the parent
+element whenever the window resizes. Provide the property `size` to set a fixed
+`<canvas>` size.
 
 `<Canvas>` also provides a default camera, located at `{ z: 5 }`.
 
 If `renderMode` is set to `on-demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.<br />
 If `renderMode` is set to `always` a re-render is automatically scheduled every frame.<br />
 If `renderMode` is set to `manual` a re-render must manually be triggered with `useThrelte().advance()`.
+
+<Tip
+  type="note"
+  title="Events"
+>
+  It's recommended to use the `dom` element given from the `useThrelte` hook to add events to rather
+  than the `canvas`.
+</Tip>

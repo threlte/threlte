@@ -5,6 +5,8 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
 import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
+import { threlteStudio } from '@threlte/studio/vite'
+import type { Plugin } from 'vite'
 
 // https://astro.build/config
 import tailwind from '@astrojs/tailwind'
@@ -23,7 +25,12 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
-  prefetch: true,
+  prefetch: {
+    prefetchAll: true
+  },
+  experimental: {
+    clientPrerender: true
+  },
   build: {
     inlineStylesheets: 'never'
   },
@@ -32,7 +39,6 @@ export default defineConfig({
       imports: [
         '$components/Example/Example.astro',
         '$components/Tip/Tip.astro',
-        '$components/ManualInstallGuide/ManualInstallGuide.svelte',
         '$components/Card/Card.astro'
       ]
     }),
@@ -63,9 +69,11 @@ export default defineConfig({
     },
     // Use https and generate a cert to allow XR debugging.
     server: {
-      https: process.argv.includes('--https')
+      ...(process.argv.includes('--https') ? { https: {} } : {})
     },
-    plugins: process.argv.includes('--https') ? [mkcert()] : [],
+    plugins: process.argv.includes('--https')
+      ? [threlteStudio() as unknown as Plugin, mkcert()]
+      : [threlteStudio() as unknown as Plugin],
     ssr: {
       // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
@@ -74,6 +82,18 @@ export default defineConfig({
       // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
       // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
       proxySsrExternalModules: true
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
+    build: {
+      target: 'esnext',
+      minify: 'terser',
+      terserOptions: {
+        keep_classnames: true
+      }
     }
   },
   markdown: {

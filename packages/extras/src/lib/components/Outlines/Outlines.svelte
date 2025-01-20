@@ -1,49 +1,35 @@
 <script lang="ts">
-  import { T, useParent, useThrelte, forwardEventHandlers } from '@threlte/core'
+  import { isInstanceOf, T, useParent, useThrelte } from '@threlte/core'
   import {
+    BackSide,
     Color,
-    Vector2,
-    ShaderMaterial,
     Group,
-    SkinnedMesh,
     InstancedMesh,
     Mesh,
-    type BufferGeometry,
-    BackSide
+    ShaderMaterial,
+    SkinnedMesh,
+    Vector2
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import { vertexShader, fragmentShader } from './shaders'
-  import type { OutlinesEvents, OutlinesProps, OutlinesSlots } from './Outlines'
+  import { fragmentShader, vertexShader } from './shaders'
+  import type { OutlinesProps } from './types'
+  import { fromStore } from 'svelte/store'
 
-  type $$Props = OutlinesProps
-  type $$Events = OutlinesEvents
-  type $$Slots = OutlinesSlots
-
-  type Props = Required<OutlinesProps>
-
-  /** Outline color, default: black */
-  export let color: Props['color'] = 'black'
-
-  /** Line thickness is independent of zoom, default: false */
-  export let screenspace: Props['screenspace'] = false
-
-  /** Outline opacity, default: 1 */
-  export let opacity: Props['opacity'] = 1
-
-  /** Outline transparency, default: false */
-  export let transparent: Props['transparent'] = false
-
-  /** Outline thickness, default 0.05 */
-  export let thickness: Props['thickness'] = 0.05
-
-  export let toneMapped: Props['toneMapped'] = true
-
-  /** Geometry crease angle (0 === no crease), default: Math.PI */
-  export let angle: Props['angle'] = Math.PI
-
-  export let polygonOffset: Props['polygonOffset'] = false
-  export let polygonOffsetFactor: Props['polygonOffsetFactor'] = 0
-  export let renderOrder: Props['renderOrder'] = 0
+  let {
+    color = 'black',
+    screenspace = false,
+    opacity = 1,
+    transparent = false,
+    thickness = 0.05,
+    toneMapped = true,
+    angle = Math.PI,
+    polygonOffset = false,
+    polygonOffsetFactor = 0,
+    renderOrder = 0,
+    children,
+    ref = $bindable(),
+    ...props
+  }: OutlinesProps = $props()
 
   const { renderer } = useThrelte()
 
@@ -55,7 +41,7 @@
     size: { value: new Vector2() }
   }
 
-  export let ref = new Group()
+  const group = new Group()
 
   const material = new ShaderMaterial({
     side: BackSide,
@@ -64,68 +50,69 @@
     fragmentShader
   })
 
-  let oldAngle = 0
-  let oldGeometry: BufferGeometry
-
-  let mesh: Mesh | SkinnedMesh | InstancedMesh
-
   const parent = useParent()
 
-  $: {
-    const parentMesh = $parent as undefined | THREE.Mesh | THREE.InstancedMesh | THREE.SkinnedMesh
+  let parentMesh = fromStore(parent)
 
-    if (parentMesh?.geometry !== undefined) {
-      if (oldAngle !== angle || oldGeometry !== parentMesh.geometry) {
-        oldAngle = angle
-        oldGeometry = parentMesh.geometry
+  let geometry = $derived.by(() => {
+    if (!isInstanceOf(parentMesh.current, 'Mesh')) return undefined
+    return toCreasedNormals(parentMesh.current.geometry, angle)
+  })
 
-        if (mesh) {
-          if (angle) mesh.geometry.dispose()
-          ref.remove(mesh)
-        }
-
-        const geometry = angle ? toCreasedNormals(parentMesh.geometry, angle) : parentMesh.geometry
-
-        if ('skeleton' in parentMesh) {
-          const nextMesh = new SkinnedMesh(geometry, material)
-          nextMesh.bind(parentMesh.skeleton, parentMesh.bindMatrix)
-          mesh = nextMesh
-        } else if ('isInstancedMesh' in parentMesh) {
-          const nextMesh = new InstancedMesh(geometry, material, parentMesh.count)
-          nextMesh.instanceMatrix = parentMesh.instanceMatrix
-          mesh = nextMesh
-        } else {
-          mesh = new Mesh(geometry, material)
-        }
-
-        mesh.renderOrder = renderOrder
-      }
+  let mesh: undefined | Mesh | SkinnedMesh | InstancedMesh = $derived.by(() => {
+    if (!isInstanceOf(parentMesh.current, 'Mesh')) return
+    if (isInstanceOf(parentMesh.current, 'SkinnedMesh')) {
+      const nextMesh = new SkinnedMesh()
+      nextMesh.bind(parentMesh.current.skeleton, parentMesh.current.bindMatrix)
+      return nextMesh
+    } else if (isInstanceOf(parentMesh.current, 'InstancedMesh')) {
+      const nextMesh = new InstancedMesh(undefined, undefined, parentMesh.current.count)
+      nextMesh.instanceMatrix = parentMesh.current.instanceMatrix
+      return nextMesh
     }
-  }
+    return new Mesh()
+  })
 
-  $: if (mesh) {
-    mesh.renderOrder = renderOrder
-  }
-
-  $: material.transparent = transparent
-  $: material.toneMapped = toneMapped
-  $: material.polygonOffset = polygonOffset
-  $: material.polygonOffsetFactor = polygonOffsetFactor
-
-  $: material.uniforms.screenspace.value = screenspace
-  $: material.uniforms.color.value.set(color)
-  $: material.uniforms.opacity.value = opacity
-  $: material.uniforms.thickness.value = thickness
-  $: renderer.getDrawingBufferSize(material.uniforms.size.value)
-
-  const component = forwardEventHandlers()
+  $effect.pre(() => {
+    if (mesh) mesh.renderOrder = renderOrder
+  })
+  $effect.pre(() => {
+    material.transparent = transparent
+  })
+  $effect.pre(() => {
+    material.toneMapped = toneMapped
+  })
+  $effect.pre(() => {
+    material.polygonOffset = polygonOffset
+  })
+  $effect.pre(() => {
+    material.polygonOffsetFactor = polygonOffsetFactor
+  })
+  $effect.pre(() => {
+    material.uniforms.screenspace.value = screenspace
+  })
+  $effect.pre(() => {
+    material.uniforms.color.value.set(color)
+  })
+  $effect.pre(() => {
+    material.uniforms.opacity.value = opacity
+  })
+  $effect.pre(() => {
+    material.uniforms.thickness.value = thickness
+  })
+  $effect.pre(() => {
+    renderer.getDrawingBufferSize(material.uniforms.size.value)
+  })
 </script>
 
 <T
-  is={ref}
-  {...$$restProps}
-  bind:this={$component}
+  is={group}
+  bind:ref
+  {...props}
 >
-  <T is={mesh} />
-  <slot {ref} />
+  <T is={mesh}>
+    <T is={geometry} />
+    <T is={material} />
+  </T>
+  {@render children?.({ ref: group })}
 </T>

@@ -1,27 +1,14 @@
 ---
-import { c } from '$lib/classes'
-
 type Size = 's' | 'm' | 'l'
 
 interface Props {
+  href: string
   color: 'orange' | 'blue' | 'green'
   size?: Size
-  href: string
   class?: string
-  glow?: boolean
 }
 
-/*
-Leave this in to force tailwind to include classes
-
-bg-orange
-bg-blue
-bg-green
-hover:bg-orange-400
-hover:bg-blue-400
-hover:bg-green-400
-*/
-
+const { href, color = 'orange', size = 'l', class: _class } = Astro.props
 const paddings: Record<Size, string> = {
   s: 'px-3 py-1',
   m: 'px-5 py-3',
@@ -32,18 +19,12 @@ const textSizes: Record<Size, string> = {
   m: 'text-base',
   l: 'text-lg'
 }
+const extras = `${paddings[size]} ${textSizes[size]} bg-${color} hover:bg-${color}-400 ${_class}`
 ---
 
 <a
-  href={Astro.props.href}
-  class={c(
-    'rounded-md shadow-[inset_0_1px_0_0_hsl(0deg_0%_100%_/_20%)] text-center flex flex-row gap-3 w-fit text-white',
-    paddings[Astro.props.size ?? 'l'],
-    textSizes[Astro.props.size ?? 'l'],
-    `bg-${Astro.props.color}`,
-    `hover:bg-${Astro.props.color}-400`,
-    Astro.props.class ?? ''
-  )}
+  {href}
+  class={`flex w-fit flex-row gap-3 rounded-md text-center text-white ${extras}`}
 >
   <div class="empty:hidden"><slot name="icon-before" /></div>
   <slot />

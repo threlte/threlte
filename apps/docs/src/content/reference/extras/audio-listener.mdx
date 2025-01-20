@@ -1,29 +1,27 @@
 ---
-{
-  order: 1.2,
-  'category': '@threlte/extras',
-  'name': '<AudioListener>',
-  'type': 'component',
-  'sourcePath': 'packages/extras/src/lib/audio/AudioListener/AudioListener.svelte',
-  'componentSignature':
-    {
-      extends:
-        {
-          type: 'AudioListener',
-          url: 'https://threejs.org/docs/index.html#api/en/audio/AudioListener'
-        },
-      'props':
-        [
-          { name: 'id', type: 'string', required: false },
-          { name: 'masterVolume', type: 'number', required: false }
-        ],
-      bindings:
-        [
-          { name: 'resumeContext', type: '() => Promise<void>' },
-          { name: 'audioContext', type: 'AudioContext' }
-        ]
-    }
-}
+order: 6.2
+category: '@threlte/extras'
+name: '<AudioListener>'
+type: 'component'
+sourcePath: 'packages/extras/src/lib/audio/AudioListener/AudioListener.svelte'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'AudioListener',
+        url: 'https://threejs.org/docs/index.html#api/en/audio/AudioListener'
+      },
+    props:
+      [
+        { name: 'id', type: 'string', required: false },
+        { name: 'masterVolume', type: 'number', required: false }
+      ],
+    exports:
+      [
+        { name: 'resumeContext', type: '() => Promise<void>' },
+        { name: 'audioContext', type: 'AudioContext' }
+      ]
+  }
 ---
 
 The `<AudioListener>` represents a virtual listener of the all positional and non-positional audio effects in the scene.

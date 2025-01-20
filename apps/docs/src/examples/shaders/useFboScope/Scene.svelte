@@ -18,8 +18,10 @@
   position={[0, 1.5, 20]}
   fov={baseFov}
 >
-  <Scope let:ref>
-    <LensView scope={ref} />
+  <Scope>
+    {#snippet children({ ref })}
+      <LensView scope={ref} />
+    {/snippet}
   </Scope>
 </T.PerspectiveCamera>
 <Controls />

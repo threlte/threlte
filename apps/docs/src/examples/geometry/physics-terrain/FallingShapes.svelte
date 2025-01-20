@@ -1,68 +1,90 @@
-<script lang="ts">
-  import { T } from '@threlte/core'
-  import { Collider, RigidBody, AutoColliders } from '@threlte/rapier'
-  import { BoxGeometry, SphereGeometry, CylinderGeometry, ConeGeometry } from 'three'
-
+<script
+  lang="ts"
+  module
+>
   const radius = 0.25
-  const shapes = [
+  const cuboid: Shape = {
+    autoCollider: 'cuboid',
+    color: 'hotpink',
+    geometry: new BoxGeometry(radius, radius, radius)
+  }
+
+  const shapes: Shape[] = [
+    cuboid,
     {
-      geometry: new BoxGeometry(radius, radius, radius),
-      autoCollider: 'cuboid',
-      color: 'hotpink'
-    },
-    {
-      geometry: new SphereGeometry(radius),
       autoCollider: 'ball',
-      color: 'cyan'
+      color: 'cyan',
+      geometry: new SphereGeometry(radius)
     },
     {
-      geometry: new CylinderGeometry(radius, radius, radius * 2),
       autoCollider: 'convexHull',
-      color: 'green'
+      color: 'green',
+      geometry: new CylinderGeometry(radius, radius, radius * 2)
     },
     {
-      geometry: new ConeGeometry(radius, radius * 3, 10),
       autoCollider: 'convexHull',
-      color: 'orange'
+      color: 'orange',
+      geometry: new ConeGeometry(radius, radius * 3, 10)
     }
   ]
 
-  const bodies = new Array(50).fill(0).map((_, index) => {
-    const position: Parameters<Vector3['set']> = [
-      Math.random() * 5 - 2.5,
-      Math.random() * 5,
-      Math.random() * 5 - 2.5
-    ]
-    const rotation: Parameters<Euler['set']> = [
-      Math.random() * 10,
-      Math.random() * 10,
-      Math.random() * 10
-    ]
-    const shape = shapes[Math.floor(Math.random() * shapes.length)]
-
-    return {
-      id: index,
-      position,
-      rotation,
-      ...shape
-    }
-  })
+  const getRandomShape = (defaultShape = cuboid): Shape => {
+    return shapes[Math.floor(Math.random() * shapes.length)] ?? defaultShape
+  }
 </script>
 
-{#each bodies as body (body.id)}
+<script lang="ts">
+  import type { AutoCollidersShapes } from '@threlte/rapier'
+  import type { BufferGeometry, ColorRepresentation } from 'three'
+  import type { Snippet } from 'svelte'
+  import { AutoColliders, RigidBody } from '@threlte/rapier'
+  import { BoxGeometry, ConeGeometry, CylinderGeometry, SphereGeometry, Vector3 } from 'three'
+  import { T } from '@threlte/core'
+
+  type Shape = {
+    autoCollider: AutoCollidersShapes
+    color: ColorRepresentation
+    geometry: BufferGeometry
+  }
+
+  let { children }: { children?: Snippet<[{ shape: Shape }]> } = $props()
+
+  const offset = new Vector3(-2.5, 2.5, -2.5)
+  const createPosition = (scalar = 5): Vector3 => {
+    return new Vector3().random().multiplyScalar(scalar).add(offset)
+  }
+
+  const createRotation = (scalar = 10): Vector3 => {
+    return new Vector3().random().multiplyScalar(scalar)
+  }
+
+  type Body = {
+    position: Vector3
+    rotation: Vector3
+  }
+
+  const bodies: Body[] = []
+  const count = 50
+  for (let i = 0; i < count; i += 1) {
+    const position = createPosition()
+    const rotation = createRotation()
+
+    bodies.push({
+      position,
+      rotation
+    })
+  }
+</script>
+
+{#each bodies as body}
+  {@const shape = getRandomShape()}
   <T.Group
-    position={body.position}
-    rotation={body.rotation}
+    position={body.position.toArray()}
+    rotation={body.rotation.toArray()}
   >
-    <RigidBody type={'dynamic'}>
-      <AutoColliders shape={body.autoCollider}>
-        <T.Mesh
-          castShadow
-          receiveShadow
-          geometry={body.geometry}
-        >
-          <T.MeshStandardMaterial color={body.color} />
-        </T.Mesh>
+    <RigidBody type="dynamic">
+      <AutoColliders shape={shape.autoCollider}>
+        {@render children?.({ shape })}
       </AutoColliders>
     </RigidBody>
   </T.Group>

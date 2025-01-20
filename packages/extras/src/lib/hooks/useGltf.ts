@@ -1,20 +1,16 @@
-import { useLoader, useThrelte, type AsyncWritable } from '@threlte/core'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { useLoader, type AsyncWritable } from '@threlte/core'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js'
+import type { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import type { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
+import type { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js'
 import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
 import type { ThrelteGltf } from '../types/types'
 
 type UseGltfOptions = {
-  useDraco?: boolean | string | DRACOLoader
-  useMeshopt?: boolean
-  ktxTranscoderPath?: string
+  dracoLoader?: DRACOLoader
+  meshoptDecoder?: typeof MeshoptDecoder
+  ktx2Loader?: KTX2Loader
 }
-
-const defaultDracoLoaderInstances: Record<string, DRACOLoader> = {}
 
 export function useGltf(options?: UseGltfOptions): {
   load: <
@@ -52,37 +48,19 @@ export function useGltf<
         url: string
       ) => AsyncWritable<ThrelteGltf<Graph>>
     } {
-  const { renderer } = useThrelte()
   const opts = typeof urlOrOptions === 'string' ? options : urlOrOptions
   const loader = useLoader(GLTFLoader, {
     extend(loader) {
-      if (opts?.useDraco) {
-        if (typeof opts.useDraco === 'string' || typeof opts.useDraco === 'boolean') {
-          // default draco
-          const path =
-            typeof opts.useDraco === 'string'
-              ? opts.useDraco
-              : 'https://www.gstatic.com/draco/versioned/decoders/1.4.3/'
-
-          if (!defaultDracoLoaderInstances[path]) {
-            defaultDracoLoaderInstances[path] = new DRACOLoader().setDecoderPath(path)
-          }
-          loader.setDRACOLoader(defaultDracoLoaderInstances[path])
-        } else {
-          // user's draco
-          loader.setDRACOLoader(opts.useDraco)
-        }
+      if (opts?.dracoLoader) {
+        loader.setDRACOLoader(opts.dracoLoader)
       }
 
-      if (opts?.useMeshopt) {
-        loader.setMeshoptDecoder(MeshoptDecoder)
+      if (opts?.meshoptDecoder) {
+        loader.setMeshoptDecoder(opts.meshoptDecoder)
       }
 
-      if (opts?.ktxTranscoderPath) {
-        const ktx2Loader = new KTX2Loader()
-        ktx2Loader.setTranscoderPath(opts?.ktxTranscoderPath)
-        ktx2Loader.detectSupport(renderer)
-        loader.setKTX2Loader(ktx2Loader)
+      if (opts?.ktx2Loader) {
+        loader.setKTX2Loader(opts.ktx2Loader)
       }
     }
   })

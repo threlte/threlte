@@ -1,22 +1,20 @@
 ---
-{
-  order: 6,
-  category: '@threlte/rapier',
-  sourcePath: 'packages/rapier/src/lib/components/Attractor/Attractor.svelte',
-  name: '<Attractor>',
-  type: 'component',
-  componentSignature:
-    {
-      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-      props:
-        [
-          { name: 'strength', type: 'number', default: '1', required: false },
-          { name: 'range', type: 'number', default: '10', required: false },
-          { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'", required: false },
-          { name: 'gravitationalConstant', type: 'number', default: '6.673e-11', required: false }
-        ]
-    }
-}
+order: 6
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/components/Attractor/Attractor.svelte'
+name: '<Attractor>'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: 'strength', type: 'number', default: '1', required: false },
+        { name: 'range', type: 'number', default: '10', required: false },
+        { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'", required: false },
+        { name: 'gravitationalConstant', type: 'number', default: '6.673e-11', required: false }
+      ]
+  }
 ---
 
 An attractor simulates a source of gravity. Any rigid-body within range will be "pulled" toward the attractor's center.

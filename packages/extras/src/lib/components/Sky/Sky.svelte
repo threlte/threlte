@@ -7,41 +7,36 @@
     LinearMipmapLinearFilter,
     MathUtils,
     Vector3,
-    WebGLCubeRenderTarget,
-    type WebGLRenderTargetOptions
+    WebGLCubeRenderTarget
   } from 'three'
   import { Sky } from 'three/examples/jsm/objects/Sky.js'
+  import type { SkyProps } from './types'
 
-  /** The scale of the cuboid skybox along every axis, default: 1000 */
-  export let scale = 1000
-  /** Relative clarity of the sky, default: 10 */
-  export let turbidity = 10
-  /** Amount of rayleigh scattering, default: 3 */
-  export let rayleigh = 3
-  /** Mie scattering coefficient, default: 0.005 */
-  export let mieCoefficient = 0.005
-  /** Mie scattering directionality, default: 0.7 */
-  export let mieDirectionalG = 0.7
-  /** Elevation angle, default: 2 */
-  export let elevation = 2
-  /** Azimuthal angle, default: 180 */
-  export let azimuth = 180
-
-  /** Render the sky to the scene environment */
-  export let setEnvironment = true
-  /** The size of the cube map, default: 128 */
-  export let cubeMapSize = 128
-  /** The options for the WebGLCubeRenderTarget, default: {} */
-  export let webGLRenderTargetOptions: WebGLRenderTargetOptions = {}
+  let {
+    scale = 1000,
+    turbidity = 10,
+    rayleigh = 3,
+    mieCoefficient = 0.005,
+    mieDirectionalG = 0.7,
+    elevation = 2,
+    azimuth = 180,
+    setEnvironment = true,
+    cubeMapSize = 128,
+    webGLRenderTargetOptions = {},
+    ref = $bindable(),
+    children,
+    ...props
+  }: SkyProps = $props()
 
   const sky = new Sky()
+
   const sunPosition = new Vector3()
 
-  const uniforms = sky.material.uniforms
+  const { uniforms } = sky.material
 
   const { renderer, scene, invalidate } = useThrelte()
 
-  let renderTarget: WebGLCubeRenderTarget | undefined
+  let renderTarget: WebGLCubeRenderTarget | undefined = $state()
   let cubeCamera: CubeCamera | undefined
 
   const init = () => {
@@ -56,13 +51,15 @@
 
   const originalEnvironment = scene.environment
 
-  $: if (setEnvironment && renderTarget) {
-    scene.environment = renderTarget.texture
-    invalidate()
-  } else if (!setEnvironment) {
-    scene.environment = originalEnvironment
-    invalidate()
-  }
+  $effect.pre(() => {
+    if (setEnvironment && renderTarget) {
+      scene.environment = renderTarget.texture
+      invalidate()
+    } else if (!setEnvironment) {
+      scene.environment = originalEnvironment
+      invalidate()
+    }
+  })
 
   const { start: scheduleUpdate, stop } = useTask(
     () => {
@@ -81,7 +78,7 @@
 
       if (setEnvironment) {
         if (!renderTarget || !cubeCamera) init()
-        cubeCamera?.update(renderer, sky as any)
+        cubeCamera?.update(renderer, sky)
       }
 
       invalidate()
@@ -93,14 +90,16 @@
     }
   )
 
-  $: scale,
-    turbidity,
-    rayleigh,
-    mieCoefficient,
-    mieDirectionalG,
-    elevation,
-    azimuth,
+  $effect.pre(() => {
+    scale
+    turbidity
+    rayleigh
+    mieCoefficient
+    mieDirectionalG
+    elevation
+    azimuth
     scheduleUpdate()
+  })
 
   onDestroy(() => {
     sky.material.dispose()
@@ -113,9 +112,10 @@
   })
 </script>
 
-<T is={sky}>
-  <slot
-    {sunPosition}
-    {renderTarget}
-  />
+<T
+  is={sky}
+  bind:ref
+  {...props}
+>
+  {@render children?.({ ref: sky, sunPosition, renderTarget })}
 </T>

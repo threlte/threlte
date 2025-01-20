@@ -5,292 +5,345 @@ import { c } from '../../lib/classes'
 import { getShiki } from '../../lib/highlighter'
 
 interface Props {
-	titleOverride?: string
-	idOverride?: string
-	componentName: string
-  	signature: TypeOf<typeof componentSignature>
+  titleOverride?: string
+  idOverride?: string
+  componentName: string
+  signature: TypeOf<typeof componentSignature>
 }
 
 // sort by required and name
-const props = Astro.props.signature.props?.sort((a, b) => {
-  if (a.required && !b.required) return -1
-  if (!a.required && b.required) return 1
-  return a.name.localeCompare(b.name)
-}) ?? []
+const props =
+  Astro.props.signature.props?.sort((a, b) => {
+    if (a.required && !b.required) return -1
+    if (!a.required && b.required) return 1
+    return a.name.localeCompare(b.name)
+  }) ?? []
 const anyPropHasDescription = props.some((prop) => prop.description)
 const anyPropHasDefault = props.some((prop) => prop.default)
 
 const events = Astro.props.signature.events ?? []
 const anyEventHasDescription = events.some((event) => event.description)
 
+const exports = Astro.props.signature.exports ?? []
+const anyExportHasDescription = exports.some((e) => !!e.description)
 
 const hasEvents = !!Astro.props.signature.events?.length
+const hasExports = !!exports.length
 const hasProps = !!Astro.props.signature.props?.length
 const hasBindings = !!Astro.props.signature.bindings?.length
 
 const hasAnySignature = hasEvents || hasProps || hasBindings
 
-const propsGridCols = anyPropHasDescription &&
-anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto_auto]' :anyPropHasDescription ||
-anyPropHasDefault ? 'grid-cols-[auto_auto_auto_auto]' : 'grid-cols-[auto_auto_auto]'
+const propsGridCols =
+  anyPropHasDescription && anyPropHasDefault
+    ? 'grid-cols-[auto_auto_auto_auto_auto]'
+    : anyPropHasDescription || anyPropHasDefault
+      ? 'grid-cols-[auto_auto_auto_auto]'
+      : 'grid-cols-[auto_auto_auto]'
 
-const showComponentSignature = hasEvents || hasProps || hasBindings || !!Astro.props.signature.extends
+const showComponentSignature =
+  hasEvents || hasProps || hasBindings || !!Astro.props.signature.extends
 
 const shiki = await getShiki()
 
-const id = Astro.props.idOverride ?? 'component-signature';
+const id = Astro.props.idOverride ?? 'component-signature'
 ---
 
+{
+  showComponentSignature && (
+    <>
+      <h2
+        class="mt-0"
+        {id}
+      >
+        {Astro.props.titleOverride ? Astro.props.titleOverride : `Component Signature`}
+      </h2>
+      <div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:!p-0">
+        {Astro.props.signature.extends && (
+          <p class:list={['text-faded', !hasAnySignature && '!mb-0']}>
+            <code>{Astro.props.componentName}</code> extends
+            <code>
+              {'<'}
+              <a
+                class="!text-white"
+                href="/docs/reference/core/t"
+              >
+                {'T'}
+              </a>
+              .
+              <a
+                class="!text-white"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={Astro.props.signature.extends.url}
+              >
+                {Astro.props.signature.extends.type}
+              </a>
+              {'>'}
+            </code>
+            and supports all its props, slot props, bindings and events.
+          </p>
+        )}
 
-{showComponentSignature && (
+        {Astro.props.signature.pretext && (
+          <p
+            class:list={['text-faded', !hasAnySignature && '!mb-0']}
+            set:html={Astro.props.signature.pretext}
+          />
+        )}
 
-	<h2 class="mt-0" {id}>{Astro.props.titleOverride? Astro.props.titleOverride : `Component Signature`}</h2>
+        {(hasEvents || hasProps || hasBindings || hasExports) && (
+          <div class="flex flex-col gap-6">
+            {hasProps && (
+              <div>
+                <h3 class="mt-0">Props</h3>
 
-	<div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:!p-0">
+                <div
+                  class={c(
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
+                    propsGridCols
+                  )}
+                >
+                  <div class="font-bold">name</div>
 
+                  <div class="font-bold">type</div>
 
-		{
-			Astro.props.signature.extends && (
-				<p class={c("text-faded", !hasAnySignature && '!mb-0')}>
-					<code>{Astro.props.componentName}</code> extends
-					<!-- prettier-ignore -->
-					<code>{'<'}<a class="!text-white" href="/docs/reference/core/t">{'T'}</a>.<a class="!text-white" target="_blank" rel="noopener noreferrer" href={Astro.props.signature.extends.url}>{Astro.props.signature.extends.type}</a>{'>'}</code>
-					and supports all its props, slot props, bindings and events.
-				</p>
-			)
-		}
+                  <div class="font-bold">required</div>
 
-		{
-			Astro.props.signature.pretext && (
-				<p class={c("text-faded", !hasAnySignature && '!mb-0')} set:html={Astro.props.signature.pretext}>
-				</p>
-			)
-		}
+                  {anyPropHasDefault && <div class="font-bold">default</div>}
 
-		{ (hasEvents || hasProps || hasBindings) && (
-			<div class="flex flex-col gap-6">
-				{
-					hasProps && (
-						<div>
-							<h3 class="mt-0">Props</h3>
+                  {anyPropHasDescription && <div class="font-bold">description</div>}
 
-							<div
-								class={c(
-									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent',
-									propsGridCols
-								)}
-							>
-								<div class="font-bold">name</div>
+                  <hr class="col-span-full my-1" />
 
-								<div class="font-bold">type</div>
+                  {props.map((prop, index, arr) => {
+                    return (
+                      <>
+                        <div class="text-faded">{prop.name}</div>
 
-								<div class="font-bold">required</div>
+                        {typeof prop.type === 'string' ? (
+                          <div
+                            class="text-faded"
+                            set:html={shiki
+                              .codeToHtml(prop.type, {
+                                lang: 'typescript',
+                                theme: 'dracula-soft'
+                              })
+                              .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                              .replace('</pre>', '')}
+                          />
+                        ) : (
+                          <a
+                            class="text-faded no-underline"
+                            href={prop.type.url}
+                          >
+                            <span
+                              class="border-b-2 border-dotted border-white/70"
+                              set:html={shiki
+                                .codeToHtml(prop.type.name, {
+                                  lang: 'typescript',
+                                  theme: 'dracula-soft'
+                                })
+                                .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                                .replace('</pre>', '')}
+                            />
+                          </a>
+                        )}
 
-								{anyPropHasDefault && <div class="font-bold">default</div>}
+                        <div class="text-faded">{prop.required ? 'yes' : 'no'}</div>
 
-								{anyPropHasDescription && <div class="font-bold">description</div>}
+                        {anyPropHasDefault && (
+                          <div
+                            class="text-faded"
+                            set:html={
+                              prop.default
+                                ? shiki
+                                    .codeToHtml(prop.default, {
+                                      lang: 'typescript',
+                                      theme: 'dracula-soft'
+                                    })
+                                    .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                                    .replace('</pre>', '')
+                                : ''
+                            }
+                          />
+                        )}
 
-								<hr class="col-span-full my-1" />
+                        {anyPropHasDescription && (
+                          <div class="text-faded my-[0.2em] text-xs">{prop.description}</div>
+                        )}
 
-								{
-									props.map((prop, index, arr) => {
-										return (
-											<>
-												<div class="text-faded">{prop.name}</div>
+                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                      </>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
-												{
-													typeof prop.type === 'string' ? (
-														<div
-														class="text-faded"
-														set:html={shiki
-															.codeToHtml(prop.type, {
-																lang: 'typescript',
-																theme: 'dracula-soft',
-															})
-															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-															.replace('</pre>', '')}
-														/>
-													) : (
-														<a
-															class="text-faded no-underline"
-															href={prop.type.url}
+            {hasEvents && (
+              <div>
+                <h3 class="mt-0">Events</h3>
 
-														>
-															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
-																.codeToHtml(prop.type.name, {
-																	lang: 'typescript',
-																	theme: 'dracula-soft'
-																})
-																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-																.replace('</pre>', '')} />
-														</a>
-													)
-												}
+                <div
+                  class={c(
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
+                    anyEventHasDescription ? 'grid-cols-[auto_auto_auto]' : 'grid-cols-[auto_auto]'
+                  )}
+                >
+                  <div class="font-bold">name</div>
 
-												<div class="text-faded">{prop.required ? 'yes' : 'no'}</div>
+                  <div class="font-bold">payload</div>
 
-												{anyPropHasDefault && (
-													<div
-														class="text-faded"
-														set:html={
-															prop.default
-																? shiki
-																		.codeToHtml(prop.default, {
-																			lang: 'typescript',
-																			theme: 'dracula-soft'
-																		})
-																		.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-																		.replace('</pre>', '')
-																: ''
-														}
-													/>
-												)}
+                  {anyEventHasDescription && <div class="font-bold">description</div>}
 
-												{anyPropHasDescription && <div class="text-faded text-xs my-[0.2em]">{prop.description}</div>}
+                  <hr class="col-span-full my-1" />
 
+                  {events.map((event, index, arr) => {
+                    return (
+                      <>
+                        <div class="text-faded">{event.name}</div>
 
-												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
-											</>
-										)
-									})
-								}
-							</div>
-						</div>
-					)
-				}
+                        {typeof event.payload === 'string' ? (
+                          <div
+                            class="text-faded"
+                            set:html={shiki
+                              .codeToHtml(event.payload, {
+                                lang: 'typescript',
+                                theme: 'dracula-soft'
+                              })
+                              .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                              .replace('</pre>', '')}
+                          />
+                        ) : (
+                          <a
+                            class="text-faded no-underline"
+                            href={event.payload.url}
+                          >
+                            <span
+                              class="border-b-2 border-dotted border-white/70"
+                              set:html={shiki
+                                .codeToHtml(event.payload.name, {
+                                  lang: 'typescript',
+                                  theme: 'dracula-soft'
+                                })
+                                .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                                .replace('</pre>', '')}
+                            />
+                          </a>
+                        )}
 
-				{
-					hasEvents && (
-						<div>
-							<h3 class="mt-0">Events</h3>
+                        {event.description && <div class="text-faded">{event.description}</div>}
 
-							<div
-								class={c(
-									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent',
-									anyEventHasDescription
-										? 'grid-cols-[auto_auto_auto]'
-										: 'grid-cols-[auto_auto]'
-								)}
-							>
-								<div class="font-bold">name</div>
+                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                      </>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
-								<div class="font-bold">payload</div>
+            {hasBindings && (
+              <div>
+                <h3 class="mt-0">Bindings</h3>
 
-								{anyEventHasDescription && <div class="font-bold">description</div>}
+                <div class="scrollbar-hide grid grid-cols-[auto_auto] items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent">
+                  <div class="font-bold">name</div>
 
-								<hr class="col-span-full my-1" />
+                  <div class="font-bold">type</div>
 
-								{
-									events.map((event, index, arr) => {
-										return (
-											<>
-												<div class="text-faded">{event.name}</div>
+                  <hr class="col-span-full my-1" />
 
-												{
-													typeof event.payload === 'string' ? (
-														<div
-														class="text-faded"
-														set:html={shiki
-															.codeToHtml(event.payload, {
-																lang: 'typescript',
-																theme: 'dracula-soft'
-															})
-															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-															.replace('</pre>', '')}
-														/>
-													) : (
-													<a
-															class="text-faded no-underline"
-															href={event.payload.url}
+                  {(Astro.props.signature.bindings ?? []).map((binding, index, arr) => {
+                    return (
+                      <>
+                        <div class="text-faded">{binding.name}</div>
 
-														>
-															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
-																.codeToHtml(event.payload.name, {
-																	lang: 'typescript',
-																	theme: 'dracula-soft'
-																})
-																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-																.replace('</pre>', '')} />
-														</a>
-													)
-												}
+                        {typeof binding.type === 'string' ? (
+                          <div
+                            class="text-faded"
+                            set:html={shiki
+                              .codeToHtml(binding.type, {
+                                lang: 'typescript',
+                                theme: 'dracula-soft'
+                              })
+                              .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                              .replace('</pre>', '')}
+                          />
+                        ) : (
+                          <a
+                            class="text-faded no-underline"
+                            href={binding.type.url}
+                          >
+                            <span
+                              class="border-b-2 border-dotted border-white/70"
+                              set:html={shiki
+                                .codeToHtml(binding.type.name, {
+                                  lang: 'typescript',
+                                  theme: 'dracula-soft'
+                                })
+                                .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                                .replace('</pre>', '')}
+                            />
+                          </a>
+                        )}
 
-												{event.description && (
-													<div class="text-faded">{event.description}</div>
-												)}
+                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                      </>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
 
-												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
-											</>
-										)
-									})
-								}
-							</div>
-						</div>
-					)
-				}
+            {hasExports && (
+              <div>
+                <h3 class="mt-0">Exports</h3>
 
-				{ hasBindings && (
-						<div>
-							<h3 class="mt-0">Bindings</h3>
+                <div
+                  class={c(
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
+                    propsGridCols
+                  )}
+                >
+                  <div class="font-bold">name</div>
 
-							<div
-								class={c(
-									'grid items-start gap-x-3 overflow-x-auto scrollbar-hide [&_code]:!bg-transparent grid-cols-[auto_auto]',
-								)}
-							>
-								<div class="font-bold">name</div>
+                  <div class="font-bold">type</div>
 
-								<div class="font-bold">type</div>
+                  {anyExportHasDescription && <div class="font-bold">description</div>}
 
-								<hr class="col-span-full my-1" />
+                  <hr class="col-span-full my-1" />
 
-								{
-									(Astro.props.signature.bindings ?? []).map((binding, index, arr) => {
-										return (
-											<>
-												<div class="text-faded">{binding.name}</div>
+                  {exports.map((prop, index, arr) => {
+                    return (
+                      <>
+                        <div class="text-faded">{prop.name}</div>
 
-												{
-													typeof binding.type === 'string' ? (
-														<div
-														class="text-faded"
-														set:html={shiki
-															.codeToHtml(binding.type, {
-																lang: 'typescript',
-																theme: 'dracula-soft'
-															})
-															.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-															.replace('</pre>', '')}
-														/>
-													) : (
-													<a
-															class="text-faded no-underline"
-															href={binding.type.url}
+                        <div
+                          class="text-faded"
+                          set:html={shiki
+                            .codeToHtml(prop.type, {
+                              lang: 'typescript',
+                              theme: 'dracula-soft'
+                            })
+                            .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                            .replace('</pre>', '')}
+                        />
 
-														>
-															<span class="border-b-2 border-dotted border-white/70" set:html={shiki
-																.codeToHtml(binding.type.name, {
-																	lang: 'typescript',
-																	theme: 'dracula-soft'
-																})
-																.replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-																.replace('</pre>', '')} />
-														</a>
-													)
-												}
+                        {anyExportHasDescription && (
+                          <div class="text-faded my-[0.2em] text-xs">{prop.description}</div>
+                        )}
 
-												{index !== arr.length - 1 && <hr class="col-span-full my-1" />}
-											</>
-										)
-									})
-								}
-							</div>
-						</div>
-					)
-				}
-			</div>
-		)}
-
-	</div>
-)}
-
+                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                      </>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </>
+  )
+}

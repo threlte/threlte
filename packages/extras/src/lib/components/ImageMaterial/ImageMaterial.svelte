@@ -1,50 +1,45 @@
 <script lang="ts">
-  import { Color, Vector2, type Texture, type Mesh, Vector3, ShaderMaterial } from 'three'
-  import {
-    T,
-    asyncWritable,
-    forwardEventHandlers,
-    useParent,
-    useTask,
-    useThrelte
-  } from '@threlte/core'
+  import { T, asyncWritable, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
+  import { Color, ShaderMaterial, Vector2, Vector3, type Mesh, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture'
-  import type { ImageMaterialProps, ImageMaterialEvents, ImageMaterialSlots } from './ImageMaterial'
   import { useSuspense } from '../../suspense/useSuspense'
-  import { vertexShader, fragmentShader } from './shaders'
+  import { fragmentShader, vertexShader } from './shaders'
+  import type { ImageMaterialProps } from './types'
 
-  type $$Props = ImageMaterialProps
-  type $$Events = ImageMaterialEvents
-  type $$Slots = ImageMaterialSlots
+  let {
+    color = 'white',
+    zoom = 1,
+    radius = 0,
+    alphaThreshold = 0,
+    alphaSmoothing = 0.1,
+    brightness = 0,
+    contrast = 0,
+    hue = 0,
+    saturation = 0,
+    lightness = 0,
+    negative = false,
+    opacity = 1,
+    toneMapped = true,
+    transparent = false,
+    texture,
+    monochromeColor,
+    monochromeStrength,
+    colorProcessingTexture,
+    side,
+    url,
+    ref = $bindable(),
+    children,
+    ...props
+  }: ImageMaterialProps = $props()
 
-  type Props = Required<ImageMaterialProps>
-
-  export let color: Props['color'] = 'white'
-  export let zoom: Props['zoom'] = 1
-  export let radius: Props['radius'] = 0
-  export let alphaThreshold: Props['alphaThreshold'] = 0
-  export let alphaSmoothing: Props['alphaSmoothing'] = 0.1
-  export let brightness: Props['brightness'] = 0
-  export let contrast: Props['contrast'] = 0
-  export let hue: Props['hue'] = 0
-  export let saturation: Props['saturation'] = 0
-  export let lightness: Props['lightness'] = 0
-  export let negative: Props['negative'] = false
-  export let opacity: Props['opacity'] = 1
-  export let toneMapped: Props['toneMapped'] = true
-  export let transparent: Props['transparent'] = false
-
-  export let texture: $$Props['texture'] = undefined
-  export let monochromeColor: $$Props['monochromeColor'] = undefined
-  export let monochromeStrength: $$Props['monochromeStrength'] = undefined
-  export let colorProcessingTexture: $$Props['colorProcessingTexture'] = undefined
-  export let side: $$Props['side'] = undefined
-  export let url: $$Props['url'] = undefined
-
-  export let ref = new ShaderMaterial()
+  const material = new ShaderMaterial()
 
   const suspend = useSuspense()
-  $: textureStore = suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
+
+  let textureStore = asyncWritable<Texture | undefined>(Promise.resolve(undefined))
+  $effect.pre(() => {
+    textureStore = suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
+  })
 
   let { size } = useThrelte()
   const parent = useParent()
@@ -71,37 +66,66 @@
     colorProcessingEnabled: { value: 1 }
   }
 
-  $: uniforms.color.value.set(color)
-
-  $: uniforms.imageBounds.value.set(
-    $textureStore?.image.width ?? 0,
-    $textureStore?.image.height ?? 0
-  )
-  $: uniforms.resolution.value = Math.max($size.width, $size.height)
-  $: uniforms.zoom.value = zoom
-  $: uniforms.radius.value = radius
-  $: uniforms.opacity.value = opacity
-  $: uniforms.alphaThreshold.value = alphaThreshold
-  $: uniforms.alphaSmoothing.value = alphaSmoothing
-  $: uniforms.brightness.value = brightness
-  $: uniforms.contrast.value = contrast
-  $: uniforms.hsl.value.x = hue
-  $: uniforms.hsl.value.y = saturation
-  $: uniforms.hsl.value.z = lightness
-
-  $: uniforms.negative.value = negative ? 1 : 0
-  $: uniforms.map.value = $textureStore ?? null
-  $: uniforms.colorProccessingTexture.value = colorProcessingTexture ?? null
-  $: uniforms.colorProcessingTextureOverride.value = colorProcessingTexture ? 1 : 0
-
-  $: if (monochromeColor !== undefined) {
-    uniforms.monochromeColor.value.set(monochromeColor)
-    uniforms.monochromeStrength.value = monochromeStrength ?? 1
-  } else {
-    uniforms.monochromeStrength.value = 0
-  }
-
-  $: {
+  $effect.pre(() => {
+    uniforms.color.value.set(color)
+  })
+  $effect.pre(() => {
+    uniforms.imageBounds.value.set(
+      $textureStore?.image.width ?? 0,
+      $textureStore?.image.height ?? 0
+    )
+  })
+  $effect.pre(() => {
+    uniforms.resolution.value = Math.max($size.width, $size.height)
+  })
+  $effect.pre(() => {
+    uniforms.zoom.value = zoom
+  })
+  $effect.pre(() => {
+    uniforms.radius.value = radius
+  })
+  $effect.pre(() => {
+    uniforms.opacity.value = opacity
+  })
+  $effect.pre(() => {
+    uniforms.alphaThreshold.value = alphaThreshold
+  })
+  $effect.pre(() => {
+    uniforms.alphaSmoothing.value = alphaSmoothing
+  })
+  $effect.pre(() => {
+    uniforms.brightness.value = brightness
+  })
+  $effect.pre(() => {
+    uniforms.contrast.value = contrast
+  })
+  $effect.pre(() => {
+    uniforms.hsl.value.x = hue
+  })
+  $effect.pre(() => {
+    uniforms.hsl.value.z = lightness
+  })
+  $effect.pre(() => {
+    uniforms.negative.value = negative ? 1 : 0
+  })
+  $effect.pre(() => {
+    uniforms.map.value = $textureStore ?? null
+  })
+  $effect.pre(() => {
+    uniforms.colorProccessingTexture.value = colorProcessingTexture ?? null
+  })
+  $effect.pre(() => {
+    uniforms.colorProcessingTextureOverride.value = colorProcessingTexture ? 1 : 0
+  })
+  $effect.pre(() => {
+    if (monochromeColor !== undefined) {
+      uniforms.monochromeColor.value.set(monochromeColor)
+      uniforms.monochromeStrength.value = monochromeStrength ?? 1
+    } else {
+      uniforms.monochromeStrength.value = 0
+    }
+  })
+  $effect.pre(() => {
     let colorProcessingEnabled = 0
 
     const monochromeCheck =
@@ -123,14 +147,11 @@
     }
 
     uniforms.colorProcessingEnabled.value = colorProcessingEnabled
-  }
+  })
 
   useTask(() => {
     const mesh = $parent
-
-    if (mesh === undefined) {
-      return
-    }
+    if (!isInstanceOf(mesh, 'Mesh')) return
 
     uniforms.scale.value.set(mesh.scale.x, mesh.scale.y)
 
@@ -142,20 +163,18 @@
       uniforms.scale.value.set(uniforms.scale.value.x * width, uniforms.scale.value.y * height)
     }
   })
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
-  is={ref}
+  is={material}
+  bind:ref
   {uniforms}
   {toneMapped}
   {transparent}
   {side}
   {vertexShader}
   {fragmentShader}
-  {...$$restProps}
-  bind:this={$component}
+  {...props}
 >
-  <slot {ref} />
+  {@render children?.({ ref: material })}
 </T>

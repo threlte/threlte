@@ -1,5 +1,5 @@
-import { useThrelte } from '../../../hooks/useThrelte'
-import { resolvePropertyPath } from './resolvePropertyPath'
+import { useThrelte } from '../../../context/compounds/useThrelte'
+import { resolvePropertyPath } from '../../../utilities'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 
@@ -125,16 +125,14 @@ export const useProps = () => {
     }
   }
 
-  const updateProps = <T>(instance: T, props: Record<string, any>, options: PropOptions) => {
-    for (const key in props) {
-      if (!ignoredProps.has(key) && !options.pluginsProps?.includes(key)) {
-        setProp(instance, key, props[key], options)
-      }
-      invalidate()
+  const updateProp = <T>(instance: T, key: string, value: any, options: PropOptions) => {
+    if (!ignoredProps.has(key) && !options.pluginsProps?.includes(key)) {
+      setProp(instance, key, value, options)
     }
+    invalidate()
   }
 
   return {
-    updateProps
+    updateProp
   }
 }

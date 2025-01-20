@@ -1,22 +1,36 @@
 ---
-{
-  order: 9.3,
-  category: '@threlte/extras',
-  name: '<FakeGlowMaterial>',
-  sourcePath: 'packages/extras/src/lib/components/FakeGlowMaterial/FakeGlowMaterial.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'ShaderMaterial', url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial' },
-      'props':
-        [
-					{ name: 'glowColor', type: 'ColorRepresentation', default: '"green"', required: false },
-          { name: 'falloff', type: 'number', default: '0.1', required: false, description: 'Controls the value of the Falloff effect. Ranges from 0.0 to 1.0.' },
-          { name: 'glowInternalRadius', type: 'number', default: '6.0', required: false, description: 'Controls the internal glow radius. Ranges from -1.0 to 1.0. Set a darker color to get the fresnel effect only.' },
-          { name: 'glowSharpness', type: 'number', default: '1.0', required: false }
-        ]
-    }
-}
+order: 5.3
+category: '@threlte/extras'
+name: '<FakeGlowMaterial>'
+sourcePath: 'packages/extras/src/lib/components/FakeGlowMaterial/FakeGlowMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial'
+      },
+    props:
+      [
+        { name: 'glowColor', type: 'ColorRepresentation', default: '"green"', required: false },
+        {
+          name: 'falloff',
+          type: 'number',
+          default: '0.1',
+          required: false,
+          description: 'Controls the value of the Falloff effect. Ranges from 0.0 to 1.0.'
+        },
+        {
+          name: 'glowInternalRadius',
+          type: 'number',
+          default: '6.0',
+          required: false,
+          description: 'Controls the internal glow radius. Ranges from -1.0 to 1.0. Set a darker color to get the fresnel effect only.'
+        },
+        { name: 'glowSharpness', type: 'number', default: '1.0', required: false }
+      ]
+  }
 ---
 
 This component is a port of [ektogamat's `<FakeGlowMaterial>` r3f component](https://github.com/ektogamat/fake-glow-material-r3f)
@@ -35,8 +49,8 @@ which displays a glowing outline around a mesh using a custom shader, instead of
 </script>
 
 <T.Mesh>
-	<FakeGlowMaterial glowColor="red"/>
-	<T.IcosahedronGeometry args={[4, 4]} />
+  <FakeGlowMaterial glowColor="red" />
+  <T.IcosahedronGeometry args={[4, 4]} />
 </T.Mesh>
 ```
 
@@ -52,12 +66,12 @@ For sharp meshes like a cube, you can use a sphere to simulate the glow, instead
 </script>
 
 <T.Mesh>
-	<FakeGlowMaterial glowColor="blue"/>
-	<T.BoxGeometry args={[2, 2, 2]} />
+  <FakeGlowMaterial glowColor="blue" />
+  <T.BoxGeometry args={[2, 2, 2]} />
 </T.Mesh>
 
 <T.Mesh>
-	<FakeGlowMaterial glowColor="blue"/>
-	<T.IcosahedronGeometry args={[3, 4]} />
+  <FakeGlowMaterial glowColor="blue" />
+  <T.IcosahedronGeometry args={[3, 4]} />
 </T.Mesh>
 ```

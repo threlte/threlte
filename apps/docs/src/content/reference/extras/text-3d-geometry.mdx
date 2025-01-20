@@ -1,43 +1,41 @@
 ---
-{
-  order: 2.5,
-  category: '@threlte/extras',
-  name: '<Text3DGeometry>',
-  sourcePath: 'packages/extras/src/lib/components/Text3DGeometry/Text3DGeometry.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          {
-            name: 'font',
-            type: 'Font | string',
-            required: true,
-            description: 'Either a loaded font or a path to a font file.'
-          },
-          { name: 'text', type: 'string', required: true, description: 'The text to display.' },
-          { name: 'size', type: 'number', required: false, default: '100' },
-          { name: 'height', type: 'number', required: false, default: '50' },
-          { name: 'curveSegments', type: 'number', required: false, default: '12' },
-          { name: 'bevelEnabled', type: 'boolean', required: false, default: 'false' },
-          { name: 'bevelThickness', type: 'number', required: false, default: '10' },
-          { name: 'bevelSize', type: 'number', required: false, default: '8' },
-          { name: 'bevelOffset', type: 'number', required: false, default: '0' },
-          { name: 'bevelSegments', type: 'number', required: false, default: '3' },
-          {
-            name: 'smooth',
-            type: 'number',
-            required: false,
-            default: '0',
-            description: 'Smooth all edges where the angle between faces is less than value'
-          },
-          { name: 'depth', type: 'number', required: false, default: '1' },
-          { name: 'extrudePath', type: 'Curve<Vector3>', required: false },
-          { name: 'steps', type: 'number', required: false, default: '1' },
-          { name: 'UVGenerator', type: 'UVGenerator', required: false }
-        ]
-    }
-}
+order: 1.5
+category: '@threlte/extras'
+name: '<Text3DGeometry>'
+sourcePath: 'packages/extras/src/lib/components/Text3DGeometry/Text3DGeometry.svelte'
+type: 'component'
+componentSignature:
+  {
+    'props':
+      [
+        {
+          name: 'font',
+          type: 'Font | string',
+          required: true,
+          description: 'Either a loaded font or a path to a font file.'
+        },
+        { name: 'text', type: 'string', required: true, description: 'The text to display.' },
+        { name: 'size', type: 'number', required: false, default: '100' },
+        { name: 'height', type: 'number', required: false, default: '50' },
+        { name: 'curveSegments', type: 'number', required: false, default: '12' },
+        { name: 'bevelEnabled', type: 'boolean', required: false, default: 'false' },
+        { name: 'bevelThickness', type: 'number', required: false, default: '10' },
+        { name: 'bevelSize', type: 'number', required: false, default: '8' },
+        { name: 'bevelOffset', type: 'number', required: false, default: '0' },
+        { name: 'bevelSegments', type: 'number', required: false, default: '3' },
+        {
+          name: 'smooth',
+          type: 'number',
+          required: false,
+          default: '0',
+          description: 'Smooth all edges where the angle between faces is less than value'
+        },
+        { name: 'depth', type: 'number', required: false, default: '1' },
+        { name: 'extrudePath', type: 'Curve<Vector3>', required: false },
+        { name: 'steps', type: 'number', required: false, default: '1' },
+        { name: 'UVGenerator', type: 'UVGenerator', required: false }
+      ]
+  }
 ---
 
 Render 3D text as a geometry using threejs's [TextGeometry](https://threejs.org/docs/index.html#examples/en/geometries/TextGeometry).
@@ -92,7 +90,9 @@ rendering until the provided font is loaded:
     <T.MeshStandardMaterial />
   </T.Mesh>
 
-  <Fallback slot="fallback" />
+  {#snippet fallback()}
+    <Fallback />
+  {/snippet}
 </Suspense>
 ```
 
@@ -125,15 +125,17 @@ You can also load the font yourself and pass it to the component, like so:
 You can center a text by using the [`<Align>` component](/docs/reference/extras/align) and calling the align slot prop when the text geometry is created.
 
 ```svelte title="Scene.svelte"
-<Align let:align>
-  <T.Mesh>
-    <Text3DGeometry
-      font={'path-to-your-font'}
-      text={`Hello!`}
-      on:create={align}
-    />
-    <T.MeshStandardMaterial />
-  </T.Mesh>
+<Align>
+  {#snippet children({ align })}
+    <T.Mesh>
+      <Text3DGeometry
+        font={'path-to-your-font'}
+        text={`Hello!`}
+        oncreate={align}
+      />
+      <T.MeshStandardMaterial />
+    </T.Mesh>
+  {/snippet}
 </Align>
 ```
 

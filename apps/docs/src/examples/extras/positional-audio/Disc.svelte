@@ -3,10 +3,11 @@
   import { Edges, useGltf } from '@threlte/extras'
   import { derived } from 'svelte/store'
   import { Color, type Mesh } from 'three'
+  import type { DiscProps } from './types'
 
-  export let discSpeed = 0
+  let { discSpeed = 0, ...rest }: DiscProps = $props()
 
-  let discRotation = 0
+  let discRotation = $state(0)
   const { start, stop, started } = useTask(
     (delta) => {
       discRotation += delta * discSpeed
@@ -15,10 +16,11 @@
       autoStart: false
     }
   )
-  $: {
+
+  $effect(() => {
     if (discSpeed <= 0 && $started) stop()
     else if (discSpeed > 0 && !$started) start()
-  }
+  })
 
   const gltf = useGltf<{
     nodes: {
@@ -33,7 +35,7 @@
   })
 </script>
 
-<T.Group {...$$restProps}>
+<T.Group {...rest}>
   <T.Group rotation.y={-discRotation}>
     <!-- DISH (?) -->
     <T.Mesh

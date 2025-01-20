@@ -1,6 +1,6 @@
 <script
-  lanng="ts"
-  context="module"
+  lang="ts"
+  module
 >
   import { writable } from 'svelte/store'
   import { tweened } from 'svelte/motion'
@@ -18,7 +18,7 @@
   import { Quaternion, Vector3 } from 'three'
   import { clamp } from 'three/src/math/MathUtils.js'
 
-  const { renderer, camera } = useThrelte()
+  const { dom, camera } = useThrelte()
 
   // Pointer lock with unadjusted movement: https://github.com/slightlyoff/unadjusted_pointer_lock_explainer
   const requestPointerLock = (myTargetElement: HTMLElement) => {
@@ -49,11 +49,11 @@
 
   /*
 		Zoom in and out with mousewheel.
-		I used a passive listener on the renderer dom element because in the docs we show
-		examples as an iframe. Its interaction with lockng pointer was causing the page
+		I used a passive listener on the dom element because in the docs we show
+		examples as an iframe. Its interaction with locking pointer was causing the page
 		to scroll etc.
 	*/
-  renderer?.domElement.addEventListener(
+  dom.addEventListener(
     'wheel',
     (e) => {
       if (pointerLocked) {
@@ -103,7 +103,7 @@
   }}
   on:click={async () => {
     if (!pointerLocked) {
-      requestPointerLock(renderer?.domElement)
+      requestPointerLock(dom)
     }
   }}
   on:mousemove={({ movementX, movementY }) => {

@@ -1,15 +1,17 @@
 <script lang="ts">
+  import { types } from '@theatre/core'
   import { useThrelte } from '@threlte/core'
-  import { transitions, useGltf, useTexture } from '@threlte/extras'
-  import { Theatre } from '@threlte/theatre'
+  import { useGltf, useTexture } from '@threlte/extras'
+  import { SheetObject } from '@threlte/theatre'
+  import type { Mesh } from 'three'
   import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
   import Scene from './Scene.svelte'
+  import ScrollSheet from './ScrollSheet.svelte'
   import { cubeGeometry } from './state'
-  import state from './state.json'
 
   type CubeGltf = {
     nodes: {
-      Cube: THREE.Mesh
+      Cube: Mesh
     }
     materials: {}
   }
@@ -24,10 +26,32 @@
     $env.mapping = EquirectangularReflectionMapping
     $env.colorSpace = SRGBColorSpace
     scene.environment = $env
+    scene.environmentIntensity = 10
   }
-
-  transitions()
 </script>
+
+<ScrollSheet
+  name="Environment"
+  startAtScrollPosition={0}
+  endAtScrollPosition={5}
+  useSpring
+>
+  <SheetObject
+    key="Settings"
+    props={{
+      rotation: {
+        x: types.number(0, { range: [0, 5] }),
+        y: types.number(0, { range: [0, 5] }),
+        z: types.number(0, { range: [0, 5] })
+      }
+    }}
+    onchange={(values) => {
+      scene.environmentRotation.x = values.rotation.x
+      scene.environmentRotation.y = values.rotation.y
+      scene.environmentRotation.z = values.rotation.z
+    }}
+  />
+</ScrollSheet>
 
 {#if $cubeGeometry && $env}
   <Scene />

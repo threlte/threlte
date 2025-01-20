@@ -1,4 +1,3 @@
-import { Color, Euler } from 'three'
 import { color } from './defaults/color'
 import { degrees } from './defaults/degrees'
 import { euler } from './defaults/euler'

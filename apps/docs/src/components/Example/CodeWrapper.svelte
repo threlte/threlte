@@ -5,19 +5,25 @@
   import { writable, type Writable } from 'svelte/store'
   import { c } from '../../lib/classes'
   import { fade } from 'svelte/transition'
+  import type { Snippet } from 'svelte'
 
-  let children: HTMLElement[] = []
+  interface Props {
+    filePaths: string[]
+    hidePreview: boolean
+    showFile: string | null
+    expanded?: boolean
+    children: Snippet
+  }
 
-  export let filePaths: string[]
-  export let hidePreview: boolean
-  export let showFile: string | null
-  export let expanded = false
+  let { filePaths, hidePreview, showFile, children, expanded = $bindable(false) }: Props = $props()
+
+  let childrenElements: HTMLElement[] = $state([])
 
   const onFileSelected = (file: File) => {
     const path = file.path
 
     // hide all children except the one that was selected
-    children.forEach((child) => {
+    childrenElements.forEach((child) => {
       const elPath = child.dataset.path
       if (!elPath) return
 
@@ -49,7 +55,7 @@
     // the first child in node.children is an astro slot, so we need the children of that
     const firstChild = node.children[0]
     if (firstChild) {
-      children = Array.from(firstChild.children).filter((item): item is HTMLElement => {
+      childrenElements = Array.from(firstChild.children).filter((item): item is HTMLElement => {
         return item instanceof HTMLElement
       })
     }
@@ -68,13 +74,13 @@
     <div
       transition:fade
       class="absolute left-0 top-0 z-10 h-full w-full bg-gradient-to-t from-blue-900 to-blue-900/50"
-    />
+    ></div>
   {/if}
   {#if !expanded}
     <div class="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center">
       <button
-        class="text-orange border-orange/10 z-10 flex flex-row items-center justify-center gap-3 rounded-sm border bg-orange-800/50 px-2 py-1 text-sm backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
-        on:click={() => (expanded = true)}
+        class="z-10 flex flex-row items-center justify-center gap-3 rounded-sm border border-orange/10 bg-orange-800/50 px-2 py-1 text-sm text-orange backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
+        onclick={() => (expanded = true)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -110,6 +116,6 @@
     use:setChildren
     class="flex-1 overflow-x-auto"
   >
-    <slot />
+    {@render children()}
   </div>
 </div>

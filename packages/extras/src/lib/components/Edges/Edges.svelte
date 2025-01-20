@@ -1,31 +1,34 @@
 <script lang="ts">
-  import { T, useParent, forwardEventHandlers } from '@threlte/core'
-  import type { Mesh } from 'three'
-  import type { EdgesEvents, EdgesProps, EdgesSlots } from './Edges.svelte'
+  import { T, isInstanceOf, useParent } from '@threlte/core'
+  import { fromStore } from 'svelte/store'
+  import { LineSegments } from 'three'
+  import type { EdgesProps } from './types'
 
-  type $$Props = EdgesProps
-  type $$Events = EdgesEvents
-  type $$Slots = EdgesSlots
+  let {
+    thresholdAngle = 1,
+    color = '#ffffff',
+    ref = $bindable(),
+    children,
+    ...props
+  }: EdgesProps = $props()
 
-  export let thresholdAngle: $$Props['thresholdAngle'] = undefined as $$Props['thresholdAngle']
-  export let color: $$Props['color'] = undefined as $$Props['color']
+  const parent = fromStore(useParent())
 
-  const parent = useParent()
-  if (!$parent || $parent.type !== 'Mesh')
-    throw new Error('Edges: component must be a child of a Mesh')
+  const geometry = $derived.by(() => {
+    if (!isInstanceOf(parent.current, 'Mesh')) {
+      throw new Error('Edges: component must be a child of a Mesh')
+    }
+    return parent.current.geometry
+  })
 
-  $: parentMesh = $parent as Mesh
-  $: geometry = 'clone' in parentMesh.geometry ? parentMesh.geometry.clone() : parentMesh.geometry
-
-  const component = forwardEventHandlers()
+  ref = new LineSegments()
 </script>
 
-<T.LineSegments
-  let:ref
-  {...$$restProps}
-  bind:this={$component}
+<T
+  is={ref}
+  {...props}
 >
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
-  <slot {ref} />
-</T.LineSegments>
+  {@render children?.({ ref })}
+</T>

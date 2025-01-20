@@ -1,29 +1,27 @@
 ---
-{
-  order: 7.14,
-  category: '@threlte/extras',
-  name: <CSM>,
-  sourcePath: 'packages/extras/src/lib/components/CSM/CSM.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          { name: 'enabled', type: 'boolean', required: false },
-          { name: 'camera', type: 'THREE.Camera | undefined', required: false },
-          { name: 'configure', type: '(csm: CSM) => void', required: false },
-          { name: 'args', type: 'CSMParameters', required: false },
-          { name: 'lightIntensity', type: 'number', required: false },
-          { name: 'lightColor', type: 'THREE.ColorRepresentation', required: false },
-          {
-            name: 'lightDirection',
-            type: 'THREE.Vector3Tuple',
-            required: false,
-            default: '[1, -1, 1]'
-          }
-        ]
-    }
-}
+order: 4.14
+category: '@threlte/extras'
+name: <CSM>
+sourcePath: 'packages/extras/src/lib/components/CSM/CSM.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'enabled', type: 'boolean', required: false },
+        { name: 'camera', type: 'THREE.Camera | undefined', required: false },
+        { name: 'configure', type: '(csm: CSM) => void', required: false },
+        { name: 'args', type: 'CSMParameters', required: false },
+        { name: 'lightIntensity', type: 'number', required: false },
+        { name: 'lightColor', type: 'THREE.ColorRepresentation', required: false },
+        {
+          name: 'lightDirection',
+          type: 'THREE.Vector3Tuple',
+          required: false,
+          default: '[1, -1, 1]'
+        }
+      ]
+  }
 ---
 
 The `<CSM/>` component offers a streamlined convenience integration of the Cascaded Shadow Maps technique, sourced from the Three.js addon.

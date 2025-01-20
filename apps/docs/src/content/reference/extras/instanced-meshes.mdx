@@ -1,44 +1,42 @@
 ---
-{
-  order: 6.3,
-  category: '@threlte/extras',
-  name: '<InstancedMeshes>',
-  sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes',
-  type: 'component',
-  'componentSignature':
-    {
-      extends:
+order: 7.3
+category: '@threlte/extras'
+name: '<InstancedMeshes>'
+sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'InstancedMesh',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+      },
+    props:
+      [
         {
-          type: 'InstancedMesh',
-          url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+          name: 'limit',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of possible <Instance> components.'
         },
-      'props':
-        [
-          {
-            name: 'limit',
-            type: 'number',
-            default: '1000',
-            required: false,
-            description: 'Limits the amount of possible <Instance> components.'
-          },
-          {
-            name: 'range',
-            type: 'number',
-            default: '1000',
-            required: false,
-            description: 'Limits the amount of drawn <Instance> components.'
-          },
-          {
-            name: 'update',
-            type: 'boolean',
-            default: 'true',
-            required: false,
-            description: 'Whether the THREE.InstancedMesh should be updated.'
-          },
-          { name: 'meshes', type: 'THREE.Mesh[] | Record<string, THREE.Mesh>', required: true }
-        ]
-    }
-}
+        {
+          name: 'range',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of drawn <Instance> components.'
+        },
+        {
+          name: 'update',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Whether the THREE.InstancedMesh should be updated.'
+        },
+        { name: 'meshes', type: 'THREE.Mesh[] | Record<string, THREE.Mesh>', required: true }
+      ]
+  }
 ---
 
 The component `<InstancedMeshes>` takes existing `THREE.Mesh` instances and creates a `THREE.InstancedMesh` per `THREE.Mesh`. This is especially useful if you want to instantiate a lot of meshes that have been loaded with hooks like [`useGltf`](/docs/reference/extras/use-gltf).
@@ -66,13 +64,15 @@ Load a gltf file with the [`useGltf`](/docs/reference/extras/use-gltf) hook and 
   const gltf = useGltf('path/to/file.gltf')
 </script>
 
-{#if gltf}
+{#if $gltf}
   <!--
     You can use object destructuring
     to access the component <Cube>
   -->
-  <InstancedMeshes meshes={$gltf.nodes} let:components={{ Cube }}>
-    <Cube position.y={2} position.x={-1}>
+  <InstancedMeshes meshes={$gltf.nodes}>
+    {#snippet children({ components: { Cube } })}
+      <Cube position.y={2} position.x={-1}>
+    {/snippet}
   </InstancedMeshes>
 {/if}
 ```
@@ -106,9 +106,11 @@ If you don't want to use the `useGltf` hook, you can also pass an array of `THRE
     to access the components <MeshA>,
     <MeshB> and <MeshC>
   -->
-<InstancedMeshes meshes={meshes} let:components={[MeshA, MeshB, MeshC]}>
-  <MeshA position.y={2} position.x={-1}>
-  <MeshB position.y={-2}>
-  <MeshC position.y={0} position.x={1}>
+<InstancedMeshes meshes={meshes}>
+  {#snippet children({ components: [MeshA, MeshB, MeshC] })}
+    <MeshA position.y={2} position.x={-1}>
+    <MeshB position.y={-2}>
+    <MeshC position.y={0} position.x={1}>
+  {/snippet}
 </InstancedMeshes>
 ```

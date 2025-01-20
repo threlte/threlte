@@ -1,32 +1,67 @@
 ---
-{
-  order: 9.7,
-  category: '@threlte/extras',
-  name: '<MeshRefractionMaterial>',
-  sourcePath: 'packages/extras/src/lib/components/MeshRefractionMaterial/MeshRefractionMaterial.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'ShaderMaterial', url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial' },
-      'props':
-        [
-					{ name: 'envMap', type: 'CubeTexture | Texture', required: true },
-          { name: 'bounces', type: 'number', default: '2', required: false, description: 'Number of ray-cast bounces, it can be expensive to have too many' },
-          { name: 'ior', type: 'number', default: '2.4', required: false, description: 'Refraction index' },
-          { name: 'fresnel', type: 'number', default: '0.0', required: false, description: 'Fresnel (strip light)' },
-					{ name: 'aberrationStrength', type: 'number', default: '0.0', required: false, description: 'RGB shift intensity, can be expensive' },
-					{ name: 'color', type: 'ColorRepresentation', default: 'white', required: false },
-					{ name: 'fastChrome', type: 'boolean', default: 'true', required: false, description: 'If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy' },
-        ]
-    }
-}
+order: 5.7
+category: '@threlte/extras'
+name: '<MeshRefractionMaterial>'
+sourcePath: 'packages/extras/src/lib/components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial'
+      },
+    props:
+      [
+        { name: 'envMap', type: 'CubeTexture | Texture', required: true },
+        {
+          name: 'bounces',
+          type: 'number',
+          default: '2',
+          required: false,
+          description: 'Number of ray-cast bounces, it can be expensive to have too many'
+        },
+        {
+          name: 'ior',
+          type: 'number',
+          default: '2.4',
+          required: false,
+          description: 'Refraction index'
+        },
+        {
+          name: 'fresnel',
+          type: 'number',
+          default: '0.0',
+          required: false,
+          description: 'Fresnel (strip light)'
+        },
+        {
+          name: 'aberrationStrength',
+          type: 'number',
+          default: '0.0',
+          required: false,
+          description: 'RGB shift intensity, can be expensive'
+        },
+        { name: 'color', type: 'ColorRepresentation', default: 'white', required: false },
+        {
+          name: 'fastChrome',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy'
+        }
+      ]
+  }
 ---
+
 <Tip type="info">
-  To use this component you need to install the seperate library `three-mesh-bvh`, please run `npm install three-mesh-bvh` before adding this component to your project.
+  To use this component you need to install the seperate library `three-mesh-bvh`, please run `npm
+  install three-mesh-bvh` before adding this component to your project.
 </Tip>
 
 <Tip type="experimental">
-	This material may not work reliably on some devices or browsers. We're investigating possible fixes.
+  This material may not work reliably on some devices or browsers. We're investigating possible
+  fixes.
 </Tip>
 
 This component is a port of [drei's `<MeshRefractionMaterial>`
@@ -50,10 +85,10 @@ You can either pass in a texture to use as the environment:
 </script>
 
 {#await env then texture}
-	<T.Mesh>
-		<MeshRefractionMaterial envMap={texture}/>
-		<T.IcosahedronGeometry args={[4, 0]} />
-	</T.Mesh>
+  <T.Mesh>
+    <MeshRefractionMaterial envMap={texture} />
+    <T.IcosahedronGeometry args={[4, 0]} />
+  </T.Mesh>
 {/await}
 ```
 

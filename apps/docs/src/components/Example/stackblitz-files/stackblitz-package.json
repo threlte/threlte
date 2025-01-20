@@ -18,10 +18,10 @@
     "@threlte/extras": "latest",
     "@threlte/rapier": "latest",
     "@threlte/theatre": "latest",
+    "@threlte/studio": "latest",
     "svelte-tweakpane-ui": "*",
     "@threlte/xr": "latest",
     "@tsconfig/svelte": "*",
-    "@tweakpane/core": "^1.1.0",
     "@types/three": "*",
     "postprocessing": "*",
     "svelte": "*",
@@ -29,7 +29,6 @@
     "three": "*",
     "tslib": "*",
     "typescript": "*",
-    "vite": "*",
-    "tweakpane": "^3.1.0"
+    "vite": "*"
   }
 }

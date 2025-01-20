@@ -1,27 +1,24 @@
 <script lang="ts">
-  import type {
-    MeshLineMaterialEvents,
-    MeshLineMaterialProps,
-    MeshLineMaterialSlots
-  } from './MeshLineMaterial.svelte'
-  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
+  import type { MeshLineMaterialProps } from './types'
+  import { T, useThrelte } from '@threlte/core'
   import { ShaderMaterial, Color, Vector2 } from 'three'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
-  type $$Props = Required<MeshLineMaterialProps>
-  type $$Events = MeshLineMaterialEvents
-  type $$Slots = MeshLineMaterialSlots
-
-  export let opacity: $$Props['opacity'] = 1
-  export let color: $$Props['color'] = '#ffffff'
-  export let dashOffset: $$Props['color'] = 0
-  export let dashArray: $$Props['dashArray'] = 0
-  export let dashRatio: $$Props['dashRatio'] = 0
-  export let attenuate: $$Props['attenuate'] = true
-  export let width: $$Props['width'] = 1
-  export let scaleDown: $$Props['scaleDown'] = 0
-  export let alphaMap: $$Props['texture'] = undefined
+  let {
+    opacity = 1,
+    color = '#ffffff',
+    dashOffset = 0,
+    dashArray = 0,
+    dashRatio = 0,
+    attenuate = true,
+    width = 1,
+    scaleDown = 0,
+    alphaMap,
+    ref = $bindable(),
+    children,
+    ...props
+  }: MeshLineMaterialProps = $props()
 
   let { invalidate, size } = useThrelte()
 
@@ -43,12 +40,12 @@
 
   const material = new ShaderMaterial({ uniforms })
 
-  $: {
+  $effect.pre(() => {
     uniforms.resolution.value.set($size.width, $size.height)
     invalidate()
-  }
+  })
 
-  $: {
+  $effect.pre(() => {
     uniforms.dashRatio.value = dashRatio
     uniforms.dashArray.value = dashArray
     uniforms.dashOffset.value = dashOffset
@@ -56,17 +53,15 @@
     uniforms.opacity.value = opacity
     uniforms.color.value.set(color)
     invalidate()
-  }
-
-  const component = forwardEventHandlers()
+  })
 </script>
 
 <T
   is={material}
-  bind:this={$component}
-  {...$$restProps}
+  bind:ref
   {fragmentShader}
   {vertexShader}
+  {...props}
 >
-  <slot ref={material} />
+  {@render children?.({ ref: material })}
 </T>

@@ -4,28 +4,30 @@
 
 ```svelte
   <ARButton
-    on:error={(event) => {}}
-    on:click={(event) => {}}
+    onerror={(event) => {}}
+    onclick={(event) => {}}
   />
 ```
 -->
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import XRButton from './XRButton.svelte'
+  import { defaultFeatures } from '../internal/defaultFeatures'
 
-  type $$Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'> & {
+  type Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'> & {
     sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined }
   }
+
+  let { children, ...props }: Props = $props()
 </script>
 
 <XRButton
   sessionInit={{
     domOverlay: typeof document !== 'undefined' ? { root: document.body } : undefined,
-    requiredFeatures: ['plane-detection'],
-    optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers', 'hit-test']
+    ...defaultFeatures
   }}
-  {...$$restProps}
+  {...props}
   mode="immersive-ar"
-  on:click
-  on:error
-/>
+>
+  {@render children?.()}
+</XRButton>

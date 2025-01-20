@@ -294,11 +294,11 @@ test('stress test', () => {
     }
   )
 
-  const physicsStage = scheduler.createStage('physics stage', {
+  const simulationStage = scheduler.createStage('physics stage', {
     before: 'default stage'
   })
 
-  physicsStage.createTask('physics', (delta) => {
+  simulationStage.createTask('physics', (delta) => {
     expect(i).toBe(1)
     i++
   })

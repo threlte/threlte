@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import { setContext } from 'svelte'
   import { createEventDispatcher } from 'svelte'
   import type { Writable } from 'svelte/store'
@@ -69,7 +68,7 @@
   export { _class as class }
 </script>
 
-<div class={c('text-sm', _class)}>
+<div class="text-sm {_class}">
   <DirectoryComponent
     {currentlySelectedFile}
     showDirectoryName={false}

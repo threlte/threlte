@@ -1,68 +1,62 @@
 ---
-{
-  order: 1.3,
-  category: '@threlte/extras',
-  sourcePath: 'packages/extras/src/lib/audio/PositionalAudio/PositionalAudio.svelte',
-  name: <PositionalAudio>,
-  type: 'component',
-  componentSignature:
-    {
-      extends:
+order: 6.3
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/audio/PositionalAudio/PositionalAudio.svelte'
+name: <PositionalAudio>
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'PositionalAudio',
+        url: 'https://threejs.org/docs/index.html#api/en/audio/PositionalAudio'
+      },
+    props:
+      [
         {
-          type: 'PositionalAudio',
-          url: 'https://threejs.org/docs/index.html#api/en/audio/PositionalAudio'
+          name: 'src',
+          type: 'string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream',
+          required: true
         },
-      props:
-        [
-          {
-            name: 'src',
-            type: 'string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream',
-            required: true
-          },
-          {
-            name: 'id',
-            type: 'string',
-            required: false,
-            default: 'default',
-            description: 'The id of the AudioListener this Audio will be attached to.'
-          },
-          { name: 'autoplay', type: 'boolean', required: false },
-          { name: 'loop', type: 'boolean', required: false },
-          { name: 'volume', type: 'number', required: false },
-          { name: 'playbackRate', type: 'number', required: false },
-          { name: 'detune', type: 'number', required: false },
-          {
-            name: 'directionalCone',
-            type: '{ coneInnerAngle: number, coneOuterAngle: number, coneOuterGain: number }',
-            required: false
-          },
-          { name: 'refDistance', type: 'number', required: false },
-          { name: 'rolloffFactor', type: 'number', required: false },
-          { name: 'distanceModel', type: 'string', required: false },
-          { name: 'maxDistance', type: 'number', required: false }
-        ],
-      events:
-        [
-          { name: 'load', payload: 'AudioBuffer', description: 'Fired when the audio has loaded.' },
-          {
-            name: 'progress',
-            payload: 'ProgressEvent<EventTarget>',
-            description: 'Fired when the audio is loading.'
-          },
-          {
-            name: 'error',
-            payload: 'ErrorEvent',
-            description: 'Fired when the audio fails to load.'
-          }
-        ],
-      bindings:
-        [
-          { name: play, type: '(delay?: number) => Promise<THREE.Audio>' },
-          { name: pause, type: '() => THREE.Audio' },
-          { name: stop, type: '() => THREE.Audio' }
-        ]
-    }
-}
+        {
+          name: 'id',
+          type: 'string',
+          required: false,
+          default: 'default',
+          description: 'The id of the AudioListener this Audio will be attached to.'
+        },
+        { name: 'autoplay', type: 'boolean', required: false },
+        { name: 'loop', type: 'boolean', required: false },
+        { name: 'volume', type: 'number', required: false },
+        { name: 'playbackRate', type: 'number', required: false },
+        { name: 'detune', type: 'number', required: false },
+        {
+          name: 'directionalCone',
+          type: '{ coneInnerAngle: number, coneOuterAngle: number, coneOuterGain: number }',
+          required: false
+        },
+        { name: 'refDistance', type: 'number', required: false },
+        { name: 'rolloffFactor', type: 'number', required: false },
+        { name: 'distanceModel', type: 'string', required: false },
+        { name: 'maxDistance', type: 'number', required: false }
+      ],
+    events:
+      [
+        { name: 'load', payload: 'AudioBuffer', description: 'Fired when the audio has loaded.' },
+        {
+          name: 'progress',
+          payload: 'ProgressEvent<EventTarget>',
+          description: 'Fired when the audio is loading.'
+        },
+        { name: 'error', payload: 'ErrorEvent', description: 'Fired when the audio fails to load.' }
+      ],
+    exports:
+      [
+        { name: play, type: '(delay?: number) => Promise<THREE.Audio>' },
+        { name: pause, type: '() => THREE.Audio' },
+        { name: stop, type: '() => THREE.Audio' }
+      ]
+  }
 ---
 
 Creates a positional audio entity.

@@ -1,35 +1,18 @@
 import { onDestroy, onMount } from 'svelte'
-import { createRawEventDispatcher } from '../../../lib/createRawEventDispatcher'
+import type { CreateEvent, MaybeInstance } from '../types'
 
-export const useCreateEvent = () => {
-  const dispatchRaw = createRawEventDispatcher<{
-    create: {
-      ref: any
-      cleanup: (callback: () => void) => void
-    }
-  }>()
+export const useCreateEvent = <T>(oncreate?: CreateEvent<T>) => {
+  let cleanupFunction: (() => void) | void
 
-  const cleanupFunctions: (() => void)[] = []
-
-  let ref: any | undefined = undefined
+  let ref: MaybeInstance<T> | undefined = undefined
   let mounted = false
 
   const dispatchCreateEvent = () => {
-    // call every cleanup function
-    cleanupFunctions.forEach((cleanup) => cleanup())
-
-    // clear the cleanup functions array
-    cleanupFunctions.length = 0
-
-    const cleanup = (callback: () => void) => {
-      // add cleanup function to array
-      cleanupFunctions.push(callback)
-    }
-
-    dispatchRaw('create', { ref, cleanup })
+    cleanupFunction?.()
+    cleanupFunction = oncreate?.(ref!)
   }
 
-  const updateRef = (newRef: any) => {
+  const updateRef = (newRef: MaybeInstance<T>) => {
     ref = newRef
     if (!mounted) return
     dispatchCreateEvent()
@@ -40,10 +23,7 @@ export const useCreateEvent = () => {
     mounted = true
   })
 
-  onDestroy(() => {
-    // call every cleanup function
-    cleanupFunctions.forEach((cleanup) => cleanup())
-  })
+  onDestroy(() => cleanupFunction?.())
 
   return {
     updateRef

@@ -5,11 +5,9 @@ sourcePath: 'packages/core/src/lib/hooks/useTask.ts'
 order: 5.21
 ---
 
-
 <Tip type="info">
-  Tasks are part of Threlte's *Task Scheduling System*.
-  For details on how to use stages and tasks, see the [scheduling
-  tasks](/docs/learn/basics/scheduling-tasks) page.
+  Tasks are part of Threlte's *Task Scheduling System*. For details on how to use stages and tasks,
+  see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
 </Tip>
 
 The hook `useTask` is used to create a
@@ -30,6 +28,7 @@ const { start, stop, started, task } = useTask((delta) => {
 ```
 
 It returns an object with the following properties:
+
 - `start`: A function that starts the task. It will be executed on the next
   frame. Note that by default a task is started automatically.
 - `stop`: A function that stops the task. It will not be executed on the next
@@ -41,12 +40,17 @@ It returns an object with the following properties:
 
 ## Creating a Keyed Task
 
-You can *key* a task by passing it as the first argument to `useTask`. This
+You can _key_ a task by passing it as the first argument to `useTask`. This
 makes referencing this task easier across your app. The key can be any `string`
 or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
-const { start, stop, started, task: someTask } = useTask('some-task', (delta) => {
+const {
+  start,
+  stop,
+  started,
+  task: someTask
+} = useTask('some-task', (delta) => {
   // This function will be executed on every frame
 })
 ```
@@ -59,10 +63,13 @@ added to [Threlte's
 `mainStage`](/docs/learn/basics/scheduling-tasks#default-stages).
 
 ```ts
-useTask((delta) => {
-  // This function will be executed on every frame as a
-  // task in the stage `afterRenderStage`.
-}, { stage: afterRenderStage })
+useTask(
+  (delta) => {
+    // This function will be executed on every frame as a
+    // task in the stage `afterRenderStage`.
+  },
+  { stage: afterRenderStage }
+)
 ```
 
 ## Task Dependencies
@@ -83,12 +90,14 @@ This means that you can declare a dependency (with `before` or `after`) on a
 task that is created later in your code. The declared dependencies will be taken
 into account when they are created later on.
 
-<Tip type="warning"> If a task is passed by reference to the `before` or `after`
-  option, the task created by `useTask` will automatically be added to the same
-  stage as the task it depends on. If you pass a key instead and the task you
-  want to reference is **not** in [Threlte's
-  `mainStage`](/docs/learn/basics/scheduling-tasks#default-stages), you will
-  also need to pass the stage, either by value or key. </Tip>
+<Tip type="warning">
+  {' '}
+  If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
+  will automatically be added to the same stage as the task it depends on. If you pass a key instead
+  and the task you want to reference is **not** in [Threlte's
+  `mainStage`](/docs/learn/basics/scheduling-tasks#default-stages), you will also need to pass the
+  stage, either by value or key.{' '}
+</Tip>
 
 ## Examples
 
@@ -99,9 +108,12 @@ automatically by passing `autoStart: false` as an option to `useTask`. You can
 then start and stop the task manually using the `start` and `stop` functions:
 
 ```ts
-const { start, stop, started } = useTask((delta) => {
-  // do something
-}, { autoStart: false })
+const { start, stop, started } = useTask(
+  (delta) => {
+    // do something
+  },
+  { autoStart: false }
+)
 
 // start the task
 start()
@@ -110,7 +122,7 @@ start()
 stop()
 
 // check if the task is started
-$: console.log($started)
+$inspect($started)
 ```
 
 ### `useTask` and On-Demand Rendering
@@ -126,13 +138,16 @@ invalidate the frame manually using the `invalidate` function returned by
 ```ts
 const { invalidate } = useThrelte()
 
-const { start, stop, started } = useTask((delta) => {
-  // do something
-  // invalidate the current frame
-  if (someCondition) {
-    invalidate()
-  }
-}, { autoInvalidate: false })
+const { start, stop, started } = useTask(
+  (delta) => {
+    // do something
+    // invalidate the current frame
+    if (someCondition) {
+      invalidate()
+    }
+  },
+  { autoInvalidate: false }
+)
 ```
 
 ### Update Objects
@@ -182,9 +197,12 @@ scene.
     return () => autoRender.set(before)
   })
 
-  useTask((delta) => {
-    // render your scene here
-  }, { stage: renderStage, autoInvalidate: false })
+  useTask(
+    (delta) => {
+      // render your scene here
+    },
+    { stage: renderStage, autoInvalidate: false }
+  )
 </script>
 ```
 
@@ -195,8 +213,8 @@ effects using the library
 [`postprocessing`](https://github.com/pmndrs/postprocessing).
 
 1. Create a `<Renderer>` component. Be sure to set the option `autoInvalidate`
-of `useTask` to `false` to prevent Threlte from automatically invalidating the
-render stage.
+   of `useTask` to `false` to prevent Threlte from automatically invalidating the
+   render stage.
 
 ```svelte title="Renderer.svelte"
 <script>
@@ -245,8 +263,12 @@ render stage.
   }
 
   // We need to set up the passes according to the camera in use
-  $: setupEffectComposer($camera)
-  $: composer.setSize($size.width, $size.height)
+  $effect(() => {
+    setupEffectComposer($camera)
+  })
+  $effect(() => {
+    composer.setSize($size.width, $size.height)
+  })
 
   const { renderStage, autoRender } = useThrelte()
 
@@ -258,14 +280,17 @@ render stage.
     return () => autoRender.set(before)
   })
 
-  useTask((delta) => {
-    composer.render(delta)
-  }, { stage: renderStage, autoInvalidate: false })
+  useTask(
+    (delta) => {
+      composer.render(delta)
+    },
+    { stage: renderStage, autoInvalidate: false }
+  )
 </script>
 ```
 
 2. Use the `<Renderer>` component in your app. To disable automatic rendering of
-your scene, Set `autoRender` to `false` on the `<Canvas>` component.
+   your scene, Set `autoRender` to `false` on the `<Canvas>` component.
 
 ```svelte title="App.svelte"
 <script>

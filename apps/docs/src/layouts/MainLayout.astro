@@ -11,14 +11,16 @@ export interface Props {
 }
 
 const title = Astro.props.title
+
+const isBlog = Astro.url.pathname.startsWith('/blog')
 ---
 
-<AppLayout title={title}>
+<AppLayout {title}>
   <!-- Desktop Nav -->
-  <div class="fixed top-0 left-0 z-[5] h-[70px] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
+  <div class="fixed left-0 top-0 z-[5] h-[70px] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
     <!-- bottom gradient -->
     <div
-      class="pointer-events-none absolute top-full left-0 h-[10svh] w-full bg-gradient-to-b from-[#0A0F19] to-transparent"
+      class="pointer-events-none absolute left-0 top-full h-[10svh] w-full bg-gradient-to-b from-[#0A0F19] to-transparent"
     >
     </div>
   </div>
@@ -47,15 +49,16 @@ const title = Astro.props.title
         >
         <a
           class="hover:text-white"
-          href="/services"
-          >Services</a
+          class:list={[isBlog && 'text-orange']}
+          href="/blog"
+          >Blog</a
         >
       </nav>
     </div>
 
     <!-- Header Right -->
     <div class="flex flex-row gap-5">
-      <Socials/>
+      <Socials />
     </div>
   </header>
 
@@ -68,7 +71,7 @@ const title = Astro.props.title
       width={200}
       class="h-[37px] w-auto"
     />
-    <Socials slot="after"/>
+    <Socials slot="after" />
   </MobileMainNav>
 
   <slot name="external" />
@@ -77,5 +80,5 @@ const title = Astro.props.title
     <slot />
   </main>
 
-  <Footer class="px-6 mx-auto py-12 border-t border-white/20" />
+  <Footer class="mx-auto border-t border-white/20 px-6 py-12" />
 </AppLayout>

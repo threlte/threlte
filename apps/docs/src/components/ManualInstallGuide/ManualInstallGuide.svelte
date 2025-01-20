@@ -19,6 +19,8 @@
     return args.some(Boolean) ? divider : ''
   }
 
+  let tag = ''
+
   $: coreDivider = useDivider(
     installExtras,
     useGltf,
@@ -35,12 +37,13 @@
   $: flexDivider = useDivider(installTypes)
 
   $: installCode = [
-    `npm install three @threlte/core${coreDivider}`,
-    (installExtras || useGltf || installTheatre) && `${space}@threlte/extras${extrasDivider}`,
-    installRapier && `${space}@threlte/rapier @dimforge/rapier3d-compat${rapierDivider}`,
-    installTheatre && `${space}@threlte/theatre @theatre/core @theatre/studio${theatreDivider}`,
-    installXR && `${space}@threlte/xr${xrDivider}`,
-    installFlex && `${space}@threlte/flex${flexDivider}`,
+    `npm install three @threlte/core${tag}${coreDivider}`,
+    (installExtras || useGltf || installTheatre) && `${space}@threlte/extras${tag}${extrasDivider}`,
+    installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
+    installTheatre &&
+      `${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
+    installXR && `${space}@threlte/xr${tag}${xrDivider}`,
+    installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)

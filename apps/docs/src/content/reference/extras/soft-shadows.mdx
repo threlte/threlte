@@ -1,38 +1,36 @@
 ---
-{
-  order: 7.19,
-  'category': '@threlte/extras',
-  sourcePath: 'packages/extras/src/lib/components/SoftShadows/SoftShadows.svelte',
-  'name': '<SoftShadows>',
-  'type': 'component',
-  'componentSignature':
-    {
-      props:
-        [
-          {
-            name: 'size',
-            type: 'number',
-            default: '25',
-            description: 'Size of the light source – the larger the softer the light',
-            required: false
-          },
-          {
-            name: 'focus',
-            type: 'number',
-            default: '0',
-            description: 'Depth focus, use it to shift the focal point (where the shadow is the sharpest)',
-            required: false
-          },
-          {
-            name: 'samples',
-            type: 'number',
-            default: '10',
-            description: 'Number of samples (more samples less noise but more expensive)',
-            required: false
-          }
-        ]
-    }
-}
+order: 4.19
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/SoftShadows/SoftShadows.svelte'
+name: '<SoftShadows>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'size',
+          type: 'number',
+          default: '25',
+          description: 'Size of the light source – the larger the softer the light',
+          required: false
+        },
+        {
+          name: 'focus',
+          type: 'number',
+          default: '0',
+          description: 'Depth focus, use it to shift the focal point (where the shadow is the sharpest)',
+          required: false
+        },
+        {
+          name: 'samples',
+          type: 'number',
+          default: '10',
+          description: 'Number of samples (more samples less noise but more expensive)',
+          required: false
+        }
+      ]
+  }
 ---
 
 This component is a port of the component [`<SoftShadows>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/softShadows.tsx).

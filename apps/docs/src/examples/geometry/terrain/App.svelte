@@ -1,30 +1,37 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import { World } from '@threlte/rapier'
   import Scene from './Scene.svelte'
-  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
-  import { showCollider, autoRotate } from './state'
+  import { Canvas } from '@threlte/core'
+  import { Checkbox, Pane, Slider } from 'svelte-tweakpane-ui'
+
+  let autoRotate = $state(true)
+  let flatness = $state(4)
+
+  let scene = $state()
 </script>
 
 <Pane
-  title=""
+  title="3D noise terrain"
   position="fixed"
 >
   <Checkbox
-    label="Show Collider"
-    bind:value={$showCollider}
+    label="Auto-rotate Camera"
+    bind:value={autoRotate}
   />
-  <Checkbox
-    label="AutoRotate"
-    bind:value={$autoRotate}
+  <Slider
+    bind:value={flatness}
+    label="flatness"
+    min={1}
+    max={10}
+    step={1}
   />
 </Pane>
 
 <div>
   <Canvas>
-    <World>
-      <Scene />
-    </World>
+    <Scene
+      {autoRotate}
+      {flatness}
+    />
   </Canvas>
 </div>
 

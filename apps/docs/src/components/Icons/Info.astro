@@ -1,13 +1,11 @@
 ---
-import { c } from '$lib/classes'
-
 interface Props {
   class?: string
 }
 ---
 
 <svg
-  class={c(Astro.props.class ?? '')}
+  class:list={[Astro.props.class ?? '']}
   width="32"
   height="32"
   viewBox="0 0 32 32"

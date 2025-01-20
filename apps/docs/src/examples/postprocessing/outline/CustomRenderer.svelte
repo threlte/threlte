@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { Mesh } from 'three'
   import { useTask, useThrelte } from '@threlte/core'
   import {
     BlendFunction,
@@ -7,41 +8,63 @@
     OutlineEffect,
     RenderPass
   } from 'postprocessing'
-  import { onMount } from 'svelte'
 
-  export let selectedMesh: THREE.Mesh
+  type Props = {
+    mesh: Mesh
+  }
+
+  let { mesh }: Props = $props()
 
   const { scene, renderer, camera, size, autoRender, renderStage } = useThrelte()
 
   const composer = new EffectComposer(renderer)
 
-  const setupEffectComposer = (camera: THREE.Camera, selectedMesh: THREE.Mesh) => {
-    composer.removeAllPasses()
-    composer.addPass(new RenderPass(scene, camera))
+  const renderPass = new RenderPass(scene)
+  composer.addPass(renderPass)
 
-    const outlineEffect = new OutlineEffect(scene, camera, {
-      blendFunction: BlendFunction.ALPHA,
-      edgeStrength: 100,
-      pulseSpeed: 0.0,
-      visibleEdgeColor: 0xffffff,
-      hiddenEdgeColor: 0x9900ff,
-      xRay: true,
-      blur: true
-    })
-    if (selectedMesh !== undefined) {
-      outlineEffect.selection.add(selectedMesh)
-    }
-    composer.addPass(new EffectPass(camera, outlineEffect))
+  $effect(() => {
+    composer.setSize($size.width, $size.height)
+  })
+
+  export const outlineEffectOptions: ConstructorParameters<typeof OutlineEffect>[2] = {
+    blendFunction: BlendFunction.ALPHA,
+    edgeStrength: 100,
+    pulseSpeed: 0.0,
+    xRay: true,
+    blur: true
   }
 
-  $: setupEffectComposer($camera, selectedMesh)
-  $: composer.setSize($size.width, $size.height)
+  const outlineEffect = new OutlineEffect(scene, undefined, outlineEffectOptions)
+  $effect(() => {
+    outlineEffect.selection.add(mesh)
+    return () => {
+      outlineEffect.selection.clear()
+    }
+  })
 
-  onMount(() => {
-    let before = autoRender.current
+  const outlineEffectPass = new EffectPass(undefined, outlineEffect)
+  composer.addPass(outlineEffectPass)
+
+  $effect(() => {
+    renderPass.mainCamera = $camera
+    outlineEffect.mainCamera = $camera
+    outlineEffectPass.mainCamera = $camera
+  })
+
+  $effect(() => {
+    return () => {
+      composer.removeAllPasses()
+      outlineEffectPass.dispose()
+      renderPass.dispose()
+      composer.dispose()
+    }
+  })
+
+  $effect(() => {
+    const last = autoRender.current
     autoRender.set(false)
     return () => {
-      autoRender.set(before)
+      autoRender.set(last)
     }
   })
 

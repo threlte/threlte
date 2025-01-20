@@ -1,9 +1,8 @@
-import { getContext, onDestroy } from 'svelte'
+import { onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
+import { useScheduler } from '../context/fragments/scheduler.svelte'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling'
-import { browser } from '../lib/browser'
-import type { ThrelteInternalContext } from '../lib/contexts'
-import { useThrelte } from './useThrelte'
+import { browser } from '../utilities'
 
 export type ThrelteUseTask = {
   task: Task
@@ -40,7 +39,7 @@ export type ThrelteUseTaskOptions = {
 }
 
 /**
- * Adds a handler to threltes unified render loop.∏
+ * Adds a handler to threltes unified render loop.
  *
  * `start` and `stop` functions are returned and the options allow setting the
  * handler to not start automatically.
@@ -48,7 +47,7 @@ export type ThrelteUseTaskOptions = {
  * Use the options `after` and `before` to control the order of execution. Add
  * the task to a specific stage with the option `stage`.
  *
- * @param {(ctx: ThrelteContext, delta: number) => void} fn callback function
+ * @param {(delta: number) => void} fn callback function
  * @param {ThrelteUseTaskOptions} options options
  * @returns {ThrelteUseTask}
  */
@@ -88,16 +87,16 @@ export function useTask(
     opts = fnOrOptions as ThrelteUseTaskOptions | undefined
   }
 
-  const ctx = useThrelte()
+  const schedulerCtx = useScheduler()
 
-  let stage: Stage = ctx.mainStage
+  let stage: Stage = schedulerCtx.mainStage
 
   if (opts) {
     if (opts.stage) {
       if (DAG.isValue(opts.stage)) {
         stage = opts.stage
       } else {
-        const maybeStage = ctx.scheduler.getStage(opts.stage)
+        const maybeStage = schedulerCtx.scheduler.getStage(opts.stage)
         if (!maybeStage) {
           throw new Error(`No stage found with key ${opts.stage.toString()}`)
         }
@@ -130,8 +129,6 @@ export function useTask(
     }
   }
 
-  const { autoInvalidations } = getContext<ThrelteInternalContext>('threlte-internal-context')
-
   const started = writable(false)
 
   const task = stage.createTask(key, fn, opts)
@@ -139,15 +136,15 @@ export function useTask(
   const start = () => {
     started.set(true)
     if (opts?.autoInvalidate ?? true) {
-      autoInvalidations.add(fn)
+      schedulerCtx.autoInvalidations.add(fn)
     }
     task.start()
   }
 
   const stop = () => {
-    started.set(true)
+    started.set(false)
     if (opts?.autoInvalidate ?? true) {
-      autoInvalidations.delete(fn)
+      schedulerCtx.autoInvalidations.delete(fn)
     }
     task.stop()
   }
@@ -159,7 +156,7 @@ export function useTask(
   }
 
   onDestroy(() => {
-    if (!stage) return
+    stop()
     stage.removeTask(key)
   })
 

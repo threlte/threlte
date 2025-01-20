@@ -1,30 +1,28 @@
 ---
-{
-  order: 7.13,
-  category: '@threlte/extras',
-  name: <ContactShadows>,
-  sourcePath: 'packages/extras/src/lib/components/ContactShadows/ContactShadows.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-      'props':
-        [
-          { name: 'opacity', type: 'number', required: false },
-          { name: 'width', type: 'number', required: false },
-          { name: 'height', type: 'number', required: false },
-          { name: 'blur', type: 'number', required: false },
-          { name: 'far', type: 'number', required: false },
-          { name: 'smooth', type: 'boolean', required: false },
-          { name: 'resolution', type: 'number', required: false },
-          { name: 'frames', type: 'number', required: false },
-          { name: 'scale', type: 'number | [x: number, y: number]', required: false },
-          { name: 'color', type: 'THREE.ColorRepresentation', required: false },
-          { name: 'depthWrite', type: 'boolean', required: false }
-        ],
-      bindings: [{ name: 'refresh', type: '() => void' }]
-    }
-}
+order: 4.13
+category: '@threlte/extras'
+name: <ContactShadows>
+sourcePath: 'packages/extras/src/lib/components/ContactShadows/ContactShadows.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: 'opacity', type: 'number', required: false },
+        { name: 'width', type: 'number', required: false },
+        { name: 'height', type: 'number', required: false },
+        { name: 'blur', type: 'number', required: false },
+        { name: 'far', type: 'number', required: false },
+        { name: 'smooth', type: 'boolean', required: false },
+        { name: 'resolution', type: 'number', required: false },
+        { name: 'frames', type: 'number', required: false },
+        { name: 'scale', type: 'number | [x: number, y: number]', required: false },
+        { name: 'color', type: 'THREE.ColorRepresentation', required: false },
+        { name: 'depthWrite', type: 'boolean', required: false }
+      ],
+    exports: [{ name: 'refresh', type: '() => void' }]
+  }
 ---
 
 This component is a port of [drei's `<ContactShadows>` component](https://github.com/pmndrs/drei#contactshadows).

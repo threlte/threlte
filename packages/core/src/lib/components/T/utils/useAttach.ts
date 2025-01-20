@@ -1,73 +1,95 @@
 import { onDestroy } from 'svelte'
-import { useThrelte } from '../../../hooks/useThrelte'
+import { writable } from 'svelte/store'
+import { useThrelte } from '../../../context/compounds/useThrelte'
+import { createParentContext, useParent } from '../../../context/fragments/parent'
+import {
+  createParentObject3DContext,
+  useParentObject3D
+} from '../../../context/fragments/parentObject3D'
+import { isInstanceOf, resolvePropertyPath, watch } from '../../../utilities'
 import type { BaseProps, MaybeInstance } from '../types'
-import { resolvePropertyPath } from './resolvePropertyPath'
 
-const initialValueBeforeAttach = Symbol('initialValueBeforeAttach')
+const isObject = (ref: unknown): ref is Record<string, any> => {
+  return typeof ref === 'object' && ref !== null
+}
 
-export const useAttach = <T>() => {
+export const useAttach = <T extends MaybeInstance<any>>() => {
   const { invalidate } = useThrelte()
 
-  let isAttached = false
-  let valueBeforeAttach: any = initialValueBeforeAttach
-  let detachFn: (() => void) | undefined | void
-  // the target that the object is attached to
-  let attachedTo: any
-  // the property name that the object is attached to
-  let attachedKey: string | undefined
+  let detachFn: (() => void) | void
 
-  const update = (instance: MaybeInstance<T>, parent: any, attach?: BaseProps<T>['attach']) => {
-    detach()
+  const attach = writable<BaseProps<T>['attach']>()
 
-    // maybe assign 'material' or 'geometry' automatically if not specified
-    if (!attach) {
-      const i = instance as any
-      const isMaterial = i?.isMaterial || false
-      if (isMaterial) {
-        attach = 'material'
-      }
-      const isGeometry = i?.isBufferGeometry || i?.isGeometry || false
-      if (isGeometry) {
-        attach = 'geometry'
-      }
+  const parent = useParent()
+  const parentObject3D = useParentObject3D()
+
+  const currentRef = createParentContext<T>()
+  const object3D = createParentObject3DContext()
+
+  watch([attach, currentRef, parent, parentObject3D], ([attach, ref, parent, parentObject3D]) => {
+    // Always detach first
+    detachFn?.()
+    detachFn = undefined
+
+    if (!ref) {
+      invalidate()
+      return
     }
 
-    if (!attach) return
-
-    if (typeof attach === 'function') {
-      detachFn = attach(parent, instance)
+    if (attach !== undefined) {
+      // Manual attach
+      if (attach) {
+        if (typeof attach === 'function') {
+          detachFn = attach({ ref: ref as T, parent, parentObject3D })
+        } else if (isInstanceOf(attach, 'Object3D') && isInstanceOf(ref, 'Object3D')) {
+          detachFn = () => attach?.remove(ref)
+          // Add to parent Object3D
+          attach?.add(ref)
+        } else if (typeof attach === 'string') {
+          const { target, key } = resolvePropertyPath(parent, attach)
+          const valueBeforeAttach = target[key]
+          detachFn = () => (target[key] = valueBeforeAttach)
+          target[key] = ref
+        }
+      }
     } else {
-      const { target, key } = resolvePropertyPath(parent, attach)
-      valueBeforeAttach = target[key]
-      target[key] = instance
-      attachedTo = target
-      attachedKey = key
+      // Auto attach
+      if (isInstanceOf(ref, 'Object3D')) {
+        // Build detach function
+        detachFn = () => parentObject3D?.remove(ref)
+        // Add to parent Object3D
+        parentObject3D?.add(ref)
+      } else if (isObject(parent)) {
+        // Auto-attach to parent material or geometry
+        if (isInstanceOf(ref, 'Material')) {
+          parent['material'] = ref
+        } else if (isInstanceOf(ref, 'BufferGeometry')) {
+          parent['geometry'] = ref
+        }
+      }
     }
-    isAttached = true
+
     invalidate()
+  })
+
+  const updateAttach = (a: BaseProps<T>['attach']) => {
+    attach.set(a)
   }
 
-  const detach = () => {
-    if (!isAttached) return
-
-    if (detachFn) {
-      detachFn()
-      detachFn = undefined
-    } else if (attachedTo && attachedKey && valueBeforeAttach !== initialValueBeforeAttach) {
-      attachedTo[attachedKey] = valueBeforeAttach
-      valueBeforeAttach = initialValueBeforeAttach
-      attachedTo = undefined
-      attachedKey = undefined
+  const updateRef = (value: T) => {
+    currentRef.set(value)
+    if (isInstanceOf(value, 'Object3D')) {
+      object3D.set(value)
     }
-    isAttached = false
-    invalidate()
   }
 
   onDestroy(() => {
-    detach()
+    detachFn?.()
+    invalidate()
   })
 
   return {
-    update
+    updateRef,
+    updateAttach
   }
 }

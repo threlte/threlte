@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, createRawEventDispatcher, currentWritable, useTask } from '@threlte/core'
+  import { T, currentWritable, useTask } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Box3, Group, Vector3 } from 'three'
   import { Direction } from 'yoga-layout'
@@ -10,28 +10,27 @@
   import { applyNodeProps, type Axis, type NodeProps } from '../lib/props'
   import { propsChanged } from '../lib/propsChanged'
   import { createNodeContext } from '../nodes/context'
-  import type { InnerFlexEvents, InnerFlexProps, InnerFlexSlots } from './InnerFlex.svelte'
   import { createFlexContext } from './context'
+  import type { InnerFlexProps } from './types'
 
-  type $$Props = InnerFlexProps
-  type $$Events = InnerFlexEvents
-  type $$Slots = InnerFlexSlots
+  let {
+    yoga,
+    width = 1,
+    height = 1,
+    plane = 'xy',
+    direction = 'LTR',
+    scaleFactor = 1000,
+    classParser,
+    class: _class = '',
+    reflowStage,
+    ref = $bindable(),
+    onreflow,
+    children,
+    ...props
+  }: InnerFlexProps = $props()
 
-  export let yoga: Required<$$Props>['yoga']
-  export let width: Required<$$Props>['width'] = 1
-  export let height: Required<$$Props>['height'] = 1
-  export let plane: Required<$$Props>['plane'] = 'xy'
-  export let direction: Required<$$Props>['direction'] = 'LTR'
-  export let scaleFactor: Required<$$Props>['scaleFactor'] = 1000
-  export let classParser: $$Props['classParser'] = undefined
-  let _class: Required<$$Props>['class'] = ''
-  export { _class as class }
-  export let reflowStage: $$Props['reflowStage'] = undefined
-
-  const dispatch = createRawEventDispatcher<$$Events>()
-
-  const rootGroup = new Group()
-  rootGroup.userData.isNode = true
+  ref = new Group()
+  ref.userData.isNode = true
 
   const boundingBox = new Box3()
   const vec3 = new Vector3()
@@ -42,7 +41,7 @@
   const { width: computedWidth, height: computedHeight } = createUseDimensionsContext()
 
   /**
-   * Reflowing inside useFrame automatically batches reflows to 1 per frame.
+   * Reflowing inside useTask automatically batches reflows to 1 per frame.
    */
   const { start: reflow, stop } = useTask(
     Symbol('threlte-flex-reflow'),
@@ -61,10 +60,10 @@
           node.setHeight(scaledHeight)
         } else if (node.getChildCount() === 0) {
           // No size specified, calculate size
-          if (rootGroup) {
-            getOrientedBoundingBoxSize(group, rootGroup, boundingBox, vec3)
+          if (ref) {
+            getOrientedBoundingBoxSize(group, ref, boundingBox, vec3)
           } else {
-            // rootGroup ref is missing for some reason, let's just use usual bounding box
+            // ref is missing for some reason, let's just use usual bounding box
             boundingBox.setFromObject(group).getSize(vec3)
           }
 
@@ -103,7 +102,7 @@
       computedWidth.set((maxX - minX) / scaleFactor)
       computedHeight.set((maxY - minY) / scaleFactor)
 
-      dispatch('reflow', {
+      onreflow?.({
         width: computedWidth.current,
         height: computedHeight.current
       })
@@ -143,7 +142,7 @@
     mainAxis: currentWritable(plane[0] as Axis),
     crossAxis: currentWritable(plane[1] as Axis),
     depthAxis: currentWritable(getDepthAxis(plane)),
-    rootGroup: rootGroup,
+    rootGroup: ref,
     reflow,
     classParser
   })
@@ -153,28 +152,56 @@
 
   const { mainAxis, crossAxis, depthAxis } = flexContext
 
-  $: rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
-  // prettier-ignore
-  flexContext.updateNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps, true)
-  // prettier-ignore
-  $: flexContext.updateNodeProps(rootNode, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps)
+  $effect.pre(() => {
+    rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
+  })
 
-  $: flexContext.rootWidth.set(width), flexContext.reflow()
-  $: flexContext.rootHeight.set(height), flexContext.reflow()
-  $: flexContext.mainAxis.set(plane[0] as Axis), flexContext.reflow()
-  $: flexContext.crossAxis.set(plane[1] as Axis), flexContext.reflow()
-  $: flexContext.depthAxis.set(getDepthAxis(plane)), flexContext.reflow()
-  $: flexContext.scaleFactor.set(scaleFactor), flexContext.reflow()
+  flexContext.updateNodeProps(
+    rootNode,
+    { ...classParser?.(_class, {}), ...props } as NodeProps,
+    true
+  )
+
+  $effect.pre(() => {
+    flexContext.updateNodeProps(rootNode, {
+      ...classParser?.(_class, {}),
+      ...props
+    } as NodeProps)
+  })
+  $effect.pre(() => {
+    flexContext.rootWidth.set(width)
+    flexContext.reflow()
+  })
+  $effect.pre(() => {
+    flexContext.rootHeight.set(height)
+    flexContext.reflow()
+  })
+  $effect.pre(() => {
+    flexContext.mainAxis.set(plane[0] as Axis)
+    flexContext.reflow()
+  })
+  $effect.pre(() => {
+    flexContext.crossAxis.set(plane[1] as Axis)
+    flexContext.reflow()
+  })
+  $effect.pre(() => {
+    flexContext.depthAxis.set(getDepthAxis(plane))
+    flexContext.reflow()
+  })
+  $effect.pre(() => {
+    flexContext.scaleFactor.set(scaleFactor)
+    flexContext.reflow()
+  })
 
   onDestroy(() => {
     rootNode.free()
   })
 </script>
 
-<T is={rootGroup}>
-  <slot
-    {reflow}
-    width={$computedWidth}
-    height={$computedHeight}
-  />
+<T is={ref}>
+  {@render children?.({
+    reflow,
+    width: $computedWidth,
+    height: $computedHeight
+  })}
 </T>

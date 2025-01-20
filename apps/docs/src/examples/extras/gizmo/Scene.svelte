@@ -2,7 +2,11 @@
   import { T } from '@threlte/core'
   import { Grid } from '@threlte/extras'
 
-  export let center: [number, number, number]
+  type Props = {
+    center: [number, number, number]
+  }
+
+  let { center }: Props = $props()
 
   const red = [1, 0, 0]
   const green = [0, 1, 0]
@@ -50,8 +54,8 @@
   <T.BoxGeometry>
     <T.BufferAttribute
       args={[colors, 3]}
-      attach={(parent, self) => {
-        parent.setAttribute('color', self)
+      attach={({ parent, ref }) => {
+        parent.setAttribute('color', ref)
       }}
     />
   </T.BoxGeometry>

@@ -61,7 +61,7 @@ Let's add an event listener that's called when the camera is moved:
   position={[5, 5, 5]}
 >
   <OrbitControls
-    on:change={(e) => {
+    onchange={(e) => {
       console.log(e)
     }}
   />
@@ -95,7 +95,7 @@ extend our example from above and implement `interactivity`:
 </T.PerspectiveCamera>
 
 <T.Mesh
-  on:click={() => {
+  onclick={() => {
     console.log('clicked')
   }}
 >

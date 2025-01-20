@@ -4,24 +4,25 @@
 
 ```svelte
   <VRButton
-    on:error={(event) => {}}
-    on:click={(event) => {}}
+    onerror={(event) => {}}
+    onclick={(event) => {}}
   />
 ```
 -->
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import XRButton from './XRButton.svelte'
+  import { defaultFeatures } from '../internal/defaultFeatures'
 
-  type $$Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
+  type Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
+
+  let { ...props }: Props = $props()
 </script>
 
 <XRButton
   sessionInit={{
-    optionalFeatures: ['local-floor', 'bounded-floor', 'hand-tracking', 'layers']
+    ...defaultFeatures
   }}
-  {...$$restProps}
+  {...props}
   mode="immersive-vr"
-  on:click
-  on:error
 />

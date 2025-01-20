@@ -1,50 +1,34 @@
 <script lang="ts">
-  import { InstancedSpriteMesh, PLAY_MODE } from '@threejs-kit/instanced-sprite-mesh'
-  import { T, useTask, useThrelte, watch } from '@threlte/core'
+  import { InstancedSpriteMesh } from '@threejs-kit/instanced-sprite-mesh'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import {
     DoubleSide,
     Matrix4,
-    Mesh,
     MeshBasicMaterial,
     type Vector2Tuple,
     type Vector3Tuple
   } from 'three'
-
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import type {
-    InstancedSpriteProps,
-    InstancedSpriteSlots,
-    InstancedSpriteUserCtx
-  } from './InstancedSprite.svelte'
+  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types'
   import SpriteInstance from './SpriteInstance.svelte'
 
-  type $$Props = Required<InstancedSpriteProps>
-
-  type $$Slots = InstancedSpriteSlots
-
-  const g = new Mesh()
-  g.material
-
-  export let autoUpdate: $$Props['autoUpdate'] = true
-  export let baseMaterial: $$Props['baseMaterial'] = MeshBasicMaterial
-  export let fps: $$Props['fps'] = 15
-  export let billboarding: $$Props['billboarding']
-  export let playmode: $$Props['playmode'] = 'FORWARD'
-  export let count: $$Props['count'] = 1000
-  export let alphaTest: $$Props['alphaTest'] = 0.1
-  export let transparent: $$Props['transparent'] = true
-  export let hueShift:
-    | {
-        h: number
-        s: number
-        v: number
-      }
-    | undefined = undefined
-
-  export let randomPlaybackOffset: $$Props['randomPlaybackOffset'] = false
-
-  export let spritesheet: $$Props['spritesheet']
+  let {
+    autoUpdate = true,
+    baseMaterial = MeshBasicMaterial,
+    fps = 15,
+    billboarding,
+    playmode = 'FORWARD',
+    count = 1000,
+    alphaTest = 0.1,
+    transparent = true,
+    hueShift,
+    randomPlaybackOffset = false,
+    spritesheet,
+    ref = $bindable(),
+    children,
+    ...props
+  }: InstancedSpriteProps = $props()
 
   const spriteBaseMaterial = new baseMaterial({
     transparent: transparent,
@@ -55,64 +39,66 @@
 
   const { renderer } = useThrelte()
 
-  export let ref = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
+  const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
+  ref = mesh
 
   const animationMap = writable<Map<string, number>>(new Map())
 
-  $: {
+  $effect.pre(() => {
     if (spritesheet) {
-      ref.spritesheet = spritesheet.spritesheet
-      animationMap.set(ref.animationMap as any)
-      ref.material.map = spritesheet.texture
-      ref.material.needsUpdate = true
+      mesh.spritesheet = spritesheet.spritesheet
+      animationMap.set(mesh.animationMap as any)
+      mesh.material.map = spritesheet.texture
+      mesh.material.needsUpdate = true
     }
-  }
+  })
 
-  $: ref.material.alphaTest = alphaTest
-  $: ref.material.transparent = transparent
-  $: ref.fps = fps
-  $: ref.hueShift.setGlobal(hueShift)
-
+  $effect.pre(() => {
+    mesh.material.alphaTest = alphaTest
+  })
+  $effect.pre(() => {
+    mesh.material.transparent = transparent
+  })
+  $effect.pre(() => {
+    mesh.fps = fps
+  })
+  $effect.pre(() => mesh.hueShift.setGlobal(hueShift))
   // BILLBOARDING
-  const billboardingStore = writable<boolean | undefined>(undefined)
-  $: billboardingStore.set(billboarding)
-  watch([billboardingStore], () => {
-    if ($billboardingStore === undefined) {
-      ref.billboarding.unsetAll()
+  $effect.pre(() => {
+    if (billboarding === undefined) {
+      mesh.billboarding.unsetAll()
       return
     } else {
-      ref.billboarding.setAll($billboardingStore)
+      mesh.billboarding.setAll(billboarding)
     }
   })
 
   // PLAYMODE
-  const playmodeStore = writable<keyof typeof PLAY_MODE | undefined>(undefined)
-  $: playmodeStore.set(playmode)
-  watch([playmodeStore], () => {
-    if ($playmodeStore === undefined) {
-      ref.playmode.setAll('PAUSE')
+  $effect.pre(() => {
+    if (playmode === undefined) {
+      mesh.playmode.setAll('PAUSE')
       return
     } else {
-      ref.playmode.setAll($playmodeStore)
+      mesh.playmode.setAll(playmode)
     }
   })
 
   // RANDOM PLAYBACK OFFSET
-  const rndOffsetStore = writable(randomPlaybackOffset)
-  $: rndOffsetStore.set(randomPlaybackOffset)
-  let previousRndOffset = false
-  watch([rndOffsetStore], ([offset]) => {
+  let previousRndOffset = $state(false)
+
+  $effect.pre(() => {
     // going from no offset to random
-    if (previousRndOffset === false && offset) {
-      ref.offset.randomizeAll(offset === true ? 100 : offset)
+    if (previousRndOffset === false && randomPlaybackOffset) {
+      mesh.offset.randomizeAll(randomPlaybackOffset === true ? 100 : randomPlaybackOffset)
     }
+
     // going from random offset to none
-    if (previousRndOffset === true && !offset) {
+    if (previousRndOffset === true && !randomPlaybackOffset) {
       for (let i = 0; i < count; i++) {
-        ref.offset.setAt(i, 0)
+        mesh.offset.setAt(i, 0)
       }
     }
-    previousRndOffset = offset ? true : false
+    previousRndOffset = randomPlaybackOffset ? true : false
   })
 
   // MATRIX UPDATE - POSITION AND SCALE
@@ -122,13 +108,13 @@
     // Since this uses matrix updates, position and scale have to be updated at the same.
     tempMatrix.makeScale(scale[0], scale[1], 1)
     tempMatrix.setPosition(...position)
-    ref.setMatrixAt(id, tempMatrix)
+    mesh.setMatrixAt(id, tempMatrix)
     instanceMatrixNeedsUpdate = true
   }
 
   // Context for user facing components and hooks
   setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
-    sprite: ref,
+    sprite: mesh,
     count,
     animationMap,
     updatePosition
@@ -136,25 +122,22 @@
 
   useTask(() => {
     if (autoUpdate) {
-      ref.update()
+      mesh.update()
     }
+
     if (instanceMatrixNeedsUpdate) {
-      ref.instanceMatrix.needsUpdate = true
+      mesh.instanceMatrix.needsUpdate = true
       instanceMatrixNeedsUpdate = false
     }
   })
 
-  const proxySpritefileComponent = new Proxy(SpriteInstance, {
-    construct(_target, [args]) {
-      return new SpriteInstance(args)
-    }
-  })
+  mesh.update()
 </script>
 
 <T
-  is={ref}
+  is={mesh}
   frustumCulled={false}
-  {...$$restProps}
+  {...props}
 >
-  <slot Instance={proxySpritefileComponent} />
+  {@render children?.({ Instance: SpriteInstance })}
 </T>

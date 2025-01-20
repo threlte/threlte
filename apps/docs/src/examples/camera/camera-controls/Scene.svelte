@@ -1,41 +1,44 @@
-<script>
-  import { T, useTask } from '@threlte/core'
+<script lang="ts">
+  import { T, useThrelte } from '@threlte/core'
   import { Grid } from '@threlte/extras'
+  import CC from 'camera-controls'
+  import { Mesh, PerspectiveCamera } from 'three'
   import CameraControls from './CameraControls.svelte'
-  import { cameraControls, mesh } from './stores'
+
+  const { dom } = useThrelte()
+
+  type Props = {
+    controls: CC
+    mesh: Mesh
+  }
+
+  let { controls = $bindable(), mesh }: Props = $props()
+
+  const camera = new PerspectiveCamera()
+  controls = new CameraControls(camera, dom)
+  controls.setPosition(5, 5, 5)
 </script>
 
-<T.PerspectiveCamera
+<T
+  is={camera}
   makeDefault
-  position={[10, 10, 10]}
-  on:create={({ ref }) => {
-    ref.lookAt(0, 1, 0)
-  }}
->
-  <CameraControls
-    on:create={({ ref }) => {
-      $cameraControls = ref
-    }}
-  />
-</T.PerspectiveCamera>
+/>
 
 <T.DirectionalLight position={[3, 10, 7]} />
 
-<T.Mesh
-  position.y={1}
-  on:create={({ ref }) => {
-    $mesh = ref
-  }}
+<T
+  is={mesh}
+  position.y={0.5}
 >
-  <T.BoxGeometry args={[1, 1, 1]} />
+  <T.BoxGeometry />
   <T.MeshBasicMaterial
-    color="red"
-    wireframe={true}
+    color="#ff3e00"
+    wireframe
   />
-</T.Mesh>
+</T>
 
 <Grid
-  sectionColor={'#ff3e00'}
+  sectionColor="#ff3e00"
   sectionThickness={1}
   cellColor={'#cccccc'}
   gridSize={40}

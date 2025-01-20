@@ -100,7 +100,9 @@
   background-color: var(--markprompt-background);
   border-radius: var(--markprompt-radius);
   border: 1px solid var(--markprompt-border);
-  box-shadow: hsl(206deg 22% 7% / 35%) 0 10px 38px -10px, hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
+  box-shadow:
+    hsl(206deg 22% 7% / 35%) 0 10px 38px -10px,
+    hsl(206deg 22% 7% / 20%) 0 10px 20px -15px;
   position: fixed;
   top: 50%;
   left: 50%;
@@ -451,7 +453,7 @@
   color: var(--markprompt-foreground);
   border-left-width: 0.25rem;
   border-left-color: var(--markprompt-border);
-  quotes: '\201C''\201D''\2018''\2019';
+  quotes: '\201C' '\201D' '\2018' '\2019';
   margin-top: 1.3333333em;
   margin-bottom: 1.3333333em;
   padding-left: 1.1111111em;

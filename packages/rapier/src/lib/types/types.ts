@@ -1,15 +1,14 @@
-import type {
-  Collider,
-  ColliderHandle,
-  RigidBody,
-  RigidBodyHandle,
-  TempContactManifold,
-  Vector
+import {
+  World,
+  type Collider,
+  type RigidBody,
+  type TempContactManifold,
+  type Vector
 } from '@dimforge/rapier3d-compat'
-import type { createRawEventDispatcher } from '@threlte/core'
-import type { Writable } from 'svelte/store'
-import type { useHasEventListeners } from '../hooks/useHasEventListener'
-import type { createRapierContext } from '../lib/createRapierContext'
+import RAPIER from '@dimforge/rapier3d-compat'
+import type { CurrentWritable, Stage, Task } from '@threlte/core'
+import type { Readable, Writable } from 'svelte/store'
+import type { Object3D } from 'three'
 
 export type ColliderShapes =
   | 'ball'
@@ -33,66 +32,45 @@ export type ColliderShapes =
 
 export type AutoCollidersShapes = 'cuboid' | 'ball' | 'trimesh' | 'convexHull' | 'capsule'
 
-export type ColliderEventMap = {
-  create: {
-    ref: Collider
-    cleanup: (callback: () => void) => void
-  }
-  collisionenter: {
+export type CreateEvent<T> = {
+  oncreate?: (ref: T) => void | (() => void)
+}
+
+export type ColliderEvents = {
+  oncollisionenter?: (event: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
     manifold: TempContactManifold
     flipped: boolean
-  }
-  collisionexit: {
-    targetCollider: Collider
-    targetRigidBody: RigidBody | null
-  }
-  sensorenter: {
-    targetCollider: Collider
-    targetRigidBody: RigidBody | null
-  }
-  sensorexit: {
-    targetCollider: Collider
-    targetRigidBody: RigidBody | null
-  }
-  contact: {
+  }) => void
+  oncollisionexit?: (event: { targetCollider: Collider; targetRigidBody: RigidBody | null }) => void
+  onsensorenter?: (event: { targetCollider: Collider; targetRigidBody: RigidBody | null }) => void
+  onsensorexit?: (event: { targetCollider: Collider; targetRigidBody: RigidBody | null }) => void
+  oncontact?: (event: {
     targetCollider: Collider
     targetRigidBody: RigidBody | null
     maxForceDirection: Vector
     maxForceMagnitude: number
     totalForce: Vector
     totalForceMagnitude: number
-  }
+  }) => void
 }
 
-export type CollisionEnterEvent = ColliderEventMap['collisionenter']
-export type CollisionExitEvent = ColliderEventMap['collisionexit']
-export type SensorEnterEvent = ColliderEventMap['sensorenter']
-export type SensorExitEvent = ColliderEventMap['sensorexit']
-export type ContactEvent = ColliderEventMap['contact']
+export type CollisionEnterEvent = ColliderEvents['oncollisionenter']
+export type CollisionExitEvent = ColliderEvents['oncollisionexit']
+export type SensorEnterEvent = ColliderEvents['onsensorenter']
+export type SensorExitEvent = ColliderEvents['onsensorexit']
+export type ContactEvent = ColliderEvents['oncontact']
 
-export type RigidBodyEventMap = ColliderEventMap & {
-  sleep: void
-  wake: void
+export type RigidBodyEvents = ColliderEvents & {
+  onsleep?: () => void
+  onwake?: () => void
 }
-
-export type RigidBodyEventDispatcher = ReturnType<
-  typeof createRawEventDispatcher<RigidBodyEventMap>
->
-export type ColliderEventDispatcher = ReturnType<typeof createRawEventDispatcher<ColliderEventMap>>
-
-export type RigidBodyEventDispatchers = Map<RigidBodyHandle, RigidBodyEventDispatcher>
-export type ColliderEventDispatchers = Map<ColliderHandle, ColliderEventDispatcher>
-
-export type RapierContext = ReturnType<typeof createRapierContext>
 
 export type CollisionGroupsContext = Writable<number> | undefined
 
 export type RigidBodyUserData = {
-  hasEventListeners?: ReturnType<
-    typeof useHasEventListeners<RigidBodyEventDispatcher>
-  >['hasEventListeners']
+  events?: RigidBodyEvents
 }
 
 export type ThrelteRigidBody = RigidBody & {
@@ -124,3 +102,33 @@ export type CollisionGroupsBitMask = (
  * Used in the <Attractor> component
  */
 export type GravityType = 'static' | 'linear' | 'newtonian'
+
+export type Framerate = number | 'varying'
+
+export type RapierContext = {
+  rapier: typeof RAPIER
+  world: World
+  colliderObjects: Map<number, Object3D>
+  rigidBodyObjects: Map<number, Object3D>
+  rigidBodyEventDispatchers: Map<number, RigidBodyEvents>
+  colliderEventDispatchers: Map<number, ColliderEvents>
+  addColliderToContext: (collider: Collider, object: Object3D, props: ColliderEvents) => void
+  removeColliderFromContext: (collider: Collider) => void
+  addRigidBodyToContext: (rigidBody: RigidBody, object: Object3D, events: RigidBodyEvents) => void
+  removeRigidBodyFromContext: (rigidBody: RigidBody) => void
+  debug: Writable<boolean>
+  pause: () => void
+  resume: () => void
+  paused: Readable<boolean>
+  framerate: CurrentWritable<Framerate>
+  simulationStage: Stage
+  simulationTask: Task
+  synchronizationStage: Stage
+  synchronizationTask: Task
+  /**
+   * This number tells us how far we're off in the simulation stage as opposed
+   * to the render stage
+   */
+  simulationOffset: CurrentWritable<number>
+  updateRigidBodySimulationData: CurrentWritable<boolean>
+}

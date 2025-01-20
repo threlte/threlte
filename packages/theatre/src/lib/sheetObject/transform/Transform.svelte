@@ -1,55 +1,54 @@
-<script lang="ts">
-  import { types } from '../../theatre'
-  import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
+<script
+  lang="ts"
+  generics="Label extends string | undefined"
+>
   import type { IScrub } from '@theatre/studio'
-  import { T, watch, type CurrentWritable } from '@threlte/core'
+  import { T, watch } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
-  import { onMount, type ComponentProps } from 'svelte'
+  import { onMount } from 'svelte'
   import { Group } from 'three'
   import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
   import { RAD2DEG } from 'three/src/math/MathUtils.js'
   import { useStudio } from '../../studio/useStudio'
+  import { types } from '../../theatre'
   import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
-  import type Transform from './Transform.svelte'
+  import { useSheet } from '../useSheet'
+  import type { TransformProps } from './types'
 
-  type Label = $$Generic<string | undefined>
-  type Props = ComponentProps<Transform<Label>>
+  let {
+    label,
+    key,
+    mode = 'translate',
+    space,
+    translationSnap,
+    rotationSnap,
+    scaleSnap,
+    children
+  }: TransformProps<Label> = $props()
 
-  export let label: Label = undefined as Label
-  export let key: Props['key'] = undefined as Props['key']
-  export let mode: Props['mode'] = 'translate' as Props['mode']
-  export let space: Props['space'] = undefined as Props['space']
+  const { sheetObject, addProps, removeProps } = useSheet<any>()
 
-  export let translationSnap: Props['translationSnap'] = undefined as Props['translationSnap']
-  export let rotationSnap: Props['rotationSnap'] = undefined as Props['rotationSnap']
-  export let scaleSnap: Props['scaleSnap'] = undefined as Props['scaleSnap']
+  let controls = $state<TC | undefined>(undefined)
 
-  /** @package */
-  export let sheetObject: CurrentWritable<ISheetObject>
-  /** @package */
-  export let addProps: (props: UnknownShorthandCompoundProps) => void
-  /** @package */
-  export let removeProps: (propNames: string[]) => void
-
-  let controls: TC | undefined
-
-  $: if (controls) {
-    if (translationSnap) {
-      controls.setTranslationSnap(translationSnap)
-    } else {
-      controls.setTranslationSnap(null)
+  $effect.pre(() => {
+    if (controls) {
+      if (translationSnap) {
+        controls.setTranslationSnap(translationSnap)
+      } else {
+        controls.setTranslationSnap(null)
+      }
+      if (rotationSnap) {
+        controls.setRotationSnap(rotationSnap)
+      } else {
+        controls.setRotationSnap(null)
+      }
+      if (scaleSnap) {
+        controls.setScaleSnap(scaleSnap)
+      } else {
+        controls.setScaleSnap(null)
+      }
     }
-    if (rotationSnap) {
-      controls.setRotationSnap(rotationSnap)
-    } else {
-      controls.setRotationSnap(null)
-    }
-    if (scaleSnap) {
-      controls.setScaleSnap(scaleSnap)
-    } else {
-      controls.setScaleSnap(null)
-    }
-  }
+  })
 
   const group = new Group()
 
@@ -113,7 +112,7 @@
 
   const studio = useStudio()
   let scrub: IScrub | undefined
-  let isSelected = false
+  let isSelected = $state(false)
 
   watch([studio], ([studio]) => {
     return studio?.onSelectionChange((selection) => {
@@ -160,21 +159,18 @@
   const groupRef = group as any
 </script>
 
-<T
-  is={groupRef}
-  let:ref
->
+<T is={groupRef}>
   {#if isSelected}
     <TransformControls
-      object={ref}
+      object={groupRef}
       {mode}
       {space}
       bind:controls
-      on:mouseDown={onMouseDown}
-      on:objectChange={onChange}
-      on:mouseUp={onMouseUp}
+      onmouseDown={onMouseDown}
+      onobjectChange={onChange}
+      onmouseUp={onMouseUp}
     />
   {/if}
 
-  <slot />
+  {@render children?.()}
 </T>

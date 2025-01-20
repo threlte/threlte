@@ -14,6 +14,7 @@ const init = async () => {
     '@threlte/theatre': 'theatre',
     '@threlte/rapier': 'rapier',
     '@threlte/xr': 'xr',
+    '@threlte/studio': 'studio',
     None: 'other'
   }
 

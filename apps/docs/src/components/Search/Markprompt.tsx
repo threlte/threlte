@@ -51,6 +51,11 @@ function Search({ visible }: { visible: boolean }) {
               visible: false
             }}
             search={{
+              getTitle(ref) {
+                return ref.hierarchy.lvl1.replace(/&[lg]t;/g, (match) =>
+                  match === '&lt;' ? '<' : '>'
+                )
+              },
               enabled: true,
               provider: {
                 name: 'algolia',
@@ -99,7 +104,7 @@ export default function SearchDialog() {
       <>
         <div className="pointer-events-none fixed left-0 top-0 z-50 h-full w-full">
           <div
-            className="pointer-events-auto fixed left-0 top-0 h-screen  w-screen bg-gray-900/70"
+            className="pointer-events-auto fixed left-0 top-0 h-screen w-screen bg-gray-900/70"
             onClick={close}
           />
           <dialog

@@ -1,22 +1,14 @@
 <script lang="ts">
-  import { HierarchicalObject, T, createRawEventDispatcher } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { Group } from 'three'
+  import { Group, Object3D } from 'three'
   import { useFlex } from '../Flex/context'
   import { createUseDimensionsContext } from '../hooks/useDimensions'
   import type { NodeProps } from '../lib/props'
   import { createNodeContext } from '../nodes/context'
-  import type { BoxEvents, BoxProps, BoxSlots } from './Box.svelte'
+  import type { BoxProps } from './types'
 
-  type $$Props = BoxProps
-  type $$Events = BoxEvents
-  type $$Slots = BoxSlots
-
-  export let order: $$Props['order'] = undefined
-  let _class: Required<$$Props>['class'] = ''
-  export { _class as class }
-
-  const dispatch = createRawEventDispatcher<$$Events>()
+  let { order, class: _class = '', onreflow, children, ...props }: BoxProps = $props()
 
   /**
    * Create the context for `useDimensions`
@@ -51,74 +43,67 @@
   })
 
   // update the order of the node
-  $: parentNodeContext?.updateNodeOrder(node, order)
+  $effect.pre(() => parentNodeContext?.updateNodeOrder(node, order))
 
-  addNode(node, group, $$restProps as NodeProps)
-  updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps, true)
-  $: updateNodeProps(node, { ...classParser?.(_class, {}), ...$$restProps } as NodeProps)
+  addNode(node, group, props as NodeProps)
+  updateNodeProps(node, { ...classParser?.(_class, {}), ...props } as NodeProps, true)
+
+  $effect.pre(() => updateNodeProps(node, { ...classParser?.(_class, {}), ...props } as NodeProps))
+
   onDestroy(() => {
     removeNode(node)
   })
 
-  let computedWidth = 1
-  let computedHeight = 1
-
-  /**
-   * Untrack contentGroup
-   */
-  const getContentGroup = () => {
-    return contentGroup
-  }
+  let computedWidth = $state(1)
+  let computedHeight = $state(1)
 
   // after the parent has been reflowed, we can use the calculated layout to set the properties of the box
   onEvent('reflow:after', () => {
     computedWidth =
-      typeof $$restProps.width === 'number'
-        ? $$restProps.width
-        : node.getComputedWidth() / $scaleFactor
+      typeof props.width === 'number' ? props.width : node.getComputedWidth() / $scaleFactor
 
     computedHeight =
-      typeof $$restProps.height === 'number'
-        ? $$restProps.height
-        : node.getComputedHeight() / $scaleFactor
+      typeof props.height === 'number' ? props.height : node.getComputedHeight() / $scaleFactor
 
-    getContentGroup().position[$mainAxis] = computedWidth / 2
-    getContentGroup().position[$crossAxis] = -computedHeight / 2
-    getContentGroup().position[$depthAxis] = 0
+    contentGroup.position[$mainAxis] = computedWidth / 2
+    contentGroup.position[$crossAxis] = -computedHeight / 2
+    contentGroup.position[$depthAxis] = 0
 
     dimensionsContext.width.set(computedWidth)
     dimensionsContext.height.set(computedHeight)
 
-    dispatch('reflow', {
+    onreflow?.({
       width: computedWidth,
       height: computedHeight
     })
   })
+
+  const proxy = new Object3D()
+  proxy.add = (child) => {
+    if (child.userData.isNode) {
+      group.add(child)
+    } else {
+      contentGroup.add(child)
+    }
+    return child
+  }
+  proxy.remove = (child) => {
+    if (child.userData.isNode) {
+      group.remove(child)
+    } else {
+      contentGroup.remove(child)
+    }
+    return child
+  }
 </script>
 
 <T is={group}>
   <T is={contentGroup} />
 </T>
 
-<HierarchicalObject
-  onChildMount={(child) => {
-    if (child.userData.isNode) {
-      group.add(child)
-    } else {
-      contentGroup.add(child)
-    }
-  }}
-  onChildDestroy={(child) => {
-    if (child.userData.isNode) {
-      group.remove(child)
-    } else {
-      contentGroup.remove(child)
-    }
-  }}
+<T
+  is={proxy}
+  attach={false}
 >
-  <slot
-    {reflow}
-    width={computedWidth}
-    height={computedHeight}
-  />
-</HierarchicalObject>
+  {@render children?.({ reflow, width: computedWidth, height: computedHeight })}
+</T>

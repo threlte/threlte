@@ -10,7 +10,7 @@
   <Canvas>
     <Scene {isPlaying} />
   </Canvas>
-  <VRButton on:click={() => (isPlaying = true)} />
+  <VRButton onclick={() => (isPlaying = true)} />
 </div>
 
 <style>

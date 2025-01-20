@@ -12,27 +12,25 @@
 </T.PerspectiveCamera>
 
 <!-- Box -->
-<SheetObject
-  key="Box"
-  let:Transform
-  let:Sync
->
-  <Transform>
-    <T.Mesh
-      receiveShadow
-      castShadow
-      position.y={0.5}
-    >
-      <T.BoxGeometry />
-      <T.MeshStandardMaterial color="hotpink">
-        <Sync
-          color
-          roughness
-          metalness
-        />
-      </T.MeshStandardMaterial>
-    </T.Mesh>
-  </Transform>
+<SheetObject key="Box">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.Mesh
+        receiveShadow
+        castShadow
+        position.y={0.5}
+      >
+        <T.BoxGeometry />
+        <T.MeshStandardMaterial color="hotpink">
+          <Sync
+            color
+            roughness
+            metalness
+          />
+        </T.MeshStandardMaterial>
+      </T.Mesh>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
 <T.DirectionalLight />

@@ -70,7 +70,7 @@
 
   const sampler = new Sampler(4, [REGION_W, REGION_Z], undefined, Math.random)
 
-  const points = sampler.GeneratePoints().filter((v) => {
+  const points = sampler.GeneratePoints().filter((v: [number, number]) => {
     return Math.sqrt((v[0] - REGION_W / 2) ** 2 + (v[1] - REGION_Z / 2) ** 2) < maxRadius
   })
 
@@ -107,27 +107,28 @@
     {billboarding}
     {spritesheet}
     bind:ref={sprite}
-    let:Instance
     castShadow
   >
-    {#each points as [x, z], i}
-      {#if i < points.length / 2}
-        <!-- Pick a random tree from atlas via animation name -->
-        <Instance
-          position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
-          id={i}
-          animationName={pickRandomTreeType()}
-          scale={[3, 3]}
-        />
-      {:else}
-        <!-- Set and freeze a random frame from the spritesheet -->
-        <Instance
-          position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
-          id={i}
-          scale={[3, 3]}
-          frameId={Math.floor(Math.random() * 24)}
-        />
-      {/if}
-    {/each}
+    {#snippet children({ Instance })}
+      {#each points as [x, z], i}
+        {#if i < points.length / 2}
+          <!-- Pick a random tree from atlas via animation name -->
+          <Instance
+            position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
+            id={i}
+            animationName={pickRandomTreeType()}
+            scale={[3, 3]}
+          />
+        {:else}
+          <!-- Set and freeze a random frame from the spritesheet -->
+          <Instance
+            position={[x - REGION_W / 2, 1.5, z - REGION_Z / 2]}
+            id={i}
+            scale={[3, 3]}
+            frameId={Math.floor(Math.random() * 24)}
+          />
+        {/if}
+      {/each}
+    {/snippet}
   </InstancedSprite>
 {/await}

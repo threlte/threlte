@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import Details from './Details.svelte'
   import type { getLeftSidebarMenu } from './LeftSidebar/getLeftSidebarMenu'
   import LeftSidebarCategory from './LeftSidebar/LeftSidebarCategory.svelte'
@@ -26,7 +25,7 @@
     slot="content"
     class="flex flex-col gap-4 text-lg"
   >
-    <ul class={c('flex flex-col gap-2 overflow-y-auto')}>
+    <ul class="flex flex-col gap-2 overflow-y-auto">
       {#each keys as key}
         <li>
           <!-- The container for "learn" and "reference" categories -->

@@ -51,8 +51,8 @@
     <T.BufferGeometry>
       <T.BufferAttribute
         args={[positions, 3]}
-        attach={(parent, self) => {
-          parent.setAttribute('position', self)
+        attach={({ parent, ref }) => {
+          parent.setAttribute('position', ref)
           return () => {
             // cleanup function called when ref changes or the component unmounts
             // https://threlte.xyz/docs/reference/core/t#attach

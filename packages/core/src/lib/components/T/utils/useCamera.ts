@@ -1,72 +1,61 @@
-import { onDestroy } from 'svelte'
-import type { Camera, OrthographicCamera, PerspectiveCamera } from 'three'
-import { useThrelte } from '../../../hooks/useThrelte'
-import type { Size } from '../../../types'
+import { writable } from 'svelte/store'
+import type { OrthographicCamera, PerspectiveCamera } from 'three'
+import { useThrelte } from '../../../context/compounds/useThrelte'
+import { isInstanceOf, watch } from '../../../utilities'
 
-const isCamera = (value: any): value is Camera => {
-  return value && value.isCamera
-}
-
-const isOrthographicCamera = (value: any): value is OrthographicCamera => {
-  return value && value.isOrthographicCamera
-}
-
-const isPerspectiveCamera = (value: any): value is PerspectiveCamera => {
-  return value && value.isPerspectiveCamera
-}
-
-const isPerspectiveCameraOrOrthographicCamera = (
-  value: any
+const isPerspectiveOrOrthographicCamera = (
+  value: unknown
 ): value is PerspectiveCamera | OrthographicCamera => {
-  return isPerspectiveCamera(value) || isOrthographicCamera(value)
+  return isInstanceOf(value, 'PerspectiveCamera') || isInstanceOf(value, 'OrthographicCamera')
 }
 
 export const useCamera = () => {
   const { invalidate, size, camera } = useThrelte()
 
-  let currentInstance: PerspectiveCamera | OrthographicCamera | undefined
-  let unsubscribe: (() => void) | undefined = undefined
-  onDestroy(() => {
-    unsubscribe?.()
+  const currentRef = writable<PerspectiveCamera | OrthographicCamera | undefined>()
+  const manual = writable(true)
+  const makeDefault = writable(false)
+
+  watch([currentRef, makeDefault], ([ref, makeDefault]) => {
+    if (!ref || !makeDefault) return
+    camera.set(ref)
+    invalidate()
   })
 
-  const subscriber = (size: Size) => {
-    if (!currentInstance) return
-
-    if (isOrthographicCamera(currentInstance)) {
-      currentInstance.left = size.width / -2
-      currentInstance.right = size.width / 2
-      currentInstance.top = size.height / 2
-      currentInstance.bottom = size.height / -2
-      currentInstance.updateProjectionMatrix()
-      currentInstance.updateMatrixWorld()
+  watch([currentRef, manual, size], ([ref, manual, size]) => {
+    if (!ref || manual) return
+    if (isInstanceOf(ref, 'OrthographicCamera')) {
+      ref.left = size.width / -2
+      ref.right = size.width / 2
+      ref.top = size.height / 2
+      ref.bottom = size.height / -2
+      ref.updateProjectionMatrix()
+      ref.updateMatrixWorld()
       invalidate()
-    } else if (isPerspectiveCamera(currentInstance)) {
-      currentInstance.aspect = size.width / size.height
-      currentInstance.updateProjectionMatrix()
-      currentInstance.updateMatrixWorld()
+    } else if (isInstanceOf(ref, 'PerspectiveCamera')) {
+      ref.aspect = size.width / size.height
+      ref.updateProjectionMatrix()
+      ref.updateMatrixWorld()
       invalidate()
     }
+  })
+
+  const updateRef = (ref: unknown) => {
+    if (!isPerspectiveOrOrthographicCamera(ref)) return
+    currentRef.set(ref)
   }
 
-  const update = <T>(instance: T, manual: boolean) => {
-    unsubscribe?.()
-    if (manual || !isPerspectiveCameraOrOrthographicCamera(instance)) {
-      currentInstance = undefined
-      return
-    }
-    currentInstance = instance
-    unsubscribe = size.subscribe(subscriber)
+  const updateManual = (m: boolean) => {
+    manual.set(m)
   }
 
-  const makeDefaultCamera = <T>(instance: T, makeDefault: boolean) => {
-    if (!isCamera(instance) || !makeDefault) return
-    camera.set(instance)
-    invalidate()
+  const updateMakeDefault = (d: boolean) => {
+    makeDefault.set(d)
   }
 
   return {
-    update,
-    makeDefaultCamera
+    updateRef,
+    updateManual,
+    updateMakeDefault
   }
 }

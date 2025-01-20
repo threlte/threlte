@@ -1,10 +1,17 @@
-<script>
-  import { T } from '@threlte/core'
+<script lang="ts">
+  import type { Props } from '@threlte/core'
+  import type { Snippet } from 'svelte'
   import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
+  import { T } from '@threlte/core'
 
-  export let pointerEvents = false
+  type CssObjectProps = Props<typeof CSS2DObject> & {
+    content?: Snippet
+    pointerEvents?: boolean
+  }
 
-  let element
+  let { content, pointerEvents = false, children, ...props }: CssObjectProps = $props()
+
+  let element: HTMLElement | undefined = $state()
 </script>
 
 <div
@@ -12,19 +19,17 @@
   style:pointer-events={pointerEvents ? 'auto' : 'none !important'}
   style:will-change="transform"
 >
-  <slot />
+  {@render content?.()}
 </div>
 
-{#if element}
+{#if element !== undefined}
   <T
-    {...$$restProps}
+    {...props}
     is={CSS2DObject}
     args={[element]}
-    let:ref
   >
-    <slot
-      name="three"
-      {ref}
-    />
+    {#snippet children({ ref })}
+      {@render children?.({ ref })}
+    {/snippet}
   </T>
 {/if}

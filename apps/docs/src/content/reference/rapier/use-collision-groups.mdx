@@ -10,20 +10,20 @@ This hook can be used in conjunction with the component [`<CollisionGroups>`](/d
 
 ```svelte
 <script>
-	import { useRapier, useCollisionGroups } from '@threlte/rapier'
+  import { useRapier, useCollisionGroups } from '@threlte/rapier'
 
-	const { world } = useRapier()
-	const { registerColliders, removeColliders } = useCollisionGroups()
+  const { world } = useRapier()
+  const { registerColliders, removeColliders } = useCollisionGroups()
 
-	const collider = world.createCollider(…)
+  const collider = world.createCollider(colliderDesc)
 
-	// collider will be assigned the collision groups
-	// provided by a parent `<CollisionGroups>` component.
-	registerColliders([collider])
+  // collider will be assigned the collision groups
+  // provided by a parent `<CollisionGroups>` component.
+  registerColliders([collider])
 
-	onDestroy(() => {
-		removeColliders([collider])
-	})
+  onDestroy(() => {
+    removeColliders([collider])
+  })
 </script>
 ```
 

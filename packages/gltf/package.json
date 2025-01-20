@@ -1,9 +1,11 @@
 {
   "name": "@threlte/gltf",
-  "version": "2.0.3",
+  "version": "3.0.0-next.11",
   "description": "GLTF to Threlte converter",
   "scripts": {
-    "cleanup": "rimraf node_modules"
+    "cleanup": "rimraf node_modules",
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
   },
   "type": "module",
   "keywords": [
@@ -42,10 +44,10 @@
     "jsdom-global": "^3.0.2",
     "meow": "^11.0.0",
     "meshoptimizer": "^0.18.1",
-    "prettier": "^2.8.3",
-    "prettier-plugin-svelte": "^2.9.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-svelte": "^3.2.2",
     "sharp": "^0.32.0",
-    "svelte": "^3.55.1",
+    "svelte": "^5.14.4",
     "three": "0.122.0",
     "three-stdlib": "^2.21.8"
   },

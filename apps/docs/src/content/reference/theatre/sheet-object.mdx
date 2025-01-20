@@ -1,28 +1,26 @@
 ---
-{
-  'order': 4.1,
-  'category': '@threlte/theatre',
-  sourcePath: 'packages/theatre/src/lib/sheetObject/SheetObject.svelte',
-  'name': '<SheetObject>',
-  'type': 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          { 'name': 'key', 'type': 'string', 'required': true },
-          {
-            'name': 'props',
-            'type':
-              {
-                'name': 'UnknownShorthandCompoundProps',
-                'url': 'https://www.theatrejs.com/docs/latest/manual/prop-types'
-              },
-            'required': false
-          },
-          { 'name': 'detach', 'type': 'boolean', 'required': false, default: 'false' }
-        ]
-    }
-}
+order: 4.1
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/sheetObject/SheetObject.svelte'
+name: '<SheetObject>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'key', type: 'string', required: true },
+        {
+          name: props,
+          type:
+            {
+              name: 'UnknownShorthandCompoundProps',
+              url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+            },
+          required: false
+        },
+        { name: 'detach', type: 'boolean', required: false, default: 'false' }
+      ]
+  }
 ---
 
 The `<SheetObject>` component allows you to pool the properties of a **logical entity** which can be a anything from a single material, multiple meshes or a complete scene. The component `<SheetObject>` and
@@ -54,13 +52,10 @@ specific props. We can achieve this using _manual prop declaration_. Provide the
 `<SheetObject>` for a manual property declaration.
 
 ```svelte
-<SheetObject
-  props={{
-    x: 0
-  }}
-  let:values
->
-  <T.Mesh position.x={values.x} />
+<SheetObject props={{ x: 0 }}>
+  {#snippet children({ values })}
+    <T.Mesh position.x={values.x} />
+  {/snippet}
 </SheetObject>
 ```
 

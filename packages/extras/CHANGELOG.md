@@ -1,5 +1,378 @@
 # @threlte/extras
 
+## 9.0.0-next.55
+
+### Patch Changes
+
+- feb2660: fix Text component
+
+## 9.0.0-next.54
+
+### Patch Changes
+
+- 6378e37: Remove non-tree-shakable three/addons import use
+
+## 9.0.0-next.53
+
+### Patch Changes
+
+- e2dc870: Fixed width property of HTML component when using fullscreen property
+
+## 9.0.0-next.52
+
+### Patch Changes
+
+- 61c0403: Animated Sprite Material's console warning is more helpful
+
+## 9.0.0-next.51
+
+### Patch Changes
+
+- 1a5d639: AutoInvalidate View components within their task as dom elements may move around
+
+## 9.0.0-next.50
+
+### Minor Changes
+
+- 6ead49a: Added new View component. Adjusted core and other components to make use of the changes.
+
+## 9.0.0-next.49
+
+### Patch Changes
+
+- 213026c: Fix RoundedBoxGeometry types
+- a257643: Update Svelte + Three.js deps
+
+## 9.0.0-next.48
+
+### Minor Changes
+
+- d4a366d: Add `<VirtualEnvironment>`
+
+## 9.0.0-next.47
+
+### Minor Changes
+
+- ba706cc: Add transitions plugin
+
+## 9.0.0-next.46
+
+### Minor Changes
+
+- 095bfa4: adds ability to start and stop HTML's render task. exposes the render task for rendering a single frame
+
+## 9.0.0-next.45
+
+### Patch Changes
+
+- 1cd4af6: New Gizmo implementation
+
+## 9.0.0-next.44
+
+### Major Changes
+
+- 86072ef: separate `<Environment>` into two components
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 9.0.0-next.43
+
+### Patch Changes
+
+- f9f8444: [next] Temporary three-perf fix with a github fork
+
+## 9.0.0-next.42
+
+### Major Changes
+
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+
+### Minor Changes
+
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
+## 9.0.0-next.41
+
+### Minor Changes
+
+- 9eecd88: Add <AsciiRenderer>
+
+### Patch Changes
+
+- 24cbaa7: InstancedSprite component dependency bump to work with three v170
+
+## 9.0.0-next.40
+
+### Patch Changes
+
+- 69f168c: CubeCamera follows what other components do and binds to the ref at the component instead of assigning in the script tag
+- 8be57ae: use `isInstanceOf` to determine the camera's type in `useViewport`. fixes some type errors.
+
+## 9.0.0-next.39
+
+### Patch Changes
+
+- cfe2286: [next] Restore ability to disable _attaching_ for gradient textures
+
+## 9.0.0-next.38
+
+### Minor Changes
+
+- 076c1f9: Export InteractivityProps type
+
+## 9.0.0-next.37
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
+## 9.0.0-next.36
+
+### Patch Changes
+
+- 5d3d231: Bump troika-three-text dependency
+
+## 9.0.0-next.35
+
+### Patch Changes
+
+- 1fb46bd: Fix `<TransformControls>`
+
+## 9.0.0-next.34
+
+### Major Changes
+
+- 4d04573: migrate to generated components types
+
+## 9.0.0-next.33
+
+### Patch Changes
+
+- 1731055: fix `<Resize>` types and default args
+
+## 9.0.0-next.32
+
+### Patch Changes
+
+- cec4b57: update deps
+- cec4b57: Remove handwritten type def of `<Resize>`
+
+## 9.0.0-next.31
+
+### Patch Changes
+
+- e75748d: Fix issues with MeshLine
+
+## 9.0.0-next.30
+
+### Minor Changes
+
+- f55c743: Add RadialGradientTexture & LinearGradientTexture components
+- ca7a1f0: Add <CubeCamera>
+
+### Patch Changes
+
+- b5b3e2c: fix module context warnings on the command line
+
+## 9.0.0-next.29
+
+### Minor Changes
+
+- 20a2865: Add Resize component, fix MeshDiscardMaterial
+
+### Patch Changes
+
+- 81da20a: Fixed type of `scale` in `PerfMonitor`
+- 6016286: Adapted Threlte plugins to new plugin API
+
+## 9.0.0-next.28
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 9.0.0-next.27
+
+### Patch Changes
+
+- 865515f: Implement type guard utility, clean up
+
+## 9.0.0-next.26
+
+### Patch Changes
+
+- 5a08cd1: OrbitControls fix for Three.js R169
+- 2ac3d48: Dependency updates
+
+## 9.0.0-next.25
+
+### Patch Changes
+
+- 72a1004: Use regular ts files for shader files in MeshDiscardMaterial
+
+## 9.0.0-next.24
+
+### Minor Changes
+
+- 97004c3: adds `useMeshBounds` which is a faster raycast function for the cost of pointer accuracy
+- aba6d5a: adds a <Detailed> component that can be used for displaying different level-of-detail for scene objects
+- bf72ead: adds <MeshDiscardMaterial>` which is a material that completely hides the mesh but doesn't hide its children or shadows
+
+### Patch Changes
+
+- 01c1e3a: Adds a `<BakeShadows>` component that "freezes" shadows for scenes where shadows only need to be calculated once or very infrequently.'
+
+## 9.0.0-next.23
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+
+## 9.0.0-next.22
+
+### Patch Changes
+
+- 9b6967f: Update vertex.ts to fix ERROR: 0:167: 'isPerspectiveMatrix' : no matching overloaded function found
+
+## 9.0.0-next.21
+
+### Patch Changes
+
+- be301d2: Fix useSuspense types
+
+## 9.0.0-next.20
+
+### Patch Changes
+
+- 52926fa: Fix suspense timing & types
+
+## 9.0.0-next.19
+
+### Patch Changes
+
+- afc3ffa: Allow multiple useProgress hooks, fixes for useGamepad and audio extras types
+
+## 9.0.0-next.18
+
+### Patch Changes
+
+- 7a3281c: Split out gltf-related loaders into hooks for better tree shaking
+
+## 9.0.0-next.17
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 9.0.0-next.16
+
+### Patch Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
+## 9.0.0-next.15
+
+### Major Changes
+
+- 2b699c7: Remove transitions plugin
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 9.0.0-next.14
+
+### Patch Changes
+
+- 790794d: Add HUD component and useViewport hook
+
+## 9.0.0-next.13
+
+### Patch Changes
+
+- e4bf75c: Remove $events reference in HTML component
+
+## 9.0.0-next.12
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 9.0.0-next.11
+
+### Patch Changes
+
+- 8508b11: Add drei occlusion features to HTML component
+
+## 9.0.0-next.10
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 9.0.0-next.9
+
+### Patch Changes
+
+- 750550b: Remove useLegacyLights prop
+
+## 9.0.0-next.8
+
+### Patch Changes
+
+- e8bf233: Add lang to module block, cleanup imports
+
+## 9.0.0-next.7
+
+### Patch Changes
+
+- 13aff20: Migrate Billboard to runes mode
+
+## 9.0.0-next.6
+
+### Patch Changes
+
+- 1973ebe: Fix performance regression where non-interactive objects would be added to the interactivity plugin
+
+## 9.0.0-next.5
+
+### Patch Changes
+
+- 3883665: Reduce interactivity footprint
+
+## 9.0.0-next.4
+
+### Patch Changes
+
+- c03a430: Grid: Fix frame invalidation on prop change
+
+## 9.0.0-next.3
+
+### Patch Changes
+
+- 025ebb4: Fix TransformComtrols prop reactivity
+
+## 9.0.0-next.2
+
+### Patch Changes
+
+- 32aa5bb: Fix <TransformControls> bindings and prop updates
+- f76d1e4: Migrate additional components to runes mode
+
+## 9.0.0-next.1
+
+### Patch Changes
+
+- 3b39c4e: Remove grid useTask invalidate call
+
+## 9.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 8.12.1
 
 ### Patch Changes

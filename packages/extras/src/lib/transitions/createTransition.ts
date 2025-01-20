@@ -5,4 +5,4 @@ import type { ThrelteTransition } from './types'
  *
  * **This plugin is experimental and may change or be removed.**
  */
-export const createTransition = <Ref = any>(transition: ThrelteTransition<Ref>) => transition
+export const createTransition = (transition: ThrelteTransition<unknown>) => transition

@@ -1,116 +1,120 @@
 <script lang="ts">
-  import { AdditiveBlending, Color, ShaderMaterial, Spherical, Vector3 } from 'three'
-  import { T, forwardEventHandlers, useTask } from '@threlte/core'
-  import type { StarsEvents, StarsProps, StarsSlots } from './Stars.svelte'
-
+  import {
+    AdditiveBlending,
+    BufferAttribute,
+    BufferGeometry,
+    Color,
+    Points,
+    ShaderMaterial,
+    Spherical,
+    Vector3
+  } from 'three'
+  import { T, useTask } from '@threlte/core'
+  import type { StarsProps } from './types'
   import { fragmentShader } from './fragment'
   import { vertexShader } from './vertex'
 
-  type $$Props = Required<StarsProps>
-  type $$Events = StarsEvents
-  type $$Slots = StarsSlots
+  let {
+    count = 5000,
+    radius = 50,
+    depth = 50,
+    factor = 6,
+    saturation = 1.0,
+    lightness = 0.8,
+    speed = 1,
+    fade = true,
+    opacity = 1.0,
+    ref = $bindable(),
+    children,
+    ...props
+  }: StarsProps = $props()
 
-  export let count: $$Props['count'] = 5000
-  export let radius: $$Props['radius'] = 50
-  export let depth: $$Props['depth'] = 50
-  export let factor: $$Props['factor'] = 6
-  export let saturation: $$Props['saturation'] = 1.0
-  export let lightness: $$Props['lightness'] = 0.8
-  export let speed: $$Props['speed'] = 1
-  export let fade: $$Props['fade'] = true
-  export let opacity: $$Props['opacity'] = 1.0
+  const points = new Points()
+
   const vec3 = new Vector3()
   const spherical = new Spherical()
+  const color = new Color()
 
-  const genStar = (r: number) => {
+  const generateStar = (r: number) => {
     return vec3.setFromSpherical(
       spherical.set(r, Math.acos(1 - Math.random() * 2), Math.random() * 2 * Math.PI)
     )
   }
 
-  let positionsArray: Float32Array
-  let colorsArray: Float32Array
-  let sizesArray: Float32Array
+  let positions = new BufferAttribute(new Float32Array(count * 3), 3)
+  let colors = new BufferAttribute(new Float32Array(count * 3), 3)
+  let sizes = new BufferAttribute(new Float32Array(count), 1)
 
-  $: {
-    const positions: number[] = []
-    const colors: number[] = []
-    const sizes = Array.from({ length: count }, () => (0.5 + 0.5 * Math.random()) * factor)
-    const color = new Color()
-    let r = radius + depth
+  $effect.pre(() => {
+    positions = new BufferAttribute(new Float32Array(count * 3), 3)
+    colors = new BufferAttribute(new Float32Array(count * 3), 3)
+    sizes = new BufferAttribute(new Float32Array(count), 1)
+  })
+
+  $effect.pre(() => {
     const increment = depth / count
-    for (let i = 0; i < count; i++) {
+
+    let r = radius + depth
+
+    for (let i = 0; i < count; i += 1) {
       r -= increment * Math.random()
-      const position = genStar(r)
-      positions.push(position.x, position.y, position.z)
+      const position = generateStar(r)
+      positions.setXYZ(i, position.x, position.y, position.z)
+
       color.setHSL(i / count, saturation, lightness)
-      colors.push(color.r, color.g, color.b)
+      colors.setXYZ(i, color.r, color.g, color.b)
+
+      sizes.setX(i, (0.5 + 0.5 * Math.random()) * factor)
     }
-    positionsArray = new Float32Array(positions)
-    colorsArray = new Float32Array(colors)
-    sizesArray = new Float32Array(sizes)
-  }
+  })
 
-  const component = forwardEventHandlers()
-
-  let time = 0
   const { stop, start } = useTask(
     (dt) => {
-      time += dt * speed
+      uniforms.time.value += dt * speed
     },
     { autoStart: false }
   )
 
-  $: if (speed !== 0) {
-    start()
-  } else {
-    stop()
+  $effect.pre(() => (speed === 0 ? stop() : start()))
+
+  const uniforms = {
+    time: { value: 0 },
+    fade: { value: 1 },
+    opacity: { value: 1 }
   }
 
   const material = new ShaderMaterial({
-    uniforms: { time: { value: 0.0 }, fade: { value: 1.0 }, opacity: { value: 1.0 } },
+    uniforms,
     vertexShader,
     fragmentShader
   })
+
+  $effect.pre(() => {
+    uniforms.fade.value = fade ? 1 : 0
+  })
+
+  $effect.pre(() => {
+    uniforms.opacity.value = opacity
+  })
+
+  const geometry = new BufferGeometry()
+  geometry.setAttribute('position', positions)
+  geometry.setAttribute('color', colors)
+  geometry.setAttribute('size', sizes)
 </script>
 
-<T.Points
-  bind:this={$component}
-  {...$$restProps}
-  let:ref
+<T
+  is={points}
+  bind:ref
+  {...props}
 >
-  <T.BufferGeometry>
-    <T.BufferAttribute
-      attach={(parent, self) => {
-        parent.setAttribute('position', self)
-        return () => {}
-      }}
-      args={[positionsArray, 3]}
-    ></T.BufferAttribute>
-    <T.BufferAttribute
-      attach={(parent, self) => {
-        parent.setAttribute('color', self)
-        return () => {}
-      }}
-      args={[colorsArray, 3]}
-    ></T.BufferAttribute>
-    <T.BufferAttribute
-      attach={(parent, self) => {
-        parent.setAttribute('size', self)
-        return () => {}
-      }}
-      args={[sizesArray, 1]}
-    ></T.BufferAttribute>
-  </T.BufferGeometry>
+  <T is={geometry} />
   <T
     is={material}
     blending={AdditiveBlending}
-    uniforms.fade.value={fade ? 1.0 : 0.0}
-    uniforms.time.value={time}
-    uniforms.opacity.value={opacity}
     depthWrite={false}
     transparent
     vertexColors
   />
-  <slot {ref} />
-</T.Points>
+  {@render children?.({ ref: points })}
+</T>

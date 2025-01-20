@@ -3,28 +3,29 @@
 	- Creating namespaces
 	- Potentially Providing a sheet object
 -->
-<script lang="ts">
+<script
+  lang="ts"
+  generics="Props extends UnknownShorthandCompoundProps"
+>
   import { useStudio } from '../studio/useStudio'
-
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import {
-    createRawEventDispatcher,
-    currentWritable,
-    watch,
-    type CurrentWritable,
-    useThrelte
-  } from '@threlte/core'
+  import { currentWritable, useThrelte, watch, type CurrentWritable } from '@threlte/core'
   import { getContext, onDestroy, onMount } from 'svelte'
   import type { SheetContext } from '../sheet/types'
   import Declare from './declare/Declare.svelte'
+  import type { SheetObjectProps } from './types'
   import Sync from './sync/Sync.svelte'
   import Transform from './transform/Transform.svelte'
+  import { createSheetContext } from './useSheet'
 
-  type Props = $$Generic<UnknownShorthandCompoundProps>
-
-  export let key: string
-  export let detach: boolean = false
-  export let props: Props | undefined = undefined
+  let {
+    key,
+    detach = false,
+    props,
+    selected = $bindable(false),
+    onchange,
+    children
+  }: SheetObjectProps<Props> = $props()
 
   const { invalidate } = useThrelte()
 
@@ -38,16 +39,12 @@
     }) as any
   )
 
-  const dispatch = createRawEventDispatcher<{
-    change: ISheetObject<Props>['value']
-  }>()
-
   onMount(() => {
     // Because the sheet object value subscription is not running before any
     // values change, we're emitting the initial value here. Doing this in
     // onMount also means that child components which might add props to the
     // sheet object have already been mounted.
-    dispatch('change', sheetObject.current.value)
+    onchange?.(sheetObject.current.value)
   })
 
   // This flag is used to prevent the sheet object from being created after it
@@ -103,40 +100,17 @@
     }
   }
 
-  const augmentConstructorArgs = (args: any) => {
-    return {
-      ...args,
-      props: {
-        ...args.props,
-        sheetObject,
-        addProps,
-        removeProps
-      }
-    }
-  }
-
-  const proxySyncComponent = new Proxy(Sync, {
-    construct(_target, [args]) {
-      return new Sync(augmentConstructorArgs(args))
-    }
+  createSheetContext({
+    sheetObject,
+    addProps,
+    removeProps
   })
 
-  const proxyTransformComponent = new Proxy(Transform, {
-    construct(_target, [args]) {
-      return new Transform(augmentConstructorArgs(args))
-    }
-  })
+  let values = $state($sheetObject?.value)
 
-  const proxyDeclareComponent = new Proxy(Declare, {
-    construct(_target, [args]) {
-      return new Declare(augmentConstructorArgs(args))
-    }
-  })
-
-  let values = $sheetObject?.value
   watch(sheetObject, (sheetObject) => {
     return sheetObject.onValuesChange((newValues) => {
-      dispatch('change', newValues)
+      onchange?.(newValues)
       values = newValues
       // this invalidation also invalidates changes catched by slotted
       // components such as <Sync> or <Declare>.
@@ -147,7 +121,7 @@
   // Provide a flag to indicate whether this sheet object is selected in the
   // Theatre.js studio.
   const studio = useStudio()
-  export let selected = false
+
   watch([studio, sheetObject], ([studio, sheetObject]) => {
     return studio?.onSelectionChange((selection) => {
       selected = selection.includes(sheetObject)
@@ -167,13 +141,13 @@
   }
 </script>
 
-<slot
-  {values}
-  {selected}
-  {select}
-  {deselect}
-  sheetObject={$sheetObject}
-  Sync={proxySyncComponent}
-  Transform={proxyTransformComponent}
-  Declare={proxyDeclareComponent}
-/>
+{@render children?.({
+  values,
+  selected,
+  select,
+  deselect,
+  sheetObject: $sheetObject,
+  Sync,
+  Transform,
+  Declare
+})}

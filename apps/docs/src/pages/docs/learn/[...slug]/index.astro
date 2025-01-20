@@ -23,7 +23,10 @@ const { category, title } = entry.data
 const { Content } = await entry.render()
 ---
 
-<DocsLayout entry={entry} title={`${title} | Learn Threlte`}>
+<DocsLayout
+  {entry}
+  title={`${title} | Learn Threlte`}
+>
   <h6 class="text-faded text-sm font-bold">
     {category}
   </h6>

@@ -1,19 +1,17 @@
 ---
-{
-  order: 3.3,
-  'category': '@threlte/extras',
-  sourcePath: 'packages/extras/src/lib/components/controls/TrackballControls/TrackballControls.svelte',
-  'name': '<TrackballControls>',
-  'type': 'component',
-  'componentSignature':
-    {
-      extends:
-        {
-          type: 'TrackballControls',
-          url: 'https://threejs.org/docs/#examples/controls/TrackballControls'
-        }
-    }
-}
+order: 2.3
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/controls/TrackballControls/TrackballControls.svelte'
+name: '<TrackballControls>'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'TrackballControls',
+        url: 'https://threejs.org/docs/#examples/controls/TrackballControls'
+      }
+  }
 ---
 
 `<TrackballControls>` allow the camera to orbit freely around a target without causing gimbal lock. This type of camera controller is commonly used when the concepts of up and down are less important than the ability to carefully inspect a model from every angle. For an alternative camera controller, see [`<OrbitControls>`](/docs/reference/extras/orbit-controls).

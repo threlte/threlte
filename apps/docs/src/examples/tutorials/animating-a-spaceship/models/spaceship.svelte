@@ -8,7 +8,7 @@ Title: Rusty Spaceship - Orange
 -->
 <script>
   import { AddEquation, CustomBlending, Group, LessEqualDepth, OneFactor } from 'three'
-  import { T, forwardEventHandlers } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
   import { useTexture } from '@threlte/extras'
 
@@ -28,15 +28,12 @@ Title: Rusty Spaceship - Orange
     alphaFix(model.materials.spaceship_racer)
     alphaFix(model.materials.cockpit)
   })
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
   is={ref}
   dispose={false}
   {...$$restProps}
-  bind:this={$component}
 >
   {#await gltf}
     <slot name="fallback" />

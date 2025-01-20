@@ -1,5 +1,275 @@
 # @threlte/core
 
+## 8.0.0-next.41
+
+### Patch Changes
+
+- 9f00bd3: Return context from createThrelteContext
+
+## 8.0.0-next.40
+
+### Patch Changes
+
+- 1791c99: useTask invalidation fix
+
+## 8.0.0-next.39
+
+### Patch Changes
+
+- f102bfb: Simplify resizeObserver.
+
+## 8.0.0-next.38
+
+### Patch Changes
+
+- 6a442b9: Allow dispose prop on every T instance
+
+## 8.0.0-next.37
+
+### Major Changes
+
+- 6ead49a: Added new View component. Adjusted core and other components to make use of the changes.
+
+## 8.0.0-next.36
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 8.0.0-next.35
+
+### Patch Changes
+
+- 4ee76e8: JSDocs cleanup
+
+## 8.0.0-next.34
+
+### Patch Changes
+
+- 89d4fd5: Fix core types entry for dev
+
+## 8.0.0-next.33
+
+### Patch Changes
+
+- 52d0b9f: fix: remove .d.ts import from dist/index.js
+
+## 8.0.0-next.32
+
+### Minor Changes
+
+- d7eb71b: Custom user catalogue types
+
+## 8.0.0-next.31
+
+### Patch Changes
+
+- e732e58: export `Size` type from contexts/canvas to fix import errors regarding `Size` not being an export. for example in `useViewport`
+
+## 8.0.0-next.30
+
+### Patch Changes
+
+- eae09cd: Fix `<T>` types
+
+## 8.0.0-next.29
+
+### Minor Changes
+
+- 10ceb5b: Add UserProps
+
+## 8.0.0-next.28
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
+## 8.0.0-next.27
+
+### Patch Changes
+
+- 3a1ae36: fix: Include auto-generated d.ts file
+
+## 8.0.0-next.26
+
+### Major Changes
+
+- 6e8bcc2: Stricter types on dispose, args, makeDefault and manual
+
+## 8.0.0-next.25
+
+### Major Changes
+
+- 5d3d231: Remove automatic deeply recursive disposal in favor of disposal of objects that are referenced by a `<T>` component.
+
+## 8.0.0-next.24
+
+### Minor Changes
+
+- 0f84459: Add preliminary event types on `<T>`
+
+### Patch Changes
+
+- d44a1d3: Replace dependency of useThrelte in useTask hook with useSheduler hook instead
+
+## 8.0.0-next.23
+
+### Minor Changes
+
+- cec4b57: Make children snippet arguments a type parameter on type `Props`
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 8.0.0-next.22
+
+### Major Changes
+
+- 6016286: Remove memoize, remove createObjectStore
+- 6016286: Refactored Threlte Plugin API
+
+## 8.0.0-next.21
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 8.0.0-next.20
+
+### Minor Changes
+
+- 1c73aa0: Add the isInstanceOf utility function
+
+### Patch Changes
+
+- b8b8214: Implement type guard utility, clean up
+
+## 8.0.0-next.19
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
+## 8.0.0-next.18
+
+### Patch Changes
+
+- a340d61: Fix setting camera context in useCamera
+
+## 8.0.0-next.17
+
+### Major Changes
+
+- b7e6927: Refactor attachment API
+
+## 8.0.0-next.16
+
+### Major Changes
+
+- 98b9789: Change oncreate API to return a cleanup function instead of passing it to a function argument
+
+## 8.0.0-next.15
+
+### Patch Changes
+
+- 7051420: Inline type-fest types
+
+## 8.0.0-next.14
+
+### Patch Changes
+
+- 6aced15: Fix types of component exports
+
+## 8.0.0-next.13
+
+### Patch Changes
+
+- c12ff98: Fix event cleanup of <T>
+
+## 8.0.0-next.12
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 8.0.0-next.11
+
+### Major Changes
+
+- e7b0273: Make AgXToneMapping the default toneMapping
+
+## 8.0.0-next.10
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+- 81e354d: Remove deprecated event handling from export
+
+## 8.0.0-next.9
+
+### Patch Changes
+
+- a8f7cc0: Expose fragment contexts
+- d36f77f: fix: Set `started` store of `useTask` correctly
+- 4154987: Added toCurrentReadable to storeUtils
+- 790794d: Add HUD component and useViewport hook
+
+## 8.0.0-next.8
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 8.0.0-next.7
+
+### Patch Changes
+
+- c53d7a9: Split out contexts by domain
+
+## 8.0.0-next.6
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 8.0.0-next.5
+
+### Patch Changes
+
+- 2ccf508: Remove userSize canvas prop
+- 750550b: Remove useLegacyLights prop
+
+## 8.0.0-next.4
+
+### Patch Changes
+
+- f7c501d: Remove legacy useFrame and useRender hooks
+
+## 8.0.0-next.3
+
+### Patch Changes
+
+- ccafaaa: Fix renderer resize flickering
+
+## 8.0.0-next.2
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 8.0.0-next.1
+
+### Patch Changes
+
+- 45fae01: Granular updates on T
+
+## 8.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 7.3.1
 
 ### Patch Changes

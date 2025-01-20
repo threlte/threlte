@@ -4,9 +4,10 @@ on:
   pull_request:
     branches:
       - main
+      - next
 
 jobs:
-  prettier:
+  validations:
     runs-on: ubuntu-latest
 
     steps:
@@ -26,3 +27,6 @@ jobs:
 
       - name: Prettier 💅
         run: pnpm run prettier
+
+      - name: Test
+        run: pnpm run test

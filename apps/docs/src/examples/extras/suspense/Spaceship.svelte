@@ -1,11 +1,9 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Float, useGltf, useSuspense } from '@threlte/extras'
-  import type { SpaceshipProps } from './Spaceship.svelte'
+  import type { SpaceshipProps } from './types'
 
-  type $$Props = SpaceshipProps
-
-  export let name: $$Props['name']
+  let { name, ...rest }: SpaceshipProps = $props()
 
   const suspend = useSuspense()
 
@@ -13,7 +11,7 @@
 </script>
 
 {#await gltf then { scene }}
-  <T.Group {...$$restProps}>
+  <T.Group {...rest}>
     <Float
       floatIntensity={3}
       speed={3}

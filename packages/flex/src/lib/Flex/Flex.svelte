@@ -1,37 +1,27 @@
 <script lang="ts">
-  import { forwardEventHandlers } from '@threlte/core'
-  import { loadYoga, type Yoga } from 'yoga-layout'
-  import type { FlexEvents, FlexProps, FlexSlots } from './Flex.svelte'
+  import { loadYoga, type Yoga } from 'yoga-layout/load'
   import InnerFlex from './InnerFlex.svelte'
+  import type { FlexProps } from './types'
 
-  type $$Props = FlexProps
-  type $$Events = FlexEvents
-  type $$Slots = FlexSlots
+  let { children: innerChildren, ref = $bindable(), ...props }: FlexProps = $props()
 
-  let yoga: Yoga | undefined
+  let yoga: Yoga | undefined = $state(undefined)
 
   const initialize = async () => {
     yoga = await loadYoga()
   }
 
   initialize()
-
-  const component = forwardEventHandlers()
 </script>
 
 {#if yoga}
   <InnerFlex
     {yoga}
-    {...$$restProps}
-    bind:this={$component}
-    let:reflow
-    let:width
-    let:height
+    bind:ref
+    {...props}
   >
-    <slot
-      {reflow}
-      {width}
-      {height}
-    />
+    {#snippet children({ reflow, width, height })}
+      {@render innerChildren?.({ reflow, width, height })}
+    {/snippet}
   </InnerFlex>
 {/if}

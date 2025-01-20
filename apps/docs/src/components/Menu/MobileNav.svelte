@@ -23,7 +23,7 @@
     <div>
       <slot name="topbar-left" />
     </div>
-    <div class="max-w-[30%]" />
+    <div class="max-w-[30%]"></div>
     <div class="flex flex-row items-center justify-end gap-4">
       <div>
         <slot name="topbar-right" />
@@ -39,7 +39,7 @@
         duration: 200
       }}
       in:customSlide={{ duration: 200 }}
-      class="border-b-orange/25 -z-10 min-h-0 w-full overflow-auto border-b bg-[#0a0F19]"
+      class="-z-10 min-h-0 w-full overflow-auto border-b border-b-orange/25 bg-[#0a0F19]"
     >
       <div
         class="px-6 pb-6 pt-2"
@@ -58,4 +58,4 @@
 </div>
 
 <!-- Mobile nav spacer -->
-<div class="h-[70px]" />
+<div class="h-[70px]"></div>

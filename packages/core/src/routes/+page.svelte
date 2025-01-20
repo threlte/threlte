@@ -1,16 +1,21 @@
 <script lang="ts">
-  import { Canvas } from '$lib'
+  import { Canvas } from '../lib'
   import Scene from './scene.svelte'
 </script>
 
 <main>
-  <Canvas>
+  <Canvas renderMode="always">
     <Scene />
   </Canvas>
 </main>
 
 <style>
+  :global(body) {
+    margin: 0;
+  }
+
   main {
     height: 100dvh;
+    width: 100dvw;
   }
 </style>

@@ -1,5 +1,107 @@
 # @threlte/xr
 
+## 1.0.0-next.16
+
+### Patch Changes
+
+- b8ea70d: Fix teleport plugin
+
+## 1.0.0-next.15
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 1.0.0-next.14
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 1.0.0-next.13
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
+## 1.0.0-next.12
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 1.0.0-next.11
+
+### Patch Changes
+
+- 6016286: Adapt plugins to new plugin API
+
+## 1.0.0-next.10
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 1.0.0-next.9
+
+### Patch Changes
+
+- 995e592: Implement type guard utility, clean up
+
+## 1.0.0-next.8
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
+## 1.0.0-next.7
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+
+## 1.0.0-next.6
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 1.0.0-next.5
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 1.0.0-next.4
+
+### Patch Changes
+
+- 2107848: Fix xr events and migrate remaining slots to snippets
+
+## 1.0.0-next.3
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 1.0.0-next.2
+
+### Patch Changes
+
+- 7cc5701: Remove raw event dispatching
+
+## 1.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 1.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
 ## 0.1.4
 
 ### Patch Changes

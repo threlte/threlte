@@ -5,24 +5,24 @@
 		*/
   import { T } from '@threlte/core'
   import { ReplaceStencilOp, AlwaysStencilFunc, Mesh } from 'three'
-  import type { MaskEvents, MaskProps, MaskSlots } from './Mask'
+  import type { MaskProps } from './types'
 
-  type $$Props = MaskProps
-  type $$Events = MaskEvents
-  type $$Slots = MaskSlots
+  let {
+    id = 1,
+    colorWrite = false,
+    depthWrite = false,
+    ref = $bindable(),
+    children,
+    ...props
+  }: MaskProps = $props()
 
-  type Props = Required<MaskProps>
+  const mesh = new Mesh()
 
-  export let id: Props['id'] = 1
-  export let colorWrite: Props['colorWrite'] = false
-  export let depthWrite: Props['depthWrite'] = false
+  $effect(() => {
+    const { material } = mesh
 
-  export let ref: Mesh = new Mesh()
-
-  const meshLoaded = (mesh: Mesh) => {
-    if (!mesh) return
-    const material = mesh.material
     if (Array.isArray(material)) return
+
     material.colorWrite = colorWrite
     material.depthWrite = depthWrite
     material.stencilWrite = true
@@ -31,20 +31,14 @@
     material.stencilFail = ReplaceStencilOp
     material.stencilZFail = ReplaceStencilOp
     material.stencilZPass = ReplaceStencilOp
-  }
-
-  $: meshLoaded(ref)
-
-  $: {
-    meshLoaded(ref)
-    id
-  }
+  })
 </script>
 
-<T.Mesh
-  {...$$restProps}
-  renderOrder={-id}
+<T
+  is={mesh}
   bind:ref
+  renderOrder={-id}
+  {...props}
 >
-  <slot {ref} />
-</T.Mesh>
+  {@render children?.({ ref: mesh })}
+</T>

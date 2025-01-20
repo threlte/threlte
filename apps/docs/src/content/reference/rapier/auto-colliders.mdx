@@ -1,81 +1,58 @@
 ---
-{
-  order: 4,
-  category: '@threlte/rapier',
-  name: '<AutoColliders>',
-  sourcePath: 'packages/rapier/src/lib/components/Colliders/AutoColliders.svelte',
-  type: 'component',
-  componentSignature:
-    {
-      pretext: "If a <code>&lt;AutoColliders&gt;</code> component is not a child of a <code>&lt;RigidBody&gt;</code> component, the transform properties are reactive.<br /><br />If you don't provide any of the properties <code>density</code>, <code>mass</code> or <code>massProperties</code>, Rapier will figure that out for you.<br /><br />You can provide either a property <code>density</code>, <code>mass</code> <strong>or</strong> <code>massProperties</code>.",
-      props:
-        [
-          {
-            name: 'shape',
-            required: false,
-            type: "'cuboid' | 'ball' | 'capsule' | 'trimesh' | 'convexHull'",
-            default: "'convexHull'"
-          },
-          { name: 'density', required: false, type: 'number' },
-          { name: 'mass', required: false, type: 'number' },
-          {
-            name: 'massProperties',
-            required: false,
-            type: '{
-              mass: number,
-              centerOfMass: Position,
-              principalAngularInertia: Position,
-              angularInertiaLocalFrame: Rotation,
-              }'
-          },
-          { name: 'restitution', required: false, type: 'number' },
-          { name: 'restitutionCombineRule', required: false, type: 'CoefficientCombineRule' },
-          { name: 'friction', required: false, type: 'number' },
-          { name: 'frictionCombineRule', required: false, type: 'CoefficientCombineRule' },
-          { name: 'sensor', required: false, type: 'boolean' },
-          { name: 'contactForceEventThreshold', required: false, type: 'number' }
-        ],
-      events: [
+order: 4
+category: '@threlte/rapier'
+name: '<AutoColliders>'
+sourcePath: 'packages/rapier/src/lib/components/Colliders/AutoColliders/AutoColliders.svelte'
+type: 'component'
+componentSignature:
+  {
+    pretext: "If a <code>&lt;AutoColliders&gt;</code> component is not a child of a <code>&lt;RigidBody&gt;</code> component, the transform properties are reactive.<br /><br />If you don't provide any of the properties <code>density</code>, <code>mass</code> or <code>massProperties</code>, Rapier will figure that out for you.<br /><br />You can provide either a property <code>density</code>, <code>mass</code> <strong>or</strong> <code>massProperties</code>.",
+    props:
+      [
         {
-          name: 'create', 
-          payload: '{
-            ref: Collider[],
-            cleanup: (callback: () => void) => void }
-          '
+          name: 'shape',
+          required: false,
+          type: "'cuboid' | 'ball' | 'capsule' | 'trimesh' | 'convexHull'",
+          default: "'convexHull'"
         },
+        { name: 'density', required: false, type: 'number' },
+        { name: 'mass', required: false, type: 'number' },
+        { name: 'massProperties', required: false, type: '{
+            mass: number,
+            centerOfMass: Position,
+            principalAngularInertia: Position,
+            angularInertiaLocalFrame: Rotation,
+            }' },
+        { name: 'restitution', required: false, type: 'number' },
+        { name: 'restitutionCombineRule', required: false, type: 'CoefficientCombineRule' },
+        { name: 'friction', required: false, type: 'number' },
+        { name: 'frictionCombineRule', required: false, type: 'CoefficientCombineRule' },
+        { name: 'sensor', required: false, type: 'boolean' },
+        { name: 'contactForceEventThreshold', required: false, type: 'number' }
+      ],
+    exports:
+      [
         {
-          name: 'collisionenter',
-          payload: '{
+          name: 'refresh',
+          type: '() => void',
+          description: 'Invoke this function to update the colliders shapes and transforms.'
+        }
+      ],
+    events: [{ name: 'create', payload: 'ref: Collider[]' }, { name: 'collisionenter', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null,
             manifold: TempContactManifold,
             flipped: boolean
-          }'
-        },
-        {
-          name: 'collisionexit',
-          payload: '{
+            }' }, { name: 'collisionexit', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null
-          }'
-        },
-        {
-          name: 'sensorenter',
-          payload: '{
+            }' }, { name: 'sensorenter', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null
-          }'
-        },
-        {
-          name: 'sensorexit',
-          payload: '{
+            }' }, { name: 'sensorexit', payload: '{
             targetCollider: Collider
             targetRigidBody: RigidBody | null
-          }'
-        },
-        {
-          name: 'contact',
-          payload: '{
+            }' }, { name: 'contact', payload: '{
             targetCollider: Collider,
             targetRigidBody: RigidBody | null,
             manifold: TempContactManifold,
@@ -84,18 +61,15 @@
             maxForceMagnitude: number,
             totalForce: Vector,
             totalForceMagnitude: number,
-          }'
-        }],
-      bindings:
-        [
-          {
-            name: 'colliders',
-            type:
-              { name: 'Collider[]', url: 'https://rapier.rs/javascript3d/classes/Collider.html' }
-          }
-        ]
-    }
-}
+            }' }],
+    bindings:
+      [
+        {
+          name: 'colliders',
+          type: { name: 'Collider[]', url: 'https://rapier.rs/javascript3d/classes/Collider.html' }
+        }
+      ]
+  }
 ---
 
 The `<AutoColliders>` component generates colliders based on its children. Currently these shapes are available:

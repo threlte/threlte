@@ -1,78 +1,73 @@
 ---
-{
-  order: 9.6,
-  category: '@threlte/extras',
-  name: <MeshLineMaterial>,
-  sourcePath: 'packages/extras/src/lib/components/MeshLine/MeshLineMaterial.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      extends:
+order: 5.6
+category: '@threlte/extras'
+name: <MeshLineMaterial>
+sourcePath: 'packages/extras/src/lib/components/MeshLine/MeshLineMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      { type: 'ShaderMaterial', url: 'https://threejs.org/docs/#api/en/materials/ShaderMaterial' },
+    props:
+      [
         {
-          type: 'ShaderMaterial',
-          url: 'https://threejs.org/docs/#api/en/materials/ShaderMaterial'
+          name: 'color',
+          type: 'ColorRepresentation',
+          default: "'#ffffff'",
+          required: false,
+          description: 'The color of the line.'
         },
-      'props':
-        [
-          {
-            name: 'color',
-            type: 'ColorRepresentation',
-            default: "'#ffffff'",
-            required: false,
-            'description': 'The color of the line.'
-          },
-          {
-            name: 'width',
-            type: 'number',
-            default: '1',
-            required: false,
-            'description': "The width of the line. If attenuate is true it's world units, otherwise it's screen pixels."
-          },
-          {
-            name: 'opacity',
-            type: 'number',
-            default: '1',
-            required: false,
-            'description': 'The opacity of the line. For values less than 1 transparent must be set to true.'
-          },
-          {
-            name: 'dashArray',
-            type: 'number',
-            default: '0',
-            required: false,
-            'description': 'The length and space between dashes. 0 = no dash.'
-          },
-          {
-            name: 'dashOffset',
-            type: 'number',
-            default: '0',
-            required: false,
-            'description': 'The location where the dash will begin. Ideal to animate the line.'
-          },
-          {
-            name: 'dashRatio',
-            type: 'number',
-            default: '0',
-            required: false,
-            'description': 'The ratio between the visible and non-visible sections of the dash.'
-          },
-          {
-            name: 'attenuate',
-            type: 'boolean',
-            default: 'true',
-            required: false,
-            'description': 'Set to false to make the line width constant regardless distance.'
-          },
-          {
-            name: 'scaleDown',
-            type: 'number',
-            default: '0',
-            required: false,
-            'description': "The amount to scale down the line when points are close together. 0 = don't scale."
-          }
-        ]
-    }
-}
+        {
+          name: 'width',
+          type: 'number',
+          default: '1',
+          required: false,
+          description: "The width of the line. If attenuate is true it's world units, otherwise it's screen pixels."
+        },
+        {
+          name: 'opacity',
+          type: 'number',
+          default: '1',
+          required: false,
+          description: 'The opacity of the line. For values less than 1 transparent must be set to true.'
+        },
+        {
+          name: 'dashArray',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'The length and space between dashes. 0 = no dash.'
+        },
+        {
+          name: 'dashOffset',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'The location where the dash will begin. Ideal to animate the line.'
+        },
+        {
+          name: 'dashRatio',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'The ratio between the visible and non-visible sections of the dash.'
+        },
+        {
+          name: 'attenuate',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Set to false to make the line width constant regardless distance.'
+        },
+        {
+          name: 'scaleDown',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: "The amount to scale down the line when points are close together. 0 = don't scale."
+        }
+      ]
+  }
 ---
 
 Used in combination with [`<MeshLineGeometry>`](/docs/reference/extras/meshline-geometry) to create a line formed of a strip of billboarded triangles, based on <a href="https://github.com/spite/THREE.MeshLine" target="_blank">THREE.MeshLine</a>.

@@ -1,7 +1,7 @@
 <T.Mesh
   scale={2}
   position.x={10}
-  on:click={() => {
+  onclick={() => {
     console.log('click!')
   }}
 >

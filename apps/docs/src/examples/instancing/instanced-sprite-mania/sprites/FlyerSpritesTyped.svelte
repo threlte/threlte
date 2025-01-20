@@ -35,13 +35,12 @@
 </script>
 
 <script lang="ts">
-  import { InstancedSprite } from '@threlte/extras'
+  import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import FlyingBehaviourHook from '../behaviours/FlyingBehaviourHook.svelte'
 
   export let billboarding = false
-  export let fps: number
+
   const count = 2000
-  import { buildSpritesheet } from '@threlte/extras'
 </script>
 
 {#await cacodaemonSpritesheet.spritesheet then spritesheet}

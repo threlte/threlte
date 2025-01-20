@@ -1,32 +1,32 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
-  import { createNoise2D } from 'simplex-noise'
-  import { PlaneGeometry, Vector3 } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import fragmentShader from './fragment.glsl?raw'
   import vertexShader from './vertex.glsl?raw'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { OrbitControls } from '@threlte/extras'
+  import { PlaneGeometry, Vector3 } from 'three'
+  import { SimplexNoise } from 'three/examples/jsm/Addons.js'
+  import { T } from '@threlte/core'
+  import { Tween } from 'svelte/motion'
   import { interactivity } from '@threlte/extras'
   import { quadOut } from 'svelte/easing'
-  import { tweened } from 'svelte/motion'
 
   // Terrain setup
   const terrainSize = 30
   const geometry = new PlaneGeometry(terrainSize, terrainSize, 100, 100)
-  const noise = createNoise2D()
-  const vertices = geometry.getAttribute('position').array
-  for (let i = 0; i < vertices.length; i += 3) {
-    const x = vertices[i]
-    const y = vertices[i + 1]
-    // @ts-ignore
-    vertices[i + 2] = noise(x / 5, y / 5) * 2 + noise(x / 40, y / 40) * 3
+  const noise = new SimplexNoise()
+
+  const vertices = geometry.getAttribute('position')
+  for (let i = 0; i < vertices.count; i += 1) {
+    const x = vertices.getX(i)
+    const y = vertices.getY(i)
+    vertices.setZ(i, noise.noise(x / 5, y / 5) * 2 + noise.noise(x / 40, y / 40) * 3)
   }
   geometry.computeVertexNormals()
 
   // Interactivity and shader variables
   interactivity()
   const pulsePosition = new Vector3()
-  const pulseTimer = tweened(0, {
+  const pulseTimer = new Tween(0, {
     easing: quadOut
   })
 </script>
@@ -37,7 +37,6 @@
   fov={15}
 >
   <OrbitControls
-    autoRotate
     target.y={1.5}
     autoRotateSpeed={0.2}
   />
@@ -46,14 +45,15 @@
 <T.Mesh
   {geometry}
   rotation.x={DEG2RAD * -90}
-  on:click={({ point }) => {
-    pulsePosition.set(point.x, point.y, point.z)
-    pulseTimer.set(0, {
-      duration: 0
-    })
-    pulseTimer.set(1, {
-      duration: 2000
-    })
+  onclick={({ point }) => {
+    pulsePosition.copy(point)
+    pulseTimer
+      .set(0, {
+        duration: 0
+      })
+      .then(() => {
+        pulseTimer.set(1, { duration: 2000 })
+      })
   }}
 >
   <T.ShaderMaterial
@@ -64,9 +64,10 @@
         value: 0
       },
       pulsePosition: {
-        value: pulsePosition
+        value: 0
       }
     }}
-    uniforms.pulseTimer.value={$pulseTimer}
+    uniforms.pulseTimer.value={pulseTimer.current}
+    uniforms.pulsePosition.value={pulsePosition}
   />
 </T.Mesh>

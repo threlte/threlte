@@ -1,19 +1,22 @@
+import type { EventListener, XRTargetRaySpace } from 'three'
 import { onDestroy } from 'svelte'
 import { currentWritable, useTask, useThrelte } from '@threlte/core'
 
-type UseGamepadOptions = {
-  /** The threshold value of any axis before change events are fired. Default is 0.05. */
-  axisDeadzone?: number
-} & (
+type UseGamepadOptions =
   | {
+      /** The threshold value of any axis before change events are fired. Default is 0.05. */
+      axisDeadzone?: number
       /** An optional gamepad index, if multiple gamepads are used. */
       index?: number
+      xr?: never
+      hand?: never
     }
   | {
+      /** The threshold value of any axis before change events are fired. Default is 0.05. */
+      axisDeadzone?: number
       xr: true
       hand: 'left' | 'right'
     }
-)
 
 const standardButtons = [
   'clusterBottom',
@@ -63,17 +66,17 @@ export type StandardGamepadEvent =
       value: number
     }
   | {
+      type: StandardGamepadEvents
+      target: XRGamepadButtons
+      value: number
+    }
+  | {
       type: 'change'
       target: StandardGamepadAxes
       value: {
         x: number
         y: number
       }
-    }
-  | {
-      type: StandardGamepadEvents
-      target: XRGamepadButtons
-      value: number
     }
   | {
       type: 'change'
@@ -309,10 +312,8 @@ type StandardGamepad = ReturnType<typeof createStandard>
 type StandardXRGamepad = ReturnType<typeof createXrStandard>
 
 export function useGamepad(): StandardGamepad
-export function useGamepad(options: UseGamepadOptions): StandardGamepad
-export function useGamepad(
-  options: UseGamepadOptions & { xr: true; hand: 'left' | 'right' }
-): StandardXRGamepad
+export function useGamepad(options: UseGamepadOptions & { xr?: never }): StandardGamepad
+export function useGamepad(options: UseGamepadOptions & { xr: true }): StandardXRGamepad
 export function useGamepad(options: UseGamepadOptions = {}) {
   const { axisDeadzone = 0.05 } = options
   const allEvents: Events = {}
@@ -365,7 +366,13 @@ export function useGamepad(options: UseGamepadOptions = {}) {
     // don't need to clean up here.
     const { start, stop } = useTask(processSnapshot, { autoStart: false, autoInvalidate: false })
 
-    const handleConnected = (event: THREE.Event) => {
+    const handleConnected: EventListener<
+      {
+        data: XRInputSource
+      },
+      'connected',
+      XRTargetRaySpace
+    > = (event) => {
       if (event.data.handedness !== options.hand) return
 
       const pad = event.data.gamepad
@@ -377,7 +384,13 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       }
     }
 
-    const handleDisconnected = (event: THREE.Event) => {
+    const handleDisconnected: EventListener<
+      {
+        data: XRInputSource
+      },
+      'disconnected',
+      XRTargetRaySpace
+    > = (event) => {
       if (event.data.handedness !== options.hand) return
 
       gamepad.raw = null
@@ -407,15 +420,15 @@ export function useGamepad(options: UseGamepadOptions = {}) {
 
     for (const index of [0, 1]) {
       const controller = xr.getController(index)
-      controller.addEventListener('connected', handleConnected as any)
-      controller.addEventListener('disconnected', handleDisconnected as any)
+      controller.addEventListener('connected', handleConnected)
+      controller.addEventListener('disconnected', handleDisconnected)
     }
 
     onDestroy(() => {
       for (const index of [0, 1]) {
         const controller = xr.getController(index)
-        controller.removeEventListener('connected', handleConnected as any)
-        controller.removeEventListener('disconnected', handleDisconnected as any)
+        controller.removeEventListener('connected', handleConnected)
+        controller.removeEventListener('disconnected', handleDisconnected)
       }
     })
 
@@ -431,7 +444,7 @@ export function useGamepad(options: UseGamepadOptions = {}) {
     const processSnapshot = () => {
       /**
        * getGamepads() will return a snapshot of a gamepad that will never change,
-       * so it must be polled continuously to recieve new values.
+       * so it must be polled continuously to receive new values.
        */
       const pad = navigator.getGamepads()[gamepadIndex]
       gamepad.raw = pad

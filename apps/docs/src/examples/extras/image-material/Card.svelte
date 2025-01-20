@@ -40,8 +40,8 @@
 <T.Mesh
   scale={$scale}
   {...$$restProps}
-  on:pointerover={stopPropagation(() => (hovered = true))}
-  on:pointerleave={stopPropagation(() => (hovered = false))}
+  onpointerover={stopPropagation(() => (hovered = true))}
+  onpointerleave={stopPropagation(() => (hovered = false))}
 >
   <BentPlaneGeometry args={[0.1, 1, 1, 20, 20]} />
   <ImageMaterial

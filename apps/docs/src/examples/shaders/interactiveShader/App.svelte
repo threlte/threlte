@@ -4,10 +4,10 @@
 </script>
 
 <div>
-  <span class="absolute left-0 top-0 z-20 whitespace-nowrap pl-4">Click on the terrain mesh</span>
   <Canvas>
     <Scene />
   </Canvas>
+  <span class="absolute left-4 top-4 z-20 whitespace-nowrap text-white">Click on the terrain</span>
 </div>
 
 <style>

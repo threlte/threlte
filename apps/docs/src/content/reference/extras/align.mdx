@@ -1,62 +1,67 @@
 ---
-{
-  order: 7.11,
-  'category': '@threlte/extras',
-  'name': '<Align>',
-  sourcePath: 'packages/extras/src/lib/components/Align/Align.svelte',
-  'type': 'component',
-  'componentSignature':
-    {
-      extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-      props:
-        [
-          {
-            name: 'x',
-            type: 'number | false',
-            default: '0',
-            description: 'Align child objects on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis. If `false` is provided, this axis will be ignored.',
-            required: false
-          },
-          {
-            name: 'y',
-            type: 'number | false',
-            default: '0',
-            description: 'Align child objects on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis. If `false` is provided, this axis will be ignored.',
-            required: false
-          },
-          {
-            name: 'z',
-            type: 'number | false',
-            default: '0',
-            description: 'Align child objects on the z-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the z-axis. If `false` is provided, this axis will be ignored.',
-            required: false
-          },
-          {
-            name: 'precise',
-            type: 'boolean',
-            default: 'false',
-            description: 'See [setFromObject](https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject)',
-            required: false
-          },
-          {
-            name: 'auto',
-            type: 'boolean',
-            default: 'false',
-            description: 'Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts.',
-            required: false
-          }
-        ],
-      events:
-        [
-          {
-            name: 'align',
-            description: 'Fires when the child objects have been aligned.',
-            payload: '{ container: Object3D, width: number, height: number, depth: number, boundingBox: Box3, boundingSphere: Sphere, align: Vector3, verticalAlignment: number, horizontalAlignment: number, depthAlignment: number }'
-          }
-        ],
-      bindings: [{ name: 'align', type: '() => void' }]
-    }
-}
+order: 4.11
+category: '@threlte/extras'
+name: '<Align>'
+sourcePath: 'packages/extras/src/lib/components/Align/Align.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        {
+          name: 'x',
+          type: 'number | false',
+          default: '0',
+          description: 'Align child objects on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis. If `false` is provided, this axis will be ignored.',
+          required: false
+        },
+        {
+          name: 'y',
+          type: 'number | false',
+          default: '0',
+          description: 'Align child objects on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis. If `false` is provided, this axis will be ignored.',
+          required: false
+        },
+        {
+          name: 'z',
+          type: 'number | false',
+          default: '0',
+          description: 'Align child objects on the z-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the z-axis. If `false` is provided, this axis will be ignored.',
+          required: false
+        },
+        {
+          name: 'precise',
+          type: 'boolean',
+          default: 'false',
+          description: 'See [setFromObject](https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject)',
+          required: false
+        },
+        {
+          name: 'auto',
+          type: 'boolean',
+          default: 'false',
+          description: 'Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts.',
+          required: false
+        },
+        {
+          name: 'stage',
+          type: 'Stage',
+          default: 'useStage("<Align>", { before: renderStage })',
+          description: 'Bring your own stage to control when aligning occurs. If not provided, aligning will occur before the main render stage.',
+          required: false
+        }
+      ],
+    events:
+      [
+        {
+          name: 'align',
+          description: 'Fires when the child objects have been aligned.',
+          payload: '{ container: Object3D, width: number, height: number, depth: number, boundingBox: Box3, boundingSphere: Sphere, align: Vector3, verticalAlignment: number, horizontalAlignment: number, depthAlignment: number }'
+        }
+      ],
+    exports: [{ name: 'align', type: '() => void', description: 'Manually trigger an alignment.' }]
+  }
 ---
 
 This component will calculate a boundary box and align its children accordingly.
@@ -161,7 +166,7 @@ type AlignEventData = {
 
 ```svelte
 <Align
-  on:align={({ width }) => {
+  onalign={({ width }) => {
     console.log('The width of the bounding box is', width)
   }}
 >
@@ -172,20 +177,22 @@ type AlignEventData = {
 </Align>
 ```
 
-### Slot Props
+### Snippet Props
 
-The component `<Align>` provides a slot prop called `align` to schedule
+The component `<Align>` provides a snippet prop called `align` to schedule
 aligning all child objects. Be aware that this will not immediately align the
 objects, but rather schedule the alignment to happen exactly _once per frame_.
 It's a manual alternative to [`auto`](#auto).
 
 ```svelte
-<Align let:align>
-  {#if showOtherCube}
-    <T.Mesh on:create={align}>
-      <T.BoxGeometry />
-      <T.MeshBasicMaterial />
-    </T.Mesh>
-  {/if}
+<Align>
+  {#snippet children({ align })}
+    {#if showOtherCube}
+      <T.Mesh oncreate={align}>
+        <T.BoxGeometry />
+        <T.MeshBasicMaterial />
+      </T.Mesh>
+    {/if}
+  {/snippet}
 </Align>
 ```

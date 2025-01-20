@@ -1,34 +1,48 @@
 <script lang="ts">
   import { getContext } from 'svelte'
-  import type { InstancedSpriteUserCtx } from './InstancedSprite.svelte'
-  import type { SpriteInstanceProps } from './SpriteInstance'
+  import type { InstancedSpriteUserCtx, SpriteInstanceProps } from './types'
 
-  type $$Props = SpriteInstanceProps
+  let {
+    id = 0,
+    position = [0, 0, 0],
+    scale = [1, 1],
+    animationName,
+    playmode,
+    billboarding,
+    offset,
+    loop,
+    flipX,
+    flipY,
+    frameId
+  }: SpriteInstanceProps = $props()
 
-  const spriteCtx = getContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx')
-  const { updatePosition, sprite } = spriteCtx
-  //
-  export let id: $$Props['id'] = 0
+  const { updatePosition, sprite } = getContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx')
 
-  export let position: $$Props['position'] = [0, 0, 0]
-  export let scale: $$Props['scale'] = [1, 1]
-
-  export let animationName: $$Props['animationName'] = undefined
-  export let playmode: $$Props['playmode'] = undefined
-  export let billboarding: $$Props['billboarding'] = undefined
-  export let offset: $$Props['offset'] = undefined
-  export let loop: $$Props['loop'] = undefined
-  export let flipX: $$Props['flipX'] = undefined
-  export let flipY: $$Props['flipY'] = undefined
-  export let frameId: $$Props['frameId'] = undefined
-
-  $: position !== undefined && updatePosition(id, position, scale)
-  $: animationName !== undefined && sprite.animation.setAt(id, animationName)
-  $: playmode !== undefined && sprite.playmode.setAt(id, playmode)
-  $: billboarding !== undefined && sprite.billboarding.setAt(id, billboarding)
-  $: offset !== undefined && sprite.offset.setAt(id, offset)
-  $: loop !== undefined && sprite.loop.setAt(id, loop)
-  $: flipX !== undefined && sprite.flipX.setAt(id, flipX)
-  $: flipY !== undefined && sprite.flipY.setAt(id, flipY)
-  $: frameId !== undefined && sprite.frame.setAt(id, frameId, animationName)
+  $effect.pre(() => {
+    if (position !== undefined) updatePosition(id, position, scale)
+  })
+  $effect.pre(() => {
+    if (animationName !== undefined) sprite.animation.setAt(id, animationName)
+  })
+  $effect.pre(() => {
+    if (playmode !== undefined) sprite.playmode.setAt(id, playmode)
+  })
+  $effect.pre(() => {
+    if (billboarding !== undefined) sprite.billboarding.setAt(id, billboarding)
+  })
+  $effect.pre(() => {
+    if (offset !== undefined) sprite.offset.setAt(id, offset)
+  })
+  $effect.pre(() => {
+    if (loop !== undefined) sprite.loop.setAt(id, loop)
+  })
+  $effect.pre(() => {
+    if (flipX !== undefined) sprite.flipX.setAt(id, flipX)
+  })
+  $effect.pre(() => {
+    if (flipY !== undefined) sprite.flipY.setAt(id, flipY)
+  })
+  $effect.pre(() => {
+    if (frameId !== undefined) sprite.frame.setAt(id, frameId, animationName)
+  })
 </script>

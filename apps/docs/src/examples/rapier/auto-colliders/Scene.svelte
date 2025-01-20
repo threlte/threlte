@@ -3,8 +3,7 @@
   import { OrbitControls, Environment, useGltf } from '@threlte/extras'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
   import { derived } from 'svelte/store'
-  import type { MeshStandardMaterial, Mesh } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { type MeshStandardMaterial, type Mesh, MathUtils } from 'three'
   import Ground from './Ground.svelte'
 
   const gltf = useGltf<{
@@ -22,10 +21,7 @@
   })
 </script>
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-/>
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.PerspectiveCamera
   makeDefault
@@ -44,7 +40,7 @@
 {#if $helmet}
   <T.Group
     position={[-2.5, 2, 2.5]}
-    rotation={[90 * DEG2RAD, 0, 0]}
+    rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
       <AutoColliders shape={'convexHull'}>
@@ -59,7 +55,7 @@
 
   <T.Group
     position={[2.5, 2, 2.5]}
-    rotation={[90 * DEG2RAD, 0, 0]}
+    rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
       <AutoColliders shape={'ball'}>
@@ -74,7 +70,7 @@
 
   <T.Group
     position={[2.5, 2, -2.5]}
-    rotation={[90 * DEG2RAD, 0, 0]}
+    rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
       <AutoColliders shape={'cuboid'}>
@@ -89,7 +85,7 @@
 
   <T.Group
     position={[0, 2, 0]}
-    rotation={[90 * DEG2RAD, 0, 0]}
+    rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
       <AutoColliders shape={'trimesh'}>
@@ -104,7 +100,7 @@
 
   <T.Group
     position={[-2.5, 2, -2.5]}
-    rotation={[90 * DEG2RAD, 0, 0]}
+    rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
       <AutoColliders shape={'capsule'}>

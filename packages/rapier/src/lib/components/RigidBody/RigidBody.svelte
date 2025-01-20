@@ -1,50 +1,60 @@
 <script lang="ts">
-  import type { RigidBody } from '@dimforge/rapier3d-compat'
-  import { createRawEventDispatcher, SceneGraphObject } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
   import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
-  import { useHasEventListeners } from '../../hooks/useHasEventListener'
   import { useRapier } from '../../hooks/useRapier'
+  import {
+    initializeRigidBodyUserData,
+    setInitialRigidBodyState
+  } from '../../lib/createPhysicsTasks'
   import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
-  import type { RigidBodyContext, RigidBodyEventMap, ThrelteRigidBody } from '../../types/types'
-  import type { RigidBodyProps } from './RigidBody.svelte'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
   import { useCreateEvent } from '../../lib/useCreateEvent'
+  import type { RigidBodyContext, ThrelteRigidBody } from '../../types/types'
+  import { overrideTeleportMethods } from './overrideTeleportMethods'
+  import type { RigidBodyProps } from './types'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
-  type $$Props = Required<RigidBodyProps>
-  type OptProps = RigidBodyProps
-
-  export let linearVelocity: OptProps['linearVelocity'] = undefined
-  export let angularVelocity: OptProps['angularVelocity'] = undefined
-
-  export let type: $$Props['type'] = 'dynamic'
-  export let canSleep: $$Props['canSleep'] = true
-  export let gravityScale: $$Props['gravityScale'] = 1
-  export let ccd: $$Props['ccd'] = false
-  export let angularDamping: $$Props['angularDamping'] = 0
-  export let linearDamping: $$Props['linearDamping'] = 0
-  export let lockRotations: $$Props['lockRotations'] = false
-  export let lockTranslations: $$Props['lockTranslations'] = false
-  export let enabledRotations: $$Props['enabledRotations'] = [true, true, true]
-  export let enabledTranslations: $$Props['enabledTranslations'] = [true, true, true]
-  export let dominance: $$Props['dominance'] = 0
-  export let enabled: $$Props['enabled'] = true
-  export let userData: $$Props['userData'] = {}
+  let {
+    linearVelocity,
+    angularVelocity,
+    type = 'dynamic',
+    canSleep = true,
+    gravityScale = 1,
+    ccd = false,
+    angularDamping = 0,
+    linearDamping = 0,
+    lockRotations = false,
+    lockTranslations = false,
+    enabledRotations = [true, true, true],
+    enabledTranslations = [true, true, true],
+    dominance = 0,
+    enabled = true,
+    userData = {},
+    rigidBody = $bindable(),
+    oncreate,
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake,
+    children
+  }: RigidBodyProps = $props()
 
   /**
    * Every RigidBody receives and forwards collision-related events
    */
-  type $$Events = RigidBodyEventMap
-  const dispatcher = createRawEventDispatcher<$$Events>()
-  const { updateRef } = useCreateEvent<RigidBody>()
+  const { updateRef } = useCreateEvent(oncreate)
 
   const object = new Object3D()
+  initializeRigidBodyUserData(object)
 
   /**
-   * isSleeping used for events "sleep" and "wake" in `useFrameHandler`
+   * isSleeping used for events "sleep" and "wake" in `createPhysicsTasks`
    */
   object.userData.isSleeping = false
 
@@ -54,14 +64,13 @@
   const desc = new rapier.RigidBodyDesc(parseRigidBodyType(type)).setCanSleep(canSleep)
 
   /**
-   * Export the rigidBody only after positional initialization
-   */
-  export let rigidBody: RigidBody | undefined = undefined
-
-  /**
    * Temporary RigidBody init
    */
-  const rigidBodyTemp = world.createRigidBody(desc) as ThrelteRigidBody
+  let rigidBodyInternal = world.createRigidBody(desc) as ThrelteRigidBody
+
+  overrideTeleportMethods(rigidBodyInternal, object)
+
+  rigidBody = rigidBodyInternal
 
   /**
    * Apply transforms after the parent component added "object" to itself
@@ -73,57 +82,69 @@
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
     const worldPosition = getWorldPosition(object).multiply(parentWorldScale)
     const worldQuaternion = getWorldQuaternion(object)
-    rigidBodyTemp.setTranslation(worldPosition, true)
-    rigidBodyTemp.setRotation(worldQuaternion, true)
-    rigidBody = rigidBodyTemp
-    updateRef(rigidBody)
+    setInitialRigidBodyState(object, worldPosition, worldQuaternion)
+    rigidBodyInternal.setTranslation(worldPosition, true)
+    rigidBodyInternal.setRotation(worldQuaternion, true)
+    updateRef(rigidBodyInternal)
   }
   initPosition()
 
   /**
    * Will come in handy in the future for joints
    */
-  object.userData.rigidBody = rigidBodyTemp
+  object.userData.rigidBody = rigidBodyInternal
 
-  /**
-   * Reactive RigidBody properties
-   */
-  $: rigidBodyTemp.setBodyType(parseRigidBodyType(type), true)
-  $: if (linearVelocity)
-    rigidBodyTemp.setLinvel(
-      { x: linearVelocity[0], y: linearVelocity[1], z: linearVelocity[2] },
-      true
-    )
-  $: if (angularVelocity)
-    rigidBodyTemp.setAngvel(
-      { x: angularVelocity[0], y: angularVelocity[1], z: angularVelocity[2] },
-      true
-    )
-  $: rigidBodyTemp.setGravityScale(gravityScale, true)
-  $: rigidBodyTemp.enableCcd(ccd)
-  $: rigidBodyTemp.setDominanceGroup(dominance)
-  $: rigidBodyTemp.lockRotations(lockRotations, true)
-  $: rigidBodyTemp.lockTranslations(lockTranslations, true)
-  $: rigidBodyTemp.setEnabledRotations(...enabledRotations, true)
-  $: rigidBodyTemp.setEnabledTranslations(...enabledTranslations, true)
-  $: rigidBodyTemp.setAngularDamping(angularDamping)
-  $: rigidBodyTemp.setLinearDamping(linearDamping)
-  $: rigidBodyTemp.setEnabled(enabled)
+  $effect.pre(() => rigidBodyInternal.setBodyType(parseRigidBodyType(type), true))
+  $effect.pre(() => {
+    if (linearVelocity) {
+      rigidBodyInternal.setLinvel(
+        { x: linearVelocity[0], y: linearVelocity[1], z: linearVelocity[2] },
+        true
+      )
+    }
+  })
+  $effect.pre(() => {
+    if (angularVelocity) {
+      rigidBodyInternal.setAngvel(
+        { x: angularVelocity[0], y: angularVelocity[1], z: angularVelocity[2] },
+        true
+      )
+    }
+  })
+  $effect.pre(() => rigidBodyInternal.setGravityScale(gravityScale, true))
+  $effect.pre(() => rigidBodyInternal.enableCcd(ccd))
+  $effect.pre(() => rigidBodyInternal.setDominanceGroup(dominance))
+  $effect.pre(() => rigidBodyInternal.lockRotations(lockRotations, true))
+  $effect.pre(() => rigidBodyInternal.lockTranslations(lockTranslations, true))
+  $effect.pre(() => rigidBodyInternal.setEnabledRotations(...enabledRotations, true))
+  $effect.pre(() => rigidBodyInternal.setEnabledTranslations(...enabledTranslations, true))
+  $effect.pre(() => rigidBodyInternal.setAngularDamping(angularDamping))
+  $effect.pre(() => rigidBodyInternal.setLinearDamping(linearDamping))
+  $effect.pre(() => rigidBodyInternal.setEnabled(enabled))
 
   /**
    * Add userData to the rigidBody
    */
-  const { hasEventListeners } = useHasEventListeners<typeof dispatcher>()
-  $: rigidBodyTemp.userData = {
-    hasEventListeners,
-    ...userData
-  }
+  $effect.pre(() => {
+    rigidBodyInternal.userData = {
+      events: {
+        oncollisionenter,
+        oncollisionexit,
+        oncontact,
+        onsensorenter,
+        onsensorexit,
+        onsleep,
+        onwake
+      },
+      ...userData
+    }
+  })
 
   /**
    * Setting the RigidBody context so that colliders can
    * hook onto.
    */
-  setContext<RigidBodyContext>('threlte-rapier-rigidbody', rigidBodyTemp)
+  setContext<RigidBodyContext>('threlte-rapier-rigidbody', rigidBodyInternal)
 
   /**
    * Used by child colliders to restore transform
@@ -133,17 +154,32 @@
   /**
    * Add the mesh to the context
    */
-  addRigidBodyToContext(rigidBodyTemp, object, dispatcher)
+  addRigidBodyToContext(rigidBodyInternal, object, {
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit,
+    onsleep,
+    onwake
+  })
 
   /**
    * cleanup
    */
   onDestroy(() => {
-    removeRigidBodyFromContext(rigidBodyTemp)
-    world.removeRigidBody(rigidBodyTemp)
+    removeRigidBodyFromContext(rigidBodyInternal)
+    world.removeRigidBody(rigidBodyInternal)
+  })
+
+  const parent3DObject = useParentObject3D()
+  createParentObject3DContext(object)
+  watch(parent3DObject, (parent) => {
+    parent?.add(object)
+    return () => {
+      parent?.remove(object)
+    }
   })
 </script>
 
-<SceneGraphObject {object}>
-  <slot {rigidBody} />
-</SceneGraphObject>
+{@render children?.({ rigidBody: rigidBodyInternal })}

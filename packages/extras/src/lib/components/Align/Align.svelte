@@ -1,48 +1,37 @@
 <script lang="ts">
   import {
+    isInstanceOf,
+    observe,
     T,
-    createRawEventDispatcher,
-    forwardEventHandlers,
+    useStage,
     useTask,
-    useThrelte
+    useThrelte,
+    type Plugin
   } from '@threlte/core'
-  import { onMount } from 'svelte'
   import { Box3, Group, Sphere, Vector3 } from 'three'
-  import type { AlignEvents, AlignProps, AlignSlots } from './Align.svelte'
-  import { injectAlignPlugin } from './alignPlugin'
+  import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
+  import type { AlignProps } from './types'
 
-  type $$Props = AlignProps
-  type $$Events = AlignEvents
-  type $$Slots = AlignSlots
+  const { renderStage } = useThrelte()
 
-  /** Align the object on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis. */
-  export let x: $$Props['x'] = 0
-  /** Align the object on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis. */
-  export let y: $$Props['y'] = 0
-  /** Align the object on the z-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the z-axis. */
-  export let z: $$Props['z'] = 0
-  /** See https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject */
-  export let precise: $$Props['precise'] = false
-  /** Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts, defaults to false */
-  export let auto: $$Props['auto'] = false
+  let {
+    x = 0,
+    y = 0,
+    z = 0,
+    precise = false,
+    auto = false,
+    ref = $bindable(),
+    onalign,
+    children,
+    stage = useStage('<Align>', { before: renderStage }),
+    ...props
+  }: AlignProps = $props()
 
-  const dispatch = createRawEventDispatcher<$$Events>()
-  const { invalidate } = useThrelte()
-
-  const containerGroup = new Group()
+  const group = new Group()
   const innerGroup = new Group()
   const outerGroup = new Group()
 
-  let mounted = false
-  onMount(() => {
-    mounted = true
-  })
-
-  export const calculate = () => {
-    // we're only aligning when the component mounted, meaning all child
-    // component have been mounted as well.
-    if (!mounted) return
-
+  const calculate = () => {
     // return early if all axes are false
     if (x === false && y === false && z === false) return
 
@@ -67,20 +56,18 @@
       z === false ? 0 : -align.z + dAlign
     )
 
-    const eventData = {
+    onalign?.({
       boundingBox: box3,
       center: outerGroup.position.clone(),
       boundingSphere: sphere,
-      container: containerGroup,
+      container: group,
       depth,
       depthAlignment: dAlign,
       height,
       verticalAlignment: vAlign,
       width,
       horizontalAlignment: hAlign
-    }
-
-    dispatch('align', eventData)
+    })
   }
 
   /**
@@ -90,44 +77,43 @@
   const { start: scheduleAligning, stop } = useTask(
     () => {
       calculate()
-      invalidate()
       stop()
     },
-    { autoStart: false, autoInvalidate: false }
+    { autoStart: false, stage }
   )
 
-  /** Force a recalculation of the bounding box. */
-  export const align = () => {
-    scheduleAligning()
+  /** Manually trigger aligning */
+  export const align = scheduleAligning
+
+  observe(() => [x, y, z, precise], scheduleAligning)
+
+  const plugin: Plugin = (args) => {
+    if (!isInstanceOf(args.ref, 'Object3D')) return
+    observe.pre(
+      () => [args.ref],
+      () => {
+        if (auto) scheduleAligning()
+        return () => {
+          if (auto) scheduleAligning()
+        }
+      }
+    )
   }
-
-  /**
-   * We're only recalculating when the props change and the component is
-   * mounted.
-   */
-  $: mounted === true && x, y, z, precise, scheduleAligning()
-
-  /**
-   * Inject the align plugin if autoAlign is true. This will automatically
-   * align the object whenever a child component mounts or unmounts.
-   */
-  if (auto) injectAlignPlugin(scheduleAligning)
-
-  const component = forwardEventHandlers()
 </script>
 
 <T
-  is={containerGroup}
-  {...$$restProps}
-  bind:this={$component}
-  let:ref
+  is={group}
+  bind:ref
+  {...props}
 >
   <T is={outerGroup}>
     <T is={innerGroup}>
-      <slot
-        align={scheduleAligning}
-        {ref}
-      />
+      <InjectPlugin
+        name="align"
+        {plugin}
+      >
+        {@render children?.({ align: scheduleAligning, ref: group })}
+      </InjectPlugin>
     </T>
   </T>
 </T>

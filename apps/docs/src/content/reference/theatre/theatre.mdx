@@ -33,28 +33,26 @@ The component `<Theatre>` is a good choice if you want to test the waters or to 
 
 <Canvas>
   <Theatre>
-    <SheetObject
-      key="Camera"
-      let:Transform
-    >
-      <Transform>
-        <T.PerspectiveCamera
-          makeDefault
-          position={[5, 10, 3]}
-        />
-      </Transform>
+    <SheetObject key="Camera">
+      {#snippet children({ Transform })}
+        <Transform>
+          <T.PerspectiveCamera
+            makeDefault
+            position={[5, 10, 3]}
+          />
+        </Transform>
+      {/snippet}
     </SheetObject>
 
-    <SheetObject
-      key="Cube"
-      let:Transform
-    >
-      <Transform>
-        <T.Mesh position.y={0.5}>
-          <T.BoxGeometry />
-          <T.MeshBasicMaterial color="hotpink" />
-        </T.Mesh>
-      </Transform>
+    <SheetObject key="Cube">
+      {#snippet children({ Transform })}
+        <Transform>
+          <T.Mesh position.y={0.5}>
+            <T.BoxGeometry />
+            <T.MeshBasicMaterial color="hotpink" />
+          </T.Mesh>
+        </Transform>
+      {/snippet}
     </SheetObject>
 
     <T.GridHelper />

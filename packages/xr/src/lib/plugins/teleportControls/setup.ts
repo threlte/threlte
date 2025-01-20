@@ -67,7 +67,7 @@ export const setupTeleportControls = (
     },
     {
       fixedStep,
-      autostart: false
+      autoStart: false
     }
   )
 

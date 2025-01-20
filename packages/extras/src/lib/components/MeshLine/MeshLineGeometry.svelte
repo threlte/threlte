@@ -1,25 +1,26 @@
+<!--
+@component
+A stripped down version of THREE.MeshLine:
+
+https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
+
+With peformance improvements inspired by:
+
+https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
+ -->
 <script lang="ts">
-  /*
-    A stripped down version of THREE.MeshLine:
-    https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
-    With peformance improvements inspired by:
-    https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
-	*/
-  import type {
-    MeshLineGeometryEvents,
-    MeshLineGeometryProps,
-    MeshLineGeometrySlots
-  } from './MeshLineGeometry.svelte'
-  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
+  import type { MeshLineGeometryProps } from './types'
+  import { T, useThrelte } from '@threlte/core'
   import { BufferGeometry, Vector3, BufferAttribute } from 'three'
 
-  type $$Props = Required<MeshLineGeometryProps>
-  type $$Events = MeshLineGeometryEvents
-  type $$Slots = MeshLineGeometrySlots
-
-  export let points: $$Props['points'] = []
-  export let shape: $$Props['none'] = 'none'
-  export let shapeFunction: $$Props['selectFunction'] = (p: number) => 1
+  let {
+    points = [],
+    shape = 'none',
+    shapeFunction = () => 1,
+    ref = $bindable(),
+    children,
+    props
+  }: MeshLineGeometryProps = $props()
 
   let pointCount = points.length
 
@@ -50,7 +51,7 @@
     width.setX(i2, w)
     width.setX(i2 + 1, w)
 
-    uv.setXYZW(i3, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
+    uv.setXYZW(i2, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
 
     if (i < pointCount - 1) {
       const n = i * 2
@@ -129,15 +130,13 @@
     invalidate()
   }
 
-  $: setPoints(points)
-
-  const component = forwardEventHandlers()
+  $effect.pre(() => setPoints(points))
 </script>
 
 <T
   is={geometry}
-  bind:this={$component}
-  {...$$restProps}
+  bind:ref
+  {...props}
 >
-  <slot ref={geometry} />
+  {@render children?.({ ref: geometry })}
 </T>

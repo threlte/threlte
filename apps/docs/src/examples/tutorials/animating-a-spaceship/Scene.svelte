@@ -1,5 +1,5 @@
 <script>
-  import { T, useRender, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import Spaceship from './models/spaceship.svelte'
   import { Color, Mesh, PMREMGenerator, PlaneGeometry, Raycaster, Vector2, Vector3 } from 'three'
@@ -34,44 +34,50 @@
     composer.addPass(outputPass)
   }
 
-  // takes control of the render loop, unlike useFrame
-  // https://threlte.xyz/docs/reference/core/use-render
-  useRender(({ scene }) => {
-    if (intersectionPoint) {
-      const targetY = intersectionPoint?.y || 0
-      translAccelleration += (targetY - translY) * 0.002 // stiffness
-      translAccelleration *= 0.95 // damping
-      translY += translAccelleration
+  // Replaces the default render task, which does not execute because autoRender=false
+  // https://threlte.xyz/docs/learn/basics/render-modes#render-modes-and-custom-rendering
+  const { renderStage } = useThrelte()
+  useTask(
+    () => {
+      if (intersectionPoint) {
+        const targetY = intersectionPoint?.y || 0
+        translAccelleration += (targetY - translY) * 0.002 // stiffness
+        translAccelleration *= 0.95 // damping
+        translY += translAccelleration
 
-      const dir = intersectionPoint
-        .clone()
-        .sub(new Vector3(0, translY, 0))
-        .normalize()
-      const dirCos = dir.dot(new Vector3(0, 1, 0))
-      const angle = Math.acos(dirCos) - Math.PI * 0.5
-      angleAccelleration += (angle - angleZ) * 0.01 // stiffness
-      angleAccelleration *= 0.85 // damping
-      angleZ += angleAccelleration
-    }
-
-    if (envMapRT) envMapRT.dispose()
-
-    spaceShipRef.visible = false
-    scene.background = null
-    envMapRT = pmrem.fromScene(scene, 0, 0.1, 1000)
-    scene.background = new Color('#598889').multiplyScalar(0.05)
-    spaceShipRef.visible = true
-
-    spaceShipRef.traverse((child) => {
-      if (child?.material?.envMapIntensity) {
-        child.material.envMap = envMapRT.texture
-        child.material.envMapIntensity = 100
-        child.material.normalScale.set(0.3, 0.3)
+        const dir = intersectionPoint
+          .clone()
+          .sub(new Vector3(0, translY, 0))
+          .normalize()
+        const dirCos = dir.dot(new Vector3(0, 1, 0))
+        const angle = Math.acos(dirCos) - Math.PI * 0.5
+        angleAccelleration += (angle - angleZ) * 0.01 // stiffness
+        angleAccelleration *= 0.85 // damping
+        angleZ += angleAccelleration
       }
-    })
 
-    composer.render()
-  })
+      if (envMapRT) envMapRT.dispose()
+
+      spaceShipRef.visible = false
+      scene.background = null
+      envMapRT = pmrem.fromScene(scene, 0, 0.1, 1000)
+      scene.background = new Color('#598889').multiplyScalar(0.05)
+      spaceShipRef.visible = true
+
+      spaceShipRef.traverse((child) => {
+        if (child?.material?.envMapIntensity) {
+          child.material.envMap = envMapRT.texture
+          child.material.envMapIntensity = 100
+          child.material.normalScale.set(0.3, 0.3)
+        }
+      })
+
+      composer.render()
+    },
+    {
+      stage: renderStage
+    }
+  )
 
   onMount(() => {
     setupEffectComposer()

@@ -1,36 +1,19 @@
 <script lang="ts">
-  import { forwardEventHandlers } from '@threlte/core'
+  import { createInstanceIdContext } from '../useInstanceId'
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
   import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
-  import type {
-    InstancedMeshesEvents,
-    InstancedMeshesProps,
-    InstancedMeshesSlots,
-    Meshes
-  } from './InstancedMeshes.svelte'
+  import type { InstancedMeshesProps, Meshes } from './types'
 
   type T = $$Generic<Meshes>
 
-  type $$Props = InstancedMeshesProps<T>
-  type $$Events = InstancedMeshesEvents
-  type $$Slots = InstancedMeshesSlots<T>
-
-  export let meshes: T
+  let { meshes, children, ...props }: InstancedMeshesProps<T> = $props()
 
   const getInstance = (id: string) => {
-    return new Proxy(Instance, {
-      construct(Instance, args) {
-        const opts = {
-          ...args[0],
-          props: {
-            ...args[0].props,
-            id
-          }
-        } as any
-        return new Instance(opts)
-      }
-    })
+    return (...args: any) => {
+      createInstanceIdContext(id)
+      return Instance(...args)
+    }
   }
 
   const getInstanceComponentsArray = <T extends Mesh[]>(meshes: T): (typeof Instance)[] => {
@@ -51,20 +34,19 @@
     )
   }
 
-  $: components = Array.isArray(meshes)
-    ? (getInstanceComponentsArray(meshes) as any)
-    : (getInstanceComponentsObject(meshes) as any)
+  let components = $derived(
+    Array.isArray(meshes)
+      ? (getInstanceComponentsArray(meshes) as any)
+      : (getInstanceComponentsObject(meshes) as any)
+  )
 
-  $: meshesArray = Array.isArray(meshes) ? meshes : Object.values(meshes)
-  $: filteredMeshesArray = meshesArray.filter((mesh) => mesh.isMesh)
-
-  const dispatchingComponent = forwardEventHandlers()
+  let meshesArray = $derived(Array.isArray(meshes) ? meshes : Object.values(meshes))
+  let filteredMeshesArray = $derived(meshesArray.filter((mesh) => mesh.isMesh))
 </script>
 
 <InnerInstancedMeshes
   meshes={filteredMeshesArray}
-  bind:this={$dispatchingComponent}
-  {...$$restProps}
+  {...props}
 >
-  <slot {components} />
+  {@render children?.({ components })}
 </InnerInstancedMeshes>

@@ -1,5 +1,5 @@
 ---
-order: 11.4
+order: 5.4
 category: '@threlte/extras'
 name: <ImageMaterial>
 sourcePath: 'packages/extras/src/lib/components/ImageMaterial/ImageMaterial.svelte'
@@ -160,9 +160,14 @@ will smoothly transition into visibility.
 
 Enable "color processing with a texture" in the example on top of this page to see the effect applying RGBA color processing texture can have.
 
-<div class="w-full flex flex-col items-center">
-	<img src="/textures/alpha.jpg" class="max-w-[300px]"/>
-	<span>*Alpha image used in the example. The lighter values towards the center are revealed first.*</span>
+<div class="flex w-full flex-col items-center">
+  <img
+    src="/textures/alpha.jpg"
+    class="max-w-[300px]"
+  />
+  <span>
+    *Alpha image used in the example. The lighter values towards the center are revealed first.*
+  </span>
 </div>
 
 ### Order of processing effects

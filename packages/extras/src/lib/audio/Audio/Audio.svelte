@@ -1,21 +1,22 @@
 <script lang="ts">
-  import { forwardEventHandlers, T } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { Audio as ThreeAudio } from 'three'
   import { useAudio } from '../utils/useAudio'
   import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioEvents, AudioProps, AudioSlots } from './Audio.svelte'
+  import type { AudioProps } from './types'
 
-  type $$Props = AudioProps
-  type $$Events = AudioEvents
-  type $$Slots = AudioSlots
-
-  export let src: $$Props['src']
-  export let id: $$Props['id'] = undefined
-  export let volume: $$Props['volume'] = undefined
-  export let playbackRate: $$Props['playbackRate'] = undefined
-  export let autoplay: $$Props['autoplay'] = undefined
-  export let detune: $$Props['detune'] = undefined
-  export let loop: $$Props['loop'] = undefined
+  let {
+    src,
+    id,
+    volume,
+    playbackRate,
+    autoplay,
+    detune,
+    loop,
+    ref = $bindable(),
+    children,
+    ...props
+  }: AudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
@@ -25,26 +26,27 @@
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
-  export const ref = new ThreeAudio<GainNode>(listener)
+  const audio = new ThreeAudio<GainNode>(listener)
 
-  const { pause, play, stop, setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume } =
-    useAudio(ref)
-  export { play, pause, stop }
-  $: setAutoPlay(autoplay)
-  $: setSrc(src)
-  $: setVolume(volume)
-  $: setPlaybackRate(playbackRate)
-  $: setLoop(loop)
-  $: setDetune(detune)
+  const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
+    useAudio(audio, props)
 
-  const component = forwardEventHandlers()
+  export const pause = useAudioProps.pause
+  export const play = useAudioProps.play
+  export const stop = useAudioProps.stop
+
+  $effect(() => setAutoPlay(autoplay))
+  $effect(() => void setSrc(src))
+  $effect(() => setVolume(volume))
+  $effect(() => setPlaybackRate(playbackRate))
+  $effect(() => setLoop(loop))
+  $effect(() => setDetune(detune))
 </script>
 
 <T
-  is={ref}
-  {...$$restProps}
-  let:ref
-  bind:this={$component}
+  is={audio}
+  bind:ref
+  {...props}
 >
-  <slot {ref} />
+  {@render children?.({ ref: audio })}
 </T>

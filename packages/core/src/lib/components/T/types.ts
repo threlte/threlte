@@ -1,8 +1,24 @@
-import type { ConditionalKeys, Primitive } from 'type-fest'
+import type { Snippet } from 'svelte'
+import type { Object3D } from 'three'
+
+/** Inlined from type-fest */
+type ConditionalKeys<Base, Condition> = {
+  // Map through all the keys of the given base type.
+  [Key in keyof Base]-?: Base[Key] extends Condition // Pick only keys with types extending the given `Condition` type.
+    ? // Retain this key since the condition passes.
+      Key
+    : // Discard this key since the condition fails.
+      never
+
+  // Convert the produced object into a union type of the keys which passed the conditional test.
+}[keyof Base]
+
+/** Inlined from type-fest */
+type Primitive = null | undefined | string | number | boolean | symbol | bigint
 
 /**
- * We hold a list of prop keys that should be ommited from the object props
- * that are infered by the provided type.
+ * We hold a list of prop keys that should be omitted from the object props
+ * that are inferred by the provided type.
  */
 export type OmittedPropKeys =
   | 'type'
@@ -38,18 +54,21 @@ export type AnyProps = Record<string, any>
 /**
  * ### Base Props
  */
-export type BaseProps<Type> = {
-  attach?: string | ((parent: any, self: MaybeInstance<Type>) => (() => void) | void)
-}
-
-/**
- * ### Disposable Props
- */
-export type DisposableProps = {
+export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]> = {
   /**
    * If true, the object will be deeply disposed when the component unmounts.
    */
   dispose?: boolean
+
+  attach?:
+    | string
+    | Object3D
+    | ((args: { ref: Type; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
+    | false
+
+  children?: Snippet<ChildrenArgs>
+
+  oncreate?: CreateEvent<Type>
 }
 
 /**
@@ -59,7 +78,9 @@ export type ClassProps<Type> = Type extends AnyClass
   ? {
       args?: any[] | ConstructorParameters<Type>
     }
-  : Record<string, unknown>
+  : {
+      args?: never
+    }
 
 // Ref Props
 export type RefProps<Type> = {
@@ -76,7 +97,7 @@ export type CameraProps<Type> =
          * By default, Threlte will update the cameras aspect ratio or frustum
          * when the canvas is resized. If you want to manually control the
          * camera, set this to true.
-         * @default true
+         * @default false
          */
         manual?: boolean
         /**
@@ -85,12 +106,15 @@ export type CameraProps<Type> =
          */
         makeDefault?: boolean
       }
-    : Record<string, unknown>
+    : {
+        makeDefault?: never
+        manual?: never
+      }
 
 /**
  * ### Instance Props
  *
- * Enables the use of props that are infered from the provided type.
+ * Enables the use of props that are inferred from the provided type.
  *
  * ```ts
  * type PerspectiveCameraProps = InstanceProps<typeof PerspectiveCamera>
@@ -116,6 +140,31 @@ export type InstanceProps<Type> = Partial<
   >
 >
 
+// –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
+
+export type EventProps<Type> = Type extends {
+  addEventListener: (type: any, listener: (args: any[]) => void) => any
+}
+  ? {
+      [Key in Parameters<Type['addEventListener']>[0] & string as `on${Key}`]?: (
+        event: ExtractPayload<Key, Type>
+      ) => void
+    }
+  : Record<string, unknown>
+
+type ExtractPayload<
+  Event extends string,
+  Type extends { addEventListener: (type: string, listener: (args: any[]) => void) => any }
+> = Parameters<Extract<Type['addEventListener'], (type: Event, listener: any) => any>>[1] extends (
+  event: infer EventData
+) => any
+  ? EventData
+  : never
+
+export type CreateEvent<Type> = (ref: MaybeInstance<Type>) => void | (() => void)
+
+// –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
+
 /**
  * ### `Props<Type>`
  *
@@ -124,63 +173,23 @@ export type InstanceProps<Type> = Partial<
  * @example Props<typeof PerspectiveCamera>
  * // { position: [number, number, number], fov: number, etc… }
  */
-export type Props<Type> = AnyProps &
-  DisposableProps &
+export type Props<
+  Type,
+  ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]
+> = AnyProps &
   RefProps<Type> &
-  BaseProps<Type> &
+  BaseProps<Type, ChildrenArgs> &
   ClassProps<Type> &
   CameraProps<Type> &
-  InstanceProps<Type>
-
-// –––––––––––––––––––––––– SLOTS ––––––––––––––––––––––––
-
-/**
- * ### `Slots<Type>`
- *
- * This type is used as the Slot type for the component `<T>`.
- * @example Slots<typeof PerspectiveCamera>
- * // { default: { ref: PerspectiveCamera } }
- */
-export type Slots<Type> = {
-  default: {
-    ref: MaybeInstance<Type>
-  }
-}
-
-// –––––––––––––––––––––––– EVENTS ––––––––––––––––––––––––
+  InstanceProps<Type> &
+  EventProps<Type> &
+  Threlte.UserProps
 
 /**
- * ### `ObjectEvents<Type>`
+ * ### `TProps<Type>`
  *
- * This type can extract the event names and details from the provided type.
- * The event dispatcher currently needs to follow the strict pattern of
- * implementing an event map with the event name as the key and the event
- * payload as the value with a `type` property that matches the key.
+ * This type is internally used as the Prop type for the component `<T>`.
  */
-export type ObjectEvents<Type> =
-  MaybeInstance<Type> extends {
-    addEventListener: (...args: any[]) => any
-  }
-    ? {
-        [Key in Parameters<MaybeInstance<Type>['addEventListener']>[0]]: Extract<
-          Parameters<Parameters<MaybeInstance<Type>['addEventListener']>[1]>[0],
-          { type: Key }
-        >
-      }
-    : Record<string, unknown>
-
-export type CreateEvent<Type> = {
-  create: {
-    ref: MaybeInstance<Type>
-    cleanup: (callback: () => void) => void
-  }
-}
-
-/**
- * ### `Events<Type>`
- *
- * This type is used as the Events type for the component `<T>`.
- * @example Events<typeof PerspectiveCamera>
- * // { create: { ref: PerspectiveCamera, cleanup: (callback: () => void) => void } }
- */
-export type Events<Type> = Record<string, any> & CreateEvent<Type> & ObjectEvents<Type>
+export type TProps<Type> = {
+  is: Type
+} & Props<Type>

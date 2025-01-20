@@ -3,7 +3,7 @@
   import { T } from '@threlte/core'
   import { useGltf, useTexture, InstancedMesh, Instance } from '@threlte/extras'
 
-  export let transformData: number[][] = []
+  export let transformData: [number, number, number, number][] = []
 
   type GLTFResult = {
     nodes: {
@@ -22,7 +22,7 @@
   const assets = Promise.all([gltf, texture1])
 </script>
 
-{#await assets then _}
+{#await assets then [$gltf, $texture1]}
   <InstancedMesh>
     <T is={$gltf.nodes.Bush.geometry} />
     <T.MeshStandardMaterial

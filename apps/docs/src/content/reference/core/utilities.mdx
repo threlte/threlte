@@ -5,14 +5,18 @@ sourcePath: 'packages/core/src/lib/lib/storeUtils.ts'
 order: 6.2
 ---
 
-Threlte comes with a few utilities that are catered towards the use in a Threlte application but can also be used in other projects.
+Threlte comes with a few utilities that are catered towards the use in a Threlte
+application but can also be used in other projects.
 
 ## `watch`
 
-Watch a single store or multiple stores and call a callback when they change to trigger side effects. The callback will be called immediately with the current value of the store.
+Watch a single store or multiple stores and call a callback when they change to
+trigger side effects. The callback will be called immediately with the current
+value of the store.
 
 ```ts
 const store = writable(0)
+
 watch(store, (value) => {
   console.log(value) // 0
 })
@@ -25,6 +29,7 @@ You can also watch multiple stores:
 ```ts
 const store1 = writable(0)
 const store2 = writable(1)
+
 watch([store1, store2], ([value1, value2]) => {
   console.log(value1, value2) // 0 1
 })
@@ -34,6 +39,7 @@ The callback can return a cleanup function that will be called when the stores c
 
 ```ts
 const store = writable(0)
+
 watch(store, (value) => {
   console.log(value) // 0
   return () => {
@@ -44,38 +50,37 @@ watch(store, (value) => {
 
 ---
 
-## `memoize`
+## `observe`
 
-Use a single store or multiple stores and return the value(s) as an object.
-This is useful for using stores in a non-reactive way e.g. in loops.
-
-```ts
-const numberStore = writable(0)
-const memoized = memoize(numberStore) // { current: 0 }
-
-useTask(() => {
-  numberStore.update((n) => n + 1)
-  console.log(memoized.current) // 1, 2, 3, ...
-})
-
-const stringStore = writable('hello')
-const memoized = memoize([numberStore, stringStore])
-console.log(memoized.current) // [0, 'hello']
-```
-
-<Tip type="info">This utility function needs to be called during component initialization.</Tip>
-
-You can also pass a transform function to transform the values:
+Watch a single or multiple reactive values or stores and call a callback when
+they change. This is the runes-equivalent to [`watch`](#watch) and supports both
+stores and reactive values. It does however serve a different purpose: As
+opposed to `watch`, the provided callback is not called synchronously when
+stores or reactive values change but in the next microtask. This utility uses
+[Svelte's `$effect`](https://svelte.dev/docs/svelte/$effect) under the hood.
 
 ```ts
-const store = writable(0)
-const doubled = memoize(store, (n) => n * 2) // { current: 0 }
+let count = $state(0)
+let name = $state('John')
+const iteration = writable(0)
 
-useTask(() => {
-  store.update((n) => n + 1)
-  console.log(doubled.current) // 2, 4, 6, ...
-})
+observe(
+  () => [count, iteration],
+  ([count, iteration]) => {
+    // This callback is only called when `count` or `iteration` changes
+    // and not when `name` changes.
+    console.log(count, iteration, name)
+  }
+)
 ```
+
+---
+
+## `observe.pre`
+
+This is the same as [`observe`](#observe) but it uses
+[`$effect.pre`](https://svelte.dev/docs/svelte/$effect#$effect.pre) instead of
+`$effect`.
 
 ---
 
@@ -142,52 +147,20 @@ useTask(() => {
 
 ---
 
-## `forwardEventHandlers`
+## `isInstanceOf`
 
-Natively, Svelte has no way of passing down event handlers inside a
-component to a child component. Events have to be hand-wired upstream. This
-function allows you to forward event handlers from a parent component to a child
-component as if they were declared on the child component itself.
+Check if an object is an instance of a given THREE class. This function can be
+used as a type guard and as an alternative to
+[`instanceof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof)
+which is prone to error and [slower](https://jsperf.app/jazula). This function
+uses the `isFoo` property that THREE classes have to determine if an object is
+of a particular class.
 
-```svelte title="Child.svelte"
-<script>
-  import { forwardEventHandlers } from '@threlte/core'
-  const dispatchingComponent = forwardEventHandlers()
-</script>
+```ts
+const obj = new Object3D()
 
-<OtherChildComponent bind:this={$dispatchingComponent} />
-```
-
-Now, when implementing `<Child>` and adding event handlers via `on:eventname`,
-those event handlers will be forwarded to `<OtherChildComponent>`:
-
-```svelte title="Parent.svelte"
-<script>
-  import Child from './Child.svelte'
-</script>
-
-<Child on:click={() => console.log('clicked')} />
-```
-
-If `OtherChildComponent.svelte` now dispatches a `click` event, the event handler
-in `Parent.svelte` will be called.
-
----
-
-## `createRawEventDispatcher`
-
-This event dispatcher creates raw events unlike Svelte's own event dispatcher
-which nests the data in a detail object (`CustomEvent<Payload>`). This is not
-nesessary for a lot of Threlte use cases and makes it harder to work with the payload.
-
-```svelte title="ComponentA.svelte"
-<script>
-  const dispatch = createRawEventDispatcher<{ foo: string }>()
-  dispatch('foo', 'bar')
-</script>
-```
-
-```svelte title="ComponentB.svelte"
-<ComponentA on:foo={(e) => console.log(e)} />
-<!-- 'bar' -->
+// Later, in an unknown context
+if (isInstanceOf(obj, 'Object3D')) {
+  obj.position.x = 5
+}
 ```

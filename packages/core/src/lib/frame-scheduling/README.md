@@ -110,7 +110,7 @@ const physicsContext = {
 let rate = 1 / 2
 let fixedStepTimeAccumulator = 0
 
-const physicsStage = scheduler.createStage('physics stage', {
+const simulationStage = scheduler.createStage('physics stage', {
   before: 'default stage',
   // The callback is invoked by the scheduler on every requestAnimationFrame
   // and receives the delta time since the last frame in milliseconds as
@@ -141,7 +141,7 @@ context for easy interpolation. We can now add a task that will run when
 the step is invoked by the physics stage.
 
 ```ts
-physicsStage.createTask('physics', (delta) => {
+simulationStage.createTask('physics', (delta) => {
 	// physics world update
 })
 ```

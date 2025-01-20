@@ -1,5 +1,77 @@
 # @threlte/gltf
 
+## 3.0.0-next.11
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 3.0.0-next.10
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
+## 3.0.0-next.9
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 3.0.0-next.8
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 3.0.0-next.7
+
+### Patch Changes
+
+- 946e7a8: fix parser for animated assets
+
+## 3.0.0-next.6
+
+### Patch Changes
+
+- 7a3281c: Split out gltf-related loaders into hooks for better tree shaking
+
+## 3.0.0-next.5
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 3.0.0-next.4
+
+### Patch Changes
+
+- 54bdef9: Fix gltf parser template for isolated components
+
+## 3.0.0-next.3
+
+### Patch Changes
+
+- bb726da: fix prettier formatting
+
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 958c375: Fix T.Group parser error
+
+## 3.0.0-next.1
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 3.0.0-next.0
+
+### Major Changes
+
+- e27c1e4: Remove forwardEventHandlers from generated svelte files
+
 ## 2.0.3
 
 ### Patch Changes

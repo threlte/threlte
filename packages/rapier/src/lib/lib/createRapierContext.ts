@@ -5,22 +5,34 @@ import type {
   RigidBodyHandle
 } from '@dimforge/rapier3d-compat'
 import RAPIER from '@dimforge/rapier3d-compat'
-import { readable, writable } from 'svelte/store'
+import { currentWritable, type Key, type Stage } from '@threlte/core'
+import { derived, writable } from 'svelte/store'
 import type { Object3D } from 'three'
-import type {
-  ColliderEventDispatcher,
-  ColliderEventDispatchers,
-  RigidBodyEventDispatcher,
-  RigidBodyEventDispatchers
-} from '../types/types'
+import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types'
+import { createPhysicsStages } from './createPhysicsStages'
+import { createPhysicsTasks } from './createPhysicsTasks'
 
-export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER.World>) => {
-  const world = new RAPIER.World(...args)
+export const createRapierContext = (
+  worldArgs: ConstructorParameters<typeof RAPIER.World>,
+  options: {
+    framerate?: Framerate
+    autoStart?: boolean
+    simulationStageOptions?: {
+      before?: (Key | Stage) | (Key | Stage)[]
+      after?: (Key | Stage) | (Key | Stage)[]
+    }
+    synchronizationStageOptions?: {
+      before?: (Key | Stage) | (Key | Stage)[]
+      after?: (Key | Stage) | (Key | Stage)[]
+    }
+  }
+): RapierContext => {
+  const world = new RAPIER.World(...worldArgs)
 
   const colliderObjects = new Map<ColliderHandle, Object3D>()
   const rigidBodyObjects = new Map<RigidBodyHandle, Object3D>()
-  const rigidBodyEventDispatchers = new Map() as RigidBodyEventDispatchers
-  const colliderEventDispatchers = new Map() as ColliderEventDispatchers
+  const rigidBodyEventDispatchers = new Map<number, RigidBodyEvents>()
+  const colliderEventDispatchers = new Map<number, ColliderEvents>()
 
   /**
    * Adds a collider to the context
@@ -28,13 +40,9 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
    * @param object
    * @param eventDispatcher
    */
-  const addColliderToContext = (
-    collider: Collider,
-    object: Object3D,
-    eventDispatcher: ColliderEventDispatcher
-  ) => {
+  const addColliderToContext = (collider: Collider, object: Object3D, props: ColliderEvents) => {
     colliderObjects.set(collider.handle, object)
-    colliderEventDispatchers.set(collider.handle, eventDispatcher)
+    colliderEventDispatchers.set(collider.handle, props)
   }
 
   /**
@@ -55,10 +63,10 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
   const addRigidBodyToContext = (
     rigidBody: RigidBody,
     object: Object3D,
-    eventDispatcher: RigidBodyEventDispatcher
+    events: RigidBodyEvents
   ) => {
     rigidBodyObjects.set(rigidBody.handle, object)
-    rigidBodyEventDispatchers.set(rigidBody.handle, eventDispatcher)
+    rigidBodyEventDispatchers.set(rigidBody.handle, events)
   }
 
   /**
@@ -70,12 +78,35 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
     rigidBodyEventDispatchers.delete(rigidBody.handle)
   }
 
-  // Dummy functions, will be replaced by useFrameHandler fn
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const pause = () => {}
+  const framerate = currentWritable(options.framerate ?? 'varying')
+  const simulationOffset = currentWritable(1)
+  const updateRigidBodySimulationData = currentWritable(framerate.current === 'varying')
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  const resume = () => {}
+  const { simulationStage, synchronizationStage } = createPhysicsStages(
+    framerate,
+    simulationOffset,
+    updateRigidBodySimulationData,
+    options
+  )
+
+  const autostart = options.autoStart ?? true
+  const paused = writable(!autostart)
+  if (!autostart) {
+    simulationStage.stop()
+    synchronizationStage.stop()
+  }
+
+  const { simulationTask, synchronizationTask } = createPhysicsTasks(
+    world,
+    framerate,
+    simulationOffset,
+    rigidBodyObjects,
+    updateRigidBodySimulationData,
+    colliderEventDispatchers,
+    rigidBodyEventDispatchers,
+    simulationStage,
+    synchronizationStage
+  )
 
   return {
     rapier: RAPIER,
@@ -89,8 +120,23 @@ export const createRapierContext = (...args: ConstructorParameters<typeof RAPIER
     addRigidBodyToContext,
     removeRigidBodyFromContext,
     debug: writable(false),
-    pause,
-    resume,
-    paused: readable(false)
+    pause: () => {
+      paused.set(true)
+      simulationStage.stop()
+      synchronizationStage.stop()
+    },
+    resume: () => {
+      paused.set(false)
+      simulationStage.start()
+      synchronizationStage.start()
+    },
+    paused: derived(paused, (a) => a),
+    framerate,
+    simulationOffset,
+    simulationStage,
+    synchronizationStage,
+    updateRigidBodySimulationData,
+    simulationTask,
+    synchronizationTask
   }
 }

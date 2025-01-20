@@ -39,6 +39,15 @@ export const componentSignature = z.object({
       })
     )
     .optional(),
+  exports: z
+    .array(
+      z.object({
+        name: z.string(),
+        description: z.string().optional(),
+        type: z.string()
+      })
+    )
+    .optional(),
   bindings: z
     .array(
       z.object({
@@ -62,6 +71,7 @@ export const referenceCategories = [
   '@threlte/gltf',
   '@threlte/xr',
   '@threlte/flex',
+  '@threlte/studio',
   'Documentation'
 ] as const
 
@@ -124,11 +134,32 @@ export const showcaseCollection = defineCollection({
   })
 })
 
+export const authorsCollection = defineCollection({
+  schema: z.object({
+    schemaType: z.string().default('authors'),
+    name: z.string(),
+    url: z.string()
+  })
+})
+
+export const blogCollection = defineCollection({
+  schema: z.object({
+    schemaType: z.string().default('blog'),
+    author: z.string(),
+    date: z.string(),
+    image: z.string(),
+    title: z.string(),
+    subtitle: z.string()
+  })
+})
+
 // 3. Export a single `collections` object to register your collection(s)
 export const collections = {
   reference: referenceCollection,
   learn: learnCollection,
   testimonials: testimonialsCollection,
   showcase: showcaseCollection,
-  examples: examplesCollection
+  examples: examplesCollection,
+  blog: blogCollection,
+  authors: authorsCollection
 }
