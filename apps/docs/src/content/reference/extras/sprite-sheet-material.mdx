@@ -1,5 +1,5 @@
 ---
-order: 9.1
+order: 5.1
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
 name: <SpriteSheetMaterial>
@@ -129,30 +129,62 @@ componentSignature:
   }
 ---
 
-A component for static or animatable spritesheets.
-
-<Example path="extras/sprite-sheet-material" />
+A common pattern with 2D assets is to pack sprites into one texture called a
+spritesheet. This can be used for both static and animatable sprites.
 
 ## Basics
 
-Threejs's `Sprite` is a plane that always face the camera and cannot cast
-shadows. The `SpriteMaterial` is transparent by default, isn't affected by
-lighting and generally has a single static texture. All of that can be a
-drawback so using a normal `Mesh`, `PlaneGeometry` and `MeshStandardMaterial`
-is a valid option.
+A `Sprite` is a plane that always faces the camera and cannot cast
+shadows. The `SpriteMaterial` is transparent by default and isn't affected by
+lighting. This can be a drawback sometimes so using a normal `Mesh`,
+`PlaneGeometry` and `MeshStandardMaterial` is a valid option.
+
+<Example path="extras/sprites/basic-mesh" />
+
+By default, if the `<SpriteSheetMaterial/>` has a `Mesh` parent it'll be a `MeshStandardMaterial`,
+otherwise its assumed to be a child of a `Sprite` and be a `SpriteMaterial` instead. A custom depth
+material will be added when it's parent is a mesh to support shadows.
+
+Any other material type can be used as well.
+
+```svelte {2}+
+<SpriteSheetMaterial
+  is={THREE.MeshToonMaterial}
+  textureUrl="fire.png"
+/>
+```
+
+It's assumed that the spritesheet's texture will be used again elsewhere within
+your app. This would normally cause problems however `<SpriteSheetMaterial>`
+[clones](https://threejs.org/docs/index.html?q=text#api/en/textures/Texture.clone)
+the texture and then disposes the clone when destroyed.
 
 ## SpriteSheets
 
-A common pattern in 2D graphics is to pack sprites into one texture called a
-spritesheet.
+The data for the spritesheet texture can be created from props, given in the `data`
+prop or loaded from file using the `dataURL` prop. If the component isn't given
+enough information from props, it'll either display the entire spritesheet or
+the first sprite frame.
 
-### Multiple static Sprites
+### Multiple Sprites
 
-The sheet data for the sprite frames within the texture can be given using the `data` prop
+The simplest setup is to pack your sprites into a single row or uniform grid and provide the
+the number of `columns` and/or `rows`. Then use `select` to pick the index of the sprite to use.
 
-The fruit example:
+```svelte {3-5}+
+<SpriteSheetMaterial
+  textureUrl="fruit.png"
+  columns={4}
+  rows={4}
+  select={10}
+/>
+```
 
-```svelte
+If your texture has some sprites of different sizes or you want to only single
+out a couple of sprites from your texture, you'll need to provide that
+information into the `data` prop. `select` can be the name of the sprite.
+
+```svelte {34-35}+
 <script lang="ts">
   import { T } from '@threlte/core'
   import { SpriteSheetMaterial, type SpriteSheetData } from '@threlte/extras'
@@ -171,70 +203,49 @@ The fruit example:
         y: 16,
         width: 16,
         height: 16,
-        name: 'pear_orange'
+        name: 'bush'
       },
       {
         x: 32,
         y: 0,
         width: 16,
-        height: 16,
-        name: 'grapes_green'
+        height: 48,
+        name: 'tree'
       }
     ]
   } satisfies SpriteSheetData
-
-  const selectedSprite = 'apple_red'
 </script>
 
-<T.Mesh>
-  <T.PlaneGeometry />
-  <SpriteSheetMaterial
-    textureUrl="/textures/sprites/fruit.png"
-    {data}
-    {selectedSprite}
-  />
-</T.Mesh>
+<SpriteSheetMaterial
+  textureUrl="worldtileset.png"
+  {data}
+  select={'tree'}
+/>
 ```
 
 ### Animated Sprites
 
-The coin
+<Example path="extras/sprites/animated-sprite-sheet-material" />
 
-...and the knight
+If your spritesheet is meant to be animated, it needs to have the `animate`
+prop.
 
-This material is most easily used by passing it a [spritesheet](https://www.aseprite.org/docs/sprite-sheet/) URL and a [JSON metadata file](https://gist.github.com/dacap/db18e5747a4b6e208d3c) URL.
+If no `data` or `dataURL` props are provided, additional props must be passed
+to create and run the animation.
 
-Currently, JSON metadata using [Aseprite's](https://www.aseprite.org/) [hash export format](https://www.aseprite.org/docs/cli/#data) is supported.
+- `totalFrames` or `columns` if the spritesheet is only a single row.
+- `rows` and `columns` otherwise.
 
-Animation names [from tags](https://www.aseprite.org/docs/tags) can be used to transition to specific animations in the spritesheet.
-
-```svelte {4,5}+
-<T.Sprite>
-  <SpriteSheetMaterial
-    animation="Idle"
-    textureUrl="./player.png"
-    dataUrl="./player.json"
-  />
-</T.Sprite>
+```svelte {3-4}+
+<SpriteSheetMaterial
+  textureUrl="coin.png"
+  totalFrames={12}
+  animate
+/>
 ```
 
-If no metadata file is provided, additional props must be passed to run an animation:
-
-- `totalFrames`, if the spritesheet is only a single row.
-- `totalFrames`, `rows`, and `columns`, otherwise.
-
-```svelte {4-6}+
-<T.Sprite>
-  <SpriteSheetMaterial
-    textureUrl="./fire.png"
-    totalFrames={14}
-    rows={4}
-    columns={4}
-  />
-</T.Sprite>
-```
-
-Additionally, if a sheet with no JSON supplied has multiple animations, start and end frames must be passed to run an animation within the sheet.
+Additionally, if a sheet with no JSON supplied has multiple animations, start
+and end frames must be passed to run an animation within the sheet.
 
 ```svelte {7-8}+
 <T.Sprite>
@@ -249,20 +260,15 @@ Additionally, if a sheet with no JSON supplied has multiple animations, start an
 </T.Sprite>
 ```
 
-`<SpriteSheetMaterial>` can be attached to a `<T.Sprite>` as well as a `<T.Mesh>`.
+## typescript
 
-<Example path="extras/animated-sprite-mesh" />
+`enum`s and `satisfies`
 
-In the case of a `Mesh` parent a `MeshBasicMaterial` will be used by default, instead of a `SpriteMaterial` when attached to a `Sprite`. A custom depth material will be attached when parented to a mesh to support shadows.
+## Supported data formats
 
-Any other material type can be used as well.
+Your JSON metadata may have been created from a third-party program, in which
+case if it's supported it will be transformed into the format that threlte uses.
 
-```svelte {3}+
-<T.Mesh>
-  <SpriteSheetMaterial
-    is={THREE.MeshStandardMaterial}
-    textureUrl="./fire.png"
-    totalFrames={14}
-  />
-</T.Mesh>
-```
+The following are currently supported:
+
+- [Aseprite](https://www.aseprite.org/).
