@@ -35,11 +35,12 @@
 		uniform float uTime;
 		uniform float uAmplitude;
 		uniform float uFrequency;
+
 		void main() {
 			vec2 uv = gl_FragCoord.xy / uResolution.xy;
-			vec3 color = texture2D(uScene, uv).rgb;
+			vec4 color = texture2D(uScene, uv);
 			color.b = uAmplitude * 0.5 * (1.0 + sin(uFrequency * uTime));
-			gl_FragColor = vec4(color, 1.0);
+			gl_FragColor = color;
 		}
 	`
 
