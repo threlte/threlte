@@ -15,7 +15,10 @@
   let amplitude = $state(1)
 </script>
 
-<Pane position="fixed">
+<Pane
+  position="fixed"
+  title="simple post-processing"
+>
   <Slider
     label="amplitude"
     bind:value={amplitude}
