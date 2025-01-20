@@ -9,7 +9,7 @@
 
   useTask((delta) => {
     const f = 1 / 60 / delta // ~1 at 60fps
-    rotation += 0.002 * f
+    rotation += 0.0005 * f
   })
 </script>
 
