@@ -15,13 +15,13 @@
     ...props
   }: TextProps = $props()
 
-  const text = new Text()
+  const text3d = new Text()
 
   const { invalidate } = useThrelte()
 
   const onUpdate = async () => {
     await tick()
-    text.sync(() => {
+    text3d.sync(() => {
       invalidate()
       onsync?.()
     })
@@ -40,12 +40,12 @@
 </script>
 
 <T
-  is={text}
+  is={text3d}
   bind:ref
   {...props}
   {font}
   {characters}
   {sdfGlyphSize}
 >
-  {@render children?.({ ref: text })}
+  {@render children?.({ ref: text3d })}
 </T>
