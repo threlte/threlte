@@ -1,5 +1,39 @@
 # @threlte/extras
 
+## 3.0.0
+
+### Major Changes
+
+- 05dc480: Refactor component types
+- d4f0639: Remove BasicPlayerController recipe
+- da6742c: Fixed Frame Physics, two-Stage system to manage simulation and synchronization)
+- f25685a: Experimental Svelte 5 compatibility
+- b476c89: Dependency updates
+
+### Minor Changes
+
+- b903698: Add usePhysicsTask hook
+- 5331021: Add useRopeJoint hook
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+- b7045f5: Svelte dependency update
+- 98a9bec: Fix rigidbody syncing for varying framerates
+- 9ebc43d: Enable scaled meshes for autocolliders
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 995e592: Implement type guard utility, clean up
+- c53d7a9: Replace fallback slots with snippets
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+- 42ee4c9: Fix svelte compiler warnings
+
 ## 3.0.0-next.20
 
 ### Patch Changes
