@@ -35,14 +35,7 @@ The package allows you to use an interactive GUI in the browser during developme
 
 ### Installation
 
-For a quick interactive setup of a fresh Threlte project, run:
-
-```sh
-npm create threlte my-project
-```
-and select the `@threlte/theatre` option.
-
-Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
+Check out the [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
 
 ### Support
 

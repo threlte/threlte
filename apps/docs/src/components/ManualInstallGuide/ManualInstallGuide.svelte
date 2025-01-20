@@ -19,7 +19,7 @@
     return args.some(Boolean) ? divider : ''
   }
 
-  let tag = '@next'
+  let tag = ''
 
   $: coreDivider = useDivider(
     installExtras,
