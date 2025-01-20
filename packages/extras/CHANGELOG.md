@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.0-next.55
+
+### Patch Changes
+
+- feb2660: fix Text component
+
 ## 9.0.0-next.54
 
 ### Patch Changes
