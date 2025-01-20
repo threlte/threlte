@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { AnimatedSpriteMaterial, Suspense, useTexture } from '@threlte/extras'
+  import { SpriteSheetMaterial, Suspense, useTexture } from '@threlte/extras'
   import Fire from './Fire.svelte'
   import Player from './Player.svelte'
   import ThrelteLogo from './ThrelteLogo.svelte'
@@ -45,11 +45,12 @@
       position.y={-1.99}
       position.x={i < 5 ? i / 2.4 + Math.random() * 0.4 - 2.8 : i / 2.4 + Math.random() * 0.4 - 1}
     >
-      <AnimatedSpriteMaterial
+      <SpriteSheetMaterial
         textureUrl="/textures/sprites/grass.png"
         totalFrames={6}
         fps={5}
         delay={i * 40}
+        animate
       />
     </T.Sprite>
   {/each}
