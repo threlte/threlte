@@ -1,5 +1,32 @@
 # @threlte/flex
 
+## 2.0.0
+
+### Major Changes
+
+- f25685a: Experimental Svelte 5 compatibility
+- 0e3a020: Migrate to generated component types
+
+### Minor Changes
+
+- 811ce98: bump Yoga 2.0 > Yoga 3.1
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+- b7045f5: Svelte dependency update
+- f7c501d: Remove legacy useFrame and useRender hooks
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+- 37d3cdc: Remove inspect
+
 ## 2.0.0-next.15
 
 ### Patch Changes
