@@ -52,7 +52,7 @@
     <TheatreTextBox key="start-building">
       <div class="flex flex-col-reverse items-center justify-center gap-6 md:flex-row md:gap-3">
         <code class="px-7 py-4 text-[1em] text-sm md:text-base">
-          <span class="mr-2 select-none font-bold text-orange">{'>'}</span>npm create threlte
+          <span class="mr-2 select-none font-bold text-orange">{'>'}</span>npm i @threlte/core
         </code>
 
         <Button

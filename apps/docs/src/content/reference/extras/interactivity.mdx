@@ -150,6 +150,8 @@ as set the raycaster up for raycasting.
       state.pointer.update((p) => {
         p.x = (event.clientX / window.innerWidth) * 2 - 1
         p.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+        return p
       })
 
       // Update the raycaster

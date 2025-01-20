@@ -1,5 +1,94 @@
 # @threlte/extras
 
+## 9.0.0
+
+### Major Changes
+
+- 2b699c7: Remove transitions plugin
+- 4d04573: migrate to generated components types
+- f25685a: Experimental Svelte 5 compatibility
+- 86072ef: separate `<Environment>` into two components
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+
+### Minor Changes
+
+- ba706cc: Add transitions plugin
+- 20a2865: Add Resize component, fix MeshDiscardMaterial
+- 97004c3: adds `useMeshBounds` which is a faster raycast function for the cost of pointer accuracy
+- 095bfa4: adds ability to start and stop HTML's render task. exposes the render task for rendering a single frame
+- d4a366d: Add `<VirtualEnvironment>`
+- aba6d5a: adds a <Detailed> component that can be used for displaying different level-of-detail for scene objects
+- f55c743: Add RadialGradientTexture & LinearGradientTexture components
+- 6ead49a: Added new View component. Adjusted core and other components to make use of the changes.
+- 076c1f9: Export InteractivityProps type
+- 9eecd88: Add <AsciiRenderer>
+- bf72ead: adds <MeshDiscardMaterial>` which is a material that completely hides the mesh but doesn't hide its children or shadows
+- ca7a1f0: Add <CubeCamera>
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
+### Patch Changes
+
+- 1731055: fix `<Resize>` types and default args
+- b7e6927: Adapt new core Attachment API
+- 5a08cd1: OrbitControls fix for Three.js R169
+- 5d3d231: Bump troika-three-text dependency
+- 3883665: Reduce interactivity footprint
+- b7045f5: Svelte dependency update
+- 8508b11: Add drei occlusion features to HTML component
+- 69f168c: CubeCamera follows what other components do and binds to the ref at the component instead of assigning in the script tag
+- 72a1004: Use regular ts files for shader files in MeshDiscardMaterial
+- afc3ffa: Allow multiple useProgress hooks, fixes for useGamepad and audio extras types
+- 61c0403: Animated Sprite Material's console warning is more helpful
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- e7b0273: Make AgXToneMapping the default toneMapping
+- 81da20a: Fixed type of `scale` in `PerfMonitor`
+- 8be57ae: use `isInstanceOf` to determine the camera's type in `useViewport`. fixes some type errors.
+- 24cbaa7: InstancedSprite component dependency bump to work with three v170
+- 13aff20: Migrate Billboard to runes mode
+- 52926fa: Fix suspense timing & types
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 01c1e3a: Adds a `<BakeShadows>` component that "freezes" shadows for scenes where shadows only need to be calculated once or very infrequently.'
+- 213026c: Fix RoundedBoxGeometry types
+- 7a3281c: Split out gltf-related loaders into hooks for better tree shaking
+- b5b3e2c: fix module context warnings on the command line
+- 9b6967f: Update vertex.ts to fix ERROR: 0:167: 'isPerspectiveMatrix' : no matching overloaded function found
+- 3b39c4e: Remove grid useTask invalidate call
+- 36128d5: Replace events with callback props and slots with snippets
+- 6378e37: Remove non-tree-shakable three/addons import use
+- 1a5d639: AutoInvalidate View components within their task as dom elements may move around
+- e8bf233: Add lang to module block, cleanup imports
+- cc4ccf2: Update Three.js
+- e4bf75c: Remove $events reference in HTML component
+- 60fcc29: Bump dev dependencies
+- 1973ebe: Fix performance regression where non-interactive objects would be added to the interactivity plugin
+- e75748d: Fix issues with MeshLine
+- cec4b57: Remove handwritten type def of `<Resize>`
+- 750550b: Remove useLegacyLights prop
+- 32aa5bb: Fix <TransformControls> bindings and prop updates
+- e2dc870: Fixed width property of HTML component when using fullscreen property
+- f76d1e4: Migrate additional components to runes mode
+- c03a430: Grid: Fix frame invalidation on prop change
+- a257643: Update Svelte + Three.js deps
+- 6016286: Adapted Threlte plugins to new plugin API
+- f9f8444: [next] Temporary three-perf fix with a github fork
+- be301d2: Fix useSuspense types
+- feb2660: fix Text component
+- 865515f: Implement type guard utility, clean up
+- 42ee4c9: Fix svelte compiler warnings
+- 1fb46bd: Fix `<TransformControls>`
+- cfe2286: [next] Restore ability to disable _attaching_ for gradient textures
+- 025ebb4: Fix TransformComtrols prop reactivity
+- 790794d: Add HUD component and useViewport hook
+- 1cd4af6: New Gizmo implementation
+
+## 9.0.0-next.55
+
+### Patch Changes
+
+- feb2660: fix Text component
+
 ## 9.0.0-next.54
 
 ### Patch Changes
@@ -366,6 +455,28 @@
 ### Major Changes
 
 - Experimental Svelte 5 compatibility
+
+## 8.12.1
+
+### Patch Changes
+
+- be8f4aa: Fix uncaught exception thrown in `<Grid>`
+
+## 8.12.0
+
+### Minor Changes
+
+- 33956e5: <xLabel>, <yLabel> and <zLabel> props have been added to the Gizmo component. This gives you the option to use custom labels ones such as ('N', 'E', 'W'), or ('y','x','z') instead of the default ('X', 'Y','Z')
+
+### Patch Changes
+
+- 0b853d1: fixes OrbitControls and TrackballControls task functions to work with three version 0.168
+
+## 8.11.5
+
+### Patch Changes
+
+- 25f7e6b: Update vertex.ts to fix ERROR: 0:167: 'isPerspectiveMatrix' : no matching overloaded function found
 
 ## 8.11.4
 

@@ -1,5 +1,21 @@
 # @threlte/docs-next
 
+## 0.14.0
+
+### Patch Changes
+
+- cd41fc5: Test versioning
+- 4c43bb8: modify useTexture docs. examples use svelte 5 effects, simplify `usage` section and modify headings
+- 2acb567: [next] AsciiRenderer docs update
+- 8c682f9: simplify camera controls example and turn it into a reactive class. update docs and note that `camera` is not reactive unless you want to create a new camera controls instance each time the camera updates
+- 617f59f: change code snippets to svelte script since `useSuspence must be called in a script tag
+- 612a2cb: converts the helmet example to svelte 5
+- 26e5722: update examples to use svelte 5, use typescript as codeblock language for better highlighting. use `boolean` instead of `Boolean`
+- 21271b8: fixes types in the MarchingCubes example and makes it a little less libraryish
+- c67def6: rewrite of `useFBO` which adds more functionality and is easier to follow in its implementation
+- a76b62a: replace all mentions of `BoxBufferGeometry` with `BoxGeometry`
+- 7e00f60: updates useFBO to use default options of `WebGLRenderTarget`
+
 ## 0.14.0-next.7
 
 ### Patch Changes
