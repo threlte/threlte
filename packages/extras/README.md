@@ -35,13 +35,7 @@ This provides assorted components, hooks and plugins that address common usecase
 
 ### Installation
 
-For a quick interactive setup of a fresh Threlte project, run:
-
-```sh
-npm create threlte my-project
-```
-
-Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
+Check out the [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
 
 ### Tutorial
 
