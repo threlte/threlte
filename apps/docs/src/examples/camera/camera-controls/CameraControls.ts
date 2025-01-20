@@ -1,11 +1,11 @@
 import CC from 'camera-controls'
-import type { OrthographicCamera } from 'three'
-import { PerspectiveCamera } from 'three'
+import type { Camera } from './types'
 import {
   Box3,
   Matrix4,
   Quaternion,
   Raycaster,
+  PerspectiveCamera,
   Sphere,
   Spherical,
   Vector2,
@@ -15,10 +15,7 @@ import {
 
 export default class CameraControls extends CC {
   static #installed = false
-  constructor(
-    element: HTMLElement,
-    camera: OrthographicCamera | PerspectiveCamera = new PerspectiveCamera()
-  ) {
+  constructor(element: HTMLElement, camera: Camera = new PerspectiveCamera()) {
     if (!CameraControls.#installed) {
       CC.install({
         THREE: {

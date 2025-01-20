@@ -1,13 +1,18 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
-  import type CameraControls from './CameraControls.svelte'
+  import type CC from 'camera-controls'
   import { Button, Checkbox, Pane, Separator } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { Mesh } from 'three'
 
   const mesh = new Mesh()
-  let controls: CameraControls
+  let controls = $state<CC>()
+
+  /**
+   * controls.enabled can not be bound to since its not reactive
+   */
+  let enabled = $state(true)
 </script>
 
 <Pane
@@ -136,25 +141,15 @@
     }}
   />
   <Separator />
-  {#if controls !== undefined}
-    <Checkbox
-      bind:value={controls.enabled}
-      label="enabled"
-    />
-  {/if}
+  <Checkbox
+    bind:value={enabled}
+    label="enabled"
+  />
 </Pane>
 
-<div>
-  <Canvas>
-    <Scene
-      {mesh}
-      bind:controls
-    />
-  </Canvas>
-</div>
-
-<style>
-  div {
-    height: 100%;
-  }
-</style>
+<Canvas>
+  <Scene
+    {mesh}
+    bind:controls
+  />
+</Canvas>

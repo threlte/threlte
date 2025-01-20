@@ -1,13 +1,20 @@
 <script lang="ts">
   import CameraControls from './CameraControls'
   import type CC from 'camera-controls'
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import type { Camera } from './types'
+  import { useTask, useThrelte } from '@threlte/core'
 
-  let { ref = $bindable() }: { ref: CC } = $props()
+  let { camera, ref = $bindable() }: { camera?: Camera; ref: CC | undefined } = $props()
 
   const { dom, invalidate } = useThrelte()
 
   ref = new CameraControls(dom)
+
+  $effect(() => {
+    if (camera !== undefined) {
+      ref.camera = camera
+    }
+  })
 
   useTask(
     (delta) => {
@@ -25,8 +32,3 @@
     }
   })
 </script>
-
-<T
-  is={ref.camera}
-  makeDefault
-/>
