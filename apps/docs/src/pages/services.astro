@@ -11,14 +11,13 @@ import ContactForm from '$components/ContactForm/ContactForm.svelte'
       <h1 class="relative z-10 max-w-[450px] text-center text-4xl font-bold text-white/90">
         Development & Support<br />by the
         <span class="relative inline-block">
-          <div class="bg-orange absolute bottom-0 left-0 -z-10 h-4 w-full"></div>
+          <div class="absolute bottom-0 left-0 -z-10 h-4 w-full bg-orange"></div>
           Threlte Team</span
         >.
       </h1>
       <Button
         class="my-6 pl-4"
         color="orange"
-        glow={true}
         href="#get-in-touch"
       >
         <svg
@@ -37,7 +36,7 @@ import ContactForm from '$components/ContactForm/ContactForm.svelte'
       </Button>
       <div class="text-faded mb-12 flex-1 text-center text-2xl font-light">
         Your experts<br />
-        for <span class="text-orange font-bold">3D Web Projects</span>.
+        for <span class="font-bold text-orange">3D Web Projects</span>.
       </div>
     </div>
   </div>
@@ -94,10 +93,7 @@ import ContactForm from '$components/ContactForm/ContactForm.svelte'
         </Fragment>
       </FeatureSection>
 
-      <FeatureSection
-        color="blue"
-        center={true}
-      >
+      <FeatureSection color="blue">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           slot="icon"
@@ -192,7 +188,7 @@ import ContactForm from '$components/ContactForm/ContactForm.svelte'
       >
         Let's
         <span class="relative inline-block">
-          <div class="bg-orange absolute bottom-0 left-0 -z-10 h-4 w-full"></div>
+          <div class="absolute bottom-0 left-0 -z-10 h-4 w-full bg-orange"></div>
           Get In Touch</span
         >.
       </h1>
