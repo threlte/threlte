@@ -19,6 +19,6 @@
   />
 </Pane>
 
-<Canvas>
+<Canvas autoRender={false}>
   <Scene {radius} />
 </Canvas>
