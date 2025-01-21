@@ -5,7 +5,7 @@ type DOMContext = {
   /** The canvas wrapper element */
   dom: HTMLElement
   canvas: HTMLCanvasElement
-  size: CurrentReadable<DOMRect>
+  size: CurrentReadable<{ width: number, height: number }>
 }
 
 export type CreateDOMContextOptions = {
@@ -15,11 +15,11 @@ export type CreateDOMContextOptions = {
 
 export const createDOMContext = (options: CreateDOMContextOptions) => {
   const { dom, canvas } = options
-  const size = currentWritable(dom.getBoundingClientRect())
+  const size = currentWritable({ width: dom.offsetWidth, height: dom.offsetHeight })
 
   onMount(() => {
     const resizeObserver = new ResizeObserver(() => {
-      size.set(dom.getBoundingClientRect())
+      size.set({ width: dom.offsetWidth, height: dom.offsetHeight })
     })
 
     resizeObserver.observe(dom)
