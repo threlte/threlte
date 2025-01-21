@@ -2,19 +2,17 @@
   import ScreenQuadGeometry, { vertexShader } from './ScreenQuadGeometry.svelte'
   import { Scene, Uniform, Vector2 } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { Environment, OrbitControls, useFBO, useGltf } from '@threlte/extras'
+  import { Environment, interactivity, OrbitControls, useFBO, useGltf } from '@threlte/extras'
 
-  let { amplitude = 1, frequency = 1 }: { amplitude?: number; frequency?: number } = $props()
+  let { radius = 1 }: { radius?: number } = $props()
 
   const { camera, renderStage, renderer, scene, size } = useThrelte()
 
   const fbo = useFBO()
   const _scene = new Scene()
 
-  const uTime = new Uniform(0)
   useTask(
-    (delta) => {
-      uTime.value += delta
+    () => {
       const last = renderer.getRenderTarget()
       renderer.setRenderTarget(fbo)
       renderer.render(scene, camera.current)
@@ -26,23 +24,28 @@
 
   /**
    * put your interesting effects in this shader.
-   * this one oscillates the blue channel of the scene
    */
   const fragmentShader = `
 		precision highp float;
 		uniform sampler2D uScene;
 		uniform vec2 uResolution;
-		uniform float uTime;
-		uniform float uAmplitude;
-		uniform float uFrequency;
+		uniform vec2 uMouse;
+		uniform float uRadius;
 
 		void main() {
 			vec2 uv = gl_FragCoord.xy / uResolution.xy;
 			vec4 color = texture2D(uScene, uv);
-			// remap sine's output from -1 -> 1 to 0 -> 1
-			float v = 0.5 * (1.0 + sin(uFrequency * uTime));
-			// uAmplitude scales v but must also be in the range 0 -> 1
-			color.b = uAmplitude * v;
+
+			vec2 d = (uv - uMouse);
+			d.x *= uResolution.x / uResolution.y;
+
+			float circle = 1.0 - smoothstep(
+				uRadius,
+				uRadius,
+				dot(d, d)
+			);
+
+			color.rgb *= circle;
 			gl_FragColor = color;
 		}
 	`
@@ -55,6 +58,14 @@
   })
 
   const gltf = useGltf('/models/spaceships/Bob.gltf')
+
+  const uMouse = new Uniform(new Vector2(0.5, 0.5))
+
+  const { pointer } = interactivity()
+
+  $effect(() => {
+    uMouse.value.copy($pointer).addScalar(1).divideScalar(2)
+  })
 </script>
 
 <T.PerspectiveCamera
@@ -73,21 +84,14 @@
     {vertexShader}
     {fragmentShader}
     uniforms={{
-      uAmplitude: {
-        value: 1
-      },
-      uTime: {
-        value: 0
-      },
-      uFrequency: {
+      uRadius: {
         value: 1
       }
     }}
     uniforms.uScene={uScene}
     uniforms.uResolution={uResolution}
-    uniforms.uTime={uTime}
-    uniforms.uAmplitude.value={amplitude}
-    uniforms.uFrequency.value={frequency}
+    uniforms.uMouse={uMouse}
+    uniforms.uRadius.value={radius}
   />
   <ScreenQuadGeometry />
 </T.Mesh>

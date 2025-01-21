@@ -3,16 +3,7 @@
   import Scene from './Scene.svelte'
   import { Canvas } from '@threlte/core'
 
-  /**
-   * how fast to cycle
-   */
-  let frequency = $state(1)
-
-  /**
-   * how much the effect will come through
-   * 0 -> 1 since gl colors are in this range
-   */
-  let amplitude = $state(1)
+  let radius = $state(0.05)
 </script>
 
 <Pane
@@ -20,24 +11,14 @@
   title="simple post-processing"
 >
   <Slider
-    label="amplitude"
-    bind:value={amplitude}
-    min={0}
-    max={1}
-    step={0.1}
-  />
-  <Slider
-    label="frequency"
-    bind:value={frequency}
-    min={1}
-    max={5}
-    step={1}
+    label="radius"
+    bind:value={radius}
+    min={0.01}
+    max={0.1}
+    step={0.01}
   />
 </Pane>
 
-<Canvas autoRender={false}>
-  <Scene
-    {amplitude}
-    {frequency}
-  />
+<Canvas>
+  <Scene {radius} />
 </Canvas>
