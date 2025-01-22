@@ -1,40 +1,60 @@
 <script lang="ts">
-  import CameraControls from './CameraControls.svelte'
+  import CameraControls from './CameraControls'
   import type CC from 'camera-controls'
-  import type { Camera } from './types'
   import type { ColorRepresentation } from 'three'
   import { Grid } from '@threlte/extras'
   import { Mesh, PerspectiveCamera } from 'three'
   import { T } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
 
   let {
-    camera = new PerspectiveCamera(),
     color = '#ff3e00',
-    controls = $bindable(),
-    enabled = true,
-    mesh
+    controls = $bindable()
   }: {
-    camera?: Camera
     color?: ColorRepresentation
     controls: CC | undefined
-    enabled?: boolean
-    mesh: Mesh
   } = $props()
 
+  const { autoRender, dom, invalidate } = useThrelte()
+
+  const camera = new PerspectiveCamera()
+  controls = new CameraControls(dom, camera)
+
   $effect(() => {
-    if (controls !== undefined) {
-      controls.enabled = enabled
+    return () => {
+      controls.dispose()
+    }
+  })
+  controls.setPosition(5, 5, 5)
+
+  const last = autoRender.current
+  autoRender.set(false)
+  $effect(() => {
+    return () => {
+      autoRender.set(last)
     }
   })
 
-  $effect(() => {
-    controls?.setPosition(5, 5, 5)
-  })
+  useTask(
+    (delta) => {
+      if (controls.update(delta)) {
+        console.log('yo')
+        invalidate()
+      }
+    },
+    { autoInvalidate: false }
+  )
+
+  const mesh = new Mesh()
+
+  export const fitToMesh = (transition = true) => {
+    return controls.fitToBox(mesh, transition)
+  }
 </script>
 
-<CameraControls
-  bind:ref={controls}
-  {camera}
+<T
+  is={camera}
+  makeDefault
 />
 
 <T
@@ -53,9 +73,4 @@
   sectionThickness={1}
   cellColor="#cccccc"
   gridSize={40}
-/>
-
-<T
-  is={camera}
-  makeDefault
 />

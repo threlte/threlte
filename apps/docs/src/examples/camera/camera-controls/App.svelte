@@ -4,15 +4,19 @@
   import { Button, Checkbox, Pane, Separator } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { Mesh } from 'three'
 
-  const mesh = new Mesh()
   let controls = $state<CC>()
+  let scene = $state<Scene>()
 
   /**
    * controls.enabled can not be bound to since its not reactive
    */
   let enabled = $state(true)
+  $effect(() => {
+    if (controls !== undefined) {
+      controls.enabled = enabled
+    }
+  })
 </script>
 
 <Pane
@@ -98,7 +102,7 @@
   <Button
     title="fit to the bounding box of the mesh"
     on:click={() => {
-      controls?.fitToBox(mesh, true)
+      scene?.fitToMesh()
     }}
   />
   <Separator />
@@ -149,7 +153,7 @@
 
 <Canvas>
   <Scene
-    {mesh}
+    bind:this={scene}
     bind:controls
   />
 </Canvas>
