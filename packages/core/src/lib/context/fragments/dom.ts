@@ -19,7 +19,10 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
 
   onMount(() => {
     const resizeObserver = new ResizeObserver(() => {
-      size.set({ width: dom.offsetWidth, height: dom.offsetHeight })
+      const { offsetWidth, offsetHeight } = dom
+      if (size.current.width !== offsetWidth || size.current.height !== offsetHeight) {
+        size.set({ width: offsetWidth, height: offsetHeight })
+      }
     })
 
     resizeObserver.observe(dom)
