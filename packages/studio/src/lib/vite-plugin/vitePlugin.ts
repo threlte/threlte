@@ -1,9 +1,9 @@
 import type { Plugin } from 'vite'
 import { createRPCServer } from 'vite-dev-rpc'
-import * as hmr from './hmr'
-import * as openInEditor from './open-in-editor'
-import * as staticState from './static-state'
-import * as transactions from './transactions'
+import * as hmr from './hmr/index'
+import * as openInEditor from './open-in-editor/index'
+import * as staticState from './static-state/index'
+import * as transactions from './transactions/index'
 import * as logger from './utils/logger'
 import type * as rpc from '../rpc/rpc'
 

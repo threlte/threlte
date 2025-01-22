@@ -1,4 +1,4 @@
-import * as hmr from '../hmr'
+import * as hmr from '../hmr/index'
 import * as componentParser from '../utils/componentParser'
 import { addStudioRuntimeProps, hasTComponent } from '../utils/componentParser'
 import * as componentUtils from '../utils/componentUtils'
