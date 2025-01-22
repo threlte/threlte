@@ -5,6 +5,8 @@ const metaKeys = new Set(['ctrl', 'alt', 'shift', 'meta'])
 
 const keyDelimiter = '§§§'
 
+const ignoreInputOnActiveElementTagNames = ['INPUT', 'TEXTAREA', 'SELECT']
+
 /**
  * Creates a string representation from an array of keyboard keys with a
  * delimiter that is unlikely to be used in a keyboard shortcut. Flattened
@@ -139,9 +141,11 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
 
     // Ignore keyboard actions if the active element is an input and keys array
     // does not include 'meta' or 'ctrl'
-    if (keys.includes('meta') || keys.includes('ctrl')) {
+    checkActiveElement: if (!keys.includes('meta') && !keys.includes('ctrl')) {
       const activeElement = document.activeElement
-      if (activeElement && activeElement.tagName === 'INPUT') return
+      if (!activeElement) break checkActiveElement
+      const tagName = activeElement.tagName.toUpperCase()
+      if (activeElement && ignoreInputOnActiveElementTagNames.includes(tagName)) return
     }
 
     const flattenedKeyCombo = flattenKeyCombo(keys)
