@@ -4,23 +4,18 @@ which supports smooth transitions and a variety of features.
 
 <Example path="camera/camera-controls" />
 
-The `CameraControls` class in the example _extends_ the camera controls library's
+The `CameraControls` class in the example _extends_ the camera-controls library's
 `CameraControls` class.
 
-It automatically installs `camera-controls` if not already installed and connects to the dom element that is passed into its constructor.
+It automatically installs `camera-controls` if not already installed when a new instance is created and connects the instance to the `element` passed into its constructor.
 
-## `<CameraControls>` component
+## Updating the Controls
 
 Updating the controls happens in a task in the `<Scene>` component.
 
-When the component unmounts, the controls are disposed of.
+The controls are disposed when the `<Scene>` component unmounts. This is an important step because it removes all the event listeners that are added when the CameraControls instance is created and connected to the dom.
 
-You could put both of these actions in the constructor of the `CameraControls` class if you didn't want to make a component out of it but be careful using threlte's [`useTask`](/docs/reference/core/use-task) since it accesses context set up by the [`<Canvas>`](/docs/reference/core/canvas) component.
-
-<Tip type="info">
-  The camera-controls package features include first-person, third-person, pointer-lock,
-  fit-to-bounding-sphere and much more!
-</Tip>
+You could put both of these actions in the constructor of the `CameraControls` class if you didn't want to do it in the component but be careful using threlte's [`useTask`](/docs/reference/core/use-task) since it accesses context set up by the [`<Canvas>`](/docs/reference/core/canvas) component.
 
 ### Prevent SSR Externalization
 
@@ -37,3 +32,8 @@ export default defineConfig({
   }
 })
 ```
+
+<Tip type="info">
+  The camera-controls package features include first-person, third-person, pointer-lock,
+  fit-to-bounding-sphere and much more!
+</Tip>
