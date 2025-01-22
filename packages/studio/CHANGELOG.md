@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.2
+
+### Patch Changes
+
+- 6726484: Ignore studio keyboard hotkey inputs when an input is focused
+
 ## 0.1.1
 
 ### Patch Changes
