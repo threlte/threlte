@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { AnimatedSpriteMaterial } from '@threlte/extras'
+  import { SpriteSheetMaterial } from '@threlte/extras'
 
   interface Props {
     show: boolean
@@ -26,11 +26,12 @@
   scale={[3.5, 1.75, 3.5]}
   position.y={0.2}
 >
-  <AnimatedSpriteMaterial
+  <SpriteSheetMaterial
     textureUrl="/textures/sprites/Threlte_7.png"
     dataUrl="/textures/sprites/Threlte_7.json"
+    dataFormat="Aseprite"
+    animate
     {animation}
-    autoplay
     loop={false}
   />
 </T.Sprite>

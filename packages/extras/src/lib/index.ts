@@ -17,7 +17,8 @@ export { meshBounds } from './utilities/meshBounds'
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as SpriteSheetMaterial } from './components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
 export type {
-  SpriteFrames,
+  SpriteSheetFrame,
+  SpriteSheetAnimation,
   SpriteSheetUserData as SpriteSheetData
 } from './components/SpriteSheetMaterial/types'
 export { default as Edges } from './components/Edges/Edges.svelte'
