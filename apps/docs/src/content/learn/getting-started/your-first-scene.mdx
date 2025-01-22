@@ -13,7 +13,6 @@ title: Your First Scene
 
 As a first step we're creating a new Svelte file called `App.svelte` where we are importing the [`<Canvas>` component](/docs/reference/core/canvas).
 
-{/* prettier-ignore-start */}
 ```svelte title="App.svelte"
 <script>
   import { Canvas } from '@threlte/core'
@@ -24,7 +23,6 @@ As a first step we're creating a new Svelte file called `App.svelte` where we ar
   <Scene />
 </Canvas>
 ```
-{/* prettier-ignore-end */}
 
 The `<Canvas>` component is the root component of your Threlte application. It creates a
 renderer and sets up some sensible defaults for you like antialiasing and color management.
@@ -45,7 +43,6 @@ a [`THREE.MeshBasicMaterial`](https://threejs.org/docs/index.html#api/en/materia
 
 We should now be looking at a white cube on a transparent background.
 
-{/* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {1-8}+
 <script>
   import { T } from '@threlte/core'
@@ -56,7 +53,6 @@ We should now be looking at a white cube on a transparent background.
   <T.MeshBasicMaterial />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-1"
@@ -80,7 +76,6 @@ pattern so Threlte takes care of it for you.
     object of `<T.BoxGeometry>` to the property `geometry` of the `<T.Mesh>` component. We're also attaching
     the underlying Three.js object of `<T.MeshBasicMaterial>` to the property `material` of the `<T.Mesh>` component.
 
-    {/* prettier-ignore-start */}
     ```svelte title="Scene.svelte"
     <script>
       import { T } from '@threlte/core'
@@ -91,7 +86,6 @@ pattern so Threlte takes care of it for you.
       <T.MeshBasicMaterial attach="material" />
     </T.Mesh>
     ```
-    {/* prettier-ignore-end */}
 
     Binding geometries to the property `geometry` and materials to the property `material` is a common
     pattern so Threlte will take care of it. It checks for the properties `isMaterial` and `isGeometry` on
@@ -123,7 +117,6 @@ mesh.material = material
 That cube is still a bit boring. Let's add some color to it, and make it a bit bigger! We also want to move it up a little to highlight it. We can do this by passing props to the
 `<T>` component.
 
-{/* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {5-7}m
 <script>
 import { T } from '@threlte/core'
@@ -134,8 +127,6 @@ import { T } from '@threlte/core'
 <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ````
-
-{/* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-2"
@@ -237,7 +228,6 @@ of props like `position.y` in our `<T.Mesh>`.
 
 We're still staring at the side of a cube, let's add a camera and offset it from the center:
 
-{/* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {5-11}+
 <script>
   import { T } from '@threlte/core'
@@ -256,7 +246,6 @@ We're still staring at the side of a cube, let's add a camera and offset it from
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-3"
@@ -279,20 +268,21 @@ event to get a reference to the underlying Three.js object as soon as it's creat
 
 Let's say we want to scale our cube as soon as we hover over it. We first have to import the
 [plugin](/docs/learn/advanced/plugins) [`interactivity`](/docs/reference/extras/interactivity) from
-[`@threlte/extras`](/docs/reference/extras/getting-started) and invoke it in our Scene.svelte file;
-We can now add interaction event listeners to our `<T>` components. We will add `pointerenter` and
-`pointerleave` event listeners to our cube. In the event handlers we'll update the value of a Svelte spring store
-and apply the stores value to the property `scale` of the component `<T.Mesh>`.
+[`@threlte/extras`](/docs/reference/extras/getting-started) and invoke it in our `Scene.svelte` file.
 
-{/* prettier-ignore-start */}
+The `interactivity` allows us to add interaction event listeners to our `<T>` components. We will add `pointerenter` and
+`pointerleave` event listeners to our cube. In the event handlers we'll update the value of a `Spring` from `svelte/motion`
+and use its `.current` value to set the `scale` property of the `<T.Mesh>` component.
+
 ```svelte title="Scene.svelte" {3-4,6-7,20-22}+
 <script>
   import { T } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
+  import { Spring } from 'svelte/motion'
 
   interactivity()
-  const scale = spring(1)
+
+  const scale = new Spring(1)
 </script>
 
 <T.PerspectiveCamera
@@ -305,15 +295,18 @@ and apply the stores value to the property `scale` of the component `<T.Mesh>`.
 
 <T.Mesh
   position.y={1}
-  scale={$scale}
-  onpointerenter={() => scale.set(1.5)}
-  onpointerleave={() => scale.set(1)}
+  scale={scale.current}
+  onpointerenter={() => {
+    scale.target = 1.5
+  }}
+  onpointerleave={() => {
+    scale.target = 1
+  }}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-4"
@@ -348,15 +341,15 @@ Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/refer
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 
-{/* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {2}m {9-12,24}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
+  import { Spring } from 'svelte/motion'
 
   interactivity()
-  const scale = spring(1)
+
+  const scale = new Spring(1)
 
   let rotation = 0
   useTask((delta) => {
@@ -375,15 +368,18 @@ cube rotate around its y-axis.
 <T.Mesh
   rotation.y={rotation}
   position.y={1}
-  scale={$scale}
-  onpointerenter={() => scale.set(1.5)}
-  onpointerleave={() => scale.set(1)}
+  scale={scale.current}
+  onpointerenter={() => {
+    scale.target = 1.5
+  }}
+  onpointerleave={() => {
+    scale.target = 1
+  }}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-5"
@@ -400,15 +396,16 @@ the delta to update the rotation
 We're almost done. Let's add some shading to our cube and a light source. We'll use a
 `THREE.MeshStandardMaterial` on our cube and a `THREE.DirectionalLight` to illuminate our scene.
 
-{/* prettier-ignore-start */}
 ```svelte title="Scene.svelte" {32}m {22}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
+  import { Spring } from 'svelte/motion'
 
   interactivity()
-  const scale = spring(1)
+
+  const scale = new Spring(1)
+
   let rotation = 0
   useTask((delta) => {
     rotation += delta
@@ -428,15 +425,18 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
 <T.Mesh
   rotation.y={rotation}
   position.y={1}
-  scale={$scale}
-  onpointerenter={() => scale.set(1.5)}
-  onpointerleave={() => scale.set(1)}
+  scale={scale.current}
+  onpointerenter={() => {
+    scale.target = 1.5
+  }}
+  onpointerleave={() => {
+    scale.target = 1
+  }}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshStandardMaterial color="hotpink" />
 </T.Mesh>
 ```
-{/* prettier-ignore-end */}
 
 <Example
   path="first-scene/step-6"
@@ -449,16 +449,16 @@ We would like our cube to cast a shadow. To do so, we need a floor for it to cas
 so we add a new `<T.Mesh>` but this time with `<T.CircleGeometry>`. To enable shadows, we need to
 set `castShadow` on both the light and our cube, and set `receiveShadow` on our new floor:
 
-{/* prettier-ignore-start */}
-
 ```svelte title="Scene.svelte" {22}m {24,33,39-45}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
+  import { Spring } from 'svelte/motion'
 
   interactivity()
-  const scale = spring(1)
+
+  const scale = new Spring(1)
+
   let rotation = 0
   useTask((delta) => {
     rotation += delta
@@ -481,9 +481,13 @@ set `castShadow` on both the light and our cube, and set `receiveShadow` on our 
 <T.Mesh
   rotation.y={rotation}
   position.y={1}
-  scale={$scale}
-  onpointerenter={() => scale.set(1.5)}
-  onpointerleave={() => scale.set(1)}
+  scale={scale.current}
+  onpointerenter={() => {
+    scale.target = 1.5
+  }}
+  onpointerleave={() => {
+    scale.target = 1
+  }}
   castShadow
 >
   <T.BoxGeometry args={[1, 2, 1]} />

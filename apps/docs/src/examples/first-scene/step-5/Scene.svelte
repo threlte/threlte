@@ -1,10 +1,10 @@
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
+  import { Spring } from 'svelte/motion'
 
   interactivity()
-  const scale = spring(1)
+  const scale = new Spring(1)
 
   let rotation = 0
   useTask((delta) => {
@@ -23,9 +23,13 @@
 <T.Mesh
   rotation.y={rotation}
   position.y={1}
-  scale={$scale}
-  onpointerenter={() => scale.set(1.5)}
-  onpointerleave={() => scale.set(1)}
+  scale={scale.current}
+  onpointerenter={() => {
+    scale.target = 1.5
+  }}
+  onpointerleave={() => {
+    scale.target = 1
+  }}
 >
   <T.BoxGeometry args={[1, 2, 1]} />
   <T.MeshBasicMaterial color="hotpink" />
