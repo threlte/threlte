@@ -5,7 +5,7 @@ type DOMContext = {
   /** The canvas wrapper element */
   dom: HTMLElement
   canvas: HTMLCanvasElement
-  size: CurrentReadable<{ width: number, height: number }>
+  size: CurrentReadable<{ width: number; height: number }>
 }
 
 export type CreateDOMContextOptions = {
