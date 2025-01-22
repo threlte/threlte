@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.12.2
+
+### Patch Changes
+
+- 1fa32a4: Fix for MeshLineMaterial
+
 ## 8.12.1
 
 ### Patch Changes
