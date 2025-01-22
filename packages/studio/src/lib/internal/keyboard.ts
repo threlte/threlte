@@ -137,6 +137,13 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       keys.push(e.key.toLowerCase())
     }
 
+    // Ignore keyboard actions if the active element is an input and keys array
+    // does not include 'meta' or 'ctrl'
+    if (keys.includes('meta') || keys.includes('ctrl')) {
+      const activeElement = document.activeElement
+      if (activeElement && activeElement.tagName === 'INPUT') return
+    }
+
     const flattenedKeyCombo = flattenKeyCombo(keys)
     if (downKeyMap.current.has(flattenedKeyCombo)) {
       e.preventDefault()
