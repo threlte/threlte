@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.1
+
+### Patch Changes
+
+- deb42dd: Bundle the vite plugin with tsup instead of svelte-package
+
 ## 0.1.0
 
 ### Minor Changes
