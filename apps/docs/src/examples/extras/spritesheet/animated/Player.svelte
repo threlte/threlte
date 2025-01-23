@@ -65,6 +65,7 @@
       textureUrl="/textures/sprites/player.png"
       dataUrl="/textures/sprites/player.json"
       dataFormat="Aseprite"
+      animate
       bind:this={sprite}
     />
     <T.PlaneGeometry args={[0.5, 0.5]} />

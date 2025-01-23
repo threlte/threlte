@@ -65,7 +65,7 @@ export type SpriteSheetCreationProps = {
    */
   columns?: number
 
-  /** Required to start animating. */
+  /** Required to animate. */
   animate?: boolean
 
   /**
@@ -76,9 +76,7 @@ export type SpriteSheetCreationProps = {
   startFrame?: number
 
   /**
-   * The end frame of the current animation.
-   *
-   * @default rows * columns - 1
+   * The end frame of the current animation. defaults to (`rows` * `columns`) - 1
    */
   endFrame?: number
 }

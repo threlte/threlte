@@ -48,6 +48,7 @@
       <SpriteSheetMaterial
         textureUrl="/textures/sprites/grass.png"
         totalFrames={6}
+        animate
         fps={5}
         delay={i * 40}
       />

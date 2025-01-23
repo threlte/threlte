@@ -20,6 +20,7 @@
 <T.Sprite position.y={-2.3}>
   <SpriteSheetMaterial
     textureUrl="/textures/sprites/fire.png"
+    animate
     totalFrames={8}
     fps={10}
   />

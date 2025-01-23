@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isInstanceOf, T, useParent, useTask, watch } from '@threlte/core'
+  import { isInstanceOf, T, useParent, useTask, watch, useThrelte } from '@threlte/core'
   import {
     LinearFilter,
     MeshStandardMaterial,
@@ -29,6 +29,7 @@
     startFrame = 0,
 
     animation,
+    animate,
     loop = true,
     autoplay = true,
     delay = 0,
@@ -49,6 +50,7 @@
 
   const parent = useParent()
   const suspend = useSuspense()
+  const { invalidate } = useThrelte()
 
   let isMesh = $parent !== undefined && isInstanceOf($parent, 'Mesh')
   is ??= isMesh ? new MeshStandardMaterial() : new SpriteMaterial()
@@ -57,7 +59,7 @@
   const jsonStore = suspend(
     dataUrl
       ? createFromJSON(dataUrl, dataFormat!)
-      : createFromProps({ columns, rows, startFrame, endFrame, totalFrames }, textureStore)
+      : createFromProps({ columns, rows, startFrame, endFrame, totalFrames, animate }, textureStore)
   )
 
   let texture: Texture | undefined = $state()
@@ -144,6 +146,10 @@
   const { start, stop } = useTask(
     () => {
       if (json == undefined) return
+      if (animate != true) {
+        stop()
+        return
+      }
 
       const now = performance.now()
       const diff = now - timerOffset
@@ -152,19 +158,11 @@
       const interval = frame.duration ?? fpsInterval
 
       if (diff <= interval) return
+
       timerOffset = now - (diff % interval)
 
-      // start and end are the first and last frames of the animation respectively
-      // const start =
-      //   direction === Direction.forward
-      //     ? frameTag?.from ?? startFrame ?? 0
-      //     : frameTag?.to ?? endFrame ?? numFrames - 1
-      // const end =
-      //   direction === Direction.forward
-      //     ? frameTag?.to ?? endFrame ?? numFrames - 1
-      //     : frameTag?.from ?? startFrame ?? 0
-
       setFrame(frame)
+      invalidate()
 
       currentFrameIndex += direction
 
@@ -182,7 +180,7 @@
         }
       }
     },
-    { autoStart: false }
+    { autoStart: false, autoInvalidate: false }
   )
 
   watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
@@ -202,7 +200,6 @@
     json = nextJson
 
     numFrames = json.frames.length
-    endFrame = numFrames - 1
 
     size = json.size
 
@@ -224,6 +221,7 @@
   })
 
   $effect.pre(() => {
+    if (animate == undefined) return
     setupAnimation(animation ?? defaultAnimationName)
     if (autoplay) {
       play()

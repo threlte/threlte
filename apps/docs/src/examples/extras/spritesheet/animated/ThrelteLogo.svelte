@@ -30,6 +30,7 @@
     textureUrl="/textures/sprites/Threlte_7.png"
     dataUrl="/textures/sprites/Threlte_7.json"
     dataFormat="Aseprite"
+    animate
     {animation}
     autoplay
     loop={false}

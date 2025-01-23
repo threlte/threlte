@@ -36,7 +36,7 @@ export const createFromProps = (
 function create(propData: SpriteSheetCreationProps, texture: Texture) {
   const { width, height } = texture.image
   let { rows, columns } = propData
-  const { data, totalFrames, endFrame, startFrame } = propData
+  const { data, totalFrames, animate, endFrame, startFrame } = propData
 
   const frames: SpriteSheetFrame[] = []
   let animations: SpriteSheetAnimation[] | undefined
@@ -75,7 +75,7 @@ function create(propData: SpriteSheetCreationProps, texture: Texture) {
     }
 
     // with many columns we can create an animation
-    if (columns > 1) {
+    if (animate) {
       if (startFrame != undefined && endFrame != undefined) {
         animations = [
           {
