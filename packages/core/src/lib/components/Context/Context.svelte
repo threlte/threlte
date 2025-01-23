@@ -6,8 +6,10 @@
     type CreateThrelteContextOptions
   } from '../../context/createThrelteContext.svelte'
 
-  let { children, ...rest }: CreateThrelteContextOptions<Renderer> & { children: Snippet } =
-    $props()
+  let {
+    children,
+    ...rest
+  }: CreateThrelteContextOptions<Renderer> & { offsetSize?: boolean; children: Snippet } = $props()
 
   createThrelteContext(rest)
 </script>

@@ -11,21 +11,22 @@ type DOMContext = {
 export type CreateDOMContextOptions = {
   dom: HTMLElement
   canvas: HTMLCanvasElement
+  offsetSize: boolean
 }
 
 export const createDOMContext = (options: CreateDOMContextOptions) => {
-  const { dom, canvas } = options
+  const { dom, canvas, offsetSize } = options
+
   const size = currentWritable(dom.getBoundingClientRect())
-  size.current.width = dom.offsetWidth
-  size.current.height = dom.offsetHeight
 
   onMount(() => {
     const resizeObserver = new ResizeObserver(() => {
-      const { offsetWidth, offsetHeight } = dom
-
-      if (size.current.width !== offsetWidth || size.current.height !== offsetHeight) {
-        size.current.width = offsetWidth
-        size.current.height = offsetHeight
+      if (offsetSize) {
+        size.set(dom.getBoundingClientRect())
+        size.current.width = dom.offsetWidth
+        size.current.height = dom.offsetHeight
+      } else {
+        size.set(dom.getBoundingClientRect())
       }
     })
 
