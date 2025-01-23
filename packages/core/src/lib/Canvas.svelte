@@ -5,11 +5,10 @@
   import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte'
 
   type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'dom'> & {
-    offsetSize?: boolean
     children?: Snippet
   }
 
-  let { offsetSize = true, children, ...rest }: Props = $props()
+  let { children, ...rest }: Props = $props()
 
   let canvas = $state<HTMLCanvasElement>()
   let dom = $state<HTMLDivElement>()
@@ -21,7 +20,6 @@
       <Context
         {dom}
         {canvas}
-        {offsetSize}
         {...rest}
       >
         {@render children?.()}
