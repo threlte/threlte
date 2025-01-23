@@ -1,7 +1,7 @@
 <script lang="ts">
   import { observe, T, useThrelte } from '@threlte/core'
   import { tick } from 'svelte'
-  import { preloadFont, Text } from 'troika-three-text'
+  import { preloadFont, Text as TroikaText } from 'troika-three-text'
   import { useSuspense } from '../../suspense/useSuspense'
   import type { TextProps } from './types'
 
@@ -15,7 +15,7 @@
     ...props
   }: TextProps = $props()
 
-  const text = new Text()
+  const text = new TroikaText()
 
   const { invalidate } = useThrelte()
 
