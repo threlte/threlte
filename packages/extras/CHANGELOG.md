@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.1
+
+### Patch Changes
+
+- 354880e: Fix `<Text>` published types
+
 ## 9.0.0
 
 ### Major Changes
