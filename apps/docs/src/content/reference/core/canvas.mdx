@@ -76,7 +76,9 @@ componentSignature:
   }
 ---
 
-The `<Canvas>` component is the root of your Threlte scene. It provides contexts that all other components and many hooks are depending on. This means they need to be **child components** to the `<Canvas>` component.
+The `<Canvas>` component is the root of your Threlte scene. It provides
+contexts that all other components and many hooks depend on. This means they
+need to be **child components** to the `<Canvas>` component.
 
 <Tip
   type="tip"
@@ -86,20 +88,33 @@ The `<Canvas>` component is the root of your Threlte scene. It provides contexts
   app architecture recipe.
 </Tip>
 
-By default, the `<canvas>` element and the renderer will resize to fit the parent
-element whenever the window resizes. Provide the property `size` to set a fixed
-`<canvas>` size.
+## Size
 
-`<Canvas>` also provides a default camera, located at `{ z: 5 }`.
+By default, the `<Canvas>` takes up `width:100%` and `height:100%` as well as
+resize if changes occur.
 
-If `renderMode` is set to `on-demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.<br />
-If `renderMode` is set to `always` a re-render is automatically scheduled every frame.<br />
-If `renderMode` is set to `manual` a re-render must manually be triggered with `useThrelte().advance()`.
+When resizing, [offset sizes](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Object_Model/Determining_the_dimensions_of_elements#how_much_room_does_it_use_up)
+are used. If you need the DOMRect sizes call `.getBoundingClientRect()` on the
+`dom` prop from [useThrelte](/docs/reference/core/use-threlte#usage)
+
+You can wrap your `<Canvas>` in an HTMLElement with `position:fixed` to keep
+the size the same.
+
+## Attaching events
+
+Within components you may wish to listen to events from the dom. The `dom`
+element given from the `useThrelte` hook for this.
 
 <Tip
-  type="note"
-  title="Events"
+  type="info"
+  title="Render Modes"
 >
-  It's recommended to use the `dom` element given from the `useThrelte` hook to add events to rather
-  than the `canvas`.
+  Visit our [Render Modes](/docs/learn/basics/render-modes) to learn more about that prop
+</Tip>
+
+<Tip
+  type="info"
+>
+  `<Canvas>` also provides a default camera, located at `{ z: 5 }` but this is
+  overridden by any camera in your scene with the `makeDefault` prop.
 </Tip>
