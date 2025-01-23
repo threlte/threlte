@@ -1,6 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky, AnimatedSpriteMaterial } from '@threlte/extras'
+  import { Grid, OrbitControls, Sky, SpriteSheetMaterial } from '@threlte/extras'
+  import { DoubleSide, type OrthographicCamera } from 'three'
 </script>
 
 <T.OrthographicCamera
@@ -9,7 +10,7 @@
   far={100}
   zoom={150}
   position={[5, 1.5, 3]}
-  oncreate={(ref) => ref.lookAt(0, 0, 0)}
+  oncreate={(ref: OrthographicCamera) => ref.lookAt(0, 0, 0)}
 >
   <OrbitControls
     enableDamping
@@ -21,6 +22,12 @@
 </T.OrthographicCamera>
 
 <Sky />
+
+<T.DirectionalLight
+  intensity={2}
+  castShadow
+  position={[1, 1, 1]}
+/>
 
 <Grid
   position.y={0.001}
@@ -50,13 +57,30 @@
 <T.Mesh
   position.y={0.5}
   rotation.y={Math.PI / 2}
+  position.z={0.5}
   castShadow
   receiveShadow
 >
-  <AnimatedSpriteMaterial
-    animation="Idle_Left"
-    textureUrl="/textures/sprites/punk.png"
-    dataUrl="/textures/sprites/punk.json"
+  <SpriteSheetMaterial
+    textureUrl="/textures/sprites/trees-pixelart.png"
+    side={DoubleSide}
+    rows={3}
+    columns={8}
+    startFrame={5}
   />
   <T.PlaneGeometry />
 </T.Mesh>
+
+<T.Sprite
+  position.z={-0.5}
+  position.y={0.5}
+  castShadow
+  receiveShadow
+>
+  <SpriteSheetMaterial
+    textureUrl="/textures/sprites/trees-pixelart.png"
+    rows={3}
+    columns={8}
+    startFrame={5}
+  />
+</T.Sprite>
