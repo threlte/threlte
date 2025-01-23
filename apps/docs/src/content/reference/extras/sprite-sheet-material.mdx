@@ -227,8 +227,7 @@ information into the `data` prop. `select` can be the name of the sprite.
 
 <Example path="extras/spritesheet/animated" />
 
-If your spritesheet is meant to be animated, it needs to have the `animate`
-prop.
+A default animation will be created if your spritesheet has more than 1 totalFrames (or columns).
 
 If no `data` or `dataURL` props are provided, additional props must be passed
 to create and run the animation.
@@ -240,12 +239,11 @@ to create and run the animation.
 <SpriteSheetMaterial
   textureUrl="coin.png"
   totalFrames={12}
-  animate
 />
 ```
 
 Additionally, if a sheet with no JSON supplied has multiple animations, start
-and end frames must be passed to run an animation within the sheet.
+and end frames must be passed to run the desired animation within the sheet.
 
 ```svelte {7-8}+
 <T.Sprite>
@@ -255,7 +253,7 @@ and end frames must be passed to run an animation within the sheet.
     rows={4}
     columns={4}
     startFrame={4}
-    endFrame={8}
+    endFrame={7}
   />
 </T.Sprite>
 ```
