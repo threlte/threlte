@@ -78,13 +78,10 @@
   const setFrame = (frame: SpriteSheetFrame) => {
     if (!texture) return
 
-    // TODO-DefinitelyMaybe: Why? isn't this == rows/columns?
     const horizontalFrames = size.width / frame.width
     const verticalFrames = size.height / frame.height
     const frameOffsetX = 1 / horizontalFrames
     const frameOffsetY = 1 / verticalFrames
-
-    // console.log(frameOffsetX, frame.x)
 
     const x =
       flipOffset > 0
@@ -132,7 +129,6 @@
   export const play = async () => {
     playQueued = true
     await Promise.all([textureStore, jsonStore])
-    if (!playQueued) return
     timerOffset = performance.now() - delay
     start()
   }
@@ -196,6 +192,7 @@
       texture.dispose()
     }
     texture = nextTexture.clone()
+    // TODO-DefinitelyMaybe: what were these about?
     // texture.matrixAutoUpdate = false
     // texture.generateMipmaps = false
     // texture.premultiplyAlpha = false
@@ -203,7 +200,6 @@
     texture.magFilter = texture.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
 
     json = nextJson
-    console.log(json)
 
     numFrames = json.frames.length
     endFrame = numFrames - 1
