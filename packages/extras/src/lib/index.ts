@@ -14,7 +14,13 @@ export { useViewport } from './hooks/useViewport'
 export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
-export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
+export { default as SpriteSheetMaterial } from './components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
+export type {
+  SpriteSheetData_Aseprite,
+  SpriteSheetUserData as SpriteSheetData,
+  SpriteSheetFrame,
+  SpriteSheetAnimation
+} from './components/SpriteSheetMaterial/types'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as HUD } from './components/HUD/HUD.svelte'
