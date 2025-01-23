@@ -11,12 +11,7 @@
   } from 'three'
   import { useTexture } from '../../hooks/useTexture'
   import { useSuspense } from '../../suspense/useSuspense'
-  import type {
-    SpriteSheetProps,
-    SpriteSheetFrame,
-    SpriteSheetData,
-    SpriteSheetAnimation
-  } from './types'
+  import type { SpriteSheetProps, SpriteSheetFrame, SpriteSheetData } from './types'
   import { defaultAnimationName, Direction, createFromJSON, createFromProps } from './utils'
   import { onDestroy } from 'svelte'
 
@@ -31,13 +26,13 @@
     dataFormat,
     rows = 1,
     columns = undefined,
+    startFrame = 0,
 
-    animation = '',
+    animation,
     loop = true,
     autoplay = true,
     delay = 0,
     fps = 10,
-    startFrame = 0,
     endFrame = undefined,
     totalFrames = 0,
 
@@ -233,8 +228,7 @@
   })
 
   $effect.pre(() => {
-    if (json == undefined) return
-    setupAnimation(animation)
+    setupAnimation(animation ?? defaultAnimationName)
     if (autoplay) {
       play()
     }

@@ -36,7 +36,7 @@ export const createFromProps = (
 function create(propData: SpriteSheetCreationProps, texture: Texture) {
   const { width, height } = texture.image
   let { rows, columns } = propData
-  const { data, totalFrames, animate, endFrame, startFrame } = propData
+  const { data, totalFrames, endFrame, startFrame } = propData
 
   const frames: SpriteSheetFrame[] = []
   let animations: SpriteSheetAnimation[] | undefined
@@ -52,10 +52,6 @@ function create(propData: SpriteSheetCreationProps, texture: Texture) {
       animations = data.animations
     }
   } else {
-    if (animate == undefined) {
-      console.error('Provide either the totalFrames or columns to animate the sprite')
-    }
-
     const spriteWidth = width / columns
     const spriteHeight = height / rows
 
@@ -78,32 +74,24 @@ function create(propData: SpriteSheetCreationProps, texture: Texture) {
       })
     }
 
-    if (animate) {
-      if (columns > 1) {
-        if (startFrame != undefined && endFrame != undefined) {
-          animations = [
-            {
-              name: defaultAnimationName,
-              from: startFrame,
-              to: endFrame,
-              direction: Direction.forward
-            }
-          ]
-        } else {
-          animations = [
-            {
-              name: defaultAnimationName,
-              from: 0,
-              to: numFrames - 1,
-              direction: Direction.forward
-            }
-          ]
-        }
-        // there should be enough information to create an animation
+    // with many columns we can create an animation
+    if (columns > 1) {
+      if (startFrame != undefined && endFrame != undefined) {
+        animations = [
+          {
+            name: defaultAnimationName,
+            from: startFrame,
+            to: endFrame
+          }
+        ]
       } else {
-        console.error(
-          'To animate a sprite, please provide either totalFrames or columns greater than 1'
-        )
+        animations = [
+          {
+            name: defaultAnimationName,
+            from: 0,
+            to: numFrames - 1
+          }
+        ]
       }
     }
   }

@@ -88,6 +88,36 @@ export type SpriteSheetProps = Props<Material> &
     /** The URL of the spritesheet texture image. */
     textureUrl: string
 
+    /**
+     * The texture filtering applied to the spritesheet.
+     *
+     * @default 'nearest'
+     */
+    filter?: 'nearest' | 'linear'
+
+    /**
+     * Sets the alpha value to be used when running an alpha test.
+     *
+     * @see https://threejs.org/docs/#api/en/materials/Material.alphaTest
+     *
+     * @default 0.1
+     */
+    alphaTest?: number
+
+    /**
+     * Whether or not the material should be transparent.
+     *
+     * @default true
+     */
+    transparent?: boolean
+
+    /**
+     * Whether or not the Sprite should flip sides on the x-axis.
+     *
+     * @default false
+     */
+    flipX?: boolean
+
     /** The current playing animation name. */
     animation?: string
 
@@ -113,41 +143,11 @@ export type SpriteSheetProps = Props<Material> &
     fps?: number
 
     /**
-     * The texture filtering applied to the spritesheet.
-     *
-     * @default 'nearest'
-     */
-    filter?: 'nearest' | 'linear'
-
-    /**
-     * Sets the alpha value to be used when running an alpha test.
-     *
-     * @see https://threejs.org/docs/#api/en/materials/Material.alphaTest
-     *
-     * @default 0.1
-     */
-    alphaTest?: number
-
-    /**
      * Delay the start of the animation in ms.
      *
      * @default 0
      */
     delay?: number
-
-    /**
-     * Whether or not the material should be transparent.
-     *
-     * @default true
-     */
-    transparent?: boolean
-
-    /**
-     * Whether or not the Sprite should flip sides on the x-axis.
-     *
-     * @default false
-     */
-    flipX?: boolean
 
     /** Fires when all resources have loaded. */
     onload?: () => void
