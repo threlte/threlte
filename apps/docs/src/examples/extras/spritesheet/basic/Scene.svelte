@@ -74,8 +74,6 @@
 <T.Sprite
   position.z={-0.5}
   position.y={0.5}
-  castShadow
-  receiveShadow
 >
   <SpriteSheetMaterial
     textureUrl="/textures/sprites/trees-pixelart.png"
