@@ -14,13 +14,13 @@
     [-1, -1, 0]
   ]
 
-  class BoundsMesh {
+  class BoundsItem {
     wireframe = $state(true)
     constructor(public position: Vector3Tuple) {}
   }
 
-  const boundsMeshes = positions.map((position) => {
-    return new BoundsMesh(position)
+  const boundsItems = positions.map((position) => {
+    return new BoundsItem(position)
   })
 
   const size = 1
@@ -37,21 +37,21 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-{#each boundsMeshes as boundsMesh}
+{#each boundsItems as boundsItem}
   <T.Mesh
     raycast={meshBounds}
     onpointerenter={() => {
-      boundsMesh.wireframe = false
+      boundsItem.wireframe = false
     }}
     onpointerleave={() => {
-      boundsMesh.wireframe = true
+      boundsItem.wireframe = true
     }}
-    position={boundsMesh.position}
+    position={boundsItem.position}
   >
     <T.BoxGeometry args={[size, size, size]} />
     <T.MeshStandardMaterial
       color="hotpink"
-      wireframe={boundsMesh.wireframe}
+      wireframe={boundsItem.wireframe}
     />
   </T.Mesh>
 {/each}
