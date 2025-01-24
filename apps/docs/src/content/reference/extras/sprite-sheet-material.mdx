@@ -92,10 +92,10 @@ componentSignature:
         },
         {
           name: 'startFrame',
-          type: 'number',
+          type: 'number|string',
           required: false,
           default: '0',
-          description: 'The start frame of the current animation.'
+          description: 'The index or name of the initial frame.'
         },
         {
           name: 'endFrame',
@@ -120,10 +120,10 @@ componentSignature:
       ],
     events:
       [
-        { name: 'load', payload: 'void', description: 'Fires when all resources have loaded.' },
-        { name: 'start', payload: 'void', description: 'Fires when an animation starts.' },
-        { name: 'end', payload: 'void', description: 'Fires when an animation ends.' },
-        { name: 'loop', payload: 'void', description: 'Fires when an animation loop completes.' }
+        { name: 'onload', payload: 'void', description: 'Fires when all resources have loaded.' },
+        { name: 'onstart', payload: 'void', description: 'Fires when an animation starts.' },
+        { name: 'onend', payload: 'void', description: 'Fires when an animation ends.' },
+        { name: 'onloop', payload: 'void', description: 'Fires when an animation loop completes.' }
       ],
     exports: [{ name: play, type: '() => void' }, { name: pause, type: '() => void' }]
   }
