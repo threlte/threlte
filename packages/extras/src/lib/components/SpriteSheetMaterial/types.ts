@@ -28,23 +28,11 @@ export type SpriteSheetData = {
   animations?: SpriteSheetAnimation[]
 }
 
-export type SpriteSheetUserData = {
-  size?: {
-    width: number
-    height: number
-  }
-  frames?: SpriteSheetFrame[]
-  animations?: SpriteSheetAnimation[]
-}
-
 export type SpriteSheetCreationProps = {
   /** The URL of the spritesheet JSON. */
   dataUrl?: string
 
-  dataFormat?: 'Aseprite'
-
-  /** User created data for the spritesheet. */
-  data?: SpriteSheetData
+  dataFormat?: 'Threlte' | 'Aseprite'
 
   /**
    * The total number of frames in the spritesheet.
@@ -69,11 +57,11 @@ export type SpriteSheetCreationProps = {
   animate?: boolean
 
   /**
-   * The start frame of the current animation.
+   * The start frame of the current animation. Can also be the name of a frame.
    *
    * @default 0
    */
-  startFrame?: number
+  startFrame?: number | string
 
   /**
    * The end frame of the current animation. defaults to (`rows` * `columns`) - 1

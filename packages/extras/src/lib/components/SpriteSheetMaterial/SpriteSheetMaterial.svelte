@@ -67,7 +67,7 @@
   let flipOffset = flipX ? -1 : 1
 
   let json: SpriteSheetData | undefined
-  let currentFrameIndex = startFrame
+  let currentFrameIndex = 0
 
   /** forward == 1 or reserve == -1 */
   let direction: Direction = Direction.forward
@@ -93,6 +93,7 @@
 
     texture.offset.set(x, y)
     // texture.updateMatrix()
+    invalidate()
   }
 
   const setupAnimation = (name: string) => {
@@ -146,10 +147,6 @@
   const { start, stop } = useTask(
     () => {
       if (json == undefined) return
-      if (animate != true) {
-        stop()
-        return
-      }
 
       const now = performance.now()
       const diff = now - timerOffset
@@ -162,7 +159,6 @@
       timerOffset = now - (diff % interval)
 
       setFrame(frame)
-      invalidate()
 
       currentFrameIndex += direction
 
@@ -170,7 +166,7 @@
         (direction === Direction.forward && currentFrameIndex > endFrame!) ||
         (direction === Direction.reverse && currentFrameIndex < endFrame!)
       ) {
-        currentFrameIndex = startFrame
+        currentFrameIndex = startFrame as number
 
         if (loop) {
           onloop?.()
@@ -203,6 +199,17 @@
 
     size = json.size
 
+    if (typeof startFrame === 'string') {
+      let maybeFrame = json.frames.findIndex((obj) => obj.name === startFrame)
+      if (maybeFrame != -1) {
+        currentFrameIndex = maybeFrame
+        startFrame = maybeFrame
+      } else {
+        startFrame = 0
+      }
+    } else {
+      currentFrameIndex = startFrame
+    }
     const { width, height } = json.frames[currentFrameIndex]
 
     texture.repeat.set((1 * flipOffset) / (size.width / width), 1 / (size.height / height))
@@ -213,7 +220,6 @@
         play()
       }
     } else {
-      // currentFrameIndex defaults to startFrame which defaults to 0
       setFrame(json.frames[currentFrameIndex])
     }
 
@@ -232,7 +238,7 @@
   })
 </script>
 
-{#snippet SpriteSheetMaterial(map:Texture)}
+{#snippet material(map:Texture)}
   <T
     {is}
     bind:ref
@@ -246,7 +252,7 @@
 
 {#if texture}
   {#if isMesh}
-    {@render SpriteSheetMaterial(texture)}
+    {@render material(texture)}
     <T.MeshDepthMaterial
       attach="customDepthMaterial"
       depthPacking={RGBADepthPacking}
@@ -254,6 +260,6 @@
       {alphaTest}
     />
   {:else}
-    {@render SpriteSheetMaterial(texture)}
+    {@render material(texture)}
   {/if}
 {/if}

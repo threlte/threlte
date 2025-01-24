@@ -13,8 +13,6 @@ export enum Direction {
   reverse = -1
 }
 
-type SupportedDataTypes = 'Aseprite'
-
 /**
  * Creates metadata if no JSON file is supplied.
  */
@@ -36,7 +34,7 @@ export const createFromProps = (
 function create(propData: SpriteSheetCreationProps, texture: Texture) {
   const { width, height } = texture.image
   let { rows, columns } = propData
-  const { data, totalFrames, animate, endFrame, startFrame } = propData
+  const { totalFrames, animate, endFrame, startFrame } = propData
 
   const frames: SpriteSheetFrame[] = []
   let animations: SpriteSheetAnimation[] | undefined
@@ -44,43 +42,37 @@ function create(propData: SpriteSheetCreationProps, texture: Texture) {
   if (!columns) columns = totalFrames ?? 1
   if (!rows) rows = 1
 
-  if (data != undefined) {
-    if (data.frames) {
-      frames.push(...data.frames)
-    }
-    if (data.animations) {
-      animations = data.animations
-    }
-  } else {
-    const spriteWidth = width / columns
-    const spriteHeight = height / rows
+  const spriteWidth = width / columns
+  const spriteHeight = height / rows
 
-    const numFrames = rows * columns
+  const numFrames = rows * columns
 
-    for (let i = 0; i < numFrames; i += 1) {
-      // Calculate the row and column for the current frame
-      const row = Math.floor(i / columns)
-      const col = i % columns
+  for (let i = 0; i < numFrames; i += 1) {
+    // Calculate the row and column for the current frame
+    const row = Math.floor(i / columns)
+    const col = i % columns
 
-      // Calculate the x, y coordinates of the frame within the sprite sheet
-      const x = col * spriteWidth
-      const y = row * spriteHeight
+    // Calculate the x, y coordinates of the frame within the sprite sheet
+    const x = col * spriteWidth
+    const y = row * spriteHeight
 
-      frames.push({
-        x,
-        y,
-        width: spriteWidth,
-        height: spriteHeight
-      })
-    }
+    frames.push({
+      x,
+      y,
+      width: spriteWidth,
+      height: spriteHeight
+    })
+  }
 
-    // with many columns we can create an animation
-    if (animate) {
-      if (startFrame != undefined && endFrame != undefined) {
+  // with many columns we can create an animation
+  if (animate) {
+    if (startFrame != undefined && endFrame != undefined) {
+      if (typeof startFrame == 'string') {
+        console.warn(`Please provide the startFrame index instead of: ${startFrame}`)
         animations = [
           {
             name: defaultAnimationName,
-            from: startFrame,
+            from: 0,
             to: endFrame
           }
         ]
@@ -88,11 +80,19 @@ function create(propData: SpriteSheetCreationProps, texture: Texture) {
         animations = [
           {
             name: defaultAnimationName,
-            from: 0,
-            to: numFrames - 1
+            from: startFrame,
+            to: endFrame
           }
         ]
       }
+    } else {
+      animations = [
+        {
+          name: defaultAnimationName,
+          from: 0,
+          to: numFrames - 1
+        }
+      ]
     }
   }
   return {
@@ -105,17 +105,19 @@ function create(propData: SpriteSheetCreationProps, texture: Texture) {
   } satisfies SpriteSheetData
 }
 
-export const createFromJSON = (jsonURL: string, format: SupportedDataTypes) => {
+export const createFromJSON = (jsonURL: string, format: SpriteSheetCreationProps['dataFormat']) => {
   return useLoader(FileLoader).load(jsonURL, {
     transform: (file) => {
       try {
         if (typeof file !== 'string') throw 'expected string file format'
         const data = JSON.parse(file)
         switch (format) {
+          case 'Threlte':
+            return data as SpriteSheetData
           case 'Aseprite':
             return createFromAseprite(data as Aseprite_SpriteJsonHashData)
           default:
-            console.error(`The data format ${format} is not supported`)
+            console.error(`The data format: ${format} is not supported`)
             return undefined
         }
       } catch (err) {

@@ -16,8 +16,7 @@ export { meshBounds } from './utilities/meshBounds'
 // abstractions
 export { default as SpriteSheetMaterial } from './components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
 export type {
-  SpriteSheetData_Aseprite,
-  SpriteSheetUserData as SpriteSheetData,
+  SpriteSheetData,
   SpriteSheetFrame,
   SpriteSheetAnimation
 } from './components/SpriteSheetMaterial/types'
