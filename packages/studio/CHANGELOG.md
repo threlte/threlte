@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.3
+
+### Patch Changes
+
+- f0ed2fe: Fix HMR for StaticState when a member is removed in code
+
 ## 0.1.2
 
 ### Patch Changes
