@@ -97,7 +97,9 @@
     return options
   }
 
-  const buildAutoValueOptions = (state: StaticState, accessor: string) => {
+  const buildAutoValueOptions = (state: StaticState | undefined, accessor: string) => {
+    // In some rare cases, Svelte may provide an undefined state.
+    if (!state) return {}
     const modifiers = findModifiers(state, accessor)
     const options = buildOptionsFromModifiers(modifiers)
     // must be any because of the way the AutoValue component works
