@@ -10,6 +10,7 @@
   let installXR = false
   let installFlex = false
   let installTypes = false
+  let installStudio = false
 
   let divider = ' \\'
   let merger = '\n'
@@ -28,22 +29,35 @@
     installTheatre,
     installXR,
     installFlex,
-    installTypes
+    installTypes,
+    installStudio
   )
-  $: extrasDivider = useDivider(installRapier, installTheatre, installXR, installFlex, installTypes)
-  $: rapierDivider = useDivider(installTheatre, installXR, installFlex, installTypes)
-  $: theatreDivider = useDivider(installXR, installFlex, installTypes)
-  $: xrDivider = useDivider(installFlex, installTypes)
-  $: flexDivider = useDivider(installTypes)
+  $: extrasDivider = useDivider(
+    installRapier,
+    installTheatre,
+    installXR,
+    installFlex,
+    installTypes,
+    installStudio
+  )
+  $: rapierDivider = useDivider(installTheatre, installXR, installFlex, installTypes, installStudio)
+  $: theatreDivider = useDivider(installXR, installFlex, installTypes, installStudio)
+  $: xrDivider = useDivider(installFlex, installTypes, installStudio)
+  $: flexDivider = useDivider(installTypes, installStudio)
+  $: studioDivider = useDivider(installTypes)
+
+  $: extrasPassivelyActive = useGltf || installTheatre || installStudio
 
   $: installCode = [
     `npm install three @threlte/core${tag}${coreDivider}`,
-    (installExtras || useGltf || installTheatre) && `${space}@threlte/extras${tag}${extrasDivider}`,
+    (installExtras || useGltf || installTheatre || installStudio) &&
+      `${space}@threlte/extras${tag}${extrasDivider}`,
     installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
     installTheatre &&
       `${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
     installXR && `${space}@threlte/xr${tag}${xrDivider}`,
     installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
+    installStudio && `${space}@threlte/studio${tag}${studioDivider}`,
     installTypes && `${space}@types/three`
   ]
     .filter(Boolean)
@@ -79,7 +93,7 @@
       installExtras = !installExtras
     }}
     active={installExtras}
-    passivelyActive={useGltf || installTheatre}>@threlte/extras</InstallButton
+    passivelyActive={extrasPassivelyActive}>@threlte/extras</InstallButton
   >
 
   <p class="my-0 self-center text-sm md:text-base">
@@ -169,6 +183,17 @@
       rel="noreferrer">Yoga</a
     > in Threlte.
   </p>
+
+  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+
+  <InstallButton
+    on:click={() => {
+      installStudio = !installStudio
+    }}
+    active={installStudio}>@threlte/studio</InstallButton
+  >
+
+  <p class="my-0 self-center text-sm md:text-base">Spatial Programming Toolset for Threlte.</p>
 
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
