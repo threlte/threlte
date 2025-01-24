@@ -193,7 +193,12 @@
     active={installStudio}>@threlte/studio</InstallButton
   >
 
-  <p class="my-0 self-center text-sm md:text-base">Spatial Programming Toolset for Threlte.</p>
+  <p class="my-0 self-center text-sm md:text-base">
+    <a
+      href="/docs/reference/studio/getting-started"
+      target="_blank">Spatial Programming Toolset</a
+    > for Threlte.
+  </p>
 
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
