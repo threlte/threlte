@@ -34,6 +34,6 @@ Firstly, The screen-quad mesh is not frustrum culled. This is because the geomet
 
 This `<T.Mesh>` uses threlte's `attach` prop to add it to the secondary scene instead of the default scene created by threlte.
 
-Secondly, the render task that threlte automatically uses is disabled and a custom render task is used instead. This is explained on the [`useTask page`](/docs/reference/core/use-task).
+Secondly, the render task that threlte automatically uses is disabled and a custom render task is used instead. This is explained on the [`useTask`](/docs/reference/core/use-task) page.
 
 Lastly, the uvs are used in the fragment shader to use as an index into the scene texture. For this reason, the resolution of the canvas is sent into the shader as a uniform. An effect is ran to keep the uniform in sync with the current size of the canvas.
