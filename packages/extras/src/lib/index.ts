@@ -14,12 +14,7 @@ export { useViewport } from './hooks/useViewport'
 export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
-export { default as SpriteSheetMaterial } from './components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
-export type {
-  SpriteSheetData,
-  SpriteSheetFrame,
-  SpriteSheetAnimation
-} from './components/SpriteSheetMaterial/types'
+export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as HUD } from './components/HUD/HUD.svelte'
@@ -63,6 +58,12 @@ export { default as RadialGradientTexture } from './components/GradientTexture/r
 export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
+export { default as SpriteSheetMaterial } from './components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
+export type {
+  SpriteSheetData,
+  SpriteSheetFrame,
+  SpriteSheetAnimation
+} from './components/SpriteSheetMaterial/types'
 
 // Transitions
 export { transitions } from './transitions/transltions.svelte'
