@@ -128,7 +128,7 @@ The function `load` of `useLoader` also accepts an array of paths in which case 
   const { load } = useLoader(TextureLoader)
   const textures = load(['texture1.png', 'texture2.png'])
 
-  $: console.log($textures) // [Texture, Texture]
+  $inspect($textures) // eventually [Texture, Texture]
 </script>
 ```
 
@@ -149,7 +149,7 @@ You can also provide a map of paths to load multiple assets at once. In this cas
     texture2: 'texture2.png'
   })
 
-  $: console.log($textures) // { texture1: Texture, texture2: Texture }
+  $inspect($textures) // eventually { texture1: Texture, texture2: Texture }
 </script>
 ```
 
