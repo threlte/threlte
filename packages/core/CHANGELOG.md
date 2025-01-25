@@ -1,5 +1,67 @@
 # @threlte/core
 
+## 8.0.0
+
+### Major Changes
+
+- 98b9789: Change oncreate API to return a cleanup function instead of passing it to a function argument
+- e7b0273: Make AgXToneMapping the default toneMapping
+- f25685a: Experimental Svelte 5 compatibility
+- 5d3d231: Remove automatic deeply recursive disposal in favor of disposal of objects that are referenced by a `<T>` component.
+- b7e6927: Refactor attachment API
+- 6ead49a: Added new View component. Adjusted core and other components to make use of the changes.
+- 6016286: Remove memoize, remove createObjectStore
+- 6016286: Refactored Threlte Plugin API
+- 6e8bcc2: Stricter types on dispose, args, makeDefault and manual
+
+### Minor Changes
+
+- 10ceb5b: Add UserProps
+- 0f84459: Add preliminary event types on `<T>`
+- cec4b57: Make children snippet arguments a type parameter on type `Props`
+- 1c73aa0: Add the isInstanceOf utility function
+- d7eb71b: Custom user catalogue types
+
+### Patch Changes
+
+- 6aced15: Fix types of component exports
+- a8f7cc0: Expose fragment contexts
+- b7045f5: Svelte dependency update
+- 9f00bd3: Return context from createThrelteContext
+- 52d0b9f: fix: remove .d.ts import from dist/index.js
+- d36f77f: fix: Set `started` store of `useTask` correctly
+- c12ff98: Fix event cleanup of <T>
+- f7c501d: Remove legacy useFrame and useRender hooks
+- 2ccf508: Remove userSize canvas prop
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- 81e354d: Remove deprecated event handling from export
+- 4154987: Added toCurrentReadable to storeUtils
+- cec4b57: update deps
+- ccafaaa: Fix renderer resize flickering
+- f102bfb: Simplify resizeObserver.
+- e732e58: export `Size` type from contexts/canvas to fix import errors regarding `Size` not being an export. for example in `useViewport`
+- d44a1d3: Replace dependency of useThrelte in useTask hook with useSheduler hook instead
+- 45fae01: Granular updates on T
+- a340d61: Fix setting camera context in useCamera
+- b8b8214: Implement type guard utility, clean up
+- 89d4fd5: Fix core types entry for dev
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 4ee76e8: JSDocs cleanup
+- 3a1ae36: fix: Include auto-generated d.ts file
+- 60fcc29: Bump dev dependencies
+- 7051420: Inline type-fest types
+- 750550b: Remove useLegacyLights prop
+- 6a442b9: Allow dispose prop on every T instance
+- 1791c99: useTask invalidation fix
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+- c53d7a9: Split out contexts by domain
+- 42ee4c9: Fix svelte compiler warnings
+- 790794d: Add HUD component and useViewport hook
+- eae09cd: Fix `<T>` types
+
 ## 8.0.0-next.41
 
 ### Patch Changes
