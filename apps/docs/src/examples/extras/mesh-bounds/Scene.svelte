@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { BoundsMesh } from './BoundsMesh.svelte.ts'
+  import type { Vector3Tuple } from 'three'
   import { OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
   import { interactivity, meshBounds } from '@threlte/extras'
-  import type { Vector3Tuple } from 'three'
 
-  type Props = {
-    showBounds: boolean
-  }
-
-  let { showBounds }: Props = $props()
+  let { showBounds = false }: { showBounds?: boolean } = $props()
 
   interactivity()
 
@@ -19,7 +14,14 @@
     [-1, -1, 0]
   ]
 
-  const meshes = positions.map((position) => new BoundsMesh(position))
+  class BoundsItem {
+    wireframe = $state(true)
+    constructor(public position: Vector3Tuple) {}
+  }
+
+  const boundsItems = positions.map((position) => {
+    return new BoundsItem(position)
+  })
 
   const size = 1
   // half of the box's diagonal === radius of the bounding sphere
@@ -35,27 +37,27 @@
   <OrbitControls />
 </T.PerspectiveCamera>
 
-{#each meshes as mesh}
+{#each boundsItems as boundsItem}
   <T.Mesh
     raycast={meshBounds}
     onpointerenter={() => {
-      mesh.wireframe = false
+      boundsItem.wireframe = false
     }}
     onpointerleave={() => {
-      mesh.wireframe = true
+      boundsItem.wireframe = true
     }}
-    position={mesh.position}
+    position={boundsItem.position}
   >
     <T.BoxGeometry args={[size, size, size]} />
     <T.MeshStandardMaterial
       color="hotpink"
-      wireframe={mesh.wireframe}
+      wireframe={boundsItem.wireframe}
     />
   </T.Mesh>
 {/each}
 
 <T.Group visible={showBounds}>
-  {#each meshes as { position }}
+  {#each positions as position}
     <T.Mesh {position}>
       <T.SphereGeometry args={[radius]} />
       <T.MeshStandardMaterial
