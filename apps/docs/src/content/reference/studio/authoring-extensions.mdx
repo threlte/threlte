@@ -70,7 +70,7 @@ This file implements the extension. Furthermore, it has full access to the Threl
 
   const { createExtension } = useStudio()
 
-  createExtension<ExtensionState, ExtensionActions>({
+  const extension = createExtension<ExtensionState, ExtensionActions>({
     scope: extensionScope,
     state({ persist }) {
       return {
