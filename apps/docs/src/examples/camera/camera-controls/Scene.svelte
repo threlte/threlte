@@ -9,13 +9,15 @@
 
   let {
     color = '#ff3e00',
-    controls = $bindable()
+    controls = $bindable(),
+    mesh = $bindable()
   }: {
     color?: ColorRepresentation
     controls: CC | undefined
+    mesh?: Mesh
   } = $props()
 
-  const { autoRender, dom, invalidate } = useThrelte()
+  const { dom, invalidate } = useThrelte()
 
   const camera = new PerspectiveCamera()
   controls = new CameraControls(dom, camera)
@@ -25,31 +27,17 @@
       controls.dispose()
     }
   })
-  controls.setPosition(5, 5, 5)
 
-  const last = autoRender.current
-  autoRender.set(false)
-  $effect(() => {
-    return () => {
-      autoRender.set(last)
-    }
-  })
+  controls.setPosition(5, 5, 5)
 
   useTask(
     (delta) => {
       if (controls.update(delta)) {
-        console.log('yo')
         invalidate()
       }
     },
     { autoInvalidate: false }
   )
-
-  const mesh = new Mesh()
-
-  export const fitToMesh = (transition = true) => {
-    return controls.fitToBox(mesh, transition)
-  }
 </script>
 
 <T
@@ -57,8 +45,10 @@
   makeDefault
 />
 
-<T
-  is={mesh}
+<T.Mesh
+  oncreate={(ref) => {
+    mesh = ref
+  }}
   position.y={0.5}
 >
   <T.BoxGeometry />
@@ -66,7 +56,7 @@
     {color}
     wireframe
   />
-</T>
+</T.Mesh>
 
 <Grid
   sectionColor={color}

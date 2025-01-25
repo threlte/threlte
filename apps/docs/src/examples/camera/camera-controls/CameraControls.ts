@@ -5,7 +5,6 @@ import {
   Matrix4,
   Quaternion,
   Raycaster,
-  PerspectiveCamera,
   Sphere,
   Spherical,
   Vector2,
@@ -15,7 +14,7 @@ import {
 
 export default class CameraControls extends CC {
   static #installed = false
-  constructor(element: HTMLElement, camera: Camera = new PerspectiveCamera()) {
+  constructor(element: HTMLElement, camera: Camera) {
     if (!CameraControls.#installed) {
       CC.install({
         THREE: {
