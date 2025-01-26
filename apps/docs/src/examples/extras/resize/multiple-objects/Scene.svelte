@@ -33,7 +33,7 @@
       position.z={Math.sin(r)}
     >
       {#if resize}
-        <Resize>
+        <Resize auto={false}>
           <T is={scene} />
         </Resize>
       {:else}
