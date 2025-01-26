@@ -17,7 +17,7 @@ componentSignature:
     props:
       [
         {
-          description: 'Specifies which axis to constrain. If not provided, the maximum axis is used',
+          description: 'Specifies which axis to constrain. If not provided, the maximum axis is used.',
           name: 'axis',
           required: false,
           type: "'x' | 'y' | 'z'",
@@ -25,7 +25,7 @@ componentSignature:
         },
         {
           default: 'false',
-          description: 'when true, will automatically resize when children or added or removed',
+          description: 'When true, will automatically resize when children are added or removed.',
           name: 'auto',
           required: false,
           type: 'boolean'
@@ -39,7 +39,7 @@ componentSignature:
         },
         {
           default: 'undefined',
-          description: 'a callback function to run whenever resizing is done',
+          description: 'A callback function to run whenever resizing is done.',
           name: 'onresize',
           required: false,
           type: '() => void'
@@ -52,7 +52,7 @@ componentSignature:
           type: 'THREE.Box3'
         },
         {
-          description: 'If true, use precise bounding box calculation.',
+          description: 'If true, use precise bounding box calculation when resizing',
           name: 'precise',
           required: false,
           default: 'undefined',
@@ -112,7 +112,7 @@ it may be easier to reason about their relative sizes.
 
 In the example above, the fox model is much larger than the duck and flower models. It is so much larger that you may have to pull the camera back in order to see it. Using `<Resize>` scales each model so that each one fits inside a unit cube. From there, their relative sizes and positions may be easier to work with.
 
-## Manually Triggering a Resize
+## Manual Resizing
 
 ### Using the Export
 
@@ -122,13 +122,13 @@ You can manually trigger a resize by calling the `resize` export.
 <script>
   import { Resize } from '@threlte/extras'
 
-  let resizeRef = $state<ReturnType<typeof useResize>>()
+  let ref = $state<Resize>()
 
-  // ... later
-  resizeRef.resize()
+  // ... later on
+  ref?.resize()
 </script>
 
-<Resize bind:this={resizeRef}>
+<Resize bind:this={ref}>
   <!-- ... -->
 </Resize>
 ```
