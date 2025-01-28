@@ -3,7 +3,6 @@
 
   import CodeExplorer from './CodeExplorer.svelte'
   import { writable, type Writable } from 'svelte/store'
-  import { c } from '../../lib/classes'
   import { fade } from 'svelte/transition'
   import type { Snippet } from 'svelte'
 
@@ -64,11 +63,11 @@
 </script>
 
 <div
-  class={c(
+  class={[
     'not-prose relative flex w-full flex-col items-stretch overflow-hidden !rounded-b-md border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
     !expanded && '!max-h-[100px] overflow-hidden',
     hidePreview && '!rounded-md border-t'
-  )}
+  ]}
 >
   {#if !expanded}
     <div
@@ -103,9 +102,7 @@
   {/if}
   <CodeExplorer
     {currentlySelectedFile}
-    class={c(
-      'scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 max-md:flex-shrink-0 md:border-b-0 md:border-r'
-    )}
+    class="scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 max-md:flex-shrink-0 md:border-b-0 md:border-r"
     {filePaths}
     on:fileSelected={(e) => {
       onFileSelected(e.detail)

@@ -1,13 +1,16 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import { getContext } from 'svelte'
   import type { Writable } from 'svelte/store'
   import type { File } from './types'
 
-  export let file: File
-  export let currentlySelectedFile: Writable<File>
+  interface Props {
+    file: File
+    currentlySelectedFile: Writable<File>
+  }
 
-  $: isSelected = file.path === $currentlySelectedFile.path
+  let { file, currentlySelectedFile }: Props = $props()
+
+  let isSelected = $derived(file.path === $currentlySelectedFile.path)
 
   const fileExtension = file.name.split('.').pop()
 
@@ -15,12 +18,12 @@
 </script>
 
 <button
-  class={c(
+  class={[
     'flex flex-row items-center gap-1 border border-transparent hover:underline focus:outline-none [&>*]:w-[1em]',
     isSelected &&
       '-mx-1 -my-0.5 rounded-sm border-orange/5 bg-orange-800/50 px-1 py-0.5 text-orange'
-  )}
-  on:click={() => selectFile(file)}
+  ]}
+  onclick={() => selectFile(file)}
 >
   {#if fileExtension === 'ts'}
     <svg
