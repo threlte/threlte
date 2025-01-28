@@ -11,7 +11,7 @@
 
   const width = 10
   const limit = width * width
-  const gap = 1.5
+  const gap = 1.3
   const offset = (width * gap) / 2
 
   const yellow = new Color('yellow')
