@@ -12,13 +12,13 @@
   const gap = 2.5
   const offset = (width * gap) / 2
 
-  const fromColor = new Color('yellow')
-  const toColor = new Color('blue')
+  const startColor = new Color('blue')
+  const endColor = new Color('yellow')
   const instances: BallInstance[] = []
   for (let i = 0; i < limit; i += 1) {
-    const x = i % width
-    const y = Math.floor(i / width)
-    instances.push(new BallInstance(toColor, fromColor, x * gap - offset, y * gap - offset))
+    const x = (i % width) * gap - offset
+    const z = Math.floor(i / width) * gap - offset
+    instances.push(new BallInstance(startColor, endColor, x, z))
   }
 
   const { size } = useThrelte()
@@ -26,19 +26,22 @@
 
   interactivity({
     filter(items) {
-      // don't hit balls behind the scaled ball
+      // only report the first intersection
       return items.slice(0, 1)
     }
   })
 
   const light = new DirectionalLight()
+  const lightRadius = 10
+  const lightHeight = 5
+
   let time = 0
-  const d = 10
-  const height = 5
   const { start, stop } = useTask(
     (delta) => {
       time += delta
-      light.position.set(d * Math.cos(time), height, d * Math.sin(time))
+      const x = lightRadius * Math.cos(time)
+      const z = lightRadius * Math.sin(time)
+      light.position.set(x, lightHeight, z)
       light.lookAt(0, 0, 0)
     },
     { autoStart: false }

@@ -1,6 +1,6 @@
-import { cubicOut } from 'svelte/easing'
-import { Tween } from 'svelte/motion'
 import { Color } from 'three'
+import { Tween } from 'svelte/motion'
+import { cubicOut } from 'svelte/easing'
 
 export default class {
   y = new Tween(0, { easing: cubicOut, duration: 250 })
