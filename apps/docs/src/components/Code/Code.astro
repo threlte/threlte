@@ -1,22 +1,19 @@
 ---
-import type { Theme, HtmlRendererOptions, Lang } from 'shiki'
-import { getShiki } from '../../lib/highlighter'
 import CopyCodeButton from './CopyCodeButton.svelte'
+import { highlighter } from '$lib/highlighter'
 
 interface Props {
-  lang: Lang
-  theme?: Theme
+  lang: string
   class?: string
   title?: string
   code: string
-  lineOptions?: HtmlRendererOptions['lineOptions']
+  // lineOptions?:  HtmlRendererOptions['lineOptions'] // this has changed to decorations/transformers but couldn't manage to wire it up correctly to get positive diff highlighting
 }
-
-const highlighter = await getShiki()
 
 const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {
   lang: Astro.props.lang,
-  lineOptions: Astro.props.lineOptions ?? []
+  theme: 'dracula-soft'
+  // lineOptions: Astro.props.lineOptions ?? []
 })
 ---
 
