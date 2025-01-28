@@ -1,11 +1,9 @@
 <script lang="ts">
-  import type { Vector3Tuple } from 'three'
+  import BallInstance from './BallInstance.svelte'
   import { Color } from 'three'
+  import { DirectionalLight } from 'three'
   import { Instance, InstancedMesh, interactivity } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { Tween } from 'svelte/motion'
-  import { cubicOut } from 'svelte/easing'
-  import { DirectionalLight } from 'three'
 
   let { paused = false }: { paused?: boolean } = $props()
 
@@ -14,31 +12,29 @@
   const gap = 1.3
   const offset = (width * gap) / 2
 
-  const yellow = new Color('yellow')
-  const blue = new Color('blue')
-
-  class SphereInstance {
-    color = new Tween(blue, {
-      easing: cubicOut,
-      duration: 250,
-      interpolate(a, b) {
-        return (t) => a.clone().lerpHSL(b, t)
-      }
-    })
-    constructor(public position: Vector3Tuple) {}
-  }
-
-  const instances: SphereInstance[] = []
+  const fromColor = new Color('yellow')
+  const toColor = new Color('blue')
+  const instances: BallInstance[] = []
   for (let i = 0; i < limit; i += 1) {
     instances.push(
-      new SphereInstance([(i % width) * gap - offset, 0, Math.floor(i / width) * gap - offset])
+      new BallInstance(
+        toColor,
+        fromColor,
+        (i % width) * gap - offset,
+        Math.floor(i / width) * gap - offset
+      )
     )
   }
 
   const { size } = useThrelte()
   const zoom = $derived($size.width / (2 * (1 + width)))
 
-  interactivity()
+  interactivity({
+    filter(items) {
+      // don't hit balls behind the scaled ball
+      return items.slice(0, 1)
+    }
+  })
 
   const light = new DirectionalLight()
   let time = 0
@@ -78,13 +74,16 @@
 
   {#each instances as instance}
     <Instance
-      position={instance.position}
-      color={instance.color.current}
+      position.x={instance.x}
+      position.y={instance.y}
+      scale={instance.scale}
+      position.z={instance.z}
+      color={instance.color}
       onpointerenter={() => {
-        instance.color.set(yellow)
+        instance.up()
       }}
       onpointerleave={() => {
-        instance.color.set(blue)
+        instance.down()
       }}
     />
   {/each}
