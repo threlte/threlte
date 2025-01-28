@@ -10,7 +10,6 @@ import RightSidebar from '$components/Menu/RightSidebar/RightSidebar.astro'
 import MobileDocsNav from '$components/Menu/MobileDocsNav.svelte'
 import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarMenu'
 import Package from './Package.astro'
-import { c } from '../lib/classes'
 import Book from './Book.astro'
 import Circles from './Circles.astro'
 import Search from '$components/Search/Search.svelte'
@@ -82,73 +81,73 @@ const activeLinkStyles = '!text-orange'
         <div class="relative flex items-center gap-6">
           <a
             href="/docs/reference/core/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
-            )}
+            ]}
           >
             <Package class="hidden h-[16px] md:block" />core</a
           >
           <a
             href="/docs/reference/extras/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
-            )}
+            ]}
           >
             <Package class="hidden h-[16px] md:block" />extras</a
           >
           <a
             href="/docs/reference/gltf/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
-            )}
+            ]}
           >
             <Package class="hidden h-[16px] md:block" />gltf</a
           >
           <a
             href="/docs/reference/rapier/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
-            )}
+            ]}
           >
             <Package class="hidden h-[16px] md:block" />rapier</a
           >
           <a
             href="/docs/reference/theatre/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
-            )}
+            ]}
           >
             <Package class="hidden h-[16px] md:block" />theatre</a
           >
           <a
             href="/docs/reference/xr/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/xr') && activeLinkStyles
-            )}
+            ]}
           >
             <Package class="hidden h-[16px] md:block" />xr
           </a>
           <a
             href="/docs/reference/flex/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/flex') && activeLinkStyles
-            )}
+            ]}
           >
             <Package class="hidden h-[16px] md:block" />flex
           </a>
           <a
             href="/docs/reference/studio/getting-started"
-            class={c(
+            class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/studio') && activeLinkStyles
-            )}
+            ]}
             data-astro-prefetch
           >
             <Package class="hidden h-[16px] md:block" />studio
