@@ -1,45 +1,20 @@
 import { cubicOut } from 'svelte/easing'
 import { Tween } from 'svelte/motion'
-import type { Color } from 'three'
-
-const squaredDistance = (a: Color, b: Color) => {
-  return (a.r - b.r) ** 2 + (a.g - b.g) ** 2 + (a.b - b.b) ** 2
-}
+import { Color } from 'three'
 
 export default class {
-  // scale based on how close the current color is to the end color
-  scale = $derived.by(() => {
-    const distToStartColor = squaredDistance(this.#color.current, this.startColor)
-    const distToEndColor = squaredDistance(this.#color.current, this.endColor)
-    return 2 - distToEndColor / (distToStartColor + distToEndColor)
-  })
-  y = $derived(this.scale - 1)
-  #color: Tween<Color>
+  y = new Tween(0, { easing: cubicOut, duration: 250 })
+  scale = $derived(this.y.current + 1)
+  startColor = new Color()
+  endColor = new Color()
+  color = $derived(this.startColor.clone().lerpHSL(this.endColor, this.y.current))
   constructor(
-    public startColor: Color,
-    public endColor: Color,
+    startColor: Color,
+    endColor: Color,
     public x: number,
     public z: number
   ) {
-    this.#color = new Tween(startColor, {
-      easing: cubicOut,
-      duration: 250,
-      interpolate(a, b) {
-        // need to return a new instance for reactivity to be triggered
-        return (t) => a.clone().lerpHSL(b, t)
-      }
-    })
-  }
-
-  get color() {
-    return this.#color.current
-  }
-
-  up() {
-    this.#color.set(this.endColor)
-  }
-
-  down() {
-    this.#color.set(this.startColor)
+    this.startColor.set(startColor)
+    this.endColor.set(endColor)
   }
 }

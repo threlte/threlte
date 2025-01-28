@@ -9,25 +9,20 @@
 
   const width = 10
   const limit = width * width
-  const gap = 1.3
+  const gap = 2.5
   const offset = (width * gap) / 2
 
   const fromColor = new Color('yellow')
   const toColor = new Color('blue')
   const instances: BallInstance[] = []
   for (let i = 0; i < limit; i += 1) {
-    instances.push(
-      new BallInstance(
-        toColor,
-        fromColor,
-        (i % width) * gap - offset,
-        Math.floor(i / width) * gap - offset
-      )
-    )
+    const x = i % width
+    const y = Math.floor(i / width)
+    instances.push(new BallInstance(toColor, fromColor, x * gap - offset, y * gap - offset))
   }
 
   const { size } = useThrelte()
-  const zoom = $derived($size.width / (2 * (1 + width)))
+  const zoom = $derived($size.width / (1.5 * gap * width))
 
   interactivity({
     filter(items) {
@@ -69,21 +64,22 @@
 />
 
 <InstancedMesh {limit}>
-  <T.SphereGeometry args={[0.5]} />
+  <T.TorusGeometry />
   <T.MeshToonMaterial />
 
   {#each instances as instance}
     <Instance
+      rotation.x={0.5 * Math.PI}
       position.x={instance.x}
-      position.y={instance.y}
+      position.y={instance.y.current}
       scale={instance.scale}
       position.z={instance.z}
       color={instance.color}
       onpointerenter={() => {
-        instance.up()
+        instance.y.set(1)
       }}
       onpointerleave={() => {
-        instance.down()
+        instance.y.set(0)
       }}
     />
   {/each}
