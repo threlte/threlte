@@ -7,7 +7,7 @@ const squaredDistance = (a: Color, b: Color) => {
 }
 
 export default class {
-  // scale based on how close the color is to the end color
+  // scale based on how close the current color is to the end color
   scale = $derived.by(() => {
     const distToStartColor = squaredDistance(this.#color.current, this.startColor)
     const distToEndColor = squaredDistance(this.#color.current, this.endColor)
@@ -26,7 +26,7 @@ export default class {
       duration: 250,
       interpolate(a, b) {
         // need to return a new instance for reactivity to be triggered
-        return (t) => a.clone().lerp(b, t)
+        return (t) => a.clone().lerpHSL(b, t)
       }
     })
   }
