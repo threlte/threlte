@@ -63,8 +63,11 @@
   }}
 />
 
-<InstancedMesh {limit}>
-  <T.TorusGeometry />
+<InstancedMesh
+  {limit}
+  range={limit}
+>
+  <T.SphereGeometry />
   <T.MeshToonMaterial />
 
   {#each instances as instance}
