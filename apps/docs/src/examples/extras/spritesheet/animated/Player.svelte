@@ -1,7 +1,6 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { AnimatedSpriteMaterial, Suspense } from '@threlte/extras'
-  import { Mesh, MeshStandardMaterial } from 'three'
+  import { SpriteSheetMaterial, Suspense } from '@threlte/extras'
 
   type Props = {
     position: [number, number, number]
@@ -11,11 +10,8 @@
   const keyboard = { x: 0 }
   const pressed = new Set<string>()
 
-  let sprite: AnimatedSpriteMaterial
+  let sprite: SpriteSheetMaterial
   let animation = $state('IdleRight')
-
-  const mesh = new Mesh()
-  mesh.position.set(...position)
 
   const handleKey = (key: string, value: 0 | 1) => {
     switch (key.toLowerCase()) {
@@ -54,7 +50,6 @@
 
     if (keyboard.x === 0) return
     position[0] += -keyboard.x * (delta * 2)
-    mesh.position.set(...position)
   })
 </script>
 
@@ -64,14 +59,15 @@
 />
 
 <Suspense>
-  <T is={mesh}>
-    <AnimatedSpriteMaterial
-      is={new MeshStandardMaterial()}
+  <T.Mesh {position}>
+    <SpriteSheetMaterial
       {animation}
       textureUrl="/textures/sprites/player.png"
       dataUrl="/textures/sprites/player.json"
+      dataFormat="Aseprite"
+      animate
       bind:this={sprite}
     />
     <T.PlaneGeometry args={[0.5, 0.5]} />
-  </T>
+  </T.Mesh>
 </Suspense>
