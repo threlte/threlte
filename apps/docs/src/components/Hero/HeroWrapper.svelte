@@ -38,7 +38,7 @@
   })
 
   const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'd') debug.set(!debug.current)
+    // if (e.key === 'd') debug.set(!debug.current)
   }
 
   const onMouseMove = (e: MouseEvent) => {
