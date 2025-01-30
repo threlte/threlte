@@ -19,6 +19,8 @@
   "dependencies": {
     "@astrojs/mdx": "^3.1.2",
     "@astrojs/preact": "^3.1.0",
+    "@astrojs/starlight": "^0.31.1",
+    "@astrojs/starlight-tailwind": "^3.0.0",
     "@astrojs/svelte": "^5.7.2",
     "@astrojs/tailwind": "^5.1.0",
     "@markprompt/css": "^0.10.0",
