@@ -7,16 +7,11 @@ import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
 import { threlteStudio } from '@threlte/studio/vite'
 import type { Plugin } from 'vite'
-
-// https://astro.build/config
 import tailwind from '@astrojs/tailwind'
-
-// https://astro.build/config
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
-
-// https://astro.build/config
 import mdx from '@astrojs/mdx'
+import starlight from '@astrojs/starlight'
 
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
@@ -35,6 +30,12 @@ export default defineConfig({
     inlineStylesheets: 'never'
   },
   integrations: [
+    starlight({
+      title: 'Threlte',
+      expressiveCode: {
+        themes: ['dracula-soft']
+      }
+    }),
     AutoImport({
       imports: [
         '$components/Example/Example.astro',
