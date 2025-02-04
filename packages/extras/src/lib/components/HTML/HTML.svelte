@@ -257,7 +257,8 @@
   }
 
   export const { start: startRendering, stop: stopRendering } = useTask(render, {
-    autoStart: false
+    autoStart: false,
+    autoInvalidate: false
   })
   $effect(() => {
     if (autoRender) {
