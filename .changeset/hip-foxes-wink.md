@@ -2,4 +2,4 @@
 "@threlte/extras": patch
 ---
 
-Fix `<HTML>` on-demand rendering
+Fix `<HTML>` auto invalidation
