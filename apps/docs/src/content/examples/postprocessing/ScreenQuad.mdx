@@ -9,7 +9,7 @@ The basic idea of postprocessing is to draw the scene to a frame-buffer that can
 1. a webgl render target
 2. a separate scene from the one that threlte provides
 
-The [`useFBO`](/docs/reference/extras/use-fbo) hook returns a render target. This will be what we render the main scene to every frame and pass into the fragment shader as a texture.
+A [WebGLRenderTarget](https://threejs.org/docs/index.html?q=webgl#api/en/renderers/WebGLRenderTarget) is created and its size is set up to follow the size of the canvas.
 
 A separate scene is needed so that we can add the screen-quad mesh to it and render it. The idea is that the only thing in this scene will be the screen-quad mesh that has the post-processed scene as its material. This mesh can't be added to the main scene because it would cause a circular dependency.
 
