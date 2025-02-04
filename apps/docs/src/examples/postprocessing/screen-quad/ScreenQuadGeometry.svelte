@@ -17,10 +17,14 @@
 
   export const vertexShader = `
 		precision highp float;
+
 		attribute vec2 position;
 
+		varying vec2 vUv;
+
 		void main() {
-			gl_Position = vec4(position, 1.0, 1.0);
+			vUv = 0.5 * (position + 1.0);
+			gl_Position = vec4(position, 0.0, 1.0);
 		}
 	`
 
@@ -32,13 +36,21 @@
   import { BufferAttribute, BufferGeometry, Sphere, Vector3 } from 'three'
   import { T } from '@threlte/core'
 
-  const geometry = new BufferGeometry()
-  geometry.setAttribute('position', new BufferAttribute(vertices, 2))
-  geometry.boundingSphere = new Sphere().set(center, Infinity)
+  let {
+    ref = $bindable(new BufferGeometry()),
+    children,
+    ...restProps
+  }: Props<BufferGeometry> = $props()
 
-  let { children }: Props<typeof BufferGeometry> = $props()
+  ref.setAttribute('position', new BufferAttribute(vertices, 2))
+  ref.boundingSphere = new Sphere().set(center, Infinity)
 </script>
 
-<T is={geometry}>
-  {@render children?.({ ref: geometry })}
+<T
+  is={ref}
+  {...restProps}
+>
+  {@render children?.({
+    ref
+  })}
 </T>
