@@ -14,6 +14,12 @@
   import Mounter from './Mounter.svelte'
   import { helpersScope, type HelpersActions, type HelpersState } from './types'
 
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+
   const { autoRenderTask } = useThrelte()
   const { createExtension } = useStudio()
   const { onTransaction } = useTransactions()
@@ -157,4 +163,4 @@
   {/each}
 {/if}
 
-<slot />
+{@render children?.()}

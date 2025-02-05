@@ -15,6 +15,12 @@
     type TransformControlsState
   } from './types'
 
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+
   const { createExtension: createExtension } = useStudio()
 
   const extension = createExtension<TransformControlsState, TransformControlsActions>({
@@ -132,4 +138,4 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}

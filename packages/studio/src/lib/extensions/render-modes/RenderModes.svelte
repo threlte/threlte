@@ -15,6 +15,12 @@
   import { useStudio } from '../../internal/extensions'
   import { renderModesScope, type RenderModesActions, type RenderModesState } from './types'
 
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+
   const hasMaterial = (object: any): object is { material: Material } => {
     return 'material' in object
   }
@@ -132,4 +138,4 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}

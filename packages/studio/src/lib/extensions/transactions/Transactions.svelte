@@ -16,6 +16,12 @@
   import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
   import { vitePluginEnabled } from './vitePluginEnabled'
 
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
 
@@ -209,4 +215,4 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}

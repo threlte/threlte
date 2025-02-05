@@ -12,6 +12,12 @@
   import Bindings from './Bindings.svelte'
   import { inspectorScope, type InspectorActions, type InspectorState } from './types'
 
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+
   const { createExtension } = useStudio()
   const { openInEditor } = useTransactions()
 
@@ -86,7 +92,9 @@
               }}
               disabled={objectSelection.selectedObjects.length !== 1}
             />
-            <span slot="tooltip">Open In Editor</span>
+            {#snippet tooltip()}
+              <span>Open In Editor</span>
+            {/snippet}
           </Tooltip>
         </div>
       </Element>
@@ -96,4 +104,4 @@
   </Pane>
 {/if}
 
-<slot />
+{@render children?.()}

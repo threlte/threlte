@@ -14,6 +14,11 @@
   import CameraControls from './CameraControls.svelte'
   import DefaultCamera from './DefaultCamera.svelte'
   import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
 
   const { createExtension } = useStudio()
   const { camera } = useThrelte()
@@ -227,4 +232,4 @@
   {/if}
 {/if}
 
-<slot />
+{@render children?.()}

@@ -12,6 +12,12 @@
     type SceneHierarchyState
   } from './types'
 
+  interface Props {
+    children?: import('svelte').Snippet
+  }
+
+  let { children }: Props = $props()
+
   const { createExtension } = useStudio()
 
   const ext = createExtension<SceneHierarchyState, SceneHierarchyActions>({
@@ -72,4 +78,4 @@
   </Portal>
 {/if}
 
-<slot />
+{@render children?.()}
