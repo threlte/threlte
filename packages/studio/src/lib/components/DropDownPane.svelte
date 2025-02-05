@@ -118,7 +118,7 @@
     <div
       bind:this={arrowEl}
       class="arrow"
-    />
+    ></div>
   </div>
 </div>
 
