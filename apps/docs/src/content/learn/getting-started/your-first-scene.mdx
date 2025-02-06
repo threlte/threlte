@@ -274,14 +274,13 @@ The `interactivity` allows us to add interaction event listeners to our `<T>` co
 `pointerleave` event listeners to our cube. In the event handlers we'll update the value of a `Spring` from `svelte/motion`
 and use its `.current` value to set the `scale` property of the `<T.Mesh>` component.
 
-```svelte title="Scene.svelte" {3-4,6-7,20-22}+
+```svelte title="Scene.svelte" {3-4,6-7,21-26}+
 <script>
   import { T } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import { Spring } from 'svelte/motion'
 
   interactivity()
-
   const scale = new Spring(1)
 </script>
 
