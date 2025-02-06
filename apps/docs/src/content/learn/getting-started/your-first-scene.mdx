@@ -341,7 +341,7 @@ Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/refer
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 
-```svelte title="Scene.svelte" {2}m {9-12,24}+
+```svelte title="Scene.svelte" {2}m {9-12,25}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
@@ -396,7 +396,7 @@ the delta to update the rotation
 We're almost done. Let's add some shading to our cube and a light source. We'll use a
 `THREE.MeshStandardMaterial` on our cube and a `THREE.DirectionalLight` to illuminate our scene.
 
-```svelte title="Scene.svelte" {32}m {22}+
+```svelte title="Scene.svelte" {38}m {24}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
