@@ -1,10 +1,9 @@
 <script>
+  import { Spring } from 'svelte/motion'
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
 
   interactivity()
-  const scale = spring(1)
   let rotation = 0
   useTask((delta) => {
     rotation += delta
