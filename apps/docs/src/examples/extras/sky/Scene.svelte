@@ -1,17 +1,21 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { Grid, OrbitControls } from '@threlte/extras'
   import { SphereGeometry } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { T, useThrelte } from '@threlte/core'
 
-  export let exposure = 1
+  let {
+    exposure = 1
+  }: {
+    exposure?: number
+  } = $props()
 
   const { renderer, invalidate } = useThrelte()
 
-  $: {
+  $effect(() => {
     renderer.toneMappingExposure = exposure
     invalidate()
-  }
+  })
 
   const sphereGeo = new SphereGeometry(2.5, 32, 32)
 </script>
@@ -24,7 +28,6 @@
   makeDefault
 >
   <OrbitControls
-    enableZoom={true}
     maxPolarAngle={85 * DEG2RAD}
     enableDamping
     target={[0, 2.5, 0]}
@@ -44,8 +47,8 @@
 </T.Mesh>
 
 <T.Mesh
-  position.x={-3}
   castShadow
+  position.x={-3}
   position.y={2.5}
 >
   <T is={sphereGeo} />
