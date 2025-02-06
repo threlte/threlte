@@ -274,14 +274,13 @@ The `interactivity` allows us to add interaction event listeners to our `<T>` co
 `pointerleave` event listeners to our cube. In the event handlers we'll update the value of a `Spring` from `svelte/motion`
 and use its `.current` value to set the `scale` property of the `<T.Mesh>` component.
 
-```svelte title="Scene.svelte" {3-4,6-7,20-22}+
+```svelte title="Scene.svelte" {3-4,6-7,20-26}+
 <script>
   import { T } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
   import { Spring } from 'svelte/motion'
 
   interactivity()
-
   const scale = new Spring(1)
 </script>
 
@@ -341,7 +340,7 @@ Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/refer
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 
-```svelte title="Scene.svelte" {2}m {9-12,24}+
+```svelte title="Scene.svelte" {2}m {10-13,25}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
@@ -396,7 +395,7 @@ the delta to update the rotation
 We're almost done. Let's add some shading to our cube and a light source. We'll use a
 `THREE.MeshStandardMaterial` on our cube and a `THREE.DirectionalLight` to illuminate our scene.
 
-```svelte title="Scene.svelte" {32}m {22}+
+```svelte title="Scene.svelte" {38}m {24}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
@@ -449,7 +448,7 @@ We would like our cube to cast a shadow. To do so, we need a floor for it to cas
 so we add a new `<T.Mesh>` but this time with `<T.CircleGeometry>`. To enable shadows, we need to
 set `castShadow` on both the light and our cube, and set `receiveShadow` on our new floor:
 
-```svelte title="Scene.svelte" {22}m {24,33,39-45}+
+```svelte title="Scene.svelte" {26,39,45-51}+
 <script>
   import { T, useTask } from '@threlte/core'
   import { interactivity } from '@threlte/extras'
