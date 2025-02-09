@@ -1,0 +1,39 @@
+This example demonstrates how to write and use a threlte plugin to apply the necessary functionality from [three-mesh-bvh](https://github.com/gkjohnson/three-mesh-bvh) for faster spatial queries and raycasting.
+
+<Example path="plugins/bvh" />
+
+## BVH Plugin
+
+The plugin works by checking each `<T>` component in the markup. The plugin sets the raycast function of any `<T>` components that are a `Three.Mesh` to the raycast function from `three-mesh-bvh` and computes its bounds tree upfront. The bounds tree is what is checked during raycasting. It's important to dispose the bounds tree when the mesh is no longer needed.
+
+Note that the plugin will only apply to `<T>` components that are instances of meshes, or more accurately, components whose ref passes the `isMesh` function. If you wanted to catch `<T>` components that are buffer geometries, you would need to modify the plugin. Check out the bvh example from the [`plugin` docs]('/docs/learn/advanced/plugins#bvh-raycast-plugin') for an alternative plugin that will apply the plugin to `<T>` components whose ref is an instance of `Three.BufferGeometry`.
+
+## Scene
+
+To use the plugin, simply import it and call it. It will then apply to all components within that subtree. In this case, anything below `<Scene>` will be checked.
+
+### MeshBVHHelper
+
+An important thing to note is that components are processed top down so the mesh needs to come before the MeshBVHHelper. This is so that the mesh can have its bounds tree computed before the helper reads it. If you want to avoid this, you could save a reference to the mesh and derive the MeshBVHHelper later.
+
+```svelte
+<script>
+  let mesh = $state()
+
+  // undefined until the mesh has been created and its bounds tree is calculated
+  const helper = $derived.by(() => {
+    if (mesh === undefined) return
+    return new MeshBVHHelper(mesh)
+  })
+</script>
+
+{#if helper !== undefined}
+  <T is={helper} />
+{/if}
+
+<T.Mesh
+  oncreate={(ref) => {
+    mesh = ref
+  }}
+/>
+```
