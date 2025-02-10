@@ -11,12 +11,10 @@
   import { useTransactions } from '../transactions/useTransactions'
   import Bindings from './Bindings.svelte'
   import { inspectorScope, type InspectorActions, type InspectorState } from './types'
+  import type { Snippet } from 'svelte'
+  import Toolbar from '../../components/Toolbar.svelte'
 
-  interface Props {
-    children?: import('svelte').Snippet
-  }
-
-  let { children }: Props = $props()
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
   const { openInEditor } = useTransactions()
@@ -66,7 +64,7 @@
   <ToolbarButton
     label="Inspector"
     icon="mdiPencil"
-    on:click={ext.toggleEnabled}
+    onclick={ext.toggleEnabled}
     active={ext.state.enabled}
   />
 </ToolbarItem>
@@ -83,19 +81,15 @@
     {#if objectSelection.selectedObjects.length === 1}
       <Element>
         <div style="display: flex; justify-content: end; margin-bottom: 4px;">
-          <Tooltip>
-            <IconButton
-              label="Open In Editor"
-              icon="mdiMenuOpen"
-              on:click={() => {
-                openInEditor(objectSelection.selectedObjects[0])
-              }}
-              disabled={objectSelection.selectedObjects.length !== 1}
-            />
-            {#snippet tooltip()}
-              <span>Open In Editor</span>
-            {/snippet}
-          </Tooltip>
+          <ToolbarButton
+            icon="mdiMenuOpen"
+            label="Open In Editor"
+            onclick={() => {
+              openInEditor(objectSelection.selectedObjects[0])
+            }}
+            disabled={objectSelection.selectedObjects.length !== 1}
+            tooltip="Open In Editor"
+          />
         </div>
       </Element>
       <Separator />

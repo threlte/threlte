@@ -1,6 +1,6 @@
 <script lang="ts">
   import { injectPlugin, useThrelte } from '@threlte/core'
-  import { onMount } from 'svelte'
+  import { onMount, type Snippet } from 'svelte'
   import { Checkbox, Element, RadioGrid } from 'svelte-tweakpane-ui'
   import DropDownPane from '../../components/DropDownPane.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
@@ -16,11 +16,7 @@
   import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
   import { vitePluginEnabled } from './vitePluginEnabled'
 
-  interface Props {
-    children?: import('svelte').Snippet
-  }
-
-  let { children }: Props = $props()
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
@@ -168,7 +164,7 @@
         : 'mdiContentSave'}
       label="Sync"
       {tooltip}
-      on:click={extension.sync}
+      onclick={extension.sync}
     />
 
     <DropDownPane title="Sync Settings">
@@ -203,14 +199,14 @@
       label="Undo"
       disabled={!extension.state.queue.canUndo}
       tooltip="Undo (Cmd+Z)"
-      on:click={extension.undo}
+      onclick={extension.undo}
     />
     <ToolbarButton
       icon="mdiRedo"
       label="Redo"
       disabled={!extension.state.queue.canRedo}
       tooltip="Redo (Shift+Cmd+Z)"
-      on:click={extension.redo}
+      onclick={extension.redo}
     />
   </HorizontalButtonGroup>
 </ToolbarItem>

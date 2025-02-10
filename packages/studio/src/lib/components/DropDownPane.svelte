@@ -3,34 +3,48 @@
   import { Pane } from 'svelte-tweakpane-ui'
   import IconButton from './IconButton.svelte'
   import type { Icons } from './Icon.svelte'
+  import type { Snippet } from 'svelte'
 
-  let ref: HTMLElement
-  let tooltipEl: HTMLElement
-  let arrowEl: HTMLElement
-
-  export let placement: Placement = 'bottom'
-  export let title: string = ''
-  export let icon: Icons = 'mdiChevronDown'
-
-  export let visible = false
+  let ref = $state<HTMLElement>()
+  let tooltipEl = $state<HTMLElement>()
+  let arrowEl = $state<HTMLElement>()
 
   export const show = () => {
+    if (!tooltipEl) return
     tooltipEl.style.display = 'block'
     update()
     visible = true
   }
 
   export const hide = () => {
+    if (!tooltipEl) return
     tooltipEl.style.display = 'none'
     visible = false
   }
 
-  export let toggle = () => {
-    if (!visible) show()
-    else hide()
+  interface Props {
+    placement?: Placement
+    title?: string
+    icon?: Icons
+    visible?: boolean
+    toggle?: any
+    children?: Snippet
   }
 
+  let {
+    placement = 'bottom',
+    title = '',
+    icon = 'mdiChevronDown',
+    visible = $bindable(false),
+    toggle = () => {
+      if (!visible) show()
+      else hide()
+    },
+    children
+  }: Props = $props()
+
   async function update() {
+    if (!ref || !tooltipEl || !arrowEl) return
     const {
       x,
       y,
@@ -96,7 +110,7 @@
     <IconButton
       {icon}
       label="Toggle Pane"
-      on:click={() => {
+      onclick={() => {
         toggle()
       }}
     />
@@ -113,7 +127,7 @@
       expanded
       userExpandable={false}
     >
-      <slot />
+      {@render children?.()}
     </Pane>
     <div
       bind:this={arrowEl}

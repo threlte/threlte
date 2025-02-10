@@ -1,20 +1,26 @@
 <script lang="ts">
   import { computePosition, flip, shift, offset, arrow } from '@floating-ui/dom'
+  import type { Snippet } from 'svelte'
 
-  let ref: HTMLElement
-  let tooltipEl: HTMLElement
-  let arrowEl: HTMLElement
+  let { children, tooltip }: { children?: Snippet; tooltip?: Snippet } = $props()
+
+  let ref = $state<HTMLElement>()
+  let tooltipEl = $state<HTMLElement>()
+  let arrowEl = $state<HTMLElement>()
 
   function showTooltip() {
+    if (!tooltipEl) return
     tooltipEl.style.display = 'block'
     update()
   }
 
   function hideTooltip() {
+    if (!tooltipEl) return
     tooltipEl.style.display = ''
   }
 
   async function update() {
+    if (!ref || !tooltipEl || !arrowEl) return
     const { x, y, placement, middlewareData } = await computePosition(ref, tooltipEl, {
       placement: 'top',
       middleware: [offset(2), flip(), shift({ padding: 5 }), arrow({ element: arrowEl })]
@@ -49,19 +55,20 @@
 <div
   role="tooltip"
   bind:this={ref}
-  on:mouseenter={showTooltip}
-  on:mouseleave={hideTooltip}
-  on:focus={showTooltip}
-  on:blur={hideTooltip}
+  onmouseenter={showTooltip}
+  onmouseleave={hideTooltip}
+  onfocus={showTooltip}
+  onblur={hideTooltip}
 >
-  <slot />
+  {@render children?.()}
 
   <div
     bind:this={tooltipEl}
     class="tooltip"
     role="tooltip"
   >
-    <slot name="tooltip" />
+    {@render tooltip?.()}
+
     <div
       bind:this={arrowEl}
       class="arrow"

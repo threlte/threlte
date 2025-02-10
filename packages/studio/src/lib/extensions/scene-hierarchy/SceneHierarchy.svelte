@@ -11,12 +11,9 @@
     type SceneHierarchyActions,
     type SceneHierarchyState
   } from './types'
+  import type { Snippet } from 'svelte'
 
-  interface Props {
-    children?: import('svelte').Snippet
-  }
-
-  let { children }: Props = $props()
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
 
@@ -57,7 +54,7 @@
   <ToolbarButton
     label="Scene Hierarchy"
     icon="mdiFormatListBulletedSquare"
-    on:click={ext.toggleEnabled}
+    onclick={ext.toggleEnabled}
     active={ext.state.enabled}
   />
 </ToolbarItem>

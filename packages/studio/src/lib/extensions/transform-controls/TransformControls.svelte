@@ -14,12 +14,9 @@
     type TransformControlsActions,
     type TransformControlsState
   } from './types'
+  import type { Snippet } from 'svelte'
 
-  interface Props {
-    children?: import('svelte').Snippet
-  }
-
-  let { children }: Props = $props()
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension: createExtension } = useStudio()
 
@@ -93,7 +90,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={() => {
+      onclick={() => {
         extension.setMode('translate')
       }}
       active={mode === 'translate'}
@@ -103,7 +100,7 @@
     />
 
     <ToolbarButton
-      on:click={() => {
+      onclick={() => {
         extension.setMode('rotate')
       }}
       active={mode === 'rotate'}
@@ -113,7 +110,7 @@
     />
 
     <ToolbarButton
-      on:click={() => {
+      onclick={() => {
         extension.setMode('scale')
       }}
       active={mode === 'scale'}
