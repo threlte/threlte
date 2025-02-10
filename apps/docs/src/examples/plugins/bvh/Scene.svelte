@@ -43,19 +43,12 @@
 
   let controlsEnabled = $state(true)
 
-  // these variables are only read in callbacks, so they don't need to be runes/signals
   let down = false
-  let r = 0
-  let g = 0
-  let b = 0
 
   const colorAsInt = $derived(parseInt(color.substring(1), 16))
-
-  $effect(() => {
-    r = ((colorAsInt >> 16) & 255) / 255
-    g = ((colorAsInt >> 8) & 255) / 255
-    b = ((colorAsInt >> 0) & 255) / 255
-  })
+  const r = $derived(((colorAsInt >> 16) & 255) / 255)
+  const g = $derived(((colorAsInt >> 8) & 255) / 255)
+  const b = $derived(((colorAsInt >> 0) & 255) / 255)
 </script>
 
 <Stats />
