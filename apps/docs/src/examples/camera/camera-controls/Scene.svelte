@@ -1,22 +1,43 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
+  import CameraControls from './CameraControls'
+  import type CC from 'camera-controls'
+  import type { ColorRepresentation } from 'three'
   import { Grid } from '@threlte/extras'
-  import CC from 'camera-controls'
   import { Mesh, PerspectiveCamera } from 'three'
-  import CameraControls from './CameraControls.svelte'
+  import { T } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
 
-  const { dom } = useThrelte()
+  let {
+    color = '#ff3e00',
+    controls = $bindable(),
+    mesh = $bindable()
+  }: {
+    color?: ColorRepresentation
+    controls: CC | undefined
+    mesh?: Mesh
+  } = $props()
 
-  type Props = {
-    controls: CC
-    mesh: Mesh
-  }
-
-  let { controls = $bindable(), mesh }: Props = $props()
+  const { dom, invalidate } = useThrelte()
 
   const camera = new PerspectiveCamera()
-  controls = new CameraControls(camera, dom)
+  controls = new CameraControls(dom, camera)
+
+  $effect(() => {
+    return () => {
+      controls.dispose()
+    }
+  })
+
   controls.setPosition(5, 5, 5)
+
+  useTask(
+    (delta) => {
+      if (controls.update(delta)) {
+        invalidate()
+      }
+    },
+    { autoInvalidate: false }
+  )
 </script>
 
 <T
@@ -24,22 +45,22 @@
   makeDefault
 />
 
-<T.DirectionalLight position={[3, 10, 7]} />
-
-<T
-  is={mesh}
+<T.Mesh
+  oncreate={(ref) => {
+    mesh = ref
+  }}
   position.y={0.5}
 >
   <T.BoxGeometry />
   <T.MeshBasicMaterial
-    color="#ff3e00"
+    {color}
     wireframe
   />
-</T>
+</T.Mesh>
 
 <Grid
-  sectionColor="#ff3e00"
+  sectionColor={color}
   sectionThickness={1}
-  cellColor={'#cccccc'}
+  cellColor="#cccccc"
   gridSize={40}
 />

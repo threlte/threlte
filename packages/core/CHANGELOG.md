@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.1
+
+### Patch Changes
+
+- c02525f: Threlte Canvas size defaults to the offsetWidth and offsetHeight. If you'd like the DOM rect properties you must call dom.getBoundingClientRect()
+
 ## 8.0.0
 
 ### Major Changes

@@ -1,4 +1,7 @@
-<script module>
+<script
+  module
+  lang="ts"
+>
   const createPoints = (count = 50) => {
     const points: Vector3[] = []
     for (let i = 0; i < count; i += 1) {
