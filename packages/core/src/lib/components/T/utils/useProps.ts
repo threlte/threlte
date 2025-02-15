@@ -45,6 +45,7 @@ const createSetter = (target: any, key: any, value: any): PropSetter => {
   if (
     !Array.isArray(value) &&
     typeof value === 'number' &&
+    typeof target[key] === 'object' &&
     typeof target[key]?.setScalar === 'function' &&
     // colors do have a setScalar function, but we don't want to use it, because
     // the hex notation (i.e. 0xff0000) is very popular and matches the number
@@ -56,7 +57,7 @@ const createSetter = (target: any, key: any, value: any): PropSetter => {
       target[key].setScalar(value)
     }
   } else {
-    if (typeof target[key]?.set === 'function') {
+    if (typeof target[key]?.set === 'function' && typeof target[key] === 'object') {
       // if the property has a "set" function, we can use it
       if (Array.isArray(value)) {
         return (target: any, key: any, value: any) => {
