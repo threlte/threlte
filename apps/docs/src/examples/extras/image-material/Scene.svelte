@@ -152,10 +152,14 @@
 </T.Mesh>
 
 <HUD>
+  <T.OrthographicCamera
+    makeDefault
+    position.z={5}
+    zoom={120}
+  />
   <T.Group
-    visible={textureOverrideEnabled}
-    position.x={-1 * $viewport.width + 0.5}
-    position.y={$viewport.height - 0.5}
+    position.x={-1 * $viewport.width + 1}
+    position.y={1 * 0.5 * $viewport.height + 1}
   >
     {#each names as text, index}
       <T.Group position.x={index}>
