@@ -160,6 +160,7 @@
   <T.Group
     position.x={-1 * $viewport.width + 1}
     position.y={1 * 0.5 * $viewport.height + 1}
+    visible={textureOverrideEnabled}
   >
     {#each names as text, index}
       <T.Group position.x={index}>
