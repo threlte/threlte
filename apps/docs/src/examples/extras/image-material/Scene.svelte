@@ -52,17 +52,17 @@
     saturation = 0,
     textureOverrideEnabled = false
   }: {
+    alphaSmoothing?: number
+    alphaThreshold?: number
     brightness?: number
     contrast?: number
-    negative?: boolean
     hue?: number
-    saturation?: number
     lightness?: number
     monochromeColor?: string
     monochromeStrength?: number
+    negative?: boolean
+    saturation?: number
     textureOverrideEnabled?: boolean
-    alphaThreshold?: number
-    alphaSmoothing?: number
   } = $props()
 
   const viewport = useViewport()
