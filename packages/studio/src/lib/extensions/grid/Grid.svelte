@@ -15,11 +15,14 @@
   import { useStudio } from '../../internal/extensions'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
   import { gridScope, type GridActions, type GridState } from './types'
+  import type { Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
-  let grid = studioObjectsRegistry.studioObjectRef<Mesh>()
+  let grid = $state(studioObjectsRegistry.studioObjectRef<Mesh>())
 
   const extension = createExtension<GridState, GridActions>({
     scope: gridScope,
@@ -66,7 +69,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={() => {
+      onclick={() => {
         extension.toggleEnabled()
       }}
       active={extension.state.enabled}
@@ -115,4 +118,4 @@
   />
 {/if}
 
-<slot />
+{@render children?.()}

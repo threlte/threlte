@@ -13,6 +13,9 @@
   import GroupHelper from './GroupHelper.svelte'
   import Mounter from './Mounter.svelte'
   import { helpersScope, type HelpersActions, type HelpersState } from './types'
+  import type { Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { autoRenderTask } = useThrelte()
   const { createExtension } = useStudio()
@@ -77,7 +80,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={ext.toggleEnabled}
+      onclick={ext.toggleEnabled}
       active={ext.state.enabled}
       label="Helpers"
       icon="mdiFitToScreen"
@@ -157,4 +160,4 @@
   {/each}
 {/if}
 
-<slot />
+{@render children?.()}

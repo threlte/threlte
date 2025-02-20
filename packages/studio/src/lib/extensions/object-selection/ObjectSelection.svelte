@@ -14,7 +14,9 @@
   } from './types'
   import { useOnRemove } from '../../internal/useOnRemove'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { tick } from 'svelte'
+  import { tick, type Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
@@ -112,7 +114,7 @@
   <HorizontalButtonGroup>
     <ToolbarButton
       label="Select Tweak"
-      on:click={() => {
+      onclick={() => {
         extension.setMode('tweak')
       }}
       active={extension.state.mode === 'tweak'}
@@ -122,7 +124,7 @@
 
     <ToolbarButton
       label="Select Box"
-      on:click={() => {
+      onclick={() => {
         extension.setMode('rect')
       }}
       active={extension.state.mode === 'rect'}
@@ -132,4 +134,4 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}
