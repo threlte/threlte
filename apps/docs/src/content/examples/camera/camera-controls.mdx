@@ -21,10 +21,10 @@ You could put both of these actions in the constructor of the `CameraControls` c
 
 If you are using SvelteKit or Vite for building your app, you may need to externalize the `camera-controls` library.
 
-To externalize the `camera-controls` library put the following in your `vite-config.js` or `vite-config.ts`.
+To externalize the `camera-controls` library put the following in your `vite.config.js` or `vite.config.ts`.
 
 ```typescript {4-6}+
-// vite-config.ts
+// vite.config.ts
 export default defineConfig({
   plugins: [sveltekit()],
   ssr: {
