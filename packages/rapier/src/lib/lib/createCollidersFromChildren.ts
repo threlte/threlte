@@ -121,12 +121,16 @@ export const createCollidersFromChildren = (
 
         case 'convexHull':
           {
-            const scaleX = scale.x
+            const scaleX = scale.x;
+						const scaleY = scale.y;
+						const scaleZ = scale.z;
             const vertices = new Float32Array(geometry.attributes.position.array)
             if (scaleX !== 1) {
-              for (let i = 0; i < vertices.length; i++) {
-                vertices[i] *= scaleX
-              }
+              for (let i = 0; i < vertices.length; i += 3) {
+								vertices[i] *= scaleX;
+								vertices[i + 1] *= scaleY;
+								vertices[i + 2] *= scaleZ;
+						}
             }
             description = ColliderDesc.convexHull(vertices) as ColliderDesc
           }
