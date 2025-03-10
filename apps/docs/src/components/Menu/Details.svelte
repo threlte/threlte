@@ -1,28 +1,34 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import { onMount } from 'svelte'
 
-  export let open = false
-  export let id = ''
+  let mounted = $state(false)
 
-  let mounted = false
-
-  $: if (mounted) {
-    const storage = sessionStorage.getItem(id)
-    if (storage) {
-      open = JSON.parse(storage)
-    }
+  interface Props {
+    open?: boolean
+    id?: string
+    class?: string
+    summary?: import('svelte').Snippet
+    children?: import('svelte').Snippet
   }
 
-  $: if (mounted) {
-    sessionStorage.setItem(id, JSON.stringify(open))
-  }
-
-  let _class = ''
-  export { _class as class }
+  let { open = $bindable(false), id = '', class: _class = '', summary, children }: Props = $props()
 
   onMount(() => {
     mounted = true
+  })
+
+  $effect(() => {
+    if (mounted) {
+      const storage = sessionStorage.getItem(id)
+      if (storage) {
+        open = JSON.parse(storage)
+      }
+    }
+  })
+  $effect(() => {
+    if (mounted) {
+      sessionStorage.setItem(id, JSON.stringify(open))
+    }
   })
 </script>
 
@@ -33,15 +39,15 @@
 >
   <summary class="cursor-pointer select-none list-none font-bold">
     <div class="mb-0 flex flex-row items-center">
-      <slot name="summary" />
+      {@render summary?.()}
       <div>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 1 16 16"
-          class={c(
+          class={[
             'ml-1 h-[1em] w-[1em] translate-y-px rotate-0 transition-all duration-200',
             open && '-translate-y-px rotate-90'
-          )}
+          ]}
           aria-hidden="true"
         >
           <path
@@ -55,7 +61,7 @@
   </summary>
 
   <div>
-    <slot />
+    {@render children?.()}
   </div>
 </details>
 
