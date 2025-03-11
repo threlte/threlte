@@ -10,7 +10,7 @@
     children?: Snippet
   }
 
-  let { id = 'default', object, children: childrenSnippet }: Props = $props()
+  let { id = 'default', object, children }: Props = $props()
 
   const { getPortal } = usePortalContext()
   const portal = getPortal(id)
@@ -20,6 +20,6 @@
 
 {#if target}
   <T.Object3D attach={target}>
-    {@render childrenSnippet?.()}
+    {@render children?.()}
   </T.Object3D>
 {/if}
