@@ -6,6 +6,13 @@
     type StudioObjectsRegistryActions,
     type StudioObjectsRegistryState
   } from './types'
+  import type { Snippet } from 'svelte'
+
+  let {
+    children
+  }: {
+    children?: Snippet
+  } = $props()
 
   const { createExtension } = useStudio()
 
@@ -27,4 +34,4 @@
   })
 </script>
 
-<slot />
+{@render children?.()}

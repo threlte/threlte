@@ -169,7 +169,7 @@
       <canvas
         bind:this={canvasEl}
         style="width: {width}px; height: {height}px; display: block"
-      />
+      ></canvas>
     </Element>
   </Pane>
 </Portal>

@@ -7,39 +7,51 @@
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
 
   const { studioObjectRef } = useStudioObjectsRegistry()
-  let axesHelper = studioObjectRef<Line2>()
+  let axesHelper = $state(studioObjectRef<Line2>())
 
-  export let length = 1
-  export let width = 0.2
-  export let colors = ['red', 'green', 'blue']
-  export let opacity = 1
-  export let overlay = false
+  interface Props {
+    length?: number
+    width?: number
+    colors?: ('red' | 'green' | 'blue')[]
+    opacity?: number
+    overlay?: boolean
+  }
+
+  let {
+    length = 1,
+    width = 0.2,
+    colors = ['red', 'green', 'blue'],
+    opacity = 1,
+    overlay = false
+  }: Props = $props()
 
   const lineGeometry = new LineGeometry()
-  const lineMaterial = new LineMaterial({
-    linewidth: width / 100,
-    vertexColors: true,
-    transparent: opacity < 1,
-    opacity,
-    ...(overlay ? { depthTest: false, depthWrite: false } : {})
-  })
+  const lineMaterial = $state(
+    new LineMaterial({
+      linewidth: width / 100,
+      vertexColors: true,
+      transparent: opacity < 1,
+      opacity,
+      ...(overlay ? { depthTest: false, depthWrite: false } : {})
+    })
+  )
   const line2 = new Line2(lineGeometry, lineMaterial)
   const color = new THREE.Color()
 
-  $: {
+  $effect.pre(() => {
     const positions = new Float32Array(27)
     positions[3] = length
     positions[13] = length
     positions[23] = length
     lineGeometry.setPositions(positions)
     line2.computeLineDistances()
-  }
+  })
 
-  $: {
+  $effect.pre(() => {
     lineMaterial.linewidth = width / 100
-  }
+  })
 
-  $: {
+  $effect.pre(() => {
     const colorArray = new Float32Array(27)
     colors.forEach((axis, i) => {
       color.set(axis)
@@ -50,7 +62,7 @@
       }
     })
     lineGeometry.setColors(colorArray)
-  }
+  })
 </script>
 
 <T
