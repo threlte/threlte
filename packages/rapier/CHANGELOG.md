@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.1.0
+
+### Minor Changes
+
+- 738918d: Fix TriMesh & ConvexHull auto colliders
+
 ## 3.0.0
 
 ### Major Changes
