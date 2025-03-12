@@ -1,6 +1,6 @@
 <script lang="ts">
   import { isInstanceOf, useParent, watch } from '@threlte/core'
-  import { usePortalContext } from '../usePortalContext'
+  import { usePortalContext } from './usePortalContext.svelte'
 
   interface Props {
     id?: string
