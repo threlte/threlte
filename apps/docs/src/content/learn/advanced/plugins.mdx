@@ -189,7 +189,6 @@ A Plugin that implements [BVH raycasting](https://github.com/gkjohnson/three-mes
 
 ```ts title="bvhRaycasting.svelte.ts"
 import { injectPlugin, isInstanceOf } from '@threlte/core'
-import type { BufferGeometry, Mesh } from 'three'
 import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh'
 
 const bvhRaycasting = () => {
