@@ -49,6 +49,7 @@ export const fragmentShader = /*glsl*/ `
 	uniform vec3 sectionColor;
 	uniform float fadeDistance;
 	uniform float fadeStrength;
+	uniform vec3 fadeOrigin;
 	uniform float cellThickness;
 	uniform float sectionThickness;
 	uniform vec3 backgroundColor;
@@ -143,7 +144,7 @@ if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + th
 			g2 = getPolarGrid(sectionSize, sectionThickness, polarSectionDividers, localPos);
 		}
 
-		float dist = distance(worldCamProjPosition, worldPosition.xyz);
+		float dist = distance(fadeOrigin, worldPosition.xyz);
 		float d = 1.0 - min(dist / fadeDistance, 1.0);
 		float fadeFactor = pow(d, fadeStrength) * 0.95;
 
