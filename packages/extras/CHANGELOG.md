@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.0.2
+
+### Patch Changes
+
+- 61a8a99: Fix portal components not being removed on unmount
+
 ## 9.0.1
 
 ### Patch Changes
