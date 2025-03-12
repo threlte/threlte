@@ -91,16 +91,20 @@ export const createCollidersFromChildren = (
 
         case 'trimesh':
           {
-            const scaleX = scale.x
+            const { x: scaleX, y: scaleY, z: scaleZ } = scale
             const vertices = new Float32Array(geometry.attributes.position.array)
-            if (scaleX !== 1) {
-              for (let i = 0; i < vertices.length; i++) {
+            if (scaleX !== 1 || scaleY !== 1 || scaleZ !== 1) {
+              for (let i = 0; i < vertices.length; i += 3) {
                 vertices[i] *= scaleX
+                vertices[i + 1] *= scaleY
+                vertices[i + 2] *= scaleZ
               }
             }
             description = ColliderDesc.trimesh(
               vertices,
-              new Uint32Array(geometry.index?.array ?? [])
+              new Uint32Array(
+                geometry.index?.array ?? Uint32Array.from(Array(vertices.length / 3).keys())
+              )
             )
           }
           break
@@ -121,16 +125,14 @@ export const createCollidersFromChildren = (
 
         case 'convexHull':
           {
-            const scaleX = scale.x;
-						const scaleY = scale.y;
-						const scaleZ = scale.z;
+            const { x: scaleX, y: scaleY, z: scaleZ } = scale
             const vertices = new Float32Array(geometry.attributes.position.array)
-            if (scaleX !== 1) {
+            if (scaleX !== 1 || scaleY !== 1 || scaleZ !== 1) {
               for (let i = 0; i < vertices.length; i += 3) {
-								vertices[i] *= scaleX;
-								vertices[i + 1] *= scaleY;
-								vertices[i + 2] *= scaleZ;
-						}
+                vertices[i] *= scaleX
+                vertices[i + 1] *= scaleY
+                vertices[i + 2] *= scaleZ
+              }
             }
             description = ColliderDesc.convexHull(vertices) as ColliderDesc
           }
