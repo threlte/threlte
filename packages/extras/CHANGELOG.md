@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.1.0
+
+### Minor Changes
+
+- 2f5e124: Add fadeOrigin parameter to Grid
+
 ## 9.0.2
 
 ### Patch Changes
