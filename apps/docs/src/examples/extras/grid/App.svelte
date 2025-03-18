@@ -222,14 +222,14 @@
 
 <div>
   <Canvas>
-    <TransformControls
-      showX={useFadeOrigin}
-      showY={useFadeOrigin}
-      showZ={useFadeOrigin}
-      onobjectChange={(e) => {
-        fadeOrigin = e.target.object.position.clone()
-      }}
-    />
+    {#if useFadeOrigin}
+      <TransformControls
+        position={fadeOrigin.toArray()}
+        onobjectChange={(e) => {
+          fadeOrigin = e.target.object.position.clone()
+        }}
+      />
+    {/if}
     {#if gridGeometryIsTerrain}
       <Grid
         position.y={-2}
