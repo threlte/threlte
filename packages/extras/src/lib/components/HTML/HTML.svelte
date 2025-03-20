@@ -83,7 +83,7 @@
 
   visible = true
 
-  const { camera, scene, size, dom, canvas } = useThrelte()
+  const { camera, scene, size, dom, canvas, renderStage } = useThrelte()
 
   const group = new Group()
 
@@ -257,7 +257,9 @@
   }
 
   export const { start: startRendering, stop: stopRendering } = useTask(render, {
-    autoStart: false
+    autoStart: false,
+    autoInvalidate: false,
+    stage: renderStage
   })
   $effect(() => {
     if (autoRender) {
