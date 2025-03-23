@@ -306,10 +306,10 @@ importers:
         version: 5.14.4
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.14.4)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.14.4)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.14.4)(typescript@5.6.3)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.14.4)(typescript@5.6.3)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.14.4)(typescript@5.6.3)
@@ -334,12 +334,12 @@ importers:
       camera-controls:
         specifier: ^2.9.0
         version: 2.9.0(three@0.171.0)
+      svelte-tweakpane-ui:
+        specifier: ^1.5.6
+        version: 1.5.6(svelte@5.14.4)
       three-mesh-bvh:
         specifier: ^0.7.4
         version: 0.7.4(three@0.171.0)
-      three-perf:
-        specifier: github:jerzakm/three-perf#three-kit-threlte-fork
-        version: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.171.0)
       three-viewport-gizmo:
         specifier: ^2.0.2
         version: 2.0.2(three@0.171.0)
@@ -406,10 +406,10 @@ importers:
         version: 5.14.4
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.14.4)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.14.4)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.14.4)(typescript@5.6.3)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.14.4)(typescript@5.6.3)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.14.4)(typescript@5.6.3)
@@ -2186,35 +2186,89 @@ packages:
     peerDependencies:
       tweakpane: ^4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-camerakit@0.3.1-beta.3':
+    resolution: {integrity: sha512-Tg9TyaaeG7bfo4d6Bx1qtRBKWzs+8uYpN4FaxtyIcOJES6YjOXNAe7f23G2auSDuhkA8H62nqo4lnqxYOoyGEQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
+
   '@kitschpatrol/tweakpane-plugin-essentials@0.2.1':
     resolution: {integrity: sha512-0V7ANWmcOb+oWNssIqa+KtBt8+Lqtqk++wiBZ8g8DjJ9z1v8Q3VLluVekSzZb2Mhu1rytWsXmzMknnRWsfzqBg==}
     peerDependencies:
       tweakpane: ^4.0.3
+
+  '@kitschpatrol/tweakpane-plugin-essentials@0.2.2-beta.3':
+    resolution: {integrity: sha512-ucqdSQ16G8vCtifuQSr2sCtKCNWzhScOp4g+6p+uXRHIpOC73zHRAlLUndB2ZgjhOyA+0+2zQqBx22QnJkybaw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
+
+  '@kitschpatrol/tweakpane-plugin-file-import@1.1.2-beta.2':
+    resolution: {integrity: sha512-+W5DIOu2B/J0pmwSmxnF93TemJCvpMfvrcx5Opt8DYwsbtmFm0hRaHBO1dHmTeMJaBckOxWxIq22nJ4jcuwB4w==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
 
   '@kitschpatrol/tweakpane-plugin-image@2.0.0':
     resolution: {integrity: sha512-7gnWKCBIJtcBus4JhvBCGU3q4NL+Tfgo7Bnxb30ORsqnYI/D6W8Kuty/NbUrPVL6fx1E3zulgH6lmBkmv0JhDA==}
     peerDependencies:
       tweakpane: ^4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-image@2.0.1-beta.6':
+    resolution: {integrity: sha512-eaDYP3qjYHmXvlC9P8XIj+zVb176G96rStL224o+RcU5S4LWPXRXvpucltPbLWVFRi2AFo5LHoEFSkSB1P07Og==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
+
+  '@kitschpatrol/tweakpane-plugin-inputs@1.0.4-beta.4':
+    resolution: {integrity: sha512-VRzvTTMCy6wRABJOkPDbguPTzRJytrxx0RUNMSJpx7H5L4XJ8BVzglQqatXLxHr3Nvy3ZovwqX11W7mu7QcX5A==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
+
   '@kitschpatrol/tweakpane-plugin-profiler@0.4.1':
     resolution: {integrity: sha512-dPPLvaHUBpZM8upzudMforfMw/h6j9jscZsHkt+LjSrrmXH2OUM5adR4Dd7WUCc/OGjgMx9hxsSjiptIZqxA+g==}
     peerDependencies:
       tweakpane: ^4.0.3
+
+  '@kitschpatrol/tweakpane-plugin-profiler@0.4.2-beta.3':
+    resolution: {integrity: sha512-9vri0Oew3eO0K/F/jT58VAO3ersaQEfNfEqn5C0Np0zOOuFE+f1d/XgUKfiRPln9p3hrfNjbJ0kGBIfhBw+vzQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
 
   '@kitschpatrol/tweakpane-plugin-rotation@0.2.0':
     resolution: {integrity: sha512-bXGR2WO84zlXeafk/r4PRy6mhpuGdXX9AiQHWAwcCchzyYGvXtqNK0QjCZQfLTTBHbp8y1wDxU2Idd2qAKBq2Q==}
     peerDependencies:
       tweakpane: ^4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-rotation@0.2.1-beta.2':
+    resolution: {integrity: sha512-chGPIPjdiP18C71xDbO88IkpgaxwBSaFa6W5+XbmxTT5LpHXSyOTtOEv4cjPg85HDUG2Fc+h7tpnTw/3caCFRw==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
+
   '@kitschpatrol/tweakpane-plugin-textarea@2.0.0':
     resolution: {integrity: sha512-h68Eo9gKbeZ9AYyaFy/HSVFzYeMsN+WTlOk+QO1prqDs56yqw0DJKDHffK2sdlGd8wThtGF359TiV8UEsCa3dA==}
     peerDependencies:
       tweakpane: ^4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-textarea@2.0.1-beta.2':
+    resolution: {integrity: sha512-VHV6dJRlceyELapEd38Cwqtu+aG7VPX4e1anPxxVESQmb1uzr4LvsDWPYY6s+9XLzT7O1CZHg63Rd7rRn3bsDQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
+
   '@kitschpatrol/tweakpane-plugin-waveform@1.0.3':
     resolution: {integrity: sha512-litDHX36MXbaw92stzTxua0MqS8INOkq0kGIhqxuRlyjOom7JJsO0bkSgNSbSNAQxJTHmo9NRjO6PzBbFR2Dsw==}
     peerDependencies:
       tweakpane: ^4.0.3
+
+  '@kitschpatrol/tweakpane-plugin-waveform@1.0.4-beta.3':
+    resolution: {integrity: sha512-UVzLSoLQNnyvG3xwno+Mxl/O2rED0b7yz3UIl8gbU3eggJOsHMltywHpSuF7oIJYbbtQtjns6um/fhYyvzXnRQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      tweakpane: ^4.0.0
 
   '@lumaai/luma-web@0.1.15':
     resolution: {integrity: sha512-gNI7qhwSDdvS6+IVFe9QpD2E/9VXRfO2dUn5CUVgvw+Ldus057ghBKdZ1AYO8Mgi/7J+OI4Nxd7r8YwzRf8/Pg==}
@@ -2909,6 +2963,9 @@ packages:
 
   '@tweakpane/core@2.0.3':
     resolution: {integrity: sha512-qHci4XA1Wngpwy8IzsLh5JEdscz8aDti/9YhyOaq01si+cgNDaZfwzTtXdn1+xTxSnCM+pW4Zb2/4eqn+K1ATw==}
+
+  '@tweakpane/core@2.0.5':
+    resolution: {integrity: sha512-punBgD5rKCF5vcNo6BsSOXiDR/NSs9VM7SG65QSLJIxfRaGgj54ree9zQW6bO3pNFf3AogiGgaNODUVQRk9YqQ==}
 
   '@tweakpane/plugin-camerakit@0.3.0':
     resolution: {integrity: sha512-6UwgwDKU+oaAgXJ2D/pOoIpEAZts0RyeLmVzBJGs+VVNqSfkiHzL0i5XD+XnmSL2PaLXBne0dlz0bYOrjmeELw==}
@@ -4355,6 +4412,9 @@ packages:
   esm-env@1.2.1:
     resolution: {integrity: sha512-U9JedYYjCnadUlXk7e1Kr+aENQhtUaoaV9+gZm1T8LC/YBAPJx3NSPIAurFOC0U5vrdSevnUJS2/wUVxGwPhng==}
 
+  esm-env@1.2.2:
+    resolution: {integrity: sha512-Epxrv+Nr/CaL4ZcFGPJIYLWFom+YeV1DqMLHJoEd9SYRxNbaFruBwfEX/kkHUJf55j2+TUbmDcmuilbP1TmXHA==}
+
   espree@10.0.1:
     resolution: {integrity: sha512-MWkrWZbJsL2UwnjxTX3gG8FneachS/Mwg7tdGXce011sJd5b0JG54vat5KHnfSBODZ3Wvzd2WnjxyzsRoVv+ww==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -4452,11 +4512,18 @@ packages:
   fast-copy@3.0.1:
     resolution: {integrity: sha512-Knr7NOtK3HWRYGtHoJrjkaWepqT8thIVGAwt0p0aUs1zqkAzXZV4vo9fFNwyb5fcqK1GKYFYxldQdIDVKhUAfA==}
 
+  fast-copy@3.0.2:
+    resolution: {integrity: sha512-dl0O9Vhju8IrcLndv2eU4ldt1ftXMqqfgN4H1cpmGV7P6jeB9FwpN9a2c8DPGE1Ys88rNUJVYDHq73CGAGOPfQ==}
+
   fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
 
   fast-equals@5.0.1:
     resolution: {integrity: sha512-WF1Wi8PwwSY7/6Kx0vKXtw8RwuSGoM1bvDaJbu7MxDlR1vovZjIAKrnzyrThgAjm6JDTu0fVgWXDlMGspodfoQ==}
+    engines: {node: '>=6.0.0'}
+
+  fast-equals@5.2.2:
+    resolution: {integrity: sha512-V7/RktU11J3I36Nwq2JnZEM7tNm17eBJz+u25qdxBZeCKiX6BkVSZQjwWIr+IobgnZy+ag73tTZgZi7tr0LrBw==}
     engines: {node: '>=6.0.0'}
 
   fast-fifo@1.3.2:
@@ -5928,6 +5995,11 @@ packages:
     engines: {node: ^18 || >=20}
     hasBin: true
 
+  nanoid@5.1.5:
+    resolution: {integrity: sha512-Ir/+ZpE9fDsNH0hQ3C68uyThDXzYcim2EqcZ8zn8Chtt1iylPT9xXJB0kPCnqzgcEGikO9RxSrh63MsmVCU7Fw==}
+    engines: {node: ^18 || >=20}
+    hasBin: true
+
   napi-build-utils@1.0.2:
     resolution: {integrity: sha512-ONmRUqK7zj7DWX0D9ADe03wbwOBZxNAfF20PlGfCWQcD3+/MakShIHrMqx9YwPTfxDdF1zLeL+RGZiR9kGMLdg==}
 
@@ -7389,6 +7461,12 @@ packages:
     peerDependencies:
       svelte: ^3.48.0 || >4.0.0
 
+  svelte-persisted-store@0.12.0:
+    resolution: {integrity: sha512-BdBQr2SGSJ+rDWH8/aEV5GthBJDapVP0GP3fuUCA7TjYG5ctcB+O9Mj9ZC0+Jo1oJMfZUd1y9H68NFRR5MyIJA==}
+    engines: {node: '>=0.14'}
+    peerDependencies:
+      svelte: ^3.48.0 || ^4 || ^5
+
   svelte-portal@2.2.1:
     resolution: {integrity: sha512-uF7is5sM4aq5iN7QF/67XLnTUvQCf2iiG/B1BHTqLwYVY1dsVmTeXZ/LeEyU6dLjApOQdbEG9lkqHzxiQtOLEQ==}
 
@@ -7439,6 +7517,11 @@ packages:
     engines: {node: '>=18.0.0', pnpm: '>=8.0.0'}
     peerDependencies:
       svelte: ^4.0.0
+
+  svelte-tweakpane-ui@1.5.6:
+    resolution: {integrity: sha512-cIJojCnuMj6EbkWdeFJkCDbcsYVE8PgLGDhQQFHzLGCHl/Pk2j+BJX0nn+EAKRE6D6k32jjZwanlohZHQdwwmw==}
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0
 
   svelte2tsx@0.7.10:
     resolution: {integrity: sha512-POOXaTncPGjwXMj6NVSRvdNj8KFqqLabFtXsQal3WyPy4X5raGsiDST2+ELhceKwfHk79/hR3qGUeU7KxYo4vQ==}
@@ -7528,12 +7611,6 @@ packages:
     resolution: {integrity: sha512-WDd77RklE52pZSKZx8sDXzrd2JCF/gL/hugFvsIBylpMRlJxxwesKn2rW7TcQZ809NocDVkQx1UJo9pJtVAPYg==}
     peerDependencies:
       three: '>= 0.151.0'
-
-  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169:
-    resolution: {tarball: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169}
-    version: 1.0.10
-    peerDependencies:
-      three: '>=0.170'
 
   three-stdlib@2.21.8:
     resolution: {integrity: sha512-kqisiKvO4mSy59v5vWqBQSH8famLxp7Z51LxpMJI9GwDxqODaW02rhIwmjYDEzZWNFpjZpoDHVGbdpeHf8h3SA==}
@@ -7653,11 +7730,6 @@ packages:
     peerDependencies:
       three: '>=0.125.0'
 
-  troika-three-text@0.52.2:
-    resolution: {integrity: sha512-UGYwjKnR8RgmyOIpo0/KiSW0wySQ155BQXNLoSWA1liKzXG+RyHM+dvTIDawHGVQcqjqyunFlVY32xm/HDqjpw==}
-    peerDependencies:
-      three: '>=0.125.0'
-
   troika-three-utils@0.47.2:
     resolution: {integrity: sha512-/28plhCxfKtH7MSxEGx8e3b/OXU5A0xlwl+Sbdp0H8FXUHKZDoksduEKmjQayXYtxAyuUiCRunYIv/8Vi7aiyg==}
     peerDependencies:
@@ -7678,9 +7750,6 @@ packages:
 
   troika-worker-utils@0.50.0:
     resolution: {integrity: sha512-BxNk0w6+d9NYd7El/3RzlzH/F2vovJI1FX9Zb+D7fArVM1EsUXj6+wVwJSrfucy6/HYhfbZPu/lD6Miiw9Byiw==}
-
-  troika-worker-utils@0.52.0:
-    resolution: {integrity: sha512-W1CpvTHykaPH5brv5VHLfQo9D1OYuo0cSBEUQFFT/nBUzM8iD6Lq2/tgG/f1OelbAS1WtaTPQzE5uM49egnngw==}
 
   trough@2.1.0:
     resolution: {integrity: sha512-AqTiAOLcj85xS7vQ8QkAV41hPDIJ71XJB4RCUrzo/1GM2CQwhkJGaf9Hgr7BOugMRpgGUrqRg/DrBDl4H40+8g==}
@@ -7798,11 +7867,11 @@ packages:
     resolution: {integrity: sha512-vHZe/e6k1HZVKiMQPQ1BWFn53vjVQDFKdkjUq/pBKlRWi1gw9LQO6ntH4qZCcHY1rH6TXgsRmexXdgWl96YvVQ==}
     hasBin: true
 
-  tweakpane@3.1.10:
-    resolution: {integrity: sha512-rqwnl/pUa7+inhI2E9ayGTqqP0EPOOn/wVvSWjZsRbZUItzNShny7pzwL3hVlaN4m9t/aZhsP0aFQ9U5VVR2VQ==}
-
   tweakpane@4.0.3:
     resolution: {integrity: sha512-BlcWOAe8oe4c+k9pmLBARGdWB6MVZMszayekkixQXTgkxTaYoTUpHpwVEp+3HkoamZkomodpbBf0CkguIHTgLg==}
+
+  tweakpane@4.0.5:
+    resolution: {integrity: sha512-rxEXdSI+ArlG1RyO6FghC4ZUX8JkEfz8F3v1JuteXSV0pEtHJzyo07fcDG+NsJfN5L39kSbCYbB9cBGHyuI/tQ==}
 
   tweetnacl@0.14.5:
     resolution: {integrity: sha512-KXXFFdAbFXY4geFIwoyNK+f5Z1b7swfXABfL7HXCmoIWMKU3dmS26672A4EeQtDzLKy7SXmfBu51JolvEKwtGA==}
@@ -8588,7 +8657,7 @@ snapshots:
       '@babel/traverse': 7.25.9
       '@babel/types': 7.25.9
       convert-source-map: 2.0.0
-      debug: 4.3.7
+      debug: 4.4.0
       gensync: 1.0.0-beta.2
       json5: 2.2.3
       semver: 6.3.1
@@ -8847,7 +8916,7 @@ snapshots:
       '@babel/parser': 7.25.9
       '@babel/template': 7.25.9
       '@babel/types': 7.25.9
-      debug: 4.3.7
+      debug: 4.4.0
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -9653,35 +9722,80 @@ snapshots:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-camerakit@0.3.1-beta.3(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
+
   '@kitschpatrol/tweakpane-plugin-essentials@0.2.1(tweakpane@4.0.3)':
     dependencies:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
+
+  '@kitschpatrol/tweakpane-plugin-essentials@0.2.2-beta.3(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
+
+  '@kitschpatrol/tweakpane-plugin-file-import@1.1.2-beta.2(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
 
   '@kitschpatrol/tweakpane-plugin-image@2.0.0(tweakpane@4.0.3)':
     dependencies:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-image@2.0.1-beta.6(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
+
+  '@kitschpatrol/tweakpane-plugin-inputs@1.0.4-beta.4(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
+
   '@kitschpatrol/tweakpane-plugin-profiler@0.4.1(tweakpane@4.0.3)':
     dependencies:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
+
+  '@kitschpatrol/tweakpane-plugin-profiler@0.4.2-beta.3(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
 
   '@kitschpatrol/tweakpane-plugin-rotation@0.2.0(tweakpane@4.0.3)':
     dependencies:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-rotation@0.2.1-beta.2(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
+
   '@kitschpatrol/tweakpane-plugin-textarea@2.0.0(tweakpane@4.0.3)':
     dependencies:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
 
+  '@kitschpatrol/tweakpane-plugin-textarea@2.0.1-beta.2(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
+
   '@kitschpatrol/tweakpane-plugin-waveform@1.0.3(tweakpane@4.0.3)':
     dependencies:
       '@tweakpane/core': 2.0.3
       tweakpane: 4.0.3
+
+  '@kitschpatrol/tweakpane-plugin-waveform@1.0.4-beta.3(tweakpane@4.0.5)':
+    dependencies:
+      '@tweakpane/core': 2.0.5
+      tweakpane: 4.0.5
 
   '@lumaai/luma-web@0.1.15(@types/three@0.171.0)(three@0.171.0)':
     dependencies:
@@ -10515,6 +10629,8 @@ snapshots:
 
   '@tweakpane/core@2.0.3': {}
 
+  '@tweakpane/core@2.0.5': {}
+
   '@tweakpane/plugin-camerakit@0.3.0(tweakpane@4.0.3)':
     dependencies:
       tweakpane: 4.0.3
@@ -11007,8 +11123,7 @@ snapshots:
 
   acorn@8.13.0: {}
 
-  acorn@8.14.0:
-    optional: true
+  acorn@8.14.0: {}
 
   agent-base@6.0.2:
     dependencies:
@@ -12398,6 +12513,8 @@ snapshots:
 
   esm-env@1.2.1: {}
 
+  esm-env@1.2.2: {}
+
   espree@10.0.1:
     dependencies:
       acorn: 8.13.0
@@ -12518,9 +12635,13 @@ snapshots:
 
   fast-copy@3.0.1: {}
 
+  fast-copy@3.0.2: {}
+
   fast-deep-equal@3.1.3: {}
 
   fast-equals@5.0.1: {}
+
+  fast-equals@5.2.2: {}
 
   fast-fifo@1.3.2: {}
 
@@ -14520,6 +14641,8 @@ snapshots:
 
   nanoid@5.0.6: {}
 
+  nanoid@5.1.5: {}
+
   napi-build-utils@1.0.2: {}
 
   natural-compare@1.4.0: {}
@@ -14983,7 +15106,7 @@ snapshots:
 
   postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)):
     dependencies:
-      lilconfig: 3.0.0
+      lilconfig: 3.1.3
       yaml: 2.3.4
     optionalDependencies:
       postcss: 8.4.38
@@ -16189,6 +16312,10 @@ snapshots:
     dependencies:
       svelte: 5.14.4
 
+  svelte-persisted-store@0.12.0(svelte@5.14.4):
+    dependencies:
+      svelte: 5.14.4
+
   svelte-portal@2.2.1: {}
 
   svelte-preprocess@5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.33)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.7.2)))(postcss@8.4.33)(sass@1.77.7)(svelte@5.14.4)(typescript@5.7.2):
@@ -16287,6 +16414,26 @@ snapshots:
       svelte: 5.14.4
       svelte-local-storage-store: 0.6.4(svelte@5.14.4)
       tweakpane: 4.0.3
+
+  svelte-tweakpane-ui@1.5.6(svelte@5.14.4):
+    dependencies:
+      '@kitschpatrol/tweakpane-plugin-camerakit': 0.3.1-beta.3(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-essentials': 0.2.2-beta.3(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-file-import': 1.1.2-beta.2(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-image': 2.0.1-beta.6(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-inputs': 1.0.4-beta.4(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-profiler': 0.4.2-beta.3(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-rotation': 0.2.1-beta.2(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-textarea': 2.0.1-beta.2(tweakpane@4.0.5)
+      '@kitschpatrol/tweakpane-plugin-waveform': 1.0.4-beta.3(tweakpane@4.0.5)
+      '@tweakpane/core': 2.0.5
+      esm-env: 1.2.2
+      fast-copy: 3.0.2
+      fast-equals: 5.2.2
+      nanoid: 5.1.5
+      svelte: 5.14.4
+      svelte-persisted-store: 0.12.0(svelte@5.14.4)
+      tweakpane: 4.0.5
 
   svelte2tsx@0.7.10(svelte@5.14.4)(typescript@5.4.5):
     dependencies:
@@ -16400,7 +16547,7 @@ snapshots:
   terser@5.37.0:
     dependencies:
       '@jridgewell/source-map': 0.3.6
-      acorn: 8.13.0
+      acorn: 8.14.0
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -16432,12 +16579,6 @@ snapshots:
   three-mesh-bvh@0.7.5(three@0.171.0):
     dependencies:
       three: 0.171.0
-
-  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.171.0):
-    dependencies:
-      three: 0.171.0
-      troika-three-text: 0.52.2(three@0.171.0)
-      tweakpane: 3.1.10
 
   three-stdlib@2.21.8(three@0.122.0):
     dependencies:
@@ -16556,14 +16697,6 @@ snapshots:
       troika-worker-utils: 0.50.0
       webgl-sdf-generator: 1.1.1
 
-  troika-three-text@0.52.2(three@0.171.0):
-    dependencies:
-      bidi-js: 1.0.2
-      three: 0.171.0
-      troika-three-utils: 0.52.0(three@0.171.0)
-      troika-worker-utils: 0.52.0
-      webgl-sdf-generator: 1.1.1
-
   troika-three-utils@0.47.2(three@0.171.0):
     dependencies:
       three: 0.171.0
@@ -16579,8 +16712,6 @@ snapshots:
   troika-worker-utils@0.47.2: {}
 
   troika-worker-utils@0.50.0: {}
-
-  troika-worker-utils@0.52.0: {}
 
   trough@2.1.0: {}
 
@@ -16748,9 +16879,9 @@ snapshots:
       turbo-windows-64: 2.3.1
       turbo-windows-arm64: 2.3.1
 
-  tweakpane@3.1.10: {}
-
   tweakpane@4.0.3: {}
+
+  tweakpane@4.0.5: {}
 
   tweetnacl@0.14.5: {}
 

@@ -1,74 +1,65 @@
 <script lang="ts">
-  import { useStage, useTask, useThrelte } from '@threlte/core'
-  import { ThreePerf } from 'three-perf'
-  import type { PerfMonitorProps } from './types'
-  import { onDestroy } from 'svelte'
+  import { useTask, useThrelte } from '@threlte/core'
+  import { Pane, AutoValue, FpsGraph } from 'svelte-tweakpane-ui'
 
-  let {
-    domElement = document.body,
-    logsPerSecond = 10,
-    showGraph = true,
-    memory = true,
-    enabled = true,
-    visible = true,
-    actionToCallUI = '',
-    guiVisible = false,
-    backgroundOpacity = 0.7,
-    scale = 1,
-    anchorX = 'left',
-    anchorY = 'top'
-  }: PerfMonitorProps = $props()
+  const { renderer } = useThrelte()
 
-  const { renderer, renderStage, mainStage } = useThrelte()
+  let calls = $state(0)
 
-  let perf: ThreePerf
+  let geometries = $state(0)
+  let textures = $state(0)
+  let triangles = $state(0)
+  let points = $state(0)
+  let lines = $state(0)
 
-  $effect.pre(() => {
-    domElement
-    perf?.dispose()
-    perf = new ThreePerf({
-      domElement,
-      renderer
-    })
-  })
-
-  $effect.pre(() => {
-    perf.logsPerSecond = logsPerSecond
-    perf.showGraph = showGraph
-    perf.memory = memory
-    perf.enabled = enabled
-    perf.visible = visible
-    perf.actionToCallUI = actionToCallUI
-    perf.guiVisible = guiVisible
-    perf.backgroundOpacity = backgroundOpacity
-    perf.scale = scale
-    perf.anchorX = anchorX
-    perf.anchorY = anchorY
-  })
-
-  useTask(
-    () => {
-      perf.begin()
-    },
-    {
-      stage: useStage('monitor-begin', {
-        before: mainStage
-      })
-    }
-  )
-
-  useTask(
-    () => {
-      perf.end()
-    },
-    {
-      stage: useStage('monitor-end', {
-        after: renderStage
-      })
-    }
-  )
-
-  onDestroy(() => {
-    if (perf) perf.dispose()
+  useTask(() => {
+    const { geometries: geo, textures: t } = renderer.info.memory
+    const { triangles: tri, points: p, calls: c, lines: l } = renderer.info.render
+    geometries = geo
+    textures = t
+    triangles = tri
+    points = p
+    calls = c
+    lines = l
   })
 </script>
+
+<Pane
+  title="Performance Monitor"
+  position="fixed"
+>
+  <FpsGraph
+    disabled
+    rows={2}
+  />
+  <AutoValue
+    value={geometries.toFixed(0)}
+    label="geometries"
+    disabled
+  />
+  <AutoValue
+    value={textures.toFixed(0)}
+    label="textures"
+    disabled
+  />
+  <AutoValue
+    value={triangles.toFixed(0)}
+    label="triangles"
+    disabled
+  />
+  <AutoValue
+    value={points.toFixed(0)}
+    label="points"
+    disabled
+  />
+  <AutoValue
+    value={lines.toFixed(0)}
+    label="lines"
+    disabled
+  />
+  <AutoValue
+    value={calls.toFixed(0)}
+    label="draw calls"
+    disabled
+  />
+</Pane>
