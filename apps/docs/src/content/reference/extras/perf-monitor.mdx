@@ -96,22 +96,19 @@ componentSignature:
   }
 ---
 
-Utility component for monitoring basic rendering statistics using [three-perf](https://github.com/TheoTheDev/three-perf).
+Utility component for monitoring basic rendering [info](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.info).
 
 <Example path="extras/perf-monitor" />
 
 ## Usage
 
 Simply drop in the `<PerfMonitor>` component as a child of Threlte `<Canvas>`.
-The component starts measuring before `mainStage` and ends after `renderStage`.
-Learn more about tasks in threlte [here](/docs/learn/basics/scheduling-tasks)
 
 ```svelte
 <Canvas>
-  <PerfMonitor
-    anchorX={'right'}
-    logsPerSecond={30}
-  />
+  <PerfMonitor />
   <Scene />
 </Canvas>
 ```
+
+{/* Learn more about tasks in threlte [here](/docs/learn/basics/scheduling-tasks) */}
