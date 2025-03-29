@@ -1,6 +1,6 @@
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { onDestroy, type Snippet } from 'svelte'
   import {
     BackSide,
     DoubleSide,
@@ -14,6 +14,8 @@
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import { useStudio } from '../../internal/extensions'
   import { renderModesScope, type RenderModesActions, type RenderModesState } from './types'
+
+  let { children }: { children?: Snippet } = $props()
 
   const hasMaterial = (object: any): object is { material: Material } => {
     return 'material' in object
@@ -105,7 +107,7 @@
     <ToolbarButton
       label="Wireframe"
       icon="mdiWeb"
-      on:click={() => {
+      onclick={() => {
         extension.setRenderMode('wireframe')
       }}
       active={extension.state.renderMode === 'wireframe'}
@@ -114,7 +116,7 @@
     <ToolbarButton
       label="Solid"
       icon="mdiCircle"
-      on:click={() => {
+      onclick={() => {
         extension.setRenderMode('solid')
       }}
       active={extension.state.renderMode === 'solid'}
@@ -123,7 +125,7 @@
     <ToolbarButton
       label="Rendered"
       icon="mdiCircleOpacity"
-      on:click={() => {
+      onclick={() => {
         extension.setRenderMode('rendered')
       }}
       active={extension.state.renderMode === 'rendered'}
@@ -132,4 +134,4 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}

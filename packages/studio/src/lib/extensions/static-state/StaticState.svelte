@@ -116,7 +116,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={extension.toggleEditor}
+      onclick={extension.toggleEditor}
       active={extension.state.editorEnabled}
       label="Static State"
       icon="mdiAppsBox"

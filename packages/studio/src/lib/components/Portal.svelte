@@ -2,7 +2,7 @@
   module
   lang="ts"
 >
-  import { tick } from 'svelte'
+  import { tick, type Snippet } from 'svelte'
 
   /**
    * Usage: <div use:portal={'css selector'}> or <div use:portal={document.body}>
@@ -43,16 +43,24 @@
 </script>
 
 <script lang="ts">
-  /**
-   * DOM Element or CSS Selector
-   */
-  export let target: HTMLElement | string = 'body'
+  let {
+    target = 'body',
+    children,
+    ...rest
+  }: {
+    /**
+     * DOM Element or CSS Selector
+     */
+    target?: HTMLElement | string
+    children?: Snippet
+    [key: string]: any
+  } = $props()
 </script>
 
 <div
   use:portal={target}
   style="display: contents;"
-  {...$$restProps}
+  {...rest}
 >
-  <slot />
+  {@render children?.()}
 </div>
