@@ -71,7 +71,7 @@ Load a gltf file with the [`useGltf`](/docs/reference/extras/use-gltf) hook and 
   -->
   <InstancedMeshes meshes={$gltf.nodes}>
     {#snippet children({ components: { Cube } })}
-      <Cube position.y={2} position.x={-1}>
+      <Cube position.y={2} position.x={-1}/>
     {/snippet}
   </InstancedMeshes>
 {/if}
@@ -108,9 +108,9 @@ If you don't want to use the `useGltf` hook, you can also pass an array of `THRE
   -->
 <InstancedMeshes meshes={meshes}>
   {#snippet children({ components: [MeshA, MeshB, MeshC] })}
-    <MeshA position.y={2} position.x={-1}>
-    <MeshB position.y={-2}>
-    <MeshC position.y={0} position.x={1}>
+    <MeshA position.y={2} position.x={-1}/>
+    <MeshB position.y={-2}/>
+    <MeshC position.y={0} position.x={1}/>
   {/snippet}
 </InstancedMeshes>
 ```
