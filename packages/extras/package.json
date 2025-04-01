@@ -91,6 +91,7 @@
   "dependencies": {
     "@threejs-kit/instanced-sprite-mesh": "^2.5.0",
     "camera-controls": "^2.9.0",
+    "stats-gl": "^3.6.0",
     "svelte-tweakpane-ui": "^1.5.6",
     "three-mesh-bvh": "^0.7.4",
     "three-viewport-gizmo": "^2.0.2",
