@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { useTask, useThrelte } from '@threlte/core'
-  import { Pane, AutoValue, Element } from 'svelte-tweakpane-ui'
-  import Stats from 'stats-gl'
   import type { PerfMonitorProps } from './types'
+  import { useTask, useThrelte, useStage } from '@threlte/core'
+  import { Pane, AutoValue } from 'svelte-tweakpane-ui'
+  import { onMount } from 'svelte'
+  import Stats from 'stats-gl'
 
   let { extraInfo = false, ...rest }: PerfMonitorProps = $props()
-  const { renderer, dom } = useThrelte()
+  const { renderer, dom, renderStage } = useThrelte()
 
   const stats = new Stats(rest)
 
-  stats.init(renderer)
-
-  let el: HTMLDivElement | undefined = $state()
   let calls = $state(0)
   let geometries = $state(0)
   let textures = $state(0)
@@ -19,25 +17,34 @@
   let points = $state(0)
   let lines = $state(0)
 
-  $effect(() => {
-    if (extraInfo) {
-      el?.appendChild(stats.dom)
-    } else {
-      dom.append(stats.dom)
+  onMount(() => {
+    stats.init(renderer)
+    dom.appendChild(stats.dom)
+    return () => {
+      dom.removeChild(stats.dom)
     }
   })
 
-  useTask(() => {
-    const { geometries: geo, textures: t } = renderer.info.memory
-    const { triangles: tri, points: p, calls: c, lines: l } = renderer.info.render
-    geometries = geo
-    textures = t
-    triangles = tri
-    points = p
-    calls = c
-    lines = l
-    stats.update()
-  })
+  useTask(
+    () => {
+      stats.update()
+      if (extraInfo) {
+        const { geometries: geo, textures: t } = renderer.info.memory
+        const { triangles: tri, points: p, calls: c, lines: l } = renderer.info.render
+        geometries = geo
+        textures = t
+        triangles = tri
+        points = p
+        calls = c
+        lines = l
+      }
+    },
+    {
+      stage: useStage('monitor-end', {
+        after: renderStage
+      })
+    }
+  )
 </script>
 
 {#if extraInfo}
@@ -45,9 +52,6 @@
     title="Performance Monitor"
     position="fixed"
   >
-    <Element>
-      <div bind:this={el}></div>
-    </Element>
     <AutoValue
       value={calls.toFixed(0)}
       label="draw calls"
