@@ -9,100 +9,95 @@ componentSignature:
     'props':
       [
         {
-          name: 'domElement',
-          type: 'HTMLElement',
-          default: 'document.body',
+          name: 'extraInfo',
+          type: 'boolean',
+          default: 'false',
           required: false,
-          'description': 'Dom element to which stats block will be attached to.'
+          'description': 'Add info pane about draw calls, triangles, etc.'
+        },
+        {
+          name: 'trackGPU',
+          type: 'boolean',
+          default: 'false',
+          required: false,
+          'description': 'A boolean value to enable or disable GPU tracking.'
+        },
+        {
+          name: 'trackCPT',
+          type: 'boolean',
+          default: 'false',
+          required: false,
+          'description': '(Threejs specific) A boolean value to enable or disable Threejs Compute Shading tracking.'
+        },
+        {
+          name: 'trackHz',
+          type: 'boolean',
+          default: 'false',
+          required: false,
+          'description': 'A boolean value to enable or disable Hz tracking.'
         },
         {
           name: 'logsPerSecond',
           type: 'number',
+          default: '20',
+          required: false,
+          'description': 'How often to log performance data, in logs per second.'
+        },
+        {
+          name: 'samplesLog',
+          type: 'number',
+          default: '100',
+          required: false,
+          'description': 'Number of recent log samples to keep for computing averages.'
+        },
+        {
+          name: 'samplesGraph',
+          type: 'number',
           default: '10',
           required: false,
-          'description': 'Refresh rate of the logs.'
+          'description': 'Number of recent graph samples to keep for computing averages.'
         },
         {
-          name: 'showGraph',
+          name: 'precision',
+          type: 'number',
+          default: '2',
+          required: false,
+          'description': 'Precision of the data, in number of decimal places (only affects CPU and GPU).'
+        },
+        {
+          name: 'horizontal',
           type: 'boolean',
           default: 'true',
           required: false,
-          'description': 'Toggles cpu/gpu/fps graphs rendering.'
+          'description': 'Display the canvases on the X axis, set to align on vertical axis.'
         },
         {
-          name: 'memory',
-          type: 'boolean',
-          default: 'true',
-          required: false,
-          'description': 'Toggles memory info visiblity (geometries, textures, shaders)'
-        },
-        {
-          name: 'enabled',
-          type: 'boolean',
-          default: 'true',
-          required: false,
-          'description': 'Toggles stats collection.'
-        },
-        {
-          name: 'visible',
-          type: 'boolean',
-          default: 'true',
-          required: false,
-          'description': 'Toggles visibility of the monitor html element. Setting `false` does not stop collection of the stats.'
-        },
-        {
-          name: 'actionToCallUI',
-          type: 'string',
-          default: ' ',
-          required: false,
-          'description': 'If set and given characters are typed in the the tab window, the three-perf dev gui will be shown. Disabled by default (empty string).'
-        },
-        {
-          name: 'guiVisible',
+          name: 'minimal',
           type: 'boolean',
           default: 'false',
           required: false,
-          'description': 'Toggles Three-perf dev gui visiblity.'
+          'description': 'A boolean value to control the minimalistic mode of the panel display. If set to true, a simple click on the panel will switch between different metrics.'
         },
         {
-          name: 'backgroundOpacity',
+          name: 'mode',
           type: 'number',
-          default: '0.7',
+          default: '0',
           required: false,
-          'description': 'Stats block background opacity level.'
-        },
-        {
-          name: 'scale',
-          type: 'number',
-          default: '1',
-          required: false,
-          'description': 'Scale of the stats block html element.'
-        },
-        {
-          name: 'anchorX',
-          type: "'left' | 'right'",
-          default: "'left'",
-          required: false,
-          'description': 'Stats html element horizontal anchor.'
-        },
-        {
-          name: 'anchorY',
-          type: "'top' | 'bottom'",
-          default: "'top'",
-          required: false,
-          'description': 'Stats html element vertical anchor.'
+          'description': 'Sets the initial panel to display - 0 for FPS, 1 for CPU, and 2 for GPU (if supported).'
         }
       ]
   }
 ---
 
-Utility component for monitoring basic rendering [info](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.info).
+Utility component for monitoring performance details using [stats-gl](https://github.com/RenaudRohlinger/stats-gl).
 
 <Example path="extras/perf-monitor" />
 
+There is some optional [renderer info](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.info) available using the `extraInfo` prop.
+
 ## Usage
 
-Simply drop in the `<PerfMonitor>` component as a child of Threlte `<Canvas>`.
+Install `stats-gl` then simply drop in the `<PerfMonitor>` component as a child of your Threlte `<Canvas>`.
 
 ```svelte
 <Canvas>
@@ -110,5 +105,3 @@ Simply drop in the `<PerfMonitor>` component as a child of Threlte `<Canvas>`.
   <Scene />
 </Canvas>
 ```
-
-{/* Learn more about tasks in threlte [here](/docs/learn/basics/scheduling-tasks) */}
