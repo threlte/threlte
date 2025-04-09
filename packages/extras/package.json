@@ -94,6 +94,6 @@
     "three-mesh-bvh": "^0.7.4",
     "three-perf": "github:jerzakm/three-perf#three-kit-threlte-fork",
     "three-viewport-gizmo": "^2.0.2",
-    "troika-three-text": "^0.50.3"
+    "troika-three-text": "^0.52.4"
   }
 }
