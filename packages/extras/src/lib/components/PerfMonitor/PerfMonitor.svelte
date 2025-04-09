@@ -1,65 +1,43 @@
 <script lang="ts">
-  import { useStage, useTask, useThrelte } from '@threlte/core'
-  import { ThreePerf } from 'three-perf'
   import type { PerfMonitorProps } from './types'
-  import { onDestroy } from 'svelte'
+  import { useTask, useThrelte, useStage } from '@threlte/core'
+  import { Pane, AutoValue } from 'svelte-tweakpane-ui'
+  import { onMount } from 'svelte'
+  import Stats from 'stats-gl'
 
-  let {
-    domElement = document.body,
-    logsPerSecond = 10,
-    showGraph = true,
-    memory = true,
-    enabled = true,
-    visible = true,
-    actionToCallUI = '',
-    guiVisible = false,
-    backgroundOpacity = 0.7,
-    scale = 1,
-    anchorX = 'left',
-    anchorY = 'top'
-  }: PerfMonitorProps = $props()
+  let { extraInfo = false, ...rest }: PerfMonitorProps = $props()
+  const { renderer, dom, renderStage } = useThrelte()
 
-  const { renderer, renderStage, mainStage } = useThrelte()
+  const stats = new Stats(rest)
 
-  let perf: ThreePerf
+  let calls = $state(0)
+  let geometries = $state(0)
+  let textures = $state(0)
+  let triangles = $state(0)
+  let points = $state(0)
+  let lines = $state(0)
 
-  $effect.pre(() => {
-    domElement
-    perf?.dispose()
-    perf = new ThreePerf({
-      domElement,
-      renderer
-    })
-  })
-
-  $effect.pre(() => {
-    perf.logsPerSecond = logsPerSecond
-    perf.showGraph = showGraph
-    perf.memory = memory
-    perf.enabled = enabled
-    perf.visible = visible
-    perf.actionToCallUI = actionToCallUI
-    perf.guiVisible = guiVisible
-    perf.backgroundOpacity = backgroundOpacity
-    perf.scale = scale
-    perf.anchorX = anchorX
-    perf.anchorY = anchorY
-  })
-
-  useTask(
-    () => {
-      perf.begin()
-    },
-    {
-      stage: useStage('monitor-begin', {
-        before: mainStage
-      })
+  onMount(() => {
+    stats.init(renderer)
+    dom.appendChild(stats.dom)
+    return () => {
+      dom.removeChild(stats.dom)
     }
-  )
+  })
 
   useTask(
     () => {
-      perf.end()
+      stats.update()
+      if (extraInfo) {
+        const { geometries: geo, textures: t } = renderer.info.memory
+        const { triangles: tri, points: p, calls: c, lines: l } = renderer.info.render
+        geometries = geo
+        textures = t
+        triangles = tri
+        points = p
+        calls = c
+        lines = l
+      }
     },
     {
       stage: useStage('monitor-end', {
@@ -67,8 +45,42 @@
       })
     }
   )
-
-  onDestroy(() => {
-    if (perf) perf.dispose()
-  })
 </script>
+
+{#if extraInfo}
+  <Pane
+    title="Performance Monitor"
+    position="fixed"
+  >
+    <AutoValue
+      value={calls.toFixed(0)}
+      label="draw calls"
+      disabled
+    />
+    <AutoValue
+      value={triangles.toFixed(0)}
+      label="triangles"
+      disabled
+    />
+    <AutoValue
+      value={geometries.toFixed(0)}
+      label="geometries"
+      disabled
+    />
+    <AutoValue
+      value={textures.toFixed(0)}
+      label="textures"
+      disabled
+    />
+    <AutoValue
+      value={points.toFixed(0)}
+      label="points"
+      disabled
+    />
+    <AutoValue
+      value={lines.toFixed(0)}
+      label="lines"
+      disabled
+    />
+  </Pane>
+{/if}
