@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.1.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
 ## 3.1.0
 
 ### Minor Changes

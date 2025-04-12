@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.1.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+- 1a93c64: Fix ownership_invalid_mutation in InstancedMesh and InstancedMeshes
+
 ## 9.1.1
 
 ### Patch Changes

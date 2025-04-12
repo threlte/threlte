@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
 ## 2.0.0
 
 ### Major Changes
