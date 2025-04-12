@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
 ## 8.0.1
 
 ### Patch Changes

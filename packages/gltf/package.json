@@ -1,6 +1,6 @@
 {
   "name": "@threlte/gltf",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "GLTF to Threlte converter",
   "scripts": {
     "cleanup": "rimraf node_modules",
