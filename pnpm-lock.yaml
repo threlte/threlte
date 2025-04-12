@@ -124,11 +124,11 @@ importers:
         specifier: ^0.5.3
         version: 0.5.3(tailwindcss@3.4.4(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.7.2)))
       '@theatre/core':
-        specifier: ^0.7.2
-        version: 0.7.2
+        specifier: ^0.6.2
+        version: 0.6.2
       '@theatre/studio':
-        specifier: ^0.7.2
-        version: 0.7.2(@theatre/core@0.7.2)
+        specifier: ^0.6.2
+        version: 0.6.2(@theatre/core@0.6.2)
       '@threlte/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -2940,22 +2940,11 @@ packages:
   '@theatre/core@0.6.2':
     resolution: {integrity: sha512-AmIIJ4rcSREn2VbNRH6cchIBj9hG9+lEkhVrABDfXojnjMJK/ZzX5dyaJGGgyjye2jKmc4sItoyEqbF7jdkqJQ==}
 
-  '@theatre/core@0.7.2':
-    resolution: {integrity: sha512-IDQa/6WY7mIJAtsSd4EgNcM0IUZkl+FrqZ8DdYiCVTFap9ARDNmrngJOeFjJOsnnaHlc5GdEB/jj7fsjbIrAzQ==}
-
   '@theatre/dataverse@0.6.2':
     resolution: {integrity: sha512-wcnl6QuOVhNFzYL2rmu4lbVRR4t5A6a5ZBjZ4To+J/pKQ5MozPZtWJVPguMAa+rgoxAwVh7sZ0SNEpfYXajgaQ==}
 
-  '@theatre/dataverse@0.7.2':
-    resolution: {integrity: sha512-YyfoyX7EyhFUY2OM5fsM0LPrs1SdgLwpiTMkkvTIoZLdOwvQhstjYq4Yz/8ZncJlRoTWvakfmgvCaBN+QuBYxg==}
-
   '@theatre/studio@0.6.2':
     resolution: {integrity: sha512-jX5m7aYMIuXXZXIqc5ZJPIlgP4QnU1lc3sDRcjoNantz47Qzq3/JjRt5MIrahsKKONZwgEvl5WA57qCo7IW+hA==}
-    peerDependencies:
-      '@theatre/core': '*'
-
-  '@theatre/studio@0.7.2':
-    resolution: {integrity: sha512-p6LTKzJWVlcHkpGzIlNHh9AkGbB3E+0q9Pjxv+OJoTDe1IK+CMKW695Wp+1//lB4vfC9qShe4z/p+Zaj1q8KtA==}
     peerDependencies:
       '@theatre/core': '*'
 
@@ -10627,15 +10616,7 @@ snapshots:
     dependencies:
       '@theatre/dataverse': 0.6.2
 
-  '@theatre/core@0.7.2':
-    dependencies:
-      '@theatre/dataverse': 0.7.2
-
   '@theatre/dataverse@0.6.2':
-    dependencies:
-      lodash-es: 4.17.21
-
-  '@theatre/dataverse@0.7.2':
     dependencies:
       lodash-es: 4.17.21
 
@@ -10643,11 +10624,6 @@ snapshots:
     dependencies:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
-
-  '@theatre/studio@0.7.2(@theatre/core@0.7.2)':
-    dependencies:
-      '@theatre/core': 0.7.2
-      '@theatre/dataverse': 0.7.2
 
   '@threejs-kit/instanced-sprite-mesh@2.5.0(@types/three@0.175.0)(three@0.175.0)':
     dependencies:
