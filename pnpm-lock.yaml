@@ -332,17 +332,17 @@ importers:
         specifier: ^2.5.0
         version: 2.5.0(@types/three@0.175.0)(three@0.175.0)
       camera-controls:
-        specifier: ^2.9.0
-        version: 2.9.0(three@0.175.0)
+        specifier: ^2.10.1
+        version: 2.10.1(three@0.175.0)
       three-mesh-bvh:
-        specifier: ^0.7.4
-        version: 0.7.4(three@0.175.0)
+        specifier: ^0.9.0
+        version: 0.9.0(three@0.175.0)
       three-perf:
         specifier: github:jerzakm/three-perf#three-kit-threlte-fork
         version: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.175.0)
       three-viewport-gizmo:
-        specifier: ^2.0.2
-        version: 2.0.2(three@0.175.0)
+        specifier: ^2.2.0
+        version: 2.2.0(three@0.175.0)
       troika-three-text:
         specifier: ^0.52.4
         version: 0.52.4(three@0.175.0)
@@ -3586,6 +3586,11 @@ packages:
   camelcase@8.0.0:
     resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
     engines: {node: '>=16'}
+
+  camera-controls@2.10.1:
+    resolution: {integrity: sha512-KnaKdcvkBJ1Irbrzl8XD6WtZltkRjp869Jx8c0ujs9K+9WD+1D7ryBsCiVqJYUqt6i/HR5FxT7RLASieUD+Q5w==}
+    peerDependencies:
+      three: '>=0.126.1'
 
   camera-controls@2.8.5:
     resolution: {integrity: sha512-7VTwRk7Nu1nRKsY7bEt9HVBfKt8DETvzyYhLN4OW26OByBayMDB5fUaNcPI+z++vG23RH5yqn6ZRhZcgLQy2rA==}
@@ -7519,15 +7524,15 @@ packages:
     peerDependencies:
       three: '>=0.125.0'
 
-  three-mesh-bvh@0.7.4:
-    resolution: {integrity: sha512-flxe0A4uflTPR6elgq/Y8VrLoljDNS899i422SxQcU3EtMj6o8z4kZRyqZqGWzR0qMf1InTZzY1/0xZl/rnvVw==}
-    peerDependencies:
-      three: '>= 0.151.0'
-
   three-mesh-bvh@0.7.5:
     resolution: {integrity: sha512-WDd77RklE52pZSKZx8sDXzrd2JCF/gL/hugFvsIBylpMRlJxxwesKn2rW7TcQZ809NocDVkQx1UJo9pJtVAPYg==}
     peerDependencies:
       three: '>= 0.151.0'
+
+  three-mesh-bvh@0.9.0:
+    resolution: {integrity: sha512-xAwZj0hZknpwVsdK5BBJTIAZDjDPZCRzURY1o+z/JHBON/jc2UetK1CzPeQZiiOVSfI4jV2z7sXnnGtgsgnjaA==}
+    peerDependencies:
+      three: '>= 0.159.0'
 
   three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169:
     resolution: {tarball: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169}
@@ -7540,8 +7545,8 @@ packages:
     peerDependencies:
       three: '>=0.122.0'
 
-  three-viewport-gizmo@2.0.2:
-    resolution: {integrity: sha512-PtdBqtPZbXoQgxXAla393iPs+ox0HbZVKqA1ym3w4z7Og0Ihevg/odxjEYA9R6xwtIqS5qgsz8RyK3z8lFHtpQ==}
+  three-viewport-gizmo@2.2.0:
+    resolution: {integrity: sha512-Jo9Liur1rUmdKk75FZumLU/+hbF+RtJHi1qsKZpntjKlCYScK6tjbYoqvJ9M+IJphrlQJF5oReFW7Sambh0N4Q==}
     peerDependencies:
       three: '>=0.162.0 <1.0.0'
 
@@ -11423,6 +11428,10 @@ snapshots:
   camelcase@7.0.1: {}
 
   camelcase@8.0.0: {}
+
+  camera-controls@2.10.1(three@0.175.0):
+    dependencies:
+      three: 0.175.0
 
   camera-controls@2.8.5(three@0.175.0):
     dependencies:
@@ -16417,11 +16426,11 @@ snapshots:
       three: 0.175.0
       troika-three-utils: 0.52.0(three@0.175.0)
 
-  three-mesh-bvh@0.7.4(three@0.175.0):
+  three-mesh-bvh@0.7.5(three@0.175.0):
     dependencies:
       three: 0.175.0
 
-  three-mesh-bvh@0.7.5(three@0.175.0):
+  three-mesh-bvh@0.9.0(three@0.175.0):
     dependencies:
       three: 0.175.0
 
@@ -16446,7 +16455,7 @@ snapshots:
       three: 0.122.0
       zstddec: 0.0.2
 
-  three-viewport-gizmo@2.0.2(three@0.175.0):
+  three-viewport-gizmo@2.2.0(three@0.175.0):
     dependencies:
       three: 0.175.0
 
