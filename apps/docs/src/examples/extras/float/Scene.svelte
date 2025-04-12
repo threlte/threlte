@@ -58,7 +58,12 @@
             roughness={0.2}
             color={hovering ? red : blue}
           />
-          <T is={node.geometry} />
+          {#if node.geometry}
+            <T
+              is={node.geometry}
+              attach="geometry"
+            />
+          {/if}
         </T.Mesh>
       {/snippet}
     </Blob>
