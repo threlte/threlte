@@ -6,7 +6,7 @@
 
 <div>
   <Canvas>
-    <PerfMonitor />
+    <PerfMonitor trackGPU />
     <Scene />
   </Canvas>
 </div>
