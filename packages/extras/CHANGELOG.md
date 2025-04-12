@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.1.1
+
+### Patch Changes
+
+- ab34cce: Fix `<HTML>` auto invalidation
+
 ## 9.1.0
 
 ### Minor Changes
