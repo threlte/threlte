@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { AnimatedSpriteMaterial } from '@threlte/extras'
+  import { SpriteSheetMaterial } from '@threlte/extras'
   import { PointLight } from 'three'
 
   const light = new PointLight('#FF893D', 100)
@@ -18,8 +18,9 @@
 </script>
 
 <T.Sprite position.y={-2.3}>
-  <AnimatedSpriteMaterial
+  <SpriteSheetMaterial
     textureUrl="/textures/sprites/fire.png"
+    animate
     totalFrames={8}
     fps={10}
   />
