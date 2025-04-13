@@ -3,13 +3,9 @@ import { getCollection } from 'astro:content'
 import Testimonial from './Testimonial.astro'
 
 const testimonials = await getCollection('testimonials')
-
-interface Props {
-  class?: string
-}
 ---
 
-<div class:list={['columns-1 gap-6 md:columns-2 lg:columns-3', Astro.props.class ?? '']}>
+<div class="columns-1 gap-6 md:columns-2 lg:columns-3">
   {
     testimonials.map((testimonial) => {
       return <Testimonial testimonial={testimonial} />
