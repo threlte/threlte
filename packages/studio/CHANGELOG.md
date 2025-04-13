@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.4
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
 ## 0.1.3
 
 ### Patch Changes

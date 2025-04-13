@@ -1,6 +1,6 @@
 {
   "name": "@threlte/gltf",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "GLTF to Threlte converter",
   "scripts": {
     "cleanup": "rimraf node_modules",
@@ -47,7 +47,7 @@
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.2",
     "sharp": "^0.32.0",
-    "svelte": "^5.14.4",
+    "svelte": "^5.26.2",
     "three": "0.122.0",
     "three-stdlib": "^2.21.8"
   },

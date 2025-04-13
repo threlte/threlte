@@ -32,6 +32,13 @@ componentSignature:
         { name: 'fadeDistance', type: 'number', default: '100', required: false },
         { name: 'fadeStrength', type: 'number', default: '1', required: false },
         {
+          name: 'fadeOrigin',
+          type: 'Vector3',
+          default: 'undefined',
+          required: false,
+          description: 'Set a custom fading point of origin. The current camera position will be used if unset.'
+        },
+        {
           name: type,
           type: "'grid' | 'lines' | 'circular' | 'polar'",
           default: "'grid'",
@@ -106,7 +113,7 @@ You can adjust the color and thickness of cell and section lines with `cellColor
 
 The `<Grid>` component is a `THREE.Mesh` with a `PlaneGeometry` attached to it. The `gridSize` parameter defines the size of the `PlaneGeometry`.
 You can extend the grid into infinity if you set the `infiniteGrid` parameter to `true`.
-Changing `fadeDistance` sets how far from the camera position the grid begins to fade by having its alpha reduced. `fadeStrength` determines how fast it happens (exponent). `fadeStrength = 0` means that there is no fading (not recommended for large grids).
+Changing `fadeDistance` sets how far from the camera position the grid begins to fade by having its alpha reduced. `fadeStrength` determines how fast it happens (exponent). `fadeStrength = 0` means that there is no fading (not recommended for large grids). You can change the fading point of origin to not be the camera position but a custom point by setting `fadeOrigin`.
 
 ### Custom geometry
 

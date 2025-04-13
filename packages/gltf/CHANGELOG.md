@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
 ## 3.0.0
 
 ### Patch Changes

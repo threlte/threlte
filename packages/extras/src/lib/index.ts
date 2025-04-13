@@ -72,8 +72,8 @@ export { onReveal } from './suspense/onReveal'
 export { onSuspend } from './suspense/onSuspend'
 
 // portals
-export { default as Portal } from './components/portals/Portal/Portal.svelte'
-export { default as PortalTarget } from './components/portals/PortalTarget/PortalTarget.svelte'
+export { default as Portal } from './components/portals/Portal.svelte'
+export { default as PortalTarget } from './components/portals/PortalTarget.svelte'
 
 // text component
 export { default as Text } from './components/Text/Text.svelte'

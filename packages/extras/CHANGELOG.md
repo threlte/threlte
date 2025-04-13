@@ -1,5 +1,30 @@
 # @threlte/extras
 
+## 9.1.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+- 1a93c64: Fix ownership_invalid_mutation in InstancedMesh and InstancedMeshes
+
+## 9.1.1
+
+### Patch Changes
+
+- ab34cce: Fix `<HTML>` auto invalidation
+
+## 9.1.0
+
+### Minor Changes
+
+- 2f5e124: Add fadeOrigin parameter to Grid
+
+## 9.0.2
+
+### Patch Changes
+
+- 61a8a99: Fix portal components not being removed on unmount
+
 ## 9.0.1
 
 ### Patch Changes

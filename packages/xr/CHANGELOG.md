@@ -1,5 +1,17 @@
 # @threlte/xr
 
+## 1.0.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 1.0.1
+
+### Patch Changes
+
+- fa5c4e9: Fixed a check for secure contexts that previously prevented WebXR apps from running on localhost
+
 ## 1.0.0
 
 ### Major Changes
