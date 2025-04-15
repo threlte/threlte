@@ -89,7 +89,7 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
-    "@threejs-kit/instanced-sprite-mesh": "^2.5.0",
+    "@threejs-kit/instanced-sprite-mesh": "^2.5.1",
     "camera-controls": "^2.10.1",
     "three-mesh-bvh": "^0.9.0",
     "three-perf": "github:jerzakm/three-perf#three-kit-threlte-fork",
