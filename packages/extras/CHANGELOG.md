@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.1.3
+
+### Patch Changes
+
+- 8ce3129: Update instanced sprite dependency to support three 175
+
 ## 9.1.2
 
 ### Patch Changes
