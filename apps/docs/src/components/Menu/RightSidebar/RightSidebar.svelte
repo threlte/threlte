@@ -1,18 +1,22 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import type { MarkdownHeading } from 'astro'
   import { onMount } from 'svelte'
   import { onDestroy } from 'svelte'
 
-  export let editUrl: string | undefined = undefined
-  export let sourceUrl: string | undefined = undefined
-  export let headings: MarkdownHeading[]
+  interface Props {
+    editUrl?: string | undefined
+    sourceUrl?: string | undefined
+    headings: MarkdownHeading[]
+    children?: import('svelte').Snippet
+  }
+
+  let { editUrl = undefined, sourceUrl = undefined, headings, children }: Props = $props()
 
   const lowestHeadingDepth = Math.min(...headings.map((heading) => heading.depth))
 
   let intersectionObserver: IntersectionObserver | undefined = undefined
 
-  let currentHeadingSlug: string | undefined = undefined
+  let currentHeadingSlug: string | undefined = $state(undefined)
   let currentHeading: MarkdownHeading | undefined = headings[0]
 
   const setCurrentHeading = (id: string) => {
@@ -74,26 +78,26 @@
 
     <ul
       class="duration-50 mb-8 w-full bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
-      on:transitionend={focusFirstDropdownLink}
+      ontransitionend={focusFirstDropdownLink}
     >
       {#each headings as heading}
         <li
-          class={c(
+          class={[
             'nav-list-item text-faded',
             !!currentHeadingSlug &&
               heading.slug === currentHeadingSlug &&
               '!border-orange font-bold !text-orange'
-          )}
+          ]}
         >
           <a
             data-depth={heading.depth}
             class="block py-2 pr-4 no-underline hover:underline lg:py-0"
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}
-            on:keypress={() => {
+            onkeypress={() => {
               headingClicked(heading.slug)
             }}
-            on:click={() => {
+            onclick={() => {
               headingClicked(heading.slug)
             }}
           >
@@ -113,7 +117,7 @@
 
   <ul
     class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
-    on:transitionend={focusFirstDropdownLink}
+    ontransitionend={focusFirstDropdownLink}
   >
     <li class="text-faded list-item">
       <a
@@ -199,7 +203,7 @@
   </ul>
 
   <div class="ml-[-9px]">
-    <slot />
+    {@render children?.()}
   </div>
 </div>
 
