@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.1.4
+
+### Patch Changes
+
+- f268570: Remove generation of intermediate Object3Ds when creating portals
+
 ## 9.1.3
 
 ### Patch Changes
