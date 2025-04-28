@@ -36,11 +36,11 @@ Here is a simplified version of the HTML layout:
 
 ```html
 <div style="position: relative">
-	<!-- Threlte Canvas -->
-	<canvas style="width: 100%; height: 100%"></canvas>
-	<!-- UI Elements -->
-	<div style="position: absolute" ></div>
-	<div style="position: absolute" ></div>
+  <!-- Threlte Canvas -->
+  <canvas style="width: 100%; height: 100%"></canvas>
+  <!-- UI Elements -->
+  <div style="position: absolute"></div>
+  <div style="position: absolute"></div>
 </div>
 ```
 
@@ -61,7 +61,7 @@ easily pass data between components as our app and 3d scene grow in complexity.
 Here is a simplified representation of the component tree:
 
 <img
-  class="w-[500px] mt-10 mb-10 ml-auto mr-auto"
+  class="mb-10 ml-auto mr-auto mt-10 w-[500px]"
   src="/images/blog/componentTree.svg"
 />
 
@@ -84,12 +84,12 @@ Here is a simplified excerpt of the `state.svelte.ts` file:
 
 ```ts title="state.svelte.ts"
 class CardState {
-	selectedCard = $state<Card | null>(null);
-	hoverCard = $state<Card | null>(null);
-	cards: Card[] = [];
+  selectedCard = $state<Card | null>(null)
+  hoverCard = $state<Card | null>(null)
+  cards: Card[] = []
 }
 
-export const cardState = new CardState();
+export const cardState = new CardState()
 ```
 
 `cardState` can now simply be imported into any `.ts`/`.svelte` file in our project and changes made
@@ -103,18 +103,18 @@ section of the
 a simplified structure of our card object:
 
 ```ts title="types.ts"
-export type XYZ = { x: number; y: number; z: number };
+export type XYZ = { x: number; y: number; z: number }
 
 export type Card = {
-	id: string;
-	typeId: number;
-	position: XYZ;
-	moveTo:XYZ;
-	rotation: XYZ;
-	rotateTo:XYZ;
-	health: number;
-	strength: number;
-};
+  id: string
+  typeId: number
+  position: XYZ
+  moveTo: XYZ
+  rotation: XYZ
+  rotateTo: XYZ
+  health: number
+  strength: number
+}
 ```
 
 The card objects contain properties that will be used to render the card in the correct place on
@@ -152,15 +152,17 @@ with performance as during the game no additional meshes are added or removed fr
 
 You can view some of the meshes included in the GLTF file below:
 
-<Example path="blog/gltf" hideCode hideStackblitz />
+<Example
+  path="blog/gltf"
+  hideCode
+  hideStackblitz
+/>
 
 If you select `wireframe` in the options panel above and zoom in on the geometry you will notice
 that each face is a separate solid colour. One benefit to this art style is that a small image can
 be used as a texture atlas for all of our meshes, which you can see
 [here](https://infinite-turtles.pages.dev/images/map.png), as each face of geometry is mapped to a
 certain colour on this image.
-
-
 
 ## Animations and scheduling
 
@@ -183,19 +185,19 @@ scheduling system to easily pause or adjust the speed of the all our animations 
 Hook:
 
 ```ts
-const { mainStage, renderStage } = useThrelte();
+const { mainStage, renderStage } = useThrelte()
 
 useStage('gameplay-stage', {
-		after: mainStage,
-		before: renderStage,
-		callback: (delta, runTasks) => {
-			// Only run the tasks if the game is not paused and use a
-			// custom speed value to modify the delta value passed to
-			// all instances of useTask with the 'gameplay-stage' key
-			if (!gameState.paused) runTasks(delta * speed);
-		}
-	});
-	```
+  after: mainStage,
+  before: renderStage,
+  callback: (delta, runTasks) => {
+    // Only run the tasks if the game is not paused and use a
+    // custom speed value to modify the delta value passed to
+    // all instances of useTask with the 'gameplay-stage' key
+    if (!gameState.paused) runTasks(delta * speed)
+  }
+})
+```
 
 ## UI elements
 
@@ -217,6 +219,5 @@ plenty more areas of the project to talk about such creating the GLTF file in Bl
 timeline to schedule animations and working with custom materials shaders... the list goes on! So
 please get in touch let me know if there are any aspects of the project that you would like to hear
 about in more detail.
-
 
 You can find me on [discord](https://discordapp.com/users/240587527222722560).
