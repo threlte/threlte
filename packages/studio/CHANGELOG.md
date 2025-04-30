@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.5
+
+### Patch Changes
+
+- dc88715: Studio Svelte 5 migration, cleanup and fixes
+
 ## 0.1.4
 
 ### Patch Changes
