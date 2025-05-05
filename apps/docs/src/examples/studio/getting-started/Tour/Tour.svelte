@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import { onMount, tick } from 'svelte'
   import Portal from 'svelte-portal'
   import { TourManager } from './Tour/TourManager.svelte'
@@ -103,12 +102,12 @@
     {:else}
       <!-- INSTRUCTIONS -->
       <div
-        class={c(
+        class={[
           'pointer-events-none absolute z-[10000] flex w-full select-none items-center justify-center',
           instructionsPlacement === 'bottom' || !instructionsPlacement
             ? 'bottom-2'
             : 'top-1/2 -translate-y-1/2'
-        )}
+        ]}
       >
         {#if tourManager.instructionsManager.currentInstructions}
           <div
