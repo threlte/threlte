@@ -11,25 +11,25 @@
      * Whether or not CSM is enabled. If `enabled={false}`, a slot named
      * `"disabled"` will be rendered.
      */
-    enabled: boolean
+    enabled?: boolean
     /**
      * The arguments to pass to the CSM constructor.
      */
-    args: Partial<CSMParameters>
+    args?: Partial<CSMParameters>
     /**
      * The camera to use for CSM. Defaults to the camera set by `makeDefault`.
      */
-    camera: Camera | undefined
+    camera?: Camera | undefined
     /**
      * A configuration callback, which is triggered when CSM is activated. This
      * callback facilitates advanced configurations, such as enabling the fade
      * feature.
      */
-    configure: ((csm: CSM) => void) | undefined
+    configure?: ((csm: CSM) => void) | undefined
 
-    lightIntensity: number | undefined
-    lightColor: ColorRepresentation | undefined
-    lightDirection: Vector3Tuple
+    lightIntensity?: number | undefined
+    lightColor?: ColorRepresentation | undefined
+    lightDirection?: Vector3Tuple
     children?: Snippet
     fallback?: Snippet
   }
