@@ -61,7 +61,7 @@ enabled. You can disable this by setting `staticMoving` to true.
   )
 
   $effect(() => {
-    const handleChange = (event: Event) => {
+    const handleChange = (event: Event<any, ThreeTrackballControls>) => {
       invalidate()
       props.onchange?.(event)
     }
