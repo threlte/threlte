@@ -31,29 +31,30 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import {
-    Vector3,
-    Group,
-    Mesh,
-    PerspectiveCamera,
-    Object3D,
     DoubleSide,
+    Group,
     Matrix4,
+    Mesh,
+    Object3D,
     OrthographicCamera,
-    Raycaster
+    PerspectiveCamera,
+    Raycaster,
+    Vector3
   } from 'three'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import { logFragment, logVertex, spriteVertex } from './shaders'
+  import type { HTMLProps } from './types'
   import {
     defaultCalculatePosition,
     epsilon,
     getCameraCSSMatrix,
     getObjectCSSMatrix,
+    getViewportFactor,
     isObjectBehindCamera,
     isObjectVisible,
     objectScale,
-    objectZIndex,
-    getViewportFactor
+    objectZIndex
   } from './utils'
-  import { logVertex, logFragment, spriteVertex } from './shaders'
-  import type { HTMLProps } from './types'
 
   let {
     autoRender = true,
@@ -286,6 +287,8 @@
       destroy: () => el.remove()
     }
   }
+
+  const { suspended } = useSuspense()
 </script>
 
 <T
@@ -335,6 +338,7 @@
   style:overflow={transform ? 'hidden' : undefined}
   style:transform={transform ? undefined : `translate3d(${pos[0]}px,${pos[1]}px,0)`}
   style:transform-origin={transform ? undefined : '0 0'}
+  style:display={$suspended ? 'none' : undefined}
 >
   {#if transform}
     <div
