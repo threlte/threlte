@@ -100,8 +100,8 @@ importers:
         version: 6.1.1(react@18.2.0)(three@0.175.0)
     devDependencies:
       '@dimforge/rapier3d-compat':
-        specifier: ^0.14.0
-        version: 0.14.0
+        specifier: ^0.16.2
+        version: 0.16.2
       '@floating-ui/dom':
         specifier: ^1.6.4
         version: 1.6.7
@@ -1352,9 +1352,6 @@ packages:
   '@cspotcode/source-map-support@0.8.1':
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
     engines: {node: '>=12'}
-
-  '@dimforge/rapier3d-compat@0.14.0':
-    resolution: {integrity: sha512-/uHrUzS+CRQ+NQrrJCEDUkhwHlNsAAexbNXgbN9sHY+GwR+SFFAFrxRr8Llf5/AJZzqiLANdQIfJ63Cw4gJVqw==}
 
   '@dimforge/rapier3d-compat@0.16.2':
     resolution: {integrity: sha512-VM4pOmZbWUgXzuSJbNmoiDVhurCV8KnHhg0/MB7cNcJEjkrhwTSlnMSAe7OCUU0MXnSJciXdIFOgJU8eCzGGkQ==}
@@ -9141,8 +9138,6 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
     optional: true
-
-  '@dimforge/rapier3d-compat@0.14.0': {}
 
   '@dimforge/rapier3d-compat@0.16.2': {}
 
