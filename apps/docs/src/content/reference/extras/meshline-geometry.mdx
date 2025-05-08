@@ -69,9 +69,9 @@ The `points` property is required and accepts an array of `THREE.Vector3` object
 The `points` property is reactive and you can animate the line by updating the positions of the `Vector3` objects within the array.
 
 <Tip type="warning">
-  When updating the <b>points</b> array you must ensure the updated array is the same length as the
-  initial array, otherwise the points will not update. In other words you can alter the position of
-  points in the array but you cannot add or remove points.
+  When updating the <b>points</b> array it is strongly recommended that the updated array is the
+  same length as the initial array, because when the array is resized many `BufferAttribute`s are
+  re-created.
 </Tip>
 
 ### Shape
