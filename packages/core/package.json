@@ -19,6 +19,7 @@
     "@sveltejs/kit": "^2.7.7",
     "@sveltejs/package": "^2.3.7",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
+    "@types/bun": "^1.2.12",
     "@types/node": "^20.12.7",
     "@types/three": "^0.175.0",
     "@typescript-eslint/eslint-plugin": "^7.6.0",
