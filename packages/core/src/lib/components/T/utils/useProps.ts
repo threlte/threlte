@@ -36,7 +36,7 @@ export const memoizeProp = (value: unknown): boolean => {
 
 type PropOptions = {
   manualCamera?: boolean
-  pluginsProps?: string[]
+  pluginsProps?: string[] | undefined
 }
 
 type PropSetter = (target: any, key: any, value: any) => void
