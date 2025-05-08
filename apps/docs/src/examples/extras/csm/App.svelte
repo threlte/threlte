@@ -46,9 +46,8 @@
       <Scene />
 
       {#snippet fallback()}
-    <!-- Will be mounted if settings.shadows is false -->
-    <T.DirectionalLight castShadow={false} />
-  {/snippet}
+        <T.DirectionalLight castShadow={false} />
+      {/snippet}
     </CSM>
   </Canvas>
 </div>
