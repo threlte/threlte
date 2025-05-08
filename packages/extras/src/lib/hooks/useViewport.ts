@@ -29,7 +29,11 @@ export const useViewport = (
 
   const { camera, size, renderStage, scheduler } = useThrelte()
 
-  const updateViewport = ($size: { width: number; height: number }, $camera: Camera, distance: number) => {
+  const updateViewport = (
+    $size: { width: number; height: number },
+    $camera: Camera,
+    distance: number
+  ) => {
     viewport.update(($viewport) => {
       const { width, height } = $size
 
