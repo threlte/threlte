@@ -309,10 +309,10 @@ importers:
         version: 5.26.2
       svelte-check:
         specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.26.2)
+        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.26.2)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.26.2)(typescript@5.6.3)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.26.2)(typescript@5.6.3)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.26.2)(typescript@5.6.3)
@@ -408,11 +408,11 @@ importers:
         specifier: ^5.26.2
         version: 5.26.2
       svelte-check:
-        specifier: ^3.6.9
-        version: 3.6.9(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.26.2)
+        specifier: ^4.1.7
+        version: 4.1.7(picomatch@4.0.2)(svelte@5.26.2)(typescript@5.6.3)
       svelte-preprocess:
         specifier: ^5.1.3
-        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.47)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.47)(sass@1.77.7)(svelte@5.26.2)(typescript@5.6.3)
+        version: 5.1.3(@babel/core@7.25.9)(postcss-load-config@4.0.2(postcss@8.4.38)(ts-node@10.8.2(@types/node@20.12.7)(typescript@5.6.3)))(postcss@8.4.38)(sass@1.77.7)(svelte@5.26.2)(typescript@5.6.3)
       svelte2tsx:
         specifier: ^0.7.6
         version: 0.7.6(svelte@5.26.2)(typescript@5.6.3)
@@ -7454,6 +7454,14 @@ packages:
     peerDependencies:
       svelte: ^3.55.0 || ^4.0.0-next.0 || ^4.0.0 || ^5.0.0-next.0
 
+  svelte-check@4.1.7:
+    resolution: {integrity: sha512-1jX4BzXrQJhC/Jt3SqYf6Ntu//vmfc6VWp07JkRfK2nn+22yIblspVUo96gzMkg0Zov8lQicxhxsMzOctwcMQQ==}
+    engines: {node: '>= 18.0.0'}
+    hasBin: true
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0-next.0
+      typescript: '>=5.0.0'
+
   svelte-eslint-parser@0.34.0:
     resolution: {integrity: sha512-jOozxWbHVtIFt6fvettJK9T9aK1AyrcWBJzqcjqJxkr7QfgMYWjHNVlG/qFFOr72cw8mUVS/D/8BO6HlPEtNug==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
@@ -8686,7 +8694,7 @@ snapshots:
     dependencies:
       '@babel/types': 7.23.9
       '@jridgewell/gen-mapping': 0.3.3
-      '@jridgewell/trace-mapping': 0.3.22
+      '@jridgewell/trace-mapping': 0.3.25
       jsesc: 2.5.2
 
   '@babel/generator@7.25.9':
@@ -12289,7 +12297,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.0.0)(typescript@5.7.2))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.26.0)(eslint@9.0.0)):
+  eslint-module-utils@2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.0.0)(typescript@5.7.2))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1):
     dependencies:
       debug: 3.2.7
       find-up: 2.1.0
@@ -12308,7 +12316,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.0.0
       eslint-import-resolver-node: 0.3.6
-      eslint-module-utils: 2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.0.0)(typescript@5.7.2))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.26.0)(eslint@9.0.0))
+      eslint-module-utils: 2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.0.0)(typescript@5.7.2))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1)
       has: 1.0.3
       is-core-module: 2.12.1
       is-glob: 4.0.3
@@ -16323,6 +16331,18 @@ snapshots:
       - sass
       - stylus
       - sugarss
+
+  svelte-check@4.1.7(picomatch@4.0.2)(svelte@5.26.2)(typescript@5.6.3):
+    dependencies:
+      '@jridgewell/trace-mapping': 0.3.25
+      chokidar: 4.0.1
+      fdir: 6.4.3(picomatch@4.0.2)
+      picocolors: 1.1.1
+      sade: 1.8.1
+      svelte: 5.26.2
+      typescript: 5.6.3
+    transitivePeerDependencies:
+      - picomatch
 
   svelte-eslint-parser@0.34.0(svelte@5.26.2):
     dependencies:
