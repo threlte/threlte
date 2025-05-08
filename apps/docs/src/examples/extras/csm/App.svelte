@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Pane, Slider, Checkbox, Color, Point } from 'svelte-tweakpane-ui'
-  import { Canvas } from '@threlte/core'
+  import { Canvas, T } from '@threlte/core'
   import { CSM } from '@threlte/extras'
   import Scene from './Scene.svelte'
 
@@ -44,6 +44,11 @@
       {lightColor}
     >
       <Scene />
+
+      {#snippet fallback()}
+    <!-- Will be mounted if settings.shadows is false -->
+    <T.DirectionalLight castShadow={false} />
+  {/snippet}
     </CSM>
   </Canvas>
 </div>
