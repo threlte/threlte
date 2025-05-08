@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useParentObject3D, watch } from '@threlte/core'
+  import { T, useParentObject3D, useThrelte, watch } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import type { Writable } from 'svelte/store'
   import { Group, type Object3D } from 'three'
@@ -31,20 +31,28 @@
     if ($errors.length > 0) onerror?.($errors)
   })
 
+  const { invalidate } = useThrelte()
+
   const group = new Group()
-  const parentObject3D = useParentObject3D() as Writable<Object3D>
+  const parentObject3D = useParentObject3D()
 
   watch([parentObject3D, suspended, errors], ([parent, suspended, errors]) => {
     // we don't have a parent, so we can't add ourselves to it
     if (!parent) return
+
     // if the component is suspended or has errors, we remove ourselves from the parent
     if (suspended || errors.length) {
       parent.remove(group)
+      invalidate()
       return
     }
+
     parent.add(group)
+    invalidate()
+
     return () => {
       parent.remove(group)
+      invalidate()
     }
   })
 </script>
