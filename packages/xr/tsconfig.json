@@ -2,16 +2,19 @@
   "extends": "./.svelte-kit/tsconfig.json",
   "include": ["./src/**/*"],
   "compilerOptions": {
-    "target": "ESNext",
-    "module": "ESNext",
-    "resolveJsonModule": true,
-    "moduleResolution": "bundler",
-
     "allowJs": true,
     "checkJs": true,
-    "verbatimModuleSyntax": true,
-
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
     "strict": true,
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "target": "ESNext",
+
+    "verbatimModuleSyntax": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noUncheckedIndexedAccess": true,
