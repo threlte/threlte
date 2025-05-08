@@ -2,7 +2,7 @@
   import { Color } from 'three'
   import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib'
 
-  const { scene, invalidate } = useThrelte()
+  const { scene } = useThrelte()
   scene.background = new Color('black')
 
   let posY = $state(0)
