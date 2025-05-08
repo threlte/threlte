@@ -26,9 +26,9 @@ export const useCollisionGroups = () => {
   if (!bitMaskStore)
     return {
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      registerColliders: (colliders: Collider[]) => {},
+      registerColliders: (_colliders: Collider[]) => {},
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      removeColliders: (colliders: Collider[]) => {}
+      removeColliders: (_colliders: Collider[]) => {}
     }
 
   let bitMask = get(bitMaskStore)

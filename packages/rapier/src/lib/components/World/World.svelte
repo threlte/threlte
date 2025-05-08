@@ -6,7 +6,7 @@
   let { fallback, children, ...rest }: WorldProps = $props()
 </script>
 
-{#await initRapier() then _}
+{#await initRapier()}
   <InnerWorld {...rest}>
     {@render children?.()}
   </InnerWorld>
