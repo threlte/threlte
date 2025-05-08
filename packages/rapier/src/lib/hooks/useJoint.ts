@@ -17,6 +17,8 @@ export const useJoint = <T extends ImpulseJoint | MultibodyJoint>(
     if (!!rbA && !!rbB) {
       return [rbA, rbB] as [RigidBody, RigidBody]
     }
+
+    return undefined
   })
 
   const joint = writable<T>(undefined)

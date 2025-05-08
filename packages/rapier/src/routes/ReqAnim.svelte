@@ -45,7 +45,7 @@
 >
   <div>window.requestAnimationFrame</div>
   <button
-    on:click={() => {
+    onclick={() => {
       if (isPaused) {
         resumeRaf()
       } else {
