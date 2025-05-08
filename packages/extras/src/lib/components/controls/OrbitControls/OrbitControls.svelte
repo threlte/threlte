@@ -37,7 +37,7 @@
   })
 
   $effect.pre(() => {
-    const handleChange = (event: Event) => {
+    const handleChange = (event: Event<any, ThreeOrbitControls>) => {
       invalidate()
       props.onchange?.(event)
     }

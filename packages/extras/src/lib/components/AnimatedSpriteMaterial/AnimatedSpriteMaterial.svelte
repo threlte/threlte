@@ -80,17 +80,12 @@
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
 
-  let fpsInterval = 0
-  let isMesh = $state(false)
+  let fpsInterval = $derived(1000 / fps)
+  let isMesh = $derived($parent !== undefined && isInstanceOf($parent, 'Mesh'))
 
   $effect.pre(() => {
-    isMesh = $parent !== undefined && isInstanceOf($parent, 'Mesh')
+    is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
   })
-  $effect.pre(() => {
-    fpsInterval = 1000 / fps
-  })
-
-  is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
 
   const suspend = useSuspense()
 

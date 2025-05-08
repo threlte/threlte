@@ -10,7 +10,7 @@
   let { meshes, children, ...props }: InstancedMeshesProps<T> = $props()
 
   const getInstance = (id: string) => {
-    return (...args: any) => {
+    return (...args: Parameters<typeof Instance>) => {
       createInstanceIdContext(id)
       return Instance(...args)
     }
