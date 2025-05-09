@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.4
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
 ## 8.0.3
 
 ### Patch Changes

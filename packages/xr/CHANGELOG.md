@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.4
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
 ## 1.0.3
 
 ### Patch Changes
