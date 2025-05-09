@@ -96,11 +96,11 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart = () => {
     isPresenting.set(true)
-    onsessionstart?.({ type: 'sessionstart', target: $session! })
+    onsessionstart?.({ type: 'sessionstart', target: $session } as any)
   }
 
   const handleSessionEnd = () => {
-    onsessionend?.({ type: 'sessionend', target: $session! })
+    onsessionend?.({ type: 'sessionend', target: $session } as any)
     isPresenting.set(false)
     session.set(undefined)
   }
