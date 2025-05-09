@@ -30,6 +30,7 @@
     blending: AdditiveBlending,
     depthTest: false
   })
+  ref = material
 
   const { invalidate } = useThrelte()
 
@@ -53,7 +54,6 @@
 
 <T
   is={material}
-  bind:ref
   {...props}
 >
   {@render children?.({ ref: material })}

@@ -30,6 +30,7 @@
   }: StarsProps = $props()
 
   const points = new Points()
+  ref = points
 
   const vec3 = new Vector3()
   const spherical = new Spherical()
@@ -41,14 +42,15 @@
     )
   }
 
-  let positions = new BufferAttribute(new Float32Array(count * 3), 3)
-  let colors = new BufferAttribute(new Float32Array(count * 3), 3)
-  let sizes = new BufferAttribute(new Float32Array(count), 1)
+  const geometry = new BufferGeometry()
+  const positions = $derived(new BufferAttribute(new Float32Array(count * 3), 3))
+  const colors = $derived(new BufferAttribute(new Float32Array(count * 3), 3))
+  const sizes = $derived(new BufferAttribute(new Float32Array(count), 1))
 
   $effect.pre(() => {
-    positions = new BufferAttribute(new Float32Array(count * 3), 3)
-    colors = new BufferAttribute(new Float32Array(count * 3), 3)
-    sizes = new BufferAttribute(new Float32Array(count), 1)
+    geometry.setAttribute('position', positions)
+    geometry.setAttribute('color', colors)
+    geometry.setAttribute('size', sizes)
   })
 
   $effect.pre(() => {
@@ -96,16 +98,10 @@
   $effect.pre(() => {
     uniforms.opacity.value = opacity
   })
-
-  const geometry = new BufferGeometry()
-  geometry.setAttribute('position', positions)
-  geometry.setAttribute('color', colors)
-  geometry.setAttribute('size', sizes)
 </script>
 
 <T
   is={points}
-  bind:ref
   {...props}
 >
   <T is={geometry} />

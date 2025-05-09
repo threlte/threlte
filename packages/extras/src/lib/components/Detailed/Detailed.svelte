@@ -8,6 +8,7 @@
   let { ref = $bindable(), children, ...props }: DetailedProps = $props()
 
   const lod = new LOD()
+  ref = lod
 
   injectPlugin<{ distance?: number; hysteresis?: number }>('detailed', (args) => {
     const parent = useParent()
@@ -72,7 +73,6 @@
 
 <T
   is={lod}
-  bind:ref
   {...props}
 >
   {@render children?.({ ref: lod })}

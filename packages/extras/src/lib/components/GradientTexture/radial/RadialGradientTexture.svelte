@@ -22,6 +22,7 @@
   const canvas = new OffscreenCanvas(0, 0)
   const context = canvas.getContext('2d')
   const texture = new CanvasTexture(canvas)
+  ref = texture
 
   $effect.pre(() => {
     canvas.width = width
@@ -72,7 +73,6 @@
   is={texture}
   {...props}
   {attach}
-  bind:ref
 >
   {@render children?.({ ref: texture })}
 </T>

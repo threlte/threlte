@@ -6,9 +6,9 @@
   import type { TextProps } from './types'
 
   let {
-    font,
-    characters,
-    sdfGlyphSize,
+    font = null,
+    characters = null,
+    sdfGlyphSize = null,
     ref = $bindable(),
     onsync,
     children,
@@ -16,6 +16,7 @@
   }: TextProps = $props()
 
   const text = new TroikaText()
+  ref = text
 
   const { invalidate } = useThrelte()
 
@@ -78,7 +79,6 @@
 
 <T
   is={text}
-  bind:ref
   {...props}
   {font}
   {characters}

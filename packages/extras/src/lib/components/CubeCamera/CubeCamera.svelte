@@ -27,6 +27,8 @@
   const { renderer, scene } = useThrelte()
 
   const group = new Group()
+  ref = group
+
   const inner = new Group()
 
   let count = 0
@@ -68,7 +70,6 @@
 
 <T
   is={group}
-  bind:ref
   {...props}
 >
   <T is={camera} />
