@@ -93,6 +93,5 @@
   "overrides": {
     "react": "npm:@preact/compat@latest",
     "react-dom": "npm:@preact/compat@latest"
-  },
-  "packageManager": "pnpm@10.10.0"
+  }
 }
