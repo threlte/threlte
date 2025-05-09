@@ -109,7 +109,7 @@ This should be placed within a Threlte `<Canvas />`.
     onvisibilitychange?.({ ...event, target: $session! })
   }
 
-  const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
+  const handleInputSourcesChange = (event: XRInputSourcesChangeEvent) => {
     $isHandTracking = Object.values(event.session.inputSources).some((source) => source.hand)
     oninputsourceschange?.({ ...event, target: $session! })
   }

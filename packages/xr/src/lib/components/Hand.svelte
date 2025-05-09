@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   import { Group } from 'three'
   import { T, useThrelte, useTask } from '@threlte/core'
@@ -86,7 +86,7 @@
   const { start, stop } = useTask(
     () => {
       const frame = xr.getFrame()
-      const joint = inputSource?.get('wrist' as unknown as number)
+      const joint = inputSource?.get('wrist')
 
       if (joint === undefined || space === null) return
 
