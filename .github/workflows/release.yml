@@ -22,8 +22,6 @@ jobs:
           node-version: 20
 
       - uses: pnpm/action-setup@v4
-        with:
-          version: 9.4.0
 
       - name: Install deps
         run: pnpm run install:packages
