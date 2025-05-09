@@ -49,6 +49,8 @@ enabled. You can disable this by setting `staticMoving` to true.
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeTrackballControls($parent, dom)
+  ref = controls
+
   const { trackballControls } = useControlsContext()
 
   useTask(
@@ -77,7 +79,6 @@ enabled. You can disable this by setting `staticMoving` to true.
 
 <T
   is={controls}
-  bind:ref
   {...props}
 >
   {@render children?.({ ref: controls })}

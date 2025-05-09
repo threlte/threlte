@@ -66,8 +66,8 @@
     sprite = false,
     transform = false,
     occlude = false,
-    castShadow,
-    receiveShadow,
+    castShadow = false,
+    receiveShadow = false,
     material,
     geometry,
     zIndexRange = [16777271, 0],
@@ -86,6 +86,7 @@
   const { camera, scene, size, dom, canvas, renderStage } = useThrelte()
 
   const group = new Group()
+  ref = group
 
   let element = document.createElement(as)
   let oldZoom = 0
@@ -261,12 +262,15 @@
     autoInvalidate: false,
     stage: renderStage
   })
+
   $effect(() => {
-    if (autoRender) {
-      startRendering()
-      return () => {
-        stopRendering()
-      }
+    if (!autoRender) {
+      return
+    }
+
+    startRendering()
+    return () => {
+      stopRendering()
     }
   })
 
@@ -292,7 +296,6 @@
 
 <T
   is={group}
-  bind:ref
   {...props}
 >
   {#if occlude && !isRayCastOcclusion}

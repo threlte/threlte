@@ -33,13 +33,17 @@
   }: ImageMaterialProps = $props()
 
   const material = new ShaderMaterial()
+  ref = material
+
+  $effect.pre(() => {
+    if (side) material.side = side
+  })
 
   const suspend = useSuspense()
 
-  let textureStore = asyncWritable<Texture | undefined>(Promise.resolve(undefined))
-  $effect.pre(() => {
-    textureStore = suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
-  })
+  const textureStore = $derived(
+    suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
+  )
 
   let { size } = useThrelte()
   const parent = useParent()
@@ -150,7 +154,8 @@
   })
 
   useTask(() => {
-    const mesh = $parent
+    const mesh = parent.current
+
     if (!isInstanceOf(mesh, 'Mesh')) return
 
     uniforms.scale.value.set(mesh.scale.x, mesh.scale.y)
@@ -167,11 +172,9 @@
 
 <T
   is={material}
-  bind:ref
   {uniforms}
   {toneMapped}
   {transparent}
-  {side}
   {vertexShader}
   {fragmentShader}
   {...props}

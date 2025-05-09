@@ -36,6 +36,7 @@
   const { scene, renderer } = useThrelte()
 
   const group = new Group()
+  ref = group
 
   const scaledWidth = $derived(width * (Array.isArray(scale) ? scale[0] : scale || 1))
   const scaledHeight = $derived(height * (Array.isArray(scale) ? scale[1] : scale || 1))
@@ -212,7 +213,6 @@
 
 <T
   is={group}
-  bind:ref
   {...props}
 >
   <T.Group rotation.x={Math.PI / 2}>

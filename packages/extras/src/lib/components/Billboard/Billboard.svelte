@@ -7,6 +7,7 @@
 
   const inner = new Group()
   const localRef = new Group()
+  ref = localRef
 
   const { camera, renderStage } = useThrelte()
 
@@ -38,7 +39,6 @@
 
 <T
   is={localRef}
-  bind:ref
   {...props}
 >
   <T is={inner}>

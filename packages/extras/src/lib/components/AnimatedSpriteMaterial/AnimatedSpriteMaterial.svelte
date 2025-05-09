@@ -41,7 +41,7 @@
     rows = 1,
     columns = undefined,
     totalFrames = 0,
-    is = $bindable(),
+    is,
     ref = $bindable(),
 
     onload,
@@ -85,6 +85,7 @@
 
   $effect.pre(() => {
     is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
+    ref = is
   })
 
   const suspend = useSuspense()
@@ -312,7 +313,6 @@
 {#if texture && isMesh}
   <T
     {is}
-    bind:ref
     map={texture}
     toneMapped={false}
     side={DoubleSide}
@@ -330,7 +330,6 @@
 {:else if texture}
   <T
     {is}
-    bind:ref
     map={texture}
     toneMapped={false}
     {transparent}

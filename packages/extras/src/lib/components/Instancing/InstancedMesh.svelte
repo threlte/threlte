@@ -15,7 +15,8 @@
     ...props
   }: InstancedMeshProps = $props()
 
-  const mesh = new InstancedMesh(null as any, null as any, 0)
+  const mesh = new InstancedMesh(undefined, undefined, 0)
+  ref = mesh
 
   const useInstancedMesh = (callback: (instancedMesh: InstancedMesh) => void) => {
     callback(mesh)
@@ -24,7 +25,6 @@
 
 <T
   is={mesh}
-  bind:ref
   raycast={() => null}
   matrixAutoUpdate={false}
   {...props}

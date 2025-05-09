@@ -54,22 +54,24 @@
   })
 
   $effect(() => {
-    if (urls !== undefined && loader !== undefined) {
-      const suspendedTexture = suspend(
-        cache.remember(() => {
-          return loader.loadAsync(urls)
-        }, urls)
-      )
+    if (urls === undefined || loader === undefined) {
+      return
+    }
 
-      suspendedTexture.then((t) => {
-        texture = t
+    const suspendedTexture = suspend(
+      cache.remember(() => {
+        return loader.loadAsync(urls)
+      }, urls)
+    )
+
+    suspendedTexture.then((t) => {
+      texture = t
+    })
+
+    return () => {
+      suspendedTexture.then((texture) => {
+        texture.dispose()
       })
-
-      return () => {
-        suspendedTexture.then((texture) => {
-          texture.dispose()
-        })
-      }
     }
   })
 </script>

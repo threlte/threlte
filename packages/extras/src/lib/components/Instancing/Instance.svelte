@@ -11,6 +11,7 @@
   const { addInstance, removeInstance, instancedMesh, instances } = useApi(id)
 
   const mesh = new PositionMesh(instancedMesh, instances)
+  ref = mesh
 
   addInstance(mesh)
 
@@ -21,7 +22,6 @@
 
 <T
   is={mesh}
-  bind:ref
   {...props}
 >
   {@render children?.({ ref: mesh })}

@@ -17,6 +17,8 @@
   }: FloatProps = $props()
 
   const outerGroup = new Group()
+  ref = outerGroup
+
   const group = new Group()
 
   let t = seed
@@ -65,7 +67,6 @@
 >
   <T
     is={group}
-    bind:ref
     matrixAutoUpdate={false}
   >
     {@render children?.({ ref: group })}

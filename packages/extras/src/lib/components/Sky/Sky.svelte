@@ -29,6 +29,7 @@
   }: SkyProps = $props()
 
   const sky = new Sky()
+  ref = sky
 
   const sunPosition = new Vector3()
 
@@ -108,7 +109,6 @@
 
 <T
   is={sky}
-  bind:ref
   {...props}
 >
   {@render children?.({ ref: sky, sunPosition, renderTarget })}
