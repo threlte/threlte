@@ -61,7 +61,7 @@ export default ts.config(
           ignoreRestSiblings: true
         }
       ],
-      'no-undef': 'warn'
+      '@typescript-eslint/no-unsafe-function-type': 'warn'
     }
   }
 )
