@@ -25,7 +25,6 @@
     "@types/three": "^0.175.0",
     "@yushijinhun/three-minifier-rollup": "^0.4.0",
     "eslint": "^9.26.0",
-    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-svelte": "^3.5.1",
     "globals": "^16.1.0",
     "prettier": "^3.2.5",

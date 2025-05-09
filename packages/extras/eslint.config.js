@@ -9,6 +9,7 @@ export default ts.config(
   js.configs.recommended,
   ...ts.configs.recommended,
   ...svelte.configs.recommended,
+  ...svelte.configs.prettier,
   {
     languageOptions: {
       globals: {
@@ -46,7 +47,9 @@ export default ts.config(
   },
   {
     rules: {
-      '@typescript-eslint/no-explicit-any': 'warn'
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/ban-ts-comment': 'warn',
+      'svelte/no-svelte-internal': 'warn'
     }
   }
 )

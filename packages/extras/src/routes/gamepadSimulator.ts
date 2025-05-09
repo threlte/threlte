@@ -170,7 +170,7 @@ fill: fuchsia;
     )
 
     Array.from(document.querySelectorAll('.amdfc-int')).forEach(function (element) {
-      element.addEventListener('mouseenter', function (e) {
+      element.addEventListener('mouseenter', function () {
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
           gamepadSimulator.fakeController.buttons[index].touched = true
@@ -178,7 +178,7 @@ fill: fuchsia;
         }
       })
 
-      element.addEventListener('mouseleave', function (e) {
+      element.addEventListener('mouseleave', function () {
         element.setAttribute('class', 'amdfc-int')
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
@@ -194,7 +194,7 @@ fill: fuchsia;
         }
       })
 
-      element.addEventListener('mousedown', function (e) {
+      element.addEventListener('mousedown', function () {
         element.setAttribute('class', 'amdfc-int amdfc-active')
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
@@ -210,7 +210,7 @@ fill: fuchsia;
         }
       })
 
-      element.addEventListener('mouseup', function (e) {
+      element.addEventListener('mouseup', function () {
         element.setAttribute('class', 'amdfc-int')
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
