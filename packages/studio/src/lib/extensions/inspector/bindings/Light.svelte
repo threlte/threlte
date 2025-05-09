@@ -124,12 +124,11 @@
   {/if}
 
   {#if haveProperty(lights, 'shadow')}
-    {@const shadow = lights.map((light) => light.shadow)}
     <Folder
       expanded={false}
       title="Shadow"
     >
-      <Shadow objects={shadow} />
+      <Shadow objects={lights.map((light) => light.shadow).filter(shadow => shadow !== undefined)} />
     </Folder>
   {/if}
 </Folder>

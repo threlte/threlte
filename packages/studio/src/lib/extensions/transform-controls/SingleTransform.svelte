@@ -33,22 +33,25 @@
   let controls = $state<TC>()
   $effect(() => {
     if (!controls) return
+
     const helper = controls.getHelper()
-    if (helper) {
-      const objects: Object3D[] = []
-      helper.traverse((node) => {
-        objects.push(node)
-      })
+    
+    if (!helper) return
+
+    const objects: Object3D[] = []
+    helper.traverse((node) => {
+      objects.push(node)
+    })
+    for (const object of objects) {
+      addObject(object)
+    }
+    return () => {
       for (const object of objects) {
-        addObject(object)
-      }
-      return () => {
-        for (const object of objects) {
-          removeObject(object)
-        }
+        removeObject(object)
       }
     }
   })
+
   const group = studioObjectRef<Group>()
 
   onDestroy(() => {
