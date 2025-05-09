@@ -1,5 +1,13 @@
 # @threlte/extras
 
+## 3.1.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+- a162c3d: Stronger typechecking
+- 6440c33: Update rapier dependency
+
 ## 3.1.1
 
 ### Patch Changes

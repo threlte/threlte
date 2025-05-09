@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
 ## 3.0.1
 
 ### Patch Changes

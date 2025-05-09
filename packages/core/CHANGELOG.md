@@ -1,5 +1,15 @@
 # @threlte/core
 
+## 8.0.3
+
+### Patch Changes
+
+- 74a4976: Stronger typechecking
+- 4fdc0dc: Upgrade Eslint to v9
+- c4fdd00: fix(core): improve type checks in createSetter for safer property setting
+- d4956db: refactor(renderer): add generic typing to RendererContext
+- 1f22d15: test(frame-scheduling): remove unused delta parameter from tasks and add @types/bun dependency to improve type support
+
 ## 8.0.2
 
 ### Patch Changes

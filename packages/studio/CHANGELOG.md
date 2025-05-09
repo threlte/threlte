@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.6
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
 ## 0.1.5
 
 ### Patch Changes

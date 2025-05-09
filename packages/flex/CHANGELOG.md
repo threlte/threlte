@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
 ## 2.0.1
 
 ### Patch Changes

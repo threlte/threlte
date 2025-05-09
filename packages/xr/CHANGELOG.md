@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.3
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
 ## 1.0.2
 
 ### Patch Changes
