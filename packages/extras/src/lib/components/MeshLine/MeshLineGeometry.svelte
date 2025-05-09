@@ -41,7 +41,6 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
   )
 
   const geometry = new BufferGeometry()
-  ref = geometry
 
   $effect.pre(() => {
     for (let i = 0, i2 = 0, i3 = 0; i < pointCount; i += 1, i2 += 2, i3 += 6) {
@@ -134,6 +133,7 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
 
 <T
   is={geometry}
+  bind:ref
   {...props}
 >
   {@render children?.({ ref: geometry })}

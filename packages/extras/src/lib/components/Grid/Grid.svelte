@@ -33,7 +33,6 @@
   }: GridProps = $props()
 
   const mesh = new Mesh()
-  ref = mesh
 
   const { invalidate, camera } = useThrelte()
 
@@ -250,6 +249,7 @@
 
 <T
   is={mesh}
+  bind:ref
   frustumCulled={false}
   {...props}
 >

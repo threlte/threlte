@@ -33,7 +33,6 @@
   }: ImageMaterialProps = $props()
 
   const material = new ShaderMaterial()
-  ref = material
 
   $effect.pre(() => {
     if (side) material.side = side
@@ -172,6 +171,7 @@
 
 <T
   is={material}
+  bind:ref
   {uniforms}
   {toneMapped}
   {transparent}

@@ -28,8 +28,6 @@
   }: AlignProps = $props()
 
   const group = new Group()
-  ref = group
-
   const innerGroup = new Group()
   const outerGroup = new Group()
 
@@ -105,6 +103,7 @@
 
 <T
   is={group}
+  bind:ref
   {...props}
 >
   <T is={outerGroup}>

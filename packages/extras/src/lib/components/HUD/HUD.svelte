@@ -14,8 +14,6 @@
   }: HUDProps = $props()
 
   const { scene } = createSceneContext()
-  ref = scene
-
   const { camera } = createCameraContext()
 
   const key = Symbol('threlte-hud-render-stage')
@@ -44,6 +42,7 @@
 
 <T
   is={scene}
+  bind:ref
   attach={false}
   {...rest}
 >

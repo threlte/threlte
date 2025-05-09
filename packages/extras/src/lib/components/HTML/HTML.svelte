@@ -86,7 +86,6 @@
   const { camera, scene, size, dom, canvas, renderStage } = useThrelte()
 
   const group = new Group()
-  ref = group
 
   let element = document.createElement(as)
   let oldZoom = 0
@@ -296,6 +295,7 @@
 
 <T
   is={group}
+  bind:ref
   {...props}
 >
   {#if occlude && !isRayCastOcclusion}

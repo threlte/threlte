@@ -8,7 +8,6 @@
   let { id, masterVolume, ref = $bindable(), children, ...props }: AudioListenerProps = $props()
 
   const listener = new ThreeAudioListener()
-  ref = listener
 
   export const audioContext = listener.context
   export const resumeContext = () => listener.context.resume()
@@ -30,6 +29,7 @@
 
 <T
   is={listener}
+  bind:ref
   {...props}
 >
   {@render children?.({ ref: listener })}

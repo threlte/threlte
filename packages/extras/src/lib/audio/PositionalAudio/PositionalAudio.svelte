@@ -32,7 +32,6 @@
   }
 
   const audio = new ThreePositionalAudio(listener)
-  ref = audio
 
   $effect(() => {
     if (refDistance !== undefined) audio.setRefDistance(refDistance)
@@ -72,6 +71,7 @@
 
 <T
   is={audio}
+  bind:ref
   {...props}
 >
   {@render children?.({ ref: audio })}

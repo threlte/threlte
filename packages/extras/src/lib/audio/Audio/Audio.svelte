@@ -27,7 +27,6 @@
   }
 
   const audio = new ThreeAudio<GainNode>(listener)
-  ref = audio
 
   const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
     useAudio(audio, props)
@@ -46,6 +45,7 @@
 
 <T
   is={audio}
+  bind:ref
   {...props}
 >
   {@render children?.({ ref: audio })}

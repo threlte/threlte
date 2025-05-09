@@ -27,11 +27,12 @@
   }: Text3DProps = $props()
 
   const suspend = useSuspense()
+  const loader = useLoader(FontLoader)
 
   let loadedFont = $derived(
     suspend<AsyncWritable<Font>>(
       typeof font === 'string'
-        ? useLoader(FontLoader).load(font)
+        ? loader.load(font)
         : asyncWritable<Font>(new Promise((resolve) => resolve(font as Font)))
     )
   )
@@ -57,20 +58,15 @@
 
   let creasedGeometry = $derived.by(() => {
     if (!baseGeometry) return
-    if (smooth === 0) {
-      ref = baseGeometry
-      return baseGeometry
-    }
-
-    const geometry = toCreasedNormals(baseGeometry, smooth) as TextGeometry
-    ref = geometry
-    return geometry
+    if (smooth === 0) return baseGeometry
+    return toCreasedNormals(baseGeometry, smooth) as TextGeometry
   })
 </script>
 
 {#if creasedGeometry}
   <T
     is={creasedGeometry}
+    bind:ref
     {...props}
   >
     {@render children?.({ ref: creasedGeometry })}

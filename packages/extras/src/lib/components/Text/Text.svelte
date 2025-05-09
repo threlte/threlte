@@ -16,7 +16,6 @@
   }: TextProps = $props()
 
   const text = new TroikaText()
-  ref = text
 
   const { invalidate } = useThrelte()
 
@@ -79,6 +78,7 @@
 
 <T
   is={text}
+  bind:ref
   {...props}
   {font}
   {characters}

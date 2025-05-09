@@ -30,7 +30,6 @@
   }: StarsProps = $props()
 
   const points = new Points()
-  ref = points
 
   const vec3 = new Vector3()
   const spherical = new Spherical()
@@ -102,6 +101,7 @@
 
 <T
   is={points}
+  bind:ref
   {...props}
 >
   <T is={geometry} />

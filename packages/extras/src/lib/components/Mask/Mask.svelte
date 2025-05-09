@@ -17,7 +17,6 @@
   }: MaskProps = $props()
 
   const mesh = new Mesh()
-  ref = mesh
 
   $effect(() => {
     const { material } = mesh
@@ -37,6 +36,7 @@
 
 <T
   is={mesh}
+  bind:ref
   renderOrder={-id}
   {...props}
 >
