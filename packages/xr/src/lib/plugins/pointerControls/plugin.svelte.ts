@@ -1,5 +1,4 @@
 import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
-import { untrack } from 'svelte'
 import { usePointerControls } from './hook'
 import { events, type ThrelteXREvents } from './types'
 

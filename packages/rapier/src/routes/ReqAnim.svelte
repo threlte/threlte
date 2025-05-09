@@ -1,12 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
-  const originalRaf =
-    typeof window !== 'undefined'
-      ? window.requestAnimationFrame
-      : (_: FrameRequestCallback) => {
-          return -1
-        }
+  const originalRaf = typeof window !== 'undefined' ? window.requestAnimationFrame : () => -1
 
   let isPaused = $state(false)
   let pendingCallbacks: FrameRequestCallback[] = []

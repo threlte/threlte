@@ -18,11 +18,9 @@ const isObject = (d: any): d is Record<string, any> => {
 
 const getPersistedPaths = function (obj: Record<string, unknown>, prefix?: string) {
   const keys = Object.keys(obj)
-  // eslint-disable-next-line no-param-reassign
   prefix = prefix ? `${prefix}.` : ''
   return keys.reduce<string[]>((result, key) => {
     if (isObject(obj[key])) {
-      // eslint-disable-next-line no-param-reassign
       result = [...result, ...getPersistedPaths(obj[key] as Record<string, unknown>, prefix + key)]
     } else if (obj[key] === persistedDummyValue) {
       result.push(prefix + key)
@@ -32,7 +30,6 @@ const getPersistedPaths = function (obj: Record<string, unknown>, prefix?: strin
 }
 
 export const createState = (namespace: string, transient: boolean) => {
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   const state = $state<Record<string, Record<string, unknown>>>({})
 
   // the key is the scope and the value is the path to the persisted state
@@ -90,9 +87,7 @@ export const createState = (namespace: string, transient: boolean) => {
   }
 
   const removeScopedState = (scope: string): void => {
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete state[scope]
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
     delete persistedStatePaths[scope]
   }
 
