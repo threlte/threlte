@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.1.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
 ## 3.1.2
 
 ### Patch Changes

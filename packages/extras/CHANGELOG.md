@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.2.1
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
 ## 9.2.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @threlte/studio
 
+## 0.1.7
+
+### Patch Changes
+
+- 088f6a7: downgrade typescript to 5.4.5 to ensure compatibility
+- d8392bf: Improve TS Configs
+
 ## 0.1.6
 
 ### Patch Changes
