@@ -9,7 +9,7 @@ export const applyGradient = (
   gradient: CanvasGradient
 ) => {
   context.save()
-  let lastFillStyle = context.fillStyle
+  const lastFillStyle = context.fillStyle
   context.fillStyle = gradient
   context.fillRect(0, 0, context.canvas.width, context.canvas.height)
   context.fillStyle = lastFillStyle

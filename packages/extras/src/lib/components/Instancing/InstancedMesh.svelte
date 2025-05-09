@@ -29,7 +29,6 @@
   matrixAutoUpdate={false}
   {...props}
 >
-  <!-- svelte-ignore ownership_invalid_mutation -->
   <Api
     instancedMesh={mesh}
     {id}

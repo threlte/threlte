@@ -84,7 +84,7 @@
 
   observe(
     () => [size, csm],
-    ([_, csm]) => {
+    ([, csm]) => {
       csm?.updateFrustums()
     }
   )

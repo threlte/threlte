@@ -4,7 +4,6 @@ import { derived, get, writable } from 'svelte/store'
 import type { RapierContext } from '../types/types'
 import { useRapier } from './useRapier'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useJoint = <T extends ImpulseJoint | MultibodyJoint>(
   initializeJoint: (rigidBodyA: RigidBody, rigidBodyB: RigidBody, ctx: RapierContext) => T
 ) => {

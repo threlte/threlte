@@ -36,6 +36,7 @@ const runObserve = <Deps extends Dependencies>(
   )
 
   const effect = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     deps
     let cleanup: void | (() => void) = undefined
     untrack(() => {

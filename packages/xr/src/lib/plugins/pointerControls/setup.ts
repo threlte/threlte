@@ -29,7 +29,8 @@ export const setupPointerControls = (
   const { dispatchers } = getInternalContext()
 
   let hits: Intersection[] = []
-  let lastPosition = new Vector3()
+
+  const lastPosition = new Vector3()
 
   const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
@@ -90,7 +91,10 @@ export const setupPointerControls = (
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const hits = context.raycaster.intersectObjects(
+      context.interactiveObjects,
+      true
+    ) as Intersection[]
     const filtered =
       context.filter === undefined ? hits : context.filter(hits, context, handContext)
 
@@ -112,7 +116,7 @@ export const setupPointerControls = (
     return intersections
   }
 
-  function pointerMissed(objects: Object3D[], event?: IntersectionEvent | undefined) {
+  function pointerMissed(objects: Object3D[], event?: Event | undefined) {
     for (const object of objects) {
       dispatchers.get(object)?.pointermissed?.(event)
     }

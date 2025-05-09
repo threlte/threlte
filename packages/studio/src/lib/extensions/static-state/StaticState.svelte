@@ -89,7 +89,7 @@
       let v = modifier.value
       try {
         v = JSON.parse(v)
-      } catch (error) {
+      } catch {
         // ignore
       }
       options[modifier.name] = v
@@ -134,7 +134,7 @@
     y={6 + 60 + 6}
   >
     {#if hasStates}
-      {#each StaticState[instances].entries() as [constructor, ix]}
+      {#each StaticState[instances].entries() as [constructor, ix] (constructor.name)}
         {#if ix.size > 0}
           <Folder title={constructor.name}>
             {@const [instance] = ix}

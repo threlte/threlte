@@ -1,5 +1,4 @@
 import { injectPlugin, isInstanceOf } from '@threlte/core'
-import { onDestroy, onMount } from 'svelte'
 import type { Material, MeshPhongMaterial, MeshStandardMaterial } from 'three'
 
 type SupportedMaterial = MeshStandardMaterial | MeshPhongMaterial

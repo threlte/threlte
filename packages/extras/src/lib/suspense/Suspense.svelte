@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T, useParentObject3D, useThrelte, watch } from '@threlte/core'
   import type { Snippet } from 'svelte'
-  import type { Writable } from 'svelte/store'
-  import { Group, type Object3D } from 'three'
+  import { Group } from 'three'
   import { createSuspenseContext } from './context'
 
   interface Props {

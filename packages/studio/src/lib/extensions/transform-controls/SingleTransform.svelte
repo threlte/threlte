@@ -15,7 +15,6 @@
     type TransformControlsActions,
     type TransformControlsState
   } from './types'
-  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData'
 
   const { useExtension } = useStudio()
   const transformControlsExtension = useExtension<
@@ -83,8 +82,6 @@
   const onMouseUp = () => {
     listenToModes = false
     if (!initialValue) return
-
-    const userData = getThrelteStudioUserData(object)
 
     const value = {
       position: object.position.clone(),

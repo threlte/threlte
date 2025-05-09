@@ -77,7 +77,6 @@
     pointerEvents = 'auto',
     ref = $bindable(),
     visible = $bindable(),
-    style,
     children,
     ...props
   }: HTMLProps = $props()

@@ -11,7 +11,8 @@
     toneMapping: hudToneMapping,
     stage = renderStage,
     ref = $bindable(),
-    children
+    children,
+    ...rest
   }: HUDProps = $props()
 
   const key = Symbol('threlte-hud-render-stage')
@@ -42,6 +43,7 @@
   is={scene}
   attach={false}
   bind:ref
+  {...rest}
 >
   {@render children?.({ ref: scene })}
 </T>

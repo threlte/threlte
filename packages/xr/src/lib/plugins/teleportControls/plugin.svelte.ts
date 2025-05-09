@@ -18,7 +18,7 @@ export const injectTeleportControlsPlugin = (): void => {
     $effect(() => {
       if (!ref) return
 
-      let mesh = ref
+      const mesh = ref
 
       if (isSurface) {
         addSurface(mesh, args.props)
@@ -55,7 +55,7 @@ export const injectTeleportControlsPlugin = (): void => {
     $effect(() => {
       if (!ref) return
 
-      let mesh = ref
+      const mesh = ref
 
       if (isBlocker) {
         addBlocker(mesh)
