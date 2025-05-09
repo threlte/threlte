@@ -25,10 +25,8 @@ export const useCollisionGroups = () => {
   const bitMaskStore = getContext<CollisionGroupsContext>('threlte-rapier-collision-group')
   if (!bitMaskStore)
     return {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      registerColliders: (colliders: Collider[]) => {},
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      removeColliders: (colliders: Collider[]) => {}
+      registerColliders: () => {},
+      removeColliders: () => {}
     }
 
   let bitMask = get(bitMaskStore)

@@ -160,7 +160,7 @@
     userExpandable={false}
     expanded
     resizable={false}
-    padding={'6px'}
+    padding='6px'
     storePositionLocally={false}
     x={99999}
     y={99999}

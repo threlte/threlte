@@ -24,7 +24,6 @@
   let perf: ThreePerf
 
   $effect.pre(() => {
-    domElement
     perf?.dispose()
     perf = new ThreePerf({
       domElement,

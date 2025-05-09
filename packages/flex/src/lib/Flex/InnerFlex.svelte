@@ -153,7 +153,8 @@
   const { mainAxis, crossAxis, depthAxis } = flexContext
 
   $effect.pre(() => {
-    rootNode.setWidth(width * scaleFactor), rootNode.setHeight(height * scaleFactor)
+    rootNode.setWidth(width * scaleFactor)
+    rootNode.setHeight(height * scaleFactor)
   })
 
   flexContext.updateNodeProps(

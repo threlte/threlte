@@ -16,11 +16,13 @@
   import { createRootContext, useStudio } from '../internal/extensions'
   import NestedComponents from './NestedComponents.svelte'
   import Toolbar from './Toolbar.svelte'
+  import type { ComponentType, SvelteComponent } from "svelte";
+
 
   type Props = {
     namespace?: string
     transient?: boolean
-    extensions?: ConstructorOfATypedSvelteComponent[]
+    extensions?: ComponentType<SvelteComponent>[]
     children: Snippet
   }
 

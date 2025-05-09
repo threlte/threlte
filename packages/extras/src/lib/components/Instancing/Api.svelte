@@ -39,7 +39,6 @@
       instancedMesh.updateMatrix()
 
       if (update || !initialUpdateDone) {
-        // svelte-ignore ownership_invalid_binding
         instancedMesh.updateMatrixWorld()
         parentMatrix.copy(instancedMesh.matrixWorld).invert()
 

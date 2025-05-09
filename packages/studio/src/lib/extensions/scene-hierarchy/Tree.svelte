@@ -209,7 +209,7 @@ max-height: 50vh;
       treeItems.forEach((treeitem) => {
         try {
           treeitem.selected = false
-        } catch (error) {
+        } catch {
           // ignore
         }
       })

@@ -3,7 +3,6 @@ import { Euler, Quaternion, Vector3 } from 'three'
 import { useJoint } from './useJoint'
 import { isEuler, isVector3 } from './utils'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useFixedJoint = (
   anchorA: Parameters<Vector3['set']>,
   frameA: Parameters<Euler['set']> | Euler,

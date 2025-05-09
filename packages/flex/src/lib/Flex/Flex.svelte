@@ -5,7 +5,7 @@
 
   let { children: innerChildren, ref = $bindable(), ...props }: FlexProps = $props()
 
-  let yoga: Yoga | undefined = $state(undefined)
+  let yoga = $state<Yoga>()
 
   const initialize = async () => {
     yoga = await loadYoga()

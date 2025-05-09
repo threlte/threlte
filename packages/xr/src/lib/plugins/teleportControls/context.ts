@@ -6,7 +6,7 @@ import type { TeleportControlsOptions } from '.'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
-export type TeleportEvents = {}
+export type TeleportEvents = Record<string, (arg: unknown) => void>
 
 export interface Context {
   interactiveObjects: Mesh[]

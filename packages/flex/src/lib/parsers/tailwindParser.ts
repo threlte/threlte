@@ -170,10 +170,11 @@ export const tailwindParser = createClassParser((string, props) => {
         case 'flex-nowrap':
           props.flexWrap = 'NoWrap'
           break
-        default:
+        default: {
           // flex shorthand
           const [, value] = className.split('-')
           props.flex = Number(value)
+        }
       }
       return
     }
@@ -330,10 +331,11 @@ export const tailwindParser = createClassParser((string, props) => {
         case 'aspect-portrait':
           props.aspectRatio = 9 / 16
           break
-        default:
+        default: {
           const [, value] = className.split('-')
           const [width, height] = value.split('/')
           props.aspectRatio = Number(width) / Number(height)
+        }
       }
     }
   })

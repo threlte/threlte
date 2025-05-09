@@ -106,7 +106,7 @@
     }
   }
 
-  const { commit, buildTransaction } = useTransactions()
+  const { commit } = useTransactions()
 
   const onMouseUp = () => {
     if (commitObjects.length !== initialValues.length) return

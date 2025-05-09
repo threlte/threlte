@@ -1,8 +1,6 @@
 <script lang="ts">
   import { Element, Pane, Separator } from 'svelte-tweakpane-ui'
   import { type Pane as TpPane } from 'tweakpane'
-  import IconButton from '../../components/IconButton.svelte'
-  import Tooltip from '../../components/Tooltip.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import { browser } from '../../internal/browser'
@@ -12,7 +10,6 @@
   import Bindings from './Bindings.svelte'
   import { inspectorScope, type InspectorActions, type InspectorState } from './types'
   import type { Snippet } from 'svelte'
-  import Toolbar from '../../components/Toolbar.svelte'
 
   let { children }: { children?: Snippet } = $props()
 

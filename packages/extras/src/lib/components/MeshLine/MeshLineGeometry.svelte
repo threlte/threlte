@@ -19,7 +19,7 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
     shapeFunction: shapeFn = () => 1,
     ref = $bindable(),
     children,
-    props
+    ...props
   }: MeshLineGeometryProps = $props()
 
   const pointCount = $derived(points.length)
