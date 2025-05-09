@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-  import { useTask, useThrelte, useParent } from '@threlte/core'
+  import { useTask, useThrelte, useParent, observe } from '@threlte/core'
   import {
     NoToneMapping,
     Vector4,
@@ -136,11 +136,13 @@
     }
   })
 
-  $effect(() => {
-    $size
-    ref.update()
-    invalidate()
-  })
+  observe(
+    () => [size],
+    () => {
+      ref.update()
+      invalidate()
+    }
+  )
 
   $effect(() => {
     return () => ref.dispose()

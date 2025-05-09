@@ -1,5 +1,3 @@
-import type { Readable } from 'svelte/store'
-
 export type ThrelteLayers =
   | 0
   | 1

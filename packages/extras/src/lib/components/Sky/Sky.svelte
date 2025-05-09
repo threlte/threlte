@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { observe, T, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     CubeCamera,
@@ -90,16 +90,10 @@
     }
   )
 
-  $effect.pre(() => {
-    scale
-    turbidity
-    rayleigh
-    mieCoefficient
-    mieDirectionalG
-    elevation
-    azimuth
-    scheduleUpdate()
-  })
+  observe.pre(
+    () => [scale, turbidity, rayleigh, mieCoefficient, mieDirectionalG, elevation, azimuth],
+    () => scheduleUpdate()
+  )
 
   onDestroy(() => {
     sky.material.dispose()
