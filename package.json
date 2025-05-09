@@ -6,13 +6,13 @@
     "build": "turbo run build",
     "build:docs": "turbo run build --filter='@threlte/docs'",
     "preview": "turbo run preview",
-    "lint": "turbo run lint",
     "install:all": "pnpm install --filter='!@threlte/gltf'",
     "install:packages": "pnpm install --filter='!./apps/*'",
     "package": "turbo run package --filter='./packages/*'",
     "package:graph": "turbo run package --filter='./packages/*' --graph",
     "format": "pnpm -r --aggregate-output format",
-    "prettier": "pnpm -r --aggregate-output lint",
+    "lint": "pnpm -r --aggregate-output lint",
+    "check": "pnpm -r --aggregate-output check",
     "release": "changeset publish",
     "cleanup": "turbo run cleanup && rimraf node_modules",
     "test": "turbo run test"
@@ -32,6 +32,6 @@
     "pnpm": "^9.0.0",
     "node": ">=16.0.0"
   },
-	"packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@9.4.0",
   "type": "module"
 }
