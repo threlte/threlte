@@ -24,6 +24,8 @@
   }
 
   let { lights }: Props = $props()
+
+  const filterUndefined = <T>(value: T | undefined): value is T => value !== undefined
 </script>
 
 <Folder
@@ -128,7 +130,7 @@
       expanded={false}
       title="Shadow"
     >
-      <Shadow objects={lights.map((light) => light.shadow).filter(shadow => shadow !== undefined)} />
+      <Shadow objects={lights.map((light) => light.shadow).filter(filterUndefined)} />
     </Folder>
   {/if}
 </Folder>
