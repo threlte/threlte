@@ -1,5 +1,19 @@
 # @threlte/extras
 
+## 9.2.0
+
+### Minor Changes
+
+- 048a269: Migrate CSM to runes
+
+### Patch Changes
+
+- ca17d14: Make all MeshLine props reactive
+- 4fdc0dc: Upgrade Eslint to v9
+- 0a6cb5f: fix(suspense): add invalidate calls to suspense boundary
+- d2c5599: Stronger typechecking
+- f2fb26b: feat(html): hide HTML element when suspended
+
 ## 9.1.4
 
 ### Patch Changes
