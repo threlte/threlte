@@ -7,9 +7,9 @@ import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
 import type { ThrelteGltf } from '../types/types'
 
 type UseGltfOptions = {
-  dracoLoader?: DRACOLoader
-  meshoptDecoder?: typeof MeshoptDecoder
-  ktx2Loader?: KTX2Loader
+  dracoLoader?: DRACOLoader | undefined
+  meshoptDecoder?: typeof MeshoptDecoder | undefined
+  ktx2Loader?: KTX2Loader | undefined
 }
 
 export function useGltf(options?: UseGltfOptions): {

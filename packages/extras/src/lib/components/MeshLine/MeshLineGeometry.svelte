@@ -41,6 +41,7 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
   )
 
   const geometry = new BufferGeometry()
+
   $effect.pre(() => {
     for (let i = 0, i2 = 0, i3 = 0; i < pointCount; i += 1, i2 += 2, i3 += 6) {
       counters.setX(i2, i / points.length)

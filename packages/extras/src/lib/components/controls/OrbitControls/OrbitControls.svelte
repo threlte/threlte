@@ -16,6 +16,7 @@
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeOrbitControls($parent, dom)
+
   const { orbitControls } = useControlsContext()
 
   const { start, stop } = useTask(

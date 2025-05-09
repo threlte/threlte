@@ -41,7 +41,7 @@
     rows = 1,
     columns = undefined,
     totalFrames = 0,
-    is = $bindable(),
+    is,
     ref = $bindable(),
 
     onload,

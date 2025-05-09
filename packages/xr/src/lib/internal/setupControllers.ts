@@ -28,7 +28,7 @@ export const setupControllers = () => {
       if (hasHands()) return
       const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
       controllerEvents[data.handedness]?.current?.[`on${event.type}` as keyof XRControllerEvents]?.(
-        event
+        event as any
       )
     }
 

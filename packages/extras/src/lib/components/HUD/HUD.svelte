@@ -2,8 +2,6 @@
   import { T, createCameraContext, createSceneContext, useThrelte } from '@threlte/core'
   import type { HUDProps } from './types'
 
-  const { scene } = createSceneContext()
-  const { camera } = createCameraContext()
   const { renderStage, renderer, toneMapping } = useThrelte()
 
   let {
@@ -14,6 +12,9 @@
     children,
     ...rest
   }: HUDProps = $props()
+
+  const { scene } = createSceneContext()
+  const { camera } = createCameraContext()
 
   const key = Symbol('threlte-hud-render-stage')
 
@@ -41,8 +42,8 @@
 
 <T
   is={scene}
-  attach={false}
   bind:ref
+  attach={false}
   {...rest}
 >
   {@render children?.({ ref: scene })}

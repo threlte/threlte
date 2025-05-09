@@ -71,9 +71,12 @@
 
   $effect(() => {
     if (!ref) return
-    ref.on('change', onChangeHandler)
+
+    const internalRef = ref
+
+    internalRef.on('change', onChangeHandler)
     return () => {
-      ref.off('change', onChangeHandler)
+      internalRef.off('change', onChangeHandler)
     }
   })
 </script>

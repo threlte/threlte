@@ -66,8 +66,8 @@
     sprite = false,
     transform = false,
     occlude = false,
-    castShadow,
-    receiveShadow,
+    castShadow = false,
+    receiveShadow = false,
     material,
     geometry,
     zIndexRange = [16777271, 0],
@@ -261,12 +261,15 @@
     autoInvalidate: false,
     stage: renderStage
   })
+
   $effect(() => {
-    if (autoRender) {
-      startRendering()
-      return () => {
-        stopRendering()
-      }
+    if (!autoRender) {
+      return
+    }
+
+    startRendering()
+    return () => {
+      stopRendering()
     }
   })
 
