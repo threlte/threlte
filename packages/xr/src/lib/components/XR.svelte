@@ -18,7 +18,7 @@ This should be placed within a Threlte `<Canvas />`.
 
 -->
 <script lang="ts">
-  import { onMount, type Snippet } from 'svelte'
+  import { onDestroy, onMount, type Snippet } from 'svelte'
   import { useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
@@ -166,6 +166,12 @@ This should be placed within a Threlte `<Canvas />`.
       xr.enabled = false
       xr.removeEventListener('sessionstart', handleSessionStart)
       xr.removeEventListener('sessionend', handleSessionEnd)
+    }
+  })
+  onDestroy(() => {
+    // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
+    if (session.current) {
+      session.current.end()
     }
   })
 
