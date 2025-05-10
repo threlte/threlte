@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.5
+
+### Patch Changes
+
+- 3798493: Fix an issue where the XR session was left presenting after navigating away from the Threlte scene
+
 ## 1.0.4
 
 ### Patch Changes
