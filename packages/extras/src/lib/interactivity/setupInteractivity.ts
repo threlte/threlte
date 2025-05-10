@@ -7,6 +7,26 @@ function getIntersectionId(event: Intersection) {
   return `${(event.eventObject || event.object).uuid}/${event.index}${event.instanceId}`
 }
 
+/**
+ * Dispatches a synthetic pointermove event for touchmove interactions
+ * because the browser may not send pointermove events for touch, depending
+ * on the canvas touch-action css property.
+ */
+function transformTouchMove(event: TouchEvent) {
+  const touch = event.touches[0]
+  if (!touch || !event.target) {
+    return
+  }
+  const syntheticPointerEvent = new PointerEvent('pointermove', {
+    clientX: touch.clientX,
+    clientY: touch.clientY,
+    bubbles: event.bubbles,
+    cancelable: event.cancelable,
+    pointerType: 'touch'
+  })
+  event.target.dispatchEvent(syntheticPointerEvent)
+}
+
 const DOM_EVENTS = [
   ['click', false],
   ['contextmenu', false],
@@ -217,12 +237,14 @@ export const setupInteractivity = (context: InteractivityContext) => {
     DOM_EVENTS.forEach(([eventName]) => {
       target.removeEventListener(eventName, getEventHandler(eventName))
     })
+    target.removeEventListener('touchmove', transformTouchMove)
   }
 
   const connect = (target: HTMLElement) => {
     DOM_EVENTS.forEach(([eventName, passive]) => {
       target.addEventListener(eventName, getEventHandler(eventName), { passive })
     })
+    target.addEventListener('touchmove', transformTouchMove, { passive: true })
   }
 
   watch(context.target, (target) => {
