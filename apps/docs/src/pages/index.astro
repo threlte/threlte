@@ -10,6 +10,7 @@ import RapierExampleRaw from '$components/Intro/RapierExample.txt?raw'
 import ExtrasExampleRaw from '$components/Intro/ExtrasExample.txt?raw'
 import PluginsExample from '$components/Intro/PluginsExample.txt?raw'
 
+import Button from '$components/Button/Button.astro'
 import Testimonials from '$components/Testimonials/Testimonials.astro'
 ---
 
@@ -158,12 +159,13 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       Leverage the <span class="text-highlight">lifecycle</span> of Svelte components to subscribe to
       events, handle state changes and more.
 
-      <a
-        class="blue-button mt-8"
+      <Button
+        class="mt-8"
         href="/docs/learn/getting-started/your-first-scene"
+        color="blue"
       >
         Make Your First Scene
-      </a>
+      </Button>
     </Fragment>
 
     <Fragment slot="body-right">
@@ -175,7 +177,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
   </FeatureSection>
 
   <!-- Features, Ecosystem -->
-  <FeatureSection>
+  <FeatureSection class="border-t-0">
     <svg
       slot="icon"
       viewBox="0 0 33 33"
@@ -230,12 +232,13 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       On top of that <code>@threlte/extras</code> provides a collection of useful components and utilities
       to get you started.
 
-      <a
-        class="orange-button mt-8"
+      <Button
+        class="mt-8"
         href="/docs/reference/extras/getting-started"
+        color="orange"
       >
         Documentation
-      </a>
+      </Button>
     </Fragment>
 
     <Fragment slot="body-right">
@@ -260,7 +263,10 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
   </FeatureSection>
 
   <!-- Extendable -->
-  <FeatureSection color="green">
+  <FeatureSection
+    class="border-t-0"
+    color="green"
+  >
     <svg
       slot="icon"
       viewBox="0 0 32 32"
@@ -292,12 +298,13 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
       >
       that can hook into every aspect of Threlte's render component.
 
-      <a
-        class="green-button mt-8"
+      <Button
+        class="mt-8"
         href="/docs/learn/advanced/plugins"
+        color="green"
       >
         Documentation
-      </a>
+      </Button>
     </Fragment>
 
     <Fragment slot="body-right">
@@ -309,26 +316,37 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
     </Fragment>
   </FeatureSection>
 
-  <FeatureSection color="blue">
+  <FeatureSection
+    color="blue"
+    class="border-b-0 border-t-0"
+  >
     <Fragment slot="subline">Start your Journey</Fragment>
 
     <Fragment slot="headline">Don't take our word for it.</Fragment>
 
-    <Testimonials slot="body" />
+    <div
+      slot="body"
+      class="flex w-full flex-col items-center"
+    >
+      <div>
+        <Testimonials class="mb-12 w-full" />
+      </div>
+
+      <Button
+        color="orange"
+        href="/docs/learn/getting-started/introduction"
+        class="glow-orange"
+      >
+        Getting Started
+      </Button>
+    </div>
   </FeatureSection>
 
   <div class="my-12 flex flex-col items-center justify-center">
-    <a
-      href="/docs/learn/getting-started/introduction"
-      class="orange-button mb-28 mt-10 glow-orange"
-    >
-      Getting Started
-    </a>
-
     <h2 class="mb-8 text-center text-5xl font-bold text-glow-white">Join the Threlte Community.</h2>
 
-    <a
-      class="blue-button"
+    <Button
+      color="blue"
       href="https://discord.gg/EqUBCfCaGm"
     >
       <svg
@@ -348,6 +366,6 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
         </g>
       </svg>
       Discord
-    </a>
+    </Button>
   </div>
 </MainLayout>

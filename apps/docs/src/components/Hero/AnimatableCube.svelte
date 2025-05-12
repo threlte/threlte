@@ -4,12 +4,9 @@
   import KeyboardControls from './KeyboardControls.svelte'
   import { cubeGeometry } from './state'
   import DissolveMaterial from './materials/DissolveMaterial.svelte'
+  import { types } from '@theatre/core'
 
-  interface Props {
-    key: string
-  }
-
-  let { key }: Props = $props()
+  export let key: string
 </script>
 
 <SheetObject {key}>
@@ -26,8 +23,8 @@
             {/if}
             <Declare
               props={{
-                progress: 0,
-                noiseScale: 1
+                progress: types.number(0, { range: [0, 1] }),
+                noiseScale: types.number(1, { range: [0, 10] })
               }}
             >
               {#snippet children(values)}
