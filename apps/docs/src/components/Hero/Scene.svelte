@@ -8,7 +8,7 @@
   import KeyboardControls from './KeyboardControls.svelte'
   import PostProcessing from './PostProcessing.svelte'
   import ScrollSheet from './ScrollSheet.svelte'
-  import { mouseCoordsSpring } from './scrollPos' //springScrollPos
+  import { mouseCoordsSpring } from './scrollPos'
   import { debug } from './state'
 
   const { scene } = useThrelte()

@@ -21,14 +21,16 @@
     transform: (t) => {
       t.mapping = EquirectangularReflectionMapping
       t.colorSpace = SRGBColorSpace
-      scene.environment = t
-      scene.environmentIntensity = 10
       return t
     }
   })
 
   cube.then((gltf) => {
     cubeGeometry.set(gltf.nodes.Cube.geometry)
+  })
+  env.then((texture) => {
+    scene.environment = texture
+    scene.environmentIntensity = 10
   })
 </script>
 
