@@ -1,9 +1,5 @@
 import type { Props } from '@threlte/core'
-import type {
-  ColorRepresentation,
-  MeshPhysicalNodeMaterial,
-  NodeRepresentation
-} from 'three/webgpu'
+import type { ColorRepresentation, MeshPhysicalNodeMaterial, Node } from 'three/webgpu'
 
 export type SliceMaterialProps = Props<MeshPhysicalNodeMaterial> & {
   arcAngle?: number
@@ -11,4 +7,4 @@ export type SliceMaterialProps = Props<MeshPhysicalNodeMaterial> & {
   startAngle?: number
 }
 
-export type AngleInputs = { startAngle: NodeRepresentation; arcAngle: NodeRepresentation }
+export type AngleInputs = { startAngle: Node; arcAngle: Node }
