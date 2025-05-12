@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.1.4
+
+### Patch Changes
+
+- 3affb11: Fix await initRapier block syntax
+
 ## 3.1.3
 
 ### Patch Changes
