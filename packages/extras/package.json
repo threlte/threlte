@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "9.0.1",
+  "version": "9.2.1",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Utilities, abstractions and plugins for your Threlte apps",
@@ -10,11 +10,12 @@
     "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --check .",
+    "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
+    "@eslint/js": "^9.26.0",
     "@sveltejs/adapter-auto": "^3.3.1",
     "@sveltejs/kit": "^2.7.7",
     "@sveltejs/package": "^2.3.7",
@@ -22,25 +23,24 @@
     "@threlte/core": "workspace:*",
     "@types/lodash": "^4.17.0",
     "@types/node": "^20.12.7",
-    "@types/three": "^0.171.0",
-    "@typescript-eslint/eslint-plugin": "^7.6.0",
-    "@typescript-eslint/parser": "^7.6.0",
+    "@types/three": "^0.175.0",
     "@yushijinhun/three-minifier-rollup": "^0.4.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-svelte": "^2.36.0",
+    "eslint": "^9.26.0",
+    "eslint-plugin-svelte": "^3.5.1",
+    "globals": "^16.1.0",
     "prettier": "^3.2.5",
     "prettier-plugin-svelte": "^3.2.2",
     "publint": "^0.2.7",
     "rimraf": "^5.0.5",
-    "svelte": "^5.14.4",
-    "svelte-check": "^3.6.9",
+    "svelte": "^5.26.2",
+    "svelte-check": "^4.1.7",
     "svelte-preprocess": "^5.1.3",
     "svelte2tsx": "^0.7.6",
-    "three": "^0.171.0",
+    "three": "^0.175.0",
     "tslib": "^2.6.2",
     "type-fest": "^4.15.0",
     "typescript": "^5.6.3",
+    "typescript-eslint": "^8.32.0",
     "vite": "^5.2.8"
   },
   "peerDependencies": {
@@ -89,11 +89,11 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
-    "@threejs-kit/instanced-sprite-mesh": "^2.5.0",
-    "camera-controls": "^2.9.0",
-    "three-mesh-bvh": "^0.7.4",
+    "@threejs-kit/instanced-sprite-mesh": "^2.5.1",
+    "camera-controls": "^2.10.1",
+    "three-mesh-bvh": "^0.9.0",
     "three-perf": "github:jerzakm/three-perf#three-kit-threlte-fork",
-    "three-viewport-gizmo": "^2.0.2",
-    "troika-three-text": "^0.50.3"
+    "three-viewport-gizmo": "^2.2.0",
+    "troika-three-text": "^0.52.4"
   }
 }

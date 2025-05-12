@@ -65,6 +65,7 @@ export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstan
     | Object3D
     | ((args: { ref: Type; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
     | false
+    | undefined
 
   children?: Snippet<ChildrenArgs>
 

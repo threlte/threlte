@@ -34,7 +34,7 @@
     ...props
   }: ResizeProps = $props()
 
-  ref = new Group()
+  const group = new Group()
   const inner = new Group()
   const outer = new Group()
 
@@ -86,7 +86,8 @@
 </script>
 
 <T
-  is={ref}
+  is={group}
+  bind:ref
   {...props}
 >
   <T is={outer}>
@@ -95,7 +96,7 @@
         name="resize"
         {plugin}
       >
-        {@render children?.({ ref, resize: scheduleResizing })}
+        {@render children?.({ ref: group, resize: scheduleResizing })}
       </InjectPlugin>
     </T>
   </T>

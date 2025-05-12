@@ -38,6 +38,7 @@
     vertexShader,
     uniforms
   })
+  ref = material
 
   const { size, invalidate, camera } = useThrelte()
   const parent = useParent()
@@ -102,7 +103,6 @@
 
 <T
   is={material}
-  bind:ref
   uniforms.envMap.value={envMap}
   uniforms.bounces.value={bounces}
   uniforms.ior.value={ior}

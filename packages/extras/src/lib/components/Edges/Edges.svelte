@@ -21,14 +21,15 @@
     return parent.current.geometry
   })
 
-  ref = new LineSegments()
+  const segments = new LineSegments()
 </script>
 
 <T
-  is={ref}
+  is={segments}
+  bind:ref
   {...props}
 >
   <T.EdgesGeometry args={[geometry, thresholdAngle]} />
   <T.LineBasicMaterial {color} />
-  {@render children?.({ ref })}
+  {@render children?.({ ref: segments })}
 </T>

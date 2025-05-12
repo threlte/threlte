@@ -10,7 +10,7 @@ export const getXRSupportState = async (
     return 'unsupported'
   }
 
-  if (location.protocol !== 'https:') {
+  if (!window.isSecureContext) {
     return 'insecure'
   }
 

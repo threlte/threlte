@@ -28,8 +28,6 @@ export const useStudioObjectsRegistry = () => {
 
     let ref = $state<T | undefined>()
 
-    const studioObjectsRegistry = useStudioObjectsRegistry()
-
     $effect(() => {
       if (!ref) return
       objects.push(ref)
@@ -40,13 +38,13 @@ export const useStudioObjectsRegistry = () => {
         node.userData.ignoreOverrideMaterial = true
       })
       new Set(objects).forEach((object) => {
-        studioObjectsRegistry.addObject(object)
+        extension.addObject(object)
       })
     })
 
     onDestroy(() => {
       new Set(objects).forEach((object) => {
-        studioObjectsRegistry.addObject(object)
+        extension.removeObject(object)
       })
     })
 

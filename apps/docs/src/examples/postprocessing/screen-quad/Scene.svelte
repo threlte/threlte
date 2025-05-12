@@ -1,25 +1,30 @@
 <script lang="ts">
   import ScreenQuadGeometry, { vertexShader } from './ScreenQuadGeometry.svelte'
-  import { Scene, Uniform, Vector2 } from 'three'
+  import { Environment, OrbitControls, useGltf } from '@threlte/extras'
+  import { Scene, Uniform, WebGLRenderTarget } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { Environment, interactivity, OrbitControls, useFBO, useGltf } from '@threlte/extras'
-
-  let { radius = 1 }: { radius?: number } = $props()
 
   const { camera, renderStage, renderer, scene, size } = useThrelte()
 
-  const fbo = useFBO()
+  const target = new WebGLRenderTarget(1, 1)
+
+  $effect(() => {
+    target.setSize($size.width, $size.height)
+  })
+
   const _scene = new Scene()
 
   useTask(
     () => {
       const last = renderer.getRenderTarget()
-      renderer.setRenderTarget(fbo)
+      renderer.setRenderTarget(target)
       renderer.render(scene, camera.current)
       renderer.setRenderTarget(last)
       renderer.render(_scene, camera.current)
     },
-    { stage: renderStage }
+    {
+      stage: renderStage
+    }
   )
 
   /**
@@ -27,44 +32,36 @@
    */
   const fragmentShader = `
 		precision highp float;
+
 		uniform sampler2D uScene;
-		uniform vec2 uResolution;
 		uniform vec2 uMouse;
 		uniform float uRadius;
+		varying vec2 vUv;
 
 		void main() {
-			vec2 uv = gl_FragCoord.xy / uResolution.xy;
-			vec4 color = texture2D(uScene, uv);
 
-			vec2 d = (uv - uMouse);
-			d.x *= uResolution.x / uResolution.y;
+			vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
 
-			float circle = 1.0 - smoothstep(
-				uRadius,
-				uRadius,
-				dot(d, d)
-			);
+			vec2 center = vec2(0.5, 0.5);
 
-			color.rgb *= circle;
+			if (length(center - vUv) - uRadius < 0.0) {
+				color = texture2D(uScene, vUv);
+			}
+
 			gl_FragColor = color;
 		}
 	`
 
-  const uScene = new Uniform(fbo.texture)
-  const uResolution = new Uniform(new Vector2())
-
-  $effect(() => {
-    uResolution.value.set($size.width, $size.height)
-  })
-
   const gltf = useGltf('/models/spaceships/Bob.gltf')
 
-  const uMouse = new Uniform(new Vector2(0.5, 0.5))
+  const uScene = new Uniform(target.texture)
 
-  const { pointer } = interactivity()
+  const uRadius = new Uniform(0)
 
-  $effect(() => {
-    uMouse.value.copy($pointer).addScalar(1).divideScalar(2)
+  let time = 0
+  useTask((delta) => {
+    time += delta
+    uRadius.value = 1 - 0.5 * (1 + Math.sin(time))
   })
 </script>
 
@@ -83,15 +80,8 @@
   <T.RawShaderMaterial
     {vertexShader}
     {fragmentShader}
-    uniforms={{
-      uRadius: {
-        value: 1
-      }
-    }}
     uniforms.uScene={uScene}
-    uniforms.uResolution={uResolution}
-    uniforms.uMouse={uMouse}
-    uniforms.uRadius.value={radius}
+    uniforms.uRadius={uRadius}
   />
   <ScreenQuadGeometry />
 </T.Mesh>

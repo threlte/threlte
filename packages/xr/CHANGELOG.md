@@ -1,5 +1,35 @@
 # @threlte/xr
 
+## 1.0.5
+
+### Patch Changes
+
+- 3798493: Fix an issue where the XR session was left presenting after navigating away from the Threlte scene
+
+## 1.0.4
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 1.0.3
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 1.0.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 1.0.1
+
+### Patch Changes
+
+- fa5c4e9: Fixed a check for secure contexts that previously prevented WebXR apps from running on localhost
+
 ## 1.0.0
 
 ### Major Changes

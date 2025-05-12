@@ -31,11 +31,10 @@ export const setupHands = () => {
         | { data: { handedness: 'left' | 'right' } }
       const handedness =
         'handedness' in handEvent ? handEvent.handedness : handEvent.data.handedness
-      handEvents[handedness]?.current?.[`on${event.type}` as keyof XRHandEvents]?.(event)
+      handEvents[handedness]?.current?.[`on${event.type}` as keyof XRHandEvents]?.(event as any)
     }
 
     function handleConnected(this: XRHandSpace, event: XRHandEvent) {
-      const hand = this
       const { model, targetRay } = map.get(this)
       const { data } = event as {
         data: {
@@ -46,7 +45,7 @@ export const setupHands = () => {
       const { handedness, hand: inputSource } = data
 
       stores[handedness].set({
-        hand,
+        hand: this,
         model,
         inputSource,
         targetRay

@@ -1,13 +1,13 @@
-import { type Renderer } from 'three'
 import { createCacheContext } from './fragments/cache'
 import { createCameraContext } from './fragments/camera'
-import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom'
 import { createDisposalContext } from './fragments/disposal'
+import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom'
 import { createParentContext } from './fragments/parent'
 import { createRootParentObject3DContext } from './fragments/parentObject3D'
 import {
   createRendererContext,
-  type CreateRendererContextOptions
+  type CreateRendererContextOptions,
+  type Renderer
 } from './fragments/renderer.svelte'
 import { createSceneContext } from './fragments/scene'
 import {

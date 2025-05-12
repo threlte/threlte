@@ -50,9 +50,15 @@ const xrButtons = [
 const standardAxes = ['leftStick', 'rightStick'] as const
 const xrAxes = ['touchpad', 'thumbstick'] as const
 
-const gamepadEvents = ['change', 'press', 'down', 'up', 'touch', 'touchstart', 'touchend'] as const
+type StandardGamepadEvents =
+  | 'change'
+  | 'press'
+  | 'down'
+  | 'up'
+  | 'touch'
+  | 'touchstart'
+  | 'touchend'
 
-type StandardGamepadEvents = (typeof gamepadEvents)[number]
 type StandardGamepadButtons = (typeof standardButtons)[number]
 type StandardGamepadAxes = (typeof standardAxes)[number]
 

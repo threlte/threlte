@@ -1,8 +1,8 @@
 <script lang="ts">
   import { type Snippet } from 'svelte'
-  import type { Renderer } from 'three'
   import Context from './components/Context/Context.svelte'
   import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte'
+  import type { Renderer } from './context/fragments/renderer.svelte'
 
   type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'dom'> & {
     children?: Snippet

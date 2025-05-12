@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import Api from './Api.svelte'
   import { InstancedMesh } from 'three'
+  import Api from './Api.svelte'
 
   import type { InstancedMeshProps } from './types'
 
@@ -15,9 +15,11 @@
     ...props
   }: InstancedMeshProps = $props()
 
-  const mesh = new InstancedMesh(null as any, null as any, 0)
+  const mesh = new InstancedMesh(undefined, undefined, 0)
 
-  const args = [null as any, null as any, 0]
+  const useInstancedMesh = (callback: (instancedMesh: InstancedMesh) => void) => {
+    callback(mesh)
+  }
 </script>
 
 <T
@@ -25,7 +27,6 @@
   bind:ref
   raycast={() => null}
   matrixAutoUpdate={false}
-  {args}
   {...props}
 >
   <Api
@@ -34,6 +35,7 @@
     {limit}
     {range}
     {update}
+    {useInstancedMesh}
   >
     {@render children?.({ ref: mesh })}
   </Api>

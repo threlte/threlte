@@ -6,9 +6,9 @@
   import type { TextProps } from './types'
 
   let {
-    font,
-    characters,
-    sdfGlyphSize,
+    font = null,
+    characters = null,
+    sdfGlyphSize = null,
     ref = $bindable(),
     onsync,
     children,

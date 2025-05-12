@@ -23,12 +23,10 @@
   </Box>
 
   <Box flex={1}>
-    {#snippet children({ width })}
-      <Plane
-        color="blue"
-        height={100}
-        depth={1}
-      />
-    {/snippet}
+    <Plane
+      color="blue"
+      height={100}
+      depth={1}
+    />
   </Box>
 </Flex>

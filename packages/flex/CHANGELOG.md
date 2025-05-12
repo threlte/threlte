@@ -1,5 +1,23 @@
 # @threlte/flex
 
+## 2.0.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 2.0.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 2.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
 ## 2.0.0
 
 ### Major Changes

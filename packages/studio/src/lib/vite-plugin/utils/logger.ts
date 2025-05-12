@@ -11,7 +11,7 @@ const parseErrorMessage = (error: any): string | undefined => {
     return 'message' in error && typeof error.message === 'string'
       ? error.message
       : error.toString()
-  } catch (error) {
+  } catch {
     return undefined
   }
 }

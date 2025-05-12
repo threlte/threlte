@@ -18,7 +18,7 @@ This should be placed within a Threlte `<Canvas />`.
 
 -->
 <script lang="ts">
-  import { onMount, type Snippet } from 'svelte'
+  import { onDestroy, onMount, type Snippet } from 'svelte'
   import { useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
@@ -96,11 +96,11 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart = () => {
     isPresenting.set(true)
-    onsessionstart?.({ type: 'sessionstart', target: $session! })
+    onsessionstart?.({ type: 'sessionstart', target: $session } as any)
   }
 
   const handleSessionEnd = () => {
-    onsessionend?.({ type: 'sessionend', target: $session! })
+    onsessionend?.({ type: 'sessionend', target: $session } as any)
     isPresenting.set(false)
     session.set(undefined)
   }
@@ -109,7 +109,7 @@ This should be placed within a Threlte `<Canvas />`.
     onvisibilitychange?.({ ...event, target: $session! })
   }
 
-  const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
+  const handleInputSourcesChange = (event: XRInputSourcesChangeEvent) => {
     $isHandTracking = Object.values(event.session.inputSources).some((source) => source.hand)
     oninputsourceschange?.({ ...event, target: $session! })
   }
@@ -166,6 +166,12 @@ This should be placed within a Threlte `<Canvas />`.
       xr.enabled = false
       xr.removeEventListener('sessionstart', handleSessionStart)
       xr.removeEventListener('sessionend', handleSessionEnd)
+    }
+  })
+  onDestroy(() => {
+    // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
+    if (session.current) {
+      session.current.end()
     }
   })
 

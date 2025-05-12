@@ -16,7 +16,11 @@
 
   class BoundsItem {
     wireframe = $state(true)
-    constructor(public position: Vector3Tuple) {}
+    position: Vector3Tuple
+
+    constructor(position: Vector3Tuple) {
+      this.position = position
+    }
   }
 
   const boundsItems = positions.map((position) => {

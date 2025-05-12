@@ -61,11 +61,11 @@
 
 <T
   is={outerGroup}
+  bind:ref
   {...props}
 >
   <T
     is={group}
-    bind:ref
     matrixAutoUpdate={false}
   >
     {@render children?.({ ref: group })}
