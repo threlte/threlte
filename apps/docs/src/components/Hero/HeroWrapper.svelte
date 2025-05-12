@@ -16,7 +16,7 @@
     scrollPos,
     springScrollPos
   } from './scrollPos'
-  import { debug } from './state'
+  // import { debug } from './state'
   import state from './state.json'
 
   const onScroll = () => {
@@ -37,8 +37,8 @@
     })
   })
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'd') debug.set(!debug.current)
+  const onKeyDown = (_e: KeyboardEvent) => {
+    // if (e.key === 'd') debug.set(!debug.current)
   }
 
   const onMouseMove = (e: MouseEvent) => {
@@ -64,7 +64,7 @@
     <div class="fixed left-0 top-0 z-10 h-[100lvh] w-screen">
       <Canvas
         toneMapping={NoToneMapping}
-        createRenderer={(canvas) => {
+        createRenderer={(canvas: HTMLCanvasElement) => {
           return new WebGLRenderer({
             canvas,
             alpha: true,
