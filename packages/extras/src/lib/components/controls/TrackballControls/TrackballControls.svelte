@@ -49,6 +49,7 @@ enabled. You can disable this by setting `staticMoving` to true.
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeTrackballControls($parent, dom)
+
   const { trackballControls } = useControlsContext()
 
   useTask(
@@ -61,7 +62,7 @@ enabled. You can disable this by setting `staticMoving` to true.
   )
 
   $effect(() => {
-    const handleChange = (event: Event) => {
+    const handleChange = (event: Event<any, ThreeTrackballControls>) => {
       invalidate()
       props.onchange?.(event)
     }

@@ -9,7 +9,7 @@
   let {
     far = 1000,
     frames = Infinity,
-    isBackground,
+    isBackground = false,
     near = 0.1,
     onupdatestart,
     onupdatestop,

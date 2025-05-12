@@ -87,12 +87,14 @@
   }
 
   $effect(() => {
-    if (autoRender) {
-      start()
-      return () => {
-        // this should stop the task on unmount as well
-        stop()
-      }
+    if (!autoRender) {
+      return
+    }
+
+    start()
+    return () => {
+      // this should stop the task on unmount as well
+      stop()
     }
   })
 

@@ -3,7 +3,7 @@
 -->
 <script
   lang="ts"
-  context="module"
+  module
 >
   import { writable } from 'svelte/store'
   import { T } from '@threlte/core'

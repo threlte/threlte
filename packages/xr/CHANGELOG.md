@@ -1,5 +1,23 @@
 # @threlte/xr
 
+## 1.0.5
+
+### Patch Changes
+
+- 3798493: Fix an issue where the XR session was left presenting after navigating away from the Threlte scene
+
+## 1.0.4
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 1.0.3
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
 ## 1.0.2
 
 ### Patch Changes

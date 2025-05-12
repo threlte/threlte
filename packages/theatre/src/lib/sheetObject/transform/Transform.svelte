@@ -122,7 +122,7 @@
   })
 
   const onMouseDown = () => {
-    if (!studio) return
+    if (!studio.current) return
     if (scrub) return
     scrub = $studio?.scrub()
   }

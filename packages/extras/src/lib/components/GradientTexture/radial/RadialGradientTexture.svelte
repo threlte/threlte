@@ -70,9 +70,9 @@
 
 <T
   is={texture}
+  bind:ref
   {...props}
   {attach}
-  bind:ref
 >
   {@render children?.({ ref: texture })}
 </T>

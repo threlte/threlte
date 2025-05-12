@@ -22,7 +22,10 @@ export type InstancedSpriteProps = Omit<
   Props<InstancedMesh, [{ Instance: typeof SpriteInstance }]>,
   'ref'
 > & {
-  ref?: InstancedSpriteMesh<Material, unknown>
+  ref?: InstancedSpriteMesh<
+    MeshBasicMaterial | MeshStandardMaterial | MeshLambertMaterial | MeshPhongMaterial,
+    unknown
+  >
 
   /**
    * update animations automatically

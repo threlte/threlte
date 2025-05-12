@@ -14,7 +14,7 @@
   import XRButton from './XRButton.svelte'
   import { defaultFeatures } from '../internal/defaultFeatures'
 
-  type Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'> & {
+  type Props = Omit<ComponentProps<typeof XRButton>, 'mode' | 'sessionInit'> & {
     sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined }
   }
 
@@ -28,6 +28,4 @@
   }}
   {...props}
   mode="immersive-ar"
->
-  {@render children?.()}
-</XRButton>
+/>

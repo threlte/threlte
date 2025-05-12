@@ -96,7 +96,7 @@ export const gamepadSimulator = {
     timestamp: Math.floor(Date.now() / 1000)
   },
   create: function () {
-    document.querySelector('body').insertAdjacentHTML(
+    document.querySelector('body')?.insertAdjacentHTML(
       'beforeend',
       `<svg viewBox="0 0 600 300" id="amdfc-controller" width="350px" style="position: absolute; z-index: 999999; top: 0; left: 0">
 <style>
@@ -170,7 +170,7 @@ fill: fuchsia;
     )
 
     Array.from(document.querySelectorAll('.amdfc-int')).forEach(function (element) {
-      element.addEventListener('mouseenter', function (e) {
+      element.addEventListener('mouseenter', function () {
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
           gamepadSimulator.fakeController.buttons[index].touched = true
@@ -178,7 +178,7 @@ fill: fuchsia;
         }
       })
 
-      element.addEventListener('mouseleave', function (e) {
+      element.addEventListener('mouseleave', function () {
         element.setAttribute('class', 'amdfc-int')
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
@@ -194,7 +194,7 @@ fill: fuchsia;
         }
       })
 
-      element.addEventListener('mousedown', function (e) {
+      element.addEventListener('mousedown', function () {
         element.setAttribute('class', 'amdfc-int amdfc-active')
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
@@ -210,7 +210,7 @@ fill: fuchsia;
         }
       })
 
-      element.addEventListener('mouseup', function (e) {
+      element.addEventListener('mouseup', function () {
         element.setAttribute('class', 'amdfc-int')
         if (element.id.indexOf('amdfc-button') === 0) {
           const index = parseInt(element.id.replace('amdfc-button-', ''))
@@ -226,7 +226,10 @@ fill: fuchsia;
       })
     })
 
+    // @ts-expect-error
     gamepadSimulator.getGamepads = navigator.getGamepads
+
+    // @ts-expect-error
     navigator.getGamepads = function () {
       return {
         0: gamepadSimulator.fakeController
@@ -237,27 +240,31 @@ fill: fuchsia;
     if (gamepadSimulator.fakeController.connected) {
       gamepadSimulator.disconnect()
     }
+    // @ts-expect-error
     navigator.getGamepads = gamepadSimulator.getGamepads
-    document.querySelector('#amdfc-controller').remove()
+    document.querySelector('#amdfc-controller')?.remove()
   },
   connect: function () {
     const event = new Event('gamepadconnected')
     gamepadSimulator.fakeController.connected = true
     gamepadSimulator.fakeController.timestamp = Math.floor(Date.now() / 1000)
+    // @ts-expect-error
     event.gamepad = gamepadSimulator.fakeController
     window.dispatchEvent(event)
-    document.querySelector('#amdfc-controller').classList.add('connected')
+    document.querySelector('#amdfc-controller')?.classList.add('connected')
   },
   disconnect: function () {
     const event = new Event('gamepaddisconnected')
     gamepadSimulator.fakeController.connected = false
     gamepadSimulator.fakeController.timestamp = Math.floor(Date.now() / 1000)
+    // @ts-expect-error
     event.gamepad = gamepadSimulator.fakeController
     window.dispatchEvent(event)
-    document.querySelector('#amdfc-controller').classList.remove('connected')
+    document.querySelector('#amdfc-controller')?.classList.remove('connected')
   }
 }
 
-window.gamepadSimulator = gamepadSimulator
+// @ts-expect-error
+globalThis.gamepadSimulator = gamepadSimulator
 
 export default gamepadSimulator

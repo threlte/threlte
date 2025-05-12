@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import MagicString from 'magic-string'
 import { toMagicString } from '../magicStringUtils'
 

@@ -14,7 +14,7 @@ export type Properties<T> = Pick<
   { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
 >
 
-export interface Intersection extends ThreeIntersection {
+export interface Intersection<T extends Object3D = Object3D> extends ThreeIntersection<T> {
   /** The event source (the object which registered the handler) */
   eventObject: Object3D
 }

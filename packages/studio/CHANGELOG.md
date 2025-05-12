@@ -1,5 +1,24 @@
 # @threlte/studio
 
+## 0.1.7
+
+### Patch Changes
+
+- 088f6a7: downgrade typescript to 5.4.5 to ensure compatibility
+- d8392bf: Improve TS Configs
+
+## 0.1.6
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 0.1.5
+
+### Patch Changes
+
+- dc88715: Studio Svelte 5 migration, cleanup and fixes
+
 ## 0.1.4
 
 ### Patch Changes

@@ -1,5 +1,25 @@
 # @threlte/extras
 
+## 3.1.4
+
+### Patch Changes
+
+- 3affb11: Fix await initRapier block syntax
+
+## 3.1.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 3.1.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+- a162c3d: Stronger typechecking
+- 6440c33: Update rapier dependency
+
 ## 3.1.1
 
 ### Patch Changes

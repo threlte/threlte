@@ -42,6 +42,7 @@
   }
 
   const group = new Group()
+  ref = group
 
   const material = new ShaderMaterial({
     side: BackSide,
@@ -107,7 +108,6 @@
 
 <T
   is={group}
-  bind:ref
   {...props}
 >
   <T is={mesh}>

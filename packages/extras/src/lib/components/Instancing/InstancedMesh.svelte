@@ -15,7 +15,7 @@
     ...props
   }: InstancedMeshProps = $props()
 
-  const mesh = new InstancedMesh(null as any, null as any, 0)
+  const mesh = new InstancedMesh(undefined, undefined, 0)
 
   const useInstancedMesh = (callback: (instancedMesh: InstancedMesh) => void) => {
     callback(mesh)
@@ -29,7 +29,6 @@
   matrixAutoUpdate={false}
   {...props}
 >
-  <!-- svelte-ignore ownership_invalid_mutation -->
   <Api
     instancedMesh={mesh}
     {id}

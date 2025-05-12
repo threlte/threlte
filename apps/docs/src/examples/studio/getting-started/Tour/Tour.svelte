@@ -89,8 +89,7 @@
             class="pointer-events-auto rounded-md bg-white px-3 py-2 text-black shadow-2xl"
             bind:this={tourManager.instructionsManager.wrapper}
           >
-            <svelte:component
-              this={tourManager.instructionsManager.currentInstructions.content.component}
+            <tourManager.instructionsManager.currentInstructions.content.component
               {...tourManager.instructionsManager.currentInstructions.content.props}
             />
           </div>
@@ -115,8 +114,7 @@
             class="pointer-events-auto max-w-[60%] rounded-md bg-white px-3 py-2 text-black"
             bind:this={tourManager.instructionsManager.wrapper}
           >
-            <svelte:component
-              this={tourManager.instructionsManager.currentInstructions.content.component}
+            <tourManager.instructionsManager.currentInstructions.content.component
               {...tourManager.instructionsManager.currentInstructions.content.props}
             />
           </div>
