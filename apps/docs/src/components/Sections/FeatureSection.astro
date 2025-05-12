@@ -1,6 +1,5 @@
 ---
 interface Props {
-  class?: string
   color?: 'orange' | 'blue' | 'green'
 }
 
@@ -13,22 +12,9 @@ const glowClasses: Record<NonNullable<Props['color']>, string> = {
   green:
     '[background-image:radial-gradient(closest-side,rgba(135,230,151,0.12)_0%,transparent_100%)]'
 }
-
-/*
-Leave this in to force Tailwind to include the classes
-bg-orange
-bg-blue
-bg-green
-glow-orange
-glow-blue
-glow-green
-text-orange-400
-text-blue-400
-text-green-400
-*/
 ---
 
-<div class:list={['relative border-y border-white/20 pb-16 pt-10', Astro.props.class ?? '']}>
+<div class="relative border-y border-b-0 border-t border-white/20 pb-16 pt-10">
   <div
     class="pointer-events-none absolute left-[00%] top-0 h-40 w-[100%] select-none overflow-hidden"
   >
