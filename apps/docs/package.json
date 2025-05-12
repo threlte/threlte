@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "astro check",
     "cleanup": "rimraf .astro node_modules",
     "create:example": "tsx ./scripts/createExample",
     "create:example-page": "tsx ./scripts/createExamplePage",
@@ -17,6 +18,7 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^3.1.2",
     "@astrojs/preact": "^3.1.0",
     "@astrojs/svelte": "^5.7.2",
@@ -36,7 +38,8 @@
     "lucide-react": "^0.263.1",
     "npm": "^9.8.1",
     "preact": "^10.16.0",
-    "three-custom-shader-material": "^6.1.1"
+    "three-custom-shader-material": "^6.1.1",
+    "typescript": "^5.6.3"
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.16.2",

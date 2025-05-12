@@ -3,7 +3,7 @@ import { writable } from 'svelte/store'
 export const useElementMounted = () => {
   const mounted = writable(false)
 
-  const action = (node: HTMLElement) => {
+  const action = (_node: HTMLElement) => {
     mounted.set(true)
     return {
       destroy() {
