@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.6
+
+### Patch Changes
+
+- 183eb5a: Fix pointer controls still sending pointerdown/pointerup/click events when disabled
+
 ## 1.0.5
 
 ### Patch Changes
