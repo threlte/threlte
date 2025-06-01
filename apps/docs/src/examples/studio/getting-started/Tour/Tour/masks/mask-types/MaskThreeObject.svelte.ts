@@ -19,7 +19,7 @@ import type { Mask } from '../Mask'
 export class MaskThreeObject implements Mask {
   public box2d = new Box2()
 
-  private ctx: ThrelteContext
+  private ctx: ThrelteContext<WebGLRenderer>
 
   constructor(
     public readonly object: Mesh,

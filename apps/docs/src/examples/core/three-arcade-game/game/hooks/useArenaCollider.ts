@@ -8,11 +8,8 @@ export const useArenaCollisionEnterEvent = () => {
     easing: cubicOut
   })
 
-  const onCollision = (event: CollisionEnterEvent) => {
-    if (
-      !event.detail.targetRigidBody ||
-      event.detail.targetRigidBody?.handle !== game.ballRigidBody?.handle
-    ) {
+  const onCollision: CollisionEnterEvent = (event) => {
+    if (!event.targetRigidBody || event.targetRigidBody?.handle !== game.ballRigidBody?.handle) {
       return
     }
     opacity.set(0.7, {

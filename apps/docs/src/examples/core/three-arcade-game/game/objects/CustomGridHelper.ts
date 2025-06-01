@@ -7,6 +7,7 @@ import {
 } from 'three'
 
 export class CustomGridHelper extends LineSegments {
+  override type = 'GridHelper'
   constructor(
     width = 10,
     widthDivisions = 10,
@@ -64,8 +65,6 @@ export class CustomGridHelper extends LineSegments {
     const material = new LineBasicMaterial({ vertexColors: true, toneMapped: false })
 
     super(geometry, material)
-
-    this.type = 'GridHelper'
   }
 
   dispose() {

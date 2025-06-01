@@ -52,7 +52,7 @@ function Search({ visible }: { visible: boolean }) {
             }}
             search={{
               getTitle(ref) {
-                return ref.hierarchy.lvl1.replace(/&[lg]t;/g, (match) =>
+                return ref.hierarchy.lvl1.replace(/&[lg]t;/g, (match: string) =>
                   match === '&lt;' ? '<' : '>'
                 )
               },
