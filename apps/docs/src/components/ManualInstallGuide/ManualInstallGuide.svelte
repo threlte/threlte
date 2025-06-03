@@ -3,14 +3,14 @@
   import InstallButton from './InstallButton.svelte'
   import { onMount } from 'svelte'
 
-  let useGltf = false
-  let installExtras = false
-  let installRapier = false
-  let installTheatre = false
-  let installXR = false
-  let installFlex = false
-  let installTypes = false
-  let installStudio = false
+  let useGltf = $state(false)
+  let installExtras = $state(false)
+  let installRapier = $state(false)
+  let installTheatre = $state(false)
+  let installXR = $state(false)
+  let installFlex = $state(false)
+  let installTypes = $state(false)
+  let installStudio = $state(false)
 
   let divider = ' \\'
   let merger = '\n'
@@ -22,46 +22,47 @@
 
   let tag = ''
 
-  $: coreDivider = useDivider(
-    installExtras,
-    useGltf,
-    installRapier,
-    installTheatre,
-    installXR,
-    installFlex,
-    installTypes,
-    installStudio
+  let coreDivider = $derived(
+    useDivider(
+      installExtras,
+      useGltf,
+      installRapier,
+      installTheatre,
+      installXR,
+      installFlex,
+      installTypes,
+      installStudio
+    )
   )
-  $: extrasDivider = useDivider(
-    installRapier,
-    installTheatre,
-    installXR,
-    installFlex,
-    installTypes,
-    installStudio
+  let extrasDivider = $derived(
+    useDivider(installRapier, installTheatre, installXR, installFlex, installTypes, installStudio)
   )
-  $: rapierDivider = useDivider(installTheatre, installXR, installFlex, installTypes, installStudio)
-  $: theatreDivider = useDivider(installXR, installFlex, installTypes, installStudio)
-  $: xrDivider = useDivider(installFlex, installTypes, installStudio)
-  $: flexDivider = useDivider(installTypes, installStudio)
-  $: studioDivider = useDivider(installTypes)
+  let rapierDivider = $derived(
+    useDivider(installTheatre, installXR, installFlex, installTypes, installStudio)
+  )
+  let theatreDivider = $derived(useDivider(installXR, installFlex, installTypes, installStudio))
+  let xrDivider = $derived(useDivider(installFlex, installTypes, installStudio))
+  let flexDivider = $derived(useDivider(installTypes, installStudio))
+  let studioDivider = $derived(useDivider(installTypes))
 
-  $: extrasPassivelyActive = useGltf || installTheatre || installStudio
+  let extrasPassivelyActive = $derived(useGltf || installTheatre || installStudio)
 
-  $: installCode = [
-    `npm install three @threlte/core${tag}${coreDivider}`,
-    (installExtras || useGltf || installTheatre || installStudio) &&
-      `${space}@threlte/extras${tag}${extrasDivider}`,
-    installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
-    installTheatre &&
-      `${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
-    installXR && `${space}@threlte/xr${tag}${xrDivider}`,
-    installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
-    installStudio && `${space}@threlte/studio${tag}${studioDivider}`,
-    installTypes && `${space}@types/three`
-  ]
-    .filter(Boolean)
-    .join(merger)
+  let installCode = $derived(
+    [
+      `npm install three @threlte/core${tag}${coreDivider}`,
+      (installExtras || useGltf || installTheatre || installStudio) &&
+        `${space}@threlte/extras${tag}${extrasDivider}`,
+      installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
+      installTheatre &&
+        `${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
+      installXR && `${space}@threlte/xr${tag}${xrDivider}`,
+      installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
+      installStudio && `${space}@threlte/studio${tag}${studioDivider}`,
+      installTypes && `${space}@types/three`
+    ]
+      .filter(Boolean)
+      .join(merger)
+  )
 
   onMount(() => {
     if (window.navigator.userAgent.includes('Windows')) {
@@ -89,7 +90,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installExtras = !installExtras
     }}
     active={installExtras}
@@ -107,7 +108,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       useGltf = !useGltf
     }}
     active={useGltf}>@threlte/gltf</InstallButton
@@ -125,7 +126,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installRapier = !installRapier
     }}
     active={installRapier}>@threlte/rapier</InstallButton
@@ -142,7 +143,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installTheatre = !installTheatre
     }}
     active={installTheatre}>@threlte/theatre</InstallButton
@@ -159,7 +160,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installXR = !installXR
     }}
     active={installXR}>@threlte/xr</InstallButton
@@ -170,7 +171,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installFlex = !installFlex
     }}
     active={installFlex}>@threlte/flex</InstallButton
@@ -187,7 +188,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installStudio = !installStudio
     }}
     active={installStudio}>@threlte/studio</InstallButton
@@ -203,7 +204,7 @@
   <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installTypes = !installTypes
     }}
     active={installTypes}>@types/three</InstallButton
