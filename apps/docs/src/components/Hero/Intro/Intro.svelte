@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { Sequence, createSheetObjectAction } from '@threlte/theatre'
-  import Button from '../../Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
@@ -33,9 +31,7 @@
               use:sheetObject={{
                 key: 'underline',
                 props: {
-                  scaleX: types.number(0, {
-                    range: [0, 1]
-                  })
+                  scaleX: 0
                 },
                 callback(node, props) {
                   node.style.transform = `scaleX(${props.scaleX})`
@@ -55,12 +51,12 @@
           <span class="mr-2 select-none font-bold text-orange">{'>'}</span>npm i @threlte/core
         </code>
 
-        <Button
+        <a
           href="/docs/learn/getting-started/introduction"
-          color="orange"
+          class="orange-button"
         >
           Start Building →
-        </Button>
+        </a>
       </div>
     </TheatreTextBox>
 
@@ -78,12 +74,8 @@
             node.style.opacity = props.opacity
           },
           props: {
-            opacity: types.number(0, {
-              range: [0, 1]
-            }),
-            translateY: types.number(0, {
-              range: [-100, 100]
-            })
+            opacity: 0,
+            translateY: 0
           }
         }}
       >
