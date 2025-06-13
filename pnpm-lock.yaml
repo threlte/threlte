@@ -422,8 +422,8 @@ importers:
         specifier: ^0.9.0
         version: 0.9.0(three@0.175.0)
       three-perf:
-        specifier: github:jerzakm/three-perf#three-kit-threlte-fork
-        version: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.175.0)
+        specifier: ^1.0.11
+        version: 1.0.11(three@0.175.0)
       three-viewport-gizmo:
         specifier: ^2.2.0
         version: 2.2.0(three@0.175.0)
@@ -449,9 +449,6 @@ importers:
       '@threlte/core':
         specifier: workspace:*
         version: link:../core
-      '@types/lodash':
-        specifier: ^4.17.0
-        version: 4.17.0
       '@types/node':
         specifier: 'catalog:'
         version: 20.12.7
@@ -2917,9 +2914,6 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
-
-  '@types/lodash@4.17.0':
-    resolution: {integrity: sha512-t7dhREVv6dbNj0q17X12j7yDG4bD/DHYX7o5/DbDxobP0HnGPgpRz2Ej77aL7TZT3DSw13fqUTj8J4mMnqa7WA==}
 
   '@types/mdast@3.0.12':
     resolution: {integrity: sha512-DT+iNIRNX884cx0/Q1ja7NyUPpZuv0KPyL5rGNxm1WC1OtHstl7n4Jb7nk+xacNShQMbczJjt8uFzznpp6kYBg==}
@@ -7616,9 +7610,8 @@ packages:
     peerDependencies:
       three: '>= 0.159.0'
 
-  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169:
-    resolution: {tarball: https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169}
-    version: 1.0.10
+  three-perf@1.0.11:
+    resolution: {integrity: sha512-OgBpZjwL+csQKGKZjpkH/QHdbGFMxqngMbSEJeSnVNfXDYd6On7WHNv/GhUZH4YxIpNMwMahBWrNnsJvnbSJHQ==}
     peerDependencies:
       three: '>=0.170'
 
@@ -10508,8 +10501,6 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
-
-  '@types/lodash@4.17.0': {}
 
   '@types/mdast@3.0.12':
     dependencies:
@@ -16285,7 +16276,7 @@ snapshots:
     dependencies:
       three: 0.175.0
 
-  three-perf@https://codeload.github.com/jerzakm/three-perf/tar.gz/322d7d38a17069f2b6e9734913edad0fc4a29169(three@0.175.0):
+  three-perf@1.0.11(three@0.175.0):
     dependencies:
       three: 0.175.0
       troika-three-text: 0.52.4(three@0.175.0)
