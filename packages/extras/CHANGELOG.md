@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.2.2
+
+### Patch Changes
+
+- 774445e: Link to primary three-perf library in package.json
+- 774445e: Bump supported Three.js version to greater than 159
+
 ## 9.2.1
 
 ### Patch Changes

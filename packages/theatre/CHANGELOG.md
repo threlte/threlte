@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.4
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
 ## 3.0.3
 
 ### Patch Changes
