@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.5
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
 ## 8.0.4
 
 ### Patch Changes
