@@ -18,8 +18,6 @@ import {
 import { createUserContext } from './fragments/user'
 import type { ThrelteContext } from './compounds/useThrelte'
 
-const key = 'threlte-context'
-
 export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererContextOptions<T> &
   CreateDOMContextOptions &
   CreateSchedulerContextOptions
@@ -66,7 +64,7 @@ export const createThrelteContext = <T extends Renderer>(
     }
   }
 
-  setContext<ThrelteContext<T>>(key, context)
+  setContext<ThrelteContext<T>>('threlte-context', context)
 
   return context
 }
