@@ -49,7 +49,7 @@
     "@threlte/core": ">=8.0.0-next.0",
     "@threlte/extras": ">=9.0.0-next.0",
     "svelte": ">=4",
-    "three": ">=0.155"
+    "three": ">=0.160"
   },
   "type": "module",
   "keywords": [
