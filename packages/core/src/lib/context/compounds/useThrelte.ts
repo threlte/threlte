@@ -8,11 +8,8 @@ import {
 } from 'three'
 import type { Scheduler, Stage, Task } from '../../frame-scheduling'
 import type { CurrentReadable, CurrentWritable } from '../../utilities'
-import { useCamera } from '../fragments/camera'
-import { useDOM } from '../fragments/dom'
-import { useRenderer, type Renderer } from '../fragments/renderer.svelte'
-import { useScene } from '../fragments/scene'
-import { useScheduler } from '../fragments/scheduler.svelte'
+import type { Renderer } from '../fragments/renderer.svelte'
+import { getContext } from 'svelte'
 
 /**
  * ### `ThrelteContext`
@@ -86,39 +83,5 @@ export type ThrelteContext<T extends Renderer> = {
  * ```
  */
 export const useThrelte = <T extends Renderer = WebGLRenderer>(): ThrelteContext<T> => {
-  const schedulerCtx = useScheduler()
-  const rendererCtx = useRenderer()
-  const cameraCtx = useCamera()
-  const sceneCtx = useScene()
-  const domCtx = useDOM()
-
-  const context: ThrelteContext<T> = {
-    advance: schedulerCtx.advance,
-    autoRender: schedulerCtx.autoRender,
-    autoRenderTask: rendererCtx.autoRenderTask,
-    camera: cameraCtx.camera,
-    colorManagementEnabled: rendererCtx.colorManagementEnabled,
-    colorSpace: rendererCtx.colorSpace,
-    dpr: rendererCtx.dpr,
-    invalidate: schedulerCtx.invalidate,
-    mainStage: schedulerCtx.mainStage,
-    renderer: rendererCtx.renderer as T,
-    renderMode: schedulerCtx.renderMode,
-    renderStage: schedulerCtx.renderStage,
-    scheduler: schedulerCtx.scheduler,
-    shadows: rendererCtx.shadows,
-    shouldRender: schedulerCtx.shouldRender,
-    dom: domCtx.dom,
-    canvas: domCtx.canvas,
-    size: domCtx.size,
-    toneMapping: rendererCtx.toneMapping,
-    get scene() {
-      return sceneCtx.scene
-    },
-    set scene(scene) {
-      sceneCtx.scene = scene
-    }
-  }
-
-  return context
+  return getContext<ThrelteContext<T>>('threlte-context')
 }

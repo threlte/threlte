@@ -7,11 +7,12 @@
     createParentObject3DContext,
     createSceneContext,
     createUserContext,
+    type ThrelteContext,
     useTask,
     useThrelte
   } from '@threlte/core'
-  import type { Snippet } from 'svelte'
-  import { Vector4 } from 'three'
+  import { setContext, type Snippet } from 'svelte'
+  import { Vector4, WebGLRenderer } from 'three'
   import { OffscreenObserver } from './OffscreenObserver.svelte'
 
   let { dom, children }: { dom: HTMLElement; children: Snippet<[]> } = $props()
@@ -19,6 +20,7 @@
   const offscreenObserver = new OffscreenObserver(() => dom)
 
   const parentContext = useThrelte()
+  const { renderer, renderStage, canvas } = parentContext
 
   createDOMContext({ dom, canvas: parentContext.canvas })
   createCacheContext()
@@ -28,7 +30,11 @@
   const { camera } = createCameraContext()
   createUserContext()
 
-  const { renderer, renderStage, canvas } = useThrelte()
+  setContext<ThrelteContext<WebGLRenderer>>('threlte-context', {
+    ...parentContext,
+    camera,
+    dom
+  })
 
   const originalViewport = new Vector4()
   const originalScissor = new Vector4()
