@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { Mesh, type ColorRepresentation } from 'three'
+  import { Mesh } from 'three'
   import { T } from '@threlte/core'
   import { Grid, CameraControls, type CameraControlsRef } from '@threlte/extras'
 
   let {
-    color = '#ff3e00',
     controls = $bindable(),
     mesh = $bindable()
   }: {
-    color?: ColorRepresentation
     controls?: CameraControlsRef
     mesh?: Mesh
   } = $props()
@@ -25,13 +23,13 @@
 >
   <T.BoxGeometry />
   <T.MeshBasicMaterial
-    {color}
+    color="#ff3e00"
     wireframe
   />
 </T.Mesh>
 
 <Grid
-  sectionColor={color}
+  sectionColor="#ff3e00"
   sectionThickness={1}
   cellColor="#cccccc"
   gridSize={40}
