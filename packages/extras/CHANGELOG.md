@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.3.0
+
+### Minor Changes
+
+- 0817794: Add CameraControls component
+
 ## 9.2.2
 
 ### Patch Changes
