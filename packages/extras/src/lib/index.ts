@@ -16,6 +16,10 @@ export { meshBounds } from './utilities/meshBounds'
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as Decal } from './components/Decal/Decal.svelte'
+export {
+  default as CameraControls,
+  type CameraControlsRef
+} from './components/CameraControls/CameraControls.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as HUD } from './components/HUD/HUD.svelte'
