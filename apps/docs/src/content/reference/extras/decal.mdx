@@ -23,14 +23,8 @@ componentSignature:
           description: 'Euler for manual orientation or a single float for closest-vertex-normal orient'
         },
         { name: 'scale', type: 'Vector3Tuple', required: false },
-        {
-          name: 'strokeMaterialProps',
-          type: 'Props<typeof MeshBasicMaterial>',
-          required: false,
-          default: '{}'
-        },
-        { name: 'fillMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' },
-        { name: 'strokeMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' }
+        { name: 'polygonOffsetFactor', type: 'number', required: false, default: '-10' },
+        { name: 'depthTest', type: 'boolean', required: false, default: 'true' }
       ]
   }
 ---
@@ -64,6 +58,7 @@ You can also pass a single number as the rotation, which will spin the decal alo
     rotation={[0, 0, 0]}
     scale={1}
   >
+    <!-- Will override the default material if added -->
     <T.MeshBasicMaterial
       map={texture}
       polygonOffset
