@@ -7,9 +7,9 @@
     Matrix4,
     Mesh,
     Object3D,
+    Texture,
     Vector3,
     type EulerTuple,
-    type Texture,
     type Vector3Tuple
   } from 'three'
 
@@ -22,26 +22,28 @@
 
 <script lang="ts">
   import { DecalGeometry } from 'three/examples/jsm/geometries/DecalGeometry.js'
-  import { T, useParent, type Props as ThrelteProps } from '@threlte/core'
+  import { asyncWritable, T, useParent, type Props as ThrelteProps } from '@threlte/core'
 
   import type { Snippet } from 'svelte'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import { useTexture } from '../../hooks/useTexture'
 
   interface Props extends ThrelteProps<Mesh> {
-    ref?: Mesh
+    src?: Texture | string
     position?: Vector3Tuple
     /** Euler for manual orientation or a single float for closest-vertex-normal orient */
     rotation?: EulerTuple | number
     scale?: Vector3Tuple | number
-    map?: Texture
     polygonOffsetFactor?: number
     depthTest?: boolean
+    ref?: Mesh
     children?: Snippet<[{ ref: Mesh }]>
   }
 
   let {
     depthTest = true,
     polygonOffsetFactor = -10,
-    map,
+    src,
     position,
     rotation,
     scale,
@@ -56,12 +58,23 @@
   const projectorRotation = new Euler()
   const projectorSize = new Vector3(1, 1, 1)
 
+  const suspend = useSuspense()
+  const map = $derived(
+    typeof src === 'string'
+      ? suspend(useTexture(src))
+      : src
+        ? asyncWritable<Texture>(Promise.resolve(src))
+        : undefined
+  )
+
   $effect.pre(() => {
     const parentNode = $parent as Mesh
 
     if (!('geometry' in parentNode)) {
       throw new Error('Decal must have a Mesh as parent or specify its "mesh" prop')
     }
+
+    if (!$map && !children) return
 
     if (position !== undefined) {
       projectorPosition.fromArray(position)
@@ -132,15 +145,17 @@
   })
 </script>
 
-<T
-  is={mesh}
-  bind:ref
-  material.transparent={true}
-  material.polygonOffset={true}
-  material.polygonOffsetFactor={polygonOffsetFactor}
-  material.depthTest={depthTest}
-  material.map={map}
-  {...rest}
->
-  {@render children?.({ ref: mesh })}
-</T>
+{#if $map || children}
+  <T
+    is={mesh}
+    bind:ref
+    material.transparent={true}
+    material.polygonOffset={true}
+    material.polygonOffsetFactor={polygonOffsetFactor}
+    material.depthTest={depthTest}
+    material.map={$map}
+    {...rest}
+  >
+    {@render children?.({ ref: mesh })}
+  </T>
+{/if}

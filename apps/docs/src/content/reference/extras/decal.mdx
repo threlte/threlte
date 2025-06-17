@@ -9,6 +9,7 @@ componentSignature:
     extends: { type: 'Mesh', url: 'https://threejs.org/docs/#api/en/objects/Mesh' },
     'props':
       [
+        { name: 'src', type: 'string | Texture', required: true },
         {
           name: 'position',
           type: 'Vector3Tuple',
@@ -22,7 +23,6 @@ componentSignature:
           description: 'Euler for manual orientation or a single float for closest-vertex-normal orient'
         },
         { name: 'scale', type: 'Vector3Tuple', required: false },
-        { name: 'map', type: 'Texture', required: false },
         {
           name: 'strokeMaterialProps',
           type: 'Props<typeof MeshBasicMaterial>',

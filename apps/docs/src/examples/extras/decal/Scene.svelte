@@ -24,7 +24,6 @@
 
   interactivity()
 
-  const threlte = useTexture('/icons/mstile-150x150.png')
   const svelte = useTexture('/icons/svelte.png')
 
   let bodies = $state([])
@@ -70,11 +69,15 @@
     <T.MeshStandardMaterial roughness={0.1} />
 
     {#if $svelte}
-      <Decal
-        map={$svelte}
-        {position}
-      >
+      <Decal {position}>
         {#snippet children({ ref })}
+          <T.MeshStandardMaterial
+            map={$svelte}
+            transparent
+            roughness={0.2}
+            polygonOffset
+            polygonOffsetFactor={-10}
+          />
           {#if controls}
             <TransformControls
               oncreate={(ref) => {
@@ -105,25 +108,24 @@
       <T.Mesh castShadow>
         <T.SphereGeometry args={[0.3, 256, 128]} />
         <T.MeshStandardMaterial roughness={0.2} />
-        {#if $threlte}
-          <Decal
-            position={[0.35, 0.35, 0.35]}
-            rotation={Math.PI / 4}
-            scale={1}
-            map={$threlte}
-            depthTest
-          >
-            {#snippet children({ ref })}
-              {#if debug}
-                <T.Mesh raycast={() => null}>
-                  <T.BoxGeometry />
-                  <T.MeshNormalMaterial wireframe={true} />
-                  <T.AxesHelper raycast={() => null} />
-                </T.Mesh>
-              {/if}
-            {/snippet}
-          </Decal>
-        {/if}
+
+        <Decal
+          position={[0.35, 0.35, 0.35]}
+          rotation={Math.PI / 4}
+          scale={1}
+          src="/icons/mstile-150x150.png"
+          depthTest
+        >
+          {#snippet children({ ref })}
+            {#if debug}
+              <T.Mesh raycast={() => null}>
+                <T.BoxGeometry />
+                <T.MeshNormalMaterial wireframe={true} />
+                <T.AxesHelper raycast={() => null} />
+              </T.Mesh>
+            {/if}
+          {/snippet}
+        </Decal>
       </T.Mesh>
     </AutoColliders>
   </RigidBody>
