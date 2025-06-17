@@ -24,7 +24,13 @@ componentSignature:
         },
         { name: 'scale', type: 'Vector3Tuple', required: false },
         { name: 'polygonOffsetFactor', type: 'number', required: false, default: '-10' },
-        { name: 'depthTest', type: 'boolean', required: false, default: 'true' }
+        { name: 'depthTest', type: 'boolean', required: false, default: 'true' },
+        {
+          name: 'mesh',
+          type: 'Mesh',
+          required: false,
+          description: 'An optional parent mesh to project the decal'
+        }
       ]
   }
 ---

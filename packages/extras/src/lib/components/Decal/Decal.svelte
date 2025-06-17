@@ -30,6 +30,7 @@
 
   interface Props extends ThrelteProps<Mesh> {
     src?: Texture | string
+    mesh?: Mesh
     position?: Vector3Tuple
     /** Euler for manual orientation or a single float for closest-vertex-normal orient */
     rotation?: EulerTuple | number
@@ -41,18 +42,20 @@
   }
 
   let {
-    depthTest = true,
-    polygonOffsetFactor = -10,
     src,
+    mesh: parentMesh,
     position,
     rotation,
     scale,
+    polygonOffsetFactor = -10,
+    depthTest = true,
     ref = $bindable(),
     children,
     ...rest
   }: Props = $props()
 
   const parent = useParent()
+  const parentNode = $derived(parentMesh ?? ($parent as Mesh))
   const mesh = new Mesh()
   const projectorPosition = new Vector3()
   const projectorRotation = new Euler()
@@ -68,8 +71,6 @@
   )
 
   $effect.pre(() => {
-    const parentNode = $parent as Mesh
-
     if (!('geometry' in parentNode)) {
       throw new Error('Decal must have a Mesh as parent or specify its "mesh" prop')
     }
