@@ -88,7 +88,7 @@
         {#each path.subPaths as _subPath, s (_subPath)}
           {#if strokeGeometries[p]}
             <T.Mesh
-              geometry={strokeGeometries[p][s]}
+              geometry={strokeGeometries[p]?.[s]}
               {...strokeMeshProps}
               renderOrder={renderOrder++}
             >
