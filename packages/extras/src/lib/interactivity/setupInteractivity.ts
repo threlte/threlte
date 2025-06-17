@@ -219,8 +219,6 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
   const connect = (target: HTMLElement) => {
     for (const [eventName, passive] of DOM_EVENTS) {
-      console.log(eventName, passive)
-
       if (eventName === 'pointerleave' || eventName === 'pointercancel') {
         target.addEventListener(eventName, handlePointerLeave, { passive })
       } else if (eventName === 'pointerenter') {
