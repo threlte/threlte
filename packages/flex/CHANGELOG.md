@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.4
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
 ## 2.0.3
 
 ### Patch Changes

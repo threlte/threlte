@@ -1,5 +1,3 @@
-import { revision } from '../../lib/revision'
-
 export const vertexShader = /* glsl */ `
 varying vec2 vUv;
 varying vec2 vPos;
@@ -165,7 +163,7 @@ void main() {
 	}
 
   #include <tonemapping_fragment>
-  #include <${revision >= 154 ? 'colorspace_fragment' : 'encodings_fragment'}>
+  #include <colorspace_fragment>
 	gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.0) - gl_FragColor.rgb, negative);
 }
 `

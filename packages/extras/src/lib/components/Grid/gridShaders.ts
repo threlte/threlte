@@ -1,6 +1,4 @@
 // Credits to Evan Wallace https://madebyevan.com/shaders/grid/
-import { revision } from '../../lib/revision'
-
 export const vertexShader = /*glsl*/ `
   varying vec3 localPosition;
   varying vec4 worldPosition;
@@ -166,6 +164,6 @@ if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + th
 		}
 
 		#include <tonemapping_fragment>
-		#include <${revision < 154 ? 'encodings_fragment' : 'colorspace_fragment'}>
+		#include <colorspace_fragment>
 	}
 `
