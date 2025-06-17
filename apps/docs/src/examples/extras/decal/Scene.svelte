@@ -24,7 +24,7 @@
 
   interactivity()
 
-  const svelte = useTexture('/icons/svelte.png')
+  const svelteIcon = useTexture('/icons/svelte.png')
 
   let bodies = $state([])
 
@@ -68,11 +68,11 @@
     <!-- <T.BoxGeometry args={[3, 0.2, 3]} /> -->
     <T.MeshStandardMaterial roughness={0.1} />
 
-    {#if $svelte}
+    {#if $svelteIcon}
       <Decal {position}>
         {#snippet children({ ref })}
           <T.MeshStandardMaterial
-            map={$svelte}
+            map={$svelteIcon}
             transparent
             roughness={0.2}
             polygonOffset
