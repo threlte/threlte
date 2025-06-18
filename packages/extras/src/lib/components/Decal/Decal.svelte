@@ -37,6 +37,7 @@
     scale?: Vector3Tuple | number
     polygonOffsetFactor?: number
     depthTest?: boolean
+    debug?: boolean
     ref?: Mesh
     children?: Snippet<[{ ref: Mesh }]>
   }
@@ -49,6 +50,7 @@
     scale,
     polygonOffsetFactor = -10,
     depthTest = true,
+    debug = false,
     ref = $bindable(),
     children,
     ...rest
@@ -60,6 +62,8 @@
   const projectorPosition = new Vector3()
   const projectorRotation = new Euler()
   const projectorSize = new Vector3(1, 1, 1)
+
+  let helper = new Mesh()
 
   const suspend = useSuspense()
   const map = $derived(
@@ -142,6 +146,12 @@
     // Reset parent's matixWorld
     parentNode.matrixWorld.copy(matrixWorld)
 
+    if (debug) {
+      helper.position.copy(projectorPosition)
+      helper.rotation.copy(projectorRotation)
+      helper.scale.copy(projectorSize)
+    }
+
     return () => mesh.geometry.dispose()
   })
 </script>
@@ -158,5 +168,16 @@
     {...rest}
   >
     {@render children?.({ ref: mesh })}
+
+    {#if debug}
+      <T
+        is={helper}
+        raycast={() => null}
+      >
+        <T.BoxGeometry />
+        <T.MeshNormalMaterial wireframe={true} />
+        <T.AxesHelper raycast={() => null} />
+      </T>
+    {/if}
   </T>
 {/if}

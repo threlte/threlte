@@ -6,6 +6,7 @@
   import { Pane, Checkbox } from 'svelte-tweakpane-ui'
 
   let controls = $state(false)
+  let debug = $state(false)
 </script>
 
 <Pane
@@ -13,8 +14,12 @@
   position="fixed"
 >
   <Checkbox
-    label="Enable controls"
+    label="Controls"
     bind:value={controls}
+  />
+  <Checkbox
+    label="Debug"
+    bind:value={debug}
   />
 </Pane>
 
@@ -22,7 +27,10 @@
   <Canvas>
     <World>
       <Suspense>
-        <Scene {controls} />
+        <Scene
+          {controls}
+          {debug}
+        />
       </Suspense>
     </World>
   </Canvas>
