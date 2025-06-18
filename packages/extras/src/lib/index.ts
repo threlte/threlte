@@ -116,3 +116,4 @@ export {
 } from './components/InstancedSprite/instancedSpriteUtils'
 
 export type { ThrelteGltf } from './types/types'
+export type { SceneGraph } from './lib/buildSceneGraph'
