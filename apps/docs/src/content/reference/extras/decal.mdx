@@ -9,7 +9,12 @@ componentSignature:
     extends: { type: 'Mesh', url: 'https://threejs.org/docs/#api/en/objects/Mesh' },
     'props':
       [
-        { name: 'src', type: 'string | Texture', required: true },
+        {
+          name: 'src',
+          type: 'string | Texture',
+          required: false,
+          description: 'Can be used instead of a material override'
+        },
         {
           name: 'position',
           type: 'Vector3Tuple',
