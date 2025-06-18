@@ -25,13 +25,13 @@
     "prettier-plugin-astro": "^0.14.0",
     "prettier-plugin-svelte": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "rimraf": "^5.0.5",
+    "rimraf": "catalog:",
     "turbo": "^2.3.1"
   },
   "engines": {
     "pnpm": ">=9",
     "node": ">=16.0.0"
   },
-  "packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@10.11.1",
   "type": "module"
 }
