@@ -82,7 +82,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
     }
   }
 
-  const handlePointerLeave = () => {
+  const handlePointerLeaveOrCancel = () => {
     context.pointerOverTarget.set(false)
     cancelPointer([])
   }
@@ -208,7 +208,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
   const disconnect = (target: HTMLElement) => {
     for (const [eventName] of DOM_EVENTS) {
       if (eventName === 'pointerleave' || eventName === 'pointercancel') {
-        target.removeEventListener(eventName, handlePointerLeave)
+        target.removeEventListener(eventName, handlePointerLeaveOrCancel)
       } else if (eventName === 'pointerenter') {
         target.removeEventListener(eventName, handlePointerEnter)
       } else {
@@ -220,7 +220,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
   const connect = (target: HTMLElement) => {
     for (const [eventName, passive] of DOM_EVENTS) {
       if (eventName === 'pointerleave' || eventName === 'pointercancel') {
-        target.addEventListener(eventName, handlePointerLeave, { passive })
+        target.addEventListener(eventName, handlePointerLeaveOrCancel, { passive })
       } else if (eventName === 'pointerenter') {
         target.addEventListener(eventName, handlePointerEnter, { passive })
       } else {
