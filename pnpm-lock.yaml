@@ -9557,12 +9557,6 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@jridgewell/gen-mapping@0.3.3':
-    dependencies:
-      '@jridgewell/set-array': 1.2.1
-      '@jridgewell/sourcemap-codec': 1.5.0
-      '@jridgewell/trace-mapping': 0.3.25
-
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
       '@jridgewell/set-array': 1.2.1
@@ -10816,7 +10810,6 @@ snapshots:
   '@yushijinhun/three-minifier-common@0.4.0':
     dependencies:
       acorn: 8.14.0
-      acorn: 8.14.0
       acorn-walk: 8.2.0
       glsl-tokenizer: 2.1.5
 
@@ -10834,7 +10827,6 @@ snapshots:
 
   acorn-globals@7.0.1:
     dependencies:
-      acorn: 8.14.0
       acorn: 8.14.0
       acorn-walk: 8.2.0
 
@@ -14780,7 +14772,6 @@ snapshots:
     dependencies:
       '@types/estree': 1.0.6
       estree-walker: 3.0.3
-      is-reference: 3.0.3
       is-reference: 3.0.3
 
   picocolors@0.2.1: {}
