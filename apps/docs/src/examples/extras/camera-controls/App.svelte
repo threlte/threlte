@@ -1,13 +1,12 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
-  import type CC from 'camera-controls'
   import { Button, Checkbox, Pane, Separator } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import type { Mesh } from 'three'
+  import type { CameraControlsRef } from '@threlte/extras'
+  import { type Mesh, MathUtils } from 'three'
 
-  let controls = $state<CC>()
-  let mesh = $state<Mesh>()
+  let controls = $state.raw<CameraControlsRef>()
+  let mesh = $state.raw<Mesh>()
 
   /**
    * controls.enabled can not be bound to since its not reactive
@@ -27,25 +26,25 @@
   <Button
     title="rotate theta 45deg"
     on:click={() => {
-      controls?.rotate(45 * DEG2RAD, 0, true)
+      controls?.rotate(45 * MathUtils.DEG2RAD, 0, true)
     }}
   />
   <Button
     title="rotate theta -90deg"
     on:click={() => {
-      controls?.rotate(-90 * DEG2RAD, 0, true)
+      controls?.rotate(-90 * MathUtils.DEG2RAD, 0, true)
     }}
   />
   <Button
     title="rotate theta 360deg"
     on:click={() => {
-      controls?.rotate(360 * DEG2RAD, 0, true)
+      controls?.rotate(360 * MathUtils.DEG2RAD, 0, true)
     }}
   />
   <Button
     title="rotate phi 20deg"
     on:click={() => {
-      controls?.rotate(0, 20 * DEG2RAD, true)
+      controls?.rotate(0, 20 * MathUtils.DEG2RAD, true)
     }}
   />
   <Separator />
@@ -103,8 +102,8 @@
   <Button
     title="fit to the bounding box of the mesh"
     on:click={() => {
-      if (mesh !== undefined && controls !== undefined) {
-        controls.fitToBox(mesh, true)
+      if (mesh !== undefined) {
+        controls?.fitToBox(mesh, true)
       }
     }}
   />

@@ -15,28 +15,23 @@
     ...props
   }: InstancedMeshProps = $props()
 
-  const mesh = new InstancedMesh(undefined, undefined, 0)
-
-  const useInstancedMesh = (callback: (instancedMesh: InstancedMesh) => void) => {
-    callback(mesh)
-  }
+  const instancedMesh = new InstancedMesh(undefined, undefined, 0)
 </script>
 
 <T
-  is={mesh}
+  is={instancedMesh}
   bind:ref
   raycast={() => null}
   matrixAutoUpdate={false}
   {...props}
 >
   <Api
-    instancedMesh={mesh}
+    {instancedMesh}
     {id}
     {limit}
     {range}
     {update}
-    {useInstancedMesh}
   >
-    {@render children?.({ ref: mesh })}
+    {@render children?.({ ref: instancedMesh })}
   </Api>
 </T>

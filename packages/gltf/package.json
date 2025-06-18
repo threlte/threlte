@@ -44,10 +44,10 @@
     "jsdom-global": "^3.0.2",
     "meow": "^11.0.0",
     "meshoptimizer": "^0.18.1",
-    "prettier": "^3.2.5",
-    "prettier-plugin-svelte": "^3.2.2",
+    "prettier": "catalog:",
+    "prettier-plugin-svelte": "catalog:",
     "sharp": "^0.32.0",
-    "svelte": "^5.26.2",
+    "svelte": "catalog:",
     "three": "0.122.0",
     "three-stdlib": "^2.21.8"
   },

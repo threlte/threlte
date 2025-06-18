@@ -234,29 +234,45 @@ export const setupPointerControls = (
     }
   )
 
-  watch(controller, (input) => {
+  watch([controller, handContext.enabled], ([input, enabled]) => {
     if (input === undefined) return
 
-    input.targetRay.addEventListener('selectstart', handlePointerDown)
-    input.targetRay.addEventListener('selectend', handlePointerUp)
-    input.targetRay.addEventListener('select', handleClick)
-
-    return () => {
+    const removeHandlers = () => {
       input.targetRay.removeEventListener('selectstart', handlePointerDown)
       input.targetRay.removeEventListener('selectend', handlePointerUp)
       input.targetRay.removeEventListener('select', handleClick)
     }
+
+    if (enabled) {
+      input.targetRay.addEventListener('selectstart', handlePointerDown)
+      input.targetRay.addEventListener('selectend', handlePointerUp)
+      input.targetRay.addEventListener('select', handleClick)
+
+      return removeHandlers
+    } else {
+      removeHandlers()
+      return
+    }
   })
 
-  watch(hand, (input) => {
+  watch([hand, handContext.enabled], ([input, enabled]) => {
     if (input === undefined) return
-    input.hand.addEventListener('pinchstart', handlePointerDown)
-    input.hand.addEventListener('pinchend', handlePointerUp)
-    input.hand.addEventListener('pinchend', handleClick)
-    return () => {
+
+    const removeHandlers = () => {
       input.hand.removeEventListener('pinchstart', handlePointerDown)
       input.hand.removeEventListener('pinchend', handlePointerUp)
       input.hand.removeEventListener('pinchend', handleClick)
+    }
+
+    if (enabled) {
+      input.hand.addEventListener('pinchstart', handlePointerDown)
+      input.hand.addEventListener('pinchend', handlePointerUp)
+      input.hand.addEventListener('pinchend', handleClick)
+
+      return removeHandlers
+    } else {
+      removeHandlers()
+      return
     }
   })
 

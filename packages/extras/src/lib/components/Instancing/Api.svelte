@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { revision, T, useTask } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import type { InstancedMesh } from 'three'
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
@@ -12,10 +12,9 @@
     range: number
     update: boolean
     children?: Snippet
-    useInstancedMesh: (callback: (instancedMesh: InstancedMesh) => void) => void
   }
 
-  let { instancedMesh, id, limit, range, update, children, useInstancedMesh }: Props = $props()
+  let { instancedMesh, id, limit, range, update, children }: Props = $props()
 
   const { instances } = createApi(instancedMesh, id)
 
@@ -35,55 +34,43 @@
   let initialUpdateDone = false
 
   useTask(() => {
-    useInstancedMesh((instancedMesh) => {
-      instancedMesh.updateMatrix()
+    instancedMesh.updateMatrix()
 
-      if (update || !initialUpdateDone) {
-        instancedMesh.updateMatrixWorld()
-        parentMatrix.copy(instancedMesh.matrixWorld).invert()
+    if (update || !initialUpdateDone) {
+      instancedMesh.updateMatrixWorld()
+      parentMatrix.copy(instancedMesh.matrixWorld).invert()
 
-        // update the transform matrices and colors
-        if (instancedMesh.instanceColor) {
-          instancedMesh.instanceColor!.needsUpdate = true
-        }
-        instancedMesh.instanceMatrix.needsUpdate = true
-
-        for (let i = 0, l = instances.current.length; i < l; i++) {
-          const instance = instances.current[i]
-          // Multiply the inverse of the InstancedMesh world matrix or else
-          // Instances will be double-transformed if <Instances> isn't at identity
-          instance.matrixWorld.decompose(translation, rotation, scale)
-          instanceMatrix.compose(translation, rotation, scale).premultiply(parentMatrix)
-          instanceMatrix.toArray(matrices, i * 16)
-          instance.color.toArray(colors, i * 3)
-        }
-
-        initialUpdateDone = true
+      // update the transform matrices and colors
+      if (instancedMesh.instanceColor) {
+        instancedMesh.instanceColor!.needsUpdate = true
       }
-    })
+      instancedMesh.instanceMatrix.needsUpdate = true
+
+      for (let i = 0, l = instances.current.length; i < l; i++) {
+        const instance = instances.current[i]
+        // Multiply the inverse of the InstancedMesh world matrix or else
+        // Instances will be double-transformed if <Instances> isn't at identity
+        instance.matrixWorld.decompose(translation, rotation, scale)
+        instanceMatrix.compose(translation, rotation, scale).premultiply(parentMatrix)
+        instanceMatrix.toArray(matrices, i * 16)
+        instance.color.toArray(colors, i * 3)
+      }
+
+      initialUpdateDone = true
+    }
   })
 
   $effect.pre(() => {
-    useInstancedMesh((instancedMesh) => {
-      const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
-      instancedMesh.count = updateRange
+    const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
+    instancedMesh.count = updateRange
 
-      if (revision >= 159) {
-        instancedMesh.instanceMatrix.clearUpdateRanges()
-        instancedMesh.instanceMatrix.addUpdateRange(0, updateRange * 16)
-      } else {
-        ;(instancedMesh.instanceMatrix as any).updateRange.count = updateRange * 16
-      }
+    instancedMesh.instanceMatrix.clearUpdateRanges()
+    instancedMesh.instanceMatrix.addUpdateRange(0, updateRange * 16)
 
-      if (instancedMesh.instanceColor) {
-        if (revision >= 159) {
-          instancedMesh.instanceColor.clearUpdateRanges()
-          instancedMesh.instanceColor.addUpdateRange(0, updateRange * 3)
-        } else {
-          ;(instancedMesh.instanceColor as any).updateRange.count = updateRange * 3
-        }
-      }
-    })
+    if (instancedMesh.instanceColor) {
+      instancedMesh.instanceColor.clearUpdateRanges()
+      instancedMesh.instanceColor.addUpdateRange(0, updateRange * 3)
+    }
   })
 </script>
 
