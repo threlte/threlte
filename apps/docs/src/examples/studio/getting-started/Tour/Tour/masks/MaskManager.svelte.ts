@@ -1,4 +1,4 @@
-import { tweened } from 'svelte/motion'
+import { Tween } from 'svelte/motion'
 import type { Mask } from './Mask'
 import { useStage, useTask } from '@threlte/core'
 
@@ -15,25 +15,18 @@ export class MaskManager {
 
   public darkenerRect = $state<SVGRectElement | undefined>()
 
-  private _globalOpacity = tweened(0, {
+  private _globalOpacity = new Tween(0, {
     duration: 400
   })
-  private opacity = $state(0)
+  private opacity = $derived(this._globalOpacity.current)
 
-  private _darkenerOpacity = tweened(0, {
+  private _darkenerOpacity = new Tween(0, {
     duration: 400
   })
-  private darkenerOpacity = $state(0)
+  private darkenerOpacity = $derived(this._darkenerOpacity.current)
 
   constructor() {
     this.onPointerMove = this.onPointerMove.bind(this)
-
-    this._globalOpacity.subscribe((value) => {
-      this.opacity = value
-    })
-    this._darkenerOpacity.subscribe((value) => {
-      this.darkenerOpacity = value
-    })
 
     $effect(() => {
       if (!this.svg) return

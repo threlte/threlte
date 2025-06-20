@@ -2,12 +2,19 @@
 // https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
 
 export class PoissonDiscSample {
-  /**
-   * @param {number} radius
-   * @param {number[]} region even numbered width/height vector
-   * @param {number} maxCandidates default 30
-   */
-  constructor(radius, region, maxCandidates = 30) {
+  random: () => number
+  radius: number
+  cellSize: number
+  maxCandidates: number
+  width: number
+  height: number
+  gridHeight: number
+  gridWidth: number
+  grid: any[]
+  points: [number, number][]
+  spawnPoints: [number, number][]
+
+  constructor(radius: number, region: [number, number], maxCandidates: number = 30) {
     this.random = Math.random
 
     this.radius = radius
@@ -34,19 +41,22 @@ export class PoissonDiscSample {
   /**
    * @returns {number[][]} an array of points
    */
-  GeneratePoints() {
+  GeneratePoints(): number[][] {
     while (this.spawnPoints.length > 0) {
       // choose one of the spawn points at random
       const spawnIndex = Math.floor(this.random() * this.spawnPoints.length)
-      const spawnCentre = this.spawnPoints[spawnIndex]
+      const spawnCentre = this.spawnPoints[spawnIndex]!
       let candidateAccepted = false
 
       // then generate k candidates around it
       for (let k = 0; k < this.maxCandidates; k++) {
         const angle = this.random() * Math.PI * 2
-        const dir = [Math.sin(angle), Math.cos(angle)]
+        const dir: [number, number] = [Math.sin(angle), Math.cos(angle)]
         const disp = Math.floor(this.random() * (this.radius + 1)) + this.radius
-        const candidate = spawnCentre.map((val, i) => val + dir[i] * disp)
+        const candidate: [number, number] = [
+          spawnCentre[0] + dir[0] * disp,
+          spawnCentre[1] + dir[1] * disp
+        ]
 
         // check if the candidate is valid
         if (this.IsValid(candidate)) {
@@ -68,7 +78,7 @@ export class PoissonDiscSample {
     return this.points
   }
 
-  IsValid(candidate) {
+  IsValid(candidate: [number, number]) {
     const cX = candidate[0]
     const cY = candidate[1]
     if (cX >= 0 && cX < this.width && cY >= 0 && cY < this.height) {
@@ -83,9 +93,9 @@ export class PoissonDiscSample {
         for (let y = searchStartY; y <= searchEndY; y++) {
           const pointIndex = this.grid[y][x]
           if (pointIndex != 0) {
-            const diff = candidate.map((val, i) => val - this.points[pointIndex - 1][i])
+            const diff = candidate.map((val, i) => val - this.points[pointIndex - 1]![i]!)
             // we're not worried about the actual distance, just the equality
-            const sqrdDst = Math.pow(diff[0], 2) + Math.pow(diff[1], 2)
+            const sqrdDst = Math.pow(diff[0]!, 2) + Math.pow(diff[1]!, 2)
             if (sqrdDst < Math.pow(this.radius, 2)) {
               return false
             }
@@ -99,13 +109,12 @@ export class PoissonDiscSample {
 }
 
 export class AdaptedPoissonDiscSample extends PoissonDiscSample {
-  /**
-   * @param {number} radius
-   * @param {number[]} region even numbered width/height vector
-   * @param {number} maxCandidates default 30
-   * @param {()=>number} random a random (or pusedo-random) number generator (0, 1)
-   */
-  constructor(radius, region, maxCandidates = 30, random) {
+  constructor(
+    radius: number,
+    region: [number, number],
+    maxCandidates: number = 30,
+    random: () => number
+  ) {
     super(radius, region, maxCandidates)
     this.random = random
     this.spawnPoints = []

@@ -1,5 +1,15 @@
 # @threlte/extras
 
+## 9.4.0
+
+### Minor Changes
+
+- 12be21a: Add Decal and SVG components
+
+### Patch Changes
+
+- 6aab0e9: Fix interactivity memory leak
+
 ## 9.3.0
 
 ### Minor Changes
