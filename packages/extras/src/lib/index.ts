@@ -64,6 +64,12 @@ export { default as RadialGradientTexture } from './components/GradientTexture/r
 export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
+export { default as SpriteSheetMaterial } from './components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
+export type {
+  SpriteSheetData,
+  SpriteSheetFrame,
+  SpriteSheetAnimation
+} from './components/SpriteSheetMaterial/types'
 
 // Transitions
 export { transitions } from './transitions/transltions.svelte'
