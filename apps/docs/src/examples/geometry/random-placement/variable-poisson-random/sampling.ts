@@ -63,19 +63,19 @@ export class PoissonDiscSample {
       return obj.radius > max ? obj.radius : max
     }, -Infinity)
 
-    this.radiiMap = this.radiiMatrix.reduce((obj, value) => {
+    this.radiiMap = this.radiiMatrix.reduce((obj: { [key: string]: number }, value) => {
       obj[value.desription] = value.radius
       return obj
     }, {})
 
-    this.cellSizeMatrix = this.radiiMatrix.reduce((obj, value) => {
+    this.cellSizeMatrix = this.radiiMatrix.reduce((obj: { [key: string]: number }, value) => {
       obj[value.desription] = value.radius / Math.SQRT2
       return obj
     }, {})
     this.cellSize = Infinity
     for (const key in this.cellSizeMatrix) {
-      if (this.cellSizeMatrix[key] < this.cellSize) {
-        this.cellSize = this.cellSizeMatrix[key]
+      if (this.cellSizeMatrix[key]! < this.cellSize) {
+        this.cellSize = this.cellSizeMatrix[key]!
       }
     }
     this.windowSize = Math.ceil(this.maxRadius / this.cellSize)
@@ -106,20 +106,20 @@ export class PoissonDiscSample {
     while (this.spawnPoints.length > 0) {
       // choose one of the spawn points at random
       const spawnIndex = Math.floor(this.random() * this.spawnPoints.length)
-      const spawnCentre = this.spawnPoints[spawnIndex]
+      const spawnCentre = this.spawnPoints[spawnIndex]!
       let candidateAccepted = false
 
       // then generate k candidates around it
       for (let k = 0; k < this.maxCandidates; k++) {
         const angle = this.random() * Math.PI * 2
-        const dir = [Math.sin(angle), Math.cos(angle)]
+        const dir: [number, number] = [Math.sin(angle), Math.cos(angle)]
         // TODO-DefinitelyMaybe: select a point and calc it's displacement
         const candidateType = this.createPointType()
 
         // const disp = Math.floor(this.random() * (this.radius + 1)) + this.radius
         const dispScalar = Math.max(
-          this.radiiMap[candidateType],
-          this.radiiMap[spawnCentre.desription]
+          this.radiiMap[candidateType]!,
+          this.radiiMap[spawnCentre.desription]!
         )
         const disp = Math.floor(this.random() * (dispScalar + 1)) + dispScalar
         const candidate = {
@@ -135,7 +135,7 @@ export class PoissonDiscSample {
           this.spawnPoints.push(candidate)
           const gridX = Math.ceil(candidate.x / this.cellSize) - 1
           const gridY = Math.ceil(candidate.y / this.cellSize) - 1
-          this.grid[gridY][gridX] = this.points.length
+          this.grid[gridY]![gridX] = this.points.length
           candidateAccepted = true
           break
         }
@@ -149,14 +149,16 @@ export class PoissonDiscSample {
     return this.points
   }
 
-  createPointType(): string {
+  createPointType() {
     const number = this.random()
+    let value = ''
     for (let i = 0; i < this.customRanges.length; i++) {
-      const { start, end, desription } = this.customRanges[i]
+      const { start, end, desription } = this.customRanges[i]!
       if (number > start && number <= end) {
-        return desription
+        value = desription
       }
     }
+    return value
   }
 
   isValid(candidate: Point) {
@@ -172,11 +174,11 @@ export class PoissonDiscSample {
 
       for (let x = searchStartX; x <= searchEndX; x++) {
         for (let y = searchStartY; y <= searchEndY; y++) {
-          const pointIndex = this.grid[y][x]
+          const pointIndex = this.grid[y]![x]!
           if (pointIndex != 0) {
-            const diff = [
-              candidate.x - this.points[pointIndex - 1]?.x,
-              candidate.y - this.points[pointIndex - 1]?.y
+            const diff: [number, number] = [
+              candidate.x - this.points[pointIndex - 1]?.x!,
+              candidate.y - this.points[pointIndex - 1]?.y!
             ]
             // we're not worried about the actual distance, just the equality
             const sqrdDst = Math.pow(diff[0], 2) + Math.pow(diff[1], 2)
@@ -184,8 +186,8 @@ export class PoissonDiscSample {
               sqrdDst <
               Math.pow(
                 Math.max(
-                  this.radiiMap[this.points[pointIndex - 1]?.desription],
-                  this.radiiMap[candidate.desription]
+                  this.radiiMap[this.points[pointIndex - 1]?.desription!]!,
+                  this.radiiMap[candidate.desription]!
                 ),
                 2
               )
