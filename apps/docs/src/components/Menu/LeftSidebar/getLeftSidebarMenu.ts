@@ -55,8 +55,7 @@ const learnSidebarMenuCategoryOrder: LearnCategoryKey[] = [
   'Getting Started',
   'Basics',
   'Advanced',
-  'More',
-  'Preprocessing'
+  'More'
 ]
 
 const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
