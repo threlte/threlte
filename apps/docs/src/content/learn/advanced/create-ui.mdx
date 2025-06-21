@@ -32,9 +32,9 @@ even if only drilling through a few components.
 The [context
 API](https://svelte.dev/docs/svelte/$state#Passing-state-across-modules) is a
 better option for distant components in the same subtree and is used
-extensively across Threlte. Anytime you make a
-[useThrelte](/docs/reference/core/use-threlte) call, the context API is being
-used.
+extensively across Threlte. Anytime
+[useThrelte](/docs/reference/core/use-threlte) is called, the context API is
+being used.
 
 Add in a svelte store like
 [writable](https://svelte.dev/docs/svelte/svelte-store#writable), Threlte's
@@ -202,7 +202,8 @@ Another option for distant components is by using a [shared state
 module](https://svelte.dev/docs/svelte/$state#Passing-state-across-modules).
 This option is similar to the context API but instead of only working within
 the context's subtree, a shared state module can be imported directly where its
-needed. This is the global state option.
+needed. This is the global state option. Add in runes, classes or stores for
+reactivity.
 
 ```typescript title="state.svelte.ts"
 export const globals = $state({
@@ -248,8 +249,8 @@ export const globals = $state({
 
 ## Events
 
-Remember that events only bubble up to ancestors. If you've created an html
-element that covers your canvas, for example:
+Events only bubble up to ancestors. If you've created an html element that
+covers your canvas, for example:
 
 ```svelte
 <div class="relative h-screen w-screen">
@@ -266,8 +267,8 @@ element that covers your canvas, for example:
 </div>
 ```
 
-Your `<Scene>` will not receive any mouse events because they can only bubble
-up. In this case you need to add [pointer-events:
+Your `<Scene>` will not receive any mouse events. In this case you need to add
+[pointer-events:
 none;](https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events) to the
 covering element and then add `pointer-events: auto;` where it makes sense.
 
