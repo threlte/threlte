@@ -71,8 +71,9 @@
   const propKeys = Object.keys(props)
   const { updateProp } = useProps()
   propKeys.forEach((key) => {
+    const prop = $derived(props[key])
     $effect.pre(() => {
-      updateProp(internalRef, key, props[key], {
+      updateProp(internalRef, key, prop, {
         manualCamera: manual,
         pluginsProps: plugins?.pluginsProps
       })

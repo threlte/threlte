@@ -19,30 +19,32 @@ export const useCamera = <T>(
   )
 
   $effect.pre(() => {
-    if (camera && getMakeDefault()) {
-      defaultCamera.set(camera)
-      invalidate()
+    if (camera === undefined || !getMakeDefault()) {
+      return
     }
+
+    defaultCamera.set(camera)
+    invalidate()
   })
 
   $effect.pre(() => {
-    if (!camera || getManual()) return
+    if (camera === undefined || getManual()) {
+      return
+    }
 
     const { width, height } = size.current
 
-    if (isInstanceOf(camera, 'OrthographicCamera')) {
+    if (isInstanceOf(camera, 'PerspectiveCamera')) {
+      camera.aspect = width / height
+    } else if (isInstanceOf(camera, 'OrthographicCamera')) {
       camera.left = width / -2
       camera.right = width / 2
       camera.top = height / 2
       camera.bottom = height / -2
-      camera.updateProjectionMatrix()
-      camera.updateMatrixWorld()
-      invalidate()
-    } else if (isInstanceOf(camera, 'PerspectiveCamera')) {
-      camera.aspect = width / height
-      camera.updateProjectionMatrix()
-      camera.updateMatrixWorld()
-      invalidate()
     }
+
+    camera.updateProjectionMatrix()
+    camera.updateMatrixWorld()
+    invalidate()
   })
 }

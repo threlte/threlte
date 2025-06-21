@@ -1,4 +1,4 @@
-import type { Event, EventDispatcher } from 'three'
+import type { EventDispatcher } from 'three'
 import type { MaybeInstance } from '../types'
 
 type Props = Record<string, (arg: unknown) => void>
@@ -19,31 +19,20 @@ const isEventDispatcher = <T>(
   )
 }
 
-export const useEvents = <T>(propKeys: string[], props: Props, ref: () => MaybeInstance<T>) => {
-  const eventHandlerProxy = (event?: Event) => {
-    if (event?.type) {
-      props[`on${event.type}`]?.(event)
-    }
+export const useEvents = <T>(propKeys: string[], props: Props, getRef: () => MaybeInstance<T>) => {
+  const ref = $derived(getRef())
+
+  for (const key of propKeys) {
+    const prop = $derived(props[key])
+
+    $effect.pre(() => {
+      if (!key.startsWith('on') || typeof prop !== 'function' || !isEventDispatcher(ref)) {
+        return
+      }
+
+      const name = key.slice(2)
+      ref.addEventListener(name, prop)
+      return () => ref.removeEventListener(name, prop)
+    })
   }
-
-  $effect.pre(() => {
-    const r = ref()
-
-    if (!isEventDispatcher(r)) return
-
-    const eventNames: string[] = []
-
-    for (const eventName of propKeys) {
-      if (eventName.startsWith('on')) {
-        r.addEventListener(eventName.slice(2), eventHandlerProxy)
-        eventNames.push(eventName)
-      }
-    }
-
-    return () => {
-      for (let i = 0; i < eventNames.length; i++) {
-        r.removeEventListener(eventNames[i], eventHandlerProxy)
-      }
-    }
-  })
 }
