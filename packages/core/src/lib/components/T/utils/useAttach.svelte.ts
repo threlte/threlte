@@ -34,29 +34,34 @@ export const useAttach = <T extends MaybeInstance<any>>(
     invalidate()
 
     if (attach) {
+      // Custom attach function
       if (typeof attach === 'function') {
         return attach({
           ref: ref as T,
           parent: parent.current,
           parentObject3D: parentObject3D.current
         })
+
+        // Attach to parent Object3D
       } else if (isInstanceOf(attach, 'Object3D') && isInstanceOf(ref, 'Object3D')) {
-        // Add to parent Object3D
         attach?.add(ref)
         return () => attach?.remove(ref)
+
+        // Attach to parent prop
       } else if (typeof attach === 'string') {
         const { target, key } = resolvePropertyPath(parent.current, attach)
         const valueBeforeAttach = target[key]
         target[key] = ref
         return () => (target[key] = valueBeforeAttach)
       }
+
+      // Auto-attach to parent Object3D
     } else if (attach !== false && isInstanceOf(ref, 'Object3D')) {
-      // Add to parent Object3D
       parentObject3D.current?.add(ref)
-      // Build detach function
       return () => parentObject3D.current?.remove(ref)
-    } else if (isObject(parent.current)) {
+
       // Auto-attach to parent material or geometry
+    } else if (isObject(parent.current)) {
       if (isInstanceOf(ref, 'Material')) {
         parent.current.material = ref
       } else if (isInstanceOf(ref, 'BufferGeometry')) {

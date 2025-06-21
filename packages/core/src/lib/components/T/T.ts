@@ -6,17 +6,17 @@ import TComp from './T.svelte'
 import type { Props } from './types'
 import { setIs } from './utils/useIs'
 
+type Extensions = Record<string, unknown>
+
 type ThreeCatalogue = {
   [K in keyof typeof THREE]: (typeof THREE)[K]
 }
 
-type ExtendedCatalogue = ThreeCatalogue & Record<string, unknown>
-
 type TComponentProxy = {
-  [K in keyof ExtendedCatalogue]: Component<Props<ExtendedCatalogue[K]>, {}, 'ref'>
+  [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
 }
 
-const catalogue: Partial<Threlte.UserCatalogue> = {}
+const catalogue: Extensions = {}
 
 /**
  * Extends the default THREE namespace and allows using custom Three.js objects with `<T>`.
@@ -33,7 +33,7 @@ const catalogue: Partial<Threlte.UserCatalogue> = {}
  * <T.OrbitControls />
  * ```
  */
-export function extend<const T extends Partial<Threlte.UserCatalogue>>(extensions: T): void {
+export const extend = (extensions: Extensions): void => {
   Object.assign(catalogue, extensions)
 }
 
@@ -58,14 +58,20 @@ export function extend<const T extends Partial<Threlte.UserCatalogue>>(extension
  * ```
  */
 export const T = new Proxy(TComp, {
-  get(_target, is: string) {
-    const module = catalogue[is] || (THREE as any)[is]
+  get(_target, is: keyof typeof THREE) {
+    // Handle snippets
+    if (typeof is !== 'string') {
+      return TComp
+    }
 
-    if (!module) {
+    const module = catalogue[is] || THREE[is]
+
+    if (module === undefined) {
       throw new Error(`No Three.js module found for "${is}". Did you forget to call extend()?`)
     }
 
-    setIs(module)
+    setIs<typeof module>(module)
+
     return TComp
   }
 }) as typeof TComp & TComponentProxy

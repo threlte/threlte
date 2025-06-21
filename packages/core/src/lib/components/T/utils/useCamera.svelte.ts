@@ -4,42 +4,44 @@ import { isInstanceOf } from '../../../utilities'
 import type { MaybeInstance } from '../types'
 
 export const useCamera = <T>(
-  ref: () => MaybeInstance<T>,
-  manual: () => boolean,
-  makeDefault: () => boolean
+  getRef: () => MaybeInstance<T>,
+  getManual: () => boolean,
+  getMakeDefault: () => boolean
 ) => {
-  const { invalidate, size, camera } = useThrelte()
+  const { invalidate, size: sizeStore, camera: defaultCamera } = useThrelte()
 
-  const s = fromStore(size)
-  const r = $derived(ref())
-  const cam = $derived(
-    isInstanceOf(r, 'PerspectiveCamera') || isInstanceOf(r, 'OrthographicCamera') ? r : undefined
+  const size = fromStore(sizeStore)
+  const ref = $derived(getRef())
+  const camera = $derived(
+    isInstanceOf(ref, 'PerspectiveCamera') || isInstanceOf(ref, 'OrthographicCamera')
+      ? ref
+      : undefined
   )
 
   $effect.pre(() => {
-    if (cam && makeDefault()) {
-      camera.set(cam)
+    if (camera && getMakeDefault()) {
+      defaultCamera.set(camera)
       invalidate()
     }
   })
 
   $effect.pre(() => {
-    if (!cam || manual()) return
+    if (!camera || getManual()) return
 
-    const { width, height } = s.current
+    const { width, height } = size.current
 
-    if (isInstanceOf(cam, 'OrthographicCamera')) {
-      cam.left = width / -2
-      cam.right = width / 2
-      cam.top = height / 2
-      cam.bottom = height / -2
-      cam.updateProjectionMatrix()
-      cam.updateMatrixWorld()
+    if (isInstanceOf(camera, 'OrthographicCamera')) {
+      camera.left = width / -2
+      camera.right = width / 2
+      camera.top = height / 2
+      camera.bottom = height / -2
+      camera.updateProjectionMatrix()
+      camera.updateMatrixWorld()
       invalidate()
-    } else if (isInstanceOf(cam, 'PerspectiveCamera')) {
-      cam.aspect = width / height
-      cam.updateProjectionMatrix()
-      cam.updateMatrixWorld()
+    } else if (isInstanceOf(camera, 'PerspectiveCamera')) {
+      camera.aspect = width / height
+      camera.updateProjectionMatrix()
+      camera.updateMatrixWorld()
       invalidate()
     }
   })

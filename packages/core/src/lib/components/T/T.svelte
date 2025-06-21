@@ -34,10 +34,10 @@
     ref = internalRef
   })
 
-  let calledOnce = false
+  let calledOnMount = false
   $effect(() => {
-    if (calledOnce && ref === internalRef) return
-    calledOnce = true
+    if (calledOnMount && ref === internalRef) return
+    calledOnMount = true
     return oncreate?.(internalRef)
   })
 
@@ -68,8 +68,9 @@
   }))
 
   // Props
+  const propKeys = Object.keys(props)
   const { updateProp } = useProps()
-  Object.keys(props).forEach((key) => {
+  propKeys.forEach((key) => {
     $effect.pre(() => {
       updateProp(internalRef, key, props[key], {
         manualCamera: manual,
@@ -97,7 +98,7 @@
   $effect.pre(() => disposal.updateDispose(dispose))
 
   // Events
-  useEvents(props, () => internalRef)
+  useEvents(propKeys, props, () => internalRef)
 </script>
 
 {@render children?.({ ref: internalRef })}
