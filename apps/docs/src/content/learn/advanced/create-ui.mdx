@@ -4,10 +4,11 @@ title: Creating UI
 order: 2
 ---
 
-Very often you'd like to create some toggleable scene state, display the values
-of a three.js vector or see a T component variable within plain HTML.
+Projects have many different UI needs from toggling scene state during
+development to displaying and adjusting three.js values. Below is some examples
+and tips to get started with creating UI for your project.
 
-## Easiest Example
+## Quick start
 
 A library to help get started with this is
 [svelte-tweakpane-ui](https://kitschpatrol.com/svelte-tweakpane-ui) and is used
@@ -17,30 +18,30 @@ enough that just passing parent state to child props works well; i.e.
 
 <Example path="extras/environment/basic" />
 
-The rest of this page is about when that doesn't work well enough and what your
+The rest of this page is about when that doesn't work so well and what your
 other options are.
 
-## Prop drilling
+### Prop drilling
 
-Passing down props may not always be the best solution. For instance, as soon
-as the relationship becomes distant i.e. ansector, ..., child. To share the
-ancestors state the same way requires passing it through all intermediate
-components within the component tree which can easily become tedious to work
-with or refactor.
+Passing down props through many components is called prop drilling. Sharing
+state this way is ok for simple setups but can become tedious to work with,
+even if only drilling through a few components.
 
 ## Context API
 
 The [context
 API](https://svelte.dev/docs/svelte/$state#Passing-state-across-modules) is a
-better option for distant components and is used extensively acrossly Threlte.
-Anytime you make a [`useThrelte`](/docs/reference/core/use-threlte) call, the
-context API is being used.
+better option for distant components in the same subtree and is used
+extensively across Threlte. Anytime you make a
+[useThrelte](/docs/reference/core/use-threlte) call, the context API is being
+used.
 
-To create some reactive state for your UI, mix it with a svelte store like
+Add in a svelte store like
 [writable](https://svelte.dev/docs/svelte/svelte-store#writable), Threlte's
-[currentWritable](/docs/reference/core/utilities#currentwritable), a `const`
+[currentWritable](/docs/reference/core/utilities#currentwritable), a
 `$state({})` rune or encapsulate `$state()` within a
-[class](https://svelte.dev/docs/svelte/$state#Classes).
+[class](https://svelte.dev/docs/svelte/$state#Classes) to create reactive
+context state for your UI.
 
 <Tip
   type="tip"
@@ -165,7 +166,7 @@ This currently doesn't work off the bat. The descendant doesn't update.
   type="checkbox"
   name="debug"
   id="debug"
-  bind:checked={state.debug}
+  bind:checked={debug}
 />
 
 <div>
@@ -197,21 +198,90 @@ This currently doesn't work off the bat. The descendant doesn't update.
 
 ## Shared state
 
-Another option for distant components is by using [shared
-state](https://svelte.dev/docs/svelte/$state#Passing-state-across-modules).
-This option is similar to the context API but instead you're dealing more
-directly with the data.
+Another option for distant components is by using a [shared state
+module](https://svelte.dev/docs/svelte/$state#Passing-state-across-modules).
+This option is similar to the context API but instead of only working within
+the context's subtree, a shared state module can be imported directly where its
+needed. This is the global state option.
 
-A separate `state.svelte.ts` file which exports `$state()` that is used by each
-component.
-
-Start with creating the shared state file.
-
-```typescript title="shared.svelte.ts"
+```typescript title="state.svelte.ts"
 export const globals = $state({
-  debug: false,
-  vec1: [0, 0, 0],
-  vec2: new Vector3(0, 0, 0)
-  // etc...
+  debug: false
 })
+```
+
+```svelte title="App.svelte"
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import Scene from '$lib/Scene.svelte'
+  import { globals } from '$lib/state.svelte'
+</script>
+
+<input
+  type="checkbox"
+  name="debug"
+  id="debug"
+  bind:checked={globals.debug}
+/>
+
+<div>
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+```
+
+```svelte title="Descendant.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { globals } from '$lib/state.svelte'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial
+    wireframe={globals.debug}
+    color="red"
+  />
+</T.Mesh>
+```
+
+## Events
+
+Remember that events only bubble up to ancestors. If you've created an html
+element that covers your canvas, for example:
+
+```svelte
+<div class="relative h-screen w-screen">
+  <div class="absolute h-full w-full">
+    <Canvas>
+      <Scene />
+    </Canvas>
+  </div>
+  <div class="absolute h-full w-full">
+    <div class="h-full w-1/2 bg-blue-500/50">
+      <!-- ... -->
+    </div>
+  </div>
+</div>
+```
+
+Your `<Scene>` will not receive any mouse events because they can only bubble
+up. In this case you need to add [pointer-events:
+none;](https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events) to the
+covering element and then add `pointer-events: auto;` where it makes sense.
+
+```svelte
+<div class="relative h-screen w-screen">
+  <div class="absolute h-full w-full">
+    <Canvas>
+      <Scene />
+    </Canvas>
+  </div>
+  <div class="pointer-events-none absolute h-full w-full">
+    <div class="pointer-events-auto h-full w-1/2 bg-blue-500/50">
+      <!-- ... -->
+    </div>
+  </div>
+</div>
 ```
