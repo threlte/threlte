@@ -26,6 +26,11 @@ export const useAttach = <T extends MaybeInstance<any>>(
 
   $effect.pre(() => {
     currentRef.set(ref)
+
+    if (isInstanceOf(ref, 'Object3D')) {
+      object3D.set(ref)
+    }
+
     invalidate()
 
     if (attach) {
@@ -45,8 +50,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
         target[key] = ref
         return () => (target[key] = valueBeforeAttach)
       }
-    } else if (isInstanceOf(ref, 'Object3D')) {
-      object3D.set(ref)
+    } else if (attach !== false && isInstanceOf(ref, 'Object3D')) {
       // Add to parent Object3D
       parentObject3D.current?.add(ref)
       // Build detach function
