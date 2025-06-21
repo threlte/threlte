@@ -5,7 +5,7 @@
   import type { TProps } from './types'
   import { useAttach } from './utils/useAttach.svelte'
   import { useCamera } from './utils/useCamera.svelte'
-  import { useDispose } from './utils/useDispose'
+  import { useDispose } from './utils/useDispose.svelte'
   import { useEvents } from './utils/useEvents.svelte'
   import { useIs } from './utils/useIs'
   import { usePlugins } from './utils/usePlugins'
@@ -94,12 +94,13 @@
   )
 
   // Disposal
-  const disposal = useDispose(dispose)
-  $effect.pre(() => disposal.updateRef(internalRef))
-  $effect.pre(() => disposal.updateDispose(dispose))
+  useDispose(
+    () => internalRef,
+    () => dispose
+  )
 
   // Events
-  useEvents(propKeys, props, () => internalRef)
+  useEvents(() => internalRef, propKeys, props)
 </script>
 
 {@render children?.({ ref: internalRef })}

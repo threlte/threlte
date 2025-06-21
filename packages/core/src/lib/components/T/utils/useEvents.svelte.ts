@@ -1,8 +1,6 @@
 import type { EventDispatcher } from 'three'
 import type { MaybeInstance } from '../types'
 
-type Props = Record<string, (arg: unknown) => void>
-
 /**
  * Typeguard to check if a value is extending THREE.EventDispatcher
  * @param value
@@ -19,7 +17,11 @@ const isEventDispatcher = <T>(
   )
 }
 
-export const useEvents = <T>(propKeys: string[], props: Props, getRef: () => MaybeInstance<T>) => {
+export const useEvents = <T>(
+  getRef: () => MaybeInstance<T>,
+  propKeys: string[],
+  props: Record<string, any>
+) => {
   const ref = $derived(getRef())
 
   for (const key of propKeys) {
