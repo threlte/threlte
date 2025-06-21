@@ -4,10 +4,9 @@
 >
   import type { TProps } from './types'
   import { useAttach } from './utils/useAttach'
-  import { useCamera } from './utils/useCamera'
-  import { useCreateEvent } from './utils/useCreateEvent'
+  import { useCamera } from './utils/useCamera.svelte'
   import { useDispose } from './utils/useDispose'
-  import { useEvents } from './utils/useEvents'
+  import { useEvents } from './utils/useEvents.svelte'
   import { useIs } from './utils/useIs'
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
@@ -27,17 +26,16 @@
   }: TProps<Type> = $props()
 
   // We can't create the object in a reactive statement due to providing context
-  let internalRef = $derived(determineRef<Type>(is, args))
-
-  // Create Event
-  const createEvent = useCreateEvent<Type>(oncreate)
+  const internalRef = $derived(determineRef<Type>(is, args))
 
   // When "is" or "args" change, we need to create a new ref.
   $effect.pre(() => {
     if (ref === internalRef) return
     ref = internalRef
-    // The ref is recreated, emit the event
-    createEvent.updateRef(internalRef)
+  })
+
+  $effect(() => {
+    return oncreate?.(internalRef)
   })
 
   // Plugins are initialized here so that pluginsProps
@@ -83,10 +81,11 @@
   $effect.pre(() => attachment.updateRef(internalRef))
 
   // Camera management
-  const camera = useCamera()
-  $effect.pre(() => camera.updateRef(internalRef))
-  $effect.pre(() => camera.updateManual(manual))
-  $effect.pre(() => camera.updateMakeDefault(makeDefault))
+  useCamera(
+    () => internalRef,
+    () => manual,
+    () => makeDefault
+  )
 
   // Disposal
   const disposal = useDispose(dispose)
@@ -94,8 +93,7 @@
   $effect.pre(() => disposal.updateDispose(dispose))
 
   // Events
-  const events = useEvents(props)
-  $effect.pre(() => events.updateRef(internalRef))
+  useEvents(props, () => internalRef)
 </script>
 
 {@render children?.({ ref: internalRef })}

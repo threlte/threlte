@@ -10,7 +10,7 @@ export const usePlugins = (args: () => Parameters<Plugin>[0]) => {
   const pluginsProps: string[] = []
   const pluginsArray = Object.values(plugins)
 
-  if (pluginsArray.length) {
+  if (pluginsArray.length > 0) {
     const pluginArgs = args()
     // initalize plugins
     for (let i = 0; i < pluginsArray.length; i++) {

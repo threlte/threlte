@@ -6,71 +6,50 @@ import TComp from './T.svelte'
 import type { Props } from './types'
 import { setIs } from './utils/useIs'
 
-type Extensions = Record<string, unknown>
-
-const catalogue: Extensions = {}
+// ========== 🧠 Type Safety Infrastructure ==========
 
 /**
- * Extends the default THREE namespace and allows using custom Three.js objects with `<T>`.
- *
+ * Users can augment this interface to declare custom classes.
  * @example
- * ```svelte
- * <script>
- * 	import { extend, T } from 'threlte'
- * 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
- *
- * 	extend({ OrbitControls })
- * </script>
- *
- * <T.OrbitControls />
- * ```
+ * declare global {
+ *   namespace Threlte {
+ *     interface UserCatalogue {
+ *       OrbitControls: typeof OrbitControls
+ *     }
+ *   }
+ * }
  */
-export const extend = (extensions: Extensions) => {
+declare global {
+  namespace Threlte {
+    interface UserCatalogue {}
+  }
+}
+
+type ThreeCatalogue = {
+  [K in keyof typeof THREE]: (typeof THREE)[K]
+}
+
+type ExtendedCatalogue = ThreeCatalogue & Threlte.UserCatalogue
+
+type TComponentProxy = {
+  [K in keyof ExtendedCatalogue]: Component<Props<ExtendedCatalogue[K]>, {}, 'ref'>
+}
+
+const catalogue: Partial<Threlte.UserCatalogue> = {}
+
+export function extend<const T extends Partial<Threlte.UserCatalogue>>(extensions: T): void {
   Object.assign(catalogue, extensions)
 }
 
-/**
- * ## `<T>`
- *
- * Threlte's `<T>` component is a wrapper around Three.js objects. It is a generic component that can be used to create any Three.js object.
- *
- * @example
- *
- * ```svelte
- * <script>
- * 	import { T } from 'threlte'
- * </script>
- *
- * <T.PerspectiveCamera makeDefault />
- *
- * <T.Mesh>
- * 	<T.BoxGeometry />
- * 	<T.MeshBasicMaterial color="red" />
- * </T.Mesh>
- * ```
- */
-export const T = new Proxy(function () {}, {
-  apply(_target, _thisArg, argArray: [internal: unknown, props: { is: unknown }]) {
-    return TComp(...argArray)
-  },
-  get(_target, is: keyof typeof THREE) {
-    // Handle snippets
-    if (typeof is !== 'string') {
-      return TComp
+export const T = new Proxy(TComp, {
+  get(_target, is: string) {
+    const module = catalogue[is] || (THREE as any)[is]
+
+    if (!module) {
+      throw new Error(`No Three.js module found for "${is}". Did you forget to call extend()?`)
     }
 
-    const module = catalogue[is] || THREE[is]
-
-    if (module === undefined) {
-      throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
-    }
-
-    setIs<typeof module>(module)
-
+    setIs(module)
     return TComp
   }
-}) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
-} & {
-  [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
-} & Record<string, Component>
+}) as typeof TComp & TComponentProxy

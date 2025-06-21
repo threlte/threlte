@@ -10,7 +10,7 @@ type Props = Record<string, (arg: unknown) => void>
  */
 const isEventDispatcher = <T>(
   value: MaybeInstance<T>
-): value is MaybeInstance<T> & EventDispatcher => {
+): value is MaybeInstance<T> & EventDispatcher<Record<string, unknown>> => {
   return (
     value !== null &&
     typeof value === 'object' &&
@@ -19,14 +19,18 @@ const isEventDispatcher = <T>(
   )
 }
 
-export const useEvents = <T>(props: Props = {}) => {
+export const useEvents = <T>(props: Props, getRef: () => MaybeInstance<T>) => {
   const eventHandlerProxy = (event?: Event) => {
     if (event?.type) {
       props[`on${event.type}`]?.(event)
     }
   }
 
-  const addEventListeners = (ref: EventDispatcher<Record<string, unknown>>, props: Props) => {
+  $effect.pre(() => {
+    const ref = getRef()
+
+    if (!isEventDispatcher(ref)) return
+
     const eventNames: string[] = []
 
     for (const eventName of Object.keys(props)) {
@@ -41,14 +45,5 @@ export const useEvents = <T>(props: Props = {}) => {
         ref.removeEventListener(eventNames[i], eventHandlerProxy)
       }
     }
-  }
-
-  const updateRef = (ref: MaybeInstance<T>) => {
-    if (!isEventDispatcher(ref)) return
-    return addEventListeners(ref, props)
-  }
-
-  return {
-    updateRef
-  }
+  })
 }

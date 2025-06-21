@@ -11,13 +11,9 @@ const isClass = (input: unknown): input is AnyClass => {
   return classRegex.test(input.toString())
 }
 
-const argsIsConstructorParameters = (args: unknown): args is ConstructorParameters<AnyClass> => {
-  return Array.isArray(args)
-}
-
 export const determineRef = <Type>(is: unknown, args: unknown): MaybeInstance<Type> => {
   if (isClass(is)) {
-    if (argsIsConstructorParameters(args)) {
+    if (Array.isArray(args)) {
       return new is(...args)
     } else {
       return new is()
