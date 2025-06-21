@@ -19,7 +19,7 @@ const isEventDispatcher = <T>(
   )
 }
 
-export const useEvents = <T>(props: Props, getRef: () => MaybeInstance<T>) => {
+export const useEvents = <T>(props: Props, ref: () => MaybeInstance<T>) => {
   const eventHandlerProxy = (event?: Event) => {
     if (event?.type) {
       props[`on${event.type}`]?.(event)
@@ -27,22 +27,22 @@ export const useEvents = <T>(props: Props, getRef: () => MaybeInstance<T>) => {
   }
 
   $effect.pre(() => {
-    const ref = getRef()
+    const r = ref()
 
-    if (!isEventDispatcher(ref)) return
+    if (!isEventDispatcher(r)) return
 
     const eventNames: string[] = []
 
     for (const eventName of Object.keys(props)) {
       if (eventName.startsWith('on')) {
-        ref.addEventListener(eventName.slice(2), eventHandlerProxy)
+        r.addEventListener(eventName.slice(2), eventHandlerProxy)
         eventNames.push(eventName)
       }
     }
 
     return () => {
       for (let i = 0; i < eventNames.length; i++) {
-        ref.removeEventListener(eventNames[i], eventHandlerProxy)
+        r.removeEventListener(eventNames[i], eventHandlerProxy)
       }
     }
   })

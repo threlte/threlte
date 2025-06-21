@@ -3,7 +3,7 @@
   generics="Type"
 >
   import type { TProps } from './types'
-  import { useAttach } from './utils/useAttach'
+  import { useAttach } from './utils/useAttach.svelte'
   import { useCamera } from './utils/useCamera.svelte'
   import { useDispose } from './utils/useDispose'
   import { useEvents } from './utils/useEvents.svelte'
@@ -34,7 +34,10 @@
     ref = internalRef
   })
 
+  let calledOnce = false
   $effect(() => {
+    if (calledOnce && ref === internalRef) return
+    calledOnce = true
     return oncreate?.(internalRef)
   })
 
@@ -76,9 +79,10 @@
   })
 
   // Attachment
-  const attachment = useAttach<Type>()
-  $effect.pre(() => attachment.updateAttach(attach))
-  $effect.pre(() => attachment.updateRef(internalRef))
+  useAttach<Type>(
+    () => internalRef,
+    () => attach
+  )
 
   // Camera management
   useCamera(
