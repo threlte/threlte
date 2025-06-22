@@ -18,7 +18,7 @@ This should be placed within a Threlte `<Canvas />`.
 
 -->
 <script lang="ts">
-  import { onDestroy, onMount, type Snippet } from 'svelte'
+  import { onMount, type Snippet } from 'svelte'
   import { useThrelte, watch } from '@threlte/core'
   import type { XRSessionEvent } from '../types'
   import {
@@ -135,10 +135,6 @@ This should be placed within a Threlte `<Canvas />`.
     currentSession.addEventListener('inputsourceschange', handleInputSourcesChange)
     currentSession.addEventListener('frameratechange', handleFramerateChange)
 
-    xr.setFoveation(foveation)
-
-    updateTargetFrameRate(frameRate)
-
     return () => {
       currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
       currentSession.removeEventListener('inputsourceschange', handleInputSourcesChange)
@@ -166,17 +162,22 @@ This should be placed within a Threlte `<Canvas />`.
       xr.enabled = false
       xr.removeEventListener('sessionstart', handleSessionStart)
       xr.removeEventListener('sessionend', handleSessionEnd)
-    }
-  })
-  onDestroy(() => {
-    // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
-    if (session.current) {
-      session.current.end()
+
+      // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
+      if (session.current) {
+        session.current.end()
+      }
     }
   })
 
-  $effect.pre(() => updateTargetFrameRate(frameRate))
-  $effect.pre(() => xr.setFoveation(foveation))
+  $effect.pre(() => {
+    updateTargetFrameRate(frameRate)
+  })
+
+  $effect.pre(() => {
+    xr.setFoveation(foveation)
+  })
+
   $effect.pre(() => {
     xr.setReferenceSpaceType(referenceSpace)
     $referenceSpaceType = referenceSpace

@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { useHeadset } from '../hooks/useHeadset'
-  import ScenePortal from './internal/ScenePortal.svelte'
 
+  const { scene } = useThrelte()
   const headset = useHeadset()
 </script>
 
-<ScenePortal>
-  <T is={headset}>
-    <slot />
-  </T>
-</ScenePortal>
+<T
+  is={headset}
+  attach={scene}
+>
+  <slot />
+</T>

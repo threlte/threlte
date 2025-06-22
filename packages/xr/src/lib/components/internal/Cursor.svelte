@@ -8,7 +8,7 @@
     thickness?: number
   }
 
-  let { color = new Color('white'), size = 0.03, thickness = 0.035 }: Props = $props()
+  const { color = new Color('white'), size = 0.03, thickness = 0.035 }: Props = $props()
 
   const vertexShader = `
     uniform mat4 projectionMatrix;
@@ -52,6 +52,7 @@
   $effect.pre(() => {
     uniforms.thickness.value = thickness
   })
+
   $effect.pre(() => {
     uniforms.color.value = color
   })

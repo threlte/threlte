@@ -1,7 +1,17 @@
-<script lang="ts">
-  import { spring } from 'svelte/motion'
+<script
+  module
+  lang="ts"
+>
   import { Group, Matrix3, Vector3 } from 'three'
-  import { T, useTask } from '@threlte/core'
+
+  const vec3 = new Vector3()
+  const normalMatrix = new Matrix3()
+  const worldNormal = new Vector3()
+</script>
+
+<script lang="ts">
+  import { Spring } from 'svelte/motion'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { teleportIntersection } from '../../internal/stores'
   import Cursor from './Cursor.svelte'
   import type { Snippet } from 'svelte'
@@ -11,14 +21,11 @@
     children?: Snippet
   }
 
-  let { handedness, children }: Props = $props()
+  const { handedness, children }: Props = $props()
 
+  const { scene } = useThrelte()
   const ref = new Group()
-  const vec3 = new Vector3()
-  const normalMatrix = new Matrix3()
-  const worldNormal = new Vector3()
-
-  let intersection = $derived(teleportIntersection[handedness])
+  const intersection = $derived(teleportIntersection[handedness])
 
   const { start, stop } = useTask(
     () => {
@@ -38,7 +45,7 @@
     }
   )
 
-  const size = spring(0.1, { stiffness: 0.2 })
+  const size = new Spring(0.1, { stiffness: 0.2 })
 
   $effect.pre(() => {
     if ($intersection === undefined) {
@@ -54,13 +61,14 @@
 
 <T
   is={ref}
+  attach={scene}
   visible={$intersection !== undefined}
 >
   {#if children}
     {@render children()}
   {:else}
     <Cursor
-      size={$size}
+      size={size.current}
       thickness={0.015}
     />
   {/if}
