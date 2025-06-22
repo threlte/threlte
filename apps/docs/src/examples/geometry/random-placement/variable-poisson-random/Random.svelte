@@ -15,17 +15,17 @@
 
   let sampler = new Sampler(pointsMatrix, { width, height }, undefined, Math.random)
   let points: Point[] = sampler.generatePoints()
-  let smallObjects = points
+  let smallObjects: [number, number, number, number][] = points
     .filter((obj) => obj.desription == 'small')
     .map((value) => {
       return [value.x, value.y, Math.random(), Math.random()]
     })
-  let mediumObjects = points
+  let mediumObjects: [number, number, number, number][] = points
     .filter((obj) => obj.desription == 'medium')
     .map((value) => {
       return [value.x, value.y, Math.random(), Math.random()]
     })
-  let largeObjects = points
+  let largeObjects: [number, number, number, number][] = points
     .filter((obj) => obj.desription == 'large')
     .map((value) => {
       return [value.x, value.y, Math.random(), Math.random()]
