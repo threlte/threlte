@@ -164,9 +164,7 @@ This should be placed within a Threlte `<Canvas />`.
       xr.removeEventListener('sessionend', handleSessionEnd)
 
       // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
-      if (session.current) {
-        session.current.end()
-      }
+      session.current?.end()
     }
   })
 

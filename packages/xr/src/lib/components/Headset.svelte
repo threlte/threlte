@@ -1,6 +1,14 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
+  import type { Group } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { useHeadset } from '../hooks/useHeadset'
+
+  interface Props {
+    children?: Snippet<[{ ref: Group }]>
+  }
+
+  const { children }: Props = $props()
 
   const { scene } = useThrelte()
   const headset = useHeadset()
@@ -10,5 +18,5 @@
   is={headset}
   attach={scene}
 >
-  <slot />
+  {@render children?.({ ref: headset })}
 </T>
