@@ -29,7 +29,9 @@
 
   const { start, stop } = useTask(
     () => {
-      if (intersection.current === undefined) return
+      if (intersection.current === undefined) {
+        return
+      }
 
       const { point, face, object } = intersection.current
       ref.position.lerp(point, 0.4)
