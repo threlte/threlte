@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.0.8
+
+### Patch Changes
+
+- 05a642f: Simplify internal components and replace deprecated svelte APIs
+
 ## 1.0.7
 
 ### Patch Changes
