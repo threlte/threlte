@@ -33,7 +33,7 @@ const catalogue: Extensions = {}
  * <T.OrbitControls />
  * ```
  */
-export const extend = (extensions: Extensions): void => {
+export const extend = (extensions: Extensions) => {
   Object.assign(catalogue, extensions)
 }
 
@@ -67,7 +67,7 @@ export const T = new Proxy(TComp, {
     const module = catalogue[is] || THREE[is]
 
     if (module === undefined) {
-      throw new Error(`No Three.js module found for "${is}". Did you forget to call extend()?`)
+      throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
     }
 
     setIs<typeof module>(module)
