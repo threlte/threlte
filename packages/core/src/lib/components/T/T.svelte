@@ -34,6 +34,8 @@
     ref = internalRef
   })
 
+  // oncreate needs to be called in an $effect after all props
+  // have been set
   let calledOnMount = false
   $effect(() => {
     if (calledOnMount && ref === internalRef) return
