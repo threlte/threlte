@@ -32,40 +32,74 @@ export const useAttach = <T extends MaybeInstance<any>>(
     }
 
     invalidate()
+  })
 
-    if (attach) {
-      // Custom attach function
-      if (typeof attach === 'function') {
-        return attach({
-          ref: ref as T,
-          parent: parent.current,
-          parentObject3D: parentObject3D.current
-        })
+  $effect.pre(() => {
+    if (attach === false) {
+      return
+    }
 
-        // Attach to parent Object3D
-      } else if (isInstanceOf(attach, 'Object3D') && isInstanceOf(ref, 'Object3D')) {
-        attach?.add(ref)
-        return () => attach?.remove(ref)
+    invalidate()
 
-        // Attach to parent prop
-      } else if (typeof attach === 'string') {
-        const { target, key } = resolvePropertyPath(parent.current, attach)
-        const valueBeforeAttach = target[key]
-        target[key] = ref
-        return () => (target[key] = valueBeforeAttach)
-      }
-
-      // Auto-attach to parent Object3D
-    } else if (attach !== false && isInstanceOf(ref, 'Object3D')) {
+    // Auto-attach to parent Object3D
+    if (attach === undefined && isInstanceOf(ref, 'Object3D')) {
       parentObject3D.current?.add(ref)
-      return () => parentObject3D.current?.remove(ref)
+      return () => {
+        invalidate()
+        parentObject3D.current?.remove(ref)
+      }
+    }
 
-      // Auto-attach to parent material or geometry
-    } else if (isObject(parent.current)) {
+    // Auto-attach to parent material or geometry
+    if (attach === undefined && isObject(parent.current)) {
+      const p = parent.current
       if (isInstanceOf(ref, 'Material')) {
-        parent.current.material = ref
+        const originalMaterial = p.material
+        p.material = ref
+        return () => {
+          invalidate()
+          p.material = originalMaterial
+        }
       } else if (isInstanceOf(ref, 'BufferGeometry')) {
-        parent.current.geometry = ref
+        const originalGeometry = p.geometry
+        p.geometry = ref
+        return () => {
+          invalidate()
+          p.geometry = originalGeometry
+        }
+      }
+    }
+
+    // Custom attach function
+    if (typeof attach === 'function') {
+      const cleanup = attach({
+        ref: ref as T,
+        parent: parent.current,
+        parentObject3D: parentObject3D.current
+      })
+      return () => {
+        invalidate()
+        cleanup?.()
+      }
+    }
+
+    // Attach to parent prop
+    if (typeof attach === 'string') {
+      const { target, key } = resolvePropertyPath(parent.current, attach)
+      const valueBeforeAttach = target[key]
+      target[key] = ref
+      return () => {
+        invalidate()
+        target[key] = valueBeforeAttach
+      }
+    }
+
+    // Attach to parent Object3D
+    if (isInstanceOf(attach, 'Object3D') && isInstanceOf(ref, 'Object3D')) {
+      attach.add(ref)
+      return () => {
+        invalidate()
+        attach.remove(ref)
       }
     }
   })
