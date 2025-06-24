@@ -35,13 +35,9 @@ export const useAttach = <T extends MaybeInstance<any>>(
   })
 
   $effect.pre(() => {
-    if (attach === false) {
-      return
-    }
-
     invalidate()
 
-    // Auto-attach to parent Object3D
+    // Most common: auto-attach to parent Object3D
     if (attach === undefined && isInstanceOf(ref, 'Object3D')) {
       parentObject3D.current?.add(ref)
       return () => {
@@ -67,6 +63,13 @@ export const useAttach = <T extends MaybeInstance<any>>(
           invalidate()
           p.geometry = originalGeometry
         }
+      }
+    }
+
+    // Explicitly do not attach
+    if (attach === false) {
+      return () => {
+        invalidate()
       }
     }
 
