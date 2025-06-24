@@ -102,5 +102,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
         attach.remove(ref)
       }
     }
+
+    return
   })
 }
