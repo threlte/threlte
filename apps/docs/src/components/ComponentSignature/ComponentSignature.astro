@@ -1,7 +1,6 @@
 ---
 import type { TypeOf } from 'astro/zod'
 import type { componentSignature } from '../../content/config'
-import { c } from '../../lib/classes'
 import { getShiki } from '../../lib/highlighter'
 
 interface Props {
@@ -99,10 +98,10 @@ const id = Astro.props.idOverride ?? 'component-signature'
                 <h3 class="mt-0">Props</h3>
 
                 <div
-                  class={c(
+                  class:list={[
                     'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
                     propsGridCols
-                  )}
+                  ]}
                 >
                   <div class="font-bold">name</div>
 
@@ -186,10 +185,10 @@ const id = Astro.props.idOverride ?? 'component-signature'
                 <h3 class="mt-0">Events</h3>
 
                 <div
-                  class={c(
+                  class:list={[
                     'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
                     anyEventHasDescription ? 'grid-cols-[auto_auto_auto]' : 'grid-cols-[auto_auto]'
-                  )}
+                  ]}
                 >
                   <div class="font-bold">name</div>
 
@@ -301,10 +300,10 @@ const id = Astro.props.idOverride ?? 'component-signature'
                 <h3 class="mt-0">Exports</h3>
 
                 <div
-                  class={c(
+                  class:list={[
                     'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
                     propsGridCols
-                  )}
+                  ]}
                 >
                   <div class="font-bold">name</div>
 

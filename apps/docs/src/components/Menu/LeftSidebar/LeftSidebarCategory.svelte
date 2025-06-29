@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import Details from '../Details.svelte'
 
-  export let category: LeftSidebarMenuCategory
-  export let activeUrlPathName: string
+  interface Props {
+    category: LeftSidebarMenuCategory
+    activeUrlPathName: string
+  }
+
+  let { category, activeUrlPathName }: Props = $props()
 
   let open = true
 
@@ -20,9 +23,9 @@
   {open}
   id="sidebar-category-{category.title}"
 >
-  <svelte:fragment slot="summary">
+  {#snippet summary()}
     {category.title}
-  </svelte:fragment>
+  {/snippet}
 
   <ul class="text-faded my-2">
     {#each category.menuItems as item}
@@ -35,12 +38,12 @@
       {:else}
         <li class="last:mb-0">
           <a
-            class={c(
+            class={[
               'group relative block border-l-2 py-1 pl-4 pr-4 hover:text-white',
               isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`)
                 ? 'border-orange font-bold text-orange'
                 : 'border-white/20 hover:border-white'
-            )}
+            ]}
             href={`${category.urlPrefix}/${item.slug}`}
           >
             {item.title}
