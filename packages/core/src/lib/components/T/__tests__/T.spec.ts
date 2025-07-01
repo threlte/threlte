@@ -192,6 +192,22 @@ describe('<T> dispose', () => {
     await tick()
     expect(onDispose).toHaveBeenCalledTimes(0)
   })
+
+  it('disposes all objects passed to "is" on unmount', async () => {
+    const onDispose = vi.fn()
+    const material1 = new MeshBasicMaterial()
+    material1.addEventListener('dispose', onDispose)
+
+    const { rerender, unmount } = render(T, { is: material1 })
+
+    const material2 = new MeshBasicMaterial()
+    material2.addEventListener('dispose', onDispose)
+
+    await rerender({ is: material2 })
+    unmount()
+    await tick()
+    expect(onDispose).toHaveBeenCalledTimes(2)
+  })
 })
 
 /**
@@ -266,6 +282,48 @@ describe('<T> props', () => {
     expect(group.visible).toBe(true)
     expect(group.position.toArray()).toStrictEqual([1, 2, 3])
   })
+
+  it('updates a prop initially set to undefined', async () => {
+    const group = new Group()
+    const { rerender } = render(T, {
+      props: { is: group, name: undefined, castShadow: undefined }
+    })
+
+    expect(group.name).toBe(undefined)
+    expect(group.castShadow).toBe(undefined)
+    await rerender({ name: 'group', castShadow: true })
+    expect(group.name).toBe('group')
+    expect(group.castShadow).toBe(true)
+  })
+
+  /**
+   * @todo(mp) Strange behavior: why do we call updateProjectionMatrix only for non-manual
+   * cameras in `useProps.ts`? Manual cameras need updates, non-manual cameras are already updated
+   * in `useCamera.ts`.
+   */
+  it('does not update the projection matrix for a manual camera', async () => {
+    const reference = new PerspectiveCamera()
+    const { rerender, scene } = render(T.PerspectiveCamera, {
+      props: { aspect: 1, manual: true }
+    })
+
+    const camera = scene.getObjectByProperty('type', 'PerspectiveCamera') as PerspectiveCamera
+    expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
+
+    await rerender({ aspect: 2 })
+    expect(camera.aspect).toBe(2)
+
+    reference.aspect = 2
+    reference.updateProjectionMatrix()
+
+    expect(camera.projectionMatrix.toArray()).not.toStrictEqual(
+      reference.projectionMatrix.toArray()
+    )
+
+    camera.updateProjectionMatrix()
+
+    expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
+  })
 })
 
 /**
@@ -294,13 +352,13 @@ describe('<T> plugins', () => {
         name: 'child'
       },
 
-      /** @todo This is strange, should these only exist on cameras? */
+      /** @todo(mp) Should these two only exist on cameras components? */
       makeDefault: false,
       manual: false
     })
 
     /**
-     * @todo This is strange, should this be called for
+     * @todo(mp) This is strange, should this be called for
      * every component even though this is just for "lookat" props?
      *
      * I would expect it to be called once.
