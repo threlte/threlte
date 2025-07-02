@@ -1,7 +1,8 @@
-import { BufferGeometry, Group, Mesh, MeshBasicMaterial } from 'three'
-import { describe, it, expect } from 'vitest'
+import { BufferGeometry, Group, Mesh, MeshBasicMaterial, PerspectiveCamera } from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { T } from '../T'
+import { extend, T } from '../T'
 
 describe('<T>', () => {
   it('creates a Three.js class instance from a class "is" argument', () => {
@@ -31,5 +32,16 @@ describe('<T>', () => {
     const mesh = scene.getObjectByProperty('type', 'Mesh') as Mesh
     expect(mesh.geometry).toBe(geometry)
     expect(mesh.material).toBe(material)
+  })
+
+  it('extends the Three.js catalogue', () => {
+    extend({ OrbitControls })
+
+    const oncreate = vi.fn()
+    render(T.OrbitControls, {
+      props: { oncreate, args: [new PerspectiveCamera(), document.createElement('div')] }
+    })
+
+    expect(oncreate).toHaveBeenCalledOnce()
   })
 })
