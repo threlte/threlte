@@ -12,6 +12,8 @@
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
     "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
@@ -20,6 +22,7 @@
     "@sveltejs/kit": "catalog:",
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@threlte/test": "^1.0.0",
     "@types/bun": "^1.2.12",
     "@types/node": "catalog:",
     "@types/three": "catalog:",
@@ -27,6 +30,7 @@
     "eslint": "catalog:",
     "eslint-plugin-svelte": "catalog:",
     "globals": "catalog:",
+    "happy-dom": "^18.0.1",
     "prettier": "catalog:",
     "prettier-plugin-svelte": "catalog:",
     "publint": "catalog:",
@@ -40,7 +44,8 @@
     "type-fest": "catalog:",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
-    "vite": "catalog:"
+    "vite": "catalog:",
+    "vitest": "^2.1.5"
   },
   "dependencies": {
     "mitt": "^3.0.1"

@@ -352,6 +352,9 @@ importers:
       '@sveltejs/vite-plugin-svelte':
         specifier: 'catalog:'
         version: 4.0.0(svelte@5.26.2)(vite@5.4.9(@types/node@20.12.7)(sass@1.77.7)(terser@5.37.0))
+      '@threlte/test':
+        specifier: ^1.0.0
+        version: 1.0.0(@threlte/core@packages+core)(@threlte/extras@packages+extras)(svelte@5.26.2)
       '@types/bun':
         specifier: ^1.2.12
         version: 1.2.12
@@ -373,6 +376,9 @@ importers:
       globals:
         specifier: 'catalog:'
         version: 16.1.0
+      happy-dom:
+        specifier: ^18.0.1
+        version: 18.0.1
       prettier:
         specifier: 'catalog:'
         version: 3.3.2
@@ -415,6 +421,9 @@ importers:
       vite:
         specifier: 'catalog:'
         version: 5.4.9(@types/node@20.12.7)(sass@1.77.7)(terser@5.37.0)
+      vitest:
+        specifier: ^2.1.5
+        version: 2.1.5(@types/node@20.12.7)(happy-dom@18.0.1)(jsdom@20.0.3)(sass@1.77.7)(terser@5.37.0)
 
   packages/extras:
     dependencies:
@@ -895,7 +904,7 @@ importers:
         version: 0.8.6(rollup@4.24.0)(vite@5.4.9(@types/node@20.12.7)(sass@1.77.7)(terser@5.37.0))
       vitest:
         specifier: ^2.1.5
-        version: 2.1.5(@types/node@20.12.7)(jsdom@20.0.3)(sass@1.77.7)(terser@5.37.0)
+        version: 2.1.5(@types/node@20.12.7)(happy-dom@18.0.1)(jsdom@20.0.3)(sass@1.77.7)(terser@5.37.0)
 
   packages/theatre:
     dependencies:
@@ -2882,6 +2891,13 @@ packages:
     peerDependencies:
       three: '>=0.170.0'
 
+  '@threlte/test@1.0.0':
+    resolution: {integrity: sha512-4MJL42dPAfxqYwQFXn+hjVgpWTAZeTgU2pDFsW18RwUB6cE7TSqA/w4usH2ITCK2qgeTpLLvb22W+fR0S4EY+w==}
+    peerDependencies:
+      '@threlte/core': '>=8'
+      '@threlte/extras': '>=9'
+      svelte: '>=5'
+
   '@tootallnate/once@2.0.0':
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -3040,6 +3056,9 @@ packages:
 
   '@types/webxr@0.5.22':
     resolution: {integrity: sha512-Vr6Stjv5jPRqH690f5I5GLjVk8GSsoQSYJ2FVd/3jJF7KaqfwPi3ehfBS96mlQ2kPCwZaX6U0rG2+NGHBKkA/A==}
+
+  '@types/whatwg-mimetype@3.0.2':
+    resolution: {integrity: sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA==}
 
   '@types/wrap-ansi@3.0.0':
     resolution: {integrity: sha512-ltIpx+kM7g/MLRZfkbL7EsCEjfzCcScLpkg37eXEtx5kmrAKBkTJwd1GIAjDSL8wTpM6Hzn5YO4pSb91BEwu1g==}
@@ -4820,6 +4839,10 @@ packages:
   gray-matter@4.0.3:
     resolution: {integrity: sha512-5v6yZd4JK3eMI3FqqCouswVqwugaA9r4dNZB1wwcmrD02QkV5H0y7XBQW8QwQqEaZY1pM9aqORSORhJRdNK44Q==}
     engines: {node: '>=6.0'}
+
+  happy-dom@18.0.1:
+    resolution: {integrity: sha512-qn+rKOW7KWpVTtgIUi6RVmTBZJSe2k0Db0vh1f7CWrWclkkc7/Q+FrOfkZIb2eiErLyqu5AXEzE7XthO9JVxRA==}
+    engines: {node: '>=20.0.0'}
 
   har-schema@2.0.0:
     resolution: {integrity: sha512-Oqluz6zhGX8cyRaTQlFMPw80bSJVG2x/cFb8ZPhUILGgHka9SsokCCOQgpveePerqidZOrT14ipqfJb7ILcW5Q==}
@@ -10716,6 +10739,12 @@ snapshots:
     transitivePeerDependencies:
       - '@types/three'
 
+  '@threlte/test@1.0.0(@threlte/core@packages+core)(@threlte/extras@packages+extras)(svelte@5.26.2)':
+    dependencies:
+      '@threlte/core': link:packages/core
+      '@threlte/extras': link:packages/extras
+      svelte: 5.26.2
+
   '@tootallnate/once@2.0.0': {}
 
   '@tsconfig/node10@1.0.9':
@@ -10876,6 +10905,8 @@ snapshots:
   '@types/unist@3.0.0': {}
 
   '@types/webxr@0.5.22': {}
+
+  '@types/whatwg-mimetype@3.0.2': {}
 
   '@types/wrap-ansi@3.0.0': {}
 
@@ -13038,6 +13069,12 @@ snapshots:
       kind-of: 6.0.3
       section-matter: 1.0.0
       strip-bom-string: 1.0.0
+
+  happy-dom@18.0.1:
+    dependencies:
+      '@types/node': 20.12.7
+      '@types/whatwg-mimetype': 3.0.2
+      whatwg-mimetype: 3.0.0
 
   har-schema@2.0.0: {}
 
@@ -17326,7 +17363,7 @@ snapshots:
     optionalDependencies:
       vite: 5.4.9(@types/node@20.12.7)(sass@1.77.7)(terser@5.37.0)
 
-  vitest@2.1.5(@types/node@20.12.7)(jsdom@20.0.3)(sass@1.77.7)(terser@5.37.0):
+  vitest@2.1.5(@types/node@20.12.7)(happy-dom@18.0.1)(jsdom@20.0.3)(sass@1.77.7)(terser@5.37.0):
     dependencies:
       '@vitest/expect': 2.1.5
       '@vitest/mocker': 2.1.5(vite@5.4.9(@types/node@20.12.7)(sass@1.77.7)(terser@5.37.0))
@@ -17350,6 +17387,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 20.12.7
+      happy-dom: 18.0.1
       jsdom: 20.0.3
     transitivePeerDependencies:
       - less
