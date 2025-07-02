@@ -17,7 +17,7 @@ describe('<T> attach', () => {
     expect(group.parent).toBeFalsy()
   })
 
-  it('is not added if "attach"=false', () => {
+  it('does not attach if "attach"=false', () => {
     const group = new Group()
 
     const { scene } = render(T, { props: { is: group, attach: false } })
@@ -68,6 +68,9 @@ describe('<T> attach', () => {
     }
   })
 
+  /**
+   * @todo(mp) Detaching does not re-attach original geometry and material
+   */
   it('auto-attaches a child Geometry and Material', () => {
     const { scene } = render(Scene)
 
