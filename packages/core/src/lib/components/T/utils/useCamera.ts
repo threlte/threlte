@@ -18,8 +18,13 @@ export const useCamera = () => {
 
   watch([currentRef, makeDefault], ([ref, makeDefault]) => {
     if (!ref || !makeDefault) return
+    const lastCamera = camera.current
     camera.set(ref)
     invalidate()
+    return () => {
+      camera.set(lastCamera)
+      invalidate()
+    }
   })
 
   watch([currentRef, manual, size], ([ref, manual, size]) => {
