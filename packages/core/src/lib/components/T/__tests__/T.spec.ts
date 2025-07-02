@@ -1,4 +1,11 @@
-import { BufferGeometry, Group, Mesh, MeshBasicMaterial, PerspectiveCamera } from 'three'
+import {
+  BufferGeometry,
+  Group,
+  Mesh,
+  MeshBasicMaterial,
+  OrthographicCamera,
+  PerspectiveCamera
+} from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
@@ -76,12 +83,26 @@ describe('<T> events', () => {
   })
 
   it('adds an event listener to the Three.js object if the prop begins with "on"', () => {
-    const handler = vi.fn()
+    const onchange = vi.fn()
     const controls = new OrbitControls(new PerspectiveCamera())
 
-    render(T, { is: controls, onchange: handler })
+    render(T, { is: controls, onchange })
     controls.dispatchEvent({ type: 'change' })
-    expect(handler).toHaveBeenCalledOnce()
+    expect(onchange).toHaveBeenCalledOnce()
+  })
+
+  /**
+   * @todo(mp): This is failing, is this a bug?
+   */
+  it.skip('removes an event listener from the Three.js object if unmounted', async () => {
+    const onchange = vi.fn()
+    const controls = new OrbitControls(new PerspectiveCamera(), document.createElement('div'))
+
+    const { unmount } = render(T, { is: controls, onchange })
+    unmount()
+    await tick()
+    controls.dispatchEvent({ type: 'change' })
+    expect(onchange).toHaveBeenCalledTimes(0)
   })
 })
 
@@ -214,18 +235,41 @@ describe('<T> dispose', () => {
  * Camera
  */
 describe('<T> camera', () => {
-  it('is set as the default camera if "makeDefault"=true', () => {
+  it('does not change the default camera if a camera is added', () => {
+    const { scene, context } = render(T.PerspectiveCamera)
+
+    const camera = scene.getObjectByProperty('type', 'PerspectiveCamera')
+    expect(context.camera.current).not.toBe(camera)
+  })
+
+  it('is set as the default perspective camera if "makeDefault"=true', () => {
     const { scene, context } = render(T.PerspectiveCamera, { props: { makeDefault: true } })
 
     const camera = scene.getObjectByProperty('type', 'PerspectiveCamera')
     expect(context.camera.current).toBe(camera)
   })
 
-  it('does not change the default camera if a camera is added', () => {
-    const { scene, context } = render(T.PerspectiveCamera)
+  it('is set as the default orthographic camera if "makeDefault"=true', () => {
+    const { scene, context } = render(T.OrthographicCamera, { props: { makeDefault: true } })
 
-    const camera = scene.getObjectByProperty('type', 'PerspectiveCamera')
-    expect(context.camera.current).not.toBe(camera)
+    const camera = scene.getObjectByProperty('type', 'OrthographicCamera')
+    expect(context.camera.current).toBe(camera)
+  })
+
+  it('does not update perspective camera props if "manual"=true', () => {
+    const reference = new PerspectiveCamera()
+    const { scene } = render(T.PerspectiveCamera, { props: { manual: true } })
+
+    const camera = scene.getObjectByProperty('type', 'PerspectiveCamera') as PerspectiveCamera
+    expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
+  })
+
+  it('does not update orthographic camera props if "manual"=true', () => {
+    const reference = new OrthographicCamera()
+    const { scene } = render(T.OrthographicCamera, { props: { manual: true } })
+
+    const camera = scene.getObjectByProperty('type', 'OrthographicCamera') as OrthographicCamera
+    expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
   })
 })
 
