@@ -47,15 +47,25 @@ describe('<T> attach', () => {
   })
 
   it('auto-attaches and detaches a child Object3D', async () => {
-    const { scene, rerender } = render(Scene)
+    {
+      const { scene, rerender } = render(Scene)
 
-    const parent = scene.getObjectByName('parent')
-    const child = scene.getObjectByName('child')
-    expect(child?.parent).toBe(parent)
+      const parent = scene.getObjectByName('parent')
+      const child = scene.getObjectByName('child')
+      expect(child?.parent).toBe(parent)
 
-    await rerender({ attached: false })
+      await rerender({ attached: false })
 
-    expect(child?.parent).toBeFalsy()
+      expect(child?.parent).toBeFalsy()
+    }
+
+    {
+      const { scene, unmount } = render(Scene)
+
+      const child = scene.getObjectByName('child')
+      unmount()
+      expect(child?.parent).toBeFalsy()
+    }
   })
 
   it('auto-attaches a child Geometry and Material', () => {
