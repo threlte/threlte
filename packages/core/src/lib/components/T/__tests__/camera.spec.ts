@@ -20,9 +20,6 @@ describe('<T> camera', () => {
     }
   })
 
-  /**
-   * @todo(mp) This is failing because the default camera is changed when "makeDefault"=false or on unmount
-   */
   it('changes the default camera based on the "makeDefault" prop', async () => {
     {
       const { scene, context, rerender } = render(T.PerspectiveCamera, {

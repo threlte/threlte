@@ -68,9 +68,6 @@ describe('<T> attach', () => {
     }
   })
 
-  /**
-   * @todo(mp) Detaching does not re-attach original geometry and material
-   */
   it('auto-attaches and detaches a child Geometry and Material', () => {
     const { scene, unmount } = render(Scene)
 
