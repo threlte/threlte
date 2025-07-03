@@ -2,6 +2,8 @@
   lang="ts"
   generics="Type"
 >
+  import { isInstanceOf } from '../../utilities'
+
   import type { TProps } from './types'
   import { useAttach } from './utils/useAttach.svelte'
   import { useCamera } from './utils/useCamera.svelte'
@@ -74,11 +76,18 @@
   )
 
   // Camera management
-  useCamera(
-    () => internalRef,
-    () => manual,
-    () => makeDefault
-  )
+  $effect.pre(() => {
+    if (
+      isInstanceOf(internalRef, 'PerspectiveCamera') ||
+      isInstanceOf(internalRef, 'OrthographicCamera')
+    ) {
+      useCamera(
+        () => internalRef,
+        () => manual,
+        () => makeDefault
+      )
+    }
+  })
 
   // Disposal
   useDispose(
