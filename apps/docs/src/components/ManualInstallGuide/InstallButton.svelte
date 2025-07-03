@@ -1,17 +1,24 @@
 <script lang="ts">
-  import { c } from '../../lib/classes'
+  interface Props {
+    active?: boolean
+    passivelyActive?: boolean
+    class?: string
+    children?: import('svelte').Snippet
+    [key: string]: any
+  }
 
-  export let active = false
-  export let passivelyActive = false
-
-  let _class = ''
-  export { _class as class }
+  let {
+    active = false,
+    passivelyActive = false,
+    class: _class = '',
+    children,
+    ...rest
+  }: Props = $props()
 </script>
 
 <button
-  {...$$restProps}
-  on:click
-  class={c(
+  {...rest}
+  class={[
     'group flex flex-row items-center justify-start gap-2 rounded-md border border-white/20 px-3 py-1 pr-4',
     active
       ? 'bg-green-500/70 text-white'
@@ -19,7 +26,7 @@
         ? 'bg-green-500/20 text-white'
         : 'bg-blue-900 hover:bg-blue-700/30',
     _class
-  )}
+  ]}
 >
   {#if active || passivelyActive}
     <svg
@@ -51,11 +58,11 @@
     >
   {/if}
   <code
-    class={c(
+    class={[
       'mx-0 bg-transparent px-0',
       active || passivelyActive ? 'text-white' : 'text-faded group-hover:text-white'
-    )}
+    ]}
   >
-    <slot />
+    {@render children?.()}
   </code>
 </button>

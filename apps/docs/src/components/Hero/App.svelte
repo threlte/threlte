@@ -15,19 +15,23 @@
     }
     materials: {}
   }
-  const cube = useGltf<CubeGltf>('/cube.glb')
-
-  $: if ($cube) cubeGeometry.set($cube.nodes.Cube.geometry)
-
-  const env = useTexture('/oil-on-water.png')
 
   const { scene } = useThrelte()
-  $: if ($env) {
-    $env.mapping = EquirectangularReflectionMapping
-    $env.colorSpace = SRGBColorSpace
-    scene.environment = $env
+  const cube = useGltf<CubeGltf>('/cube.glb')
+  const env = useTexture('/oil-on-water.png', {
+    transform(texture) {
+      texture.mapping = EquirectangularReflectionMapping
+      texture.colorSpace = SRGBColorSpace
+    }
+  })
+
+  cube.then((gltf) => {
+    cubeGeometry.set(gltf.nodes.Cube.geometry)
+  })
+  env.then((texture) => {
+    scene.environment = texture
     scene.environmentIntensity = 10
-  }
+  })
 </script>
 
 <ScrollSheet
