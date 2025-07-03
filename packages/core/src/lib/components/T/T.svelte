@@ -89,17 +89,21 @@
   // Events
   useEvents(() => internalRef, propKeys, props)
 
-  // oncreate needs to be called after all other props
-  // have been set so tha
   /**
-   *
+   * oncreate needs to be called after all other hooks
+   * so that props will have been set once ref is passed
+   * to this callback
    */
   $effect.pre(() => {
     if (ref === internalRef) return
     return oncreate?.(internalRef)
   })
 
-  // When "is" or "args" change, we need to create a new ref.
+  /**
+   * When "is" or "args" change, we need to create a new ref.
+   *
+   * This must be called after the oncreate effect so that ref !== internalref
+   */
   $effect.pre(() => {
     if (ref === internalRef) return
     ref = internalRef
