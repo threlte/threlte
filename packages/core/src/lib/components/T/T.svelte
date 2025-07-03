@@ -28,21 +28,6 @@
   // We can't create the object in a reactive statement due to providing context
   const internalRef = $derived(determineRef<Type>(is, args))
 
-  // When "is" or "args" change, we need to create a new ref.
-  $effect.pre(() => {
-    if (ref === internalRef) return
-    ref = internalRef
-  })
-
-  // oncreate needs to be called in an $effect after all props
-  // have been set
-  let calledOnMount = false
-  $effect(() => {
-    if (calledOnMount && ref === internalRef) return
-    calledOnMount = true
-    return oncreate?.(internalRef)
-  })
-
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
   const plugins = usePlugins(() => ({
@@ -103,6 +88,22 @@
 
   // Events
   useEvents(() => internalRef, propKeys, props)
+
+  // oncreate needs to be called after all other props
+  // have been set so tha
+  /**
+   *
+   */
+  $effect.pre(() => {
+    if (ref === internalRef) return
+    return oncreate?.(internalRef)
+  })
+
+  // When "is" or "args" change, we need to create a new ref.
+  $effect.pre(() => {
+    if (ref === internalRef) return
+    ref = internalRef
+  })
 </script>
 
 {@render children?.({ ref: internalRef })}

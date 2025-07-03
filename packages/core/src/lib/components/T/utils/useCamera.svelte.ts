@@ -23,8 +23,15 @@ export const useCamera = <T>(
       return
     }
 
+    const lastCamera = defaultCamera.current
+
     defaultCamera.set(camera)
     invalidate()
+
+    return () => {
+      defaultCamera.set(lastCamera)
+      invalidate()
+    }
   })
 
   $effect.pre(() => {

@@ -49,7 +49,7 @@ describe('<T> events', () => {
   /**
    * @todo(mp): This is failing, is this a bug?
    */
-  it.skip('removes an event listener from the Three.js object if unmounted', async () => {
+  it('removes an event listener from the Three.js object if unmounted', async () => {
     const onchange = vi.fn()
     const controls = new OrbitControls(new PerspectiveCamera(), document.createElement('div'))
 

@@ -6,7 +6,7 @@ import TComp from './T.svelte'
 import type { Props } from './types'
 import { setIs } from './utils/useIs'
 
-type Extensions = Record<string, unknown>
+type Extensions = Record<string, Component>
 
 type ThreeCatalogue = {
   [K in keyof typeof THREE]: (typeof THREE)[K]
@@ -33,7 +33,7 @@ const catalogue: Extensions = {}
  * <T.OrbitControls />
  * ```
  */
-export const extend = (extensions: Extensions) => {
+export const extend = (extensions: Record<string, unknown>) => {
   Object.assign(catalogue, extensions)
 }
 
@@ -74,4 +74,4 @@ export const T = new Proxy(TComp, {
 
     return TComp
   }
-}) as typeof TComp & TComponentProxy
+}) as typeof TComp & TComponentProxy & Extensions
