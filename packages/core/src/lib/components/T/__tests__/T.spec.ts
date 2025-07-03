@@ -34,6 +34,9 @@ describe('<T>', () => {
     expect(mesh.material).toBe(material)
   })
 
+  // @todo
+  it.skip('creates a bindable ref', () => {})
+
   it('extends the Three.js catalogue', () => {
     extend({ OrbitControls })
 
