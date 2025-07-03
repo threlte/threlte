@@ -91,12 +91,7 @@
   {#if texture}
     <T
       is={GroundedSkybox}
-      oncreate={() => {
-        return () => {
-          skybox = undefined
-        }
-      }}
-      bind:ref={skybox as GroundedSkybox}
+      bind:ref={skybox}
       args={[texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
     />
   {/if}
