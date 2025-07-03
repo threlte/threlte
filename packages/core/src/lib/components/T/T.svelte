@@ -105,7 +105,7 @@
    * so that props will have been set once ref is passed
    * to this callback
    */
-  $effect(() => {
+  $effect.pre(() => {
     if (ref === internalRef) return
   })
 </script>
