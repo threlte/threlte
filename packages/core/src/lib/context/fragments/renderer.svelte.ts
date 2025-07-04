@@ -175,19 +175,19 @@ export const createRendererContext = <T extends Renderer>(
     }
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     context.colorManagementEnabled.set(options.colorManagementEnabled ?? true)
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.colorSpace.set(options.colorSpace ?? 'srgb')
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.toneMapping.set(options.toneMapping ?? AgXToneMapping)
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.shadows.set(options.shadows ?? PCFSoftShadowMap)
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.dpr.set(options.dpr ?? window.devicePixelRatio)
   })
 
