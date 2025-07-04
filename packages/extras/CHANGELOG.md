@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.4.1
+
+### Patch Changes
+
+- 4af59ff: Remove self ref assignment in Environment component
+
 ## 9.4.0
 
 ### Minor Changes

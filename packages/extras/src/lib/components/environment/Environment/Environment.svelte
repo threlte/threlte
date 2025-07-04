@@ -62,7 +62,7 @@
     return loaders.tex
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     if (url === undefined || loader === undefined) {
       return
     }
