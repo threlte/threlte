@@ -2,7 +2,7 @@ import { Group, Mesh, MeshBasicMaterial } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T'
-import Scene from './Scene.svelte'
+import Scene from './__fixtures__/Scene.svelte'
 
 describe('<T> attach', () => {
   it('attaches and detaches to an object that is passed to "attach"', () => {

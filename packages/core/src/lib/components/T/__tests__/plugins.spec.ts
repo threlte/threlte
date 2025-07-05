@@ -1,7 +1,7 @@
 import { Mesh } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import Scene from './Scene.svelte'
+import Scene from './__fixtures__/Scene.svelte'
 
 describe('<T> plugins', () => {
   it('calls a plugin callback for every T instance', () => {

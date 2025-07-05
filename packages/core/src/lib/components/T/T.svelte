@@ -2,8 +2,6 @@
   lang="ts"
   generics="Type"
 >
-  import { isInstanceOf } from '../../utilities'
-
   import type { TProps } from './types'
   import { useAttach } from './utils/useAttach.svelte'
   import { useCamera } from './utils/useCamera.svelte'
@@ -13,6 +11,7 @@
   import { usePlugins } from './utils/usePlugins'
   import { useProps } from './utils/useProps'
   import { determineRef } from './utils/utils'
+  import { isInstanceOf } from '../../utilities'
 
   let {
     is = useIs<Type>(),
@@ -62,10 +61,7 @@
   propKeys.forEach((key) => {
     const prop = $derived(props[key])
     $effect.pre(() => {
-      updateProp(internalRef, key, prop, {
-        manualCamera: manual,
-        pluginsProps: plugins?.pluginsProps
-      })
+      updateProp(internalRef, key, prop, plugins?.pluginsProps, manual)
     })
   })
 
@@ -105,7 +101,7 @@
    * so that props will have been set once ref is passed
    * to this callback
    */
-  $effect.pre(() => {
+  $effect(() => {
     if (ref === internalRef) return
     ref = internalRef
     return oncreate?.(internalRef)
