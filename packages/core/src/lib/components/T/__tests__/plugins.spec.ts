@@ -8,7 +8,7 @@ describe('<T> plugins', () => {
     const fn = vi.fn()
     render(Scene, { props: { plugin: { fn } } })
 
-    expect(fn).toHaveBeenCalledTimes(5)
+    expect(fn).toHaveBeenCalledTimes(6)
   })
 
   it('passes a reference and props to a plugin callback', () => {
@@ -16,7 +16,7 @@ describe('<T> plugins', () => {
     const { scene } = render(Scene, { props: { plugin: { fn, props: ['lookat'] } } })
 
     const ref = scene.getObjectByName('child') as Mesh
-    expect(fn).toHaveBeenNthCalledWith(2, {
+    expect(fn).toHaveBeenNthCalledWith(3, {
       ref,
       args: undefined,
       attach: undefined,
@@ -37,6 +37,6 @@ describe('<T> plugins', () => {
      *
      * I would expect it to be called once.
      * */
-    expect(fn).toHaveBeenCalledTimes(5)
+    expect(fn).toHaveBeenCalledTimes(6)
   })
 })

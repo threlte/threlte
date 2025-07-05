@@ -82,7 +82,7 @@
       isInstanceOf(internalRef, 'OrthographicCamera')
     ) {
       useCamera(
-        () => internalRef,
+        internalRef,
         () => manual,
         () => makeDefault
       )

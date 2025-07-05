@@ -36,6 +36,20 @@ describe('<T> dispose', () => {
     expect(onDispose).toHaveBeenCalledTimes(0)
   })
 
+  it('does not dipose any child objects if "dispose"=false', async () => {
+    const onDispose = vi.fn()
+    const { unmount, scene } = render(Scene, { dispose: false })
+
+    const mesh = scene.getObjectByName('child') as Mesh
+    mesh.geometry.addEventListener('dispose', onDispose)
+    const material = mesh.material as MeshBasicMaterial
+    material.addEventListener('dispose', onDispose)
+    material.map?.addEventListener('dispose', onDispose)
+
+    unmount()
+    expect(onDispose).toHaveBeenCalledTimes(0)
+  })
+
   it('disposes all objects passed to "is" on unmount', async () => {
     const onDispose = vi.fn()
     const material1 = new MeshBasicMaterial()

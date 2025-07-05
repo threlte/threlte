@@ -1,6 +1,5 @@
 import { getContext, onMount, setContext } from 'svelte'
 import { useDisposal, type DisposableObject } from '../../../context/fragments/disposal'
-import { isInstanceOf } from '../../../utilities'
 import type { MaybeInstance } from '../types'
 
 const contextName = Symbol('threlte-disposable-object-context')
@@ -11,8 +10,8 @@ type ThrelteDisposeContext = () => boolean
  * @param object - The object to check.
  * @returns True if the object is a disposable object, false otherwise.
  */
-const isDisposableObject = (object: unknown): object is DisposableObject => {
-  return typeof (object as any)?.dispose === 'function' && !isInstanceOf(object, 'Scene')
+export const isDisposableObject = (object: unknown): object is DisposableObject => {
+  return typeof (object as any)?.dispose === 'function'
 }
 
 export const useDispose = <T>(

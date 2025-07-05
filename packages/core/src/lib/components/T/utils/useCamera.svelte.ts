@@ -1,18 +1,16 @@
 import { fromStore } from 'svelte/store'
 import { useThrelte } from '../../../context/compounds/useThrelte'
 import { isInstanceOf } from '../../../utilities'
-import type { MaybeInstance } from '../types'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 
 export const useCamera = (
-  getCamera: () => MaybeInstance<PerspectiveCamera | OrthographicCamera>,
+  camera: PerspectiveCamera | OrthographicCamera,
   getManual: () => boolean,
   getMakeDefault: () => boolean
 ) => {
   const { invalidate, size: sizeStore, camera: defaultCamera } = useThrelte()
 
   const size = fromStore(sizeStore)
-  const camera = $derived(getCamera())
 
   $effect.pre(() => {
     if (!getMakeDefault()) {

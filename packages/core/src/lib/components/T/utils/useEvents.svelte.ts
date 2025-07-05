@@ -27,14 +27,17 @@ export const useEvents = <T>(
   for (const key of propKeys) {
     const prop = $derived(props[key])
 
-    $effect.pre(() => {
-      if (!key.startsWith('on') || typeof prop !== 'function' || !isEventDispatcher(ref)) {
-        return
-      }
+    // Don't create the effect unless the prop begins with "on"
+    if (key.startsWith('on')) {
+      $effect.pre(() => {
+        if (typeof prop !== 'function' || !isEventDispatcher(ref)) {
+          return
+        }
 
-      const name = key.slice(2)
-      ref.addEventListener(name, prop)
-      return () => ref.removeEventListener(name, prop)
-    })
+        const name = key.slice(2)
+        ref.addEventListener(name, prop)
+        return () => ref.removeEventListener(name, prop)
+      })
+    }
   }
 }
