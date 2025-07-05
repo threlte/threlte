@@ -34,11 +34,6 @@ export const memoizeProp = (value: unknown): boolean => {
   return false
 }
 
-type PropOptions = {
-  manualCamera?: boolean
-  pluginsProps?: string[] | undefined
-}
-
 type PropSetter = (target: any, key: any, value: any) => void
 
 const createSetter = (target: any, key: any, value: any): PropSetter => {
@@ -90,7 +85,7 @@ export const useProps = () => {
   >()
   const memoizedSetters = new Map<string, PropSetter>()
 
-  const setProp = <T>(instance: T, propertyPath: string, value: any, options: PropOptions) => {
+  const setProp = <T>(instance: T, propertyPath: string, value: any, manualCamera?: boolean) => {
     if (memoizeProp(value)) {
       const memoizedProp = memoizedProps.get(propertyPath)
       if (memoizedProp && memoizedProp.instance === instance && memoizedProp.value === value) {
@@ -117,7 +112,7 @@ export const useProps = () => {
       createSetter(target, key, value)(target, key, value)
     }
 
-    if (options.manualCamera) return
+    if (manualCamera) return
 
     if (
       updateProjectionMatrixKeys.has(key) &&
@@ -127,9 +122,15 @@ export const useProps = () => {
     }
   }
 
-  const updateProp = <T>(instance: T, key: string, value: any, options: PropOptions) => {
-    if (!ignoredProps.has(key) && !options.pluginsProps?.includes(key)) {
-      setProp(instance, key, value, options)
+  const updateProp = <T>(
+    instance: T,
+    key: string,
+    value: any,
+    pluginsProps?: string[],
+    manualCamera?: boolean
+  ) => {
+    if (!ignoredProps.has(key) && !pluginsProps?.includes(key)) {
+      setProp(instance, key, value, manualCamera)
     }
     invalidate()
   }

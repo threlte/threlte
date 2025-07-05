@@ -1,16 +1,15 @@
 import { getContext } from 'svelte'
-import type { Plugin, PluginContext, PluginContextName } from '../../../plugins/types'
+import { type Plugin, type PluginContext, pluginContextKey } from '../../../plugins/types'
 
 export const usePlugins = (args: () => Parameters<Plugin>[0]) => {
-  const pluginContextName: PluginContextName = 'threlte-plugin-context'
-  const plugins = getContext<PluginContext | undefined>(pluginContextName)
+  const plugins = getContext<PluginContext | undefined>(pluginContextKey)
 
   if (!plugins) return
 
   const pluginsProps: string[] = []
   const pluginsArray = Object.values(plugins)
 
-  if (pluginsArray.length) {
+  if (pluginsArray.length > 0) {
     const pluginArgs = args()
     // initalize plugins
     for (let i = 0; i < pluginsArray.length; i++) {

@@ -1,15 +1,13 @@
 import { getContext, setContext } from 'svelte'
-import type { AnyProps, Plugin, PluginContext, PluginContextName } from './types'
+import { type AnyProps, type Plugin, type PluginContext, pluginContextKey } from './types'
 
 export function injectPlugin<Props extends AnyProps = AnyProps>(
   name: string,
   plugin: Plugin<Props>
 ): void {
-  const contextName: PluginContextName = 'threlte-plugin-context'
-
   if (!plugin) return
-  setContext<PluginContext>(contextName, {
-    ...getContext<PluginContext | undefined>(contextName),
+  setContext<PluginContext>(pluginContextKey, {
+    ...getContext<PluginContext | undefined>(pluginContextKey),
     [name]: plugin as Plugin
   })
 }

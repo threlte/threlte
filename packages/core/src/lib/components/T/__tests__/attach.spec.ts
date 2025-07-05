@@ -2,7 +2,7 @@ import { Group, Mesh, MeshBasicMaterial } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T'
-import Scene from './Scene.svelte'
+import Scene from './__fixtures__/Scene.svelte'
 
 describe('<T> attach', () => {
   it('attaches and detaches to an object that is passed to "attach"', () => {
@@ -68,18 +68,19 @@ describe('<T> attach', () => {
     }
   })
 
-  /**
-   * @todo(mp) Detaching does not re-attach original geometry and material
-   */
-  it('auto-attaches a child Geometry and Material', () => {
-    const { scene } = render(Scene)
+  it('auto-attaches and detaches a child Geometry and Material', () => {
+    const { scene, unmount } = render(Scene)
 
     const mesh = scene.getObjectByName('child') as Mesh
     expect(mesh.geometry.name).toBe('geometry')
     expect((mesh.material as MeshBasicMaterial).name).toBe('material')
+
+    unmount()
+    expect(mesh.geometry.name).not.toBe('geometry')
+    expect((mesh.material as MeshBasicMaterial).name).not.toBe('material')
   })
 
-  it('attaches and detatches an object to a property if attach="property"', () => {
+  it('attaches and detaches an object to a property if attach="property"', () => {
     const { scene, unmount } = render(Scene)
 
     const mesh = scene.getObjectByName('child') as Mesh

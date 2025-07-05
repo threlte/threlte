@@ -1,23 +1,15 @@
 import type { AnyClass, MaybeInstance } from '../types'
 
-const classRegex = /^\s*class\s+/
-
-// Type Guards
+/**
+ * Short cicruits if the input is not a function, then calls toString on Function with guaranteed safe behavior
+ */
 const isClass = (input: unknown): input is AnyClass => {
-  if (typeof input !== 'function') {
-    return false
-  }
-
-  return classRegex.test(input.toString())
-}
-
-const argsIsConstructorParameters = (args: unknown): args is ConstructorParameters<AnyClass> => {
-  return Array.isArray(args)
+  return typeof input === 'function' && Function.prototype.toString.call(input).startsWith('class ')
 }
 
 export const determineRef = <Type>(is: unknown, args: unknown): MaybeInstance<Type> => {
   if (isClass(is)) {
-    if (argsIsConstructorParameters(args)) {
+    if (Array.isArray(args)) {
       return new is(...args)
     } else {
       return new is()
