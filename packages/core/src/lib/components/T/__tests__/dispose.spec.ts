@@ -47,6 +47,7 @@ describe('<T> dispose', () => {
     material.map?.addEventListener('dispose', onDispose)
 
     unmount()
+    await tick()
     expect(onDispose).toHaveBeenCalledTimes(0)
   })
 
