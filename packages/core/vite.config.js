@@ -12,6 +12,7 @@ export default defineConfig(({ mode }) => ({
     }
   },
   test: {
+    include: ['**/*.{test,spec}.ts', '**/*.{test,spec}.svelte.ts'],
     environment: 'happy-dom',
     coverage: { include: ['src'] },
     mockReset: true,
