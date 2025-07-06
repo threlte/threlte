@@ -1,0 +1,49 @@
+---
+order: 4.14
+category: '@threlte/extras'
+name: <Shadow>
+sourcePath: 'packages/extras/src/lib/components/Shadow/Shadow.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+    props:
+      [
+        { name: 'color', type: 'Three.ColorRepresentation', required: false, default: "'black'" },
+        { name: 'colorStop', type: 'number', required: false, default: '0' },
+        { name: 'depthWrite', type: 'boolean', required: false, default: 'false' },
+        { name: 'fog', type: 'boolean', required: false, default: 'false' },
+        { name: 'opacity', type: 'number', required: false, default: '0.5' }
+      ],
+    exports: []
+  }
+---
+
+A cheap [CanvasTexture](https://threejs.org/docs/?q=canvastexture#api/en/textures/CanvasTexture)-based mesh meant to look like a shadow without the need for any lights in the scene.
+
+<Example path="extras/shadow" />
+
+## Rotation
+
+ThreeJS uses a y-up coordinate system. This means that the z-axis is into and out of the screen.
+
+`<Shadow>`'s geometry is not rotated. It exists in the xy-plane just like if you created a mesh with a plane geometry. If you want the shadow to appear flat on the ground (in the xz-plane), you may need to rotate it.
+
+```svelte
+<!-- rotate the shadow to be in the xz-plane. -->
+<Shadow rotation.x={-1 * 0.5 * Math.PI} />
+```
+
+`<Shadow>`'s material is double-sided so no matter its rotation, it will always be visible.
+
+## Avoiding Z-fighting
+
+You may need to offset the shadow by a small amount to avoid z-fighting.
+
+```svelte
+<Shadow position.z={0.01} />
+```
+
+## Transparency
+
+Because the canvas texture uses an alpha channel, `<Shadow>`'s material uses transparency. This means it will be sorted into a "transparent objects" render list by the renderer. In three.js, transparent objects are renderer _after_ opaque objects. This may be something to keep in mind when using `<Shadow>`.
