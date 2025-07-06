@@ -5,7 +5,7 @@ packages:
 catalog:
   three: ^0.175.0
   '@types/three': ^0.175.0
-  svelte: '^5.26.2'
+  svelte: '5.26.2'
   typescript: '^5.6.3'
   vite: '^5.2.8'
   '@types/node': '^20.12.7'
