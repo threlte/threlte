@@ -15,7 +15,7 @@ describe('<T> events', () => {
     expect(oncreate).toHaveBeenCalledWith(group)
   })
 
-  it('fires a cleanup event passed to oncreate', () => {
+  it('fires a cleanup event passed to oncreate on unmount', () => {
     const cleanup = vi.fn()
     const { unmount } = render(T.Group, {
       props: { oncreate: () => cleanup }
@@ -23,6 +23,18 @@ describe('<T> events', () => {
 
     unmount()
     expect(cleanup).toHaveBeenCalledOnce()
+  })
+
+  it('fires oncreate after properties have been set', () => {
+    const reference = new PerspectiveCamera()
+    reference.position.set(5, 5, 5)
+    reference.lookAt(0, 0, 0)
+
+    const oncreate = (ref: PerspectiveCamera) => ref.lookAt(0, 0, 0)
+    const { scene } = render(T.PerspectiveCamera, { props: { position: [5, 5, 5], oncreate } })
+
+    const camera = scene.getObjectByProperty('type', 'PerspectiveCamera')
+    expect(camera?.matrix.elements).toStrictEqual(reference.matrix.elements)
   })
 
   it('fires an oncreate event if the Three.js object changes', async () => {

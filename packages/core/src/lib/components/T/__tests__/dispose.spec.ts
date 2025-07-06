@@ -2,7 +2,7 @@ import { Mesh, MeshBasicMaterial } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T'
-import Scene from './Scene.svelte'
+import Scene from './__fixtures__/Scene.svelte'
 import { tick } from 'svelte'
 
 describe('<T> dispose', () => {
@@ -31,6 +31,21 @@ describe('<T> dispose', () => {
     const { unmount } = render(T, { props: { is: material, dispose: false } })
 
     material.addEventListener('dispose', onDispose)
+    unmount()
+    await tick()
+    expect(onDispose).toHaveBeenCalledTimes(0)
+  })
+
+  it('does not dipose any child objects if "dispose"=false', async () => {
+    const onDispose = vi.fn()
+    const { unmount, scene } = render(Scene, { dispose: false })
+
+    const mesh = scene.getObjectByName('child') as Mesh
+    mesh.geometry.addEventListener('dispose', onDispose)
+    const material = mesh.material as MeshBasicMaterial
+    material.addEventListener('dispose', onDispose)
+    material.map?.addEventListener('dispose', onDispose)
+
     unmount()
     await tick()
     expect(onDispose).toHaveBeenCalledTimes(0)

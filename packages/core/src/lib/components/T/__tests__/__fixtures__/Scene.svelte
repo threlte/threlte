@@ -7,9 +7,10 @@
       props?: string[]
     }
     attached?: boolean
+    dispose?: boolean
   }
 
-  let { attached = true, plugin }: Props = $props()
+  let { attached = true, dispose, plugin }: Props = $props()
 
   if (plugin) {
     injectPlugin('plugin-name', (args) => {
@@ -27,18 +28,20 @@
 </script>
 
 {#if attached}
-  <T.Group name="parent">
-    <T.Mesh
-      name="child"
-      lookat={[0, 0, 0]}
-    >
-      <T.BufferGeometry name="geometry" />
-      <T.MeshBasicMaterial name="material">
-        <T.Texture
-          attach="map"
-          name="texture"
-        />
-      </T.MeshBasicMaterial>
-    </T.Mesh>
+  <T.Group {dispose}>
+    <T.Group name="parent">
+      <T.Mesh
+        name="child"
+        lookat={[0, 0, 0]}
+      >
+        <T.BufferGeometry name="geometry" />
+        <T.MeshBasicMaterial name="material">
+          <T.Texture
+            attach="map"
+            name="texture"
+          />
+        </T.MeshBasicMaterial>
+      </T.Mesh>
+    </T.Group>
   </T.Group>
 {/if}
