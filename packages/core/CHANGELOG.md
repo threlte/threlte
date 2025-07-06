@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.0.6
+
+### Patch Changes
+
+- 17f0f85: Change renderer.svelte.ts effects to effects.pre
+
 ## 8.0.5
 
 ### Patch Changes
