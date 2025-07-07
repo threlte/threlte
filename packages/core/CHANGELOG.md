@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.1.1
+
+### Patch Changes
+
+- 62da2af: Fix: only reset default camera if no T components with makeDefault exist
+
 ## 8.1.0
 
 ### Minor Changes
