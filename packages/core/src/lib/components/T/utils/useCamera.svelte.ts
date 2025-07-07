@@ -3,13 +3,16 @@ import { useThrelte } from '../../../context/compounds/useThrelte'
 import { isInstanceOf } from '../../../utilities'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 
+const defaultCameras = new Set()
+
 export const useCamera = (
-  camera: PerspectiveCamera | OrthographicCamera,
+  getCamera: () => PerspectiveCamera | OrthographicCamera,
   getManual: () => boolean,
   getMakeDefault: () => boolean
 ) => {
   const { invalidate, size: sizeStore, camera: defaultCamera } = useThrelte()
 
+  const camera = $derived(getCamera())
   const size = fromStore(sizeStore)
 
   $effect.pre(() => {
@@ -17,14 +20,16 @@ export const useCamera = (
       return
     }
 
-    const lastCamera = defaultCamera.current
-
+    defaultCameras.add(camera)
     defaultCamera.set(camera)
     invalidate()
 
     return () => {
-      defaultCamera.set(lastCamera)
-      invalidate()
+      defaultCameras.delete(camera)
+      if (defaultCameras.size === 0) {
+        defaultCamera.set(undefined!)
+        invalidate()
+      }
     }
   })
 
