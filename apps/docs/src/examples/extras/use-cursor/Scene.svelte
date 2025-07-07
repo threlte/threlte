@@ -1,6 +1,4 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy'
-
   import { T, useThrelte } from '@threlte/core'
   import { interactivity, Text, useCursor } from '@threlte/extras'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
