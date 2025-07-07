@@ -26,7 +26,9 @@
     ...props
   }: TProps<Type> = $props()
 
-  // We can't create the object in a reactive statement due to providing context
+  /**
+   * When "is" or "args" change, we need to create a new ref.
+   */
   const internalRef = $derived(determineRef<Type>(is, args))
   $effect.pre(() => {
     ref = internalRef
@@ -98,8 +100,6 @@
   useEvents(() => internalRef, propKeys, props)
 
   /**
-   * When "is" or "args" change, we need to create a new ref.
-   *
    * oncreate needs to be called after all other hooks
    * so that props will have been set once ref is passed
    * to this callback
