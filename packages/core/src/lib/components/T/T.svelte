@@ -12,6 +12,7 @@
   import { useProps } from './utils/useProps'
   import { determineRef } from './utils/utils'
   import { isInstanceOf } from '../../utilities'
+  import { untrack } from 'svelte'
 
   let {
     is = useIs<Type>(),
@@ -31,6 +32,7 @@
    */
   const internalRef = $derived(determineRef<Type>(is, args))
   $effect.pre(() => {
+    if (ref === internalRef) return
     ref = internalRef
   })
 
@@ -105,7 +107,13 @@
    * to this callback
    */
   $effect(() => {
-    return oncreate?.(internalRef)
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    internalRef
+    let cleanup: void | (() => void) = undefined
+    untrack(() => {
+      cleanup = oncreate?.(internalRef)
+    })
+    return cleanup
   })
 </script>
 
