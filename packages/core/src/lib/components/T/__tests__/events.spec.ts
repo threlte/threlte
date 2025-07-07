@@ -17,12 +17,17 @@ describe('<T> events', () => {
 
   it('fires a cleanup event passed to oncreate on unmount', () => {
     const cleanup = vi.fn()
-    const { unmount } = render(T.Group, {
-      props: { oncreate: () => cleanup }
-    })
+    const { unmount } = render(T.Group, { props: { oncreate: () => cleanup } })
 
     unmount()
     expect(cleanup).toHaveBeenCalledOnce()
+  })
+
+  it('does not fire the oncreate cleanup method until unmount or "is" changes', () => {
+    const cleanup = vi.fn()
+    render(T.Group, { props: { oncreate: () => cleanup } })
+
+    expect(cleanup).toHaveBeenCalledTimes(0)
   })
 
   it('fires oncreate after properties have been set', () => {

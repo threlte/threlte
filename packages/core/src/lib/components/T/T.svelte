@@ -28,6 +28,9 @@
 
   // We can't create the object in a reactive statement due to providing context
   const internalRef = $derived(determineRef<Type>(is, args))
+  $effect.pre(() => {
+    ref = internalRef
+  })
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
@@ -102,8 +105,6 @@
    * to this callback
    */
   $effect(() => {
-    if (ref === internalRef) return
-    ref = internalRef
     return oncreate?.(internalRef)
   })
 </script>
