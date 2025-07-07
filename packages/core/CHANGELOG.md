@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.1.2
+
+### Patch Changes
+
+- 2af56f3: Fix: unattach correct object3d reference on unmount
+
 ## 8.1.1
 
 ### Patch Changes
