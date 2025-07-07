@@ -2,6 +2,7 @@ import { OrthographicCamera, PerspectiveCamera } from 'three'
 import { describe, it, expect } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T'
+import Camera from './__fixtures__/Camera.svelte'
 
 describe('<T> camera', () => {
   it('does not change the default camera if a camera is added', () => {
@@ -20,27 +21,34 @@ describe('<T> camera', () => {
     }
   })
 
+  it('returns to the default camera if no cameras have "makeDefault"=true', async () => {
+    const { context, rerender } = render(T.PerspectiveCamera, {
+      props: { makeDefault: false }
+    })
+    const defaultCamera = context.camera.current
+
+    await rerender({ makeDefault: true })
+    await rerender({ makeDefault: false })
+
+    expect(context.camera.current).toBe(defaultCamera)
+  })
+
   it('changes the default camera based on the "makeDefault" prop', async () => {
     {
       const { scene, context, rerender } = render(T.PerspectiveCamera, {
         props: { makeDefault: false }
       })
 
-      const defaultCamera = context.camera.current
       const camera = scene.getObjectByProperty('type', 'PerspectiveCamera') as PerspectiveCamera
       expect(context.camera.current).not.toBe(camera)
 
       await rerender({ makeDefault: true })
 
       expect(context.camera.current).toBe(camera)
-
-      await rerender({ makeDefault: false })
-
-      expect(context.camera.current).toBe(defaultCamera)
     }
 
     {
-      const { scene, context, rerender, unmount } = render(T.OrthographicCamera, {
+      const { scene, context, rerender } = render(T.OrthographicCamera, {
         props: { makeDefault: false }
       })
 
@@ -51,10 +59,19 @@ describe('<T> camera', () => {
       await rerender({ makeDefault: true })
 
       expect(context.camera.current).toBe(camera)
-
-      unmount()
-      expect(context.camera.current).toBe(defaultCamera)
     }
+  })
+
+  it('swaps between two cameras rendered conditionally with makeDefault="true"', async () => {
+    const { scene, camera, rerender } = render(Camera, { props: { perspective: true } })
+
+    const perspective = scene.getObjectByProperty('type', 'PerspectiveCamera')
+    expect(camera.current).toBe(perspective)
+
+    await rerender({ perspective: false })
+
+    const orthographic = scene.getObjectByProperty('type', 'OrthographicCamera')
+    expect(camera.current).toBe(orthographic)
   })
 
   it('does not update camera props if "manual"=true', () => {
