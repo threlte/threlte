@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.1.0
+
+### Minor Changes
+
+- 74b7b04: Improve T component performance, use runes internals
+
 ## 8.0.6
 
 ### Patch Changes
