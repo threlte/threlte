@@ -1,18 +1,18 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy'
+
   import { T, useThrelte } from '@threlte/core'
   import { interactivity, Text, useCursor } from '@threlte/extras'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 
-  $: color = $hovering ? '#dddddd' : '#FE3D00'
+  interactivity()
 
   const { size } = useThrelte()
 
-  let zoom = $size.width / 7
-  $: zoom = $size.width / 7
-
-  interactivity()
+  const color = $derived($hovering ? '#dddddd' : '#FE3D00')
+  const zoom = $derived($size.width / 7)
 </script>
 
 <T.OrthographicCamera

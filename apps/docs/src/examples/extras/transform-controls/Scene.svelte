@@ -4,20 +4,25 @@
 
   import { BoxGeometry, MeshStandardMaterial, PerspectiveCamera } from 'three'
 
-  export let controls: '<TrackballControls>' | '<OrbitControls>' = '<OrbitControls>'
-
-  let camera: PerspectiveCamera
-
-  $: if (camera && controls === '<OrbitControls>') {
-    // This snaps the camera back into a position that makes sense for OrbitControls
-    camera.up.set(0, 1, 0)
+  interface Props {
+    controls?: '<TrackballControls>' | '<OrbitControls>'
   }
+
+  let { controls = '<OrbitControls>' }: Props = $props()
+
+  let camera = $state.raw<PerspectiveCamera>()
+
+  $effect(() => {
+    if (controls === '<OrbitControls>') {
+      // This snaps the camera back into a position that makes sense for OrbitControls
+      camera?.up.set(0, 1, 0)
+    }
+  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[10, 5, 10]}
-  lookAt.y={0.5}
   bind:ref={camera}
 >
   {#if controls === '<TrackballControls>'}
@@ -39,8 +44,8 @@
   translationSnap={1}
   position.y={1}
 >
-  <T.Mesh
-    geometry={new BoxGeometry(2, 2, 2)}
-    material={new MeshStandardMaterial()}
-  />
+  <T.Mesh>
+    <T.BoxGeometry args={[2, 2, 2]} />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
 </TransformControls>

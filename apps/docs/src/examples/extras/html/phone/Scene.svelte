@@ -1,7 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Environment, Float, HTML, useGltf, OrbitControls } from '@threlte/extras'
-  import { derived } from 'svelte/store'
   import { type Mesh, MathUtils } from 'three'
   import Geometries from './Geometries.svelte'
   import { RoundedPlaneGeometry } from './RoundedPlaneGeometry'
@@ -13,10 +12,7 @@
     materials: {}
   }>('/models/phone/phone.glb')
 
-  const phoneGeometry = derived(gltf, (gltf) => {
-    if (!gltf) return
-    return gltf.nodes.phone.geometry
-  })
+  const phoneGeometry = $derived(gltf?.nodes.phone.geometry)
 
   const url = window.origin
 </script>

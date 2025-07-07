@@ -1,10 +1,9 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
-  import { BufferGeometry, Color, Mesh, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BufferGeometry, Color, Mesh, MeshStandardMaterial, MathUtils } from 'three'
 
-  let rotation = 0
+  let rotation = $state(0)
   useTask((delta) => {
     rotation += delta
   })
@@ -18,11 +17,7 @@
     }
   }>('/models/helmet/DamagedHelmet.gltf')
 
-  let helmetGeometry: BufferGeometry | undefined
-  $: if ($gltf) {
-    const mesh = $gltf.nodes['node_damagedHelmet_-6514'] as Mesh
-    helmetGeometry = mesh.geometry
-  }
+  const helmetGeometry = $derived($gltf?.nodes['node_damagedHelmet_-6514'].geometry)
 </script>
 
 <T.PerspectiveCamera
@@ -34,7 +29,7 @@
 <T.Group rotation.y={rotation}>
   {#if helmetGeometry}
     <T.Mesh
-      rotation.x={90 * DEG2RAD}
+      rotation.x={90 * MathUtils.DEG2RAD}
       geometry={helmetGeometry}
     >
       <T.MeshBasicMaterial

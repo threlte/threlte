@@ -3,7 +3,7 @@
   import { Environment, useGltf } from '@threlte/extras'
   import type { Material, Object3D } from 'three'
 
-  let rotation = 0
+  let rotation = $state(0)
   useTask((delta) => {
     const f = 1 / 60 / delta // ~1 at 60fps
     rotation += 0.005 * f
