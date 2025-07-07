@@ -37,28 +37,31 @@ export const useAttach = <T extends MaybeInstance<any>>(
   $effect.pre(() => {
     invalidate()
 
+    // Save the current ref in case it is destroyed / changed
+    const current = ref
+
     // Most common: auto-attach to parent Object3D
-    if (attach === undefined && isInstanceOf(ref, 'Object3D')) {
-      parentObject3D.current?.add(ref)
+    if (attach === undefined && isInstanceOf(current, 'Object3D')) {
+      parentObject3D.current?.add(current)
       return () => {
         invalidate()
-        parentObject3D.current?.remove(ref)
+        parentObject3D.current?.remove(current)
       }
     }
 
     // Auto-attach to parent material or geometry
     if (attach === undefined && isObject(parent.current)) {
       const p = parent.current
-      if (isInstanceOf(ref, 'Material')) {
+      if (isInstanceOf(current, 'Material')) {
         const originalMaterial = p.material
-        p.material = ref
+        p.material = current
         return () => {
           invalidate()
           p.material = originalMaterial
         }
-      } else if (isInstanceOf(ref, 'BufferGeometry')) {
+      } else if (isInstanceOf(current, 'BufferGeometry')) {
         const originalGeometry = p.geometry
-        p.geometry = ref
+        p.geometry = current
         return () => {
           invalidate()
           p.geometry = originalGeometry
@@ -76,7 +79,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
     // Custom attach function
     if (typeof attach === 'function') {
       const cleanup = attach({
-        ref: ref as T,
+        ref: current as T,
         parent: parent.current,
         parentObject3D: parentObject3D.current
       })
@@ -90,7 +93,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
     if (typeof attach === 'string') {
       const { target, key } = resolvePropertyPath(parent.current, attach)
       const valueBeforeAttach = target[key]
-      target[key] = ref
+      target[key] = current
       return () => {
         invalidate()
         target[key] = valueBeforeAttach
@@ -98,11 +101,11 @@ export const useAttach = <T extends MaybeInstance<any>>(
     }
 
     // Attach to parent Object3D
-    if (isInstanceOf(attach, 'Object3D') && isInstanceOf(ref, 'Object3D')) {
-      attach.add(ref)
+    if (isInstanceOf(attach, 'Object3D') && isInstanceOf(current, 'Object3D')) {
+      attach.add(current)
       return () => {
         invalidate()
-        attach.remove(ref)
+        attach.remove(current)
       }
     }
 
