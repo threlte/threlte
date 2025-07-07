@@ -17,12 +17,17 @@ describe('<T> events', () => {
 
   it('fires a cleanup event passed to oncreate on unmount', () => {
     const cleanup = vi.fn()
-    const { unmount } = render(T.Group, {
-      props: { oncreate: () => cleanup }
-    })
+    const { unmount } = render(T.Group, { props: { oncreate: () => cleanup } })
 
     unmount()
     expect(cleanup).toHaveBeenCalledOnce()
+  })
+
+  it('does not fire the oncreate cleanup method until unmount or "is" changes', () => {
+    const cleanup = vi.fn()
+    render(T.Group, { props: { oncreate: () => cleanup } })
+
+    expect(cleanup).toHaveBeenCalledTimes(0)
   })
 
   it('fires oncreate after properties have been set', () => {
@@ -58,10 +63,7 @@ describe('<T> events', () => {
     expect(onchange).toHaveBeenCalledOnce()
   })
 
-  /**
-   * @todo(mp): This is failing, is this a bug?
-   */
-  it.skip('removes an event listener from the Three.js object if unmounted', async () => {
+  it('removes an event listener from the Three.js object if unmounted', async () => {
     const onchange = vi.fn()
     const controls = new OrbitControls(new PerspectiveCamera(), document.createElement('div'))
 

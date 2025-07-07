@@ -26,4 +26,4 @@ export type Plugin<Props extends AnyProps = AnyProps> = (
 
 export type PluginContext = Record<string, Plugin<AnyProps>>
 
-export type PluginContextName = 'threlte-plugin-context'
+export const pluginContextKey = 'threlte-plugin-context'

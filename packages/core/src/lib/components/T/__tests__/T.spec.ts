@@ -3,6 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { extend, T } from '../T'
+import Bindable from './__fixtures__/Bindable.svelte'
 
 describe('<T>', () => {
   it('creates a Three.js class instance from a class "is" argument', () => {
@@ -43,5 +44,15 @@ describe('<T>', () => {
     })
 
     expect(oncreate).toHaveBeenCalledOnce()
+  })
+
+  it('creates a bindable ref', async () => {
+    const group = new Group()
+    const onRefCreate = vi.fn()
+    render(Bindable, { props: { is: group, onRefCreate } })
+
+    expect(onRefCreate).toHaveBeenCalledTimes(2)
+    expect(onRefCreate).toHaveBeenNthCalledWith(1, undefined)
+    expect(onRefCreate).toHaveBeenNthCalledWith(2, group)
   })
 })

@@ -6,7 +6,15 @@ import TComp from './T.svelte'
 import type { Props } from './types'
 import { setIs } from './utils/useIs'
 
-type Extensions = Record<string, unknown>
+type Extensions = Record<string, Component>
+
+type ThreeCatalogue = {
+  [K in keyof typeof THREE]: (typeof THREE)[K]
+}
+
+type TComponentProxy = {
+  [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
+}
 
 const catalogue: Extensions = {}
 
@@ -25,7 +33,7 @@ const catalogue: Extensions = {}
  * <T.OrbitControls />
  * ```
  */
-export const extend = (extensions: Extensions) => {
+export const extend = (extensions: Record<string, unknown>) => {
   Object.assign(catalogue, extensions)
 }
 
@@ -49,10 +57,7 @@ export const extend = (extensions: Extensions) => {
  * </T.Mesh>
  * ```
  */
-export const T = new Proxy(function () {}, {
-  apply(_target, _thisArg, argArray: [internal: unknown, props: { is: unknown }]) {
-    return TComp(...argArray)
-  },
+export const T = new Proxy(TComp, {
   get(_target, is: keyof typeof THREE) {
     // Handle snippets
     if (typeof is !== 'string') {
@@ -69,8 +74,4 @@ export const T = new Proxy(function () {}, {
 
     return TComp
   }
-}) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
-} & {
-  [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
-} & Record<string, Component>
+}) as typeof TComp & TComponentProxy & Extensions
