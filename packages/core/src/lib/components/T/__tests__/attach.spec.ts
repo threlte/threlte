@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T'
 import Scene from './__fixtures__/Scene.svelte'
+import Attach from './__fixtures__/Attach.svelte'
 
 describe('<T> attach', () => {
   it('attaches and detaches to an object that is passed to "attach"', () => {
@@ -89,5 +90,28 @@ describe('<T> attach', () => {
 
     unmount()
     expect(material.map).toBeFalsy()
+  })
+
+  it('attaches and detaches a conditionally rendered component', async () => {
+    const { scene, rerender } = render(Attach, { props: { attach: false } })
+
+    const parent = scene.getObjectByName('parent')
+    expect(scene.getObjectByName('child')).toBeFalsy()
+    expect(scene.getObjectByName('child2')).toBeTruthy()
+    expect(parent?.children.length).toBe(1)
+
+    await rerender({ attach: true })
+
+    const child = scene.getObjectByName('child')
+    expect(child?.parent).toBe(parent)
+    expect(scene.getObjectByName('child2')).toBeFalsy()
+    expect(parent?.children.length).toBe(2)
+
+    await rerender({ attach: false })
+
+    expect(child?.parent).toBeFalsy()
+    expect(scene.getObjectByName('child')).toBeFalsy()
+    expect(scene.getObjectByName('child2')).toBeTruthy()
+    expect(parent?.children.length).toBe(1)
   })
 })
