@@ -63,23 +63,25 @@
   })
 
   $effect(() => {
-    if (url !== undefined && loader !== undefined) {
-      const suspendedTexture = suspend(
-        cache.remember(() => {
-          return loader.loadAsync(url)
-        }, [url])
-      )
+    if (url === undefined || loader === undefined) {
+      return
+    }
 
-      suspendedTexture.then((t) => {
-        t.mapping = EquirectangularReflectionMapping
-        texture = t
+    const suspendedTexture = suspend(
+      cache.remember(() => {
+        return loader.loadAsync(url)
+      }, [url])
+    )
+
+    suspendedTexture.then((t) => {
+      t.mapping = EquirectangularReflectionMapping
+      texture = t
+    })
+
+    return () => {
+      suspendedTexture.then((texture) => {
+        texture.dispose()
       })
-
-      return () => {
-        suspendedTexture.then((texture) => {
-          texture.dispose()
-        })
-      }
     }
   })
 </script>
@@ -94,7 +96,7 @@
           skybox = undefined
         }
       }}
-      bind:ref={skybox}
+      bind:ref={skybox as GroundedSkybox}
       args={[texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
     />
   {/if}

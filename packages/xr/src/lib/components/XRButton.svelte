@@ -75,7 +75,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     }
   }
 
-  let modeText = $derived(
+  const modeText = $derived(
     {
       'immersive-vr': 'VR',
       'immersive-ar': 'AR',
@@ -83,7 +83,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     }[mode]
   )
 
-  let style = $derived(
+  const style = $derived(
     styled
       ? `
       position: absolute;
@@ -111,7 +111,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     {style}
   >
     {#if children}
-      {@render children?.({ state })}
+      {@render children({ state })}
     {:else if state === 'unsupported'}
       {modeText} unsupported
     {:else if state === 'insecure'}

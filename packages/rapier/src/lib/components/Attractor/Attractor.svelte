@@ -20,9 +20,9 @@
   const group = new Group()
 
   const calcForceByType = {
-    static: (s: number, m2: number, r: number, d: number, G: number): number => s,
-    linear: (s: number, m2: number, r: number, d: number, G: number) => s * (d / r),
-    newtonian: (s: number, m2: number, r: number, d: number, G: number) =>
+    static: (s: number, _m2: number, _r: number, _d: number, _G: number): number => s,
+    linear: (s: number, _m2: number, r: number, d: number, _G: number) => s * (d / r),
+    newtonian: (s: number, m2: number, _r: number, d: number, G: number) =>
       (G * s * m2) / Math.pow(d, 2)
   }
 

@@ -17,7 +17,7 @@
   {#if fileNames.length}
     Unsaved changes in:<br />
     <ul>
-      {#each fileNames as fileName}
+      {#each fileNames as fileName (fileName)}
         <li>
           {fileName}
         </li>

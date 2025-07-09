@@ -43,7 +43,7 @@ export type InteractivityContext = {
   interactiveObjects: Object3D[]
   handlers: WeakMap<Object3D, Events>
   compute: ComputeFunction
-  filter?: FilterFunction
+  filter?: FilterFunction | undefined
   addInteractiveObject: (object: Object3D, events: Events) => void
   removeInteractiveObject: (object: Object3D) => void
 }

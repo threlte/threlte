@@ -5,7 +5,7 @@
   import type { IProject, IProjectConfig } from '@theatre/core'
 
   interface Props {
-    name: string
+    name?: string
     config?: IProjectConfig | undefined
     project?: IProject
     isReady?: boolean

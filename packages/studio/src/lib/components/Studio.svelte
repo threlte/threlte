@@ -17,10 +17,11 @@
   import NestedComponents from './NestedComponents.svelte'
   import Toolbar from './Toolbar.svelte'
 
+
   type Props = {
     namespace?: string
     transient?: boolean
-    extensions?: ConstructorOfATypedSvelteComponent[]
+    extensions?: Component[]
     children: Snippet
   }
 

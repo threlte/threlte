@@ -29,7 +29,8 @@ export const setupPointerControls = (
   const { dispatchers } = getInternalContext()
 
   let hits: Intersection[] = []
-  let lastPosition = new Vector3()
+
+  const lastPosition = new Vector3()
 
   const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
@@ -90,7 +91,10 @@ export const setupPointerControls = (
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const hits = context.raycaster.intersectObjects(
+      context.interactiveObjects,
+      true
+    ) as Intersection[]
     const filtered =
       context.filter === undefined ? hits : context.filter(hits, context, handContext)
 
@@ -112,7 +116,7 @@ export const setupPointerControls = (
     return intersections
   }
 
-  function pointerMissed(objects: Object3D[], event?: IntersectionEvent | undefined) {
+  function pointerMissed(objects: Object3D[], event?: Event | undefined) {
     for (const object of objects) {
       dispatchers.get(object)?.pointermissed?.(event)
     }
@@ -134,6 +138,10 @@ export const setupPointerControls = (
 
     // loop through all hits and dispatch events
     dispatchEvents: for (const hit of hits) {
+      const events = dispatchers.get(hit.eventObject)
+
+      if (events === undefined) continue
+
       const intersectionEvent: IntersectionEvent = {
         stopped,
         ...hit,
@@ -155,10 +163,6 @@ export const setupPointerControls = (
         pointer: handContext.pointer.current,
         ray: context.raycaster.ray
       }
-
-      const events = dispatchers.get(hit.eventObject)
-
-      if (events === undefined) return
 
       if (isPointerMove) {
         // Move event ...
@@ -230,29 +234,45 @@ export const setupPointerControls = (
     }
   )
 
-  watch(controller, (input) => {
+  watch([controller, handContext.enabled], ([input, enabled]) => {
     if (input === undefined) return
 
-    input.targetRay.addEventListener('selectstart', handlePointerDown)
-    input.targetRay.addEventListener('selectend', handlePointerUp)
-    input.targetRay.addEventListener('select', handleClick)
-
-    return () => {
+    const removeHandlers = () => {
       input.targetRay.removeEventListener('selectstart', handlePointerDown)
       input.targetRay.removeEventListener('selectend', handlePointerUp)
       input.targetRay.removeEventListener('select', handleClick)
     }
+
+    if (enabled) {
+      input.targetRay.addEventListener('selectstart', handlePointerDown)
+      input.targetRay.addEventListener('selectend', handlePointerUp)
+      input.targetRay.addEventListener('select', handleClick)
+
+      return removeHandlers
+    } else {
+      removeHandlers()
+      return
+    }
   })
 
-  watch(hand, (input) => {
+  watch([hand, handContext.enabled], ([input, enabled]) => {
     if (input === undefined) return
-    input.hand.addEventListener('pinchstart', handlePointerDown)
-    input.hand.addEventListener('pinchend', handlePointerUp)
-    input.hand.addEventListener('pinchend', handleClick)
-    return () => {
+
+    const removeHandlers = () => {
       input.hand.removeEventListener('pinchstart', handlePointerDown)
       input.hand.removeEventListener('pinchend', handlePointerUp)
       input.hand.removeEventListener('pinchend', handleClick)
+    }
+
+    if (enabled) {
+      input.hand.addEventListener('pinchstart', handlePointerDown)
+      input.hand.addEventListener('pinchend', handlePointerUp)
+      input.hand.addEventListener('pinchend', handleClick)
+
+      return removeHandlers
+    } else {
+      removeHandlers()
+      return
     }
   })
 

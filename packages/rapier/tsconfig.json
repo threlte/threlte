@@ -3,6 +3,16 @@
   "compilerOptions": {
     "noErrorTruncation": true,
     "strict": true,
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+
     "paths": {
       "$lib": ["./src/lib"],
       "$lib/*": ["./src/lib/*"],

@@ -96,11 +96,11 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart = () => {
     isPresenting.set(true)
-    onsessionstart?.({ type: 'sessionstart', target: $session! })
+    onsessionstart?.({ type: 'sessionstart', target: $session } as any)
   }
 
   const handleSessionEnd = () => {
-    onsessionend?.({ type: 'sessionend', target: $session! })
+    onsessionend?.({ type: 'sessionend', target: $session } as any)
     isPresenting.set(false)
     session.set(undefined)
   }
@@ -109,7 +109,7 @@ This should be placed within a Threlte `<Canvas />`.
     onvisibilitychange?.({ ...event, target: $session! })
   }
 
-  const handleInputSourcesChange = (event: XRInputSourceChangeEvent) => {
+  const handleInputSourcesChange = (event: XRInputSourcesChangeEvent) => {
     $isHandTracking = Object.values(event.session.inputSources).some((source) => source.hand)
     oninputsourceschange?.({ ...event, target: $session! })
   }
@@ -134,10 +134,6 @@ This should be placed within a Threlte `<Canvas />`.
     currentSession.addEventListener('visibilitychange', handleVisibilityChange)
     currentSession.addEventListener('inputsourceschange', handleInputSourcesChange)
     currentSession.addEventListener('frameratechange', handleFramerateChange)
-
-    xr.setFoveation(foveation)
-
-    updateTargetFrameRate(frameRate)
 
     return () => {
       currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
@@ -166,11 +162,20 @@ This should be placed within a Threlte `<Canvas />`.
       xr.enabled = false
       xr.removeEventListener('sessionstart', handleSessionStart)
       xr.removeEventListener('sessionend', handleSessionEnd)
+
+      // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
+      session.current?.end()
     }
   })
 
-  $effect.pre(() => updateTargetFrameRate(frameRate))
-  $effect.pre(() => xr.setFoveation(foveation))
+  $effect.pre(() => {
+    updateTargetFrameRate(frameRate)
+  })
+
+  $effect.pre(() => {
+    xr.setFoveation(foveation)
+  })
+
   $effect.pre(() => {
     xr.setReferenceSpaceType(referenceSpace)
     $referenceSpaceType = referenceSpace

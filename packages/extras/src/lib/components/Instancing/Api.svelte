@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { T, useTask, revision } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
+  import type { Snippet } from 'svelte'
   import type { InstancedMesh } from 'three'
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
   import { createApi } from './api'
-  import type { Snippet } from 'svelte'
 
   interface Props {
     instancedMesh: InstancedMesh
@@ -42,7 +42,7 @@
 
       // update the transform matrices and colors
       if (instancedMesh.instanceColor) {
-        instancedMesh.instanceColor.needsUpdate = true
+        instancedMesh.instanceColor!.needsUpdate = true
       }
       instancedMesh.instanceMatrix.needsUpdate = true
 
@@ -64,20 +64,12 @@
     const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
     instancedMesh.count = updateRange
 
-    if (revision >= 159) {
-      instancedMesh.instanceMatrix.clearUpdateRanges()
-      instancedMesh.instanceMatrix.addUpdateRange(0, updateRange * 16)
-    } else {
-      instancedMesh.instanceMatrix.updateRange.count = updateRange * 16
-    }
+    instancedMesh.instanceMatrix.clearUpdateRanges()
+    instancedMesh.instanceMatrix.addUpdateRange(0, updateRange * 16)
 
     if (instancedMesh.instanceColor) {
-      if (revision >= 159) {
-        instancedMesh.instanceColor.clearUpdateRanges()
-        instancedMesh.instanceColor.addUpdateRange(0, updateRange * 3)
-      } else {
-        instancedMesh.instanceColor.updateRange.count = updateRange * 3
-      }
+      instancedMesh.instanceColor.clearUpdateRanges()
+      instancedMesh.instanceColor.addUpdateRange(0, updateRange * 3)
     }
   })
 </script>

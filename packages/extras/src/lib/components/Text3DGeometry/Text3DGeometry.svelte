@@ -27,11 +27,12 @@
   }: Text3DProps = $props()
 
   const suspend = useSuspense()
+  const loader = useLoader(FontLoader)
 
   let loadedFont = $derived(
     suspend<AsyncWritable<Font>>(
       typeof font === 'string'
-        ? useLoader(FontLoader).load(font)
+        ? loader.load(font)
         : asyncWritable<Font>(new Promise((resolve) => resolve(font as Font)))
     )
   )

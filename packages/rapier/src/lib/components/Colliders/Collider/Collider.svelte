@@ -77,7 +77,7 @@
 
     const scaledArgs = scaleColliderArgs(shape, args, scale)
 
-    // @ts-ignore
+    // @ts-expect-error
     const colliderDesc = ColliderDesc[shape](...scaledArgs) as ColliderDesc
 
     collider = world.createCollider(colliderDesc, rigidBody)

@@ -34,18 +34,19 @@
   $effect(() => {
     if (!controls) return
     const helper = controls.getHelper()
-    if (helper) {
-      const objects: Object3D[] = []
-      helper.traverse((node) => {
-        objects.push(node)
-      })
+
+    if (!helper) return
+
+    const objects: Object3D[] = []
+    helper.traverse((node) => {
+      objects.push(node)
+    })
+    for (const object of objects) {
+      addObject(object)
+    }
+    return () => {
       for (const object of objects) {
-        addObject(object)
-      }
-      return () => {
-        for (const object of objects) {
-          removeObject(object)
-        }
+        removeObject(object)
       }
     }
   })
@@ -106,7 +107,7 @@
     }
   }
 
-  const { commit, buildTransaction } = useTransactions()
+  const { commit } = useTransactions()
 
   const onMouseUp = () => {
     if (commitObjects.length !== initialValues.length) return

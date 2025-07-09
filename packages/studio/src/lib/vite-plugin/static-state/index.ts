@@ -25,7 +25,7 @@ const hasStaticState = (code: string) => {
   return code.includes('extends StaticState')
 }
 
-const regex = /extends StaticState[^\{]*{/gm
+const regex = /extends StaticState[^{]*{/gm
 
 const appendMeta = (code: string, meta: StaticStateMeta) => {
   // add meta info to the code: id

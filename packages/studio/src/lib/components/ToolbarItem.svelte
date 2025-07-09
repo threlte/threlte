@@ -1,9 +1,13 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import Portal from './Portal.svelte'
 
-  export let position: 'left' | 'right' | 'center' = 'left'
+  let {
+    position = 'left',
+    children
+  }: { position?: 'left' | 'right' | 'center'; children?: Snippet } = $props()
 </script>
 
 <Portal target=".toolbar-items-{position}">
-  <slot />
+  {@render children?.()}
 </Portal>

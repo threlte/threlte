@@ -3,16 +3,14 @@
 -->
 <script
   lang="ts"
-  context="module"
+  module
 >
-  import { writable } from 'svelte/store'
   import { T } from '@threlte/core'
   import { left as leftStore, right as rightStore } from '../hooks/useController'
   import { isHandTracking, pointerState, teleportState, controllerEvents } from '../internal/stores'
   import type { XRControllerEvents } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
-  import ScenePortal from './internal/ScenePortal.svelte'
   import TeleportCursor from './internal/TeleportCursor.svelte'
   import TeleportRay from './internal/TeleportRay.svelte'
   import type { Snippet } from 'svelte'
@@ -77,11 +75,10 @@
     teleportCursor: teleportCursorSnippet
   }: Props = $props()
 
-  const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
-  $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
+  const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : hand ?? 'left')
 
   $effect.pre(() =>
-    controllerEvents[$handedness].set({
+    controllerEvents[handedness].set({
       onconnected,
       ondisconnected,
       onselect,
@@ -93,12 +90,12 @@
     })
   )
 
-  let store = $derived(stores[$handedness])
-  let grip = $derived($store?.grip)
-  let targetRay = $derived($store?.targetRay)
-  let model = $derived($store?.model)
-  let hasPointerControls = $derived($pointerState[$handedness].enabled)
-  let hasTeleportControls = $derived($teleportState[$handedness].enabled)
+  const store = $derived(stores[handedness])
+  const grip = $derived($store?.grip)
+  const targetRay = $derived($store?.targetRay)
+  const model = $derived($store?.model)
+  const hasPointerControls = $derived($pointerState[handedness].enabled)
+  const hasTeleportControls = $derived($teleportState[handedness].enabled)
 </script>
 
 {#if !$isHandTracking}
@@ -120,7 +117,7 @@
 
       {#if hasPointerControls || hasTeleportControls}
         <ShortRay
-          handedness={$handedness}
+          {handedness}
           children={pointerRaySnippet}
         />
       {/if}
@@ -128,24 +125,22 @@
   {/if}
 {/if}
 
-<ScenePortal>
-  {#if hasPointerControls}
-    <PointerCursor
-      handedness={$handedness}
-      children={pointerCursorSnippet}
-    />
-  {/if}
+{#if hasPointerControls}
+  <PointerCursor
+    {handedness}
+    children={pointerCursorSnippet}
+  />
+{/if}
 
-  {#if hasTeleportControls && targetRay !== undefined}
-    <TeleportRay
-      {targetRay}
-      handedness={$handedness}
-      children={teleportRaySnippet}
-    />
+{#if hasTeleportControls && targetRay !== undefined}
+  <TeleportRay
+    {targetRay}
+    {handedness}
+    children={teleportRaySnippet}
+  />
 
-    <TeleportCursor
-      handedness={$handedness}
-      children={teleportCursorSnippet}
-    />
-  {/if}
-</ScenePortal>
+  <TeleportCursor
+    {handedness}
+    children={teleportCursorSnippet}
+  />
+{/if}

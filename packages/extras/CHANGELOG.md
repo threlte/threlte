@@ -1,5 +1,85 @@
 # @threlte/extras
 
+## 9.4.0
+
+### Minor Changes
+
+- 12be21a: Add Decal and SVG components
+
+### Patch Changes
+
+- 6aab0e9: Fix interactivity memory leak
+
+## 9.3.0
+
+### Minor Changes
+
+- 0817794: Add CameraControls component
+
+## 9.2.2
+
+### Patch Changes
+
+- 774445e: Link to primary three-perf library in package.json
+- 774445e: Bump supported Three.js version to greater than 159
+
+## 9.2.1
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 9.2.0
+
+### Minor Changes
+
+- 048a269: Migrate CSM to runes
+
+### Patch Changes
+
+- ca17d14: Make all MeshLine props reactive
+- 4fdc0dc: Upgrade Eslint to v9
+- 0a6cb5f: fix(suspense): add invalidate calls to suspense boundary
+- d2c5599: Stronger typechecking
+- f2fb26b: feat(html): hide HTML element when suspended
+
+## 9.1.4
+
+### Patch Changes
+
+- f268570: Remove generation of intermediate Object3Ds when creating portals
+
+## 9.1.3
+
+### Patch Changes
+
+- 8ce3129: Update instanced sprite dependency to support three 175
+
+## 9.1.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+- 1a93c64: Fix ownership_invalid_mutation in InstancedMesh and InstancedMeshes
+
+## 9.1.1
+
+### Patch Changes
+
+- ab34cce: Fix `<HTML>` auto invalidation
+
+## 9.1.0
+
+### Minor Changes
+
+- 2f5e124: Add fadeOrigin parameter to Grid
+
+## 9.0.2
+
+### Patch Changes
+
+- 61a8a99: Fix portal components not being removed on unmount
+
 ## 9.0.1
 
 ### Patch Changes

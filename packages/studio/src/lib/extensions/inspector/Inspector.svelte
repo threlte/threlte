@@ -1,8 +1,6 @@
 <script lang="ts">
   import { Element, Pane, Separator } from 'svelte-tweakpane-ui'
   import { type Pane as TpPane } from 'tweakpane'
-  import IconButton from '../../components/IconButton.svelte'
-  import Tooltip from '../../components/Tooltip.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import { browser } from '../../internal/browser'
@@ -11,6 +9,9 @@
   import { useTransactions } from '../transactions/useTransactions'
   import Bindings from './Bindings.svelte'
   import { inspectorScope, type InspectorActions, type InspectorState } from './types'
+  import type { Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
   const { openInEditor } = useTransactions()
@@ -60,7 +61,7 @@
   <ToolbarButton
     label="Inspector"
     icon="mdiPencil"
-    on:click={ext.toggleEnabled}
+    onclick={ext.toggleEnabled}
     active={ext.state.enabled}
   />
 </ToolbarItem>
@@ -77,17 +78,15 @@
     {#if objectSelection.selectedObjects.length === 1}
       <Element>
         <div style="display: flex; justify-content: end; margin-bottom: 4px;">
-          <Tooltip>
-            <IconButton
-              label="Open In Editor"
-              icon="mdiMenuOpen"
-              on:click={() => {
-                openInEditor(objectSelection.selectedObjects[0])
-              }}
-              disabled={objectSelection.selectedObjects.length !== 1}
-            />
-            <span slot="tooltip">Open In Editor</span>
-          </Tooltip>
+          <ToolbarButton
+            icon="mdiMenuOpen"
+            label="Open In Editor"
+            onclick={() => {
+              openInEditor(objectSelection.selectedObjects[0])
+            }}
+            disabled={objectSelection.selectedObjects.length !== 1}
+            tooltip="Open In Editor"
+          />
         </div>
       </Element>
       <Separator />
@@ -96,4 +95,4 @@
   </Pane>
 {/if}
 
-<slot />
+{@render children?.()}

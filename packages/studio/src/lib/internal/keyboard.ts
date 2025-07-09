@@ -154,7 +154,6 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       const action = downKeyMap.current.get(flattenedKeyCombo)
       if (!action) return
       // no need to await here
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       runAction(action.scope, action.actionId)
     }
   }
@@ -184,7 +183,6 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       const action = upKeyMap.current.get(flattenedKeyCombo)
       if (!action) return
       // no need to await here
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       runAction(action.scope, action.actionId)
     }
   }

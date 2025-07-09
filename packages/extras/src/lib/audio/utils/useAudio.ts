@@ -56,7 +56,8 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
         audio.setMediaStreamSource(source)
       }
       loaded.set(true)
-      audio.buffer ? props.onload?.(audio.buffer) : props.onload?.()
+
+      props.onload?.(audio.buffer)
     } catch (error) {
       props.onerror?.(error as ErrorEvent)
     }

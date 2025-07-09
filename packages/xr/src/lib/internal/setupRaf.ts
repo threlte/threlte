@@ -1,5 +1,4 @@
 import { onDestroy } from 'svelte'
-// @ts-expect-error untyped internal import, when have you ever done me wrong?
 import { raf } from 'svelte/internal/client'
 import { watch } from '@threlte/core'
 import { session } from './stores'
