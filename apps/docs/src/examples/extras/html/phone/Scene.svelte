@@ -12,7 +12,7 @@
     materials: {}
   }>('/models/phone/phone.glb')
 
-  const phoneGeometry = $derived(gltf?.nodes.phone.geometry)
+  const phoneGeometry = $derived($gltf?.nodes.phone.geometry)
 
   const url = window.origin
 </script>
@@ -60,10 +60,10 @@
     </div>
   </HTML>
 
-  {#if $phoneGeometry}
+  {#if phoneGeometry}
     <T.Mesh
       scale={5.65}
-      geometry={$phoneGeometry}
+      geometry={phoneGeometry}
     >
       <T.MeshStandardMaterial
         color="#FF3F00"
