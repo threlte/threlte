@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { OrbitControls, TrackballControls, TransformControls } from '@threlte/extras'
-
-  import { BoxGeometry, MeshStandardMaterial, PerspectiveCamera } from 'three'
+  import { PerspectiveCamera } from 'three'
 
   interface Props {
     controls?: '<TrackballControls>' | '<OrbitControls>'
