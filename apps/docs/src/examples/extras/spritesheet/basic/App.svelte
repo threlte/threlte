@@ -3,7 +3,7 @@
   import Scene from './Scene.svelte'
 </script>
 
-<div class="h-full">
+<div>
   <Canvas>
     <Scene />
   </Canvas>
@@ -11,7 +11,6 @@
 
 <style>
   div {
-    background-color: black;
     height: 100%;
   }
 </style>

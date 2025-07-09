@@ -1,0 +1,295 @@
+---
+order: 5.1
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/SpriteSheetMaterial/SpriteSheetMaterial.svelte'
+name: <SpriteSheetMaterial>
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'textureUrl',
+          type: 'string',
+          required: true,
+          description: 'The URL of the spritesheet texture image.'
+        },
+        {
+          name: 'dataUrl',
+          type: 'string',
+          required: false,
+          description: 'The URL of the spritesheet JSON.'
+        },
+        {
+          name: 'animate',
+          type: 'boolean',
+          required: false,
+          description: 'Required if spritesheet is animatable.'
+        },
+        {
+          name: 'animation',
+          type: 'string',
+          required: false,
+          description: 'The current playing animation name.'
+        },
+        {
+          name: 'loop',
+          type: 'boolean',
+          required: false,
+          default: 'true',
+          description: 'Whether or not the current animation should loop.'
+        },
+        {
+          name: 'autoplay',
+          type: 'boolean',
+          required: false,
+          default: 'true',
+          description: 'Controls whether or not to automatically run an animation on load.'
+        },
+        {
+          name: 'fps',
+          type: 'boolean',
+          required: false,
+          default: '10',
+          description: 'The desired frames per second of the animation.'
+        },
+        {
+          name: 'filter',
+          type: '"nearest" | "linear"',
+          required: false,
+          default: '"nearest"',
+          description: 'The texture filtering applied to the spritesheet.'
+        },
+        {
+          name: 'alphaTest',
+          type: 'number',
+          required: false,
+          default: '0.1',
+          description: 'Sets the alpha value to be used when running an alpha test.'
+        },
+        {
+          name: 'delay',
+          type: 'number',
+          required: false,
+          default: '0',
+          description: 'Delay the start of the animation in ms.'
+        },
+        {
+          name: 'transparent',
+          type: 'boolean',
+          required: false,
+          default: 'true',
+          description: 'Whether or not the material should be transparent.'
+        },
+        {
+          name: 'flipX',
+          type: 'boolean',
+          required: false,
+          default: 'false',
+          description: 'Whether or not the Sprite should flip sides on the x-axis.'
+        },
+
+        {
+          name: 'totalFrames',
+          type: 'number',
+          required: false,
+          default: 'rows * columns - 1',
+          description: 'The total number of frames in the spritesheet.'
+        },
+        {
+          name: 'startFrame',
+          type: 'number|string',
+          required: false,
+          default: '0',
+          description: 'The index or name of the initial frame.'
+        },
+        {
+          name: 'endFrame',
+          type: 'number',
+          required: false,
+          default: 'totalFrames',
+          description: 'The end frame of the current animation.'
+        },
+        {
+          name: 'rows',
+          type: 'number',
+          required: false,
+          default: '1',
+          description: 'The number of rows in the spritesheet.'
+        },
+        {
+          name: 'columns',
+          type: 'number',
+          required: false,
+          description: 'The number of columns in the spritesheet.'
+        }
+      ],
+    events:
+      [
+        { name: 'onload', payload: 'void', description: 'Fires when all resources have loaded.' },
+        { name: 'onstart', payload: 'void', description: 'Fires when an animation starts.' },
+        { name: 'onend', payload: 'void', description: 'Fires when an animation ends.' },
+        { name: 'onloop', payload: 'void', description: 'Fires when an animation loop completes.' }
+      ],
+    exports: [{ name: play, type: '() => void' }, { name: pause, type: '() => void' }]
+  }
+---
+
+A common pattern with 2D assets is to pack sprites into one texture called a
+spritesheet. This can be used for static sprites and sprite animations.
+
+## Basics
+
+A `Sprite` is a plane that always faces the camera and cannot cast
+shadows. The `SpriteMaterial` is transparent by default and isn't affected by
+lighting. This can be a drawback sometimes so using a normal `Mesh`,
+`PlaneGeometry` and `MeshStandardMaterial` is a valid option.
+
+<Example path="extras/spritesheet/basic" />
+
+Any material can be used.
+
+```svelte {2}+
+<SpriteSheetMaterial
+  is={THREE.MeshToonMaterial}
+  textureUrl="fire.png"
+/>
+```
+
+If no material is provided, the default is a `SpriteMaterial` unless it's the
+child of a `Mesh` in which case its a `MeshStandardMaterial`. A custom depth material
+is added when its the child of a mesh to support shadows.
+
+It's assumed that the spritesheet's texture will be used again elsewhere within
+your app. This would normally cause problems however a
+[clone](https://threejs.org/docs/index.html?q=text#api/en/textures/Texture.clone)
+of the texture is used instead.
+
+## SpriteSheets
+
+The data for your spritesheet is either created from props or loaded from file.
+To load the data from file provide the `dataURL` and `dataFormat` props. To
+create the data from props you'll need to provide the appropriate configuration
+of props.
+
+If the component isn't given enough information from props, it may either
+display the entire spritesheet or the first sprite frame.
+
+### Multiple Sprites
+
+The simplest setup is to pack your sprites into a single row or uniform grid.
+
+Provide the:
+
+- `columns` for a single row.
+- `rows` and `columns` for a uniform grid.
+
+```svelte {3-5}+
+<SpriteSheetMaterial
+  textureUrl="fruit.png"
+  columns={4}
+  rows={4}
+  startFrame={10}
+/>
+```
+
+If a spritesheet was loaded from file, the `startFrame` prop can be either the
+desired frames name or the index of the sprite within the frames array.
+
+If the spritesheet data was created from props, then the `startFrame` must be
+the index of the sprite within the created frames array.
+
+### Animated Sprites
+
+If a spritesheet is meant to be animated the `animate` prop is required.
+
+If the data is loaded from file, that data will be used otherwise an animation
+may be created if the appropriate props are present.
+
+When creating sheetdata from props, provide the `animate` prop as well as:
+
+- `totalFrames` or `columns` if the spritesheet is only a single row.
+- `rows` and `columns` otherwise.
+
+```svelte {3-4}+
+<SpriteSheetMaterial
+  textureUrl="coin.png"
+  totalFrames={12}
+  animate
+/>
+```
+
+#### Multiple animations
+
+If a spritesheet data was loaded from file, use the `animation` prop to select
+your desired animation by name. `animation` is reactive to changes and will
+update the currently playing animation.
+
+```svelte {5-6}+
+<SpriteSheetMaterial
+  textureUrl="./fire.png"
+  dataURL="./fire.json"
+  dataFormat="Threlte"
+  animation="default"
+  animate
+/>
+```
+
+If the spritesheet data was created from props, provide the `startFrame`
+and `endFrame` indexes.
+
+```svelte {6-8}+
+<T.Sprite>
+  <SpriteSheetMaterial
+    textureUrl="./fire.png"
+    rows={4}
+    columns={4}
+    startFrame={4}
+    endFrame={7}
+    animate
+  />
+</T.Sprite>
+```
+
+<Example path="extras/spritesheet/animated" />
+
+## Typescript
+
+While using spritesheets, keeping track of which index maps to which sprite can be taxing and error prone.
+
+One of the tools from typescript to help is [enum's](https://www.typescriptlang.org/docs/handbook/enums.html).
+
+```svelte {3-7}+ {14}+
+<script lang="ts">
+  import { SpriteSheetMaterial } from '@threlte/extras'
+  enum SpriteSheet {
+		Apple // 0
+		Pear // 1
+		Grapes // 2
+	}
+</script>
+
+<SpriteSheetMaterial
+  textureUrl="fruit.png"
+  columns={4}
+  rows={4}
+  startFrame={SpriteSheet.Apple}
+/>
+```
+
+### Creating spritesheet data
+
+If manually creating a file for your spritesheet, the `SpriteSheetFrame`,
+`SpriteSheetAnimation` and `SpriteSheetData` types are provided. The file is
+expected to be JSON that satisfies the `SpriteSheetData` type. Add
+`dataFormat="Threlte"` to your `<SpriteSheetMaterial/>` so that it gets
+initialized correctly.
+
+## Supported External data formats
+
+Your JSON metadata may have been created from a third-party program, in which
+case if it's supported it will be transformed into the format that threlte uses.
+
+The following are currently supported:
+
+- [Aseprite](https://www.aseprite.org/)
