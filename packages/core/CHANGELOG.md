@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.1.3
+
+### Patch Changes
+
+- f08ec19: Reduce number of dispose effects per app
+
 ## 8.1.2
 
 ### Patch Changes
