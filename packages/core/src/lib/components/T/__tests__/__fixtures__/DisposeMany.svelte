@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { T, useDisposal, useTask } from '@threlte/core'
 
   const { dispose } = useDisposal()
