@@ -61,10 +61,10 @@ export { default as Resize } from './components/Resize/Resize.svelte'
 export { default as CubeCamera } from './components/CubeCamera/CubeCamera.svelte'
 export { default as LinearGradientTexture } from './components/GradientTexture/linear/LinearGradientTexture.svelte'
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
-export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
+export type { ColorStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
-export { default as Shadow } from './components/Shadow/Shadow.svelte'
+export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMaterial.svelte'
 
 // Transitions
 export { transitions } from './transitions/transltions.svelte'

@@ -1,0 +1,61 @@
+<script
+  module
+  lang="ts"
+>
+  const width = 128
+  const height = width
+
+  const outerRadius = 0.5 * width
+</script>
+
+<script lang="ts">
+  import type { ColorStop } from '../GradientTexture/types'
+  import type { ShadowProps } from './types'
+  import { DoubleSide, MeshBasicMaterial } from 'three'
+  import RadialGradientTexture from '../GradientTexture/radial/RadialGradientTexture.svelte'
+  import { T } from '@threlte/core'
+
+  let {
+    children,
+    color = 'black',
+    ref = $bindable(),
+    transparent = true,
+    opacity = 0.5,
+    depthWrite = false,
+    side = DoubleSide,
+    fog = false,
+    ...restProps
+  }: ShadowProps = $props()
+
+  const stops: ColorStop[] = $derived([
+    {
+      color,
+      offset: 0
+    },
+    {
+      color: 'rgba(0,0,0,0)',
+      offset: 1
+    }
+  ])
+
+  const material = new MeshBasicMaterial()
+</script>
+
+<T
+  is={material}
+  bind:ref
+  {transparent}
+  {side}
+  {depthWrite}
+  {fog}
+  {opacity}
+  {...restProps}
+>
+  <RadialGradientTexture
+    {width}
+    {height}
+    {outerRadius}
+    {stops}
+  />
+  {@render children?.({ ref: material })}
+</T>

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { ColorRepresentation, ToneMapping, Wrapping } from 'three'
-  import type { GradientStop } from '@threlte/extras'
+  import type { ColorStop } from '@threlte/extras'
   import { DoubleSide } from 'three'
   import { RadialGradientTexture, OrbitControls } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
@@ -43,7 +43,7 @@
     textureWrapT
   }: SceneProps = $props()
 
-  let stops: GradientStop[] = $derived([
+  let stops: ColorStop[] = $derived([
     { color: gradientStartColor, offset: 0 },
     { color: gradientEndColor, offset: 1 }
   ])

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Mesh } from 'three'
-  import { OrbitControls, Shadow } from '@threlte/extras'
+  import { OrbitControls, ShadowMaterial } from '@threlte/extras'
   import { T, useTask } from '@threlte/core'
 
   const plane = new Mesh()
@@ -49,8 +49,11 @@
   <T is={plane}>
     <T.PlaneGeometry />
   </T>
-  <Shadow
-    {scale}
-    position.z={0.1}
-  />
+  <T.Mesh {scale}>
+    <T.PlaneGeometry />
+    <ShadowMaterial
+      polygonOffset
+      polygonOffsetFactor={-1}
+    />
+  </T.Mesh>
 </T.Group>
