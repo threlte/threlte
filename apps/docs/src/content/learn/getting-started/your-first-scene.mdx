@@ -350,7 +350,7 @@ cube rotate around its y-axis.
 
   const scale = new Spring(1)
 
-  let rotation = 0
+  let rotation = $state(0)
   useTask((delta) => {
     rotation += delta
   })
@@ -405,7 +405,7 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
 
   const scale = new Spring(1)
 
-  let rotation = 0
+  let rotation = $state(0)
   useTask((delta) => {
     rotation += delta
   })
@@ -458,7 +458,7 @@ set `castShadow` on both the light and our cube, and set `receiveShadow` on our 
 
   const scale = new Spring(1)
 
-  let rotation = 0
+  let rotation = $state(0)
   useTask((delta) => {
     rotation += delta
   })

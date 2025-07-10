@@ -3,12 +3,12 @@
   import Scene from './Scene.svelte'
   import { Pane, Slider, Checkbox } from 'svelte-tweakpane-ui'
 
-  let x = 0
-  let y = 0
-  let z = 0
-  let precise = false
-  let showSphere = true
-  let autoAlign = true
+  let x = $state(0)
+  let y = $state(0)
+  let z = $state(0)
+  let precise = $state(false)
+  let showSphere = $state(true)
+  let autoAlign = $state(true)
 </script>
 
 <Pane

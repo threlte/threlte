@@ -6,7 +6,7 @@
   interactivity()
   const scale = new Spring(1)
 
-  let rotation = 0
+  let rotation = $state(0)
   useTask((delta) => {
     rotation += delta
   })
