@@ -1,6 +1,5 @@
 import { getContext, onMount, setContext } from 'svelte'
 import { useDisposal, type DisposableObject } from '../../../context/fragments/disposal'
-import type { MaybeInstance } from '../types'
 
 const contextName = Symbol('threlte-disposable-object-context')
 type ThrelteDisposeContext = () => boolean
@@ -14,13 +13,18 @@ export const isDisposableObject = (object: unknown): object is DisposableObject 
   return typeof (object as any)?.dispose === 'function'
 }
 
-export const useDispose = <T>(
-  getRef: () => MaybeInstance<T>,
-  getDispose: () => boolean | undefined
-) => {
-  const ref = $derived(getRef())
-  const disposable = $derived(isDisposableObject(ref) ? ref : undefined)
-  const dispose = $derived(getDispose())
+export const useSetDispose = (getDispose: () => boolean | undefined) => {
+  const parentDispose = getContext<ThrelteDisposeContext | undefined>(contextName)
+
+  // We merge the local dispose with the parent dispose. If the parent dispose
+  // is not set, we use true as default.
+  const mergedDispose = $derived(getDispose() ?? parentDispose?.() ?? true)
+
+  setContext<ThrelteDisposeContext>(contextName, () => mergedDispose)
+}
+
+export const useDispose = (getDisposable: () => DisposableObject) => {
+  const disposable = $derived(getDisposable())
 
   let previousDisposable: DisposableObject | undefined
 
@@ -31,9 +35,7 @@ export const useDispose = <T>(
 
   // We merge the local dispose with the parent dispose. If the parent dispose
   // is not set, we use true as default.
-  const mergedDispose = $derived(dispose ?? parentDispose?.() ?? true)
-
-  setContext<ThrelteDisposeContext>(contextName, () => mergedDispose)
+  const mergedDispose = $derived(parentDispose?.() ?? true)
 
   $effect(() => {
     if (disposable === previousDisposable) {
@@ -59,7 +61,7 @@ export const useDispose = <T>(
   })
 
   onMount(() => {
-    if (!mergedDispose || !disposable) return
+    if (!mergedDispose) return
 
     return () => {
       disposableObjectUnmounted(disposable)

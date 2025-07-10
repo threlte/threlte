@@ -4,15 +4,16 @@ import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { extend, T } from '../T'
 import Bindable from './__fixtures__/Bindable.svelte'
+import Stress from './__fixtures__/Stress.svelte'
 
 describe('<T>', () => {
-  it('creates a Three.js class instance from a class "is" argument', () => {
+  it('instantiates a Three.js object when the "is" argument is a class', () => {
     const { scene } = render(T, { props: { is: Group } })
 
     expect(scene.getObjectByProperty('type', 'Group')).not.toBeFalsy()
   })
 
-  it('creates a Three.js class when a property is invoked', () => {
+  it('instantiates a Three.js object when a property is accessed', () => {
     const { scene } = render(T.Group)
 
     expect(scene.getObjectByProperty('type', 'Group')).not.toBeFalsy()
@@ -54,5 +55,13 @@ describe('<T>', () => {
     expect(onRefCreate).toHaveBeenCalledTimes(2)
     expect(onRefCreate).toHaveBeenNthCalledWith(1, undefined)
     expect(onRefCreate).toHaveBeenNthCalledWith(2, group)
+  })
+
+  it('renders a large number of components without errors', async () => {
+    const { unmount, rerender } = render(Stress)
+
+    await rerender()
+
+    unmount()
   })
 })
