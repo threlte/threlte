@@ -1,6 +1,5 @@
-import { getContext, onMount, setContext } from 'svelte'
+import { getContext, setContext } from 'svelte'
 import { useDisposal, type DisposableObject } from '../../../context/fragments/disposal'
-import type { MaybeInstance } from '../types'
 
 const contextName = Symbol('threlte-disposable-object-context')
 type ThrelteDisposeContext = () => boolean
@@ -14,15 +13,18 @@ export const isDisposableObject = (object: unknown): object is DisposableObject 
   return typeof (object as any)?.dispose === 'function'
 }
 
-export const useDispose = <T>(
-  getRef: () => MaybeInstance<T>,
-  getDispose: () => boolean | undefined
-) => {
-  const ref = $derived(getRef())
-  const disposable = $derived(isDisposableObject(ref) ? ref : undefined)
-  const dispose = $derived(getDispose())
+export const useSetDispose = (getDispose: () => boolean | undefined) => {
+  const parentDispose = getContext<ThrelteDisposeContext | undefined>(contextName)
 
-  let previousDisposable: DisposableObject | undefined
+  // We merge the local dispose with the parent dispose. If the parent dispose
+  // is not set, we use true as default.
+  const mergedDispose = $derived(getDispose() ?? parentDispose?.() ?? true)
+
+  setContext<ThrelteDisposeContext>(contextName, () => mergedDispose)
+}
+
+export const useDispose = (getDisposable: () => DisposableObject) => {
+  const disposable = $derived(getDisposable())
 
   const { disposableObjectMounted, disposableObjectUnmounted, removeObjectFromDisposal } =
     useDisposal()
@@ -31,38 +33,15 @@ export const useDispose = <T>(
 
   // We merge the local dispose with the parent dispose. If the parent dispose
   // is not set, we use true as default.
-  const mergedDispose = $derived(dispose ?? parentDispose?.() ?? true)
-
-  setContext<ThrelteDisposeContext>(contextName, () => mergedDispose)
+  const dispose = $derived(parentDispose?.() ?? true)
 
   $effect(() => {
-    if (disposable === previousDisposable) {
-      // dispose changed
-      if (!mergedDispose) {
-        // disposal is no longer enabled, so we need to deregister the previous ref
-        if (previousDisposable) removeObjectFromDisposal(previousDisposable)
-      } else {
-        // disposal is enabled, so we need to register the previous ref
-        if (previousDisposable) disposableObjectMounted(previousDisposable)
-      }
-    } else {
-      // ref changed
-      if (mergedDispose) {
-        // we're disposing the old ref
-        if (previousDisposable) disposableObjectUnmounted(previousDisposable)
-        // and registering the new ref
-        if (disposable) disposableObjectMounted(disposable)
-      }
+    if (dispose) {
+      disposableObjectMounted(disposable)
+      return () => disposableObjectUnmounted(disposable)
     }
 
-    previousDisposable = disposable
-  })
-
-  onMount(() => {
-    if (!mergedDispose || !disposable) return
-
-    return () => {
-      disposableObjectUnmounted(disposable)
-    }
+    removeObjectFromDisposal(disposable)
+    return
   })
 }

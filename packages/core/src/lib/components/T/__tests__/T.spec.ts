@@ -6,13 +6,13 @@ import { extend, T } from '../T'
 import Bindable from './__fixtures__/Bindable.svelte'
 
 describe('<T>', () => {
-  it('creates a Three.js class instance from a class "is" argument', () => {
+  it('instantiates a Three.js object when the "is" argument is a class', () => {
     const { scene } = render(T, { props: { is: Group } })
 
     expect(scene.getObjectByProperty('type', 'Group')).not.toBeFalsy()
   })
 
-  it('creates a Three.js class when a property is invoked', () => {
+  it('instantiates a Three.js object when a property is accessed', () => {
     const { scene } = render(T.Group)
 
     expect(scene.getObjectByProperty('type', 'Group')).not.toBeFalsy()
