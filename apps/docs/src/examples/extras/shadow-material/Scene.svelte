@@ -15,13 +15,14 @@
   plane.scale.y = planeScale
 
   let time = 0
-  let scale = $state(1)
+
+  const shadowMesh = new Mesh()
 
   useTask((dt) => {
     time += dt
     const s = Math.sin(time)
     sphere.position.y = 2.5 + s
-    scale = 3 + s
+    shadowMesh.scale.setScalar(3 + s)
   })
 </script>
 
@@ -49,11 +50,11 @@
   <T is={plane}>
     <T.PlaneGeometry />
   </T>
-  <T.Mesh {scale}>
+  <T is={shadowMesh}>
     <T.PlaneGeometry />
     <ShadowMaterial
       polygonOffset
       polygonOffsetFactor={-1}
     />
-  </T.Mesh>
+  </T>
 </T.Group>
