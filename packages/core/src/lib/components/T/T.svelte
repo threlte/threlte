@@ -20,6 +20,7 @@
     attach,
     manual = false,
     makeDefault = false,
+    dispose,
     ref = $bindable(),
     oncreate,
     children,
@@ -54,7 +55,7 @@
       return makeDefault
     },
     get dispose() {
-      return props.dispose
+      return dispose
     },
     get props() {
       return props
@@ -92,7 +93,7 @@
   })
 
   // Disposal
-  useSetDispose(() => props.dispose)
+  useSetDispose(() => dispose)
 
   $effect.pre(() => {
     if (isDisposableObject(internalRef)) {
