@@ -1,4 +1,4 @@
-import { getContext, onMount, setContext } from 'svelte'
+import { getContext, setContext } from 'svelte'
 import { useDisposal, type DisposableObject } from '../../../context/fragments/disposal'
 
 const contextName = Symbol('threlte-disposable-object-context')
@@ -26,8 +26,6 @@ export const useSetDispose = (getDispose: () => boolean | undefined) => {
 export const useDispose = (getDisposable: () => DisposableObject) => {
   const disposable = $derived(getDisposable())
 
-  let previousDisposable: DisposableObject | undefined
-
   const { disposableObjectMounted, disposableObjectUnmounted, removeObjectFromDisposal } =
     useDisposal()
 
@@ -35,36 +33,15 @@ export const useDispose = (getDisposable: () => DisposableObject) => {
 
   // We merge the local dispose with the parent dispose. If the parent dispose
   // is not set, we use true as default.
-  const mergedDispose = $derived(parentDispose?.() ?? true)
+  const dispose = $derived(parentDispose?.() ?? true)
 
   $effect(() => {
-    if (disposable === previousDisposable) {
-      // dispose changed
-      if (!mergedDispose) {
-        // disposal is no longer enabled, so we need to deregister the previous ref
-        if (previousDisposable) removeObjectFromDisposal(previousDisposable)
-      } else {
-        // disposal is enabled, so we need to register the previous ref
-        if (previousDisposable) disposableObjectMounted(previousDisposable)
-      }
-    } else {
-      // ref changed
-      if (mergedDispose) {
-        // we're disposing the old ref
-        if (previousDisposable) disposableObjectUnmounted(previousDisposable)
-        // and registering the new ref
-        if (disposable) disposableObjectMounted(disposable)
-      }
+    if (dispose) {
+      disposableObjectMounted(disposable)
+      return () => disposableObjectUnmounted(disposable)
     }
 
-    previousDisposable = disposable
-  })
-
-  onMount(() => {
-    if (!mergedDispose) return
-
-    return () => {
-      disposableObjectUnmounted(disposable)
-    }
+    removeObjectFromDisposal(disposable)
+    return
   })
 }
