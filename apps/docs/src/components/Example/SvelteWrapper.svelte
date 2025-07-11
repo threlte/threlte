@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { c } from '../../lib/classes'
   import OpenInStackblitz from './OpenInStackblitz.svelte'
 
   interface Props {
@@ -31,11 +30,11 @@
 </script>
 
 <div
-  class={c(
+  class={[
     'relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20 bg-blue-900',
     hideCode && '!rounded-md',
     cls
-  )}
+  ]}
 >
   {#if iframe}
     <iframe

@@ -138,6 +138,10 @@ export const setupPointerControls = (
 
     // loop through all hits and dispatch events
     dispatchEvents: for (const hit of hits) {
+      const events = dispatchers.get(hit.eventObject)
+
+      if (events === undefined) continue
+
       const intersectionEvent: IntersectionEvent = {
         stopped,
         ...hit,
@@ -159,10 +163,6 @@ export const setupPointerControls = (
         pointer: handContext.pointer.current,
         ray: context.raycaster.ray
       }
-
-      const events = dispatchers.get(hit.eventObject)
-
-      if (events === undefined) return
 
       if (isPointerMove) {
         // Move event ...

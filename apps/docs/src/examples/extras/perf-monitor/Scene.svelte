@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
-  import { DoubleSide } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { DoubleSide, MathUtils } from 'three'
 </script>
 
 <T.PerspectiveCamera
@@ -22,7 +21,7 @@
 <T.DirectionalLight position={[10, 5, 0]} />
 
 <T.Mesh
-  rotation.x={DEG2RAD * -90}
+  rotation.x={MathUtils.DEG2RAD * -90}
   castShadow
   receiveShadow
 >
@@ -41,8 +40,8 @@
 {#each { length: 120 } as _, x}
   {@const distance = Math.abs(Math.sin(x)) * 50 + 10}
   {@const height = Math.abs((30 - distance) / 2)}
-  {@const posX = distance * Math.cos(DEG2RAD * ((360 / 120) * x))}
-  {@const posY = distance * Math.sin(DEG2RAD * ((360 / 120) * x))}
+  {@const posX = distance * Math.cos(MathUtils.DEG2RAD * ((360 / 120) * x))}
+  {@const posY = distance * Math.sin(MathUtils.DEG2RAD * ((360 / 120) * x))}
   <T.Mesh
     castShadow
     receiveShadow

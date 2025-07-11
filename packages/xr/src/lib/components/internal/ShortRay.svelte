@@ -8,11 +8,11 @@
     children?: Snippet
   }
 
-  let { handedness, children }: Props = $props()
+  const { handedness, children }: Props = $props()
 
-  let hovering = $derived($teleportState[handedness].hovering)
-  let intersection = $derived(teleportIntersection[handedness])
-  let visible = $derived(
+  const hovering = $derived($teleportState[handedness].hovering)
+  const intersection = $derived(teleportIntersection[handedness])
+  const visible = $derived(
     $pointerState[handedness].enabled || (hovering && $intersection === undefined)
   )
 
