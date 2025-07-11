@@ -40,8 +40,8 @@ Add in a svelte store like
 [writable](https://svelte.dev/docs/svelte/svelte-store#writable), Threlte's
 [currentWritable](/docs/reference/core/utilities#currentwritable), a
 `$state({})` rune or encapsulate `$state()` within a
-[class](https://svelte.dev/docs/svelte/$state#Classes) to create reactive
-context state for your UI.
+[class](https://svelte.dev/docs/svelte/$state#Classes) to create a reactive
+context for your UI.
 
 <Tip
   type="tip"
@@ -60,7 +60,9 @@ context state for your UI.
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
 
-  let { debug } = setContext('state', { debug: writable(false) })
+  let debug = writable(false)
+
+  setContext('state', { debug })
 </script>
 
 <input
@@ -96,15 +98,13 @@ context state for your UI.
 
 ### Runes example
 
-This currently doesn't work off the bat. The descendant doesn't update.
-
 ```svelte title="App.svelte"
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from '$lib/Scene.svelte'
   import { setContext } from 'svelte'
 
-  const state = $state({
+  let state = $state({
     debug: false
   })
 
@@ -131,9 +131,6 @@ This currently doesn't work off the bat. The descendant doesn't update.
   import { getContext } from 'svelte'
 
   let state = getContext('state')
-
-  // works if this gets added
-  // $inspect(state.debug)
 </script>
 
 <T.Mesh>
@@ -147,15 +144,13 @@ This currently doesn't work off the bat. The descendant doesn't update.
 
 ### Class example
 
-This currently doesn't work off the bat. The descendant doesn't update.
-
 ```svelte title="App.svelte"
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from '$lib/Scene.svelte'
   import { setContext } from 'svelte'
 
-  class State {
+  class MyState {
     debug = $state(false)
   }
 
@@ -182,9 +177,6 @@ This currently doesn't work off the bat. The descendant doesn't update.
   import { getContext } from 'svelte'
 
   let state = getContext('state')
-
-  // works if this gets added
-  // $inspect(state.debug)
 </script>
 
 <T.Mesh>
