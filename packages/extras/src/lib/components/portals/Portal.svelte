@@ -5,7 +5,7 @@
 
   interface Props {
     id?: string
-    object?: string
+    object?: never
     children?: Snippet
   }
 
