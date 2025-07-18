@@ -8,7 +8,7 @@
 
   let { show }: Props = $props()
 
-  let animation: 'Hidden' | 'In' | 'Out' = $state('Hidden')
+  let animation = $state<'Hidden' | 'In' | 'Out'>('Hidden')
   let mounted = false
 
   $effect(() => {

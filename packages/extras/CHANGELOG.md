@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 9.4.2
+
+### Patch Changes
+
+- 381fe96: Fix infinite effect loop in Gizmo
+
+## 9.4.1
+
+### Patch Changes
+
+- 4af59ff: Remove self ref assignment in Environment component
+
 ## 9.4.0
 
 ### Minor Changes

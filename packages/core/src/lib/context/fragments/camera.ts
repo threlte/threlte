@@ -28,6 +28,12 @@ export const createCameraContext = (): CameraContext => {
     }
   })
 
+  watch(camera, ($camera) => {
+    if ($camera === undefined) {
+      camera.set(defaultCamera)
+    }
+  })
+
   const context: CameraContext = { camera }
 
   setContext<CameraContext>('threlte-camera-context', context)

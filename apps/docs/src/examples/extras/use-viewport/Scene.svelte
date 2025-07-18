@@ -6,7 +6,7 @@
   const viewport = useViewport()
   const { renderStage, scheduler } = useThrelte()
 
-  let ref: Mesh
+  let ref = $state.raw<Mesh>()
 
   const positions: [number, number, number][] = [
     [1, 0.5, 3.5],

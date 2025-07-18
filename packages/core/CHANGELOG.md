@@ -1,5 +1,35 @@
 # @threlte/core
 
+## 8.1.3
+
+### Patch Changes
+
+- f08ec19: Reduce number of dispose effects per app
+
+## 8.1.2
+
+### Patch Changes
+
+- 2af56f3: Fix: unattach correct object3d reference on unmount
+
+## 8.1.1
+
+### Patch Changes
+
+- 62da2af: Fix: only reset default camera if no T components with makeDefault exist
+
+## 8.1.0
+
+### Minor Changes
+
+- 74b7b04: Improve T component performance, use runes internals
+
+## 8.0.6
+
+### Patch Changes
+
+- 17f0f85: Change renderer.svelte.ts effects to effects.pre
+
 ## 8.0.5
 
 ### Patch Changes
