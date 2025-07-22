@@ -15,5 +15,5 @@
     "types": ["astro/client"],
     "jsx": "preserve"
   },
-  "exclude": ["node_modules", "src/components/Example/stackblitz-template"]
+  "exclude": ["node_modules", "src/components/Example/stackblitz-template", "dist"]
 }

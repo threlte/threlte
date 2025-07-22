@@ -1,13 +1,19 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { T } from '@threlte/core'
-
   import { HTML } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
   import { BoxGeometry, MeshStandardMaterial } from 'three'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
-  export let title: string
-  export let useGround = true
+  interface Props {
+    title: string
+    useGround?: boolean
+    text?: Snippet
+    children?: Snippet
+  }
+
+  let { title, useGround = true, text, children }: Props = $props()
 </script>
 
 {#if useGround}
@@ -33,9 +39,9 @@
   <div class="w-[500px] -translate-y-1/2 transform text-black">
     <h2>{title}</h2>
     <div class="leading-normal">
-      <slot name="text" />
+      {@render text?.()}
     </div>
   </div>
 </HTML>
 
-<slot />
+{@render children?.()}

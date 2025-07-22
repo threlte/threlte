@@ -1,16 +1,21 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { T, useThrelte } from '@threlte/core'
   import { CSM, Sky, useTexture } from '@threlte/extras'
-  import { BackSide, NearestFilter, RepeatWrapping } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BackSide, NearestFilter, RepeatWrapping, MathUtils } from 'three'
   import DudeSprites from './sprites/DudeSprites.svelte'
   import FlyerSprites from './sprites/FlyerSprites.svelte'
   import FlyerSpritesTyped from './sprites/FlyerSpritesTyped.svelte'
   import GoblinSprites from './sprites/GoblinSprites.svelte'
   import TreeSpriteAtlas from './sprites/TreeSpriteAtlas.svelte'
 
-  export let billboarding = false
-  export let fps: number
+  interface Props {
+    billboarding?: boolean
+    fps: number
+    children?: Snippet
+  }
+
+  let { billboarding = false, fps, children }: Props = $props()
 
   const grass = useTexture('/textures/sprites/pixel-grass.png', {
     transform: (texture) => {
@@ -38,7 +43,7 @@
   renderer.setPixelRatio(1)
 </script>
 
-<slot />
+{@render children?.()}
 
 <CSM
   args={{
@@ -102,7 +107,7 @@
 
   {#if $grass}
     <T.Mesh
-      rotation.x={-DEG2RAD * 90}
+      rotation.x={-MathUtils.DEG2RAD * 90}
       receiveShadow
     >
       <T.CircleGeometry args={[300]} />

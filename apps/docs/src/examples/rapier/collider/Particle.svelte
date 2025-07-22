@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   const geometry = new BoxGeometry(0.25, 0.25, 0.25)
   const material = new MeshStandardMaterial()
@@ -12,8 +12,12 @@
   import type { Euler } from 'three'
   import { BoxGeometry, MeshStandardMaterial, Vector3 } from 'three'
 
-  export let position: Parameters<Vector3['set']>
-  export let rotation: Parameters<Euler['set']>
+  interface Props {
+    position: Parameters<Vector3['set']>
+    rotation: Parameters<Euler['set']>
+  }
+
+  let { position, rotation }: Props = $props()
 </script>
 
 <T.Group

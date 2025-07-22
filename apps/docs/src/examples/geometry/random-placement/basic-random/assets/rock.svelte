@@ -3,7 +3,11 @@
   import { T } from '@threlte/core'
   import { useGltf, InstancedMesh, Instance } from '@threlte/extras'
 
-  export let transformData: [number, number, number, number][] = []
+  interface Props {
+    transformData?: [number, number, number, number][]
+  }
+
+  let { transformData = [] }: Props = $props()
 
   type GLTFResult = {
     nodes: {

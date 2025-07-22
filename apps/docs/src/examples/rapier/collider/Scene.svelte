@@ -6,9 +6,15 @@
   import Sensor from './Sensor.svelte'
   import StandaloneCollider from './StandaloneCollider.svelte'
 
-  export let testIndex: number
+  interface Props {
+    testIndex: number
+  }
+
+  let { testIndex }: Props = $props()
 
   const tests = [StandaloneCollider, AttachedCollider, Sensor]
+
+  const SvelteComponent = $derived(tests[testIndex])
 </script>
 
 <T.PerspectiveCamera
@@ -32,4 +38,4 @@
   depthWrite={false}
 />
 
-<svelte:component this={tests[testIndex]} />
+<SvelteComponent />
