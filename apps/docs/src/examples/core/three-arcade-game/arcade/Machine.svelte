@@ -1,7 +1,8 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { useGltf, useTexture, useCursor } from '@threlte/extras'
-  import type { Mesh, MeshStandardMaterial, Texture, MathUtils } from 'three'
+  import type { Mesh, MeshStandardMaterial, Texture } from 'three'
+  import { MathUtils } from 'three'
   import { Tween } from 'svelte/motion'
   import { StickPosition, Button } from './types'
 
