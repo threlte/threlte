@@ -8,7 +8,7 @@
   const gray = new Color(0x333333)
   const brand = new Color(0xff3f00)
 
-  const material = $state(new MeshStandardMaterial({ color: gray }))
+  const material = new MeshStandardMaterial({ color: gray })
 
   let present = $state(false)
   $effect.pre(() => {
