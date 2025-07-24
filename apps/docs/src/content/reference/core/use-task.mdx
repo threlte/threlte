@@ -14,7 +14,7 @@ The hook `useTask` is used to create a
 [task](/docs/learn/basics/scheduling-tasks#tasks) that is used to run code on
 every frame.
 
-## Creating an Anonymous Task
+## Creating an anonymous task
 
 In its most basic form, `useTask` takes a callback function as its argument. This
 function will be executed on every frame, starting on the next frame. It receives a `delta`, representing the time since the last frame as its
@@ -38,7 +38,7 @@ It returns an object with the following properties:
 - `task`: The task itself. You can use it to indicate a dependency to this task
   on another task.
 
-## Creating a Keyed Task
+## Creating a keyed task
 
 You can _key_ a task by passing it as the first argument to `useTask`. This
 makes referencing this task easier across your app. The key can be any `string`
@@ -55,7 +55,7 @@ const {
 })
 ```
 
-## Creating a Task in a Stage
+## Creating a task in a stage
 
 You can pass a stage that the task should be added to as an option to `useTask`,
 the stage can be passed by value or key. If no stage is passed, the task will be
@@ -72,7 +72,7 @@ useTask(
 )
 ```
 
-## Task Dependencies
+## Task dependencies
 
 A common use case for tasks is to run code after another task has been executed. Imagine
 a game where an object is transformed by user input in one task and a camera follows that
@@ -101,7 +101,7 @@ into account when they are created later on.
 
 ## Examples
 
-### Starting and Stopping Tasks
+### Starting and stopping tasks
 
 By default, a task is started automatically. You can set it to not start
 automatically by passing `autoStart: false` as an option to `useTask`. You can
@@ -125,7 +125,7 @@ stop()
 $inspect($started)
 ```
 
-### `useTask` and On-Demand Rendering
+### `useTask` and on-demand rendering
 
 By default, `useTask` will automatically invalidate the current frame and
 thereby request a re-render on the next frame. Most of the times, this is what
@@ -150,18 +150,18 @@ const { start, stop, started } = useTask(
 )
 ```
 
-### Update Objects
+### Updating objects
 
 To update objects in your scene, you can use the `useTask` hook to create a task
 that is executed on every frame. The delta time is passed as the first argument
 to make animations frame rate independent.
 
 ```svelte
-<script>
+<script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Mesh } from 'svelte-three'
 
-  let mesh
+  let mesh = $state.raw<Mesh>()
 
   useTask((delta) => {
     if (!mesh) return
@@ -174,7 +174,7 @@ to make animations frame rate independent.
 </T.Mesh>
 ```
 
-### Custom Render Pipeline
+### Custom render pipeline
 
 To create a custom render pipeline, add a task to Threlte's
 [`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) which by
@@ -206,7 +206,7 @@ scene.
 </script>
 ```
 
-### Post Processing
+### Postprocessing
 
 This example demonstrates how to use `useTask` to implement post processing
 effects using the library
@@ -266,6 +266,7 @@ effects using the library
   $effect(() => {
     setupEffectComposer($camera)
   })
+
   $effect(() => {
     composer.setSize($size.width, $size.height)
   })
