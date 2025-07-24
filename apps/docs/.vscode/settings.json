@@ -6,8 +6,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "search.exclude": {
-		"**/.svelte-kit": true,
-		"**/build": true,
-		"**/dist": true
-	},
+    "**/.svelte-kit": true,
+    "**/build": true,
+    "**/dist": true
+  }
 }
