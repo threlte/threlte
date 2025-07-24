@@ -1,6 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import Character from './Character.svelte'
+
   let { action } = $props()
 </script>
 

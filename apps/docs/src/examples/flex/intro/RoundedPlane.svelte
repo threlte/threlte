@@ -2,11 +2,15 @@
   import { T } from '@threlte/core'
   import { Shape, ShapeGeometry } from 'three'
 
-  export let color: string = 'white'
-  export let height = 1
-  export let width = 1
-  export let radius = 5
-  export let depth = 0
+  interface Props {
+    color?: string
+    height?: number
+    width?: number
+    radius?: number
+    depth?: number
+  }
+
+  let { color = 'white', height = 1, width = 1, radius = 5, depth = 0 }: Props = $props()
 
   let x = 1
   let y = 1
@@ -28,7 +32,7 @@
     return geometry
   }
 
-  $: geometry = createGeometry(width, height, radius)
+  let geometry = $derived(createGeometry(width, height, radius))
 </script>
 
 <T.Mesh

@@ -13,13 +13,17 @@
   import { mouseCoordsSpring, springScrollPos } from './scrollPos'
   import { debug } from './state'
 
-  let sheet: ISheet | undefined
+  let sheet = $state<ISheet>()
 
-  $: sheet && (sheet.sequence.position = $springScrollPos * 10)
+  $effect(() => {
+    if (sheet) {
+      sheet.sequence.position = $springScrollPos * 10
+    }
+  })
 
   const { scene } = useThrelte()
 
-  let fov = 40
+  let fov = $state(40)
   onMount(() => {
     if (window.innerWidth > 640) {
       fov = 35
@@ -28,7 +32,7 @@
 </script>
 
 <svelte:window
-  on:resize={() => {
+  onresize={() => {
     if (window.innerWidth > 640) {
       fov = 35
     } else {

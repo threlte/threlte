@@ -1,11 +1,14 @@
 <script lang="ts">
-  export let position: number
-  export let playing: boolean
-  export let play: (opts?: {}) => Promise<boolean>
-  export let pause: (opts?: {}) => Promise<boolean>
-  export let rate: number = 1
-
   import { PauseIcon, PlayIcon } from './icons'
+  interface Props {
+    position: number
+    playing: boolean
+    play: (opts?: {}) => Promise<boolean>
+    pause: (opts?: {}) => Promise<boolean>
+    rate?: number
+  }
+
+  let { position = $bindable(), playing, play, pause, rate = $bindable(1) }: Props = $props()
 
   const fmt = (n: number) =>
     n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
@@ -23,15 +26,15 @@
 
 <menu>
   {#if !playing}
-    <button on:click={() => play()}>
+    <button onclick={() => play()}>
       <PlayIcon />
     </button>
   {:else}
-    <button on:click={() => pause()}>
+    <button onclick={() => pause()}>
       <PauseIcon />
     </button>
   {/if}
-  <button on:click={() => toggleRate()}>
+  <button onclick={() => toggleRate()}>
     x{rate.toFixed(1)}
   </button>
   <input

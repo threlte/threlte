@@ -3,7 +3,8 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import type { CharacterActions } from './types'
-  let action: CharacterActions = $state('idle')
+
+  let action = $state<CharacterActions>('idle')
 </script>
 
 <Pane

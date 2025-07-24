@@ -22,7 +22,7 @@
     rotation: Parameters<Euler['set']>
   }
 
-  let bodies: Body[] = []
+  let bodies = $state<Body[]>([])
 
   let lastBodyMounted: number = 0
   let bodyEveryMilliseconds = 100
@@ -38,7 +38,6 @@
       }
       bodies.unshift(body)
       lastBodyMounted = Date.now()
-      bodies = bodies
     }
     const deleteIds: string[] = []
     bodies.forEach((body) => {
@@ -52,7 +51,6 @@
         const index = bodies.findIndex((body) => body.id === id)
         if (index !== -1) bodies.splice(index, 1)
       })
-      bodies = bodies
     }
   })
 </script>

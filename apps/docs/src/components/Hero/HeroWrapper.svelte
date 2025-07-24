@@ -51,9 +51,9 @@
 </script>
 
 <svelte:window
-  on:scroll={onScroll}
-  on:keydown={onKeyDown}
-  on:mousemove={onMouseMove}
+  onscroll={onScroll}
+  onkeydown={onKeyDown}
+  onmousemove={onMouseMove}
 />
 
 <div class="pointer-events-none relative z-20 h-[500vh]">
@@ -90,7 +90,7 @@
       in={0.5}
       out={2.7}
     >
-      <svelte:fragment>
+      {#snippet children()}
         {@const start = 0.6}
         {@const stagger = 0.3}
         {@const duration = 0.6}
@@ -164,7 +164,7 @@
             </div>
           </div>
         </div>
-      </svelte:fragment>
+      {/snippet}
     </Trigger>
 
     <Trigger

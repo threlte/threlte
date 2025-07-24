@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   const geometry = new BoxGeometry(0.25, 0.25, 0.25)
   const material = new MeshStandardMaterial()
@@ -9,11 +9,14 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Collider, RigidBody } from '@threlte/rapier'
-  import type { Euler } from 'three'
-  import { BoxGeometry, MeshStandardMaterial, Vector3 } from 'three'
+  import { BoxGeometry, MeshStandardMaterial, type Vector3Tuple } from 'three'
 
-  export let position: Parameters<Vector3['set']>
-  export let rotation: Parameters<Euler['set']>
+  interface Props {
+    position: Vector3Tuple
+    rotation: Vector3Tuple
+  }
+
+  let { position, rotation }: Props = $props()
 </script>
 
 <T.Group

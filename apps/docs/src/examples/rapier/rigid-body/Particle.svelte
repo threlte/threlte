@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   const geometry = new BoxGeometry(1, 1, 1)
   const material = new MeshStandardMaterial()
@@ -13,37 +13,40 @@
   import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
   import { writable } from 'svelte/store'
   import type { Euler, Vector3 } from 'three'
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { clamp } from 'three/src/math/MathUtils.js'
+  import { BoxGeometry, MeshStandardMaterial, MathUtils } from 'three'
 
-  export let position: Vector3 | undefined = undefined
-  export let rotation: Euler | undefined = undefined
+  interface Props {
+    position?: Vector3 | undefined
+    rotation?: Euler | undefined
+  }
+
+  let { position = undefined, rotation = undefined }: Props = $props()
 
   const audios: {
     threshold: number
     volume: number
-    stop: (() => any) | undefined
-    play: ((...args: any[]) => any) | undefined
+    ref: PositionalAudio | undefined
     source: string
-  }[] = new Array(9).fill(0).map((_, i) => {
-    return {
-      threshold: i / 10,
-      play: undefined,
-      stop: undefined,
-      volume: (i + 2) / 10,
-      source: `/audio/ball_bounce_${i + 1}.mp3`
-    }
-  })
+  }[] = $state(
+    new Array(9).fill(0).map((_, i) => {
+      return {
+        threshold: i / 10,
+        ref: undefined,
+        volume: (i + 2) / 10,
+        source: `/audio/ball_bounce_${i + 1}.mp3`
+      }
+    })
+  )
 
   const fireSound: ContactEvent = (event) => {
     if ($muted) return
-    const volume = clamp((event.totalForceMagnitude - 30) / 1100, 0.1, 1)
+    const volume = MathUtils.clamp((event.totalForceMagnitude - 30) / 1100, 0.1, 1)
     const audio = audios.find((a) => a.volume >= volume)
-    audio?.stop?.()
-    audio?.play?.()
+    audio?.ref?.stop?.()
+    audio?.ref?.play?.()
   }
 
-  $: rotationCasted = rotation?.toArray() as [x: number, y: number, z: number]
+  let rotationCasted = $derived(rotation?.toArray() as [x: number, y: number, z: number])
 </script>
 
 <T.Group
@@ -58,10 +61,9 @@
   >
     {#each audios as audio}
       <PositionalAudio
+        bind:this={audio.ref}
         autoplay={false}
         detune={600 - Math.random() * 1200}
-        bind:stop={audio.stop}
-        bind:play={audio.play}
         src={audio.source}
         volume={audio.volume}
       />

@@ -8,16 +8,24 @@
   import Speaker from '../../extras/positional-audio/Speaker.svelte'
   import Microphone from './Microphone.svelte'
 
-  export let isPlaying = false
+  interface Props {
+    isPlaying?: boolean
+  }
 
-  let toggle: () => void
+  let { isPlaying = false }: Props = $props()
+
+  let turntable = $state.raw<Turntable>()
 
   const { isPresenting } = useXR()
 
   const smoothVolume = spring(0)
-  $: volume = $isPresenting ? 1 : 0
-  $: smoothVolume.set(volume)
-  $: if (isPlaying) toggle()
+  let volume = $derived($isPresenting ? 1 : 0)
+  $effect.pre(() => {
+    smoothVolume.set(volume)
+  })
+  $effect.pre(() => {
+    if (isPlaying) turntable?.toggle()
+  })
 </script>
 
 <XR>
@@ -38,7 +46,7 @@
   scale={0.08}
 >
   <Turntable
-    bind:toggle
+    bind:this={turntable}
     bind:volume
   />
   <Speaker
