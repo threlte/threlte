@@ -9,11 +9,11 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Collider, RigidBody } from '@threlte/rapier'
-  import { BoxGeometry, MeshStandardMaterial, type Vector3Tuple } from 'three'
+  import { BoxGeometry, MeshStandardMaterial, type EulerTuple, type Vector3Tuple } from 'three'
 
   interface Props {
     position: Vector3Tuple
-    rotation: Vector3Tuple
+    rotation: EulerTuple
   }
 
   let { position, rotation }: Props = $props()
