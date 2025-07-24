@@ -13,14 +13,14 @@
     // props
     name?: string
     instance?: string | undefined
+    sheet?: ISheet
     children?: Snippet<[{ sheet: ISheet }]>
   }
 
-  let { name = 'default', instance = undefined, children }: Props = $props()
+  let { name = 'default', sheet = $bindable(), instance = undefined, children }: Props = $props()
 
   // bindings
-  export const sheet =
-    globalSheets.get(`${projectName}-${name}-${instance}`) ?? project.sheet(name, instance)
+  sheet = globalSheets.get(`${projectName}-${name}-${instance}`) ?? project.sheet(name, instance)
 
   // register instance logic
   globalSheets.set(`${projectName}-${name}-${instance}`, sheet)

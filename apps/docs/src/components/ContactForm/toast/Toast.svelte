@@ -1,17 +1,20 @@
 <script lang="ts">
-  export let type: 'error' | 'warning' | 'info' = 'info'
-  export let open: boolean = true
-  export let title: string = ''
-  export let message: string
-
   import { Close, Checkmark, Warning, Error } from './icons'
 
   import { fade } from 'svelte/transition'
   import { createEventDispatcher } from 'svelte'
+  interface Props {
+    type?: 'error' | 'warning' | 'info'
+    open?: boolean
+    title?: string
+    message: string
+  }
 
-  $: error = type == 'error'
-  $: warning = type == 'warning'
-  $: info = type == 'info'
+  let { type = 'info', open = $bindable(true), title = '', message }: Props = $props()
+
+  let error = $derived(type == 'error')
+  let warning = $derived(type == 'warning')
+  let info = $derived(type == 'info')
 
   const icon = {
     error: Error,
@@ -27,6 +30,7 @@
 </script>
 
 {#if open}
+  {@const SvelteComponent = icon[type]}
   <section
     class:error
     class:warning
@@ -34,12 +38,12 @@
     transition:fade={{ duration: 200 }}
   >
     <span>
-      <svelte:component this={icon[type]} />
+      <SvelteComponent />
       <b>{title ? title + ':' : ''}</b>{message}
     </span>
     <span
-      on:click={close}
-      on:keypress={close}
+      onclick={close}
+      onkeypress={close}
     >
       <Close />
     </span>
