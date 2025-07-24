@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.6
+
+### Patch Changes
+
+- 9d3de86: Make sheet bindable
+
 ## 3.0.5
 
 ### Patch Changes
