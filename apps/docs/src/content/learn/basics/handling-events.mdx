@@ -4,8 +4,8 @@ category: Basics
 order: -700
 ---
 
-Events come in three different flavours in Threlte. The DOM events you know from
-HTML, some svelte [component props](https://svelte.dev/docs/svelte/basic-markup#Component-props)
+Events come in three different flavours in Threlte: The DOM events you know from
+HTML, some Svelte [component props](https://svelte.dev/docs/svelte/basic-markup#Component-props)
 and raycasting.
 
 ## DOM events
@@ -16,8 +16,8 @@ The `canvas` is also available if that is more appropriate for your events.
 
 ## Prop events
 
-The `<T>` component has it's own [events](/docs/reference/core/t#events). It can even pickup
-on events coming from the [underlying three.js objects](/docs/reference/core/t#object-events).
+The `<T>` component has it's own [events](/docs/reference/core/t#events). It can even pick up
+on events coming from the [underlying Three.js objects](/docs/reference/core/t#object-events).
 
 ## Raycasting events
 
@@ -26,7 +26,7 @@ creating [`interactivity`](/docs/reference/extras/interactivity) (click, pointer
 and wheel events) on your scene's meshes. Raycasting can struggle with complex shapes
 or a high number of objects but this can be mitigated by either:
 
-- Raycasting against an simplier, invisible object ([a sphere](/docs/reference/extras/mesh-bounds) for example)
-- Or introducing a better raycasting algorithm such as Bounding Volume Hirerchies ([BVH](/docs/learn/advanced/plugins#bvh-raycast-plugin))
+- Raycasting against an simplier, invisible object (as is done by the [mesh bounds](/docs/reference/extras/mesh-bounds) extra).
+- Or introducing a better raycasting algorithm such as Bounding Volume Hirerchies ([BVH](/docs/learn/advanced/plugins#bvh-raycast-plugin)).
 
-In general, Three.js's default raycaster works well enough.
+For simple use cases, Three.js's default raycaster works well enough.
