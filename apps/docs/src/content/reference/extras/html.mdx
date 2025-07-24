@@ -82,82 +82,7 @@ whereabouts automatically.
 
 <Example path="extras/html/basic" />
 
-## Stopping and Starting the Task
-
-`<HTML>` has an `autoRender` prop that you can use to turn off and on its
-render task. If at some point in your application, you no longer need to update
-the hmtl, you can set `autoRender` to `false`. If you need to resume the task,
-set `autoRender` back to `true`.
-
-`<HTML>` also exports it's internal render task and the `startRendering`,
-`stopRendering`, and `render` functions so you can either manually render the
-html or start and stop the internal task at your will.
-
-```svelte title="Manually-Rendering"
-<script>
-  let html = $state()
-
-  $effect(() => {
-    // if (shouldRender) {
-    html?.render()
-    // }
-  })
-</script>
-
-<HTML
-  autoRender={false}
-  bind:this={html}
->
-  <h1>Hello World</h1>
-</HTML>
-```
-
-```svelte title="Start-And-Stop-Rendering"
-<script>
-  let html = $state()
-
-  // turn this on and off in accordance with your application
-  let renderWhileTrue = $state(false)
-
-  $effect(() => {
-    if (html !== undefined) {
-      if (renderWhileTrue) {
-        html.startRendering()
-        // always stop rendering if it was started
-        return () => {
-          html.stopRendering()
-        }
-      }
-    }
-  })
-</script>
-
-<HTML
-  autoRender={false}
-  bind:this={html}
->
-  <h1>Hello World</h1>
-</HTML>
-```
-
-In both cases you should set `autoRender` to `false` so that the render task
-doesn't automatically begin.
-
-Lastly, you can access these functions from the `<HTML>`'s children snippet.
-
-```svelte
-<HTML autoRender={false}>
-  {#snippet children({ render, startRendering, stopRendering })}
-    <button onclick={startRendering}>start rendering</button>
-    <button onclick={stopRendering}>stop rendering</button>
-    <button onclick={render}>render a single frame</button>
-  {/snippet}
-</HTML>
-```
-
-## Examples
-
-### Basic Example
+## Basic example
 
 ```svelte
 <script lang="ts">
@@ -212,7 +137,7 @@ Setting `occlude` to `"blending"` will allow objects to partially occlude the
 
 <Example path="extras/html/phone" />
 
-### Visibility Change Event
+### Visibility change event
 
 Use the property `occlude` and bind to the event `visibilitychange` to
 implement a custom hide/show behaviour.
@@ -240,7 +165,7 @@ implement a custom hide/show behaviour.
 	_not_ automatically hidden when it's occluded.
 </Tip>
 
-### Sprite Rendering
+### Sprite rendering
 
 Use the property `sprite` in `transform` mode to render the contents of
 `<HTML>` as a sprite.
@@ -288,11 +213,84 @@ rendering `<canvas>`.
 </HTML>
 ```
 
+## Pausing the render task
+
+`<HTML>` has an `autoRender` prop that you can use to pause its
+render task. If at some point you no longer need to update `<HTML>`,
+you can set `autoRender` to `false`. If you need to resume updates,
+set `autoRender` back to `true`.
+
+`<HTML>` also exports its internal render task and the `startRendering`,
+`stopRendering`, and `render` functions so you can either manually render
+or start and stop the internal task based on your needs.
+
+```svelte title="manually-rendering.svelte"
+<script lang="ts">
+  import { HTML } from '@threlte/extras'
+
+  let html = $state<HTML>()
+
+  $effect(() => {
+    html?.render()
+  })
+</script>
+
+<HTML
+  autoRender={false}
+  bind:this={html}
+>
+  <h1>Hello World</h1>
+</HTML>
+```
+
+```svelte title="toggle-rendering.svelte"
+<script lang="ts">
+  import { HTML } from '@threlte/extras'
+
+  let html = $state<HTML>()
+
+  // turn this on and off in accordance with your application
+  let renderWhileTrue = $state(false)
+
+  $effect(() => {
+    if (renderWhileTrue) {
+      html?.startRendering()
+      // always stop rendering if it was started
+      return () => {
+        html?.stopRendering()
+      }
+    }
+  })
+</script>
+
+<HTML
+  autoRender={false}
+  bind:this={html}
+>
+  <h1>Hello World</h1>
+</HTML>
+```
+
+In both cases you should set `autoRender` to `false` so that the render task
+doesn't automatically begin.
+
+Lastly, you can access these functions from the `<HTML>`'s children snippet.
+
+```svelte
+<HTML autoRender={false}>
+  {#snippet children({ render, startRendering, stopRendering })}
+    <button onclick={startRendering}>start rendering</button>
+    <button onclick={stopRendering}>stop rendering</button>
+    <button onclick={render}>render a single frame</button>
+  {/snippet}
+</HTML>
+```
+
 ## uikit
 
 An alternative to using HTML for UI is
 [uikit](https://pmndrs.github.io/uikit/docs/getting-started/vanilla). The
 vanilla code has be wrapped into
-[threlte-uikit](https://github.com/michealparks/threlte-uikit) for use in
+[threlte-uikit](https://github.com/threlte/threlte-uikit) for use in
 threlte projects. There are situations where this package is necessary, for
 instance the `<HTML/>` component cannot be used within XR sessions.

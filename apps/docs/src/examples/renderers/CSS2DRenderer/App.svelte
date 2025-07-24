@@ -2,13 +2,13 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
 
-  let element: HTMLElement | undefined = $state()
+  let element = $state<HTMLElement>()
 </script>
 
 <div
   id="css-renderer-target"
   bind:this={element}
-/>
+></div>
 
 <div id="main">
   <Canvas>

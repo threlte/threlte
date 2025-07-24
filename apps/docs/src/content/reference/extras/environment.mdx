@@ -60,7 +60,7 @@ Asynchronously loads a single equirectangular-mapped texture and sets the provid
 
 `<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment`.
 
-`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
+`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by Three.js' [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
 Internally `<Environment>` creates a loader based on the extension of the `url` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
 
@@ -76,7 +76,7 @@ Internally `<Environment>` creates a loader based on the extension of the `url` 
 
 ### Loaders Are Simple
 
-Loaders used inside `<Environment>` are not extendable. They only fetch and load the texture at `url`. If you need to use the methods that [ThreeJS loaders](https://threejs.org/docs/index.html?q=loader#api/en/loaders/Loader) have, you should create the loader outside of `<Environment>` and load it there then pass the texture through the `texture` prop.
+Loaders used inside `<Environment>` are not extendable. They only fetch and load the texture at `url`. If you need to use the methods that [Three.js loaders](https://threejs.org/docs/index.html?q=loader#api/en/loaders/Loader) have, you should create the loader outside of `<Environment>` and load it there then pass the texture through the `texture` prop.
 
 ```svelte
 <script>

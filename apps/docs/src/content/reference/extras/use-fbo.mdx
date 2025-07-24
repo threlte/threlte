@@ -8,13 +8,13 @@ type: 'hook'
 
 `useFBO` (Framebuffer Object) is a port of [drei's useFBO](https://github.com/pmndrs/drei#usefbo) that creates a [THREE.WebGLRenderTarget](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderTarget).
 
-Framebuffer objects are useful when you want to render a scene to something other than the canvas. In ThreeJS, you do this by rendering the scene to a RenderTarget. The render target has a texture property that can be used for various things such as postprocessing effects or applying the texture to something in the scene.
+Framebuffer objects are useful when you want to render a scene to something other than the canvas. In Three.js, you do this by rendering the scene to a `RenderTarget`. The render target has a texture property that can be used for various things such as postprocessing effects or applying the texture to something in the scene.
 
 <Example path="extras/use-fbo" />
 
 ## Options
 
-`useFBO`'s options object extends `Three.RenderTargetOptions`. The additional properties are listed below.
+`useFBO`'s options object extends `THREE.RenderTargetOptions`. The additional properties are listed below.
 
 ### `size`
 
