@@ -4,9 +4,10 @@ title: Your First Scene
 ---
 
 <Tip type="info">
-  You should be familiar with both Svelte and Three.js before use Threlte. If you are new to Svelte,
-  consult its [Tutorial](https://svelte.dev/tutorial) for a quick introduction. As for Three.js, its
-  [official documentation](https://threejs.org) has many resources for getting started.
+  You should get familiar with both Svelte and Three.js before using Threlte. If you are new to
+  Svelte, consult its [Tutorial](https://svelte.dev/tutorial) for a quick introduction. As for
+  Three.js, its [official documentation](https://threejs.org) has many resources for getting
+  started.
 </Tip>
 
 ## Structuring your app
@@ -225,7 +226,7 @@ of props like `position.y` in our `<T.Mesh>`.
 
 ## Pointing the camera
 
-We now want to view our cube with some perspective. To easily manipulate a camera, let's add one to our scene:
+We now want to view our cube with some perspective. To manipulate the default camera, let's add the following:
 
 ```svelte title="Scene.svelte" {5-11}+
 <script>
