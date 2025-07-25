@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Vector2 } from 'three'
   import { T } from '@threlte/core'
-  import { Edges, MeshDiscardMaterial } from '@threlte/extras'
+  import { Edges } from '@threlte/extras'
 
   const positions = Array(35)
     .keys()

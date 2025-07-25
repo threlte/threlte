@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { Text, Grid, Outlines, VirtualEnvironment, Stars } from '@threlte/extras'
   import { XR } from '@threlte/xr'
@@ -9,6 +10,7 @@
   const { scene } = useThrelte()
 
   scene.environmentIntensity = 2
+  scene.background = new Color('#0e1625')
 </script>
 
 <XR>
