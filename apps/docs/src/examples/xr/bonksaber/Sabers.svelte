@@ -40,7 +40,16 @@
 {#snippet saber()}
   <T.Mesh>
     <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-    <T.MeshStandardMaterial color="red" />
+    <T.MeshBasicMaterial color="red" />
+  </T.Mesh>
+
+  <T.Mesh position={[0, saberLength / 2 + 0.05, 0]}>
+    <T.CylinderGeometry args={[saberRadius, saberRadius, 0.1]} />
+    <T.MeshStandardMaterial
+      color="gray"
+      roughness={0}
+      metalness={0.5}
+    />
   </T.Mesh>
 
   <T.Mesh>
