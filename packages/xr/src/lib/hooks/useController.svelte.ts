@@ -1,5 +1,5 @@
 import type { XRController } from '../types'
-import { type Readable, toStore } from 'svelte/store'
+import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
 
 class Controllers {
   left = $state.raw<XRController>()
@@ -12,14 +12,16 @@ export const controllers = new Controllers()
 /**
  * Provides a reference to a current XRController, filtered by handedness.
  */
-export const useController = (handedness: XRHandedness): Readable<XRController | undefined> => {
+export const useController = (
+  handedness: XRHandedness
+): CurrentReadable<XRController | undefined> => {
   switch (handedness) {
     case 'left':
-      return toStore(() => controllers.left)
+      return toCurrentReadable(() => controllers.left)
     case 'right':
-      return toStore(() => controllers.right)
+      return toCurrentReadable(() => controllers.right)
     case 'none':
-      return toStore(() => controllers.none)
+      return toCurrentReadable(() => controllers.none)
     default:
       throw new Error('useController handedness must be left, right, or none.')
   }

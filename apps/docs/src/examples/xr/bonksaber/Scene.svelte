@@ -2,15 +2,23 @@
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { Text, Grid, Outlines, VirtualEnvironment, Stars } from '@threlte/extras'
-  import { XR } from '@threlte/xr'
+  import { XR, useXR } from '@threlte/xr'
   import Sabers from './Sabers.svelte'
   import Blocks from './Blocks.svelte'
   import Mountains from './Mountains.svelte'
+  import { Spring } from 'svelte/motion'
 
   const { scene } = useThrelte()
+  const { isPresenting } = useXR()
 
   scene.environmentIntensity = 2
   scene.background = new Color('#0e1625')
+
+  const spring = new Spring(1, { stiffness: 0.1, damping: 0.5 })
+
+  $effect.pre(() => {
+    spring.set($isPresenting ? 0 : 1)
+  })
 </script>
 
 <XR>
@@ -18,15 +26,6 @@
   <Blocks />
 
   {#snippet fallback()}
-    <Text
-      anchorX="center"
-      anchorY="center"
-      position={[0, 1.9, 0]}
-      text="bonksaber!"
-      font="/fonts/adrip1.ttf"
-      color="red"
-    />
-
     <T.PerspectiveCamera
       makeDefault
       position={[0, 1.8, 1]}
@@ -36,6 +35,17 @@
     />
   {/snippet}
 </XR>
+
+<Text
+  anchorX="center"
+  anchorY="center"
+  position={[0, 1.9, 0]}
+  text="bonksaber!"
+  font="/fonts/adrip1.ttf"
+  color="red"
+  fillOpacity={spring.current}
+  strokeOpacity={spring.current}
+/>
 
 <T.AmbientLight />
 <T.DirectionalLight />

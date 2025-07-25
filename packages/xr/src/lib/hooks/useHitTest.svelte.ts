@@ -33,7 +33,7 @@ export const useHitTest = (
   const { xr } = useThrelte().renderer
   const hitMatrix = new Matrix4()
 
-  let hitTestSource = $state<XRHitTestSource>()
+  let hitTestSource = $state.raw<XRHitTestSource>()
 
   const getHitTestSource = async (space?: XRSpace) => {
     if (space === undefined) {
