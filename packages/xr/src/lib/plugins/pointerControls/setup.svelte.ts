@@ -1,12 +1,11 @@
 import { Vector3, type Event, type Object3D } from 'three'
-import { watch } from '@threlte/core'
+import { observe, watch } from '@threlte/core'
 import type { ControlsContext, HandContext, Intersection, IntersectionEvent, events } from './types'
 import { getInternalContext } from './context'
-import { useController } from '../../hooks/useController'
-import { useHand } from '../../hooks/useHand'
-import { useXR } from '../../hooks/useXR'
+import { controllers } from '../../hooks/useController.svelte'
+import { useHand } from '../../hooks/useHand.svelte'
 import { useFixed } from '../../internal/useFixed'
-import { pointerIntersection } from '../../internal/stores'
+import { isPresenting, pointerIntersection } from '../../internal/state.svelte'
 
 type PointerEventName = (typeof events)[number]
 
@@ -24,7 +23,7 @@ export const setupPointerControls = (
   fixedStep = 1 / 40
 ) => {
   const handedness = handContext.hand
-  const controller = useController(handedness)
+  const controller = $derived(controllers[handedness])
   const hand = useHand(handedness)
   const { dispatchers } = getInternalContext()
 
@@ -98,7 +97,7 @@ export const setupPointerControls = (
     const filtered =
       context.filter === undefined ? hits : context.filter(hits, context, handContext)
 
-    pointerIntersection[handedness].set(filtered[0])
+    pointerIntersection[handedness] = filtered[0]
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
@@ -218,7 +217,7 @@ export const setupPointerControls = (
     () => {
       hits = processHits()
 
-      const targetRay = controller.current?.targetRay
+      const targetRay = controller?.targetRay
 
       if (targetRay === undefined) return
 
@@ -234,26 +233,29 @@ export const setupPointerControls = (
     }
   )
 
-  watch([controller, handContext.enabled], ([input, enabled]) => {
-    if (input === undefined) return
+  observe.pre(
+    () => [controller, handContext.enabled],
+    ([controller, $enabled]) => {
+      if (controller === undefined) return
 
-    const removeHandlers = () => {
-      input.targetRay.removeEventListener('selectstart', handlePointerDown)
-      input.targetRay.removeEventListener('selectend', handlePointerUp)
-      input.targetRay.removeEventListener('select', handleClick)
+      const removeHandlers = () => {
+        controller.targetRay.removeEventListener('selectstart', handlePointerDown)
+        controller.targetRay.removeEventListener('selectend', handlePointerUp)
+        controller.targetRay.removeEventListener('select', handleClick)
+      }
+
+      if ($enabled) {
+        controller.targetRay.addEventListener('selectstart', handlePointerDown)
+        controller.targetRay.addEventListener('selectend', handlePointerUp)
+        controller.targetRay.addEventListener('select', handleClick)
+
+        return removeHandlers
+      } else {
+        removeHandlers()
+        return
+      }
     }
-
-    if (enabled) {
-      input.targetRay.addEventListener('selectstart', handlePointerDown)
-      input.targetRay.addEventListener('selectend', handlePointerUp)
-      input.targetRay.addEventListener('select', handleClick)
-
-      return removeHandlers
-    } else {
-      removeHandlers()
-      return
-    }
-  })
+  )
 
   watch([hand, handContext.enabled], ([input, enabled]) => {
     if (input === undefined) return
@@ -276,11 +278,14 @@ export const setupPointerControls = (
     }
   })
 
-  watch([useXR().isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
-    if (isPresenting && enabled) {
-      start()
-    } else {
-      stop()
+  observe.pre(
+    () => [isPresenting.current, handContext.enabled],
+    ([isPresenting, $enabled]) => {
+      if (isPresenting && $enabled) {
+        start()
+      } else {
+        stop()
+      }
     }
-  })
+  )
 }
