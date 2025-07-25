@@ -2,7 +2,7 @@
 @component `<Controller />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model.
 -->
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { controllers } from '../hooks/useController.svelte'
   import {
     isHandTracking,
@@ -70,6 +70,8 @@
     teleportCursor: teleportCursorSnippet
   }: Props = $props()
 
+  const { scene } = useThrelte()
+
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : hand ?? 'left')
 
   $effect.pre(() => {
@@ -99,7 +101,10 @@
 
 {#if !isHandTracking.current}
   {#if grip}
-    <T is={grip}>
+    <T
+      is={grip}
+      attach={scene}
+    >
       {#if children}
         {@render children?.()}
       {:else}

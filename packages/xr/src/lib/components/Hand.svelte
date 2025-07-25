@@ -109,7 +109,10 @@
 </script>
 
 {#if xrHand?.hand && isHandTracking.current}
-  <T is={xrHand.hand}>
+  <T
+    is={xrHand.hand}
+    attach={scene}
+  >
     {#if children === undefined}
       <T is={model} />
     {/if}
