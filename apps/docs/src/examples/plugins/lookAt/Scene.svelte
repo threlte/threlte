@@ -3,7 +3,7 @@
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { injectLookAtPlugin } from './lookAtPlugin.svelte'
 
-  const cubePos = $state([0, 0.8, 0]) as [number, number, number]
+  const cubePos = $state<[number, number, number]>([0, 0.8, 0])
 
   useTask(() => {
     cubePos[0] = Math.sin(Date.now() / 1000) * 2

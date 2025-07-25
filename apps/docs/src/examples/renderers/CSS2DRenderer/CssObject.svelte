@@ -11,7 +11,7 @@
 
   let { content, pointerEvents = false, children, ...props }: CssObjectProps = $props()
 
-  let element: HTMLElement | undefined = $state()
+  let element = $state<HTMLElement>()
 </script>
 
 <div
