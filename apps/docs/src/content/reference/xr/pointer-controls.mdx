@@ -7,6 +7,8 @@ type: 'plugin'
 
 The `pointerControls` plugin adds pointer events to an immersive XR session. This means that pointing at any mesh with your hand or a controller will trigger DOM-like pointer events.
 
+<Example path="xr/pointer-controls" />
+
 To get started, import and call the plugin in a component within your app.
 
 ```svelte
@@ -126,5 +128,3 @@ The will be a few subtle differences when events are fired within an immersive s
 - Pointers / cursors will be `THREE.Vector3`s instead of `THREE.Vector2`s. In XR, the cursor that intersects with the object that you interact with can be anywhere within a 3d space.
 - There will be no `camera` property on the event, since raycasting will originate from hands or controllers.
 - The `nativeEvent` property on event objects will be a `XRControllerEvent` or `XRHandEvent` rather than a `DomEvent`. In the case of hover events such as `pointerMove`, there will be no native event.
-
-<Example path="xr/pointer-controls" />
