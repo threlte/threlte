@@ -1,7 +1,5 @@
-import type { ColorRepresentation } from 'three'
-
-export type GradientStop = {
-  color: ColorRepresentation
+export type ColorStop = {
+  color: string
   offset: number
 }
 
