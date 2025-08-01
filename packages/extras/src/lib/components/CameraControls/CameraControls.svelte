@@ -4,7 +4,7 @@
 >
   import CC from 'camera-controls'
 
-  export type { default as CameraControlsRef } from 'camera-controls'
+  export { default as CameraControlsRef } from 'camera-controls'
 
   let installed = false
 

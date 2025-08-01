@@ -29,7 +29,9 @@ enabled. You can disable this by setting `staticMoving` to true.
 </T.PerspectiveCamera>
 ```
 
-`<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
+`<TrackballControls>` is a light wrapper that will use its parent as the target camera and 
+the DOM element the renderer is rendering to as the DOM element to listen to. It will also 
+by demand invalidate the frame loop.
 -->
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
@@ -38,19 +40,17 @@ enabled. You can disable this by setting `staticMoving` to true.
   import type { TrackballControlsProps } from './types'
   import type { Event } from 'three'
 
-  let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
+  let { onchange, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
   const parent = useParent()
-  const { dom, invalidate } = useThrelte()
+  const { dom, invalidate, size } = useThrelte()
 
   if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
   }
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeTrackballControls($parent, dom)
-
-  const { trackballControls } = useControlsContext()
+  const controls = $derived(new ThreeTrackballControls($parent))
 
   useTask(
     () => {
@@ -62,16 +62,30 @@ enabled. You can disable this by setting `staticMoving` to true.
   )
 
   $effect(() => {
+    controls.connect(dom)
+    return () => controls.disconnect()
+  })
+
+  $effect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    $size
+    controls.handleResize()
+  })
+
+  const { trackballControls } = useControlsContext()
+
+  $effect.pre(() => {
     const handleChange = (event: Event<any, ThreeTrackballControls>) => {
       invalidate()
-      props.onchange?.(event)
+      onchange?.(event)
     }
+    const currentControls = controls
 
     trackballControls.set(controls)
-    controls.addEventListener('change', handleChange)
+    currentControls.addEventListener('change', handleChange)
     return () => {
       trackballControls.set(undefined)
-      controls.removeEventListener('change', handleChange)
+      currentControls.removeEventListener('change', handleChange)
     }
   })
 </script>
