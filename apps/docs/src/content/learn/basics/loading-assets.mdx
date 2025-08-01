@@ -4,7 +4,19 @@ title: Loading Assets
 order: -750
 ---
 
-There are a number of different asset types you might like to use in your Threlte application. Three.js has a [ton of different loaders](https://threejs.org/docs/index.html?q=loader) that Threlte integrates well with. You're recommended to use the [useLoader](/docs/reference/core/use-loader) hook which will cache any asset it loads and wrap the asset in an [asyncWritable](/docs/reference/core/utilities#asyncwritable) for convenience. Caching assets will reduce network requests, bandwidth, and memory usage, which will improve the performance of your application.
+There are a number of different asset types you might like to use in your
+Threlte application. Three.js has a [ton of different
+loaders](https://threejs.org/docs/index.html?q=loader) that Threlte integrates
+well with. You're recommended to use the
+[useLoader](/docs/reference/core/use-loader) hook which will cache any asset it
+loads and wrap the asset in an
+[asyncWritable](/docs/reference/core/utilities#asyncwritable) for convenience.
+Caching assets will reduce network requests, bandwidth, and memory usage, which
+will improve the performance of your application.
+
+You are highly recommended to use svelte-kits [asset
+function](https://svelte.dev/docs/kit/$app-paths#asset) so that you can catch common asset loading
+problems. There are other equivalent vite plugins which will help you in the same way.
 
 <Tip type="info">
   This section assumes you placed your assets in your public folder or in a place in your
@@ -13,7 +25,8 @@ There are a number of different asset types you might like to use in your Threlt
 
 ## Models
 
-Models come in many different formats, but `.gltf`s are usually the best fit for the web. You can use Three.js' `GLTFLoader` to load a `.gltf` model.
+Models come in many different formats, but `.gltf`s are usually the best fit
+for the web. You can use Three.js' `GLTFLoader` to load a `.gltf` model.
 
 ```svelte
 <script>
@@ -28,11 +41,13 @@ Models come in many different formats, but `.gltf`s are usually the best fit for
 {/if}
 ```
 
-The [`<GLTF/>`](/docs/reference/extras/gltf) component is roughly equivalent to the example above.
+The [`<GLTF/>`](/docs/reference/extras/gltf) component is roughly equivalent to
+the example above.
 
 ### `useGltf` hook
 
-`@threlte/extras` provides a handy hook for loading `.gltf` models called [useGltf](/docs/reference/extras/use-gltf):
+`@threlte/extras` provides a handy hook for loading `.gltf` models called
+[useGltf](/docs/reference/extras/use-gltf):
 
 ```svelte
 <script>
@@ -48,23 +63,36 @@ The [`<GLTF/>`](/docs/reference/extras/gltf) component is roughly equivalent to 
 
 You may run into the following challenges when working with models in Threlte:
 
-- Your model may have multiple parts that you'd like to adjust individually but there's no easy way to declaritively achieve that with only one `<T/>` component.
+- Your model may have multiple parts that you'd like to adjust individually but
+  there's no easy way to declaritively achieve that with only one `<T/>`
+  component.
 - You can't seem to place multiple copies in your scene.
 
-To address both of these issues, you can use Threlte's CLI tool [@threlte/gltf](/docs/reference/gltf/getting-started) to generate a Svelte component for your model. The generated component has `<T/>` components for all of your models parts. [Adjust the component](/docs/learn/advanced/custom-abstractions) to your liking, then import and reuse it as much as you'd like.
+To address both of these issues, you can use Threlte's CLI tool
+[@threlte/gltf](/docs/reference/gltf/getting-started) to generate a Svelte
+component for your model. The generated component has `<T/>` components for all
+of your models parts. [Adjust the component](/docs/learn/advanced/custom-abstractions) to your liking, then
+import and reuse it as much as you'd like.
 
 ### Animations
 
-Three.js uses [AnimationMixer](https://threejs.org/docs/index.html#api/en/animation/AnimationMixer) to drive animations. Threlte provides a convenient [useGltfAnimations](/docs/reference/extras/use-gltf-animations) hook for gltfs. See the animation [Three.js example](https://threejs.org/examples/?q=animation) for how to setup a model for your animation needs.
+Three.js uses [AnimationMixer](https://threejs.org/docs/index.html#api/en/animation/AnimationMixer)
+to drive animations. Threlte provides a convenient
+[useGltfAnimations](/docs/reference/extras/use-gltf-animations) hook for gltfs.
+See the animation [Three.js example](https://threejs.org/examples/?q=animation)
+for how to setup a model for your animation needs.
 
-The Threlte docs also have an [animation example](/docs/examples/animation/animation-transitions) to help you get started.
+The Threlte docs also have an [animation example](/docs/examples/animation/animation-transitions) to help you get
+started.
 
 ### Common mistakes
 
-Sometimes you'll load a model and still just see a blank screen. Here are a few common mistakes that can cause this.
+Sometimes you'll load a model and still just see a blank screen. Here are a few
+common mistakes that can cause this.
 
 1. Make sure your scene has lights.
-2. Make sure the model is not too small or not too big for your camera to see it.
+2. Make sure the model is not too small or not too big for your camera to see
+   it.
 3. Make sure your camera is looking at the model
 4. Does the model render in a viewer like [gltf-viewer](https://gltf-viewer.donmccurdy.com/)?
 
@@ -87,7 +115,8 @@ The `TextureLoader` is another loader from Three.js that is used for textures.
 
 ### `useTexture` hook
 
-`@threlte/extras` provides a handy hook for loading textures called [useTexture](/docs/reference/extras/use-texture):
+`@threlte/extras` provides a handy hook for loading textures called
+[useTexture](/docs/reference/extras/use-texture):
 
 ```svelte
 <script>
@@ -101,9 +130,13 @@ The `TextureLoader` is another loader from Three.js that is used for textures.
 
 ### Multiple textures
 
-Sometimes you'll want your materials to be composed of multiple textures. `useLoader` provides a way to load multiple textures at once and [spread](https://learn.svelte.dev/tutorial/spread-props) the loaded textures on a material.
+Sometimes you'll want your materials to be composed of multiple textures.
+`useLoader` provides a way to load multiple textures at once and
+[spread](https://learn.svelte.dev/tutorial/spread-props) the loaded textures on
+a material.
 
-Loading two textures for the `map` and `normalMap` channels can be done like this:
+Loading two textures for the `map` and `normalMap` channels can be done like
+this:
 
 ```ts
 const textures = useLoader(TextureLoader).load({
@@ -129,11 +162,13 @@ Then spread on a material:
 {/if}
 ```
 
-If multiple textures are given, the promise only resolves once all textures have loaded.
+If multiple textures are given, the promise only resolves once all textures
+have loaded.
 
 ### Applying multiple textures to different mesh faces
 
-To declaratively apply different textures to multiple faces of a `BoxGeometry`, set the `attach` prop to a function.
+To declaratively apply different textures to multiple faces of a `BoxGeometry`,
+set the `attach` prop to a function.
 
 ```svelte
 <T.Mesh>
@@ -163,13 +198,21 @@ To declaratively apply different textures to multiple faces of a `BoxGeometry`, 
 
 ## Other asset types
 
-Threlte provides many components to help get started with many other asset types (like [audio](/docs/reference/extras/audio)), but it doesn't have components and hooks for all of them. Checkout [Three.js examples](https://threejs.org/examples/) to see what models, techniques and effects you can achieve, then use those examples as a guide for your own [custom components](/docs/learn/advanced/custom-abstractions).
+Threlte provides many components to help get started with many other asset
+types (like [audio](/docs/reference/extras/audio)), but it doesn't have
+components and hooks for all of them. Checkout [Three.js
+examples](https://threejs.org/examples/) to see what models, techniques and
+effects you can achieve, then use those examples as a guide for your own
+[custom components](/docs/learn/advanced/custom-abstractions).
 
 ## Async loading
 
-The return value from [useLoader](/docs/reference/core/use-loader) is an `AsyncWritable` custom store. Its value will be `undefined` until the asset has loaded.
+The return value from [useLoader](/docs/reference/core/use-loader) is an
+`AsyncWritable` custom store. Its value will be `undefined` until the asset has
+loaded.
 
-Since the underlying store's value is a promise, you can use it within a Svelte `#await` block:
+Since the underlying store's value is a promise, you can use it within a Svelte
+`#await` block:
 
 ```svelte
 {#await $texture then value}
@@ -177,7 +220,8 @@ Since the underlying store's value is a promise, you can use it within a Svelte 
 {/await}
 ```
 
-Assets can also be loaded after initialization by calling the `loader.load` method:
+Assets can also be loaded after initialization by calling the `loader.load`
+method:
 
 ```svelte
 <script>
@@ -194,8 +238,11 @@ Assets can also be loaded after initialization by calling the `loader.load` meth
 </script>
 ```
 
-The [Suspense](/docs/reference/extras/suspense) component can additionally help orchestrate loading multiple assets before displaying your scene.
+The [Suspense](/docs/reference/extras/suspense) component can additionally help
+orchestrate loading multiple assets before displaying your scene.
 
 ## Context Awareness
 
-The `useLoader` hook, and other hooks like `useTexture`, use Svelte contexts. The assets loaded with them are only available for child components of your `<Canvas>` component.
+The `useLoader` hook, and other hooks like `useTexture`, use Svelte contexts.
+The assets loaded with them are only available for child components of your
+`<Canvas>` component.
