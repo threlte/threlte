@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.4.3
+
+### Patch Changes
+
+- 49c6d1d: Improve TrackballsControls reactivity and add `handleResize` effect
+
 ## 9.4.2
 
 ### Patch Changes
