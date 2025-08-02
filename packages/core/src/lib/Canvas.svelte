@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type Snippet } from 'svelte'
+  import type { Snippet } from 'svelte'
   import Context from './components/Context/Context.svelte'
   import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte'
   import type { Renderer } from './context/fragments/renderer.svelte'
