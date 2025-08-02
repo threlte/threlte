@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
+  import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { T } from '@threlte/core'
   import { Attractor, AutoColliders, RigidBody } from '@threlte/rapier'
 
