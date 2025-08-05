@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.0.5
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
 ## 2.0.4
 
 ### Patch Changes
