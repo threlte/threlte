@@ -1,4 +1,4 @@
-import { type Snippet } from 'svelte'
+import type { Snippet } from 'svelte'
 import type { NodeProps } from '../lib/props'
 
 export type BoxProps = NodeProps & {
