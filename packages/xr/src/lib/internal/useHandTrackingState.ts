@@ -5,15 +5,21 @@ import { useThrelte } from '@threlte/core'
  * connection or disconnection event. This is the way to do that.
  */
 export const useHandTrackingState = () => {
-  const { xr } = useThrelte().renderer
+  const { renderer } = useThrelte()
 
   return () => {
-    let handTracking = false
-    xr.getSession()?.inputSources?.forEach((value) => {
-      if (value.hand) {
-        handTracking = true
+    const sources = renderer.xr.getSession()?.inputSources
+
+    if (sources === undefined) {
+      return false
+    }
+
+    for (const source of sources) {
+      if (source.hand !== undefined) {
+        return true
       }
-    })
-    return handTracking
+    }
+
+    return false
   }
 }

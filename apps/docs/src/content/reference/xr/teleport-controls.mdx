@@ -7,6 +7,8 @@ type: 'plugin'
 
 The `teleportControls` plugin creates teleportation controls similar to many native XR experiences: **pressing the thumbstick forward** on a controller will create a visible ray to a teleport destination, and when the the thumbstick is released the user will be teleported to the end of the ray.
 
+<Example path="xr/teleport-controls" />
+
 ```svelte
 <script>
   import { teleportControls } from '@threlte/xr'
@@ -69,5 +71,3 @@ This plugin can be composed with the `teleportControls` plugin to allow both tel
 ```
 
 This will result in `pointerControls` taking over when pointing at a mesh with events, and `teleportControls` taking over otherwise.
-
-<Example path="xr/teleport-controls" />

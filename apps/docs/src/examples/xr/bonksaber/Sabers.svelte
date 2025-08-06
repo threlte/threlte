@@ -1,36 +1,35 @@
 <script lang="ts">
-  import { Mesh, Vector3, Quaternion } from 'three'
+  import { Vector3, Quaternion, Group } from 'three'
   import { T, useTask } from '@threlte/core'
+  import { FakeGlowMaterial, Outlines } from '@threlte/extras'
   import { Collider, RigidBody } from '@threlte/rapier'
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { Controller, Hand, useXR } from '@threlte/xr'
 
   const { isHandTracking } = useXR()
 
-  let rigidBodyLeft: RapierRigidBody
-  let rigidBodyRight: RapierRigidBody
+  let rigidBodyLeft = $state.raw<RapierRigidBody>()
+  let rigidBodyRight = $state.raw<RapierRigidBody>()
+  let leftSaber = $state.raw<Group>()
+  let rightSaber = $state.raw<Group>()
+  let leftHandSaber = $state.raw<Group>()
+  let rightHandSaber = $state.raw<Group>()
 
-  const sabers: { left: Mesh; right: Mesh } = { left: undefined!, right: undefined! }
-  const handSabers: { left: Mesh; right: Mesh } = {
-    left: undefined!,
-    right: undefined!
-  }
+  const left = $derived($isHandTracking ? leftHandSaber : leftSaber)
+  const right = $derived($isHandTracking ? rightHandSaber : rightSaber)
 
-  const v3 = new Vector3()
-  const q = new Quaternion()
+  const vec3 = new Vector3()
+  const quaternion = new Quaternion()
 
   useTask(() => {
-    const left = isHandTracking.current ? handSabers.left : sabers.left
-    const right = isHandTracking.current ? handSabers.right : sabers.right
-
     if (left) {
-      rigidBodyLeft.setTranslation(left.getWorldPosition(v3), true)
-      rigidBodyLeft.setRotation(left.getWorldQuaternion(q), true)
+      rigidBodyLeft?.setTranslation(left.getWorldPosition(vec3), true)
+      rigidBodyLeft?.setRotation(left.getWorldQuaternion(quaternion), true)
     }
 
     if (right) {
-      rigidBodyRight.setTranslation(right.getWorldPosition(v3), true)
-      rigidBodyRight.setRotation(right.getWorldQuaternion(q), true)
+      rigidBodyRight?.setTranslation(right.getWorldPosition(vec3), true)
+      rigidBodyRight?.setRotation(right.getWorldQuaternion(quaternion), true)
     }
   })
 
@@ -38,65 +37,73 @@
   const saberLength = 1.4
 </script>
 
+{#snippet saber()}
+  <T.Mesh>
+    <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
+    <T.MeshBasicMaterial color="red" />
+  </T.Mesh>
+
+  <T.Mesh position={[0, saberLength / 2 + 0.05, 0]}>
+    <T.CylinderGeometry args={[saberRadius, saberRadius, 0.1]} />
+    <T.MeshStandardMaterial
+      color="gray"
+      roughness={0}
+      metalness={0.5}
+    />
+  </T.Mesh>
+
+  <T.Mesh>
+    <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
+    <FakeGlowMaterial glowColor="red" />
+
+    <Outlines
+      color="hotpink"
+      thickness={0.005}
+    />
+  </T.Mesh>
+{/snippet}
+
 <Controller left>
-  <T.Mesh
+  <T.Group
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    oncreate={(ref) => {
-      sabers.left = ref
-    }}
+    bind:ref={leftSaber}
   >
-    <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-    <T.MeshPhongMaterial color="red" />
-  </T.Mesh>
+    {@render saber()}
+  </T.Group>
 </Controller>
 
 <Controller right>
-  <T.Mesh
+  <T.Group
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    oncreate={(ref) => {
-      sabers.right = ref
-    }}
+    bind:ref={rightSaber}
   >
-    <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-    <T.MeshStandardMaterial
-      roughness={0}
-      color="red"
-    />
-  </T.Mesh>
+    {@render saber()}
+  </T.Group>
 </Controller>
 
 <Hand left>
   {#snippet wrist()}
-    <T.Mesh
+    <T.Group
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      oncreate={(ref) => {
-        handSabers.left = ref
-      }}
+      bind:ref={leftHandSaber}
     >
-      <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-      <T.MeshStandardMaterial
-        roughness={0}
-        color="red"
-      />
-    </T.Mesh>
+      {@render saber()}
+    </T.Group>
   {/snippet}
 </Hand>
 
 <Hand right>
   {#snippet wrist()}
-    <T.Mesh
+    <T.Group
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      oncreate={(ref) => {
-        handSabers.right = ref
-      }}
+      bind:ref={rightHandSaber}
     >
-      <T.CylinderGeometry args={[saberRadius, saberRadius, saberLength]} />
-      <T.MeshPhongMaterial color="red" />
-    </T.Mesh>
+      {@render saber()}
+    </T.Group>
   {/snippet}
 </Hand>
 
