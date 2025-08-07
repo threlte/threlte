@@ -162,7 +162,10 @@ into the global canvas:
 
 ```svelte title="src/lib/components/CanvasPortal.svelte"
 <script lang="ts">
-  import { addCanvasPortalSnippet, removeCanvasPortalSnippet } from '$lib/components/CanvasPortalTarget.svelte'
+  import {
+    addCanvasPortalSnippet,
+    removeCanvasPortalSnippet
+  } from '$lib/components/CanvasPortalTarget.svelte'
   import { onDestroy, type Snippet } from 'svelte'
 
   let { children }: { children: Snippet } = $props()
