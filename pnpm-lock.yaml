@@ -427,6 +427,9 @@ importers:
 
   packages/extras:
     dependencies:
+      '@three.ez/instanced-mesh':
+        specifier: ^0.3.5
+        version: 0.3.5(three@0.175.0)
       '@threejs-kit/instanced-sprite-mesh':
         specifier: ^2.5.1
         version: 2.5.1(@types/three@0.175.0)(three@0.175.0)
@@ -2886,6 +2889,11 @@ packages:
     peerDependencies:
       '@theatre/core': '*'
 
+  '@three.ez/instanced-mesh@0.3.5':
+    resolution: {integrity: sha512-T4Hh6HYG9lQlrzfLB2mGkrbf2EKlQBN5kxHtGDooPIIUIRjTRBvDkOXUdAZenhRX8BTkOK3gpFDzW+b0o6r9YQ==}
+    peerDependencies:
+      three: '>=0.159.0'
+
   '@threejs-kit/instanced-sprite-mesh@2.5.1':
     resolution: {integrity: sha512-pmt1ALRhbHhCJQTj2FuthH6PeLIeaM4hOuS2JO3kWSwlnvx/9xuUkjFR3JOi/myMqsH7pSsLIROSaBxDfttjeA==}
     peerDependencies:
@@ -3574,6 +3582,9 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     peerDependencies:
       esbuild: '>=0.18'
+
+  bvh.js@0.0.13:
+    resolution: {integrity: sha512-7jVxKGyyATOwEoqFvghXoStJXkkmqf7JIXYEG44eMtMXQoeCwZL2n1z5/kZogFKvCaN7XweS2TKnqdyDrd0DJA==}
 
   bytes@3.1.2:
     resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
@@ -10735,6 +10746,11 @@ snapshots:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2
 
+  '@three.ez/instanced-mesh@0.3.5(three@0.175.0)':
+    dependencies:
+      bvh.js: 0.0.13
+      three: 0.175.0
+
   '@threejs-kit/instanced-sprite-mesh@2.5.1(@types/three@0.175.0)(three@0.175.0)':
     dependencies:
       diet-sprite: 0.0.1
@@ -11642,6 +11658,8 @@ snapshots:
       esbuild: 0.24.2
       load-tsconfig: 0.2.5
 
+  bvh.js@0.0.13: {}
+
   bytes@3.1.2: {}
 
   cac@6.7.14: {}
@@ -12384,7 +12402,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.26.0(jiti@1.21.0))(typescript@5.8.3))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1):
+  eslint-module-utils@2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.26.0(jiti@1.21.0))(typescript@5.8.3))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.26.0)(eslint@9.26.0(jiti@1.21.0))):
     dependencies:
       debug: 3.2.7
       find-up: 2.1.0
@@ -12403,7 +12421,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.26.0(jiti@1.21.0)
       eslint-import-resolver-node: 0.3.6
-      eslint-module-utils: 2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.26.0(jiti@1.21.0))(typescript@5.8.3))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1)
+      eslint-module-utils: 2.7.3(@typescript-eslint/parser@5.45.0(eslint@9.26.0(jiti@1.21.0))(typescript@5.8.3))(eslint-import-resolver-node@0.3.6)(eslint-import-resolver-typescript@2.7.1(eslint-plugin-import@2.26.0)(eslint@9.26.0(jiti@1.21.0)))
       has: 1.0.3
       is-core-module: 2.12.1
       is-glob: 4.0.3

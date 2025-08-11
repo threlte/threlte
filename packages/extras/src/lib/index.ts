@@ -116,3 +116,7 @@ export {
 } from './components/InstancedSprite/instancedSpriteUtils'
 
 export type { ThrelteGltf } from './types/types'
+
+// instanced mesh 2
+export { default as InstancedMesh2 } from './components/Instancing/instancedMesh2/InstancedMesh2.svelte'
+export { default as Instance2 } from './components/Instancing/instancedMesh2/Instance2.svelte'

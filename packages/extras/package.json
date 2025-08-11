@@ -88,6 +88,7 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
+    "@three.ez/instanced-mesh": "^0.3.5",
     "@threejs-kit/instanced-sprite-mesh": "^2.5.1",
     "camera-controls": "^2.10.1",
     "three-mesh-bvh": "^0.9.0",
