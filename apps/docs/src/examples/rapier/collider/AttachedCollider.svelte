@@ -7,7 +7,7 @@
 
   const material = new MeshStandardMaterial({ color: new Color(0xff3f00) })
 
-  let rigidBody: RapierRigidBody
+  let rigidBody = $state.raw<RapierRigidBody>()
   let positionZ = 0
   let positionX = 0
   const offset = Date.now()
@@ -15,7 +15,7 @@
   useTask(() => {
     positionZ = Math.sin(Date.now() / 2000) * 2.5
     positionX = Math.sin((Date.now() + offset) / 1500) * 1.2
-    rigidBody.setNextKinematicTranslation({ x: positionX, y: 1, z: positionZ })
+    rigidBody?.setNextKinematicTranslation({ x: positionX, y: 1, z: positionZ })
   })
 </script>
 
@@ -28,7 +28,7 @@
       {material}
     />
     <Collider
-      shape={'cuboid'}
+      shape="cuboid"
       args={[1, 1, 1]}
     />
   </RigidBody>
@@ -38,10 +38,10 @@
 <T.Group position={[0, 1, 0]}>
   <RigidBody
     bind:rigidBody
-    type={'kinematicPosition'}
+    type="kinematicPosition"
     lockRotations
   >
-    <AutoColliders shape={'ball'}>
+    <AutoColliders shape="ball">
       <T.Mesh
         castShadow
         geometry={new SphereGeometry(1)}
@@ -51,11 +51,14 @@
   </RigidBody>
 </T.Group>
 
-<TestBed title={'Attached Collider'}>
-  <div slot="text">
-    <p>
-      Nesting one or multiple {'<Collider>'} components in a {'<RigidBody>'} component effectively attaches
-      the colliders to the rigid body and allow the rigid body to be affected by contact forces and gravity.
-    </p>
-  </div>
+<TestBed title="Attached Collider">
+  {#snippet text()}
+    <div>
+      <p>
+        Nesting one or multiple {'<Collider>'} components in a {'<RigidBody>'} component effectively
+        attaches the colliders to the rigid body and allow the rigid body to be affected by contact forces
+        and gravity.
+      </p>
+    </div>
+  {/snippet}
 </TestBed>

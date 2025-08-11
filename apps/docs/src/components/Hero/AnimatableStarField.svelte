@@ -4,7 +4,11 @@
   import { SheetObject } from '@threlte/theatre'
   import StarField from './StarField/StarField.svelte'
 
-  export let key: string
+  interface Props {
+    key: string
+  }
+
+  let { key }: Props = $props()
 </script>
 
 <SheetObject {key}>

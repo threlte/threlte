@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 3.0.7
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 3.0.6
+
+### Patch Changes
+
+- 9d3de86: Make sheet bindable
+
+## 3.0.5
+
+### Patch Changes
+
+- 9d8c56c: Migrate components to runes mode
+
 ## 3.0.4
 
 ### Patch Changes

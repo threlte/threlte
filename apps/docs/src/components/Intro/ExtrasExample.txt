@@ -6,7 +6,7 @@
   <GLTF
     castShadow
     receiveShadow
-    url={'/models/flower.glb'}
+    url="/models/flower.glb"
     position.y={1}
     scale={3}
   />

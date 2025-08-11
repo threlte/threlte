@@ -6,7 +6,11 @@
   import DissolveMaterial from './materials/DissolveMaterial.svelte'
   import { types } from '@theatre/core'
 
-  export let key: string
+  interface Props {
+    key: string
+  }
+
+  let { key }: Props = $props()
 </script>
 
 <SheetObject {key}>

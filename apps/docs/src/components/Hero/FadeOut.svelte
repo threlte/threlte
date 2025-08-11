@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { clamp, mapLinear } from 'three/src/math/MathUtils.js'
+  import { MathUtils } from 'three'
 
-  export let progress: number
+  interface Props {
+    progress: number
+    from?: number
+    to?: number
+    children?: import('svelte').Snippet
+  }
 
-  export let from: number = 0
-  export let to: number = 1
+  let { progress, from = 0, to = 1, children }: Props = $props()
 
-  $: p = clamp(mapLinear(progress, from, to, 1, 0), 0, 1)
+  let p = $derived(MathUtils.clamp(MathUtils.mapLinear(progress, from, to, 1, 0), 0, 1))
 </script>
 
 <div style="opacity: {p};">
   {#if p > 0}
-    <slot />
+    {@render children?.()}
   {/if}
 </div>

@@ -103,10 +103,10 @@ importers:
         version: 0.14.0
       prettier-plugin-svelte:
         specifier: ^3.2.5
-        version: 3.2.5(prettier@3.3.2)(svelte@5.35.4)
+        version: 3.2.5(prettier@3.3.2)(svelte@5.36.16)
       prettier-plugin-tailwindcss:
         specifier: ^0.6.5
-        version: 0.6.5(prettier-plugin-astro@0.14.0)(prettier-plugin-svelte@3.2.5(prettier@3.3.2)(svelte@5.35.4))(prettier@3.3.2)
+        version: 0.6.5(prettier-plugin-astro@0.14.0)(prettier-plugin-svelte@3.2.5(prettier@3.3.2)(svelte@5.36.16))(prettier@3.3.2)
       rimraf:
         specifier: 'catalog:'
         version: 5.0.5
@@ -7974,8 +7974,8 @@ packages:
     resolution: {integrity: sha512-e2TEcGK2YKVwDWYy5OsptVclYgDvfY1E/8IzPiOq63uG/GDo/j5VUYTC9EinQNraoZalbMWN+5f5TYC1QlAqOw==}
     engines: {node: '>=18'}
 
-  svelte@5.35.4:
-    resolution: {integrity: sha512-NUUD+GcV/uvLBANoFwPNtnlkJM77PEkYYH6TChRZnGI1a5UHc9k2Glq7jxGtClfVz2ZhEvpg+c4yS577qM1c6g==}
+  svelte@5.36.16:
+    resolution: {integrity: sha512-C7HnyISfvZEofs7T4p7+bmjrbQlhd6lZfgV2tLYg6Eb3nUFM/Zu9dGlSg+GWbUBU/WPw6zDPOFNZAx9qXsoCkg==}
     engines: {node: '>=18'}
 
   symbol-tree@3.2.4:
@@ -16147,17 +16147,17 @@ snapshots:
       prettier: 3.3.2
       svelte: 5.26.2
 
-  prettier-plugin-svelte@3.2.5(prettier@3.3.2)(svelte@5.35.4):
+  prettier-plugin-svelte@3.2.5(prettier@3.3.2)(svelte@5.36.16):
     dependencies:
       prettier: 3.3.2
-      svelte: 5.35.4
+      svelte: 5.36.16
 
-  prettier-plugin-tailwindcss@0.6.5(prettier-plugin-astro@0.14.0)(prettier-plugin-svelte@3.2.5(prettier@3.3.2)(svelte@5.35.4))(prettier@3.3.2):
+  prettier-plugin-tailwindcss@0.6.5(prettier-plugin-astro@0.14.0)(prettier-plugin-svelte@3.2.5(prettier@3.3.2)(svelte@5.36.16))(prettier@3.3.2):
     dependencies:
       prettier: 3.3.2
     optionalDependencies:
       prettier-plugin-astro: 0.14.0
-      prettier-plugin-svelte: 3.2.5(prettier@3.3.2)(svelte@5.35.4)
+      prettier-plugin-svelte: 3.2.5(prettier@3.3.2)(svelte@5.36.16)
 
   prettier@2.8.7:
     optional: true
@@ -17489,7 +17489,7 @@ snapshots:
       magic-string: 0.30.12
       zimmerframe: 1.1.2
 
-  svelte@5.35.4:
+  svelte@5.36.16:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.0

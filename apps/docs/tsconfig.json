@@ -13,7 +13,8 @@
       "$hooks/*": ["src/hooks/*"]
     },
     "types": ["astro/client"],
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "exactOptionalPropertyTypes": false
   },
-  "exclude": ["node_modules", "src/components/Example/stackblitz-template"]
+  "exclude": ["node_modules", "src/components/Example/stackblitz-template", "dist"]
 }

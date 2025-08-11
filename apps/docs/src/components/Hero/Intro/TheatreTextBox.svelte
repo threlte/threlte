@@ -6,13 +6,19 @@
 
   const sheetObject = createSheetObjectAction()
 
-  export let key: string
-  let reveal = 0
-  let fade = 0
+  interface Props {
+    key: string
+    children?: import('svelte').Snippet
+    [key: string]: any
+  }
+
+  let { key, children, ...rest }: Props = $props()
+  let reveal = $state(0)
+  let fade = $state(0)
 </script>
 
 <div
-  {...$$restProps}
+  {...rest}
   use:sheetObject={{
     key,
     props: {
@@ -42,7 +48,7 @@
 >
   <Reveal progress={reveal}>
     <FadeOut progress={fade}>
-      <slot />
+      {@render children?.()}
     </FadeOut>
   </Reveal>
 </div>

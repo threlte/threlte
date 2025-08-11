@@ -26,7 +26,7 @@ detected](#automatic-invalidation) or the frame is [manually
 invalidated](#manual-invalidation). This is the default mode and the recommended
 way of working with Threlte.
 
-### Automatic Invalidation
+### Automatic invalidation
 
 Threlte is able to automatically invalidate the current frame by observing
 component props and the mounting and unmounting of components. This means that
@@ -47,7 +47,7 @@ will automatically invalidate the current frame and request a new frame.
 <T.Mesh position.x={x} />
 ```
 
-### Manual Invalidation
+### Manual invalidation
 
 In some cases, you may want to manually invalidate the current frame because
 Threlte is not able to detect changes. To do this, you can use the `invalidate`
@@ -129,9 +129,9 @@ In the `'always'` mode, Threlte continuously renders the scene. This mode is the
 easiest to use, but it is also the most resource intensive and should only be
 used when necessary.
 
-## Setting the Render Mode
+## Setting the render mode
 
-### `<Canvas>` Prop
+### `<Canvas>` prop
 
 You can set the render mode by setting the property `renderMode` on the
 [`<Canvas>`](/docs/reference/core/canvas) component:
@@ -140,7 +140,7 @@ You can set the render mode by setting the property `renderMode` on the
 <Canvas renderMode="on-demand" />
 ```
 
-### `useThrelte` Hook
+### `useThrelte` hook
 
 You can also set the render mode from anywhere within your Threlte app using the
 [`useThrelte`](/docs/reference/core/use-threlte) hook:
@@ -155,11 +155,10 @@ renderMode.set('on-demand')
   frame.
 </Tip>
 
-## Render Modes and Custom Rendering
+## Render modes and custom rendering
 
 By default, Threlte will automatically render the scene for you. In some cases,
-you may want to render the scene yourself, for example when using [post
-processing](/docs/examples/postprocessing/outlines).
+you may want to render the scene yourself, for example when using [postprocessing](/docs/examples/postprocessing/outlines).
 
 1. Set `autoRender` to `false` on the [`<Canvas>`](/docs/reference/core/canvas)
    component. This will prevent Threlte from automatically rendering the scene

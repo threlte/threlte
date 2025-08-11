@@ -10,6 +10,8 @@ component tree without having to pass props down manually at every level:
 
 ```svelte title="SomeComponent.svelte"
 <script>
+  import { useThrelte } from '@threlte/core'
+
   const { camera, renderer } = useThrelte()
 </script>
 ```
@@ -17,7 +19,7 @@ component tree without having to pass props down manually at every level:
 To let Threlte do its magic, we recommend to follow our best practices for
 structuring your app.
 
-## Recommended App Structure
+## Recommended app structure
 
 The [`<Canvas>`](/docs/reference/core/canvas) component provides all basic contexts in a Threlte application.
 The recommended app structure is to have a single child component of `<Canvas>` (typically named "Scene.svelte" in examples) for
@@ -41,7 +43,7 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
   import Player from './Player.svelte'
   import World from './World.svelte'
 
-  let rotation = 0
+  let rotation = $state(0)
 
   // useTask is relying on a context provided
   // by <Canvas>. Because we are definitely *inside*
@@ -64,7 +66,7 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 <World />
 ```
 
-## Context Not Available
+## Context not available
 
 <Tip type="danger">
 	The following app structure is deceiving. It looks like it should work, but **it
@@ -91,9 +93,9 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 </Canvas>
 ```
 
-## Additional App Structures
+## Additional app structures
 
-### SvelteKit Setup Using a Single `<Canvas>`
+### SvelteKit setup using a single `<Canvas>`
 
 In a typical SvelteKit application, a single `<Canvas>` component instance
 renders all 3D content to circumvent the WebGL Error `"WARNING: Too many active
@@ -137,7 +139,7 @@ Then implement this component in the root +layout.svelte component:
 </script>
 
 <div>
-  <Canvas toneMapping={NoToneMapping}>
+  <Canvas>
     <CanvasPortalTarget />
   </Canvas>
 </div>
@@ -160,15 +162,18 @@ into the global canvas:
 
 ```svelte title="src/lib/components/CanvasPortal.svelte"
 <script lang="ts">
-  import { addSnippet, removeSnippet } from '$lib/components/CanvasPortalTarget.svelte'
+  import {
+    addCanvasPortalSnippet,
+    removeCanvasPortalSnippet
+  } from '$lib/components/CanvasPortalTarget.svelte'
   import { onDestroy, type Snippet } from 'svelte'
 
   let { children }: { children: Snippet } = $props()
 
-  addSnippet(children)
+  addCanvasPortalSnippet(children)
 
   onDestroy(() => {
-    removeSnippet(children)
+    removeCanvasPortalSnippet(children)
   })
 </script>
 ```

@@ -4,10 +4,14 @@
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { Collider, RigidBody } from '@threlte/rapier'
 
-  export let jointIndex: number
-  export let hand: 'left' | 'right'
+  interface Props {
+    jointIndex: number
+    hand: 'left' | 'right'
+  }
 
-  let body: RapierRigidBody
+  let { jointIndex, hand }: Props = $props()
+
+  let body: RapierRigidBody = $state()
 
   const joint = useHandJoint(hand, handJoints[jointIndex]!)
 
@@ -21,13 +25,15 @@
     { autoStart: false }
   )
 
-  $: radius = $joint?.jointRadius
+  let radius = $derived($joint?.jointRadius)
 
-  $: if (body && radius && $joint) {
-    start()
-  } else {
-    stop()
-  }
+  $effect.pre(() => {
+    if (body && radius && $joint) {
+      start()
+    } else {
+      stop()
+    }
+  })
 </script>
 
 {#if radius}

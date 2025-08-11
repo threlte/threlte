@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-
-  let { label = '', ...props }: { label?: string } = $props()
+  let { label = '' }: { label?: string } = $props()
 
   let count = $state(0)
   const text = $derived(`${label} - ${count}`)
 </script>
 
 <button
-  on:click={() => {
+  onclick={() => {
     count += 1
   }}
 >

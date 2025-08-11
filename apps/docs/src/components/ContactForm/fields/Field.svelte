@@ -1,7 +1,19 @@
 <script lang="ts">
-  export let label: string
-  export let id: string = label.toLowerCase().replace(' ', '-')
-  export let required: boolean = false
+  import type { Snippet } from 'svelte'
+
+  interface Props {
+    label: string
+    id?: string
+    required?: boolean
+    children?: Snippet
+  }
+
+  let {
+    label,
+    id = label.toLowerCase().replace(' ', '-'),
+    required = false,
+    children
+  }: Props = $props()
 </script>
 
 <div>
@@ -11,7 +23,7 @@
       <span>*</span>
     {/if}
   </label>
-  <slot />
+  {@render children?.()}
 </div>
 
 <style>

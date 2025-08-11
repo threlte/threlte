@@ -1,10 +1,19 @@
 <script lang="ts">
   import Field from './Field.svelte'
 
-  export let label: string
-  export let id: string = label.toLowerCase().replace(' ', '-')
-  export let required: boolean = false
-  export let value: number | undefined = undefined
+  interface Props {
+    label: string
+    id?: string
+    required?: boolean
+    value?: number
+  }
+
+  let {
+    label,
+    id = label.toLowerCase().replace(' ', '-'),
+    required = false,
+    value = $bindable(undefined)
+  }: Props = $props()
 </script>
 
 <Field
@@ -19,8 +28,3 @@
     bind:value
   />
 </Field>
-
-<style>
-  input {
-  }
-</style>

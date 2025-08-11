@@ -8,23 +8,17 @@
     after: renderStage
   })
 
-  let log = Array(100).fill(0)
+  let value = $state.raw<number[]>(Array(100).fill(0))
 
   useTask(
     () => {
-      log = update(log)
+      value = [...value.slice(1), shouldRender() ? 1 : 0]
     },
     {
       autoInvalidate: false,
       stage: afterRenderStage
     }
   )
-
-  function update(log: number[]) {
-    log.shift()
-    log.push(shouldRender() ? 1 : 0)
-    return log
-  }
 </script>
 
 <Pane
@@ -32,7 +26,7 @@
   position="fixed"
 >
   <WaveformMonitor
-    value={log}
+    {value}
     min={-1}
     max={2}
   />

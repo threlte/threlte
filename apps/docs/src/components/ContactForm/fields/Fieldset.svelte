@@ -1,7 +1,14 @@
 <script lang="ts">
-  export let align: 'left' | 'center' | 'right' = 'left'
-  export let legend: string | undefined = undefined
-  export let nowrap: boolean = false
+  import type { Snippet } from 'svelte'
+
+  interface Props {
+    align?: 'left' | 'center' | 'right'
+    legend?: string
+    nowrap?: boolean
+    children?: Snippet
+  }
+
+  let { align = 'left', legend = undefined, nowrap = false, children }: Props = $props()
 </script>
 
 <fieldset
@@ -11,7 +18,7 @@
   {#if legend}
     <legend>{legend}</legend>
   {/if}
-  <slot />
+  {@render children?.()}
 </fieldset>
 
 <style>
@@ -31,10 +38,6 @@
 
   .nowrap :global(*) {
     flex-wrap: nowrap;
-  }
-
-  .left {
-    /* default works - nothing needed */
   }
 
   .center {

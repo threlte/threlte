@@ -10,10 +10,12 @@
 
   const material = new MeshStandardMaterial({ color: gray })
 
-  let present = false
-  $: material.color = present ? brand : gray
+  let present = $state(false)
+  $effect.pre(() => {
+    material.color = present ? brand : gray
+  })
 
-  let rigidBody: RapierRigidBody
+  let rigidBody = $state<RapierRigidBody>()
   let positionZ = 0
   let positionX = 0
   const offset = Date.now()
@@ -54,11 +56,13 @@
 </T.Group>
 
 <TestBed title={'Sensor Collider'}>
-  <div slot="text">
-    <p>
-      This collider is marked as a sensor and as such does<br />
-      not participate in contacts and collisions and can be<br />
-      useful to detect presence in areas.
-    </p>
-  </div>
+  {#snippet text()}
+    <div>
+      <p>
+        This collider is marked as a sensor and as such does<br />
+        not participate in contacts and collisions and can be<br />
+        useful to detect presence in areas.
+      </p>
+    </div>
+  {/snippet}
 </TestBed>

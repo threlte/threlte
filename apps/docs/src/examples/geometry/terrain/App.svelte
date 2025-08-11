@@ -5,8 +5,6 @@
 
   let autoRotate = $state(true)
   let flatness = $state(4)
-
-  let scene = $state()
 </script>
 
 <Pane
