@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { T } from '@threlte/core'
   import { SheetObject } from '@threlte/theatre'
   import StarField from './StarField/StarField.svelte'
@@ -19,26 +18,14 @@
           props={{
             amount: 1000,
             radius: 100,
-            size: types.number(0, {
-              range: [0, 0.5]
-            }),
-            speed: types.number(0, {
-              range: [0, 5]
-            }),
+            size: 0,
+            speed: 0,
             direction: {
-              x: types.number(0, {
-                range: [-1, 1]
-              }),
-              y: types.number(0, {
-                range: [-1, 1]
-              }),
-              z: types.number(1, {
-                range: [-1, 1]
-              })
+              x: 0,
+              y: 0,
+              z: 1
             },
-            opacity: types.number(0, {
-              range: [0, 1]
-            })
+            opacity: 0
           }}
         >
           {#snippet children({ values })}
