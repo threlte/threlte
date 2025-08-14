@@ -4,10 +4,6 @@
   import { Vector3 } from 'three'
 
   const gltf = useGltf('/models/pointcloud_plant_in_a_pot.glb')
-
-  $effect(() => {
-    console.log($gltf)
-  })
 </script>
 
 <T.PerspectiveCamera
