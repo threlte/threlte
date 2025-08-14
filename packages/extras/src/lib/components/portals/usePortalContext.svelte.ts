@@ -1,44 +1,11 @@
 import { useThrelteUserContext } from '@threlte/core'
-import { SvelteMap } from 'svelte/reactivity'
-import type { Object3D } from 'three'
+import type { Snippet } from 'svelte'
+import { SvelteMap, SvelteSet } from 'svelte/reactivity'
 
-type PortalContext = {
-  addPortal: (object: Object3D, id: string) => void
-  removePortal: (id: string) => void
-  hasPortal: (id: string) => boolean
-  getPortal: (id: string) => { current: Object3D | undefined }
-}
+type PortalContext = SvelteMap<string, SvelteSet<Snippet>>
 
-const createPortalContext = () => {
-  const portals = new SvelteMap<string, Object3D>()
-
-  const ctx: PortalContext = {
-    addPortal(object, id) {
-      if (portals.has(id)) {
-        console.warn(`Portal with id ${id} already exists. Skipping portal creation.`)
-      } else {
-        portals.set(id, object)
-      }
-    },
-    removePortal(id) {
-      if (!portals.has(id)) {
-        console.warn(`Portal with id ${id} does not exist. Skipping portal removal.`)
-      } else {
-        portals.delete(id)
-      }
-    },
-    getPortal(id) {
-      return {
-        get current() {
-          return portals.get(id)
-        }
-      }
-    },
-    hasPortal(id) {
-      return portals.has(id)
-    }
-  }
-  return ctx
+const createPortalContext = (): PortalContext => {
+  return new SvelteMap<string, SvelteSet<Snippet>>()
 }
 
 export const usePortalContext = () => {
