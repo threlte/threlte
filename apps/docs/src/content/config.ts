@@ -96,7 +96,7 @@ export const referenceCollection = defineCollection({
 export const learnCollection = defineCollection({
   schema: z.object({
     schemaType: z.string().default('learn'),
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
+    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
