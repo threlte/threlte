@@ -1,0 +1,34 @@
+---
+order: 7.5
+category: '@threlte/extras'
+name: '<PointsMaterial>'
+sourcePath: 'packages/extras/src/lib/components/PointsMaterial/PointsMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'PointsMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/materials/PointsMaterial'
+      },
+    props: []
+  }
+---
+
+An extended `THREE.PointsMaterial` that renders antialiased round dots.
+
+<Example path="extras/points-material" />
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { PointsMaterial } from '@threlte/extras'
+</script>
+
+<T.Points>
+  <T.BufferGeometry />
+  <PointsMaterial />
+</T.Points>
+```
