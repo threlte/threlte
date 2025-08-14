@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.4.5
+
+### Patch Changes
+
+- ab4b10e: Add PointsMaterial component
+
 ## 9.4.4
 
 ### Patch Changes
