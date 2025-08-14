@@ -1,4 +1,4 @@
-import { session, referenceSpaceType, xr } from '../internal/stores'
+import { session, referenceSpaceType, xr } from '../internal/state.svelte'
 import { getXRSessionOptions } from './getXRSessionOptions'
 
 /**
@@ -11,7 +11,7 @@ import { getXRSessionOptions } from './getXRSessionOptions'
  */
 export const toggleXRSession = async (
   sessionMode: XRSessionMode,
-  sessionInit?: (XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined }) | undefined,
+  sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } },
   force?: 'enter' | 'exit'
 ): Promise<XRSession | undefined> => {
   const currentSession = session.current
@@ -23,7 +23,7 @@ export const toggleXRSession = async (
   // Exit a session if entered
   if (hasSession) {
     await currentSession.end()
-    session.set(undefined)
+    session.current = undefined
     return
   }
 
@@ -37,6 +37,6 @@ export const toggleXRSession = async (
 
   await xr.current.setSession(nextSession)
 
-  session.set(nextSession)
+  session.current = nextSession
   return nextSession
 }

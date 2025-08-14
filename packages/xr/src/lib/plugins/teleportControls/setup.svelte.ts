@@ -1,10 +1,9 @@
-import { watch } from '@threlte/core'
-import { useXR } from '../../hooks/useXR'
+import { observe } from '@threlte/core'
 import type { Context, HandContext } from './context'
-import { useController } from '../../hooks/useController'
+import { controllers } from '../../hooks/useController.svelte'
 import { useTeleport } from '../../hooks/useTeleport'
 import { useFixed } from '../../internal/useFixed'
-import { teleportIntersection } from '../../internal/stores'
+import { isPresenting, teleportIntersection } from '../../internal/state.svelte'
 
 export const setupTeleportControls = (
   context: Context,
@@ -12,17 +11,17 @@ export const setupTeleportControls = (
   fixedStep = 1 / 40
 ) => {
   const handedness = handContext.hand
-  const controller = useController(handedness)
+  const controller = $derived(controllers[handedness])
   const teleport = useTeleport()
 
   const handleHoverEnd = () => {
     handContext.hovered.set(undefined)
-    teleportIntersection[handedness].set(undefined)
+    teleportIntersection[handedness] = undefined
   }
 
   const { start, stop } = useFixed(
     () => {
-      const gamepad = controller.current?.inputSource.gamepad
+      const gamepad = controller?.inputSource.gamepad
 
       if (gamepad === undefined) {
         return
@@ -62,7 +61,7 @@ export const setupTeleportControls = (
         return
       }
 
-      teleportIntersection[handedness].set(intersect)
+      teleportIntersection[handedness] = intersect
       handContext.hovered.set(intersect)
     },
     {
@@ -71,11 +70,14 @@ export const setupTeleportControls = (
     }
   )
 
-  watch([useXR().isPresenting, handContext.enabled], ([isPresenting, enabled]) => {
-    if (isPresenting && enabled) {
-      start()
-    } else {
-      stop()
+  observe.pre(
+    () => [isPresenting.current, handContext.enabled],
+    ([isPresenting, $enabled]) => {
+      if (isPresenting && $enabled) {
+        start()
+      } else {
+        stop()
+      }
     }
-  })
+  )
 }
