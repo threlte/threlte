@@ -1,0 +1,60 @@
+---
+order: 7.32
+category: '@threlte/extras'
+name: '<Backdrop>'
+sourcePath: 'packages/extras/src/lib/components/Backdrop/Backdrop.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        {
+          name: 'floor',
+          type: 'number',
+          default: '0.25',
+          description: 'length of the floor segment',
+          required: false
+        },
+        {
+          name: 'receiveShadow',
+          type: 'boolean',
+          default: 'false',
+          description: 'whether the backdrop is to receive shadows',
+          required: false
+        },
+        {
+          name: 'segments',
+          type: 'number',
+          default: '20',
+          description: "resolution of the backdrop's geometry",
+          required: false
+        }
+      ]
+  }
+---
+
+A mesh of a curved plane designed to look like a studio backdrop. Its intent is to break up light and shadows in more interesting ways.
+
+<Example path="extras/backdrop" />
+
+Children are "slotted" into the underlying mesh so you can set the material of the backdrop like so:
+
+```svelte
+<Backdrop>
+  <T.MeshStandardMaterial color="#ffffdd" />
+</Backdrop>
+```
+
+## Props
+
+`floor` controls the length of the "floor" segment of the geometry. The higher the value, the longer the segment.
+
+`receiveShadow` controls whether the mesh receives shadows or not.
+
+`segments` controls the resolution of the mesh.
+
+<Tip type="warning">
+  Be aware that updating the `segments` prop causes the geometry to be rebuilt. It's advised not to
+  update `segments` in hot-code paths such as [`useTask()`](/docs/reference/core/use-task).
+</Tip>
