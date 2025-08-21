@@ -73,7 +73,7 @@
   const fill = new Uniform(new Color())
 
   $effect.pre(() => {
-    fillOpacity.value = rest.fillOpacity ?? 0.25
+    fillOpacity.value = rest.fillOpacity ?? 0
   })
   $effect.pre(() => {
     fillMix.value = rest.fillMix ?? 0
@@ -128,12 +128,14 @@
     // Disallow WireframeGeometry
     if ((parentMesh.geometry as WireframeGeometry).type === 'WireframeGeometry') {
       console.error('Wireframe: WireframeGeometry is not supported.')
+      return
     }
 
     if (!parentMesh.geometry) {
       console.error(
         'Wireframe: Must be a child of a Mesh, Line or Points object or specify a geometry prop.'
       )
+      return
     }
 
     const material = parentMesh.material as Material
