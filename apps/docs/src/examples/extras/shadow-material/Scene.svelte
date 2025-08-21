@@ -50,11 +50,11 @@
   <T is={plane}>
     <T.PlaneGeometry />
   </T>
-  <T is={shadowMesh}>
+  <T
+    is={shadowMesh}
+    position.z={0.01}
+  >
     <T.PlaneGeometry />
-    <ShadowMaterial
-      polygonOffset
-      polygonOffsetFactor={-1}
-    />
+    <ShadowMaterial />
   </T>
 </T.Group>

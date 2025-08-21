@@ -6,6 +6,11 @@
   const height = width
 
   const outerRadius = 0.5 * width
+
+  const end: ColorStop = {
+    color: 'rgba(0,0,0,0)',
+    offset: 1
+  }
 </script>
 
 <script lang="ts">
@@ -27,16 +32,9 @@
     ...restProps
   }: ShadowProps = $props()
 
-  const stops: ColorStop[] = $derived([
-    {
-      color,
-      offset: 0
-    },
-    {
-      color: 'rgba(0,0,0,0)',
-      offset: 1
-    }
-  ])
+  const start = $derived<ColorStop>({ color, offset: 0 })
+
+  const stops = $derived<ColorStop[]>([start, end])
 
   const material = new MeshBasicMaterial()
 </script>
