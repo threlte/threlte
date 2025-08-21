@@ -15,6 +15,7 @@ export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
+export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
 export { default as Decal } from './components/Decal/Decal.svelte'
 export {
   default as CameraControls,
@@ -64,7 +65,7 @@ export { default as LinearGradientTexture } from './components/GradientTexture/l
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
 export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
-export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
+export { default as Wireframe } from './components/Wireframe/Wireframe.svelte'
 
 // Transitions
 export { transitions } from './transitions/transltions.svelte'
