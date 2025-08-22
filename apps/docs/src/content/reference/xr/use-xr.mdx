@@ -11,7 +11,7 @@ Provides context about the current WebXR session.
 <script>
   import { useXR } from '@threlte/xr'
 
-  const { isPresenting, isHandTracking, session, xrFrame } = useXR()
+  const { isPresenting, isHandTracking, session } = useXR()
 </script>
 ```
 
@@ -19,9 +19,11 @@ Provides context about the current WebXR session.
 
 ```ts
 const {
-  isPresenting, // CurrentWritable<boolean> - Whether the XR device is presenting in an XR session
-  isHandTracking, // CurrentWritable<boolean> - Whether hand tracking inputs are active
-  session, // CurrentWritable<XRSession | undefined> - The active `XRSession`
-  xrFrame // CurrentWritable<XRFrame> - The current XRFrame
+  // Readable<boolean> - Whether the XR device is presenting in an XR session
+  isPresenting,
+  // Readable<boolean> - Whether hand tracking inputs are active
+  isHandTracking,
+  // Readable<XRSession | undefined> - The active `XRSession`
+  session
 } = useXR()
 ```

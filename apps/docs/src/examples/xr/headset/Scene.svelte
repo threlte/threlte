@@ -2,29 +2,19 @@
   import { T } from '@threlte/core'
   import { Headset, XR, useXR } from '@threlte/xr'
   import { AudioListener } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
   import { MathUtils } from 'three'
   import Turntable from '../../extras/positional-audio/Turntable.svelte'
   import Speaker from '../../extras/positional-audio/Speaker.svelte'
   import Microphone from './Microphone.svelte'
 
-  interface Props {
-    isPlaying?: boolean
-  }
-
-  let { isPlaying = false }: Props = $props()
-
   let turntable = $state.raw<Turntable>()
 
   const { isPresenting } = useXR()
 
-  const smoothVolume = spring(0)
-  let volume = $derived($isPresenting ? 1 : 0)
+  let volume = $state(0)
+
   $effect.pre(() => {
-    smoothVolume.set(volume)
-  })
-  $effect.pre(() => {
-    if (isPlaying) turntable?.toggle()
+    if ($isPresenting) turntable?.toggle()
   })
 </script>
 

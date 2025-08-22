@@ -12,7 +12,7 @@
 <script lang="ts">
   import { Spring } from 'svelte/motion'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { teleportIntersection } from '../../internal/stores'
+  import { teleportIntersection } from '../../internal/state.svelte'
   import Cursor from './Cursor.svelte'
   import type { Snippet } from 'svelte'
 
@@ -24,16 +24,17 @@
   const { handedness, children }: Props = $props()
 
   const { scene } = useThrelte()
-  const ref = new Group()
   const intersection = $derived(teleportIntersection[handedness])
+
+  const ref = new Group()
 
   const { start, stop } = useTask(
     () => {
-      if (intersection.current === undefined) {
+      if (intersection === undefined) {
         return
       }
 
-      const { point, face, object } = intersection.current
+      const { point, face, object } = intersection
       ref.position.lerp(point, 0.4)
 
       if (face) {
@@ -50,12 +51,12 @@
   const size = new Spring(0.1, { stiffness: 0.2 })
 
   $effect.pre(() => {
-    if ($intersection === undefined) {
+    if (intersection === undefined) {
       size.set(0.1)
       stop()
     } else {
       size.set(1)
-      ref.position.copy($intersection.point)
+      ref.position.copy(intersection.point)
       start()
     }
   })
@@ -64,7 +65,7 @@
 <T
   is={ref}
   attach={scene}
-  visible={$intersection !== undefined}
+  visible={intersection !== undefined}
 >
   {#if children}
     {@render children()}

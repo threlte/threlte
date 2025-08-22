@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { pointerIntersection, pointerState } from '../../internal/stores'
+  import { pointerIntersection, pointerState } from '../../internal/state.svelte'
   import Cursor from './Cursor.svelte'
   import type { Snippet } from 'svelte'
 
@@ -23,17 +23,18 @@
   const { handedness, children }: Props = $props()
 
   const { scene } = useThrelte()
-  const ref = new Group()
-  const hovering = $derived($pointerState[handedness].hovering)
+  const hovering = $derived(pointerState[handedness].hovering)
   const intersection = $derived(pointerIntersection[handedness])
+
+  const ref = new Group()
 
   const { start, stop } = useTask(
     () => {
-      if (intersection.current === undefined) {
+      if (intersection === undefined) {
         return
       }
 
-      const { point, face, object } = intersection.current
+      const { point, face, object } = intersection
       ref.position.lerp(point, 0.4)
 
       if (face === null || face === undefined) {
@@ -50,8 +51,8 @@
   )
 
   $effect.pre(() => {
-    if (hovering && intersection.current) {
-      ref.position.copy(intersection.current?.point)
+    if (hovering && intersection) {
+      ref.position.copy(intersection.point)
       start()
     } else {
       stop()

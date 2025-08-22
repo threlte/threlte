@@ -1,6 +1,6 @@
 import { Group } from 'three'
-import { useThrelte, useTask, watch } from '@threlte/core'
-import { useXR } from '../hooks/useXR'
+import { useThrelte, useTask } from '@threlte/core'
+import { isPresenting } from './state.svelte'
 
 export const headset = new Group()
 
@@ -23,8 +23,8 @@ export const setupHeadset = () => {
 
       const { position, orientation } = pose.transform
 
-      headset.position.set(position.x, position.y, position.z)
-      headset.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
+      headset.position.copy(position)
+      headset.quaternion.copy(orientation)
     },
     {
       autoStart: false,
@@ -45,8 +45,8 @@ export const setupHeadset = () => {
     }
   )
 
-  watch(useXR().isPresenting, ($isPresenting) => {
-    if ($isPresenting) {
+  $effect.pre(() => {
+    if (isPresenting.current) {
       immersiveFrame.start()
       nonImmersiveFrame.stop()
     } else {

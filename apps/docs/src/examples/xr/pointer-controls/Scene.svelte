@@ -1,24 +1,23 @@
 <script lang="ts">
   import { BufferGeometry, Vector3, type Mesh } from 'three'
-  import { onDestroy } from 'svelte'
   import { T, useTask } from '@threlte/core'
-  import { Text } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
-  import { interactivity } from '@threlte/extras'
+  import { Text, interactivity } from '@threlte/extras'
+  import { Spring } from 'svelte/motion'
   import { pointerControls, useXR, Controller, Hand } from '@threlte/xr'
 
   const { isPresenting } = useXR()
-  const scale = spring(1)
-  const eyeScale = spring(1, { stiffness: 0.5 })
+
+  const scale = new Spring(1)
+  const eyeScale = new Spring(1, { stiffness: 0.5 })
   const points = [new Vector3(0, 0, 0), new Vector3(0, 0, -1000)]
 
-  let debug = false
-  let ref: Mesh
-  let lookIntervalId: number | undefined
-  let happy = false
+  let text = $state('')
+  let debug = $state(false)
+  let happy = $state(false)
+  let ref = $state.raw<Mesh>()
+
   let lookAt = new Vector3()
   let point = new Vector3()
-  let text = ''
 
   const handleEvent =
     (type: string) =>
@@ -60,28 +59,31 @@
 
   useTask(() => {
     lookAt.lerp(point, happy ? 0.5 : 0.2)
-    ref.lookAt(lookAt.x, lookAt.y, 1)
+    ref?.lookAt(lookAt.x, lookAt.y, 1)
   })
 
   interactivity()
   pointerControls('left')
   pointerControls('right')
 
-  $: if (happy) {
-    clearInterval(lookIntervalId)
-  } else {
-    lookIntervalId = window.setInterval(lookForCursor, 1000)
-  }
-
+  let lookIntervalId = 0
   let blinkIntervalId = setInterval(blink, 3000)
 
-  onDestroy(() => {
-    clearInterval(blinkIntervalId)
-    clearInterval(lookIntervalId)
+  $effect(() => {
+    if (happy) {
+      clearInterval(lookIntervalId)
+    } else {
+      lookIntervalId = window.setInterval(lookForCursor, 1000)
+    }
+
+    return () => {
+      clearInterval(blinkIntervalId)
+      clearInterval(lookIntervalId)
+    }
   })
 </script>
 
-<svelte:window on:keyup={(e) => e.key === 'd' && (debug = !debug)} />
+<svelte:window onkeyup={(e) => e.key === 'd' && (debug = !debug)} />
 
 <Controller left>
   {#snippet targetRay()}
@@ -123,13 +125,13 @@
     onpointerleave={handleEvent('pointerleave')}
     onpointermove={handleEvent('pointermove')}
     onpointermissed={handleEvent('pointermissed')}
-    scale={$scale}
+    scale={scale.current}
   >
     <T.MeshStandardMaterial color="hotpink" />
     <T.BoxGeometry />
 
     <T.Mesh
-      scale.y={$eyeScale}
+      scale.y={eyeScale.current}
       position={[-0.3, 0.25, 0.5]}
       raycast={() => false}
     >
@@ -138,7 +140,7 @@
     </T.Mesh>
 
     <T.Mesh
-      scale.y={$eyeScale}
+      scale.y={eyeScale.current}
       position={[0.05, 0.25, 0.5]}
       raycast={() => false}
     >

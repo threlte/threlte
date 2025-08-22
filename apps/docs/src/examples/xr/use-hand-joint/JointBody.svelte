@@ -11,7 +11,7 @@
 
   let { jointIndex, hand }: Props = $props()
 
-  let body: RapierRigidBody = $state()
+  let body = $state.raw<RapierRigidBody>()
 
   const joint = useHandJoint(hand, handJoints[jointIndex]!)
 

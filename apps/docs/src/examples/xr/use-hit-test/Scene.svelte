@@ -5,8 +5,11 @@
 
   const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0)
 
-  let meshes: THREE.Mesh[] = []
-  let cursors = { left: undefined! as THREE.Mesh, right: undefined! as THREE.Mesh }
+  let meshes = $state<THREE.Mesh[]>([])
+  let cursors = $state({
+    left: undefined! as THREE.Mesh,
+    right: undefined! as THREE.Mesh
+  })
 
   const hands = ['left', 'right'] as const
   type Hands = (typeof hands)[number]
@@ -19,7 +22,6 @@
     cursors[hand].matrix.decompose(mesh.position, mesh.quaternion, mesh.scale)
     mesh.scale.y = Math.random() * 2 + 1
     meshes.push(mesh)
-    meshes = meshes
   }
 
   const handleHitTest =
@@ -57,7 +59,9 @@
 >
   <T.RingGeometry
     args={[0.15, 0.2, 32]}
-    oncreate={(ref) => ref.rotateX(-Math.PI / 2)}
+    oncreate={(ref) => {
+      ref.rotateX(-Math.PI / 2)
+    }}
   />
   <T.MeshBasicMaterial />
 </T.Mesh>
@@ -68,7 +72,9 @@
 >
   <T.RingGeometry
     args={[0.15, 0.2, 32]}
-    oncreate={(ref) => ref.rotateX(-Math.PI / 2)}
+    oncreate={(ref) => {
+      ref.rotateX(-Math.PI / 2)
+    }}
   />
   <T.MeshBasicMaterial />
 </T.Mesh>
