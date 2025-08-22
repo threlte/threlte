@@ -1,4 +1,4 @@
-import { Quaternion, type Vector3 } from 'three'
+import { Quaternion, type Vector3, type Vector3Tuple } from 'three'
 import { useThrelte } from '@threlte/core'
 
 const quaternion = new Quaternion()
@@ -25,14 +25,20 @@ export const useTeleport = () => {
   /**
    * Teleports a player from the world origin to a position and optional orientation.
    */
-  return (position: Vector3, orientation = quaternion) => {
+  return (position: Vector3 | Vector3Tuple, orientation = quaternion) => {
     const space = xr.getReferenceSpace()
 
     if (space === null) return
 
-    offset.x = -position.x
-    offset.y = -position.y
-    offset.z = -position.z
+    if (Array.isArray(position)) {
+      offset.x = -position[0]
+      offset.y = -position[1]
+      offset.z = -position[2]
+    } else {
+      offset.x = -position.x
+      offset.y = -position.y
+      offset.z = -position.z
+    }
 
     const pose = xr.getFrame()?.getViewerPose(space)
     if (pose !== undefined) {
