@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
+  import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { Portal, Text } from '@threlte/extras'
   import { useRapier } from '@threlte/rapier'

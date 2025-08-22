@@ -33,7 +33,7 @@
 </script>
 
 {#await assets then [$gltf, $texture1, $texture2, $normalMap1]}
-  <InstancedMesh>
+  <InstancedMesh castShadow>
     <T is={$gltf.nodes.Cylinder001.geometry} />
     <T.MeshStandardMaterial
       map={$texture1}
@@ -56,7 +56,7 @@
       />
     {/each}
   </InstancedMesh>
-  <InstancedMesh>
+  <InstancedMesh castShadow>
     <T is={$gltf.nodes.Cylinder001_1.geometry} />
     <T.MeshStandardMaterial
       map={$texture2}

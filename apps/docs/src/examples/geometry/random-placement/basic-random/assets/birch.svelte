@@ -31,7 +31,7 @@
 </script>
 
 {#await assets then [$gltf, $texture1, $texture2, $normalMap1]}
-  <InstancedMesh>
+  <InstancedMesh castShadow>
     <T is={$gltf.nodes.Cube004.geometry} />
     <T.MeshStandardMaterial
       map={$texture1}

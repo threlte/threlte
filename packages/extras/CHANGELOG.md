@@ -1,5 +1,33 @@
 # @threlte/extras
 
+## 9.5.0
+
+### Minor Changes
+
+- 2ededbe: add ShadowMaterial
+
+### Patch Changes
+
+- 03dd131: Add Wireframe component
+
+## 9.4.5
+
+### Patch Changes
+
+- ab4b10e: Add PointsMaterial component
+
+## 9.4.4
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 9.4.3
+
+### Patch Changes
+
+- 49c6d1d: Improve TrackballsControls reactivity and add `handleResize` effect
+
 ## 9.4.2
 
 ### Patch Changes

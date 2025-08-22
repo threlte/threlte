@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.0.7
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
 ## 3.0.6
 
 ### Patch Changes
