@@ -15,6 +15,7 @@ export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
+export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
 export { default as Decal } from './components/Decal/Decal.svelte'
 export {
   default as CameraControls,
@@ -48,6 +49,7 @@ export { default as Align } from './components/Align/Align.svelte'
 export { default as CSM } from './components/CSM/CSM.svelte'
 export { default as Billboard } from './components/Billboard/Billboard.svelte'
 export { default as FakeGlowMaterial } from './components/FakeGlowMaterial/FakeGlowMaterial.svelte'
+export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMaterial.svelte'
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as SVG } from './components/Svg/Svg.svelte'
 export { default as MeshRefractionMaterial } from './components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
@@ -64,8 +66,7 @@ export { default as LinearGradientTexture } from './components/GradientTexture/l
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
 export type { ColorStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
-export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
-export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMaterial.svelte'
+export { default as Wireframe } from './components/Wireframe/Wireframe.svelte'
 
 // Transitions
 export { transitions } from './transitions/transltions.svelte'

@@ -14,11 +14,17 @@
 />
 
 <T.AmbientLight />
-<T.DirectionalLight position={[10, 5, 5]} />
+<T.DirectionalLight
+  position={[10, 5, 5]}
+  castShadow
+/>
 
 <Character actionKey={action} />
 
-<T.Mesh rotation.x={-90 * (Math.PI / 180)}>
+<T.Mesh
+  rotation.x={-90 * (Math.PI / 180)}
+  receiveShadow
+>
   <T.CircleGeometry args={[3, 72]} />
   <T.MeshStandardMaterial color={'white'} />
 </T.Mesh>
