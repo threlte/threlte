@@ -1,5 +1,5 @@
 import type { CanvasTexture } from 'three'
-import type { GradientStop, RadialGradientOuterRadius } from '../types'
+import type { ColorStop, RadialGradientOuterRadius } from '../types'
 import type { Props } from '@threlte/core'
 
 export type RadialGradientTextureProps = Props<CanvasTexture> & {
@@ -27,5 +27,5 @@ export type RadialGradientTextureProps = Props<CanvasTexture> & {
    * stop offsets for the gradient. @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
    * @default [ { offset: 0, color: 'black' }, { offset: 1, color: 'white' } ]
    */
-  stops?: GradientStop[]
+  stops?: ColorStop[]
 }
