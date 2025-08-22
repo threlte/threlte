@@ -3,7 +3,8 @@
   import { RoundedBoxGeometry } from '@threlte/extras'
   import { XR } from '@threlte/xr'
 
-  let rotation = 0
+  let rotation = $state(0)
+
   useTask((delta) => {
     rotation += delta
   })
