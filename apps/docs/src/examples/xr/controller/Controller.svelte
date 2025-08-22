@@ -79,7 +79,7 @@
     cursor %= count
   }
 
-  const updateParticles = () => {
+  useTask(() => {
     for (let i = 0, j = 0; i < count; i += 1, j += 3) {
       positions[j + 0] += velocities[j]!
       positions[j + 1] += velocities[j + 1]!
@@ -89,10 +89,6 @@
     }
 
     instancedMesh.instanceMatrix.needsUpdate = true
-  }
-
-  useTask(() => {
-    updateParticles()
 
     switch (controllerState) {
       case 'squeezestart':

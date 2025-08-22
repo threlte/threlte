@@ -23,8 +23,8 @@ export const setupHeadset = () => {
 
       const { position, orientation } = pose.transform
 
-      headset.position.set(position.x, position.y, position.z)
-      headset.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
+      headset.position.copy(position)
+      headset.quaternion.copy(orientation)
     },
     {
       autoStart: false,

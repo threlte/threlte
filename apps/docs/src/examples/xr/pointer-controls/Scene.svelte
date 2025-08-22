@@ -67,17 +67,15 @@
   pointerControls('right')
 
   let lookIntervalId = 0
+  let blinkIntervalId = setInterval(blink, 3000)
+
   $effect(() => {
     if (happy) {
       clearInterval(lookIntervalId)
     } else {
       lookIntervalId = window.setInterval(lookForCursor, 1000)
     }
-  })
 
-  let blinkIntervalId = setInterval(blink, 3000)
-
-  $effect(() => {
     return () => {
       clearInterval(blinkIntervalId)
       clearInterval(lookIntervalId)

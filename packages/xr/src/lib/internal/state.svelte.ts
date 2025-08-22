@@ -1,65 +1,62 @@
 import type { WebXRManager, Intersection } from 'three'
 import type { XRControllerEvents, XRHandEvents } from '../types'
 
+interface ControllerEvents {
+  left?: XRControllerEvents
+  right?: XRControllerEvents
+}
+
+interface HandEvents {
+  left?: XRHandEvents
+  right?: XRHandEvents
+}
+
 class Presenting {
   current = $state(false)
 }
-export const isPresenting = new Presenting()
 
-export const isHandTracking = new (class {
+class IsHandTracking {
   current = $state(false)
-})()
+}
 
-export const session = new (class {
+class Session {
   current = $state.raw<XRSession>()
-})()
+}
 
-export const referenceSpaceType = new (class {
+class ReferenceSpaceType {
   current = $state.raw<XRReferenceSpaceType>()
-})()
+}
 
-export const xr = new (class {
+class XR {
   current = $state.raw<WebXRManager>()
-})()
+}
 
-export const controllerEvents: {
-  left?: XRControllerEvents
-  right?: XRControllerEvents
-} = {}
+class PointerState {
+  enabled = $state(false)
+  hovering = $state(false)
+}
 
-export const handEvents: {
-  left?: XRHandEvents
-  right?: XRHandEvents
-} = {}
+class IntersectionState {
+  left = $state.raw<Intersection>()
+  right = $state.raw<Intersection>()
+}
+
+export const isPresenting = new Presenting()
+export const isHandTracking = new IsHandTracking()
+export const session = new Session()
+export const referenceSpaceType = new ReferenceSpaceType()
+export const xr = new XR()
+export const controllerEvents: ControllerEvents = {}
+export const handEvents: HandEvents = {}
 
 export const teleportState = {
-  left: new (class {
-    enabled = $state(false)
-    hovering = $state(false)
-  })(),
-  right: new (class {
-    enabled = $state(false)
-    hovering = $state(false)
-  })()
+  left: new PointerState(),
+  right: new PointerState()
 }
-
-export const teleportIntersection = new (class {
-  left = $state.raw<Intersection>()
-  right = $state.raw<Intersection>()
-})()
-
 export const pointerState = {
-  left: new (class {
-    enabled = $state(false)
-    hovering = $state(false)
-  })(),
-  right: new (class {
-    enabled = $state(false)
-    hovering = $state(false)
-  })()
+  left: new PointerState(),
+  right: new PointerState()
 }
 
-export const pointerIntersection = new (class {
-  left = $state.raw<Intersection>()
-  right = $state.raw<Intersection>()
-})()
+export const teleportIntersection = new IntersectionState()
+export const pointerIntersection = new IntersectionState()

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { type Object3D, BoxGeometry, MeshStandardMaterial, Mesh } from 'three'
+  import { Mesh } from 'three'
   import { T } from '@threlte/core'
   import { XR, Hand, Controller, type XRHandEvent, type XRControllerEvent } from '@threlte/xr'
 
-  const boxes = $state<Object3D[]>([])
+  const boxes = $state<Mesh[]>([])
 
   const handleEvent = (event: XRHandEvent) => {
     console.log('Hand', event)
@@ -18,15 +18,11 @@
 
   const createBox = (event: XRHandEvent) => {
     const controller = event.target
-    const size = 0.05
-    const geometry = new BoxGeometry(size, size, size)
-    const material = new MeshStandardMaterial({ color: Math.random() * 0xffffff })
-    const box = new Mesh(geometry, material)
-
     const indexTip = controller?.joints['index-finger-tip']
 
     if (!indexTip) return
 
+    const box = new Mesh()
     box.position.copy(indexTip.position)
     box.quaternion.copy(indexTip.quaternion)
     boxes.push(box)
@@ -57,6 +53,14 @@
       onsqueezeend={handleControllerEvent}
     />
   {/each}
+
+  {#snippet fallback()}
+    <T.PerspectiveCamera
+      makeDefault
+      position={[0, 1.8, 1]}
+      oncreate={(ref) => ref.lookAt(0, 1.8, 0)}
+    />
+  {/snippet}
 </XR>
 
 <T.Mesh rotation={[-Math.PI / 2, 0, 0]}>
@@ -64,15 +68,12 @@
   <T.MeshBasicMaterial />
 </T.Mesh>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[0, 1.8, 1]}
-  oncreate={(ref) => ref.lookAt(0, 1.8, 0)}
-/>
-
 <T.AmbientLight />
 <T.DirectionalLight />
 
 {#each boxes as box (box.uuid)}
-  <T is={box} />
+  <T is={box}>
+    <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
+    <T.MeshStandardMaterial color={Math.random() * 0xffffff} />
+  </T>
 {/each}
