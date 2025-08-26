@@ -8,14 +8,6 @@ import { setIs } from './utils/useIs'
 
 type Extensions = Record<string, Component>
 
-type ThreeCatalogue = {
-  [K in keyof typeof THREE]: (typeof THREE)[K]
-}
-
-type TComponentProxy = {
-  [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
-}
-
 const catalogue: Extensions = {}
 
 /**
@@ -74,4 +66,8 @@ export const T = new Proxy(TComp, {
 
     return TComp
   }
-}) as typeof TComp & TComponentProxy & Extensions
+}) as typeof TComp & {
+  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
+} & {
+  [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
+} & Extensions

@@ -14,7 +14,9 @@
 
 <CameraControls
   bind:ref={controls}
-  oncreate={(ref) => ref.setPosition(5, 5, 5)}
+  oncreate={(ref) => {
+    ref.setPosition(5, 5, 5)
+  }}
 />
 
 <T.Mesh

@@ -7,13 +7,18 @@
 
   const { renderer } = useThrelte()
 
-  $effect(() => {
-    if (!suspended.current) {
-      renderer.shadowMap.autoUpdate = false
-      renderer.shadowMap.needsUpdate = true
+  $effect.pre(() => {
+    if (suspended.current) {
+      return
     }
+
+    const { autoUpdate } = renderer.shadowMap
+
+    renderer.shadowMap.autoUpdate = false
+    renderer.shadowMap.needsUpdate = true
+
     return () => {
-      renderer.shadowMap.autoUpdate = true
+      renderer.shadowMap.autoUpdate = autoUpdate
       renderer.shadowMap.needsUpdate = true
     }
   })

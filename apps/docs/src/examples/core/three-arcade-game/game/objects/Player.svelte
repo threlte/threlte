@@ -3,8 +3,7 @@
   import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
-  import type { Mesh } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { type Mesh, MathUtils } from 'three'
   import { arenaHeight, arenaWidth, playerHeight, playerSpeed, playerWidth } from '../config'
   import { game } from '../Game.svelte'
 
@@ -44,7 +43,7 @@
     game.playerPosition = positionX
   })
 
-  const onKeyUp = (e: KeyboardEvent) => {
+  const onkeyup = (e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       e.preventDefault()
       leftPressed = false
@@ -54,7 +53,7 @@
     }
   }
 
-  const onKeyDown = (e: KeyboardEvent) => {
+  const onkeydown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       e.preventDefault()
       leftPressed = true
@@ -69,7 +68,7 @@
     materials: Record<string, never>
   }>('/models/ball-game/player/player-simple.glb')
 
-  let colliders: Collider[] = $state([])
+  let colliders = $state<Collider[]>([])
 
   useTask(() => {
     if (colliders.length) {
@@ -80,8 +79,8 @@
 </script>
 
 <svelte:window
-  on:keydown={onKeyDown}
-  on:keyup={onKeyUp}
+  {onkeydown}
+  {onkeyup}
 />
 
 {#if $gltf?.nodes.Player}
@@ -93,8 +92,8 @@
       <T.Mesh
         position.z={positionZ}
         position.x={positionX}
-        rotation.x={DEG2RAD * -90}
-        rotation.y={DEG2RAD * 90}
+        rotation.x={MathUtils.DEG2RAD * -90}
+        rotation.y={MathUtils.DEG2RAD * 90}
         scale.x={0.5}
         scale.y={0.3}
       >

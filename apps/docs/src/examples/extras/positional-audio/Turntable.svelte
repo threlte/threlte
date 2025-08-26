@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
-  import { spring, tweened } from 'svelte/motion'
+  import { Spring, Tween } from 'svelte/motion'
   import {
     BufferGeometry,
     CylinderGeometry,
@@ -15,11 +15,11 @@
   import Disc from './Disc.svelte'
   import type { TurntableProps } from './types'
 
-  let discSpeed = tweened(0, {
+  let discSpeed = new Tween(0, {
     duration: 1e3
   })
 
-  let armPos = spring(0)
+  let armPos = new Spring(0)
 
   let started = $state(false)
 
@@ -39,7 +39,8 @@
     }
   }
 
-  let audio: ThreePositionalAudio = $state()
+  let audio = $state.raw<ThreePositionalAudio>()
+
   const { context } = useAudioListener()
   const analyser = context.createAnalyser()
   $effect(() => {
@@ -65,7 +66,7 @@
   }
 
   let coverOpen = $state(false)
-  const coverAngle = spring(0)
+  const coverAngle = new Spring(0)
   $effect(() => {
     if (coverOpen) coverAngle.set(80)
     else coverAngle.set(0)
@@ -93,7 +94,7 @@
   <Disc
     position.x={0.5}
     position.y={1.01}
-    discSpeed={$discSpeed}
+    discSpeed={discSpeed.current}
   />
 
   <!-- CASE -->
@@ -114,7 +115,7 @@
   <T.Group
     position.y={1}
     position.z={-2.2}
-    rotation.x={-$coverAngle * MathUtils.DEG2RAD}
+    rotation.x={-coverAngle.current * MathUtils.DEG2RAD}
   >
     {#if coverGeometry}
       <T.Mesh
@@ -158,7 +159,7 @@
   <T.Group
     position={[2.5, 1.55, -1.8]}
     rotation.z={MathUtils.DEG2RAD * 90}
-    rotation.y={MathUtils.DEG2RAD * 90 - $armPos * 0.3}
+    rotation.y={MathUtils.DEG2RAD * 90 - armPos.current * 0.3}
   >
     <T.Mesh
       castShadow
@@ -183,7 +184,7 @@
       bind:ref={audio}
       refDistance={15}
       loop
-      playbackRate={$discSpeed}
+      playbackRate={discSpeed.current}
       src={source}
       directionalCone={{
         coneInnerAngle: 90,

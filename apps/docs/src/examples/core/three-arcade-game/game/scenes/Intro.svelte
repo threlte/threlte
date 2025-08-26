@@ -11,7 +11,7 @@
 
   const { timeout } = useTimeout()
   let audio: ArcadeAudio | undefined = undefined
-  let direction: 1 | -1 = $state(1)
+  let direction = $state<1 | -1>(1)
 
   const logoScale = new Tween(0)
 
@@ -50,7 +50,7 @@
     clearInterval(intervalHandler)
   })
 
-  const onKeyDown = (e: KeyboardEvent) => {
+  const onkeydown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       direction = -1
     } else if (e.key === 'ArrowRight') {
@@ -63,7 +63,7 @@
   })
 </script>
 
-<svelte:window on:keydown={onKeyDown} />
+<svelte:window {onkeydown} />
 
 <T.Group position.z={-0.35}>
   <ThrelteLogo

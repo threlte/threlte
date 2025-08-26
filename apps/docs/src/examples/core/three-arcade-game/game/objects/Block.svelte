@@ -1,7 +1,4 @@
-<script
-  lang="ts"
-  module
->
+<script lang="ts">
   import type { BlockData } from '../objects/types'
   import { T } from '@threlte/core'
   import { Edges } from '@threlte/extras'
@@ -10,9 +7,7 @@
   import { Tween } from 'svelte/motion'
   import { clamp } from 'three/src/math/MathUtils.js'
   import { game } from '../Game.svelte'
-</script>
 
-<script lang="ts">
   type Props = {
     position: BlockData['position']
     size: BlockData['size']

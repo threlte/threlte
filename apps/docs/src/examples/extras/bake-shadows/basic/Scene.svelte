@@ -9,11 +9,12 @@
 
   let { bake }: Props = $props()
 
-  let rotation = 0
-  let mesh = $state<Mesh>()
+  let mesh = $state.raw<Mesh>()
+
   useTask((delta) => {
-    rotation += delta
-    mesh?.rotation.set(0, rotation, 0)
+    if (mesh) {
+      mesh.rotation.y += delta
+    }
   })
 </script>
 
@@ -31,9 +32,7 @@
 />
 
 <T.Mesh
-  oncreate={(ref) => {
-    mesh = ref
-  }}
+  bind:ref={mesh}
   castShadow
   position.y={1}
 >

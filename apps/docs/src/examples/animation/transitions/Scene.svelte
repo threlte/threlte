@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import Character from './Character.svelte'
 
@@ -22,7 +23,7 @@
 <Character actionKey={action} />
 
 <T.Mesh
-  rotation.x={-90 * (Math.PI / 180)}
+  rotation.x={MathUtils.degToRad(-90)}
   receiveShadow
 >
   <T.CircleGeometry args={[3, 72]} />

@@ -70,9 +70,9 @@
 
   const sampler = new Sampler(4, [REGION_W, REGION_Z], undefined, Math.random)
 
-  const points = sampler.GeneratePoints().filter((v: [number, number]) => {
-    return Math.sqrt((v[0] - REGION_W / 2) ** 2 + (v[1] - REGION_Z / 2) ** 2) < maxRadius
-  })
+  const points = sampler.GeneratePoints().filter(([x, y]) => {
+    return Math.sqrt(((x ?? 0) - REGION_W / 2) ** 2 + ((y ?? 0) - REGION_Z / 2) ** 2) < maxRadius
+  }) as [number, number][]
 
   const pickRandomTreeType = () => {
     const rnd = Math.random()
