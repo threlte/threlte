@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { Sequence, createSheetObjectAction } from '@threlte/theatre'
   import Button from '../../Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
@@ -33,9 +32,7 @@
               use:sheetObject={{
                 key: 'underline',
                 props: {
-                  scaleX: types.number(0, {
-                    range: [0, 1]
-                  })
+                  scaleX: 0
                 },
                 callback(node, props) {
                   node.style.transform = `scaleX(${props.scaleX})`
@@ -78,12 +75,8 @@
             node.style.opacity = props.opacity
           },
           props: {
-            opacity: types.number(0, {
-              range: [0, 1]
-            }),
-            translateY: types.number(0, {
-              range: [-100, 100]
-            })
+            opacity: 0,
+            translateY: 0
           }
         }}
       >

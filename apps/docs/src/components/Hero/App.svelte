@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { useThrelte } from '@threlte/core'
   import { useGltf, useTexture } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
@@ -44,9 +43,9 @@
     key="Settings"
     props={{
       rotation: {
-        x: types.number(0, { range: [0, 5] }),
-        y: types.number(0, { range: [0, 5] }),
-        z: types.number(0, { range: [0, 5] })
+        x: 0,
+        y: 0,
+        z: 0
       }
     }}
     onchange={(values) => {
