@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.5.1
+
+### Patch Changes
+
+- 7d5ef78: Fix GLTF types
+
 ## 9.5.0
 
 ### Minor Changes
