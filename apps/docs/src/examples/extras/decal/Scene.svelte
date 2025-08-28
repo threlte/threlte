@@ -9,7 +9,8 @@
     VirtualEnvironment,
     useSuspense
   } from '@threlte/extras'
-  import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
+  import { RigidBody as RigidBodyRef } from '@dimforge/rapier3d-compat'
+  import { Collider, RigidBody } from '@threlte/rapier'
 
   let { controls = false, debug = false } = $props()
 
@@ -17,8 +18,8 @@
   const svelteIcon = suspend(useTexture('/icons/svelte.png'))
   const threlteIcon = suspend(useTexture('/icons/mstile-150x150.png'))
 
-  let bodies = $state([])
-  let position = $state([0.5, 0, 0.5])
+  let bodies = $state<RigidBodyRef[]>([])
+  let position = $state<Vector3Tuple>([0.5, 0, 0.5])
 
   let current = 0
   setInterval(() => {
@@ -26,9 +27,9 @@
     current %= bodies.length
     const body = bodies[current]
 
-    body.setLinvel({ x: 0, y: 0, z: 0 })
-    body.setAngvel({ x: 0, y: 0, z: 0, w: 1 })
-    body.setTranslation(
+    body?.setLinvel({ x: 0, y: 0, z: 0 }, true)
+    body?.setAngvel({ x: 0, y: 0, z: 0 }, true)
+    body?.setTranslation(
       { x: (Math.random() - 0.5) * 0.1, y: 5, z: (Math.random() - 0.5) * 0.1 },
       true
     )
@@ -54,8 +55,6 @@
   intensity={1.25}
 />
 
-<!-- <T.BoxGeometry args={[3, 0.2, 3]} /> -->
-
 <T.Mesh receiveShadow>
   <Collider
     shape={'ball'}
@@ -69,7 +68,7 @@
       {position}
       {debug}
     >
-      {#snippet children({ ref })}
+      {#snippet children()}
         <T.MeshStandardMaterial
           map={$svelteIcon}
           transparent
@@ -96,7 +95,7 @@
   <RigidBody
     bind:rigidBody={bodies[index]}
     oncreate={(ref) => {
-      ref.setTranslation({ x: 0, y: -10 + index, z: 0 })
+      ref.setTranslation({ x: 0, y: -10 + index, z: 0 }, true)
     }}
   >
     <T.Mesh castShadow>

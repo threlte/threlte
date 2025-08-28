@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Tween } from 'svelte/motion'
-  import { BackSide, Color, PerspectiveCamera, Scene } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BackSide, Color, MathUtils } from 'three'
   import Arena from './objects/Arena.svelte'
   import Ball from './objects/Ball/Ball.svelte'
   import Renderer from './Renderer.svelte'
@@ -13,7 +12,7 @@
   import { game } from './Game.svelte'
   import GUI from './GUI.svelte'
 
-  const onKeyPress = (e: KeyboardEvent) => {
+  const onkeypress = (e: KeyboardEvent) => {
     if (e.key === 'd') {
       game.debug = !game.debug
     }
@@ -60,15 +59,11 @@
   })
 </script>
 
-<svelte:window on:keypress={onKeyPress} />
+<svelte:window {onkeypress} />
 
 <Renderer />
 
-<T.Scene
-  oncreate={(ref: Scene) => {
-    game.gameScene = ref
-  }}
->
+<T.Scene bind:ref={game.gameScene}>
   <T.Mesh>
     <T.SphereGeometry args={[50, 32, 32]} />
     <T.MeshBasicMaterial
@@ -78,13 +73,11 @@
   </T.Mesh>
 
   <T.PerspectiveCamera
-    oncreate={(ref: PerspectiveCamera) => {
-      game.gameCamera = ref
-    }}
+    bind:ref={game.gameCamera}
     manual
     args={[50, 4 / 3, 0.1, 100]}
     position={[0, 10, 0]}
-    rotation.x={-90 * DEG2RAD}
+    rotation.x={-90 * MathUtils.DEG2RAD}
   />
 
   <T.AmbientLight intensity={0.3} />

@@ -7,10 +7,10 @@
 
   type SceneProps = {
     canvasSize: number
-    gradientEndColor: ColorRepresentation
+    gradientEndColor: string
     gradientEndX: number
     gradientEndY: number
-    gradientStartColor: ColorRepresentation
+    gradientStartColor: string
     gradientStartX: number
     gradientStartY: number
     sceneClearColor: ColorRepresentation
@@ -47,7 +47,7 @@
     textureWrapT
   }: SceneProps = $props()
 
-  let stops: ColorStop[] = $derived([
+  let stops = $derived<ColorStop[]>([
     { color: gradientStartColor, offset: 0 },
     { color: gradientEndColor, offset: 1 }
   ])
