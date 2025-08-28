@@ -11,7 +11,7 @@
   const keyboard = { x: 0 }
   const pressed = new Set<string>()
 
-  let sprite: AnimatedSpriteMaterial
+  let sprite = $state.raw<AnimatedSpriteMaterial>()
   let animation = $state('IdleRight')
 
   const mesh = new Mesh()
@@ -39,8 +39,8 @@
     handleKey(e.key, 0)
     pressed.forEach((key) => handleKey(key, 1))
 
-    if (e.key === 'q') sprite.play()
-    if (e.key === 'e') sprite.pause()
+    if (e.key === 'q') sprite?.play()
+    if (e.key === 'e') sprite?.pause()
   }
 
   useTask((delta) => {

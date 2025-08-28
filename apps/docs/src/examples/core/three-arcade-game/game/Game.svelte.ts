@@ -16,9 +16,9 @@ type GameStates =
   | 'outro'
 
 class Game {
-  state: GameStates = $state('off')
+  state = $state<GameStates>('off')
   sound = new Sound()
-  levelIndex: number = $state(0)
+  levelIndex = $state(0)
   score = $state(0)
   gameOver = $state(false)
   playerPosition = $state(0)
@@ -31,13 +31,13 @@ class Game {
     return 'red'
   })
   muted = $state(false)
-  blinkClock: 0 | 1 = $state(0)
-  arcadeMachineScene: Scene | undefined = $state(undefined)
+  blinkClock = $state<0 | 1>(0)
+  arcadeMachineScene = $state<Scene>()
   averageScreenColor = $state(new Color('black'))
-  gameScene: Scene | undefined = $state(undefined)
-  gameCamera: PerspectiveCamera | undefined = $state(undefined)
-  gameTexture: Texture | undefined = $state(undefined)
-  ballRigidBody: RigidBody | undefined = $state(undefined)
+  gameScene = $state<Scene>()
+  gameCamera = $state<PerspectiveCamera>()
+  gameTexture = $state<Texture>()
+  ballRigidBody = $state<RigidBody>()
   debug = $state(false)
   orbitControls = $state(false)
   restart() {
