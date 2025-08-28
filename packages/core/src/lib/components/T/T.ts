@@ -70,7 +70,7 @@ export const T = new Proxy(TComp, {
       throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
     }
 
-    setIs(module)
+    setIs<typeof module>(module)
 
     return TComp
   }
