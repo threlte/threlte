@@ -6,15 +6,7 @@ import TComp from './T.svelte'
 import type { Props } from './types'
 import { setIs } from './utils/useIs'
 
-type Extensions = Record<string, Component>
-
-type ThreeCatalogue = {
-  [K in keyof typeof THREE]: (typeof THREE)[K]
-}
-
-type TComponentProxy = {
-  [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
-}
+type Extensions = Record<string, unknown>
 
 const catalogue: Extensions = {}
 
@@ -33,7 +25,7 @@ const catalogue: Extensions = {}
  * <T.OrbitControls />
  * ```
  */
-export const extend = (extensions: Record<string, unknown>) => {
+export const extend = (extensions: Extensions) => {
   Object.assign(catalogue, extensions)
 }
 
@@ -70,8 +62,12 @@ export const T = new Proxy(TComp, {
       throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
     }
 
-    setIs<typeof module>(module)
+    setIs(module)
 
     return TComp
   }
-}) as typeof TComp & TComponentProxy & Extensions
+}) as typeof TComp & {
+  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
+} & {
+  [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
+} & Record<string, Component>
