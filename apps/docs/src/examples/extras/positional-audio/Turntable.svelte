@@ -3,7 +3,6 @@
   import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
   import { Spring, Tween } from 'svelte/motion'
   import {
-    BufferGeometry,
     CylinderGeometry,
     DoubleSide,
     Mesh,
@@ -80,13 +79,8 @@
     }
     materials: {}
   }>('/models/turntable/cover.glb')
-  let coverGeometry: BufferGeometry | undefined = $state()
-  $effect(() => {
-    if ($gltf) {
-      const coverMesh = $gltf.nodes.Cover
-      coverGeometry = coverMesh.geometry
-    }
-  })
+
+  let coverGeometry = $derived($gltf?.nodes.Cover.geometry)
 </script>
 
 <T.Group {...rest}>
