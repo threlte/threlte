@@ -166,7 +166,7 @@ type ExtractPayload<
   ? EventData
   : never
 
-export type CreateEvent<Type> = (ref: Type) => void | (() => void)
+type CreateEvent<Type> = (ref: Type) => void | (() => void)
 
 // –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
 
