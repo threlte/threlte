@@ -63,13 +63,17 @@ export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstan
   attach?:
     | string
     | Object3D
-    | ((args: { ref: Type; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
+    | ((args: {
+        ref: MaybeInstance<Type>
+        parent: unknown
+        parentObject3D: Object3D
+      }) => void | (() => void))
     | false
     | undefined
 
   children?: Snippet<ChildrenArgs>
 
-  oncreate?: CreateEvent<Type>
+  oncreate?: CreateEvent<MaybeInstance<Type>>
 }
 
 /**
@@ -162,7 +166,7 @@ type ExtractPayload<
   ? EventData
   : never
 
-export type CreateEvent<Type> = (ref: MaybeInstance<Type>) => void | (() => void)
+type CreateEvent<Type> = (ref: Type) => void | (() => void)
 
 // –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
 
@@ -183,7 +187,7 @@ export type Props<
   ClassProps<Type> &
   CameraProps<Type> &
   InstanceProps<Type> &
-  EventProps<Type> &
+  EventProps<MaybeInstance<Type>> &
   Threlte.UserProps
 
 /**
