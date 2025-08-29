@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Sky, useTexture } from '@threlte/extras'
-  import { BackSide, NearestFilter, RepeatWrapping } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BackSide, NearestFilter, RepeatWrapping, MathUtils } from 'three'
   import TreeSpriteAtlas from './TreeSpriteAtlas.svelte'
   import DudeSprites from './DudeSprites.svelte'
 
@@ -64,7 +63,7 @@
 
 {#if $grass}
   <T.Mesh
-    rotation.x={-DEG2RAD * 90}
+    rotation.x={MathUtils.DEG2RAD * -90}
     receiveShadow
   >
     <T.CircleGeometry args={[110]} />

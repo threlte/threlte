@@ -59,10 +59,7 @@
             color={hovering ? red : blue}
           />
           {#if node.geometry}
-            <T
-              is={node.geometry}
-              attach="geometry"
-            />
+            <T is={node.geometry} />
           {/if}
         </T.Mesh>
       {/snippet}

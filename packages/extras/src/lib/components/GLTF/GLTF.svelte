@@ -1,17 +1,11 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
   import { useGltf } from '../../hooks/useGltf'
   import { useSuspense } from '../../suspense/useSuspense'
   import type { ThrelteGltf } from '../../types/types'
   import type { GltfProps } from './types'
 
-  type AnyThrelteGltf = ThrelteGltf<{
-    nodes: Record<string, any>
-    materials: Record<string, any>
-  }>
-
-  type Props = GltfProps & { gltf?: AnyThrelteGltf } & AnyThrelteGltf['materials'] & ThreeGLTF
+  type Props = GltfProps & { gltf?: ThrelteGltf | undefined } & ThrelteGltf['materials']
 
   let {
     url,
@@ -41,7 +35,7 @@
     ktx2Loader
   })
 
-  const onLoad = (data: AnyThrelteGltf) => {
+  const onLoad = (data: ThrelteGltf) => {
     if (gltf) onunload?.()
 
     gltf = data

@@ -73,8 +73,8 @@
     }
   )
 
-  let cameraTarget: Object3D | undefined = undefined
-  let camera: PerspectiveCamera | undefined = undefined
+  let cameraTarget = $state.raw<Object3D>()
+  let camera = $state.raw<PerspectiveCamera>()
 
   const backgroundColor = new Tween(new Color('#020203'), {
     duration: 2.5e3
@@ -168,9 +168,7 @@
 >
   <!-- The camera target -->
   <T.Object3D
-    oncreate={(ref: Object3D) => {
-      cameraTarget = ref
-    }}
+    bind:ref={cameraTarget}
     position.x={cameraTargetPos.current.x}
     position.y={cameraTargetPos.current.y}
     position.z={cameraTargetPos.current.z}
@@ -188,14 +186,12 @@
     </T.PerspectiveCamera>
   {:else}
     <T.PerspectiveCamera
+      bind:ref={camera}
       position.x={cameraPos.current.x}
       position.y={cameraPos.current.y}
       position.z={cameraPos.current.z}
       fov={30}
       makeDefault
-      oncreate={(ref: PerspectiveCamera) => {
-        camera = ref
-      }}
     />
   {/if}
 

@@ -25,7 +25,10 @@
 </script>
 
 {#await assets then [$gltf, $texture1]}
-  <InstancedMesh>
+  <InstancedMesh
+    castShadow
+    receiveShadow
+  >
     <T is={$gltf.nodes.Bush.geometry} />
     <T.MeshStandardMaterial
       map={$texture1}

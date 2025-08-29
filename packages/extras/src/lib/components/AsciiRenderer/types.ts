@@ -54,5 +54,5 @@ export type AsciiRendererProps = {
    * @default useThrelte().camera.current
    */
   camera?: Camera
-  children: Snippet<[{ asciiEffect: AsciiEffect }]>
+  children?: Snippet<[{ asciiEffect: AsciiEffect }]>
 }
