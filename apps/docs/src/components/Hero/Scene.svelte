@@ -41,7 +41,7 @@
   }}
 />
 
-<T.Group position.x={-$mouseCoordsSpring.x * 0.6}>
+<T.Group position.x={-mouseCoordsSpring.current.x * 0.6}>
   <ScrollSheet
     name="Star Fields"
     startAtScrollPosition={4}
@@ -107,8 +107,8 @@
     {#snippet children({ Transform })}
       <Transform>
         <T.Group
-          position.x={-$mouseCoordsSpring.x * 0.2}
-          position.y={$mouseCoordsSpring.y * 0.1}
+          position.x={-mouseCoordsSpring.current.x * 0.2}
+          position.y={mouseCoordsSpring.current.y * 0.1}
         >
           <ScrollSheet
             name="Threlte-Composite"

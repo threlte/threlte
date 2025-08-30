@@ -22,6 +22,7 @@
   position.y={13}
   fov={40}
   makeDefault
+  oncreate={(ref) => ref.lookAt(2.5, 0, 0)}
 >
   <OrbitControls target.x={2.5} />
 </T.PerspectiveCamera>
