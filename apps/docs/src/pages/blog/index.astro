@@ -8,18 +8,18 @@ const authors = await getCollection('authors')
 
 const entries = collection
   .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .map((e) => {
-    const author = authors.find((author) => author.data.name === e.data.author)
+  .map((entry) => {
+    const author = authors.find((author) => author.data.name === entry.data.author)
     if (!author) {
       throw new Error(
-        `Author with name "${e.data.author}" not found, add an author entry to the authors collection or reference an existing author`
+        `Author with name "${entry.data.author}" not found, add an author entry to the authors collection or reference an existing author`
       )
     }
     return {
-      title: e.data.title,
-      subtitle: e.data.subtitle,
-      slug: e.slug,
-      date: e.data.date,
+      title: entry.data.title,
+      subtitle: entry.data.subtitle,
+      slug: entry.id,
+      date: entry.data.date,
       author
     }
   })
