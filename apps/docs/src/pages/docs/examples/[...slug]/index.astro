@@ -1,14 +1,14 @@
 ---
 import MdxCode from '$components/Code/MdxCode.astro'
 import DocsLayout from '$layouts/DocsLayout.astro'
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection, render, type CollectionEntry } from 'astro:content'
 import QuickNav from '../../../../components/QuickNav/QuickNav.astro'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('examples')
   return blogEntries.map((entry) => {
     return {
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry }
     }
   })
@@ -20,7 +20,7 @@ interface Props {
 
 const { entry } = Astro.props
 const { category } = entry.data
-const { Content } = await entry.render()
+const { Content } = await render(entry)
 
 const title = entry.id.split('/').pop()?.split('.')[0]
 ---

@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from 'astro:content'
+import { render, type CollectionEntry } from 'astro:content'
 import RightSidebarInner from './RightSidebar.svelte'
 import { getGithubEditUrl } from '../../../lib/getGithubEditUrl'
 
@@ -9,7 +9,7 @@ interface Props {
 
 const { entry } = Astro.props
 
-const content = await entry.render()
+const content = await render(entry)
 
 // we're only showing headings with depth 2 and 3 in the sidebar
 const showHeadingsWithDepth = [2, 3]
