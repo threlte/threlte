@@ -1,5 +1,5 @@
 ---
-"@threlte/extras": major
+"@threlte/extras": patch
 ---
 
 fix RadialGradientTexture to clear its canvas whenever the `stops` prop is updated
