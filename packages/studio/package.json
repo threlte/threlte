@@ -119,7 +119,7 @@
     "json5": "^2.2.3",
     "kleur": "^4.1.5",
     "magic-string": "^0.30.10",
-    "svelte-tweakpane-ui": "^1.2.3",
+    "svelte-tweakpane-ui": "catalog:",
     "tweakpane": "4.0.3",
     "vite-dev-rpc": "^0.1.4"
   }
