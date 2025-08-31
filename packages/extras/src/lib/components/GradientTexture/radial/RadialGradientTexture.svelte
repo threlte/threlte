@@ -68,13 +68,15 @@
   const { invalidate } = useThrelte()
 
   $effect(() => {
-    context.save()
     context.fillStyle = gradient
     context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-    context.restore()
 
     texture.needsUpdate = true
     invalidate()
+
+    return () => {
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height)
+    }
   })
 </script>
 
