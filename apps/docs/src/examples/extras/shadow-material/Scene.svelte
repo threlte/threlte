@@ -3,6 +3,8 @@
   import { OrbitControls, ShadowMaterial } from '@threlte/extras'
   import { T, useTask } from '@threlte/core'
 
+  let { color = '#000000' } = $props()
+
   const plane = new Mesh()
 
   const sphere = new Mesh()
@@ -55,6 +57,6 @@
     position.z={0.01}
   >
     <T.PlaneGeometry />
-    <ShadowMaterial />
+    <ShadowMaterial {color} />
   </T>
 </T.Group>
