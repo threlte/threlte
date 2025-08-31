@@ -4,8 +4,6 @@
   import { Color, Pane } from 'svelte-tweakpane-ui'
 
   let color = $state('#000000')
-
-  $inspect(color)
 </script>
 
 <Canvas>
