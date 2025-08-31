@@ -1,4 +1,4 @@
-[ShadowMesh](https://github.com/mrdoob/three.js/blob/master/examples/jsm/objects/ShadowMesh.js) is an addon that is used as very performant alternative to shadow mapping. It uses the renderer's stencil buffer and a locally computed matrix.
+[ShadowMesh](https://github.com/mrdoob/three.js/blob/master/examples/jsm/objects/ShadowMesh.js) is a threejs addon that is used as very performant alternative to shadow mapping. It uses the renderer's stencil buffer and a locally computed matrix.
 
 <Example path="shadows/shadow-mesh" />
 
@@ -21,7 +21,7 @@ shadowMesh.geometry = mesh.geometry
 
 This is because the geometry of the shadow mesh is pulled from the mesh passed into its constructor at instantiatiation and does not update if the reference mesh's geometry is updated.
 
-## Stencil Buffer
+## Enabling the Stencil Buffer
 
 When using the ShadowMesh, you must enable the stencil buffer of the renderer. This can be done with the `createRenderer` prop of the [\<Canvas/>](/docs/reference/core/canvas) component
 
@@ -53,11 +53,11 @@ shadowMesh.update(plane, lightPosition4D)
 
 ### W Component
 
-The **w** component of the light position vector controls the _spread_ of the shadow. Values closer to 0 are suited for directional light whereas values closer to 1 are for point lights.
+The **w** component of the light position vector controls the _spread_ of the shadow. Values closer to 0 are suited for directional lights whereas values closer to 1 are for point lights.
 
 ## Offsetting and Orienting the Plane
 
-The plane should be offset from the ground or floor by a small amount. This is done to avoid z-fighting. An easy way to do this is to create the plane first and then orient the mesh to look at the plane's normal
+The plane should be offset from the ground or floor by a small amount. This is done to avoid z-fighting. An easy way to do this is to create the plane first and then orient the floor mesh to look in the direction of the plane's normal.
 
 ```ts
 const yHat = new Vector3(0, 1, 0)
@@ -72,4 +72,4 @@ const mesh = new Mesh(planeGeometry)
 mesh.lookAt(plane.normal)
 ```
 
-Unfortunately, there's not an easy way to get the normal of a plane geometry. It is possible but it involves accessing the geometry's buffer attributes.
+Unfortunately, there's not an easy way to get the normal of a plane geometry an involves accessing the geometry's buffer attributes.
