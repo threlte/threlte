@@ -8,13 +8,13 @@
 
 <Canvas>
   <Scene {color} />
-  <Pane
-    title="shadow material"
-    position="fixed"
-  >
-    <Color
-      bind:value={color}
-      label="shadow color"
-    />
-  </Pane>
 </Canvas>
+<Pane
+  title="shadow material"
+  position="fixed"
+>
+  <Color
+    bind:value={color}
+    label="shadow color"
+  />
+</Pane>
