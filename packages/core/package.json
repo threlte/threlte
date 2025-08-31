@@ -45,7 +45,7 @@
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
-    "vitest": "^3.2.4"
+    "vitest": "^2.1.5"
   },
   "dependencies": {
     "mitt": "^3.0.1"
