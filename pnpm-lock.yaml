@@ -124,7 +124,7 @@ importers:
         version: 4.3.4(astro@5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1))
       '@astrojs/preact':
         specifier: ^4.1.0
-        version: 4.1.0(@babel/core@7.25.9)(@types/node@22.18.0)(jiti@1.21.0)(preact@10.16.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1)
+        version: 4.1.0(@babel/core@7.25.9)(@types/node@22.18.0)(jiti@1.21.0)(preact@10.27.1)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1)
       '@astrojs/svelte':
         specifier: ^7.1.0
         version: 7.1.0(@types/node@22.18.0)(astro@5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1))(jiti@1.21.0)(sass@1.77.7)(svelte@5.26.2)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1)
@@ -141,8 +141,8 @@ importers:
         specifier: ^0.14.3
         version: 0.14.3(@types/react@18.2.55)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@preact/signals':
-        specifier: ^1.1.5
-        version: 1.1.5(preact@10.16.0)
+        specifier: ^2.3.1
+        version: 2.3.1(preact@10.27.1)
       '@radix-ui/react-visually-hidden':
         specifier: ^1.0.3
         version: 1.0.3(@types/react@18.2.55)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -174,8 +174,8 @@ importers:
         specifier: ^9.8.1
         version: 9.8.1
       preact:
-        specifier: ^10.16.0
-        version: 10.16.0
+        specifier: ^10.27.1
+        version: 10.27.1
       three-custom-shader-material:
         specifier: ^6.1.1
         version: 6.1.1(react@18.2.0)(three@0.175.0)
@@ -196,8 +196,8 @@ importers:
         specifier: ^0.1.15
         version: 0.1.15(@types/three@0.175.0)(three@0.175.0)
       '@macfja/svelte-persistent-store':
-        specifier: ^2.2.1
-        version: 2.2.1(svelte@5.26.2)
+        specifier: ^2.4.2
+        version: 2.4.2(svelte@5.26.2)
       '@pmndrs/vanilla':
         specifier: ^1.14.1
         version: 1.14.1(three@0.175.0)
@@ -250,8 +250,8 @@ importers:
         specifier: ^3.2.1
         version: 3.2.1
       astro-auto-import:
-        specifier: ^0.4.2
-        version: 0.4.2(astro@5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1))
+        specifier: ^0.4.4
+        version: 0.4.4(astro@5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1))
       chalk:
         specifier: ^4.1.1
         version: 4.1.2
@@ -271,8 +271,8 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       postprocessing:
-        specifier: ^6.36.3
-        version: 6.36.3(three@0.175.0)
+        specifier: ^6.37.7
+        version: 6.37.7(three@0.175.0)
       rehype-autolink-headings:
         specifier: ^7.1.0
         version: 7.1.0
@@ -301,8 +301,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1
       svelte-reduced-motion:
-        specifier: ^1.1.1
-        version: 1.1.1(svelte@5.26.2)
+        specifier: ^2.0.0
+        version: 2.0.0(svelte@5.26.2)
       svelte-tweakpane-ui:
         specifier: 'catalog:'
         version: 1.5.9(svelte@5.26.2)
@@ -2136,10 +2136,10 @@ packages:
   '@macfja/serializer@1.1.2':
     resolution: {integrity: sha512-kqEg3Zu5/g3ivdeb+jP4rBVVdmtKXVsRwH+x9KdM2Y7d2mKLq54g+YLSgTQ4KwJvWmyHFvRq0ouX5Dr4H1Hw3Q==}
 
-  '@macfja/svelte-persistent-store@2.2.1':
-    resolution: {integrity: sha512-3KI5w7uWR4jTTfXBZFDQQSTyv6j+OA80uTiSWdCnLHEzgpcl1jgQjb8xNL/mZO/GFp7lwToPDvyMXSk5mToaIQ==}
+  '@macfja/svelte-persistent-store@2.4.2':
+    resolution: {integrity: sha512-ZAcWJcCnfZDIiy77Aoj9KQ6qDt6UmRZgUM3UHjmOY1IRf0SirDl1WgBFlVUMynRLERy4/EgZtWPqAMnh3cbCRA==}
     peerDependencies:
-      svelte: ^3.0
+      svelte: ^3.0 || ^4.0 || ^5.0
 
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -2277,14 +2277,6 @@ packages:
 
   '@preact/signals-core@1.12.1':
     resolution: {integrity: sha512-BwbTXpj+9QutoZLQvbttRg5x3l5468qaV2kufh+51yha1c53ep5dY4kTuZR35+3pAZxpfQerGJiQqg34ZNZ6uA==}
-
-  '@preact/signals-core@1.3.1':
-    resolution: {integrity: sha512-DL+3kDssZ3UOMz9HufwSYE/gK0+TnT1jzegfF5rstgyPrnyfjz4BHAoxmzQA6Mkp4UlKe8qjsgl3v5a/obzNig==}
-
-  '@preact/signals@1.1.5':
-    resolution: {integrity: sha512-OWr9TjuNh9ol/B5rNbLANEA940MvbYDMGcSAjPaKzAHBPhnTpuFCWhBB8vSm9lfy1BxKx6DKJLSs3Cz24otdkw==}
-    peerDependencies:
-      preact: 10.x
 
   '@preact/signals@2.3.1':
     resolution: {integrity: sha512-nyuRIGmcwM/HjvFHhN2xUWfyla9D4llHt+prWoxjQfD6b5prO7CFPlG/xjJkP31Oic4KQXfH9SIhJFP9cy4lmg==}
@@ -3192,11 +3184,6 @@ packages:
     resolution: {integrity: sha512-k+iyHEuPgSw6SbuDpGQM+06HQUa04DZ3o+F6CSzXMvvI5KMvnaEqXe+YVe555R9nn6GPt404fos4wcgpw12SDA==}
     engines: {node: '>=0.4.0'}
 
-  acorn@8.10.0:
-    resolution: {integrity: sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==}
-    engines: {node: '>=0.4.0'}
-    hasBin: true
-
   acorn@8.13.0:
     resolution: {integrity: sha512-8zSiw54Oxrdym50NlZ9sUusyO1Z1ZchgRLWRaK6c86XJFClyCgFKetdowBg5bKxyp/u+CDBJG4Mpp0m3HLZl9w==}
     engines: {node: '>=0.4.0'}
@@ -3358,11 +3345,11 @@ packages:
     resolution: {integrity: sha512-ISvCdHdlTDlH5IpxQJIex7BWBywFWgjJSVdwst+/iQCoEYnyOaQ95+X1JGshuBjGp6nxKUy1jMgE3zPqN7fQdg==}
     hasBin: true
 
-  astro-auto-import@0.4.2:
-    resolution: {integrity: sha512-ZgWZQ58+EhbEym1+aoUnNyECOy0wsG5uRUs+rVp/7BzHtj1V76J2qkhjaTWLplgNb+8WrzhvTQNxytmXRCW+Ow==}
+  astro-auto-import@0.4.4:
+    resolution: {integrity: sha512-tiYe1hp+VusdiyaD3INgZgbvXEPamDFiURnQR5Niz+E9fWa6IHYjJ99TwGlHh/evfaXE/U/86jp9MRKWTuJU1A==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
-      astro: ^2.0.0 || ^3.0.0-beta || ^4.0.0-beta
+      astro: ^2.0.0 || ^3.0.0-beta || ^4.0.0-beta || ^5.0.0-beta
 
   astro@5.13.5:
     resolution: {integrity: sha512-XmBzkl13XU97+n/QiOM5uXQdAVe0yKt5gO+Wlgc8dHRwHR499qhMQ5sMFckLJweUINLzcNGjP3F5nG4wV8a2XA==}
@@ -6629,10 +6616,10 @@ packages:
     resolution: {integrity: sha512-3Ybi1tAuwAP9s0r1UQ2J4n5Y0G05bJkpUIO0/bI9MhwmD70S5aTWbXGBwxHrelT+XM1k6dM0pk+SwNkpTRN7Pg==}
     engines: {node: ^10 || ^12 || >=14}
 
-  postprocessing@6.36.3:
-    resolution: {integrity: sha512-GtMLwoqg0xdYAgm9lbf6qlKay7HQPb8Z+xAPSzbCUspud/qBj3Y/orJSkqEQVlfxTtm7YAUSv+J39ir51/IwaQ==}
+  postprocessing@6.37.7:
+    resolution: {integrity: sha512-3mXzCyhHQvw6cMQKzvHUzQVsy21yC3PZMIeH7KUjx+EVqLWRFPnARh4DEnnFJ+tE08mmIHrrN7UtxVR1Gxbokw==}
     peerDependencies:
-      three: '>= 0.157.0 < 0.170.0'
+      three: '>= 0.157.0 < 0.180.0'
 
   potpack@1.0.2:
     resolution: {integrity: sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==}
@@ -6642,8 +6629,8 @@ packages:
     peerDependencies:
       preact: '>=10 || >= 11.0.0-0'
 
-  preact@10.16.0:
-    resolution: {integrity: sha512-XTSj3dJ4roKIC93pald6rWuB2qQJO9gO2iLLyTe87MrjQN+HklueLsmskbywEWqCHlclgz3/M4YLL2iBr9UmMA==}
+  preact@10.27.1:
+    resolution: {integrity: sha512-V79raXEWch/rbqoNc7nT9E4ep7lu+mI3+sBmfRD4i1M73R3WLYcCtdI0ibxGVf4eQL8ZIz2nFacqEC+rmnOORQ==}
 
   prebuild-install@7.1.1:
     resolution: {integrity: sha512-jAXscXWMcCK8GgCoHOfIr0ODh5ai8mj63L2nWrjuAgXE6tDyYGnx4/8o/rCgU+B4JSyZBKbeZqzhtwtC3ovxjw==}
@@ -7541,10 +7528,10 @@ packages:
   svelte-portal@2.2.1:
     resolution: {integrity: sha512-uF7is5sM4aq5iN7QF/67XLnTUvQCf2iiG/B1BHTqLwYVY1dsVmTeXZ/LeEyU6dLjApOQdbEG9lkqHzxiQtOLEQ==}
 
-  svelte-reduced-motion@1.1.1:
-    resolution: {integrity: sha512-bkyWF+McSf8/fFiV+VIJ+/g/CLA5QRCKjesi/+tOyIArozuKxgvvQlQSrNtN3COmjJG0Y8O8PLZOW0whdKE3+g==}
+  svelte-reduced-motion@2.0.0:
+    resolution: {integrity: sha512-C99+m5eth+W741JWSpXfDZ47YilfxFj/EU7qJXP6z4a7wxyOQY49TRJPogZGZVE0krgWBDF0Nbbbl4U5jOBdPA==}
     peerDependencies:
-      svelte: ^3.55.0 || ^4.0.0
+      svelte: ^5.0.0
 
   svelte-tweakpane-ui@1.5.9:
     resolution: {integrity: sha512-iyobNh/t1BTnxvjLAipoHruLdie3566aMyki5D0GMhsYbsKjRx6HXoiIxajIFITZovu6mcvqViTdCMAFYie52g==}
@@ -8814,12 +8801,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@astrojs/preact@4.1.0(@babel/core@7.25.9)(@types/node@22.18.0)(jiti@1.21.0)(preact@10.16.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1)':
+  '@astrojs/preact@4.1.0(@babel/core@7.25.9)(@types/node@22.18.0)(jiti@1.21.0)(preact@10.27.1)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1)':
     dependencies:
-      '@preact/preset-vite': 2.10.2(@babel/core@7.25.9)(preact@10.16.0)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))
-      '@preact/signals': 2.3.1(preact@10.16.0)
-      preact: 10.16.0
-      preact-render-to-string: 6.6.1(preact@10.16.0)
+      '@preact/preset-vite': 2.10.2(@babel/core@7.25.9)(preact@10.27.1)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))
+      '@preact/signals': 2.3.1(preact@10.27.1)
+      preact: 10.27.1
+      preact-render-to-string: 6.6.1(preact@10.27.1)
       vite: 6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1)
     transitivePeerDependencies:
       - '@babel/core'
@@ -9839,7 +9826,7 @@ snapshots:
 
   '@macfja/serializer@1.1.2': {}
 
-  '@macfja/svelte-persistent-store@2.2.1(svelte@5.26.2)':
+  '@macfja/svelte-persistent-store@2.4.2(svelte@5.26.2)':
     dependencies:
       '@macfja/serializer': 1.1.2
       browser-cookies: 1.2.0
@@ -10078,12 +10065,12 @@ snapshots:
 
   '@polka/url@1.0.0-next.24': {}
 
-  '@preact/preset-vite@2.10.2(@babel/core@7.25.9)(preact@10.16.0)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))':
+  '@preact/preset-vite@2.10.2(@babel/core@7.25.9)(preact@10.27.1)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))':
     dependencies:
       '@babel/core': 7.25.9
       '@babel/plugin-transform-react-jsx': 7.25.9(@babel/core@7.25.9)
       '@babel/plugin-transform-react-jsx-development': 7.22.5(@babel/core@7.25.9)
-      '@prefresh/vite': 2.4.1(preact@10.16.0)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))
+      '@prefresh/vite': 2.4.1(preact@10.27.1)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))
       '@rollup/pluginutils': 4.2.1
       babel-plugin-transform-hook-names: 1.0.2(@babel/core@7.25.9)
       debug: 4.4.1
@@ -10096,34 +10083,27 @@ snapshots:
 
   '@preact/signals-core@1.12.1': {}
 
-  '@preact/signals-core@1.3.1': {}
-
-  '@preact/signals@1.1.5(preact@10.16.0)':
-    dependencies:
-      '@preact/signals-core': 1.3.1
-      preact: 10.16.0
-
-  '@preact/signals@2.3.1(preact@10.16.0)':
+  '@preact/signals@2.3.1(preact@10.27.1)':
     dependencies:
       '@preact/signals-core': 1.12.1
-      preact: 10.16.0
+      preact: 10.27.1
 
   '@prefresh/babel-plugin@0.5.0': {}
 
-  '@prefresh/core@1.5.1(preact@10.16.0)':
+  '@prefresh/core@1.5.1(preact@10.27.1)':
     dependencies:
-      preact: 10.16.0
+      preact: 10.27.1
 
   '@prefresh/utils@1.2.0': {}
 
-  '@prefresh/vite@2.4.1(preact@10.16.0)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))':
+  '@prefresh/vite@2.4.1(preact@10.27.1)(vite@6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1))':
     dependencies:
       '@babel/core': 7.25.9
       '@prefresh/babel-plugin': 0.5.0
-      '@prefresh/core': 1.5.1(preact@10.16.0)
+      '@prefresh/core': 1.5.1(preact@10.27.1)
       '@prefresh/utils': 1.2.0
       '@rollup/pluginutils': 4.2.1
-      preact: 10.16.0
+      preact: 10.27.1
       vite: 6.3.5(@types/node@22.18.0)(jiti@1.21.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.7.1)
     transitivePeerDependencies:
       - supports-color
@@ -11121,8 +11101,6 @@ snapshots:
 
   acorn-walk@8.2.0: {}
 
-  acorn@8.10.0: {}
-
   acorn@8.13.0: {}
 
   acorn@8.14.0: {}
@@ -11271,10 +11249,10 @@ snapshots:
 
   astring@1.8.6: {}
 
-  astro-auto-import@0.4.2(astro@5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1)):
+  astro-auto-import@0.4.4(astro@5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1)):
     dependencies:
       '@types/node': 18.17.1
-      acorn: 8.10.0
+      acorn: 8.15.0
       astro: 5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1)
 
   astro@5.13.5(@types/node@22.18.0)(jiti@1.21.0)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.6.3)(yaml@2.7.1):
@@ -15268,17 +15246,17 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  postprocessing@6.36.3(three@0.175.0):
+  postprocessing@6.37.7(three@0.175.0):
     dependencies:
       three: 0.175.0
 
   potpack@1.0.2: {}
 
-  preact-render-to-string@6.6.1(preact@10.16.0):
+  preact-render-to-string@6.6.1(preact@10.27.1):
     dependencies:
-      preact: 10.16.0
+      preact: 10.27.1
 
-  preact@10.16.0: {}
+  preact@10.27.1: {}
 
   prebuild-install@7.1.1:
     dependencies:
@@ -16425,7 +16403,7 @@ snapshots:
 
   svelte-portal@2.2.1: {}
 
-  svelte-reduced-motion@1.1.1(svelte@5.26.2):
+  svelte-reduced-motion@2.0.0(svelte@5.26.2):
     dependencies:
       svelte: 5.26.2
 
