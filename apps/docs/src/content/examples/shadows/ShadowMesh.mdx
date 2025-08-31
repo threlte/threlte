@@ -19,7 +19,7 @@ If you update the shadow-casting mesh to a new instance, you must create an enti
 shadowMesh.geometry = mesh.geometry
 ```
 
-This is because the geometry of the shadow mesh is pulled from the mesh passed into its constructor at instantiatiation and does not update if the reference mesh's geometry is updated.
+This is because the geometry of the shadow mesh is pulled from the mesh passed into its constructor at instantiation and does not update if the reference mesh's geometry is updated.
 
 ## Enabling the Stencil Buffer
 
@@ -72,4 +72,4 @@ const mesh = new Mesh(planeGeometry)
 mesh.lookAt(plane.normal)
 ```
 
-Unfortunately, there's not an easy way to get the normal of a plane geometry an involves accessing the geometry's buffer attributes.
+Unfortunately, there's not an easy way to get the normal of a plane geometry and involves accessing the geometry's buffer attributes.
