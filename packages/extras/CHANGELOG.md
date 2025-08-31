@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.5.2
+
+### Patch Changes
+
+- 6f5effb: fix RadialGradientTexture to clear its canvas whenever the `stops` prop is updated and a new gradient is created
+
 ## 9.5.1
 
 ### Patch Changes
