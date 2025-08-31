@@ -81,7 +81,7 @@
     "shiki": "^0.14.3",
     "svelte": "catalog:",
     "svelte-portal": "^2.2.1",
-    "svelte-preprocess": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
     "svelte-reduced-motion": "^1.1.1",
     "svelte-tweakpane-ui": "^1.5.6",
     "tailwindcss": "^3.4.4",

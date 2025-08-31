@@ -33,7 +33,6 @@
     "rimraf": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
-    "svelte-preprocess": "catalog:",
     "svelte2tsx": "catalog:",
     "three": "catalog:",
     "tslib": "catalog:",
