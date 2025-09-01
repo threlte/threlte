@@ -12,7 +12,11 @@
   import { AdaptedPoissonDiscSample as Sampler } from './util'
   import type { Vector3Tuple } from 'three'
 
-  export let billboarding = false
+  interface Props {
+    billboarding?: boolean
+  }
+
+  let { billboarding = false }: Props = $props()
 
   const treeAtlasMeta = [
     {
@@ -85,9 +89,9 @@
     return `green_${Math.floor(greenTrees * Math.random())}`
   }
 
-  let sprite: any
+  let sprite = $state<any>()
 
-  $: {
+  $effect(() => {
     // manually update once to apply tree atlas
     // also, flip random trees on X axis for more variety
     if (sprite) {
@@ -96,7 +100,7 @@
       }
       sprite.update()
     }
-  }
+  })
 </script>
 
 {#await treeAtlas.spritesheet then spritesheet}

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Grid, OrbitControls, interactivity } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
+  import { Spring } from 'svelte/motion'
 
   interactivity()
 
-  const scale = spring(1)
+  const scale = new Spring(1)
 </script>
 
 <T.PerspectiveCamera
@@ -23,7 +23,7 @@
 <T.AmbientLight intensity={0.3} />
 
 <T.Group
-  scale={$scale}
+  scale={scale.current}
   onpointerenter={() => scale.set(1.5)}
   onpointerleave={() => scale.set(1)}
 >

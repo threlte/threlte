@@ -2,29 +2,21 @@
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
-  import { Color, MeshStandardMaterial, SphereGeometry } from 'three'
+  import { Color } from 'three'
   import TestBed from './TestBed.svelte'
 
   const gray = new Color(0x333333)
   const brand = new Color(0xff3f00)
 
-  const material = new MeshStandardMaterial({ color: gray })
-
   let present = $state(false)
-  $effect.pre(() => {
-    material.color = present ? brand : gray
-  })
 
-  let rigidBody = $state<RapierRigidBody>()
-  let positionZ = 0
-  let positionX = 0
+  let rigidBody = $state.raw<RapierRigidBody>()
   const offset = Date.now()
 
   useTask(() => {
-    if (!rigidBody) return
-    positionZ = Math.sin(Date.now() / 2000) * 2.5
-    positionX = Math.sin((Date.now() + offset) / 1500) * 1.2
-    rigidBody.setNextKinematicTranslation({ x: positionX, y: 1, z: positionZ })
+    const positionZ = Math.sin(Date.now() / 2000) * 2.5
+    const positionX = Math.sin((Date.now() + offset) / 1500) * 1.2
+    rigidBody?.setNextKinematicTranslation({ x: positionX, y: 1, z: positionZ })
   })
 </script>
 
@@ -34,7 +26,7 @@
     onsensorenter={() => (present = true)}
     onsensorexit={() => (present = false)}
     sensor
-    shape={'cuboid'}
+    shape="cuboid"
     args={[1, 1, 1]}
   />
 </T.Group>
@@ -42,20 +34,19 @@
 <T.Group position={[0, 1, 0]}>
   <RigidBody
     bind:rigidBody
-    type={'kinematicPosition'}
+    type="kinematicPosition"
     lockRotations
   >
-    <AutoColliders shape={'ball'}>
-      <T.Mesh
-        castShadow
-        geometry={new SphereGeometry(1)}
-        {material}
-      />
+    <AutoColliders shape="ball">
+      <T.Mesh castShadow>
+        <T.SphereGeometry />
+        <T.MeshStandardMaterial color={present ? brand : gray} />
+      </T.Mesh>
     </AutoColliders>
   </RigidBody>
 </T.Group>
 
-<TestBed title={'Sensor Collider'}>
+<TestBed title="Sensor Collider">
   {#snippet text()}
     <div>
       <p>

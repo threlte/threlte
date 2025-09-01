@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { T, useTask, useThrelte, watch } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import Stats from 'three/addons/libs/stats.module.js'
   import * as THREE from 'three/webgpu'
 
-  const { scene, size, dom, invalidate } = useThrelte()
+  const { scene, dom, invalidate } = useThrelte()
 
   scene.background = new THREE.Color(0xc1c1c1)
 

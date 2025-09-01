@@ -4,10 +4,16 @@
   import { Attractor } from '@threlte/rapier'
   import RandomMeshes from './RandomMeshes.svelte'
 
-  let count: number = 50
-  export let strengthLeft: number
-  export let strengthCenter: number
-  export let strengthRight: number
+  interface Props {
+    strengthLeft: number
+    strengthCenter: number
+    strengthRight: number
+  }
+
+  let { strengthLeft, strengthCenter, strengthRight }: Props = $props()
+
+  let count = $state(50)
+
   export const reset = () => {
     count = 0
     setTimeout(() => (count = 50))
@@ -20,11 +26,9 @@
   position.z={100}
   fov={70}
   far={10000}
+  oncreate={(ref) => ref.lookAt(0, 20, 0)}
 >
-  <OrbitControls
-    enableZoom={true}
-    target.y={20}
-  />
+  <OrbitControls target.y={20} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight

@@ -12,15 +12,15 @@
   import { PositionalAudio } from '@threlte/extras'
   import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
   import { writable } from 'svelte/store'
-  import type { Euler, Vector3 } from 'three'
+  import type { Quaternion, Vector3 } from 'three'
   import { BoxGeometry, MeshStandardMaterial, MathUtils } from 'three'
 
   interface Props {
-    position?: Vector3 | undefined
-    rotation?: Euler | undefined
+    position: Vector3
+    quaternion: Quaternion
   }
 
-  let { position = undefined, rotation = undefined }: Props = $props()
+  let { position, quaternion }: Props = $props()
 
   const audios: {
     threshold: number
@@ -45,18 +45,14 @@
     audio?.ref?.stop?.()
     audio?.ref?.play?.()
   }
-
-  let rotationCasted = $derived(rotation?.toArray() as [x: number, y: number, z: number])
 </script>
 
 <T.Group
-  position.x={position?.x}
-  position.y={position?.y}
-  position.z={position?.z}
-  rotation={rotationCasted}
+  position={position.toArray()}
+  quaternion={quaternion.toArray()}
 >
   <RigidBody
-    type={'dynamic'}
+    type="dynamic"
     oncontact={fireSound}
   >
     {#each audios as audio}

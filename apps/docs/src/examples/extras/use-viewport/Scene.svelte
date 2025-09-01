@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { Mesh } from 'three'
+  import { Mesh } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls, useViewport, RoundedBoxGeometry } from '@threlte/extras'
 
   const viewport = useViewport()
   const { renderStage, scheduler } = useThrelte()
 
-  let ref = $state.raw<Mesh>()
+  let mesh = new Mesh()
 
   const positions: [number, number, number][] = [
     [1, 0.5, 3.5],
@@ -18,8 +18,8 @@
   useTask(
     () => {
       const { width, height, distance } = viewport.current
-      ref.scale.set(width * 0.4, height * 0.2, distance * 0.25)
-      ref.position.y = ref.scale.y / 2
+      mesh.scale.set(width * 0.4, height * 0.2, distance * 0.25)
+      mesh.position.y = mesh.scale.y / 2
     },
     {
       stage: scheduler.createStage(Symbol('viewport-stage'), { before: renderStage })
@@ -48,14 +48,14 @@
 
 <T.AmbientLight />
 
-<T.Mesh
-  bind:ref
+<T
+  is={mesh}
   castShadow
   receiveShadow
 >
   <RoundedBoxGeometry radius={0.1} />
   <T.MeshStandardMaterial color="turquoise" />
-</T.Mesh>
+</T>
 
 {#each positions as position}
   <T.Mesh
