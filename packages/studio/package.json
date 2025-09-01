@@ -42,6 +42,7 @@
     "three": "catalog:",
     "tslib": "catalog:",
     "tsup": "^8.3.5",
+    "tweakpane": "4.0.5",
     "typescript": "5.4.5",
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
@@ -120,7 +121,6 @@
     "kleur": "^4.1.5",
     "magic-string": "^0.30.10",
     "svelte-tweakpane-ui": "catalog:",
-    "tweakpane": "4.0.3",
     "vite-dev-rpc": "^1.1.0"
   }
 }
