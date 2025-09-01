@@ -45,7 +45,7 @@
     "typescript": "5.4.5",
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-inspect": "0.8.6",
+    "vite-plugin-inspect": "11.3.3",
     "vitest": "^2.1.5"
   },
   "peerDependencies": {
@@ -121,6 +121,6 @@
     "magic-string": "^0.30.10",
     "svelte-tweakpane-ui": "catalog:",
     "tweakpane": "4.0.3",
-    "vite-dev-rpc": "^0.1.4"
+    "vite-dev-rpc": "^1.1.0"
   }
 }
