@@ -8,7 +8,7 @@
 
   const { scene } = useThrelte()
 
-  let lightHelper: DirectionalLightHelper
+  let lightHelper = $state<DirectionalLightHelper>()
 </script>
 
 <T.PerspectiveCamera

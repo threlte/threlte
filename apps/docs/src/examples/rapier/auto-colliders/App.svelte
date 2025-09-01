@@ -5,7 +5,7 @@
   import { Debug, World } from '@threlte/rapier'
   import Scene from './Scene.svelte'
 
-  let debug = true
+  let debug = $state(true)
 </script>
 
 <Pane
