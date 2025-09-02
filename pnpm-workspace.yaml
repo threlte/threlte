@@ -22,7 +22,7 @@ catalog:
   'prettier': '^3.2.5'
   'prettier-plugin-svelte': '^3.2.2'
   'publint': '^0.2.7'
-  'rimraf': '^5.0.5'
+  'rimraf': '^6.0.1'
   'svelte-check': '^4.3.1'
   'svelte2tsx': '^0.7.6'
   'svelte-tweakpane-ui': '^1.5.9'

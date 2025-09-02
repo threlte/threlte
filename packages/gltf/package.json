@@ -31,9 +31,6 @@
   "homepage": "https://github.com/threlte/threlte.git#readme",
   "bin": "./cli.js",
   "main": "./src/utils/exports.js",
-  "engines": {
-    "node": ">=16"
-  },
   "dependencies": {
     "@gltf-transform/core": "^3.2.1",
     "@gltf-transform/extensions": "^3.2.1",
@@ -58,7 +55,7 @@
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
     "read-pkg-up": "^9.1.0",
-    "rimraf": "^5.0.1"
+    "rimraf": "catalog:"
   },
   "husky": {
     "hooks": {
