@@ -11,10 +11,9 @@ The `createSheetObjectAction` hook allows you to animate DOM elements through a 
 
 #### Theatre.js Docs
 
-| &nbsp;           | &nbsp;                                                                       | &nbsp;                                                                                 |
-| ---------------- | ---------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **Sheet Object** | [Sheet Object Manual](https://www.theatrejs.com/docs/latest/manual/objects)  | [Sheet Object API Reference](https://www.theatrejs.com/docs/0.5/api/core#sheet.object) |
-| **Prop Types**   | [Prop Types Manual](https://www.theatrejs.com/docs/latest/manual/prop-types) | [Prop Types API reference](https://www.theatrejs.com/docs/0.5/api/core#prop-types)     |
+**Sheet Object** | [Sheet Object Manual](https://www.theatrejs.com/docs/latest/manual/objects) | [Sheet Object API Reference](https://www.theatrejs.com/docs/0.5/api/core#sheet.object)
+
+**Prop Types** | [Prop Types Manual](https://www.theatrejs.com/docs/latest/manual/prop-types) | [Prop Types API reference](https://www.theatrejs.com/docs/0.5/api/core#prop-types)
 
 ## Usage
 
@@ -70,8 +69,8 @@ This is because under the hood we must first retrieve the _sheet context_ so we 
 
 The action takes the following arguments:
 
-| arg      | type                                      | description                                                                                                                                                                                                    |
-| -------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| key      | string                                    | The key of the object, shown in the studio UI (may be [namespaced with slashes](https://www.theatrejs.com/docs/latest/manual/objects#namespacing-objects))                                                     |
-| props    | Props                                     | Declaration of your props and their types (see Theatre.js [manual entry](https://www.theatrejs.com/docs/latest/manual/prop-types) and [API reference](https://www.theatrejs.com/docs/0.5/api/core#prop-types)) |
-| callback | (node: HTMLElement, props: Props) => void | A callback function called to update the HTMLElement node whenever the prop changes.                                                                                                                           |
+key (string) - The key of the object, shown in the studio UI (may be [namespaced with slashes](https://www.theatrejs.com/docs/latest/manual/objects#namespacing-objects))
+
+props (Props) - Declaration of your props and their types (see Theatre.js [manual entry](https://www.theatrejs.com/docs/latest/manual/prop-types) and [API reference](https://www.theatrejs.com/docs/0.5/api/core#prop-types))
+
+callback ((node: HTMLElement, props: Props) => void) - A callback function called to update the HTMLElement node whenever the prop changes.
