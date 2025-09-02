@@ -37,7 +37,7 @@
     "lucide-react": "^0.263.1",
     "preact": "^10.27.1",
     "three-custom-shader-material": "^6.1.1",
-    "typescript": "^5.6.3"
+    "typescript": "catalog:"
   },
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.16.2",
