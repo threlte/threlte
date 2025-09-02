@@ -46,7 +46,7 @@
     "typescript": "5.4.5",
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
-    "vite-plugin-inspect": "11.3.3",
+    "vite-plugin-inspect": "0.8.6",
     "vitest": "catalog:"
   },
   "peerDependencies": {
