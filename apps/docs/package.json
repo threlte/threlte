@@ -34,9 +34,7 @@
     "gl-noise": "^1.6.1",
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",
-    "install": "^0.13.0",
     "lucide-react": "^0.263.1",
-    "npm": "^9.8.1",
     "preact": "^10.27.1",
     "three-custom-shader-material": "^6.1.1",
     "typescript": "^5.6.3"

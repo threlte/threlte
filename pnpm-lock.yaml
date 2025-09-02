@@ -6,84 +6,27 @@ settings:
 
 catalogs:
   default:
-    '@eslint/js':
-      specifier: ^9.26.0
-      version: 9.26.0
-    '@sveltejs/adapter-auto':
-      specifier: ^6.1.0
-      version: 6.1.0
-    '@sveltejs/kit':
-      specifier: ^2.37.0
-      version: 2.37.0
-    '@sveltejs/package':
-      specifier: ^2.3.7
-      version: 2.3.7
     '@sveltejs/vite-plugin-svelte':
       specifier: ^5.1.1
       version: 5.1.1
-    '@types/node':
-      specifier: ^22.18.0
-      version: 22.18.0
     '@types/three':
       specifier: ^0.175.0
       version: 0.175.0
-    '@yushijinhun/three-minifier-rollup':
-      specifier: ^0.4.0
-      version: 0.4.0
-    eslint:
-      specifier: ^9.26.0
-      version: 9.26.0
-    eslint-plugin-svelte:
-      specifier: ^3.5.1
-      version: 3.5.1
-    globals:
-      specifier: ^16.1.0
-      version: 16.1.0
-    prettier:
-      specifier: ^3.2.5
-      version: 3.3.2
-    prettier-plugin-svelte:
-      specifier: ^3.2.2
-      version: 3.2.5
-    publint:
-      specifier: ^0.2.7
-      version: 0.2.7
     rimraf:
       specifier: ^6.0.1
       version: 6.0.1
     svelte:
       specifier: 5.26.2
       version: 5.26.2
-    svelte-check:
-      specifier: ^4.3.1
-      version: 4.3.1
     svelte-tweakpane-ui:
       specifier: ^1.5.9
       version: 1.5.9
-    svelte2tsx:
-      specifier: ^0.7.6
-      version: 0.7.22
     three:
       specifier: ^0.175.0
       version: 0.175.0
-    tslib:
-      specifier: ^2.6.2
-      version: 2.6.2
-    type-fest:
-      specifier: ^4.15.0
-      version: 4.26.1
-    typescript:
-      specifier: ^5.6.3
-      version: 5.8.3
-    typescript-eslint:
-      specifier: ^8.32.0
-      version: 8.32.0
     vite:
       specifier: ^6.3.5
       version: 6.3.5
-    vitest:
-      specifier: ^2.1.5
-      version: 2.1.5
 
 importers:
 
@@ -167,15 +110,9 @@ importers:
       highlightjs-svelte:
         specifier: ^1.0.6
         version: 1.0.6
-      install:
-        specifier: ^0.13.0
-        version: 0.13.0
       lucide-react:
         specifier: ^0.263.1
         version: 0.263.1(react@18.2.0)
-      npm:
-        specifier: ^9.8.1
-        version: 9.8.1
       preact:
         specifier: ^10.27.1
         version: 10.27.1
@@ -5020,10 +4957,6 @@ packages:
   inline-style-parser@0.2.2:
     resolution: {integrity: sha512-EcKzdTHVe8wFVOGEYXiW9WmJXPjqi1T+234YpJr98RiFYKHV3cdy1+3mkTE+KHTHxFFLH51SfaGOoUdW+v7ViQ==}
 
-  install@0.13.0:
-    resolution: {integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==}
-    engines: {node: '>= 0.10'}
-
   internal-slot@1.0.3:
     resolution: {integrity: sha512-O0DB1JC/sPyZl7cIo78n5dR7eUSwwpYPiXRhTzNxZVAMUuB8vlnRFyLxdrVToks6XPLVnFfbzaVd5WLjhgg+vA==}
     engines: {node: '>= 0.4'}
@@ -6091,80 +6024,6 @@ packages:
   npm-run-path@5.1.0:
     resolution: {integrity: sha512-sJOdmRGrY2sjNTRMbSvluQqg+8X7ZK61yvzBEIDhz4f8z1TZFYABsqjjCBd/0PUNE9M6QDgHJXQkGUEm7Q+l9Q==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
-  npm@9.8.1:
-    resolution: {integrity: sha512-AfDvThQzsIXhYgk9zhbk5R+lh811lKkLAeQMMhSypf1BM7zUafeIIBzMzespeuVEJ0+LvY36oRQYf7IKLzU3rw==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
-    hasBin: true
-    bundledDependencies:
-      - '@isaacs/string-locale-compare'
-      - '@npmcli/arborist'
-      - '@npmcli/config'
-      - '@npmcli/fs'
-      - '@npmcli/map-workspaces'
-      - '@npmcli/package-json'
-      - '@npmcli/promise-spawn'
-      - '@npmcli/run-script'
-      - abbrev
-      - archy
-      - cacache
-      - chalk
-      - ci-info
-      - cli-columns
-      - cli-table3
-      - columnify
-      - fastest-levenshtein
-      - fs-minipass
-      - glob
-      - graceful-fs
-      - hosted-git-info
-      - ini
-      - init-package-json
-      - is-cidr
-      - json-parse-even-better-errors
-      - libnpmaccess
-      - libnpmdiff
-      - libnpmexec
-      - libnpmfund
-      - libnpmhook
-      - libnpmorg
-      - libnpmpack
-      - libnpmpublish
-      - libnpmsearch
-      - libnpmteam
-      - libnpmversion
-      - make-fetch-happen
-      - minimatch
-      - minipass
-      - minipass-pipeline
-      - ms
-      - node-gyp
-      - nopt
-      - npm-audit-report
-      - npm-install-checks
-      - npm-package-arg
-      - npm-pick-manifest
-      - npm-profile
-      - npm-registry-fetch
-      - npm-user-validate
-      - npmlog
-      - p-map
-      - pacote
-      - parse-conflict-json
-      - proc-log
-      - qrcode-terminal
-      - read
-      - semver
-      - sigstore
-      - ssri
-      - supports-color
-      - tar
-      - text-table
-      - tiny-relative-date
-      - treeverse
-      - validate-npm-package-name
-      - which
-      - write-file-atomic
 
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
@@ -13311,8 +13170,6 @@ snapshots:
 
   inline-style-parser@0.2.2: {}
 
-  install@0.13.0: {}
-
   internal-slot@1.0.3:
     dependencies:
       get-intrinsic: 1.1.2
@@ -14784,8 +14641,6 @@ snapshots:
   npm-run-path@5.1.0:
     dependencies:
       path-key: 4.0.0
-
-  npm@9.8.1: {}
 
   nth-check@2.1.1:
     dependencies:
