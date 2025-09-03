@@ -51,3 +51,9 @@ export type ThrelteEvents = {
 export type InteractivityProps = {
   [K in keyof ThrelteEvents]?: (event: ThrelteEvents[K]) => void
 }
+
+declare global {
+  namespace Threlte {
+    interface UserProps extends InteractivityProps {}
+  }
+}
