@@ -21,7 +21,7 @@
   >
     <div>
       <TheatreTextBox key="mission">
-        <div class="mb-2 text-center text-xl text-white/60">The Mission:</div>
+        <div class="mb-2 text-center text-xl text-faded">The Mission:</div>
       </TheatreTextBox>
 
       <TheatreTextBox key="statement">

@@ -1,15 +1,31 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@layer utilities {
-  .text-faded {
-    @apply text-white/60;
-  }
+@config '../../tailwind.config.cjs';
 
-  .text-highlight {
-    @apply font-bold text-white;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
   }
+}
+
+@utility text-faded {
+  @apply text-white/60;
+}
+
+@utility text-highlight {
+  @apply font-bold text-white;
 }
 
 /* ======= Code Blocks ========================== */
@@ -19,7 +35,7 @@
 }
 
 .expressive-code .frame pre {
-  @apply !rounded-md !bg-blue-900;
+  @apply rounded-md! bg-blue-900!;
 }
 
 .expressive-code .frame.has-title pre {
@@ -28,20 +44,20 @@
 }
 
 .expressive-code pre {
-  @apply !border !border-t !border-white/20 bg-blue-900;
+  @apply border! border-t! border-white/20! bg-blue-900;
 }
 
 .expressive-code .frame.has-title pre,
 .expressive-code .frame.is-terminal pre {
-  @apply !border-t;
+  @apply border-t!;
 }
 
 .expressive-code .frame.has-title:not(.is-terminal) .title::after {
-  @apply !border-none;
+  @apply border-none!;
 }
 
 .expressive-code .frame.has-title:not(.is-terminal) .header {
-  @apply rounded-t-md !border-none !bg-none;
+  @apply rounded-t-md border-none! bg-none!;
 }
 
 .expressive-code .frame.has-title:not(.is-terminal) .header .title {
@@ -49,11 +65,11 @@
 }
 
 .expressive-code .frame.has-title:not(.is-terminal) .title {
-  @apply !rounded-t-md !border !border-white/20;
+  @apply rounded-t-md! border! border-white/20!;
 }
 
 .expressive-code .frame.has-title:not(.is-terminal) .header::before {
-  @apply !border-none;
+  @apply border-none!;
 }
 
 .expressive-code > .frame > pre > code div > div {

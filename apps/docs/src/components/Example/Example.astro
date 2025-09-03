@@ -76,7 +76,7 @@ const hidePreview = Astro.props.hidePreview ?? false
             <Code
               code={mod}
               lang={(path.split('.').pop() ?? 'svelte') as any}
-              class="!mb-0 !mt-0 h-full rounded-none border-none"
+              class="mb-0! mt-0! h-full rounded-none border-none"
             />
           </div>
         ))}

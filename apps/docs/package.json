@@ -83,7 +83,7 @@
     "svelte-portal": "^2.2.1",
     "svelte-reduced-motion": "^2.0.0",
     "svelte-tweakpane-ui": "catalog:",
-    "tailwindcss": "^3.4.4",
+    "tailwindcss": "^4.1.12",
     "terser": "^5.37.0",
     "three": "catalog:",
     "three-mesh-bvh": "^0.7.5",

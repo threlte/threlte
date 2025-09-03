@@ -57,21 +57,21 @@ const id = Astro.props.idOverride ?? 'component-signature'
       >
         {Astro.props.titleOverride ? Astro.props.titleOverride : `Component Signature`}
       </h2>
-      <div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:!p-0">
+      <div class="my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:p-0!">
         {Astro.props.signature.extends && (
-          <p class:list={['text-faded', !hasAnySignature && '!mb-0']}>
+          <p class:list={['text-faded', !hasAnySignature && 'mb-0!']}>
             <code>{Astro.props.componentName}</code> extends
             <code>
               {'<'}
               <a
-                class="!text-white"
+                class="text-white!"
                 href="/docs/reference/core/t"
               >
                 {'T'}
               </a>
               {'.'}
               <a
-                class="!text-white"
+                class="text-white!"
                 target="_blank"
                 rel="noopener noreferrer"
                 href={Astro.props.signature.extends.url}
@@ -86,7 +86,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
         {Astro.props.signature.pretext && (
           <p
-            class:list={['text-faded', !hasAnySignature && '!mb-0']}
+            class:list={['text-faded', !hasAnySignature && 'mb-0!']}
             set:html={Astro.props.signature.pretext}
           />
         )}
@@ -99,7 +99,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                 <div
                   class:list={[
-                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!',
                     propsGridCols
                   ]}
                 >
@@ -186,7 +186,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                 <div
                   class:list={[
-                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!',
                     anyEventHasDescription ? 'grid-cols-[auto_auto_auto]' : 'grid-cols-[auto_auto]'
                   ]}
                 >
@@ -246,7 +246,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
               <div>
                 <h3 class="mt-0">Bindings</h3>
 
-                <div class="scrollbar-hide grid grid-cols-[auto_auto] items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent">
+                <div class="scrollbar-hide grid grid-cols-[auto_auto] items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!">
                   <div class="font-bold">name</div>
 
                   <div class="font-bold">type</div>
@@ -301,7 +301,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                 <div
                   class:list={[
-                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:!bg-transparent',
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!',
                     propsGridCols
                   ]}
                 >

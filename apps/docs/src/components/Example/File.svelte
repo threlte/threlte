@@ -19,9 +19,9 @@
 
 <button
   class={[
-    'flex flex-row items-center gap-1 border border-transparent hover:underline focus:outline-none [&>*]:w-[1em]',
+    'flex flex-row items-center gap-1 border border-transparent hover:underline focus:outline-hidden *:w-[1em]',
     isSelected &&
-      '-mx-1 -my-0.5 rounded-sm border-orange/5 bg-orange-800/50 px-1 py-0.5 text-orange'
+      '-mx-1 -my-0.5 rounded-xs border-orange/5 bg-orange-800/50 px-1 py-0.5 text-orange'
   ]}
   onclick={() => selectFile(file)}
 >

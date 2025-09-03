@@ -61,7 +61,7 @@
     config={{ state }}
     studio={{ enabled: false }}
   >
-    <div class="fixed left-0 top-0 z-10 h-[100lvh] w-screen">
+    <div class="fixed left-0 top-0 z-10 h-lvh w-screen">
       <Canvas
         toneMapping={NoToneMapping}
         createRenderer={(canvas: HTMLCanvasElement) => {
@@ -112,7 +112,7 @@
                   to={outEnd}
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Learn Threlte</h3>
-                  <p class="text-sm text-white/60">
+                  <p class="text-sm text-faded">
                     Threlte puts the simplicity of Svelte 5 and the power of Three.js right at your
                     fingertips. It's designed to be powerful and flexible while still being
                     approachable and easy to use.
@@ -133,7 +133,7 @@
                   to={outEnd}
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Master Three.js</h3>
-                  <p class="text-sm text-white/60">
+                  <p class="text-sm text-faded">
                     The web is becoming more and more 3D. At its core, Threlte provides an
                     extendable declarative API for creating scalable Three.js applications for the
                     web.
@@ -154,7 +154,7 @@
                   to={outEnd}
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Integrate Anything</h3>
-                  <p class="text-sm text-white/60">
+                  <p class="text-sm text-faded">
                     Threlte comes with solutions for physics, XR, animation, layouting, model
                     loading, and countless helpers to make creating immersive 3D apps for the web a
                     breeze.
