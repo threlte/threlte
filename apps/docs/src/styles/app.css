@@ -1,3 +1,5 @@
+@tailwind base;
+@tailwind components;
 @tailwind utilities;
 
 @layer utilities {
@@ -9,6 +11,56 @@
     @apply font-bold text-white;
   }
 }
+
+/* ======= Code Blocks ========================== */
+
+.expressive-code {
+  @apply mb-6;
+}
+
+.expressive-code .frame pre {
+  @apply !rounded-md !bg-blue-900;
+}
+
+.expressive-code .frame.has-title pre {
+  border-top: solid rgb(255 255 255 / 0.2) !important;
+  border-top-left-radius: 0rem !important;
+}
+
+.expressive-code pre {
+  @apply !border !border-t !border-white/20 bg-blue-900;
+}
+
+.expressive-code .frame.has-title pre,
+.expressive-code .frame.is-terminal pre {
+  @apply !border-t;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .title::after {
+  @apply !border-none;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .header {
+  @apply rounded-t-md !border-none !bg-none;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .header .title {
+  @apply bg-blue-900 text-white/60;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .title {
+  @apply !rounded-t-md !border !border-white/20;
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .header::before {
+  @apply !border-none;
+}
+
+.expressive-code > .frame > pre > code div > div {
+  @apply m-0;
+}
+
+/* ======= Scrollbar ========================== */
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {

@@ -11,6 +11,8 @@ import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
 
+import starlight from '@astrojs/starlight'
+
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
   noExternal.push('@theatre/core')
@@ -37,10 +39,16 @@ export default defineConfig({
     }),
     tailwind(),
     svelte(),
+    preact({ compat: true, include: ['**/*.tsx'] }),
+    starlight({
+      title: 'Threlte',
+      expressiveCode: {
+        themes: ['dracula-soft']
+      }
+    }),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    }),
-    preact({ compat: true, include: ['**/*.tsx'] })
+    })
   ],
   output: 'static',
   vite: {
