@@ -1,3 +1,5 @@
+@reference "./app.css";
+
 html {
   scroll-padding-top: calc(70px + 1.5rem);
 }
