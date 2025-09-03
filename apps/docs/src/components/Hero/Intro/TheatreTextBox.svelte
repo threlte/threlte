@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { createSheetObjectAction } from '@threlte/theatre'
   import Reveal from '../Reveal.svelte'
   import FadeOut from '../FadeOut.svelte'
@@ -22,21 +21,11 @@
   use:sheetObject={{
     key,
     props: {
-      opacity: types.number(1, {
-        range: [0, 1]
-      }),
-      translateX: types.number(0, {
-        range: [-100, 100]
-      }),
-      translateY: types.number(0, {
-        range: [-100, 100]
-      }),
-      reveal: types.number(0, {
-        range: [0, 1]
-      }),
-      fade: types.number(0, {
-        range: [0, 1]
-      })
+      opacity: 1,
+      translateX: 0,
+      translateY: 0,
+      reveal: 0,
+      fade: 0
     },
     callback(node, props) {
       node.style.opacity = props.opacity
