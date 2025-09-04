@@ -7,6 +7,5 @@
   "singleAttributePerLine": true,
   "astroAllowShorthand": true,
   "astroSkipFrontmatter": false,
-  "plugins": ["prettier-plugin-astro", "prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
-  "pluginSearchDirs": false
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-svelte", "prettier-plugin-tailwindcss"]
 }
