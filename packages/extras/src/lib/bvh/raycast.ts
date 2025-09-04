@@ -105,12 +105,12 @@ export const createBatchedMeshBVH = (mesh: BatchedMesh, opts: BVHOptions) => {
 
 export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
   const geometry = new BufferGeometry()
-  const position = points.geometry.getAttribute('position')
-  const indices = new Uint32Array(position.count * 3)
-  for (let i = 0, k = 0, l = position.count; i < l; i += 1, k += 3) {
+  const positions = points.geometry.getAttribute('position')
+  const indices = new Uint32Array(positions.count * 3)
+  for (let i = 0, k = 0, l = positions.count; i < l; i += 1, k += 3) {
     indices[k + 0] = indices[k + 1] = indices[k + 2] = i
   }
-  geometry.setAttribute('position', position)
+  geometry.setAttribute('position', positions)
   geometry.setIndex(new BufferAttribute(indices, 1))
   geometry.computeBoundsTree = computeBoundsTree
   geometry.disposeBoundsTree = disposeBoundsTree
