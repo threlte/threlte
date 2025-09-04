@@ -17,10 +17,10 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
 
 <AppLayout {title}>
   <!-- Desktop Nav -->
-  <div class="fixed left-0 top-0 z-5 h-[70px] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
+  <div class="z-5 fixed left-0 top-0 h-[70px] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
     <!-- bottom gradient -->
     <div
-      class="pointer-events-none absolute left-0 top-full h-[10svh] w-full bg-linear-to-b from-[#0A0F19] to-transparent"
+      class="bg-linear-to-b pointer-events-none absolute left-0 top-full h-[10svh] w-full from-[#0A0F19] to-transparent"
     >
     </div>
   </div>

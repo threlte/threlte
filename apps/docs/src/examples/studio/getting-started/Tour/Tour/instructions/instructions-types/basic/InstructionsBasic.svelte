@@ -34,7 +34,7 @@
 
   {#if tip}
     <div
-      class="flex items-start gap-1.5 rounded-md border border-neutral-300 bg-neutral-100 px-2 py-1 text-sm leading-snug shadow-xs"
+      class="shadow-xs flex items-start gap-1.5 rounded-md border border-neutral-300 bg-neutral-100 px-2 py-1 text-sm leading-snug"
     >
       <div
         class="relative flex h-[1.375em] w-[1.375em] shrink-0 grow-0 items-center justify-center"

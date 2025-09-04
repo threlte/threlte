@@ -33,7 +33,7 @@
 </script>
 
 <button
-  class="rounded-xs border border-orange/5 bg-orange-800/50 px-2 py-1 text-sm text-orange hover:bg-orange-800/70 hover:text-orange-400 hover:underline focus:outline-hidden"
+  class="rounded-xs border-orange/5 text-orange focus:outline-hidden border bg-orange-800/50 px-2 py-1 text-sm hover:bg-orange-800/70 hover:text-orange-400 hover:underline"
   aria-label="open in stackblitz"
   {onclick}
 >
