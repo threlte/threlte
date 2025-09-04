@@ -31,12 +31,12 @@
 /* https://tailwindcss.com/docs/adding-custom-styles#functional-utilities */
 @utility glow-* {
   /* prettier-ignore */
-  box-shadow: 0 0px 40px -3px --value(--shadow-*);
+  box-shadow: 0 0px 40px -3px --value(--color-*);
 }
 
 @utility text-glow-* {
   /* prettier-ignore */
-  filter: drop-shadow(0 0px 50px --value(--drop-shadow-*));
+  filter: drop-shadow(0 0px 50px --value(--color-*));
 }
 
 /* https://tailwindcss.com/docs/font-family */
