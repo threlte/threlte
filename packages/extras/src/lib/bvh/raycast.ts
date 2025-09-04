@@ -146,23 +146,23 @@ export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
 }
 
 function raycastPoints(this: Points, raycaster: Raycaster, intersects: Intersection[]) {
-  const threshold = raycaster.params.Points.threshold
+  const mesh = pointsToMesh.get(this)
+
+  if (!mesh) {
+    return
+  }
+
+  const { threshold } = raycaster.params.Points
 
   // Checking boundingSphere distance to ray
   if (this.geometry.boundingSphere === null) {
     this.geometry.computeBoundingSphere()
   }
 
-  sphere.copy(this.geometry.boundingSphere!).applyMatrix4(this.matrixWorld)
+  sphere.copy(this.geometry.boundingSphere as Sphere).applyMatrix4(this.matrixWorld)
   sphere.radius += threshold
 
   if (!raycaster.ray.intersectsSphere(sphere)) {
-    return
-  }
-
-  const mesh = pointsToMesh.get(this)
-
-  if (!mesh) {
     return
   }
 
@@ -188,7 +188,9 @@ function raycastPoints(this: Points, raycaster: Raycaster, intersects: Intersect
     boundsTraverseOrder: firstHitOnly ? (box) => box.distanceToPoint(localRay.origin) : undefined,
 
     intersectsBounds: (box, _isLeaf, score) => {
-      if (score !== undefined && score > closestDistance) return NOT_INTERSECTED
+      if (score !== undefined && score > closestDistance) {
+        return NOT_INTERSECTED
+      }
 
       // expand in local units by localThreshold
       const expanded = expandedBox.copy(box).expandByScalar(localThreshold)
@@ -256,6 +258,7 @@ function raycastPoints(this: Points, raycaster: Raycaster, intersects: Intersect
           return true
         }
       }
+
       return false
     }
   })
