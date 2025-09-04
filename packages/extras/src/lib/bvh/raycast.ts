@@ -37,7 +37,7 @@ const closestOnRay = new Vector3()
 const pointsToMesh = new WeakMap<Points, Mesh>()
 const objectToHelper = new WeakMap<Points | Mesh, MeshBVHHelper>()
 
-export const createGeometryBVH = (geometry: BufferGeometry<any>, opts: BVHOptions) => {
+const createGeometryBVH = (geometry: BufferGeometry<any>, opts: BVHOptions) => {
   geometry.computeBoundsTree = computeBoundsTree
   geometry.disposeBoundsTree = disposeBoundsTree
   geometry.computeBoundsTree(opts)
@@ -48,9 +48,7 @@ export const createGeometryBVH = (geometry: BufferGeometry<any>, opts: BVHOption
 }
 
 export const createMeshBVH = (mesh: Mesh, opts: BVHOptions) => {
-  mesh.geometry.computeBoundsTree = computeBoundsTree
-  mesh.geometry.disposeBoundsTree = disposeBoundsTree
-  mesh.geometry.computeBoundsTree(opts)
+  const cleanup = createGeometryBVH(mesh.geometry, opts)
   mesh.raycast = acceleratedRaycast
 
   if (opts.helper) {
@@ -60,6 +58,7 @@ export const createMeshBVH = (mesh: Mesh, opts: BVHOptions) => {
   }
 
   return () => {
+    cleanup()
     mesh.geometry.disposeBoundsTree()
     mesh.raycast = Mesh.prototype.raycast
 
@@ -112,9 +111,7 @@ export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
   }
   geometry.setAttribute('position', positions)
   geometry.setIndex(new BufferAttribute(indices, 1))
-  geometry.computeBoundsTree = computeBoundsTree
-  geometry.disposeBoundsTree = disposeBoundsTree
-  geometry.computeBoundsTree(opts)
+  const cleanup = createGeometryBVH(geometry, opts)
 
   const mesh = new Mesh(geometry, material)
   mesh.visible = false
@@ -131,7 +128,7 @@ export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
   }
 
   return () => {
-    mesh.geometry.disposeBoundsTree()
+    cleanup()
     points.raycast = Points.prototype.raycast
 
     pointsToMesh.delete(points)
