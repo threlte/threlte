@@ -1,39 +1,56 @@
 ---
-import { Code as StarlightCode } from '@astrojs/starlight/components'
+import type { Theme, HtmlRendererOptions, Lang } from 'shiki'
+import { getShiki } from '../../lib/highlighter'
+import CopyCodeButton from './CopyCodeButton.svelte'
 
-type Props = {
-  /**
-   * The plaintext contents of the code block.
-   */
+interface Props {
+  lang: Lang
+  theme?: Theme
+  class?: string
+  title?: string
   code: string
-  /**
-   * The code block's language.
-   *
-   * Please use a valid [language identifier](https://expressive-code.com/key-features/syntax-highlighting/#supported-languages)
-   * to ensure proper syntax highlighting.
-   */
-  lang?: string | undefined
-  /**
-   * An optional meta string. In markdown or MDX documents, this is the part of the
-   * code block's opening fence that comes after the language name.
-   */
-  meta?: string | undefined
-  /**
-   * The code block's locale (e.g. `en-US` or `de-DE`). This is used by plugins to display
-   * localized strings depending on the language of the containing page.
-   *
-   * If no locale is defined here, most Expressive Code integrations will attempt to auto-detect
-   * the block locale using the configured
-   * [`getBlockLocale`](https://expressive-code.com/reference/configuration/#getblocklocale)
-   * function, and finally fall back to the configured
-   * [`defaultLocale`](https://expressive-code.com/reference/configuration/#defaultlocale).
-   */
-  locale?: string | undefined
-  /**
-   * The CSS class name(s) to apply to the code block's container element.
-   */
-  class?: string | undefined
+  lineOptions?: HtmlRendererOptions['lineOptions']
 }
+
+const highlighter = await getShiki()
+
+const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {
+  lang: Astro.props.lang,
+  lineOptions: Astro.props.lineOptions ?? []
+})
 ---
 
-<StarlightCode {...Astro.props} />
+{
+  Astro.props.title ? (
+    <div class="code">
+      <div class="not-prose text-faded z-10 inline-block translate-y-px rounded-t-md border border-x-white/20 border-b-white/5 border-t-white/20 bg-blue-900 px-2 py-1 text-sm">
+        {Astro.props.title}
+      </div>
+      <div
+        class:list={[
+          'not-prose relative overflow-x-auto rounded-b-md rounded-tr-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
+          Astro.props.class ?? ''
+        ]}
+      >
+        <CopyCodeButton
+          client:idle
+          code={Astro.props.code}
+        />
+        <Fragment set:html={formatted} />
+      </div>
+    </div>
+  ) : (
+    <div
+      class:list={[
+        'code not-prose group relative overflow-x-auto rounded-md border border-white/20 bg-blue-900 text-sm shadow-xl [&>*]:!bg-transparent [&>*]:p-2',
+        Astro.props.class ?? ''
+      ]}
+    >
+      <CopyCodeButton
+        client:idle
+        code={Astro.props.code}
+      />
+      <Fragment set:html={formatted} />
+    </div>
+  )
+}

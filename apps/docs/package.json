@@ -21,7 +21,6 @@
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.4",
     "@astrojs/preact": "^4.1.0",
-    "@astrojs/starlight": "^0.35.2",
     "@astrojs/svelte": "^7.1.0",
     "@markprompt/css": "^0.10.0",
     "@markprompt/react": "^0.18.0",
