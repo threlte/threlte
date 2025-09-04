@@ -14,7 +14,8 @@
 
   let { ...rest }: BVHOptions = $props()
 
-  interactivity()
+  const { raycaster } = interactivity()
+  raycaster.firstHitOnly = true
 
   bvh(() => rest)
 

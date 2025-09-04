@@ -61,3 +61,7 @@ export interface BVHOptions {
    */
   indirect?: boolean
 }
+
+export interface BVHProps {
+  bvh?: BVHOptions
+}

@@ -1,18 +1,7 @@
 import { injectPlugin, isInstanceOf } from '@threlte/core'
 import { SAH } from 'three-mesh-bvh'
-import { interactivityEventNames } from '../interactivity/plugin.svelte'
 import type { BVHOptions } from './types'
 import { createBatchedMeshBVH, createMeshBVH, createPointsBVH } from './raycast'
-
-interface BvhProps {
-  bvh?: BVHOptions
-}
-
-declare global {
-  namespace Threlte {
-    interface UserProps extends BvhProps {}
-  }
-}
 
 export const bvh = (options?: () => BVHOptions) => {
   const bvhOptions = $derived<BVHOptions>({
@@ -32,14 +21,9 @@ export const bvh = (options?: () => BVHOptions) => {
     const opts = $derived<BVHOptions>(
       pluginProps.props.bvh ? { ...bvhOptions, ...pluginProps.props.bvh } : bvhOptions
     )
-    const keys = $derived(Object.keys(pluginProps.props))
 
     $effect(() => {
       if (!opts.enabled) {
-        return
-      }
-
-      if (!interactivityEventNames.some((value) => keys.includes(value))) {
         return
       }
 

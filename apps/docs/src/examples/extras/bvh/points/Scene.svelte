@@ -5,8 +5,7 @@
     bvh,
     interactivity,
     type BVHOptions,
-    PointsMaterial,
-    PerfMonitor
+    PointsMaterial
   } from '@threlte/extras'
   import { T, useTask } from '@threlte/core'
   import { BufferAttribute, DynamicDrawUsage, Points, type Vector3Tuple } from 'three'
@@ -81,8 +80,6 @@
     enablePan={false}
   />
 </T.PerspectiveCamera>
-
-<PerfMonitor />
 
 {#if points}
   <T
