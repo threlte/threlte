@@ -36,10 +36,10 @@ export default defineConfig({
       ]
     }),
     svelte(),
-    preact({ compat: true, include: ['**/*.tsx'] }),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    })
+    }),
+    preact({ compat: true, include: ['**/*.tsx'] })
   ],
   output: 'static',
   vite: {
