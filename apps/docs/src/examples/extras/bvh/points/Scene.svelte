@@ -13,10 +13,7 @@
   let { ...rest }: BVHOptions & { firstHitOnly: boolean } = $props()
 
   const { raycaster } = interactivity()
-
-  $effect(() => {
-    raycaster.params.Points.threshold = 0.5
-  })
+  raycaster.params.Points.threshold = 0.5
 
   $effect(() => {
     raycaster.firstHitOnly = rest.firstHitOnly
@@ -114,6 +111,7 @@
   position={point}
   renderOrder={1}
   {visible}
+  bvh={{ enabled: false }}
 >
   <T.SphereGeometry args={[0.5]} />
   <T.MeshBasicMaterial

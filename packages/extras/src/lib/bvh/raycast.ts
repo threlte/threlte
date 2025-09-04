@@ -117,6 +117,7 @@ export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
   geometry.computeBoundsTree(opts)
 
   const mesh = new Mesh(geometry, material)
+  mesh.visible = false
   mesh.raycast = acceleratedRaycast
   pointsToMesh.set(points, mesh)
 
@@ -124,10 +125,9 @@ export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
 
   if (opts.helper) {
     const helper = new MeshBVHHelper(mesh)
-    points.getWorldPosition(helper.position)
-    points.getWorldQuaternion(helper.quaternion)
+
     objectToHelper.set(points, helper)
-    points.add(helper)
+    points.add(helper, mesh)
   }
 
   return () => {
@@ -139,66 +139,58 @@ export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
     if (opts.helper) {
       const helper = objectToHelper.get(points)
       helper?.removeFromParent()
+      mesh.removeFromParent()
       objectToHelper.delete(points)
     }
   }
 }
 
 function raycastPoints(this: Points, raycaster: Raycaster, intersects: Intersection[]) {
-  const points = this
-  const mesh = pointsToMesh.get(points)!
-  const geometry = mesh.geometry
+  const threshold = raycaster.params.Points.threshold
 
-  points.getWorldPosition(mesh.position)
-  points.getWorldQuaternion(mesh.quaternion)
-
-  const helper = objectToHelper.get(points)
-  if (helper) {
-    points.getWorldPosition(helper.position)
-    points.getWorldQuaternion(helper.quaternion)
+  // Checking boundingSphere distance to ray
+  if (this.geometry.boundingSphere === null) {
+    this.geometry.computeBoundingSphere()
   }
 
-  inverseMatrix.copy(points.matrixWorld).invert()
-  localRay.copy(raycaster.ray).applyMatrix4(inverseMatrix)
-
-  // world-units threshold used by THREE.Points.raycast
-  const worldThreshold = (raycaster.params?.Points && raycaster.params.Points.threshold) ?? 1
-
-  // Convert to local space using max axis scale (not average)
-  const worldScale = points.matrixWorld.getMaxScaleOnAxis()
-  const localThreshold = worldThreshold / worldScale
-  const localThresholdSq = localThreshold * localThreshold
-
-  const boundsTree = geometry.boundsTree
-  const indexAttr = geometry.getIndex()!
-  const idxArray = indexAttr.array as Uint16Array | Uint32Array
-  const posAttr = geometry.getAttribute('position') as BufferAttribute
-  const posArray = posAttr.array as Float32Array
-
-  // match THREE.Points.raycast precheck
-  if (!points.geometry.boundingSphere) {
-    points.geometry.computeBoundingSphere()
-  }
-
-  sphere.copy(points.geometry.boundingSphere!).applyMatrix4(points.matrixWorld)
-  sphere.radius += worldThreshold
+  sphere.copy(this.geometry.boundingSphere!).applyMatrix4(this.matrixWorld)
+  sphere.radius += threshold
 
   if (!raycaster.ray.intersectsSphere(sphere)) {
     return
   }
 
+  const mesh = pointsToMesh.get(this)
+
+  if (!mesh) {
+    return
+  }
+
+  const { geometry } = mesh
+
+  const indexArray = (geometry.getIndex() as BufferAttribute).array as Uint16Array | Uint32Array
+  const positionArray = geometry.getAttribute('position').array as Float32Array
+
+  // Convert to local space using max axis scale (not average)
+  const worldScale = this.matrixWorld.getMaxScaleOnAxis()
+  const localThreshold = threshold / worldScale
+  const localThresholdSq = localThreshold * localThreshold
+
   // only prune if caller asked for a single hit
   const firstHitOnly = raycaster.firstHitOnly === true
-  let closestDistance = Infinity
+  let closestDistance = Number.POSITIVE_INFINITY
+
+  inverseMatrix.copy(this.matrixWorld).invert()
+  localRay.copy(raycaster.ray).applyMatrix4(inverseMatrix)
 
   geometry.boundsTree?.shapecast({
-    // Disable sorting when we don't prune; it just adds overhead
+    // Disable sorting when we don't prune, it just adds overhead
     boundsTraverseOrder: firstHitOnly ? (box) => box.distanceToPoint(localRay.origin) : undefined,
 
     intersectsBounds: (box, _isLeaf, score) => {
       if (score !== undefined && score > closestDistance) return NOT_INTERSECTED
 
-      // expand in LOCAL units by localThreshold
+      // expand in local units by localThreshold
       const expanded = expandedBox.copy(box).expandByScalar(localThreshold)
       return localRay.intersectsBox(expanded) ? INTERSECTED : NOT_INTERSECTED
     },
@@ -206,14 +198,14 @@ function raycastPoints(this: Points, raycaster: Raycaster, intersects: Intersect
     intersectsRange: (offset: number, count: number) => {
       const end = offset + count
       for (let tri = offset; tri < end; tri++) {
-        const resolvedTri = (boundsTree as any)?.resolveTriangleIndex?.(tri) ?? tri
-        const index = idxArray[3 * resolvedTri] // [i,i,i]
-        const px = posArray[3 * index]
-        const py = posArray[3 * index + 1]
-        const pz = posArray[3 * index + 2]
+        const resolvedTri = (geometry.boundsTree as any)?.resolveTriangleIndex?.(tri) ?? tri
+        const index = indexArray[3 * resolvedTri] // [i, i, i]
+        const px = positionArray[3 * index]
+        const py = positionArray[3 * index + 1]
+        const pz = positionArray[3 * index + 2]
         trianglePoint.set(px, py, pz)
 
-        // same test as THREE.Points.raycast (local units)
+        // same test as Points.raycast (local units)
         const d2 = localRay.distanceSqToPoint(trianglePoint)
         if (d2 > localThresholdSq) {
           continue
@@ -230,15 +222,18 @@ function raycastPoints(this: Points, raycaster: Raycaster, intersects: Intersect
         }
 
         // world-space vertex
-        worldVertex.copy(trianglePoint).applyMatrix4(points.matrixWorld)
+        worldVertex.copy(trianglePoint).applyMatrix4(this.matrixWorld)
 
-        // point ON THE RAY closest to that vertex (this is what vanilla returns)
+        // point on the ray closest to that vertex
         const pointOnRay = raycaster.ray.closestPointToPoint(worldVertex, closestOnRay)
 
-        // use world-space values for parity with core
+        // use world-space values
         const distance = raycaster.ray.origin.distanceTo(pointOnRay)
         if (distance < raycaster.near || distance > raycaster.far) {
-          if (!firstHitOnly) continue
+          if (!firstHitOnly) {
+            continue
+          }
+
           return false
         }
 
@@ -253,11 +248,12 @@ function raycastPoints(this: Points, raycaster: Raycaster, intersects: Intersect
           face: null,
           faceIndex: null,
           barycoord: null,
-          object: points
+          object: this
         })
 
         if (firstHitOnly) {
-          return true // short-circuit this branch
+          // short-circuit this branch
+          return true
         }
       }
       return false
