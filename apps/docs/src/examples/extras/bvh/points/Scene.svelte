@@ -50,7 +50,7 @@
       for (const index of indices) {
         let gb = attribute.getY(index)
 
-        gb += 0.01
+        gb += 0.005
 
         if (gb >= 1) {
           gb = 1
