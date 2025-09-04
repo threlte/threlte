@@ -118,4 +118,10 @@ export {
   type SpritesheetMetadata
 } from './components/InstancedSprite/instancedSpriteUtils'
 
+// bvh
+export { bvh } from './bvh/bvh.svelte'
+export type { BVHOptions, BVHProps } from './bvh/types'
+import { SAH, CENTER, AVERAGE } from 'three-mesh-bvh'
+export const BVHSplitStrategy = { SAH, CENTER, AVERAGE }
+
 export type { ThrelteGltf } from './types/types'
