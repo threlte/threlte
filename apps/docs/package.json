@@ -85,7 +85,7 @@
     "tailwindcss": "^4.1.12",
     "terser": "^5.37.0",
     "three": "catalog:",
-    "three-mesh-bvh": "^0.7.5",
+    "three-mesh-bvh": "^0.9.1",
     "three.quarks": "^0.15.0",
     "tsx": "^4.8.1",
     "vite": "catalog:",
