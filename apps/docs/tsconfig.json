@@ -16,5 +16,6 @@
     "jsx": "preserve",
     "exactOptionalPropertyTypes": false
   },
+  "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["node_modules", "src/components/Example/stackblitz-template", "dist"]
 }
