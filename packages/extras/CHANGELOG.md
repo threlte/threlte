@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.5.4
+
+### Patch Changes
+
+- 3e6c3cc: Ensure bvh calls disposeBoundsTree on correct geometries
+
 ## 9.5.3
 
 ### Patch Changes
