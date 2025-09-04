@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.5.3
+
+### Patch Changes
+
+- 20c11ad: Add bvh plugin
+
 ## 9.5.2
 
 ### Patch Changes
