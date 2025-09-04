@@ -79,3 +79,18 @@ added `three-mesh-bvh` optimizations.
   path="extras/bvh/points"
   showFile="Scene.svelte"
 />
+
+### Limitations
+
+To avoid unnecessary bounds tree computations, the plugin will **not** recompute bounds trees when
+geometry changes occur. The plugin is set to recompute only if a reference to a mesh changes. So, if
+you want to recompute a bounds tree based on a geometry change, you'll have to regenerate the mesh as well.
+
+```svelte
+{#key geometry}
+  <T.Mesh>
+    <T is={geometry} />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+{/key}
+```
