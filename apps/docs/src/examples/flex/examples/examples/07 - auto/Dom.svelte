@@ -5,12 +5,12 @@
   <div
     class="yellow"
     style="width: auto; height: auto; flex: 1;"
-  />
+  ></div>
 
   <div
     class="blue"
     style="width: auto; height: 200px; flex: 0.5"
-  />
+  ></div>
 </div>
 
 <style lang="postcss">

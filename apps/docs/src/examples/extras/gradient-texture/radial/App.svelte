@@ -58,7 +58,7 @@
   let textureWrapT = $state<Wrapping>(ClampToEdgeWrapping)
 
   let textureRotation = $derived((Math.PI / 180) * textureRotationDegrees)
-  let gradientOuterRadius = $derived(
+  let gradientOuterRadius = $derived<number | 'auto'>(
     gradientUseOuterRadiusAuto ? 'auto' : gradientOuterRadiusNumber
   )
 </script>

@@ -5,12 +5,12 @@
   <div
     class="yellow"
     style="width: 44px; height: 44px;"
-  />
+  ></div>
 
   <div
     class="blue"
     style="width: 44px; height: 44px;"
-  />
+  ></div>
 </div>
 
 <style lang="postcss">

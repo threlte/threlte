@@ -86,14 +86,14 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       if (!keyOrKeyCombo) continue
       if (typeof keyOrKeyCombo === 'object' && !Array.isArray(keyOrKeyCombo)) {
         // object, so it's an up and/or down key
-        Object.entries(keyOrKeyCombo).forEach(([upOrDown, combo]) => {
+        for (const [upOrDown, combo] of Object.entries(keyOrKeyCombo)) {
           const flattenedKeyCombo = flattenKeyCombo(combo)
           if (upOrDown === 'up') {
             upKeyCombos.set(flattenedKeyCombo, actionId)
           } else {
             downKeyCombos.set(flattenedKeyCombo, actionId)
           }
-        })
+        }
       } else {
         // string or string[], so it's a down key automatically
         const flattenedKeyCombo = flattenKeyCombo(keyOrKeyCombo)

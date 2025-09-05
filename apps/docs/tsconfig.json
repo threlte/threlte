@@ -14,7 +14,9 @@
     },
     "types": ["astro/client"],
     "jsx": "preserve",
-    "exactOptionalPropertyTypes": false
+    "exactOptionalPropertyTypes": false,
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": false
   },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["node_modules", "src/components/Example/stackblitz-template", "dist"]

@@ -5,7 +5,7 @@
   <div
     class="yellow"
     style="width: auto; height: auto; flex: 1;"
-  />
+  ></div>
 
   <div
     class="blue"
@@ -14,11 +14,11 @@
     <div
       class="pink"
       style="height: 44px; width: auto; flex: 1;"
-    />
+    ></div>
     <div
       class="hotpink"
       style="height: 44px; width: auto; flex: 1; align-self: flex-end;"
-    />
+    ></div>
   </div>
 </div>
 
