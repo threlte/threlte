@@ -8,8 +8,8 @@ import {
 } from './context'
 import { injectTeleportControlsPlugin } from './plugin.svelte'
 import { setHandContext } from './context'
-import { setupTeleportControls } from './setup'
-import { teleportState } from '../../internal/stores'
+import { setupTeleportControls } from './setup.svelte'
+import { teleportState } from '../../internal/state.svelte'
 
 let controlsCounter = 0
 
@@ -62,17 +62,11 @@ export const teleportControls = (
 
   watch(handContext.enabled, (enabled) => {
     controlsCounter += enabled ? 1 : -1
-    teleportState.update((value) => {
-      value[handedness].enabled = controlsCounter > 0
-      return value
-    })
+    teleportState[handedness].enabled = controlsCounter > 0
   })
 
   watch(handContext.active, (hovering) => {
-    teleportState.update((value) => {
-      value[handedness].hovering = hovering
-      return value
-    })
+    teleportState[handedness].hovering = hovering
   })
 
   return {

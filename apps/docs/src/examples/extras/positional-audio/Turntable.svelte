@@ -14,6 +14,8 @@
   import Disc from './Disc.svelte'
   import type { TurntableProps } from './types'
 
+  let { isPlaying = $bindable(false), volume = $bindable(0), ...rest }: TurntableProps = $props()
+
   let discSpeed = new Tween(0, {
     duration: 1e3
   })
@@ -46,7 +48,6 @@
     if (audio) audio.getOutput().connect(analyser)
   })
   const pcmData = new Float32Array(analyser.fftSize)
-  let { isPlaying = $bindable(false), volume = $bindable(0), ...rest }: TurntableProps = $props()
   useTask(() => {
     if (!audio) return
     analyser.getFloatTimeDomainData(pcmData)
@@ -80,7 +81,7 @@
     materials: {}
   }>('/models/turntable/cover.glb')
 
-  let coverGeometry = $derived($gltf?.nodes.Cover.geometry)
+  const coverGeometry = $derived($gltf?.nodes.Cover.geometry)
 </script>
 
 <T.Group {...rest}>
