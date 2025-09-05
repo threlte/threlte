@@ -1,9 +1,11 @@
+@reference "./app.css";
+
 code {
   display: inline;
   @apply rounded-sm bg-white/10 px-1 py-0.5 text-[0.85em] !font-normal text-white;
 }
 .prose a code {
-  @apply rounded-sm px-1 py-0.5 text-[0.85em] !font-normal text-orange;
+  @apply text-orange rounded-sm px-1 py-0.5 text-[0.85em] !font-normal;
 }
 pre > code {
   display: grid;

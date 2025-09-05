@@ -6,7 +6,7 @@ import rehypeSlug from 'rehype-slug'
 import mkcert from 'vite-plugin-mkcert'
 import { threlteStudio } from '@threlte/studio/vite'
 import type { Plugin } from 'vite'
-import tailwind from '@astrojs/tailwind'
+import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
@@ -35,7 +35,6 @@ export default defineConfig({
         '$components/Card/Card.astro'
       ]
     }),
-    tailwind(),
     svelte(),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
@@ -61,8 +60,8 @@ export default defineConfig({
       ...(process.argv.includes('--https') ? { https: {} } : {})
     },
     plugins: process.argv.includes('--https')
-      ? [threlteStudio() as unknown as Plugin, mkcert()]
-      : [threlteStudio() as unknown as Plugin],
+      ? [threlteStudio() as unknown as Plugin, mkcert(), tailwindcss()]
+      : [threlteStudio() as unknown as Plugin, tailwindcss()],
     ssr: {
       // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal

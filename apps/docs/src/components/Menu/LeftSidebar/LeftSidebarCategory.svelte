@@ -41,7 +41,7 @@
             class={[
               'group relative block border-l-2 py-1 pl-4 pr-4 hover:text-white',
               isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`)
-                ? 'border-orange font-bold text-orange'
+                ? 'border-orange text-orange font-bold'
                 : 'border-white/20 hover:border-white'
             ]}
             href={`${category.urlPrefix}/${item.slug}`}
