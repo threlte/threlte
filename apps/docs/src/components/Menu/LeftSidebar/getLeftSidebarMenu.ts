@@ -26,7 +26,7 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
       .map((item): LeftSidebarMenuItem => {
         return {
           title: item.data.name,
-          slug: item.slug,
+          slug: item.id,
           isDivider: item.data.isDivider ?? false
         }
       })
@@ -71,7 +71,7 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
       .map((item): LeftSidebarMenuItem => {
         return {
           title: item.data.title,
-          slug: item.slug,
+          slug: item.id,
           isDivider: item.data.isDivider ?? false
         }
       })
@@ -123,7 +123,7 @@ const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
         const title = item.id.split('/').pop()?.split('.')[0] as string
         return {
           title,
-          slug: item.slug,
+          slug: item.id,
           isDivider: false
         }
       })

@@ -1,18 +1,13 @@
-<script
-  lang="ts"
-  module
->
+<script lang="ts">
   import type { BlockData } from '../objects/types'
   import { T } from '@threlte/core'
   import { Edges } from '@threlte/extras'
-  import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
+  import { Collider, RigidBody } from '@threlte/rapier'
   import { cubicIn } from 'svelte/easing'
   import { Tween } from 'svelte/motion'
   import { clamp } from 'three/src/math/MathUtils.js'
   import { game } from '../Game.svelte'
-</script>
 
-<script lang="ts">
   type Props = {
     position: BlockData['position']
     size: BlockData['size']
@@ -44,14 +39,6 @@
         : blinkingColors.outerB
       : staticColors.outer
   )
-
-  const onContact = (e: ContactEvent) => {
-    if (e.totalForceMagnitude > 2000 || e.totalForceMagnitude < 300) return
-    const volume = clamp(Math.max(e.totalForceMagnitude, 0) / 2000, 0, 1)
-    game.sound.playFromGroup('bounce', {
-      volume
-    })
-  }
 </script>
 
 <T.Group
@@ -67,8 +54,12 @@
     <Collider
       shape="cuboid"
       args={[size / 2, 1 / 2, size / 2]}
-      oncontact={(e: ContactEvent) => {
-        onContact(e)
+      oncontact={(e) => {
+        if (e.totalForceMagnitude > 2000 || e.totalForceMagnitude < 300) return
+        const volume = clamp(Math.max(e.totalForceMagnitude, 0) / 2000, 0, 1)
+        game.sound.playFromGroup('bounce', {
+          volume
+        })
       }}
       oncollisionexit={() => {
         if (!hit) {

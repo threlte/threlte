@@ -3,8 +3,7 @@
   import { T } from '@threlte/core'
   import { HTML } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BoxGeometry, MeshStandardMaterial, MathUtils } from 'three'
 
   interface Props {
     title: string
@@ -30,8 +29,8 @@
 
 <HTML
   transform
-  rotation.z={90 * DEG2RAD}
-  rotation.x={-90 * DEG2RAD}
+  rotation.z={90 * MathUtils.DEG2RAD}
+  rotation.x={-90 * MathUtils.DEG2RAD}
   position.x={5.8}
   pointerEvents={'none'}
   scale={0.6}

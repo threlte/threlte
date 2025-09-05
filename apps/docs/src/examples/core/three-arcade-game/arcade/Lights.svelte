@@ -30,11 +30,7 @@
   })
 
   $effect(() => {
-    if (pointLightsOff) {
-      pointLightIntensity.set(1)
-    } else {
-      pointLightIntensity.set(0)
-    }
+    pointLightIntensity.set(pointLightsOff ? 1 : 0)
   })
 
   $effect(() => {
@@ -70,7 +66,7 @@
 />
 <T.AmbientLight
   intensity={whiteAmbientLightIntensity.current}
-  color={'white'}
+  color="white"
 />
 
 <!-- Red light -->

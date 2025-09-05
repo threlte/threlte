@@ -1,6 +1,6 @@
 {
   "name": "@threlte/core",
-  "version": "8.1.4",
+  "version": "8.1.5",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "A 3D framework for the web, built on top of Svelte and Three.js",
@@ -37,7 +37,6 @@
     "rimraf": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
-    "svelte-preprocess": "catalog:",
     "svelte2tsx": "catalog:",
     "three": "catalog:",
     "tslib": "catalog:",
@@ -45,7 +44,7 @@
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
-    "vitest": "^2.1.5"
+    "vitest": "catalog:"
   },
   "dependencies": {
     "mitt": "^3.0.1"

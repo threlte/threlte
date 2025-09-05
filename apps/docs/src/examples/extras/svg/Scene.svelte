@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { SVG, Grid, OrbitControls } from '@threlte/extras'
+  import { SVG, OrbitControls } from '@threlte/extras'
 </script>
 
 <T.PerspectiveCamera

@@ -81,7 +81,7 @@
     materials: {}
   }>('/models/turntable/cover.glb')
 
-  const coverGeometry = $derived($gltf ? $gltf.nodes.Cover.geometry : undefined)
+  const coverGeometry = $derived($gltf?.nodes.Cover.geometry)
 </script>
 
 <T.Group {...rest}>

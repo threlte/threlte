@@ -1,6 +1,5 @@
 <script lang="ts">
   import type { ISheet } from '@theatre/core'
-  import { types } from '@theatre/core'
   import { T, useThrelte } from '@threlte/core'
   import { Float, Grid, OrbitControls, Portal, RadialGradientTexture } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
@@ -41,7 +40,7 @@
   }}
 />
 
-<T.Group position.x={-$mouseCoordsSpring.x * 0.6}>
+<T.Group position.x={-mouseCoordsSpring.current.x * 0.6}>
   <ScrollSheet
     name="Star Fields"
     startAtScrollPosition={4}
@@ -107,8 +106,8 @@
     {#snippet children({ Transform })}
       <Transform>
         <T.Group
-          position.x={-$mouseCoordsSpring.x * 0.2}
-          position.y={$mouseCoordsSpring.y * 0.1}
+          position.x={-mouseCoordsSpring.current.x * 0.2}
+          position.y={mouseCoordsSpring.current.y * 0.1}
         >
           <ScrollSheet
             name="Threlte-Composite"
@@ -118,12 +117,12 @@
             <SheetObject
               key="Post Processing"
               props={{
-                bloomIntensity: types.number(2, { range: [0, 10] }),
-                bloomRadius: types.number(0.6, { range: [0, 1] }),
-                bloomLuminanceSmoothing: types.number(0.025, { range: [0, 1] }),
-                brightness: types.number(0, { range: [-1, 1] }),
-                contrast: types.number(0, { range: [-1, 1] }),
-                noiseIntensity: types.number(0.03, { range: [0, 0.1] })
+                bloomIntensity: 2,
+                bloomRadius: 0.6,
+                bloomLuminanceSmoothing: 0.025,
+                brightness: 0,
+                contrast: 0,
+                noiseIntensity: 0.03
               }}
             >
               {#snippet children({ values })}
@@ -191,18 +190,10 @@
             <SheetObject
               key="Composite"
               props={{
-                floatIntensity: types.number(1, {
-                  range: [0, 10]
-                }),
-                rotationIntensity: types.number(1, {
-                  range: [0, 10]
-                }),
-                rotationSpeed: types.number(1, {
-                  range: [0, 10]
-                }),
-                floatSpeed: types.number(1, {
-                  range: [0, 10]
-                })
+                floatIntensity: 1,
+                rotationIntensity: 1,
+                rotationSpeed: 1,
+                floatSpeed: 1
               }}
             >
               {#snippet children({ Transform, values })}

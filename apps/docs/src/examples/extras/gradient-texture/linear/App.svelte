@@ -51,8 +51,8 @@
   let textureRepeatX = $state(1)
   let textureRepeatY = $state(1)
   let textureRotationDegrees = $state(0)
-  let textureWrapS: Wrapping = $state(ClampToEdgeWrapping)
-  let textureWrapT: Wrapping = $state(ClampToEdgeWrapping)
+  let textureWrapS = $state<Wrapping>(ClampToEdgeWrapping)
+  let textureWrapT = $state<Wrapping>(ClampToEdgeWrapping)
 
   let textureRotation = $derived((Math.PI / 180) * textureRotationDegrees)
 </script>

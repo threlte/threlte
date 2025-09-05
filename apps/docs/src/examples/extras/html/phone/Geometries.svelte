@@ -47,7 +47,7 @@
         MathUtils.randFloat(-8, 8),
         MathUtils.randFloat(-8, 8)
       ]}
-      geometry={prop.geometry}
+      geometry={prop?.geometry}
       {material}
     />
   </Float>

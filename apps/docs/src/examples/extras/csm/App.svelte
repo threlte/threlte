@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Pane, Slider, Checkbox, Color, Point } from 'svelte-tweakpane-ui'
+  import { Pane, Slider, Checkbox, Color } from 'svelte-tweakpane-ui'
   import { Canvas, T } from '@threlte/core'
   import { CSM } from '@threlte/extras'
   import Scene from './Scene.svelte'

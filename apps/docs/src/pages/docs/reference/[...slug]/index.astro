@@ -1,5 +1,5 @@
 ---
-import { getCollection, type CollectionEntry } from 'astro:content'
+import { getCollection, render, type CollectionEntry } from 'astro:content'
 import DocsLayout from '$layouts/DocsLayout.astro'
 import MdxCode from '$components/Code/MdxCode.astro'
 import ComponentSignature from '../../../../components/ComponentSignature/ComponentSignature.astro'
@@ -9,7 +9,7 @@ export async function getStaticPaths() {
   const blogEntries = await getCollection('reference')
   return blogEntries.map((entry) => {
     return {
-      params: { slug: entry.slug },
+      params: { slug: entry.id },
       props: { entry }
     }
   })
@@ -21,7 +21,7 @@ interface Props {
 
 const { entry } = Astro.props
 const { name, category, componentSignature } = entry.data
-const { Content } = await entry.render()
+const { Content } = await render(entry)
 ---
 
 <DocsLayout

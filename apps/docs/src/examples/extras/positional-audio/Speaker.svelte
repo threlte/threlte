@@ -1,16 +1,16 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { Edges } from '@threlte/extras'
   import { cubicIn, cubicOut } from 'svelte/easing'
-  import { tweened } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { Tween } from 'svelte/motion'
   import type { SpeakerProps } from './types'
 
   let { volume = 0, ...rest }: SpeakerProps = $props()
 
-  let jumpOffsetY = tweened(0)
-  let jumpRotationX = tweened(0)
-  let jumpRotationZ = tweened(0)
+  let jumpOffsetY = new Tween(0)
+  let jumpRotationX = new Tween(0)
+  let jumpRotationZ = new Tween(0)
   let isJumping = $state(false)
 
   const randomSign = () => Math.round(Math.random()) * 2 - 1
@@ -61,9 +61,9 @@
 
 <T.Group {...rest}>
   <T.Group
-    position.y={$jumpOffsetY}
-    rotation.z={DEG2RAD * $jumpRotationZ}
-    rotation.x={DEG2RAD * $jumpRotationX}
+    position.y={jumpOffsetY.current}
+    rotation.z={MathUtils.DEG2RAD * jumpRotationZ.current}
+    rotation.x={MathUtils.DEG2RAD * jumpRotationX.current}
   >
     <!-- CASE -->
     <T.Mesh
@@ -84,7 +84,7 @@
       position.z={1.1}
       position.y={3.5}
       scale={1 + volume}
-      rotation.x={DEG2RAD * -90}
+      rotation.x={MathUtils.DEG2RAD * -90}
     >
       <T.ConeGeometry args={[1, 1, 64]} />
       <T.MeshStandardMaterial

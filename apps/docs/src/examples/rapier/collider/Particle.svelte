@@ -9,23 +9,23 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Collider, RigidBody } from '@threlte/rapier'
-  import { BoxGeometry, MeshStandardMaterial, type EulerTuple, type Vector3Tuple } from 'three'
+  import { BoxGeometry, MeshStandardMaterial, Quaternion, Vector3 } from 'three'
 
   interface Props {
-    position: Vector3Tuple
-    rotation: EulerTuple
+    position: Vector3
+    quaternion: Quaternion
   }
 
-  let { position, rotation }: Props = $props()
+  let { position, quaternion }: Props = $props()
 </script>
 
 <T.Group
-  {position}
-  {rotation}
+  position={position.toArray()}
+  quaternion={quaternion.toArray()}
 >
-  <RigidBody type={'dynamic'}>
+  <RigidBody type="dynamic">
     <Collider
-      shape={'cuboid'}
+      shape="cuboid"
       args={[0.125, 0.125, 0.125]}
     />
     <T.Mesh

@@ -2,8 +2,6 @@
   import { T } from '@threlte/core'
   import { Gizmo, OrbitControls } from '@threlte/extras'
 
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
-
   interface Props {
     autoRotate: boolean
     enableDamping: boolean

@@ -2,10 +2,10 @@
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
-  import { BoxGeometry, Color, MeshStandardMaterial, SphereGeometry } from 'three'
+  import { BoxGeometry, MeshStandardMaterial, SphereGeometry } from 'three'
   import TestBed from './TestBed.svelte'
 
-  const material = new MeshStandardMaterial({ color: new Color(0xff3f00) })
+  const material = new MeshStandardMaterial({ color: 0xff3f00 })
 
   let rigidBody = $state.raw<RapierRigidBody>()
   let positionZ = 0

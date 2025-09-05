@@ -2,7 +2,21 @@
   module
   lang="ts"
 >
-  import CC from 'camera-controls'
+  import { T, useTask, useParent, useThrelte, isInstanceOf } from '@threlte/core'
+  import {
+    Box3,
+    Matrix4,
+    Quaternion,
+    Raycaster,
+    Sphere,
+    Spherical,
+    Vector2,
+    Vector3,
+    Vector4,
+    type PerspectiveCamera
+  } from 'three'
+  import type { CameraControlsProps } from './types'
+  import CameraControls from 'camera-controls'
 
   export { default as CameraControlsRef } from 'camera-controls'
 
@@ -13,7 +27,7 @@
       return
     }
 
-    CC.install({
+    CameraControls.install({
       THREE: {
         Vector2,
         Vector3,
@@ -32,34 +46,9 @@
 </script>
 
 <script lang="ts">
-  import {
-    T,
-    useTask,
-    useParent,
-    useThrelte,
-    type Props as ThrelteProps,
-    isInstanceOf
-  } from '@threlte/core'
-  import {
-    Box3,
-    Matrix4,
-    Quaternion,
-    Raycaster,
-    Sphere,
-    Spherical,
-    Vector2,
-    Vector3,
-    Vector4,
-    type PerspectiveCamera
-  } from 'three'
-
   install()
 
-  interface Props extends ThrelteProps<CC> {
-    ref?: CC
-  }
-
-  let { ref = $bindable(), camera: userCamera, children, ...rest }: Props = $props()
+  let { ref = $bindable(), camera: userCamera, children, ...rest }: CameraControlsProps = $props()
 
   const { dom, camera: defaultCamera, invalidate } = useThrelte()
   const parent = useParent()
@@ -76,7 +65,7 @@
     return $defaultCamera as PerspectiveCamera
   })
 
-  const controls = new CC(camera, dom)
+  const controls = new CameraControls(camera, dom)
   $effect.pre(() => {
     controls.camera = camera
   })

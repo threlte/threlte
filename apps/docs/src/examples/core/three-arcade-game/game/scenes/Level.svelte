@@ -8,7 +8,7 @@
   import Block from '../objects/Block.svelte'
   import type { BlockData } from '../objects/types'
 
-  let blocks: BlockData[] = $state([])
+  let blocks = $state<BlockData[]>([])
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
