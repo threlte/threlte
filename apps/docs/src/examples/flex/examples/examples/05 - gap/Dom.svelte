@@ -1,18 +1,27 @@
 <div
-  class="red"
-  style="width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; gap: 20px"
+  style="
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    background-color: color-mix(in srgb, red 50%, transparent 50%);
+  "
 >
   <div
-    class="yellow"
-    style="width: 44px; height: 44px;"
+    style="
+      width: 44px;
+      height: 44px;
+      background-color: color-mix(in srgb, yellow 50%, transparent 50%);
+    "
   ></div>
 
   <div
-    class="blue"
-    style="width: 44px; height: 44px;"
+    style="
+      width: 44px;
+      height: 44px;
+      background-color: color-mix(in srgb, blue 50%, transparent 50%);
+    "
   ></div>
 </div>
-
-<style lang="postcss">
-  @import '../../colors.postcss';
-</style>

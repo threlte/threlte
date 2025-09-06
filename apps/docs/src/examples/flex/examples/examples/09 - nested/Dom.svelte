@@ -1,27 +1,52 @@
 <div
-  class="red"
-  style="width: 300px; height: 300px; display: flex; justify-content: center; align-items: stretch; gap: 20px; padding: 20px; box-sizing: border-box;"
+  style="
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    gap: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: color-mix(in srgb, red 50%, transparent 50%);
+  "
 >
   <div
-    class="yellow"
-    style="width: auto; height: auto; flex: 1;"
+    style="
+      width: auto;
+      height: auto;
+      flex: 1;
+      background-color: color-mix(in srgb, yellow 50%, transparent 50%);
+    "
   ></div>
 
   <div
-    class="blue"
-    style="width: auto; height: auto; flex: 0.5; display: flex; padding: 20px; align-items: stretch;"
+    style="
+      width: auto;
+      height: auto;
+      flex: 0.5;
+      display: flex;
+      padding: 20px;
+      align-items: stretch;
+      background-color: color-mix(in srgb, blue 50%, transparent 50%);
+    "
   >
     <div
-      class="pink"
-      style="height: 44px; width: auto; flex: 1;"
+      style="
+        height: 44px;
+        width: auto;
+        flex: 1;
+        background-color: color-mix(in srgb, pink 50%, transparent 50%);
+      "
     ></div>
     <div
-      class="hotpink"
-      style="height: 44px; width: auto; flex: 1; align-self: flex-end;"
+      style="
+        height: 44px;
+        width: auto;
+        flex: 1;
+        align-self: flex-end;
+        background-color: color-mix(in srgb, hotpink 50%, transparent 50%);
+      "
     ></div>
   </div>
 </div>
-
-<style lang="postcss">
-  @import '../../colors.postcss';
-</style>
