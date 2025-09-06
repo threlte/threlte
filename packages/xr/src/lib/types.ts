@@ -55,11 +55,11 @@ export type XRController = {
   inputSource: XRInputSource
 }
 
-export type XRHand = {
+export type XRHandObject = {
   targetRay: XRTargetRaySpace
   hand: XRHandSpace
   model?: XRHandModel
-  inputSource: globalThis.XRHand
+  inputSource: XRHand
 }
 
 export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'disconnected'

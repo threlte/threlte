@@ -66,10 +66,10 @@ This should be placed within a Threlte `<Canvas />`.
     onsessionend?: (event: XRSessionEvent<'sessionend'>) => void
 
     /** Called when an XRSession is hidden or unfocused. */
-    onvisibilitychange?: (event: globalThis.XRSessionEvent) => void
+    onvisibilitychange?: (event: XRSessionEvent<'visibilitychange'>) => void
 
     /** Called when available inputsources change */
-    oninputsourceschange?: (event: globalThis.XRSessionEvent) => void
+    oninputsourceschange?: (event: XRSessionEvent<'inputsourceschange'>) => void
   }
 
   let {
@@ -104,7 +104,7 @@ This should be placed within a Threlte `<Canvas />`.
     session.current = undefined
   }
 
-  const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
+  const handleVisibilityChange = (event: XRSessionEvent) => {
     onvisibilitychange?.({ ...event, target: session.current! })
   }
 
@@ -113,7 +113,7 @@ This should be placed within a Threlte `<Canvas />`.
     oninputsourceschange?.({ ...event, target: session.current! })
   }
 
-  const handleFramerateChange = (event: globalThis.XRSessionEvent) => {
+  const handleFramerateChange = (event: XRSessionEvent) => {
     onvisibilitychange?.({ ...event, target: session.current! })
   }
 
