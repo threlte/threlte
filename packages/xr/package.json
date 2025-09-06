@@ -22,7 +22,7 @@
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@threlte/core": "workspace:*",
     "@types/three": "catalog:",
-    "@types/webxr": "^0.5.22",
+    "@types/webxr": "catalog:",
     "autoprefixer": "^10.4.19",
     "eslint": "catalog:",
     "eslint-plugin-svelte": "catalog:",

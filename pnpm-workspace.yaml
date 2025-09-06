@@ -10,6 +10,7 @@ catalog:
   vite: '^7.1.4'
   vitest: '^3.2.4'
   '@types/node': '^20.19.4'
+  '@types/webxr': '0.5.23'
   '@eslint/js': '^9.26.0'
   'eslint': '^9.26.0'
   '@sveltejs/adapter-auto': '^6.1.0'

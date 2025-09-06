@@ -12,7 +12,7 @@
       "$examples/*": ["src/examples/*"],
       "$hooks/*": ["src/hooks/*"]
     },
-    "types": ["astro/client"],
+    "types": ["astro/client", "webxr"],
     "jsx": "preserve",
     "exactOptionalPropertyTypes": false,
     "skipLibCheck": true,

@@ -25,6 +25,7 @@
     "@threlte/test": "^1.0.0",
     "@types/bun": "^1.2.12",
     "@types/node": "catalog:",
+    "@types/webxr": "catalog:",
     "@types/three": "catalog:",
     "@yushijinhun/three-minifier-rollup": "catalog:",
     "eslint": "catalog:",
