@@ -63,6 +63,7 @@
     "@types/animejs": "^3.1.7",
     "@types/three": "catalog:",
     "@types/three-nebula": "^10.0.4",
+    "@types/webxr": "catalog:",
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.4.4",
     "camera-controls": "^2.8.5",
