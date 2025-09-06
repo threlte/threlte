@@ -18,6 +18,7 @@ This should be placed within a Threlte `<Canvas />`.
 
 -->
 <script lang="ts">
+  import type { EventListener, WebXRManager, Event as ThreeEvent } from 'three'
   import type { Snippet } from 'svelte'
   import { useThrelte } from '@threlte/core'
   import {
@@ -59,7 +60,7 @@ This should be placed within a Threlte `<Canvas />`.
     children?: Snippet
 
     /** Called as an XRSession is started */
-    onsessionstart?: () => void
+    onsessionstart?: (event: ThreeEvent<'sessionstart', WebXRManager>) => void
 
     /** Called after an XRSession is ended */
     onsessionend?: (event: XRSessionEvent) => void
@@ -92,9 +93,9 @@ This should be placed within a Threlte `<Canvas />`.
   setupControllers()
   setupHands()
 
-  const handleSessionStart = () => {
+  const handleSessionStart: EventListener<object, 'sessionstart', WebXRManager> = (event) => {
     isPresenting.current = true
-    onsessionstart?.()
+    onsessionstart?.(event)
   }
 
   const handleSessionEnd = (event: XRSessionEvent) => {
