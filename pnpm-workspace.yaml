@@ -6,7 +6,7 @@ catalog:
   three: ^0.175.0
   '@types/three': ^0.175.0
   svelte: '5.26.2'
-  typescript: '^5.6.3'
+  typescript: '5.9.2'
   vite: '^7.1.4'
   vitest: '^3.2.4'
   '@types/node': '^20.19.4'

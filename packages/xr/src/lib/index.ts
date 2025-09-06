@@ -30,9 +30,8 @@ export type {
   XRSessionEventType,
   XRControllerEventType,
   XRHandEventType,
-  XRSessionEvent,
   XRControllerEvent,
   XRController,
-  XRHand,
+  XRHandObject,
   XRHandEvent
 } from './types'
