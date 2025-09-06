@@ -1,6 +1,6 @@
 {
   "name": "@threlte/flex",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Components to easily use the flexbox spec with Threlte",
