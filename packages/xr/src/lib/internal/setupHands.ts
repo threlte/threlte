@@ -2,14 +2,13 @@ import type { Event, XRHandSpace } from 'three'
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
-import { left, right } from '../hooks/useHand'
+import { hands } from '../hooks/useHand.svelte'
 import { useHandTrackingState } from './useHandTrackingState'
 import type { XRHandEvent, XRHandEvents } from '../types'
-import { handEvents } from './stores'
+import { handEvents } from './state.svelte'
 
 export const setupHands = () => {
   const factory = new XRHandModelFactory()
-  const stores = { left, right } as const
   const { xr } = useThrelte().renderer
   const hasHands = useHandTrackingState()
   const handSpaces = [xr.getHand(0), xr.getHand(1)]
@@ -31,7 +30,7 @@ export const setupHands = () => {
         | { data: { handedness: 'left' | 'right' } }
       const handedness =
         'handedness' in handEvent ? handEvent.handedness : handEvent.data.handedness
-      handEvents[handedness]?.current?.[`on${event.type}` as keyof XRHandEvents]?.(event as any)
+      handEvents[handedness]?.[`on${event.type}` as keyof XRHandEvents]?.(event as any)
     }
 
     function handleConnected(this: XRHandSpace, event: XRHandEvent) {
@@ -44,19 +43,19 @@ export const setupHands = () => {
       }
       const { handedness, hand: inputSource } = data
 
-      stores[handedness].set({
+      hands[handedness] = {
         hand: this,
         model,
         inputSource,
         targetRay
-      })
+      }
 
       dispatch(event)
     }
 
     const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
       dispatch(event)
-      stores[event.data.handedness as 'left' | 'right'].set(undefined)
+      hands[event.data.handedness as 'left' | 'right'] = undefined
     }
 
     for (const handSpace of handSpaces) {
@@ -74,8 +73,8 @@ export const setupHands = () => {
         handSpace.removeEventListener('pinchend', dispatch)
       }
 
-      stores.left.set(undefined)
-      stores.right.set(undefined)
+      hands.left = undefined
+      hands.right = undefined
     }
   })
 }

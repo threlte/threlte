@@ -4,18 +4,17 @@ import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
 import { useHandTrackingState } from './useHandTrackingState'
 import type { XRControllerEvent, XRControllerEvents } from '../types'
-import { gaze, left, right } from '../hooks/useController'
-import { controllerEvents } from './stores'
+import { controllers } from '../hooks/useController.svelte'
+import { controllerEvents } from './state.svelte'
 
 export const setupControllers = () => {
   const factory = new XRControllerModelFactory()
-  const stores = { left, right, none: gaze } as const
   const { xr } = useThrelte().renderer
   const hasHands = useHandTrackingState()
-  const controllers = [xr.getController(0), xr.getController(1)]
+  const targetRaySpaces = [xr.getController(0), xr.getController(1)]
   const indexMap = new Map()
 
-  controllers.forEach((targetRay, index) => {
+  targetRaySpaces.forEach((targetRay, index) => {
     indexMap.set(targetRay, {
       targetRay,
       grip: xr.getControllerGrip(index),
@@ -27,7 +26,7 @@ export const setupControllers = () => {
     const dispatch = (event: Event) => {
       if (hasHands()) return
       const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
-      controllerEvents[data.handedness]?.current?.[`on${event.type}` as keyof XRControllerEvents]?.(
+      controllerEvents[data.handedness]?.[`on${event.type}` as keyof XRControllerEvents]?.(
         event as any
       )
     }
@@ -36,22 +35,22 @@ export const setupControllers = () => {
       const { model, targetRay, grip } = indexMap.get(this)
       const { data: inputSource } = event
 
-      stores[event.data.handedness].set({
+      controllers[event.data.handedness] = {
         inputSource,
         targetRay,
         grip,
         model
-      })
+      }
 
       dispatch(event)
     }
 
     const handleDisconnected = (event: XRControllerEvent<'disconnected'>) => {
       dispatch(event)
-      stores[event.data.handedness].set(undefined)
+      controllers[event.data.handedness] = undefined
     }
 
-    for (const targetRay of controllers) {
+    for (const targetRay of targetRaySpaces) {
       targetRay.addEventListener('connected', handleConnected)
       targetRay.addEventListener('disconnected', handleDisconnected)
       targetRay.addEventListener('select', dispatch)
@@ -63,7 +62,7 @@ export const setupControllers = () => {
     }
 
     return () => {
-      for (const targetRay of controllers) {
+      for (const targetRay of targetRaySpaces) {
         targetRay.removeEventListener('connected', handleConnected)
         targetRay.removeEventListener('disconnected', handleDisconnected)
         targetRay.removeEventListener('select', dispatch)
@@ -74,9 +73,9 @@ export const setupControllers = () => {
         targetRay.removeEventListener('squeezeend', dispatch)
       }
 
-      stores.left.set(undefined)
-      stores.right.set(undefined)
-      stores.none.set(undefined)
+      controllers.left = undefined
+      controllers.right = undefined
+      controllers.none = undefined
     }
   })
 }

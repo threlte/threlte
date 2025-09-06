@@ -1,23 +1,20 @@
-import type { CurrentWritable } from '@threlte/core'
-import { isPresenting, isHandTracking, session, xr } from '../internal/stores'
-
-const stores = {
-  isPresenting,
-  isHandTracking,
-  session,
-  xrFrame: {
-    get current() {
-      return xr.current!.getFrame()
-    }
-  }
-}
+import type { WebXRManager } from 'three'
+import { isPresenting, isHandTracking, session, xr } from '../internal/state.svelte'
+import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
 
 /**
  * Provides access to context related to `<XR />`.
  */
 export const useXR = (): {
-  isPresenting: CurrentWritable<boolean>
-  isHandTracking: CurrentWritable<boolean>
-  session: CurrentWritable<XRSession | undefined>
-  xrFrame: { current: XRFrame }
-} => stores
+  isPresenting: CurrentReadable<boolean>
+  isHandTracking: CurrentReadable<boolean>
+  session: CurrentReadable<XRSession | undefined>
+  xr: CurrentReadable<WebXRManager | undefined>
+} => {
+  return {
+    isPresenting: toCurrentReadable(() => isPresenting.current),
+    isHandTracking: toCurrentReadable(() => isHandTracking.current),
+    session: toCurrentReadable(() => session.current),
+    xr: toCurrentReadable(() => xr.current)
+  }
+}

@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.1.0
+
+### Minor Changes
+
+- 40c52ae: Migrate internals to runes
+
 ## 1.0.8
 
 ### Patch Changes
