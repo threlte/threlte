@@ -18,9 +18,9 @@ This should be placed within a Threlte `<Canvas />`.
 
 -->
 <script lang="ts">
+  import type { EventListener, WebXRManager, Event as ThreeEvent } from 'three'
   import type { Snippet } from 'svelte'
   import { useThrelte } from '@threlte/core'
-  import type { XRSessionEvent } from '../types'
   import {
     isHandTracking,
     isPresenting,
@@ -59,17 +59,17 @@ This should be placed within a Threlte `<Canvas />`.
     fallback?: Snippet
     children?: Snippet
 
-    /** Called as an XRSession is requested */
-    onsessionstart?: (event: XRSessionEvent<'sessionstart'>) => void
+    /** Called as an XRSession is started */
+    onsessionstart?: (event: ThreeEvent<'sessionstart', WebXRManager>) => void
 
-    /** Called after an XRSession is terminated */
-    onsessionend?: (event: XRSessionEvent<'sessionend'>) => void
+    /** Called after an XRSession is ended */
+    onsessionend?: (event: XRSessionEvent) => void
 
     /** Called when an XRSession is hidden or unfocused. */
-    onvisibilitychange?: (event: globalThis.XRSessionEvent) => void
+    onvisibilitychange?: (event: XRSessionEvent) => void
 
     /** Called when available inputsources change */
-    oninputsourceschange?: (event: globalThis.XRSessionEvent) => void
+    oninputsourceschange?: (event: XRSessionEvent) => void
   }
 
   let {
@@ -93,28 +93,28 @@ This should be placed within a Threlte `<Canvas />`.
   setupControllers()
   setupHands()
 
-  const handleSessionStart = () => {
+  const handleSessionStart: EventListener<object, 'sessionstart', WebXRManager> = (event) => {
     isPresenting.current = true
-    onsessionstart?.({ type: 'sessionstart', target: session.current } as any)
+    onsessionstart?.(event)
   }
 
-  const handleSessionEnd = () => {
-    onsessionend?.({ type: 'sessionend', target: session.current } as any)
+  const handleSessionEnd = (event: XRSessionEvent) => {
+    onsessionend?.(event)
     isPresenting.current = false
     session.current = undefined
   }
 
-  const handleVisibilityChange = (event: globalThis.XRSessionEvent) => {
-    onvisibilitychange?.({ ...event, target: session.current! })
+  const handleVisibilityChange = (event: XRSessionEvent) => {
+    onvisibilitychange?.(event)
   }
 
   const handleInputSourcesChange = (event: XRInputSourcesChangeEvent) => {
     isHandTracking.current = Object.values(event.session.inputSources).some((source) => source.hand)
-    oninputsourceschange?.({ ...event, target: session.current! })
+    oninputsourceschange?.(event)
   }
 
-  const handleFramerateChange = (event: globalThis.XRSessionEvent) => {
-    onvisibilitychange?.({ ...event, target: session.current! })
+  const handleFramerateChange = (event: XRSessionEvent) => {
+    onvisibilitychange?.(event)
   }
 
   $effect(() => {
@@ -127,11 +127,13 @@ This should be placed within a Threlte `<Canvas />`.
     currentSession.addEventListener('visibilitychange', handleVisibilityChange)
     currentSession.addEventListener('inputsourceschange', handleInputSourcesChange)
     currentSession.addEventListener('frameratechange', handleFramerateChange)
+    currentSession.addEventListener('end', handleSessionEnd)
 
     return () => {
       currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
       currentSession.removeEventListener('inputsourceschange', handleInputSourcesChange)
       currentSession.removeEventListener('frameratechange', handleFramerateChange)
+      currentSession.removeEventListener('end', handleSessionEnd)
     }
   })
 
@@ -150,13 +152,11 @@ This should be placed within a Threlte `<Canvas />`.
     xr.current = renderer.xr
     renderer.xr.enabled = true
     renderer.xr.addEventListener('sessionstart', handleSessionStart)
-    renderer.xr.addEventListener('sessionend', handleSessionEnd)
 
     return () => {
       xr.current = undefined
       renderer.xr.enabled = false
       renderer.xr.removeEventListener('sessionstart', handleSessionStart)
-      renderer.xr.removeEventListener('sessionend', handleSessionEnd)
 
       // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
       currentSession?.end()

@@ -37,7 +37,7 @@
   for (let i = 0; i < agents.length; i++) {
     const pos = randomPosition(spawnRadius)
     posX[i] = pos.x
-    posY[i] = agents[i].baseHeight
+    posY[i] = agents[i]?.baseHeight ?? 0
     posZ[i] = pos.y
   }
 
@@ -49,29 +49,31 @@
     for (let i = 0; i < agents.length; i++) {
       // timer
 
-      agents[i].timer -= delta
+      const agent = agents[i]!
+
+      agent.timer -= delta
       totalTime += delta
 
       // apply velocity
-      posX[i] += agents[i].velocity[0] * delta
-      posY[i] = agents[i]?.baseHeight + Math.sin(totalTime * 0.00005 + i)
-      posZ[i] += agents[i].velocity[1] * delta
+      posX[i]! += agent.velocity[0] ?? 0 * delta
+      posY[i] = agent.baseHeight ?? 0 + Math.sin(totalTime * 0.00005 + i)
+      posZ[i]! += agent.velocity[1] ?? 0 * delta
 
       // roll new behaviour when time runs out or agent gets out of bounds
       if (i > 0) {
         const dist = Math.sqrt((posX[i] || 0) ** 2 + (posZ[i] || 0) ** 2)
-        if (agents[i].timer < 0 || dist < minCenterDistance || dist > maxCenterDistance) {
-          const runChance = 0.6 + (agents[i].action === 'Idle' ? 0.3 : 0)
-          agents[i].action = Math.random() < runChance ? 'Run' : 'Idle'
+        if (agent.timer < 0 || dist < minCenterDistance || dist > maxCenterDistance) {
+          const runChance = 0.6 + (agent.action === 'Idle' ? 0.3 : 0)
+          agent.action = Math.random() < runChance ? 'Run' : 'Idle'
 
-          agents[i].timer = 5 + Math.random() * 5
+          agent.timer = 5 + Math.random() * 5
 
-          if (agents[i].action === 'Run') {
+          if (agent.action === 'Run') {
             velocityHelper
               .set(Math.random() - 0.5, Math.random() - 0.5)
               .normalize()
               .multiplyScalar(2.1)
-            agents[i].velocity = velocityHelper.toArray()
+            agent.velocity = velocityHelper.toArray()
 
             if (velocityHelper.x > 0) {
               sprite.flipX.setAt(i, false)
@@ -91,7 +93,7 @@
 
     for (let i = 0; i < count; i++) {
       updatePosition(i, [posX[i] || 0, posY[i] || 0, posZ[i] || 0], [5, 5])
-      sprite.animation.setAt(i, 0)
+      sprite.animation.setAt(i, 0 as unknown as 'idle')
     }
   })
 </script>

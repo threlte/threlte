@@ -2,7 +2,7 @@
   import Scene from './Scene.svelte'
   import { Canvas, extend } from '@threlte/core'
   import { Checkbox, Color, Folder, Pane, Slider } from 'svelte-tweakpane-ui'
-  import { MathUtils } from 'three'
+  import { MathUtils, Color as ThreeColor } from 'three'
   import {
     DirectionalLight,
     MeshPhysicalNodeMaterial,
@@ -63,7 +63,7 @@
     <Scene
       {rotate}
       {arcAngle}
-      {sliceColor}
+      sliceColor={new ThreeColor(sliceColor)}
       {startAngle}
     />
   </Canvas>

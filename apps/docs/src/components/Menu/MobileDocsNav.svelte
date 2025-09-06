@@ -33,18 +33,18 @@
             id={key}
             open={activeSidebarTab === key}
           >
-            <div
-              class="font-normal"
-              slot="summary"
-            >
-              {#if key === 'learn'}
-                Learn
-              {:else if key === 'reference'}
-                Reference
-              {:else if key === 'examples'}
-                Examples
-              {/if}
-            </div>
+            {#snippet summary()}
+              <div class="font-normal">
+                {#if key === 'learn'}
+                  Learn
+                {:else if key === 'reference'}
+                  Reference
+                {:else if key === 'examples'}
+                  Examples
+                {/if}
+              </div>
+            {/snippet}
+
             {#each sidebarMenu[key].categories as category}
               <li class="mb-0 ml-4 mt-2 text-sm">
                 <LeftSidebarCategory

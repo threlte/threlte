@@ -1,7 +1,4 @@
 <script lang="ts">
-  import { createBubbler } from 'svelte/legacy'
-
-  const bubble = createBubbler()
   import { writable, type Writable } from 'svelte/store'
 
   import Button from '../Button/Button.svelte'
@@ -14,10 +11,18 @@
     submitButton?: string
     method?: 'post' | 'get'
     id?: string
+    onsubmit: (event: SubmitEvent) => void
     children?: import('svelte').Snippet
   }
 
-  let { action, submitButton = 'submit', method = 'post', id = action, children }: Props = $props()
+  let {
+    action,
+    submitButton = 'submit',
+    method = 'post',
+    id = action,
+    onsubmit,
+    children
+  }: Props = $props()
 
   let open: Writable<boolean> = writable(false)
 
@@ -29,7 +34,7 @@
 <form
   {id}
   {method}
-  onsubmit={bubble('submit')}
+  {onsubmit}
 >
   {@render children?.()}
   <Fieldset align="right">

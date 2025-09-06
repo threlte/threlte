@@ -1,9 +1,9 @@
-import type { XRHand } from '../types'
+import type { XRHandObject } from '../types'
 import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
 
 class Hands {
-  left = $state.raw<XRHand>()
-  right = $state.raw<XRHand>()
+  left = $state.raw<XRHandObject>()
+  right = $state.raw<XRHandObject>()
 }
 
 export const hands = new Hands()
@@ -11,7 +11,9 @@ export const hands = new Hands()
 /**
  * Provides a reference to a current XRHand, filtered by handedness.
  */
-export const useHand = (handedness: 'left' | 'right'): CurrentReadable<undefined | XRHand> => {
+export const useHand = (
+  handedness: 'left' | 'right'
+): CurrentReadable<undefined | XRHandObject> => {
   switch (handedness) {
     case 'left':
       return toCurrentReadable(() => hands.left)

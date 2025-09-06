@@ -42,6 +42,8 @@
       <b>{title ? title + ':' : ''}</b>{message}
     </span>
     <span
+      role="button"
+      tabindex="0"
       onclick={close}
       onkeypress={close}
     >
