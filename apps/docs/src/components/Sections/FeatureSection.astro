@@ -11,19 +11,6 @@ const glowClasses: Record<NonNullable<Props['color']>, string> = {
   blue: 'bg-[radial-gradient(closest-side,rgba(123,175,224,0.12)_0%,transparent_100%)]',
   green: 'bg-[radial-gradient(closest-side,rgba(135,230,151,0.12)_0%,transparent_100%)]'
 }
-
-/*
-Leave this in to force Tailwind to include the classes
-bg-orange
-bg-blue
-bg-green
-glow-orange
-glow-blue
-glow-green
-text-orange-400
-text-blue-400
-text-green-400
-*/
 ---
 
 <div class:list={['relative border-y border-white/20 pb-16 pt-10', Astro.props.class ?? '']}>
