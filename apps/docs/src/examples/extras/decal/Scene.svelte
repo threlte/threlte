@@ -147,7 +147,7 @@
   </T.Group>
 {/snippet}
 
-<VirtualEnvironment>
+<VirtualEnvironment frames={10}>
   {@render lightformer('#FF4F4F', 'plane', 20, [0, 0, -20])}
   {@render lightformer('#FFD0CB', 'circle', 5, [0, 5, 0])}
   {@render lightformer('#2223FF', 'plane', 8, [-3, 0, 4])}

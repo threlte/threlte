@@ -1,13 +1,15 @@
 <!--
 @component `<Controller />` represents a THREE.XRTargetRaySpace, a THREE.XRGripSpace, and a controller model.
 -->
-<script
-  lang="ts"
-  module
->
-  import { T } from '@threlte/core'
-  import { left as leftStore, right as rightStore } from '../hooks/useController'
-  import { isHandTracking, pointerState, teleportState, controllerEvents } from '../internal/stores'
+<script lang="ts">
+  import { T, useThrelte } from '@threlte/core'
+  import { controllers } from '../hooks/useController.svelte'
+  import {
+    isHandTracking,
+    pointerState,
+    teleportState,
+    controllerEvents
+  } from '../internal/state.svelte'
   import type { XRControllerEvents } from '../types'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -15,13 +17,6 @@
   import TeleportRay from './internal/TeleportRay.svelte'
   import type { Snippet } from 'svelte'
 
-  const stores = {
-    left: leftStore,
-    right: rightStore
-  } as const
-</script>
-
-<script lang="ts">
   type Props = {
     children?: Snippet
     grip?: Snippet
@@ -75,10 +70,12 @@
     teleportCursor: teleportCursorSnippet
   }: Props = $props()
 
+  const { scene } = useThrelte()
+
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : hand ?? 'left')
 
-  $effect.pre(() =>
-    controllerEvents[handedness].set({
+  $effect.pre(() => {
+    controllerEvents[handedness] = {
       onconnected,
       ondisconnected,
       onselect,
@@ -87,20 +84,27 @@
       onsqueeze,
       onsqueezeend,
       onsqueezestart
-    })
-  )
+    }
 
-  const store = $derived(stores[handedness])
-  const grip = $derived($store?.grip)
-  const targetRay = $derived($store?.targetRay)
-  const model = $derived($store?.model)
-  const hasPointerControls = $derived($pointerState[handedness].enabled)
-  const hasTeleportControls = $derived($teleportState[handedness].enabled)
+    return () => {
+      controllerEvents[handedness] = undefined
+    }
+  })
+
+  const xrController = $derived(controllers[handedness])
+  const grip = $derived(xrController?.grip)
+  const targetRay = $derived(xrController?.targetRay)
+  const model = $derived(xrController?.model)
+  const hasPointerControls = $derived(pointerState[handedness].enabled)
+  const hasTeleportControls = $derived(teleportState[handedness].enabled)
 </script>
 
-{#if !$isHandTracking}
+{#if !isHandTracking.current}
   {#if grip}
-    <T is={grip}>
+    <T
+      is={grip}
+      attach={scene}
+    >
       {#if children}
         {@render children?.()}
       {:else}

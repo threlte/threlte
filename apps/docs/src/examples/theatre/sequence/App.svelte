@@ -3,20 +3,19 @@
   import { Project, Sequence, Sheet, type SequenceController } from '@threlte/theatre'
   import Controller from './Controller.svelte'
   import Scene from './Scene.svelte'
-  import state from './state.json'
+  import stateJson from './state.json'
 
-  let sequence: SequenceController
-
-  let position: number = 0
-  let playing: boolean = false
-  let play: (opts?: {}) => Promise<boolean>
-  let pause: (opts?: {}) => Promise<boolean>
-  let rate: number = 1
+  let sequence = $state<SequenceController>()
+  let position = $state(0)
+  let playing = $state(false)
+  let play = $state<(opts?: {}) => Promise<boolean>>()
+  let pause = $state<(opts?: {}) => Promise<boolean>>()
+  let rate = $state(1)
 </script>
 
 <div>
   <Canvas>
-    <Project config={{ state }}>
+    <Project config={{ state: stateJson }}>
       <Sheet>
         <Scene />
         <Sequence
@@ -36,8 +35,8 @@
   </Canvas>
   <Controller
     bind:position
-    bind:playing
     bind:rate
+    {playing}
     {play}
     {pause}
   />

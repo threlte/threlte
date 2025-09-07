@@ -22,4 +22,4 @@
   })
 </script>
 
-<Bushes transformData={points} />
+<Bushes transformData={points as [number, number, number, number][]} />

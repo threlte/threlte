@@ -18,7 +18,7 @@
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { teleportIntersection } from '../../internal/stores'
+  import { teleportIntersection } from '../../internal/state.svelte'
 
   interface Props {
     handedness: 'left' | 'right'
@@ -35,9 +35,9 @@
   const intersection = $derived(teleportIntersection[handedness])
 
   const setCurvePoints = (alpha = 0.3) => {
-    if (intersection.current === undefined) return
+    if (intersection === undefined) return
 
-    const rayEnd = intersection.current.point
+    const rayEnd = intersection.point
     targetRay.getWorldPosition(rayStart)
 
     rayMidpoint.x = (rayStart.x + rayEnd.x) / 2
@@ -74,7 +74,7 @@
   )
 
   $effect.pre(() => {
-    if ($intersection === undefined) {
+    if (intersection === undefined) {
       stop()
     } else {
       setCurvePoints(1)
@@ -89,7 +89,7 @@
   <T
     is={Line2}
     attach={scene}
-    visible={$intersection !== undefined}
+    visible={intersection !== undefined}
     position.z={-0.01}
   >
     <T is={lineGeometry} />
