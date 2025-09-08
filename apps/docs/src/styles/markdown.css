@@ -1,5 +1,10 @@
+@reference "./app.css";
 /* prose-invert prose-a:text-orange prose-a:decoration-dotted prose-code:before:content-none prose-code:after:content-none */
 @layer base {
+  html {
+    scroll-padding-top: calc(70px + 1.5rem);
+  }
+
   .markdown-content
     :not(a, strong, em, del, span, input, code, br)
     + :not(a, strong, em, del, span, input, code, br, :where(.not-content *)) {
@@ -11,6 +16,21 @@
     :not(h1, h2, h3, h4, h5, h6)
     + :is(h1, h2, h3, h4, h5, h6):not(:where(.not-content *)) {
     margin-top: 1.5em;
+    /* Create the styling to show the link for headings */
+    a {
+      ::before {
+        content: '#';
+        @apply absolute inline-block -translate-x-full pr-2 text-white/50 opacity-0 transition-opacity;
+      }
+    }
+
+    &:hover {
+      a {
+        ::before {
+          @apply opacity-100;
+        }
+      }
+    }
   }
 
   .markdown-content li + li:not(:where(.not-content *)),
@@ -183,6 +203,7 @@
 
     border-inline-start: 2px solid var(--sl-details-border-color);
     padding-inline-start: 1rem;
+    @apply rounded-md bg-blue-700/20 px-4 py-2;
   }
   .markdown-content details:not([open]):hover:not(:where(.not-content *)),
   .markdown-content details:has(> summary:hover):not(:where(.not-content *)) {

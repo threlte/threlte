@@ -1,5 +1,4 @@
 ---
-import '$styles/prose.css'
 import '$styles/markprompt.css'
 
 import { Image } from 'astro:assets'
@@ -205,9 +204,7 @@ const activeLinkStyles = 'text-orange!'
     <div
       class="col-start-2 w-full justify-self-center overflow-hidden overflow-x-auto px-6 pb-12 pt-6 md:overflow-x-visible"
     >
-      <article
-        class="[&_p]:text-faded [&_li]:text-faded prose prose-invert prose-a:text-orange prose-a:decoration-dotted prose-code:before:content-none prose-code:after:content-none mx-auto max-w-5xl"
-      >
+      <article class="[&_p]:text-faded [&_li]:text-faded markdown-content mx-auto max-w-5xl">
         <slot />
       </article>
     </div>
