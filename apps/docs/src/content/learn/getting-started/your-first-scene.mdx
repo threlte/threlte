@@ -99,17 +99,18 @@ pattern so Threlte takes care of it for you.
 	<summary>
 		Three.js equivalent
 	</summary>
-  ```ts
-  // creating the objects
-  const geometry = new THREE.BoxGeometry()
-  const material = new THREE.MeshBasicMaterial()
-  const mesh = new THREE.Mesh()
+
+```typescript
+// creating the objects
+const geometry = new THREE.BoxGeometry()
+const material = new THREE.MeshBasicMaterial()
+const mesh = new THREE.Mesh()
 
 // "attaching" the objects
 mesh.geometry = geometry
 mesh.material = material
+```
 
-````
 </details>
 
 ## Modifying objects
@@ -119,14 +120,14 @@ That cube is still a bit boring. Let's add some color to it, and make it a bit b
 
 ```svelte title="Scene.svelte" {5-7}m
 <script>
-import { T } from '@threlte/core'
+  import { T } from '@threlte/core'
 </script>
 
 <T.Mesh position.y={1}>
-<T.BoxGeometry args={[1, 2, 1]} />
-<T.MeshBasicMaterial color="hotpink" />
+  <T.BoxGeometry args={[1, 2, 1]} />
+  <T.MeshBasicMaterial color="hotpink" />
 </T.Mesh>
-````
+```
 
 <Example
   path="first-scene/step-2"
