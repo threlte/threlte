@@ -60,8 +60,7 @@ We should now be looking at a white cube on a transparent background.
   hideCode
 />
 
-<Tip type="info">
-  #### attach
+<Tip type="info" title="attach">
 
 Behind the scenes we're using the property `attach` available on `<T>` to **attach an object to a property of
 its parent**. Binding geometries to the property `geometry` and materials to the property `material` is a common
@@ -257,8 +256,7 @@ We're again using the `<T>` component to create a [`THREE.PerspectiveCamera`](ht
 We're also passing a `makeDefault` prop which will make this camera the default camera of our application.
 The renderer now uses this camera to render our scene.
 
-<Tip type="info">
-  #### Events
+<Tip type="info" title="Events">
 
 Threlte supports listening to certain <a href="/docs/reference/core/t#events">events on `<T/>` components</a>. Here, we use the `create`
 event to get a reference to the underlying Three.js object as soon as it's created and use the method `lookAt` to look at the cube.
