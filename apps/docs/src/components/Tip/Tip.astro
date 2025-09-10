@@ -87,18 +87,24 @@ const Icon = Astro.props.type && typeIcons[Astro.props.type]
 
 <div
   class:list={[
-    'tip not-content flex w-full flex-row items-stretch gap-0 overflow-hidden rounded-md border',
+    'flex w-full flex-row items-stretch gap-0 overflow-hidden rounded-md border',
     getClasses()
   ]}
 >
-  <!-- prettier-ignore -->
-  <div class:list={["flex text-white empty:hidden flex-col items-center justify-center px-2 py-2", iconStyles[Astro.props.type ?? Astro.props.color ?? 'transparent']]}>{Icon ? <Icon class="h-[20px] w-auto" /> : <slot name="Icon" />}</div>
+  <div
+    class:list={[
+      'flex shrink-0 flex-col items-center justify-center px-2 py-2 text-white empty:hidden',
+      iconStyles[Astro.props.type ?? Astro.props.color ?? 'transparent']
+    ]}
+  >
+    {Icon ? <Icon class="h-[20px] w-[20px]" /> : <slot name="Icon" />}
+  </div>
 
   {
     Astro.props.title && (
-      <div class="*:text-white! px-3 py-2 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
-        <h4 class="mb-1! empty:hidden">{Astro.props.title}</h4>
-        <div class="[&>*:first-child]:mt-0! [&>*:last-child]:mb-0! overflow-x-auto text-sm">
+      <div class="mt-0 px-3 py-2">
+        <h4>{Astro.props.title}</h4>
+        <div class="mt-0 overflow-x-auto text-sm">
           <slot />
         </div>
       </div>
@@ -106,7 +112,7 @@ const Icon = Astro.props.type && typeIcons[Astro.props.type]
   }
   {
     !Astro.props.title && (
-      <div class="[&>*:first-child]:mt-0! [&>*:last-child]:mb-0! overflow-x-auto px-3 py-2 text-sm">
+      <div class="mt-0 overflow-x-auto px-3 py-2 text-sm">
         <slot />
       </div>
     )
