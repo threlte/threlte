@@ -1,0 +1,90 @@
+---
+order: 5.10
+category: '@threlte/extras'
+name: useAsciiEffect
+sourcePath: 'packages/extras/src/lib/hooks/useAsciiEffect.svelte.ts'
+type: 'hook'
+---
+
+A hook that can be used to give a scene an asciiEffect. It is essentially a wrapper around the `AsciiEffect` addon from three/addons that hooks into some of threlte's context for ease of use.
+
+<Example path="extras/use-ascii-effect" />
+
+## Usage
+
+```ts
+const { render } = useAsciiEffect()
+
+// render with the main scene and main camera (what you would get out of useThrelte())
+render()
+```
+
+The render function may take an optional object that allows you to use the effect with a different scene or a different camera.
+
+```ts
+const camera = new PespectiveCamera()
+const scene = new Scene()
+
+// render the main scene using `camera`
+render({ camera })
+
+// render `scene` with the main camera
+render({ scene })
+
+// render `scene` with `camera`
+render({
+  camera,
+  scene
+})
+```
+
+Both oft these arguments are optional and fallback to the main threlte camera andor the main threlte scene.
+
+## Context
+
+`useAsciiEffect` creates a context with the `render` function and the `current` instance. You can extract these by using `useAsciiEffectContext`
+
+```html
+<!-- In a child of a parent that has called `useAsciiEffect` -->
+
+<script>
+  const { current, render } = useAsciiEffectContext()
+</script>
+```
+
+## Parameters
+
+`useAsciiEffect` accepts an object of getters to various parameters. These parameters are detailed below.
+
+| name               | description                                                                                                              |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| getRenderer        | returns the renderer to use. used in the derived AsciiEffect's constructor                                               |
+| getCharSet         | returns the characters to use. used in the derived AsciiEffect's constructor. should be sorted by ascending "opaqueness" |
+| getOptions         | returns the `AsciiEffectOptions` to use. used in the derived AsciiEffect's constructor                                   |
+| getForegroundColor | returns the color to use for the characters. may be any valid CSS color string                                           |
+| getBackgroundColor | returns the color to use for effect's dom element background. may be any valid CSS color string                          |
+
+These are all getters because they are read in `$effects` and `$derived`s in the body of `useAsciiRenderer` function.
+
+### Options
+
+The AsciiEffect addon doesn't support modifying props after creation. For this reason a new AsciiEffect instance is derived any time an options prop updates. Each options prop is detailed below.
+
+| name       | description                                                                                                            |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- |
+| alpha      | whether to consider alpha when determinging the color of the character. if your scene uses alpha, set this to true     |
+| color      | whether to use the "true" color of the scene. may slow down performance especially at higher resolutions               |
+| block      | whether to use color blocks when `options.color` is set to true                                                        |
+| invert     | uses the more "opaque" characters for darker parts of the scene. brighter parts get mapped to less "opaque" characters |
+| resolution | more or less detail in the render                                                                                      |
+| scale      | scales the characters. isn't effected by any camera properties                                                         |
+
+```ts
+// use block coloring and an inverted character set
+useAsciiEffect({
+	getOptions: () => {
+		color: true,
+		invert: true
+	}
+})
+```

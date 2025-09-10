@@ -1,3 +1,7 @@
+<!--
+@component
+@deprecated use `useAsciiEffect` instead
+-->
 <script lang="ts">
   import type { AsciiRendererProps } from './types'
   import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
