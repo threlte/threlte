@@ -12,8 +12,6 @@ export const useAsciiEffect = ({
 }> = {}) => {
   const { canvas, dom, renderer, size: sizeStore } = useThrelte()
 
-  // save a ref in case it is used in a render loop
-  let ref: AsciiEffect
   const asciiEffect = $derived.by(() => {
     const effect = new AsciiEffect(renderer, charSet(), options())
 
@@ -22,7 +20,7 @@ export const useAsciiEffect = ({
     effect.domElement.style.left = '0px'
     effect.domElement.style.pointerEvents = 'none'
 
-    return (ref = effect)
+    return effect
   })
 
   const size = fromStore(sizeStore)
