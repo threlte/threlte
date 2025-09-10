@@ -1,6 +1,6 @@
 <!--
 @component
-@deprecated use `useAsciiEffect` instead
+@deprecated 9.6.4 use `useAsciiEffect` instead
 -->
 <script lang="ts">
   import type { AsciiRendererProps } from './types'

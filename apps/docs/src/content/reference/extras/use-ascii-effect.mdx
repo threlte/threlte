@@ -13,61 +13,34 @@ A hook that can be used to give a scene an asciiEffect. It is essentially a wrap
 ## Usage
 
 ```ts
-const { render } = useAsciiEffect()
+const asciiEffect = useAsciiEffect()
 
-// render with threlte's main scene and main camera (what you would get out of useThrelte())
-render()
+const camera = new PespectiveCamera()
+const scene = new Sceneiee()
+
+asciiEffect.current.render(scene, camera)
 ```
 
-The render function may take an optional "override" object that allows you to use the effect with a different scene or a different camera.
+If you want to render with threlte's main scene and main camera, you can pull those from the `useThrelte` hoox
 
 ```ts
-const camera = new PespectiveCamera()
-const scene = new Scene()
+import { useThrelte } from '@threlte/core'
 
-// render the main scene using `camera`
-render({ camera })
+const { camera, scene } = useThrelte()
 
-// render `scene` with the main camera
-render({ scene })
+const asciiEffect = useAsciiEffect()
 
-// render `scene` with `camera`
-render({
-  camera,
-  scene
-})
+asciiEffect.current.render(scene, camera.current)
 ```
-
-Both of these arguments are optional and fallback to the main threlte camera and/or the main threlte scene if not provided.
-
-## Context
-
-`useAsciiEffect` creates a context with the `render` function and the `current` instance. You can extract these by using `useAsciiEffectContext`.
-
-```html
-<!-- in an ancestor of a component that has called `useAsciiEffect` -->
-
-<script>
-  const asciiEffect = useAsciiEffectContext()
-
-	asciiEffect.render()
-	asciiEffect.current
-</script>
-```
-
-Note that `.current` is a get function so it may be used in `$effects` or `$derived`s.
 
 ## Parameters
 
 `useAsciiEffect` accepts an object of getters to various parameters. These parameters are detailed below.
 
-| name               | description                                                                                                              |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| getRenderer        | returns the renderer to use. used in the derived AsciiEffect's constructor                                               |
-| getCharSet         | returns the characters to use. used in the derived AsciiEffect's constructor. should be sorted by ascending "opaqueness" |
-| getOptions         | returns the `AsciiEffectOptions` to use. used in the derived AsciiEffect's constructor                                   |
-| getForegroundColor | returns the color to use for the characters. may be any valid CSS color string                                           |
-| getBackgroundColor | returns the color to use for effect's dom element background. may be any valid CSS color string                          |
+| name    | description                                                                                                                    |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| charSet | should return the characters to use. used in the derived AsciiEffect's constructor. should be sorted by ascending "opaqueness" |
+| options | should return the `AsciiEffectOptions` to use. used in the derived AsciiEffect's constructor                                   |
 
 These are all getters because they are read in `$effects` and `$derived`s in the body of `useAsciiRenderer` function.
 
@@ -87,7 +60,7 @@ The AsciiEffect addon doesn't support modifying props after creation. For this r
 ```ts
 // use block coloring and an inverted character set
 useAsciiEffect({
-	getOptions: () => {
+	options: () => {
 		color: true,
 		invert: true
 	}

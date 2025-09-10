@@ -1,6 +1,6 @@
 // Hooks
 export { useCursor } from './hooks/useCursor'
-export { useAsciiEffect, useAsciiEffectContext } from './hooks/useAsciiEffect.svelte'
+export { useAsciiEffect } from './hooks/useAsciiEffect.svelte'
 export { useGltf } from './hooks/useGltf'
 export { useDraco } from './hooks/useDraco'
 export { useMeshopt } from './hooks/useMeshopt'
