@@ -29,11 +29,7 @@ export default defineConfig({
   },
   integrations: [
     AutoImport({
-      imports: [
-        '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro',
-        '$components/Card/Card.astro'
-      ]
+      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     }),
     svelte(),
     mdx({
