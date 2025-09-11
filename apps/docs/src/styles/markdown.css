@@ -37,6 +37,11 @@ https://github.com/withastro/starlight/blob/main/packages/starlight/style/markdo
       }
     }
   }
+  /* lists */
+  .markdown-content ul {
+    list-style-type: disc;
+    padding-left: calc(var(--spacing, 0.25rem /* 4px */) * 6) /* 1.5rem = 24px */;
+  }
 
   .markdown-content li + li:not(:where(.not-content *)),
   .markdown-content dt + dt:not(:where(.not-content *)),
