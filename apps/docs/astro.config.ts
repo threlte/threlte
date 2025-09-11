@@ -24,9 +24,6 @@ export default defineConfig({
   experimental: {
     clientPrerender: true
   },
-  build: {
-    inlineStylesheets: 'never'
-  },
   integrations: [
     AutoImport({
       imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
