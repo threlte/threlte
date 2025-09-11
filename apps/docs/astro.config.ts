@@ -11,6 +11,7 @@ import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
 
+// "@theatre/core" needs to be externalized in development mode but not in production!
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
   noExternal.push('@theatre/core')
@@ -18,6 +19,9 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  markdown: {
+    syntaxHighlight: false
+  },
   prefetch: {
     prefetchAll: true
   },
@@ -56,7 +60,6 @@ export default defineConfig({
       ? [threlteStudio() as unknown as Plugin, mkcert(), tailwindcss()]
       : [threlteStudio() as unknown as Plugin, tailwindcss()],
     ssr: {
-      // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
     },
     optimizeDeps: {
@@ -71,9 +74,5 @@ export default defineConfig({
         keep_classnames: true
       }
     }
-  },
-  markdown: {
-    syntaxHighlight: false
-    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
   }
 })
