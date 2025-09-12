@@ -1,0 +1,59 @@
+---
+order: 5.10
+category: '@threlte/extras'
+name: useAsciiEffect
+sourcePath: 'packages/extras/src/lib/hooks/useAsciiEffect.svelte.ts'
+type: 'hook'
+---
+
+A hook that can be used to give a scene an asciiEffect. It is a thin wrapper around the `AsciiEffect` [addon](https://threejs.org/examples/?q=as#webgl_effects_ascii).
+
+<Example path="extras/use-ascii-effect" />
+
+## Usage
+
+Start by disabling the [autorendering](/docs/reference/core/canvas#component-signature) on your canvas i.e. `<Canvas autoRender={false}>`, then call this hooks render function within your `useTask`.
+
+```ts
+import { useThrelte } from '@threlte/core'
+
+const { camera, scene } = useThrelte()
+
+const asciiEffect = useAsciiEffect()
+
+asciiEffect.current.render(scene, camera.current)
+```
+
+## Parameters
+
+`useAsciiEffect` accepts an object of getters to various parameters. These parameters are detailed below.
+
+| name    | description                                                                                                                    |
+| ------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| charSet | should return the characters to use. used in the derived AsciiEffect's constructor. should be sorted by ascending "opaqueness" |
+| options | should return the `AsciiEffectOptions` to use. used in the derived AsciiEffect's constructor                                   |
+
+These are all getters because they are read in `$effects` and `$derived`s in the body of `useAsciiRenderer` function.
+
+### Options
+
+The AsciiEffect addon doesn't support modifying props after creation. For this reason a new AsciiEffect instance is derived any time an options prop updates. Each options prop is detailed below.
+
+| name       | description                                                                                                            |
+| ---------- | ---------------------------------------------------------------------------------------------------------------------- |
+| alpha      | whether to consider alpha when determinging the color of the character. if your scene uses alpha, set this to true     |
+| color      | whether to use the "true" color of the scene. may slow down performance especially at higher resolutions               |
+| block      | whether to use color blocks when `options.color` is set to true                                                        |
+| invert     | uses the more "opaque" characters for darker parts of the scene. brighter parts get mapped to less "opaque" characters |
+| resolution | more or less detail in the render                                                                                      |
+| scale      | scales the characters. isn't effected by any camera properties                                                         |
+
+```ts
+// use block coloring and an inverted character set
+useAsciiEffect({
+	options: () => {
+		color: true,
+		invert: true
+	}
+})
+```
