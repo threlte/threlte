@@ -12,16 +12,7 @@ A hook that can be used to give a scene an asciiEffect. It is a thin wrapper aro
 
 ## Usage
 
-```ts
-const asciiEffect = useAsciiEffect()
-
-const camera = new PespectiveCamera()
-const scene = new Sceneiee()
-
-asciiEffect.current.render(scene, camera)
-```
-
-If you want to render with threlte's main scene and main camera, you can pull those from the `useThrelte` hoox
+Start by disabling the [autorendering](/docs/reference/core/canvas#component-signature) on your canvas i.e. `<Canvas autoRender={false}>`, then call this hooks render function within your `useTask`.
 
 ```ts
 import { useThrelte } from '@threlte/core'
