@@ -1,10 +1,7 @@
 ---
-import '$styles/variables.css'
-import '$styles/code.css'
 import '$styles/app.css'
-import '$styles/prose.css'
-import '$styles/markprompt.css'
-import '$styles/dracula.css'
+import '$styles/code.css'
+import '$styles/markdown.css'
 
 export interface Props {
   title: string
@@ -14,7 +11,10 @@ const title = Astro.props.title
 ---
 
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  class="bg-[#0A0F19]"
+>
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -93,11 +93,11 @@ const title = Astro.props.title
     />
     <meta
       name="description"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       property="og:description"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       property="og:image"
@@ -117,7 +117,7 @@ const title = Astro.props.title
     />
     <meta
       property="og:image:alt"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       name="twitter:card"
@@ -125,7 +125,7 @@ const title = Astro.props.title
     />
     <meta
       name="twitter:title"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       name="twitter:description"
@@ -136,19 +136,11 @@ const title = Astro.props.title
       content="Threlte"
     />
   </head>
-  <body transition:animate="initial">
+  <body
+    transition:animate="initial"
+    class="relative bg-[#0A0F19] font-sans text-white"
+  >
     <slot />
-    <style>
-      html {
-        @apply bg-[#0A0F19];
-      }
-
-      body {
-        @apply relative text-white;
-        @apply bg-[#0A0F19];
-      }
-    </style>
-
     <script>
       import { inject } from '@vercel/analytics'
       inject()
