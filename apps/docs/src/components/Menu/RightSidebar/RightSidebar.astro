@@ -1,7 +1,7 @@
 ---
 import { render, type CollectionEntry } from 'astro:content'
 import RightSidebarInner from './RightSidebar.svelte'
-import { getGithubEditUrl } from '../../../lib/getGithubEditUrl'
+import { getGithubEditUrl } from '$lib/getGithubEditUrl'
 
 interface Props {
   entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
