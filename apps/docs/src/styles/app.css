@@ -128,3 +128,9 @@
     background: #2f7dc6aa;
   }
 }
+
+@layer component {
+  ul li.sidebar-list-item {
+    @apply border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
+  }
+}

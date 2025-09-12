@@ -27,7 +27,7 @@
     {category.title}
   {/snippet}
 
-  <ul class="text-faded my-2">
+  <ul class="my-2">
     {#each category.menuItems as item}
       {#if item.isDivider}
         <div
@@ -36,16 +36,15 @@
           {item.title}
         </div>
       {:else}
-        <li class="last:mb-0">
-          <a
-            class={[
-              'group relative block border-l-2 py-1 pl-4 pr-4 hover:text-white',
-              isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`)
-                ? 'border-orange text-orange font-bold'
-                : 'border-white/20 hover:border-white'
-            ]}
-            href={`${category.urlPrefix}/${item.slug}`}
-          >
+        <li
+          class={[
+            'sidebar-list-item',
+            activeUrlPathName === `${category.urlPrefix}/${item.slug}`
+              ? 'border-orange! text-orange font-bold'
+              : 'text-faded'
+          ]}
+        >
+          <a href={`${category.urlPrefix}/${item.slug}`}>
             {item.title}
           </a>
         </li>

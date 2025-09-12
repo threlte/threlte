@@ -83,8 +83,10 @@
       {#each headings as heading}
         <li
           class={[
-            'text-faded border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white',
-            heading.slug === currentHeadingSlug ? 'border-orange! text-orange font-bold' : ''
+            'sidebar-list-item',
+            heading.slug === currentHeadingSlug
+              ? 'border-orange! text-orange font-bold'
+              : 'text-faded'
           ]}
         >
           <a
