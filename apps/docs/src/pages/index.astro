@@ -15,7 +15,6 @@ import Testimonials from '$components/Testimonials/Testimonials.astro'
 ---
 
 <MainLayout title="Welcome to Threlte.">
-  <!-- class="bg-blue bg-green" -->
   <HeroWrapper client:load />
 
   <div class="flex flex-col gap-14 py-24">
@@ -105,6 +104,7 @@ c8.9-2.3,18.2,1.2,23.4,8.7c3.2,4.4,4.4,9.9,3.5,15.3c-0.9,5.2-4.1,9.9-8.6,12.7l-2
     </div>
   </div>
 
+  <!-- this comment makes sure "bg-blue" & "bg-green" classes make it to the output -->
   <!-- Declarative Scaling -->
   <FeatureSection color="blue">
     <svg
