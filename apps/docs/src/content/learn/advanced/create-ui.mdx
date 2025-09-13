@@ -15,13 +15,11 @@ and tips to get started with creating UI for your project.
 
 ## Quick start
 
-A library to help get started with this is
+A library to help get started is
 [svelte-tweakpane-ui](https://kitschpatrol.com/svelte-tweakpane-ui) and is used
 across many examples within these docs. Our examples also tend to be simple
 enough that just passing parent state to child props works well; i.e.
-`App.svelte` to `Scene.svelte`. If that works for you, good, keep using that.
-
-<Example path="extras/environment/basic" />
+`App.svelte` to `Scene.svelte`. If that works for you, good, keep using it.
 
 The rest of this page is about when that doesn't work so well and what your
 other options are.
@@ -55,143 +53,6 @@ context for your UI.
   To add type safety to your context, [wrap the context
   calls](https://svelte.dev/docs/svelte/context#Type-safe-context).
 </Tip>
-
-### Writable example
-
-```svelte title="App.svelte"
-<script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import Scene from '$lib/Scene.svelte'
-  import { setContext } from 'svelte'
-  import { writable } from 'svelte/store'
-
-  let debug = writable(false)
-
-  setContext('state', { debug })
-</script>
-
-<input
-  type="checkbox"
-  name="debug"
-  id="debug"
-  bind:checked={$debug}
-/>
-
-<div>
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div>
-```
-
-```svelte title="Descendant.svelte"
-<script lang="ts">
-  import { T } from '@threlte/core'
-  import { getContext } from 'svelte'
-
-  let { debug } = getContext('state')
-</script>
-
-<T.Mesh>
-  <T.BoxGeometry />
-  <T.MeshStandardMaterial
-    wireframe={$debug}
-    color="red"
-  />
-</T.Mesh>
-```
-
-### Runes example
-
-```svelte title="App.svelte"
-<script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import Scene from '$lib/Scene.svelte'
-  import { setContext } from 'svelte'
-
-  let state = $state({
-    debug: false
-  })
-
-  setContext('state', state)
-</script>
-
-<input
-  type="checkbox"
-  name="debug"
-  id="debug"
-  bind:checked={state.debug}
-/>
-
-<div>
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div>
-```
-
-```svelte title="Descendant.svelte"
-<script lang="ts">
-  import { T } from '@threlte/core'
-  import { getContext } from 'svelte'
-
-  let state = getContext('state')
-</script>
-
-<T.Mesh>
-  <T.BoxGeometry />
-  <T.MeshStandardMaterial
-    wireframe={state.debug}
-    color="red"
-  />
-</T.Mesh>
-```
-
-### Class example
-
-```svelte title="App.svelte"
-<script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import Scene from '$lib/Scene.svelte'
-  import { setContext } from 'svelte'
-
-  class MyState {
-    debug = $state(false)
-  }
-
-  let { debug } = setContext('state', new MyState())
-</script>
-
-<input
-  type="checkbox"
-  name="debug"
-  id="debug"
-  bind:checked={debug}
-/>
-
-<div>
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div>
-```
-
-```svelte title="Descendant.svelte"
-<script lang="ts">
-  import { T } from '@threlte/core'
-  import { getContext } from 'svelte'
-
-  let state = getContext('state')
-</script>
-
-<T.Mesh>
-  <T.BoxGeometry />
-  <T.MeshStandardMaterial
-    wireframe={state.debug}
-    color="red"
-  />
-</T.Mesh>
-```
 
 ## Shared state
 
