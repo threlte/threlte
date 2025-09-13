@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { T, useThrelte } from '@threlte/core'
   import { Environment, OrbitControls, Portal, SoftShadows } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
@@ -8,7 +7,7 @@
 
   const { scene } = useThrelte()
 
-  let lightHelper: DirectionalLightHelper
+  let lightHelper = $state<DirectionalLightHelper>()
 </script>
 
 <T.PerspectiveCamera
@@ -56,15 +55,9 @@
   key="Shadows"
   props={{
     soft: true,
-    size: types.number(25, {
-      range: [0, 100]
-    }),
-    focus: types.number(0, {
-      range: [0, 10]
-    }),
-    samples: types.number(10, {
-      range: [0, 100]
-    })
+    size: 25,
+    focus: 0,
+    samples: 10
   }}
 >
   {#snippet children({ values })}

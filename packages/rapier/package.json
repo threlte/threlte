@@ -1,6 +1,6 @@
 {
   "name": "@threlte/rapier",
-  "version": "3.1.4",
+  "version": "3.1.5",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Components and hooks to use the Rapier physics engine in Threlte",
@@ -34,7 +34,6 @@
     "rimraf": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
-    "svelte-preprocess": "catalog:",
     "svelte2tsx": "catalog:",
     "three": "catalog:",
     "tslib": "catalog:",

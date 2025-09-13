@@ -6,18 +6,23 @@
 
   import { Fieldset } from './fields'
 
-  export let action: string
-  export let submitButton: string = 'submit'
-  export let method: 'post' | 'get' = 'post'
-  export let id: string = action
+  interface Props {
+    action: string
+    submitButton?: string
+    method?: 'post' | 'get'
+    id?: string
+    onsubmit: (event: SubmitEvent) => void
+    children?: import('svelte').Snippet
+  }
 
-  let toast:
-    | {
-        type: 'error' | 'info'
-        title: string
-        message: string
-      }
-    | undefined = undefined
+  let {
+    action,
+    submitButton = 'submit',
+    method = 'post',
+    id = action,
+    onsubmit,
+    children
+  }: Props = $props()
 
   let open: Writable<boolean> = writable(false)
 
@@ -29,9 +34,9 @@
 <form
   {id}
   {method}
-  on:submit
+  {onsubmit}
 >
-  <slot />
+  {@render children?.()}
   <Fieldset align="right">
     <Button class="pl-4">
       <svg

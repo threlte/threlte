@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, Outlines, useDraco, useGltf } from '@threlte/extras'
-  import { BufferGeometry, Mesh, MeshStandardMaterial } from 'three'
-  import { MathUtils } from 'three'
+  import { Mesh, MeshStandardMaterial, MathUtils } from 'three'
 
   let rotation = $state(0)
   useTask((delta) => {

@@ -12,7 +12,7 @@
   let sent = false
   let sentPreviously = false
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: SubmitEvent) => {
     sending = true
     e.preventDefault()
     try {
@@ -60,7 +60,7 @@
   <Form
     action="contact"
     submitButton="Send"
-    on:submit={handleSubmit}
+    onsubmit={handleSubmit}
   >
     <Fieldset>
       <TextField

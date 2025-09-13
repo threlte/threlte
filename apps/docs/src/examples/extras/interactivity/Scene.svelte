@@ -1,9 +1,8 @@
 <script lang="ts">
   import type { Vector2Tuple } from 'three'
-  import { Grid, interactivity, OrbitControls } from '@threlte/extras'
+  import { Grid, interactivity, OrbitControls, useCursor } from '@threlte/extras'
   import { Spring } from 'svelte/motion'
   import { T } from '@threlte/core'
-  import { useCursor } from '@threlte/extras'
 
   interactivity()
 

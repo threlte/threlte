@@ -4,14 +4,15 @@ title: Your First Scene
 ---
 
 <Tip type="info">
-  You should be versed in both Svelte and Three.js before rushing into Threlte. If you are unsure
-  about Svelte, consult its [Tutorial](https://svelte.dev/tutorial) for a quick introduction. As for
-  Threejs, make sure you at least glance over its [official documentation](https://threejs.org).
+  You should get familiar with both Svelte and Three.js before using Threlte. If you are new to
+  Svelte, consult its [Tutorial](https://svelte.dev/tutorial) for a quick introduction. As for
+  Three.js, its [official documentation](https://threejs.org) has many resources for getting
+  started.
 </Tip>
 
-## Structuring Your App
+## Structuring your app
 
-As a first step we're creating a new Svelte file called `App.svelte` where we are importing the [`<Canvas>` component](/docs/reference/core/canvas).
+As a first step we create a new Svelte file called `App.svelte` where we import the [`<Canvas>` component](/docs/reference/core/canvas).
 
 ```svelte title="App.svelte"
 <script>
@@ -30,11 +31,11 @@ It also creates a default camera and provides the context in which your Threlte 
 will run. For improving access to this runtime context, it's <a href="/docs/learn/basics/app-structure">best practice</a>
 to create a separate component called `Scene.svelte` and including it in our `App.svelte` file.
 
-## Creating Objects
+## Creating objects
 
-At this point we're looking at a blank screen. Let's add a simple cube to it.
+At this point we're just looking at a blank screen. Let's add a simple cube to it.
 
-In `Scene.svelte`, we're importing the [`<T>` component](/docs/reference/core/t) which is
+In `Scene.svelte`, we import the [`<T>` component](/docs/reference/core/t), which is
 the **main building block** of your Threlte application. It's a **generic
 component** that we use to render **any Three.js object**. In this case we're creating a
 [`THREE.Mesh`](https://threejs.org/docs/index.html#api/en/objects/Mesh) which is made up from
@@ -111,8 +112,7 @@ mesh.material = material
 ````
 </details>
 
-## Modifying Objects
-
+## Modifying objects
 
 That cube is still a bit boring. Let's add some color to it, and make it a bit bigger! We also want to move it up a little to highlight it. We can do this by passing props to the
 `<T>` component.
@@ -169,7 +169,7 @@ of props like `position.y` in our `<T.Mesh>`.
     `args`. If `args` change later on, the object must naturally get reconstructed
     from scratch!
 
-    #### Auto Props
+    #### Auto props
 
     For all other props, Threlte tries to automatically interpret props passed to `<T>` component.
 
@@ -196,7 +196,7 @@ of props like `position.y` in our `<T.Mesh>`.
     instance the type of the value of a variable that is used as a prop should not
     change from a single number to an array of numbers.
 
-    #### Pierced Props
+    #### Pierced props
 
     Because the property `position` of our `THREE.Mesh` is a `THREE.Vector3`, it
     also has `x`, `y` and `z` properties which we can set directly via
@@ -206,7 +206,7 @@ of props like `position.y` in our `<T.Mesh>`.
 
 <Tip
   type="tip"
-  title="Primitive Values"
+  title="Primitive values"
 >
   From a performance perspective, it's often better to use pierced props because
   [primitive](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) prop values can safely be
@@ -224,9 +224,9 @@ of props like `position.y` in our `<T.Mesh>`.
   number. This is considered a type change and therefore not allowed.
 </Tip>
 
-## Pointing the Camera
+## Pointing the camera
 
-We're still staring at the side of a cube, let's add a camera and offset it from the center:
+We now want to view our cube with some perspective. To manipulate the default camera, let's add the following:
 
 ```svelte title="Scene.svelte" {5-11}+
 <script>
@@ -264,13 +264,13 @@ event to get a reference to the underlying Three.js object as soon as it's creat
 
 </Tip>
 
-## Enabling Interactivity
+## Enabling interactivity
 
 Let's say we want to scale our cube as soon as we hover over it. We first have to import the
 [plugin](/docs/learn/advanced/plugins) [`interactivity`](/docs/reference/extras/interactivity) from
 [`@threlte/extras`](/docs/reference/extras/getting-started) and invoke it in our `Scene.svelte` file.
 
-The `interactivity` allows us to add interaction event listeners to our `<T>` components. We will add `pointerenter` and
+The `interactivity` plugin allows us to add interaction event listeners to our `<T>` components. We will add `pointerenter` and
 `pointerleave` event listeners to our cube. In the event handlers we'll update the value of a `Spring` from `svelte/motion`
 and use its `.current` value to set the `scale` property of the `<T.Mesh>` component.
 
@@ -312,7 +312,7 @@ and use its `.current` value to set the `scale` property of the `<T.Mesh>` compo
   hideCode
 />
 
-<Tip type="info" title="Automatic Vector & Scalar Detection">
+<Tip type="info" title="Automatic vector & scalar detection">
   You might have noticed that we're only passing a single number to the prop `scale` on `<T.Mesh>`. Threlte automatically
   figures out whether you are passing an array or a number and uses the appropriate underlying Three.js method.
 
@@ -321,20 +321,20 @@ and use its `.current` value to set the `scale` property of the `<T.Mesh>` compo
       Learn more
     </summary>
     The component `<T>` will first look for a property `setScalar` on	the underlying Three.js object and use that method if
-    only a single number is passed. This is equivalent to calling `scale.setScalar($scale)`.
+    only a single number is passed. This is equivalent to calling `scale.setScalar(scale.current)`.
   </details>
 </Tip>
 
 <Tip
   type="tip"
-  title="Realtime Variables"
+  title="Realtime variables"
 >
   When working with realtime apps where variables e.g. position and rotation change constantly, an
   easy way observe the values is with [live
   expressions](https://developer.chrome.com/docs/devtools/console/live-expressions/).
 </Tip>
 
-## Adding Animation
+## Adding animation
 
 Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/reference/core/use-task) hook to tap
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
@@ -390,7 +390,7 @@ the delta to update the rotation
 [independent of the frame rate](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame)
 – the cube will rotate at the same speed regardless of the frame rate.
 
-## Adjusting the Lighting
+## Adjusting the lighting
 
 We're almost done. Let's add some shading to our cube and a light source. We'll use a
 `THREE.MeshStandardMaterial` on our cube and a `THREE.DirectionalLight` to illuminate our scene.
@@ -442,7 +442,7 @@ We're almost done. Let's add some shading to our cube and a light source. We'll 
   hideCode
 />
 
-## Casting Shadows
+## Casting shadows
 
 We would like our cube to cast a shadow. To do so, we need a floor for it to cast a shadow _on_,
 so we add a new `<T.Mesh>` but this time with `<T.CircleGeometry>`. To enable shadows, we need to

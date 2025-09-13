@@ -9,14 +9,22 @@
 
   const { camera, renderer, scene, size } = useThrelte()
 
-  export let scope: Group
+  interface Props {
+    scope: Group
+  }
+
+  let { scope = $bindable() }: Props = $props()
 
   // render scene at a lower resolution but multiple samples for antialiasing
-  const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
+  const renderTarget = useFBO({
+    size: {
+      width: $size.width * 0.5,
+      height: $size.height * 0.5
+    },
     samples: 8
   })
 
-  $: aspect = $size.width / $size.height
+  let aspect = $derived($size.width / $size.height)
 
   useTask(() => {
     if (!scope || !$scoping) return

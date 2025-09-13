@@ -5,8 +5,13 @@
   import DirectoryComponent from './Directory.svelte'
   import type { Directory, File } from './types'
 
-  export let filePaths: string[]
-  export let currentlySelectedFile: Writable<File>
+  interface Props {
+    filePaths: string[]
+    currentlySelectedFile: Writable<File>
+    class?: string
+  }
+
+  let { filePaths, currentlySelectedFile, class: _class = '' }: Props = $props()
 
   const tree: Directory['files'] = []
 
@@ -63,9 +68,6 @@
   }
 
   setContext('selectFile', selectFile)
-
-  let _class = ''
-  export { _class as class }
 </script>
 
 <div class="text-sm {_class}">

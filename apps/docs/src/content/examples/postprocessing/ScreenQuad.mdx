@@ -6,8 +6,8 @@ This example demonstrates a well-known technique for doing simple postprocessing
 
 The basic idea of postprocessing is to draw the scene to a frame-buffer that can then be sent into another shader. The output of this shader is used as the texture or material for a mesh that covers the screen. To do this we need two things:
 
-1. a webgl render target
-2. a separate scene from the one that threlte provides
+1. a WebGL render target.
+2. a separate scene from the one that Threlte provides.
 
 A [WebGLRenderTarget](https://threejs.org/docs/index.html?q=webgl#api/en/renderers/WebGLRenderTarget) is created and its size is set up to follow the size of the canvas.
 

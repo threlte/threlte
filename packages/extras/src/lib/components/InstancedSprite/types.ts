@@ -17,6 +17,7 @@ import {
   type Vector3Tuple
 } from 'three'
 import type SpriteInstance from './SpriteInstance.svelte'
+import type { Snippet } from 'svelte'
 
 export type InstancedSpriteProps = Omit<
   Props<InstancedMesh, [{ Instance: typeof SpriteInstance }]>,
@@ -26,6 +27,8 @@ export type InstancedSpriteProps = Omit<
     MeshBasicMaterial | MeshStandardMaterial | MeshLambertMaterial | MeshPhongMaterial,
     unknown
   >
+
+  children?: Snippet<[{ Instance: typeof SpriteInstance }]>
 
   /**
    * update animations automatically

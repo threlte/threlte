@@ -1,5 +1,57 @@
 # @threlte/extras
 
+## 9.5.4
+
+### Patch Changes
+
+- 3e6c3cc: Ensure bvh calls disposeBoundsTree on correct geometries
+
+## 9.5.3
+
+### Patch Changes
+
+- 20c11ad: Add bvh plugin
+
+## 9.5.2
+
+### Patch Changes
+
+- 6f5effb: fix RadialGradientTexture to clear its canvas whenever the `stops` prop is updated and a new gradient is created
+
+## 9.5.1
+
+### Patch Changes
+
+- 7d5ef78: Fix GLTF types
+
+## 9.5.0
+
+### Minor Changes
+
+- 2ededbe: add ShadowMaterial
+
+### Patch Changes
+
+- 03dd131: Add Wireframe component
+
+## 9.4.5
+
+### Patch Changes
+
+- ab4b10e: Add PointsMaterial component
+
+## 9.4.4
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 9.4.3
+
+### Patch Changes
+
+- 49c6d1d: Improve TrackballsControls reactivity and add `handleResize` effect
+
 ## 9.4.2
 
 ### Patch Changes

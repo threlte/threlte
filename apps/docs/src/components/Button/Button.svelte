@@ -2,7 +2,7 @@
   type Size = 's' | 'm' | 'l'
 
   export let color: 'orange' | 'blue' | 'green' = 'orange'
-  export let href: string
+  export let href: string | undefined = undefined
   export let size: Size = 'l'
   let _class = ''
   export { _class as class }

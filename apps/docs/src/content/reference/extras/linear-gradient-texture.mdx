@@ -1,5 +1,5 @@
 ---
-order: 5.9
+order: 5.45
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/GradientTexture/LinearGradientTexture.svelte'
 name: '<LinearGradientTexture>'
@@ -60,7 +60,7 @@ componentSignature:
           description: 'list of stops applied to the gradient. more info at https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient',
           name: 'stops',
           required: false,
-          type: 'GradientStop[]'
+          type: 'ColorStop[]'
         }
       ]
   }
@@ -89,7 +89,7 @@ The texture is automatically attached to the `map` property of its parent. You c
 
 ## Gradient Stops
 
-`<LinearGradientTexture>` accepts a `stops` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient#examples), notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in ThreeJS. Here are a couple examples of valid stops.
+`<LinearGradientTexture>` accepts a `stops` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient#examples), notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in Three.js. Here are a couple examples of valid stops.
 
 ```svelte
 <LinearGradientTexture

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Element, Pane } from 'svelte-tweakpane-ui'
-  import { type Pane as TpPane } from 'tweakpane'
+  import type { Pane as TpPane } from 'tweakpane'
   import Portal from '../../components/Portal.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'

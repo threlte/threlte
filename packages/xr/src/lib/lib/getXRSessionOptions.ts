@@ -1,6 +1,6 @@
 export const getXRSessionOptions = (
-  referenceSpaceType: XRReferenceSpaceType | undefined,
-  sessionInit: XRSessionInit | undefined
+  referenceSpaceType?: XRReferenceSpaceType,
+  sessionInit?: XRSessionInit
 ): XRSessionInit | undefined => {
   if (referenceSpaceType === undefined && sessionInit === undefined) {
     return undefined

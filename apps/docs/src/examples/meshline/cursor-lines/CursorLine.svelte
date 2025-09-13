@@ -33,7 +33,10 @@
     for (let i = 1; i < count; i += 1) {
       const first = back[i - 1]
       const second = back[i]
-      second?.lerp(first, alpha)
+
+      if (first) {
+        second?.lerp(first, alpha)
+      }
     }
     const temp = front
     front = back

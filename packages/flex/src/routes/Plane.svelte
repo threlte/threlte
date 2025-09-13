@@ -1,10 +1,14 @@
 <script lang="ts">
   import { T } from '@threlte/core'
 
-  export let color: string = 'white'
-  export let height = 1
-  export let width = 1
-  export let depth = 0
+  interface Props {
+    color?: string
+    height?: number
+    width?: number
+    depth?: number
+  }
+
+  let { color = 'white', height = 1, width = 1, depth = 0 }: Props = $props()
 </script>
 
 <T.Mesh

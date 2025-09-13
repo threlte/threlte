@@ -65,7 +65,7 @@ position it in the scene. We can do that by passing a `position` prop to the
 
 That doesn't work _yet_. The component `<Tile>` internally needs to make use of
 the `position` prop to set the position of its children. We can do that by
-[spreading `props` on the `<T.Group>`](https://svelte.dev/tutorial/spread-props)
+[spreading `rest` on the `<T.Group>`](https://svelte.dev/docs/svelte/$props#Rest-props)
 component at the root hierarchy of `<Tile>`:
 
 ```svelte title="Tile.svelte" {5}m

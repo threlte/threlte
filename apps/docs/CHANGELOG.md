@@ -1,5 +1,11 @@
 # @threlte/docs-next
 
+## 0.14.1
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
 ## 0.14.0
 
 ### Patch Changes

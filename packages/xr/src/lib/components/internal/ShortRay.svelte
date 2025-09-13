@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { pointerState, teleportState, teleportIntersection } from '../../internal/stores'
+  import { pointerState, teleportState, teleportIntersection } from '../../internal/state.svelte'
   import type { Snippet } from 'svelte'
 
   interface Props {
@@ -10,10 +10,10 @@
 
   const { handedness, children }: Props = $props()
 
-  const hovering = $derived($teleportState[handedness].hovering)
+  const hovering = $derived(teleportState[handedness].hovering)
   const intersection = $derived(teleportIntersection[handedness])
   const visible = $derived(
-    $pointerState[handedness].enabled || (hovering && $intersection === undefined)
+    pointerState[handedness].enabled || (hovering && intersection === undefined)
   )
 
   const vertexShader = `

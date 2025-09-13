@@ -1,5 +1,17 @@
 # @threlte/core
 
+## 8.1.5
+
+### Patch Changes
+
+- 64040a5: Fix typechecking for rest params on T components
+
+## 8.1.4
+
+### Patch Changes
+
+- d214ba9: fix `Canvas.svelte` type import
+
 ## 8.1.3
 
 ### Patch Changes

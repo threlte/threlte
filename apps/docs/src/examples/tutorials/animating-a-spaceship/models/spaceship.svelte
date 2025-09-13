@@ -6,37 +6,49 @@ License: CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
 Source: https://sketchfab.com/3d-models/rusty-spaceship-orange-18541ebed6ce44a9923f9b8dc30d87f5
 Title: Rusty Spaceship - Orange
 -->
-<script>
-  import { AddEquation, CustomBlending, Group, LessEqualDepth, OneFactor } from 'three'
+<script lang="ts">
+  import type { Snippet } from 'svelte'
+  import { AddEquation, CustomBlending, Group, LessEqualDepth, Material, OneFactor } from 'three'
   import { T } from '@threlte/core'
-  import { useGltf } from '@threlte/extras'
-  import { useTexture } from '@threlte/extras'
+  import { useGltf, useTexture } from '@threlte/extras'
 
-  export const ref = new Group()
+  interface Props {
+    ref?: Group
+    fallback?: Snippet
+    error?: Snippet<[any]>
+    children?: Snippet<[any]>
+    [key: string]: any
+  }
+
+  let { fallback, error, children, ref = $bindable(), ...rest }: Props = $props()
+
+  const group = new Group()
 
   const gltf = useGltf('/spaceship-tutorial/models/spaceship.glb')
   const map = useTexture('/spaceship-tutorial/textures/energy-beam-opacity.png')
 
+  function alphaFix(material: Material) {
+    material.transparent = true
+    material.alphaToCoverage = true
+    material.depthFunc = LessEqualDepth
+    material.depthTest = true
+    material.depthWrite = true
+  }
+
   gltf.then((model) => {
-    function alphaFix(material) {
-      material.transparent = true
-      material.alphaToCoverage = true
-      material.depthFunc = LessEqualDepth
-      material.depthTest = true
-      material.depthWrite = true
-    }
     alphaFix(model.materials.spaceship_racer)
     alphaFix(model.materials.cockpit)
   })
 </script>
 
 <T
-  is={ref}
+  is={group}
+  bind:ref
   dispose={false}
-  {...$$restProps}
+  {...rest}
 >
   {#await gltf}
-    <slot name="fallback" />
+    {@render fallback?.()}
   {:then gltf}
     <T.Group
       scale={0.003}
@@ -152,12 +164,9 @@ Title: Rusty Spaceship - Orange
         </T.Mesh>
       {/await}
     </T.Group>
-  {:catch error}
-    <slot
-      name="error"
-      {error}
-    />
+  {:catch err}
+    {@render error?.({ error: err })}
   {/await}
 
-  <slot {ref} />
+  {@render children?.({ ref })}
 </T>

@@ -1,5 +1,17 @@
 # @threlte/studio
 
+## 0.1.9
+
+### Patch Changes
+
+- 6ef7086: Improve internal types
+
+## 0.1.8
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
 ## 0.1.7
 
 ### Patch Changes

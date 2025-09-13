@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { Edges, Text } from '@threlte/extras'
   import { cubicIn, cubicOut } from 'svelte/easing'
   import { Tween } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { game } from './Game.svelte'
 
   let mainUiTexts = $derived.by(() => {
@@ -51,7 +51,7 @@
   <!-- Centered UI background -->
   {#key `${[(mainUiTexts?.size.width ?? 6.5).toString(), (mainUiTexts?.size.height ?? 2.5).toString()].join('')}`}
     <T.Mesh
-      rotation.x={-90 * DEG2RAD}
+      rotation.x={-90 * MathUtils.DEG2RAD}
       position.y={0.8}
     >
       <T.PlaneGeometry args={[mainUiTexts?.size.width ?? 6.5, mainUiTexts?.size.height ?? 2.5]} />
@@ -68,7 +68,7 @@
   {#if mainUiTexts?.text}
     <Text
       font="/fonts/beefd.ttf"
-      rotation.x={DEG2RAD * -90}
+      rotation.x={MathUtils.DEG2RAD * -90}
       anchorX="50%"
       anchorY="50%"
       textAlign="center"
@@ -84,7 +84,7 @@
 <!-- LEVEL (left column) -->
 <Text
   font="/fonts/beefd.ttf"
-  rotation.x={-90 * DEG2RAD}
+  rotation.x={-90 * MathUtils.DEG2RAD}
   anchorX="50%"
   anchorY="50%"
   textAlign="center"
@@ -94,7 +94,7 @@
   text="LVL"
 />
 <Text
-  rotation.x={-90 * DEG2RAD}
+  rotation.x={-90 * MathUtils.DEG2RAD}
   anchorX="50%"
   anchorY="0%"
   textAlign="center"
@@ -108,7 +108,7 @@
 
 <!-- SCORE (right column) -->
 <Text
-  rotation.x={-90 * DEG2RAD}
+  rotation.x={-90 * MathUtils.DEG2RAD}
   anchorX="50%"
   anchorY="50%"
   textAlign="center"
@@ -119,7 +119,7 @@
   text="SCR"
 />
 <Text
-  rotation.x={-90 * DEG2RAD}
+  rotation.x={-90 * MathUtils.DEG2RAD}
   anchorX="50%"
   anchorY="0%"
   lineHeight={1.4}

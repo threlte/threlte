@@ -1,10 +1,16 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { T } from '@threlte/core'
 
-  export let color: string = 'white'
-  export let height = 1
-  export let width = 1
-  export let depth = 0
+  interface Props {
+    color?: string
+    height?: number
+    width?: number
+    depth?: number
+    children?: Snippet
+  }
+
+  let { color = 'white', height = 1, width = 1, depth = 0, children }: Props = $props()
 </script>
 
 <T.Mesh
@@ -13,8 +19,8 @@
 >
   <T.PlaneGeometry args={[width, height]} />
 
-  {#if $$slots.default}
-    <slot />
+  {#if children}
+    {@render children?.()}
   {:else}
     <T.MeshBasicMaterial
       {color}
