@@ -1,6 +1,14 @@
 <script lang="ts">
-  import { T, createCameraContext, createSceneContext, useThrelte } from '@threlte/core'
+  import {
+    T,
+    type ThrelteContext,
+    createCameraContext,
+    createSceneContext,
+    useThrelte
+  } from '@threlte/core'
   import type { HUDProps } from './types'
+  import { setContext } from 'svelte'
+  import { WebGLRenderer } from 'three'
 
   const { renderStage, renderer, toneMapping } = useThrelte()
 
@@ -13,8 +21,20 @@
     ...rest
   }: HUDProps = $props()
 
-  const { scene } = createSceneContext()
+  const parentContext = useThrelte()
+  const sceneCtx = createSceneContext()
   const { camera } = createCameraContext()
+
+  setContext<ThrelteContext<WebGLRenderer>>('threlte-context', {
+    ...parentContext,
+    get scene() {
+      return sceneCtx.scene
+    },
+    set scene(scene) {
+      sceneCtx.scene = scene
+    },
+    camera
+  })
 
   const key = Symbol('threlte-hud-render-stage')
 
@@ -30,7 +50,7 @@
       renderer.toneMapping = hudToneMapping ?? toneMapping.current
 
       renderer.clearDepth()
-      renderer.render(scene, camera.current)
+      renderer.render(sceneCtx.scene, camera.current)
 
       renderer.autoClear = autoClear
       renderer.toneMapping = toneMapping.current
@@ -41,10 +61,10 @@
 </script>
 
 <T
-  is={scene}
+  is={sceneCtx.scene}
   bind:ref
   attach={false}
   {...rest}
 >
-  {@render children?.({ ref: scene })}
+  {@render children?.({ ref: sceneCtx.scene })}
 </T>
