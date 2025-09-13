@@ -1,0 +1,146 @@
+---
+category: Advanced
+title: Creating UI
+order: 2
+---
+
+Projects have many different UI needs from toggling scene state during
+development to displaying and adjusting three.js values. Below is some examples
+and tips to get started with creating UI for your project.
+
+<Tip type="tip">
+  To setup a single canvas for multiple pages with SvelteKit, checkout our [app
+  structure](/docs/learn/basics/app-structure#sveltekit-setup-using-a-single-canvas) page.
+</Tip>
+
+## Quick start
+
+A library to help get started is
+[svelte-tweakpane-ui](https://kitschpatrol.com/svelte-tweakpane-ui) and is used
+across many examples within these docs. Our examples also tend to be simple
+enough that just passing parent state to child props works well; i.e.
+`App.svelte` to `Scene.svelte`. If that works for you, good, keep using it.
+
+The rest of this page is about when that doesn't work so well and what your
+other options are.
+
+### Prop drilling
+
+Passing down props through many components is called prop drilling. Sharing
+state this way is ok for simple setups but can become tedious to work with,
+even if only drilling through a few components.
+
+## Context API
+
+The [context
+API](https://svelte.dev/docs/svelte/$state#Passing-state-across-modules) is a
+better option for distant components in the same subtree and is used
+extensively across Threlte. Anytime
+[useThrelte](/docs/reference/core/use-threlte) is called, the context API is
+being used.
+
+Add in a svelte store like
+[writable](https://svelte.dev/docs/svelte/svelte-store#writable), Threlte's
+[currentWritable](/docs/reference/core/utilities#currentwritable), a
+`$state({})` rune or encapsulate `$state()` within a
+[class](https://svelte.dev/docs/svelte/$state#Classes) to create a reactive
+context for your UI.
+
+<Tip
+  type="tip"
+  title="Type Safety"
+>
+  To add type safety to your context, [wrap the context
+  calls](https://svelte.dev/docs/svelte/context#Type-safe-context).
+</Tip>
+
+## Shared state
+
+Another option for distant components is by using a [shared state
+module](https://svelte.dev/docs/svelte/$state#Passing-state-across-modules).
+This option is similar to the context API but instead of only working within
+the context's subtree, a shared state module can be imported directly where its
+needed. This is the global state option. Add in runes, classes or stores for
+reactivity.
+
+```typescript title="state.svelte.ts"
+export const globals = $state({
+  debug: false
+})
+```
+
+```svelte title="App.svelte"
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import Scene from '$lib/Scene.svelte'
+  import { globals } from '$lib/state.svelte'
+</script>
+
+<input
+  type="checkbox"
+  name="debug"
+  id="debug"
+  bind:checked={globals.debug}
+/>
+
+<div>
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+```
+
+```svelte title="Descendant.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { globals } from '$lib/state.svelte'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial
+    wireframe={globals.debug}
+    color="red"
+  />
+</T.Mesh>
+```
+
+## Events
+
+Events only bubble up to ancestors. If you've created an html element that
+covers your canvas, for example:
+
+```svelte
+<div class="relative h-screen w-screen">
+  <div class="absolute h-full w-full">
+    <Canvas>
+      <Scene />
+    </Canvas>
+  </div>
+  <div class="absolute h-full w-full">
+    <div class="h-full w-1/2 bg-blue-500/50">
+      <!-- ... -->
+    </div>
+  </div>
+</div>
+```
+
+Your `<Scene>` will not receive any mouse events. In this case you need to add
+[pointer-events:
+none;](https://developer.mozilla.org/en-US/docs/Web/CSS/pointer-events) to the
+covering element and then add `pointer-events: auto;` where it makes sense.
+
+```svelte
+<div class="relative h-screen w-screen">
+  <div class="absolute h-full w-full">
+    <Canvas>
+      <Scene />
+    </Canvas>
+  </div>
+  <div class="pointer-events-none absolute h-full w-full">
+    <div class="pointer-events-auto h-full w-1/2 bg-blue-500/50">
+      <!-- ... -->
+    </div>
+  </div>
+</div>
+```

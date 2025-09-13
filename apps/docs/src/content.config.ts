@@ -99,7 +99,7 @@ export const learnCollection = defineCollection({
   loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/learn' }),
   schema: z.object({
     schemaType: z.string().default('learn'),
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
+    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More']),
     isDivider: z.boolean().optional(),
     title: z.string(),
     order: z.number().optional(),
