@@ -103,7 +103,7 @@ https://github.com/withastro/starlight/blob/main/packages/starlight/style/markdo
 
   .markdown-content h1:not(:where(.not-content *)) {
     font-size: var(--text-4xl);
-    @apply mt-0 pb-4 font-bold;
+    @apply mt-0! font-bold;
   }
   .markdown-content h2:not(:where(.not-content *)) {
     font-size: var(--text-2xl);
