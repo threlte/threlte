@@ -1,7 +1,7 @@
 ---
 import type { TypeOf } from 'astro/zod'
 import type { componentSignature } from '../../content.config'
-import { getShiki } from '../../lib/highlighter'
+import { getShiki } from '$lib/highlighter'
 
 interface Props {
   titleOverride?: string
@@ -57,21 +57,21 @@ const id = Astro.props.idOverride ?? 'component-signature'
       >
         {Astro.props.titleOverride ? Astro.props.titleOverride : `Component Signature`}
       </h2>
-      <div class="[&_code]:p-0! my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl">
+      <div class="not-content [&_code]:p-0! my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl">
         {Astro.props.signature.extends && (
           <p class:list={['text-faded', !hasAnySignature && 'mb-0!']}>
             <code>{Astro.props.componentName}</code> extends
             <code>
               {'<'}
               <a
-                class="text-white!"
+                class="text-white"
                 href="/docs/reference/core/t"
               >
                 {'T'}
               </a>
               {'.'}
               <a
-                class="text-white!"
+                class="text-white"
                 target="_blank"
                 rel="noopener noreferrer"
                 href={Astro.props.signature.extends.url}
@@ -95,11 +95,11 @@ const id = Astro.props.idOverride ?? 'component-signature'
           <div class="flex flex-col gap-6">
             {hasProps && (
               <div>
-                <h3 class="mt-0">Props</h3>
+                <h3 class="mt-4 text-xl font-semibold">Props</h3>
 
                 <div
                   class:list={[
-                    'scrollbar-hide [&_code]:bg-transparent! grid items-start gap-x-3 overflow-x-auto',
+                    'scrollbar-hide [&_code]:bg-transparent! mt-0 grid gap-x-3 overflow-x-auto',
                     propsGridCols
                   ]}
                 >
@@ -113,7 +113,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                   {anyPropHasDescription && <div class="font-bold">description</div>}
 
-                  <hr class="col-span-full my-1" />
+                  <hr class="col-span-full my-1 border-gray-700" />
 
                   {props.map((prop, index, arr) => {
                     return (
@@ -172,7 +172,9 @@ const id = Astro.props.idOverride ?? 'component-signature'
                           <div class="text-faded my-[0.2em] text-xs">{prop.description}</div>
                         )}
 
-                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                        {index !== arr.length - 1 && (
+                          <hr class="col-span-full my-1 border-gray-700" />
+                        )}
                       </>
                     )
                   })}
@@ -182,7 +184,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
             {hasEvents && (
               <div>
-                <h3 class="mt-0">Events</h3>
+                <h3 class="text-xl font-semibold">Events</h3>
 
                 <div
                   class:list={[
@@ -196,7 +198,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                   {anyEventHasDescription && <div class="font-bold">description</div>}
 
-                  <hr class="col-span-full my-1" />
+                  <hr class="col-span-full my-1 border-gray-700" />
 
                   {events.map((event, index, arr) => {
                     return (
@@ -234,7 +236,9 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                         {event.description && <div class="text-faded">{event.description}</div>}
 
-                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                        {index !== arr.length - 1 && (
+                          <hr class="col-span-full my-1 border-gray-700" />
+                        )}
                       </>
                     )
                   })}
@@ -244,14 +248,14 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
             {hasBindings && (
               <div>
-                <h3 class="mt-0">Bindings</h3>
+                <h3 class="text-xl font-semibold">Bindings</h3>
 
                 <div class="scrollbar-hide [&_code]:bg-transparent! grid grid-cols-[auto_auto] items-start gap-x-3 overflow-x-auto">
                   <div class="font-bold">name</div>
 
                   <div class="font-bold">type</div>
 
-                  <hr class="col-span-full my-1" />
+                  <hr class="col-span-full my-1 border-gray-700" />
 
                   {(Astro.props.signature.bindings ?? []).map((binding, index, arr) => {
                     return (
@@ -287,7 +291,9 @@ const id = Astro.props.idOverride ?? 'component-signature'
                           </a>
                         )}
 
-                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                        {index !== arr.length - 1 && (
+                          <hr class="col-span-full my-1 border-gray-700" />
+                        )}
                       </>
                     )
                   })}
@@ -297,7 +303,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
             {hasExports && (
               <div>
-                <h3 class="mt-0">Exports</h3>
+                <h3 class="text-xl font-semibold">Exports</h3>
 
                 <div
                   class:list={[
@@ -311,7 +317,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                   {anyExportHasDescription && <div class="font-bold">description</div>}
 
-                  <hr class="col-span-full my-1" />
+                  <hr class="col-span-full my-1 border-gray-700" />
 
                   {exports.map((prop, index, arr) => {
                     return (
@@ -333,7 +339,9 @@ const id = Astro.props.idOverride ?? 'component-signature'
                           <div class="text-faded my-[0.2em] text-xs">{prop.description}</div>
                         )}
 
-                        {index !== arr.length - 1 && <hr class="col-span-full my-1" />}
+                        {index !== arr.length - 1 && (
+                          <hr class="col-span-full my-1 border-gray-700" />
+                        )}
                       </>
                     )
                   })}
