@@ -9,14 +9,6 @@
   let { category, activeUrlPathName }: Props = $props()
 
   let open = true
-
-  const isEqual = (a: string, b: string) => {
-    a = a.startsWith('/') ? a.slice(1) : a
-    a = a.endsWith('/') ? a.slice(0, -1) : a
-    b = b.startsWith('/') ? b.slice(1) : b
-    b = b.endsWith('/') ? b.slice(0, -1) : b
-    return a === b
-  }
 </script>
 
 <Details
