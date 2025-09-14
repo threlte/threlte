@@ -74,7 +74,7 @@
 </script>
 
 <div
-  class="grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
+  class="mt-4 grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
 >
   <InstallButton
     disabled
@@ -87,7 +87,7 @@
     dependency.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -105,7 +105,7 @@
     and more that extend the core functionality.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -123,7 +123,7 @@
     make use of the package <code>@threlte/extras</code>.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -140,7 +140,7 @@
     > in Threlte.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -157,7 +157,7 @@
     > in Threlte.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -168,7 +168,7 @@
 
   <p class="my-0 self-center text-sm md:text-base">Components and hooks for VR and AR.</p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -185,7 +185,7 @@
     > in Threlte.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -201,7 +201,7 @@
     > for Threlte.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
