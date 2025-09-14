@@ -119,7 +119,7 @@
     class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
     ontransitionend={focusFirstDropdownLink}
   >
-    <li class="text-faded relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white">
+    <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
       <a
         class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
         href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
@@ -145,7 +145,7 @@
     </li>
 
     {#if sourceUrl}
-      <li class="text-faded relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white">
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={sourceUrl}
@@ -172,7 +172,7 @@
     {/if}
 
     {#if editUrl}
-      <li class="text-faded relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white">
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={editUrl}
@@ -199,7 +199,7 @@
     {/if}
   </ul>
 
-  <div class="ml-4">
+  <div class="ml-[-9px]">
     {@render children?.()}
   </div>
 </div>
