@@ -104,7 +104,8 @@ export type ThrelteInternalContext = {
    */
   collectDisposableObjects: (
     object?: DisposableThreeObject,
-    arr?: DisposableThreeObject[]
+    arr?: DisposableThreeObject[],
+    visited?: WeakSet<any>
   ) => DisposableThreeObject[]
 
   /**
@@ -166,9 +167,12 @@ export const createThrelteContext = (options: {
       })
       internalCtx.shouldDispose = false
     },
-    collectDisposableObjects: (object, objects) => {
+    collectDisposableObjects: (object, objects, visited) => {
       const disposables: DisposableThreeObject[] = objects ?? []
+      const visitedObjects = visited ?? new WeakSet()
       if (!object) return disposables
+      if (visitedObjects.has(object)) return disposables
+      visitedObjects.add(object)
       // Scenes can't be disposed
       if (object?.dispose && typeof object.dispose === 'function' && object.type !== 'Scene') {
         disposables.push(object)
@@ -179,7 +183,7 @@ export const createThrelteContext = (options: {
         if (propKey === 'parent' || propKey === 'children' || typeof propValue !== 'object') return
         const value = propValue as any
         if (value?.dispose) {
-          internalCtx.collectDisposableObjects(value, disposables)
+          internalCtx.collectDisposableObjects(value, disposables, visitedObjects)
         }
       })
       return disposables
