@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Sequence, createSheetObjectAction } from '@threlte/theatre'
-  import Button from '../../Button/Button.svelte'
+  import Button from '$components/Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
