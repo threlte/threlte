@@ -32,9 +32,6 @@ https://tailwindcss.com/docs/adding-custom-styles#adding-component-classes
     position: relative;
     @apply bg-red-700/50;
   }
-  pre code span.line:empty::before {
-    content: ' ';
-  }
   pre {
     counter-reset: line;
   }
