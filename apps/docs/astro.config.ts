@@ -34,6 +34,7 @@ export default defineConfig({
     }),
     svelte(),
     mdx({
+      gfm: false,
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
     preact({ compat: true, include: ['**/*.tsx'] })
