@@ -6,22 +6,36 @@ interface Props {
 
 const { color = 'orange' } = Astro.props
 
-const glowClasses: Record<NonNullable<Props['color']>, string> = {
+// https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-names
+const bgNglowClasses: Record<NonNullable<Props['color']>, string> = {
+  orange: 'bg-orange glow-orange',
+  blue: 'bg-blue glow-blue',
+  green: 'bg-green glow-green'
+}
+
+const underbarGlowClasses: Record<NonNullable<Props['color']>, string> = {
   orange: 'bg-[radial-gradient(closest-side,rgba(255,146,112,0.1)_0%,transparent_100%)]',
   blue: 'bg-[radial-gradient(closest-side,rgba(123,175,224,0.12)_0%,transparent_100%)]',
   green: 'bg-[radial-gradient(closest-side,rgba(135,230,151,0.12)_0%,transparent_100%)]'
 }
 
-// this comment forces tailwind to include these styles
-// that seem to be missed otherwise.
-// class="bg-blue bg-green text-blue-400 text-orange-400 text-green-400"
+const textClasses: Record<NonNullable<Props['color']>, string> = {
+  orange: 'text-orange-400',
+  blue: 'text-blue-400',
+  green: 'text-green-400'
+}
 ---
 
 <div class:list={['relative border-y border-white/20 pb-16 pt-10', Astro.props.class ?? '']}>
   <div
     class="pointer-events-none absolute left-[00%] top-0 h-40 w-full select-none overflow-hidden"
   >
-    <div class:list={['absolute left-0 top-40 h-96 w-full -translate-y-full', glowClasses[color]]}>
+    <div
+      class:list={[
+        'absolute left-0 top-40 h-96 w-full -translate-y-full',
+        underbarGlowClasses[color]
+      ]}
+    >
     </div>
   </div>
 
@@ -30,8 +44,7 @@ const glowClasses: Record<NonNullable<Props['color']>, string> = {
       <div
         class:list={[
           'mb-10 flex h-16 w-16 items-center justify-center rounded-full *:w-[60%] empty:hidden',
-          `bg-${color}`,
-          `glow-${color}`
+          bgNglowClasses[color]
         ]}
       >
         <slot name="icon" />
@@ -41,7 +54,7 @@ const glowClasses: Record<NonNullable<Props['color']>, string> = {
 
   {
     Astro.slots.has('subline') && (
-      <sup class:list={['mb-1 text-base empty:hidden', `text-${color}-400`]}>
+      <sup class:list={['mb-1 text-base empty:hidden', textClasses[color]]}>
         <slot name="subline" />
       </sup>
     )
