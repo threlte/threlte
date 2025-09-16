@@ -63,7 +63,7 @@
 
   <div class="absolute right-6 top-6">
     <button
-      class="rounded-full bg-white p-2 [&>*]:h-7 [&>*]:w-7"
+      class="rounded-full bg-white p-2 *:h-7 *:w-7"
       onclick={() => (game.muted = !game.muted)}
     >
       {#if game.muted}

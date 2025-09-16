@@ -47,9 +47,7 @@ const { Content } = await render(entry)
         />
       </div>
 
-      <article
-        class="[&_p]:text-faded [&_li]:text-faded prose prose-invert mt-12 w-full max-w-full prose-a:text-orange prose-a:decoration-dotted before:prose-code:content-none after:prose-code:content-none"
-      >
+      <article class="[&_p]:text-faded [&_li]:text-faded markdown-content mt-12 w-full max-w-full">
         <Content components={{ pre: MdxCode }} />
       </article>
     </div>

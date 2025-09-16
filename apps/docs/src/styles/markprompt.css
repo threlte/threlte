@@ -1,3 +1,5 @@
+@reference "./app.css";
+
 :root {
   --markprompt-background: unset;
   --markprompt-foreground: #d4d4d4;

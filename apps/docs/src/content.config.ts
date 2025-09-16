@@ -78,7 +78,7 @@ export const referenceCategories = [
 
 // 2. Define your collection(s)
 export const referenceCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/reference' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/reference' }),
   schema: z.object({
     schemaType: z.string().default('reference'),
     type: z.enum(['component', 'hook', 'plugin']).optional(),
@@ -96,7 +96,7 @@ export const referenceCollection = defineCollection({
 })
 
 export const learnCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/learn' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/learn' }),
   schema: z.object({
     schemaType: z.string().default('learn'),
     category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
@@ -108,7 +108,7 @@ export const learnCollection = defineCollection({
 })
 
 export const examplesCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/examples' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/examples' }),
   schema: z.object({
     schemaType: z.string().default('examples'),
     order: z.number().optional()
@@ -116,7 +116,7 @@ export const examplesCollection = defineCollection({
 })
 
 export const testimonialsCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/testimonials' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/testimonials' }),
   schema: z.object({
     schemaType: z.string().default('testimonials'),
     image: z.string(),
@@ -128,7 +128,7 @@ export const testimonialsCollection = defineCollection({
 })
 
 export const showcaseCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/showcase' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/showcase' }),
   schema: z.object({
     schemaType: z.string().default('showcase'),
     image: z.string(),
@@ -141,7 +141,7 @@ export const showcaseCollection = defineCollection({
 })
 
 export const authorsCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/authors' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/authors' }),
   schema: z.object({
     schemaType: z.string().default('authors'),
     name: z.string(),
@@ -150,7 +150,7 @@ export const authorsCollection = defineCollection({
 })
 
 export const blogCollection = defineCollection({
-  loader: glob({ pattern: '**/[^_]*.{md,mdx}', base: './src/content/blog' }),
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
     schemaType: z.string().default('blog'),
     author: z.string(),
