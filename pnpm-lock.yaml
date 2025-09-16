@@ -173,6 +173,9 @@ importers:
       preact:
         specifier: ^10.27.1
         version: 10.27.1
+      three-custom-shader-material:
+        specifier: ^6.3.7
+        version: 6.3.7(react@18.2.0)(three@0.175.0)
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
@@ -312,9 +315,6 @@ importers:
       three:
         specifier: 'catalog:'
         version: 0.175.0
-      three-custom-shader-material:
-        specifier: ^6.3.7
-        version: 6.3.7(react@18.2.0)(three@0.175.0)
       three-mesh-bvh:
         specifier: ^0.9.1
         version: 0.9.1(three@0.175.0)

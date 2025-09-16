@@ -37,6 +37,7 @@
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",
     "preact": "^10.27.1",
+    "three-custom-shader-material": "^6.3.7",
     "typescript": "catalog:"
   },
   "devDependencies": {
@@ -85,7 +86,6 @@
     "tailwindcss": "^4.1.12",
     "terser": "^5.37.0",
     "three": "catalog:",
-    "three-custom-shader-material": "^6.3.7",
     "three-mesh-bvh": "^0.9.1",
     "three.quarks": "^0.15.0",
     "tsx": "^4.8.1",
