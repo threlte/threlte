@@ -19,13 +19,13 @@ GUI.
   previewClass="!aspect-[4/3.2] !h-auto"
 />
 
-### Installation
+## Installation
 
 ```bash copy
 npm install @threlte/studio
 ```
 
-### Quick Start
+## Quick Start
 
 To get started, encapsulate your whole scene in the [`<Studio>`](./studio) component.
 
@@ -53,4 +53,24 @@ import { threlteStudio } from '@threlte/studio/vite'
 export default {
   plugins: [threlteStudio(), sveltekit()]
 }
+```
+
+## Tips and Tricks
+
+### Hiding from the hierarchy tree
+
+To hide items from showing in the scene hierarchy pane, add `hideInTree` to
+your object's userData.
+
+```svelte
+<T.Mesh userData={{ hideInTree: true }} />
+```
+
+### Selectable objects
+
+Scene objects are selectable by default. If you add `selectable` to your
+objects userData and set it to `false` that object wont be selectable.
+
+```svelte
+<T.Mesh userData={{ selectable: false }} />
 ```
