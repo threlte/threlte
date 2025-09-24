@@ -51,6 +51,12 @@
       hit = hits.shift()
     }
 
+		if (hit) {
+			if ('userData' in hit.object && 'selectable' in hit.object.userData && !hit.object.userData.selectable) {
+				hit = undefined
+			}
+		}
+
     if (event.shiftKey) {
       if (!hit || !hit.object) return
       toggleSelection([hit.object])
