@@ -11,8 +11,6 @@
 
   const { interactivity, instancedMesh2 } = useInstancedMesh2()
 
-  // const { enabled } = useInteractivity()
-
   $effect.pre(() => {
     if (instancedMesh2) {
       instancedMesh2.addInstances(1, (_obj, index) => {
@@ -144,6 +142,6 @@
 
 <!-- todo this seems to add a few ms to load time -->
 <!-- but I do want to expose it to people because of nice utils https://agargaro.github.io/instanced-mesh/api/classes/instancedentity/  -->
-{#if instancedMesh2 && instanceId !== null && children}
+<!-- {#if instancedMesh2 && instanceId !== null && children}
   {@render children?.({ instance: instancedMesh2.instances[instanceId] })}
-{/if}
+{/if} -->

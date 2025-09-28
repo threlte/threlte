@@ -39,6 +39,7 @@
         // todo review euler vs quaternion for ease of use
         allowsEuler: true
       })
+
       isCollecting = false
 
       if (bvh) {
