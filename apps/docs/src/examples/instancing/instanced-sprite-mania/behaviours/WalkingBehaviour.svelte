@@ -56,8 +56,8 @@
       agent.timer -= delta
 
       // apply velocity
-      posX[i] += agent.velocity[0] * delta
-      posZ[i] += agent.velocity[1] * delta
+      posX[i]! += agent.velocity[0] * delta
+      posZ[i]! += agent.velocity[1] * delta
 
       // roll new behaviour when time runs out or agent gets out of bounds
       if (agent.timer < 0) {

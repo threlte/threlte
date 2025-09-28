@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T, useTask } from '@threlte/core'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { injectLookAtPlugin } from './lookAtPlugin.svelte'
 
   const cubePos = $state<[number, number, number]>([0, 0.8, 0])
@@ -22,7 +22,7 @@
 
 <T.Mesh
   receiveShadow
-  rotation.x={DEG2RAD * -90}
+  rotation.x={MathUtils.DEG2RAD * -90}
 >
   <T.CircleGeometry args={[4, 60]} />
   <T.MeshStandardMaterial />
@@ -32,7 +32,7 @@
   position={cubePos}
   receiveShadow
   castShadow
-  rotation.x={DEG2RAD * -90}
+  rotation.x={MathUtils.DEG2RAD * -90}
 >
   <T.BoxGeometry />
   <T.MeshStandardMaterial color="#FE3D00" />
@@ -45,7 +45,7 @@
   <T.Mesh
     receiveShadow
     castShadow
-    rotation.x={DEG2RAD * 90}
+    rotation.x={MathUtils.DEG2RAD * 90}
   >
     <T.ConeGeometry args={[1, 2]} />
     <T.MeshStandardMaterial

@@ -11,14 +11,14 @@
   const defaultCharacters = ' .:-+*=%@#'
   let characters = $state(defaultCharacters)
 
-  let alpha = $state(1)
+  let alpha = $state(true)
   let block = $state(false)
   let color = $state(false)
   let invert = $state(true)
   let resolution = $state(0.1)
   let scale = $state(1)
 
-  const options: AsciiEffectOptions = $derived({
+  const options = $derived<AsciiEffectOptions>({
     alpha,
     block,
     color,

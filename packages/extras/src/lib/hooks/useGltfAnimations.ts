@@ -2,10 +2,10 @@ import { currentWritable, useTask, watch, type CurrentWritable } from '@threlte/
 import { tick } from 'svelte'
 import { derived, writable, type Writable } from 'svelte/store'
 import { AnimationMixer, type AnimationAction, type Object3D } from 'three'
-import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import type { ThrelteGltf } from '../types/types'
 
 type UseGltfAnimationsReturnType<Actions> = {
-  gltf: Writable<GLTF | undefined>
+  gltf: Writable<ThrelteGltf | undefined>
   mixer: AnimationMixer
   actions: CurrentWritable<Actions>
   root: CurrentWritable<Root | undefined>
@@ -14,7 +14,7 @@ type UseGltfAnimationsReturnType<Actions> = {
 type Root = Object3D
 const isRoot = (value: any): value is Root => !!value?.isObject3D
 
-type GltfStore = Writable<GLTF | undefined>
+type GltfStore = Writable<ThrelteGltf | undefined>
 const isGltfStore = (value: any): value is GltfStore =>
   !!value?.subscribe && typeof value.subscribe === 'function'
 
@@ -53,7 +53,7 @@ export function useGltfAnimations<
   T extends string,
   Actions extends Partial<Record<T, AnimationAction>> = Partial<Record<T, AnimationAction>>
 >(rootOrGltf?: Root | GltfStore, maybeRoot?: Root): UseGltfAnimationsReturnType<Actions> {
-  const gltf = isGltfStore(rootOrGltf) ? rootOrGltf : writable<GLTF | undefined>(undefined)
+  const gltf = isGltfStore(rootOrGltf) ? rootOrGltf : writable<ThrelteGltf | undefined>(undefined)
   const root = currentWritable<Root | undefined>(
     isRoot(rootOrGltf) ? rootOrGltf : isRoot(maybeRoot) ? maybeRoot : undefined
   )

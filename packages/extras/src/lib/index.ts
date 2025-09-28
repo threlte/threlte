@@ -15,6 +15,7 @@ export { meshBounds } from './utilities/meshBounds'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
+export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
 export { default as Decal } from './components/Decal/Decal.svelte'
 export {
   default as CameraControls,
@@ -42,11 +43,13 @@ export { default as InstancedMeshes } from './components/Instancing/InstancedMes
 export { default as SoftShadows } from './components/SoftShadows/SoftShadows.svelte'
 export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeometry.svelte'
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
+export { default as PointsMaterial } from './components/PointsMaterial/PointsMaterial.svelte'
 export { default as Sky } from './components/Sky/Sky.svelte'
 export { default as Align } from './components/Align/Align.svelte'
 export { default as CSM } from './components/CSM/CSM.svelte'
 export { default as Billboard } from './components/Billboard/Billboard.svelte'
 export { default as FakeGlowMaterial } from './components/FakeGlowMaterial/FakeGlowMaterial.svelte'
+export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMaterial.svelte'
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as SVG } from './components/Svg/Svg.svelte'
 export { default as MeshRefractionMaterial } from './components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
@@ -61,9 +64,9 @@ export { default as Resize } from './components/Resize/Resize.svelte'
 export { default as CubeCamera } from './components/CubeCamera/CubeCamera.svelte'
 export { default as LinearGradientTexture } from './components/GradientTexture/linear/LinearGradientTexture.svelte'
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
-export type { GradientStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
+export type { ColorStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
 export { default as View } from './components/View/View.svelte'
-export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
+export { default as Wireframe } from './components/Wireframe/Wireframe.svelte'
 
 // Transitions
 export { transitions } from './transitions/transltions.svelte'
@@ -114,5 +117,11 @@ export {
   buildSpritesheet,
   type SpritesheetMetadata
 } from './components/InstancedSprite/instancedSpriteUtils'
+
+// bvh
+export { bvh } from './bvh/bvh.svelte'
+export type { BVHOptions, BVHProps } from './bvh/types'
+import { SAH, CENTER, AVERAGE } from 'three-mesh-bvh'
+export const BVHSplitStrategy = { SAH, CENTER, AVERAGE }
 
 export type { ThrelteGltf } from './types/types'

@@ -13,7 +13,7 @@
   let sectionColor = $state('#ff3e00')
   let sectionThickness = $state(2)
 
-  let gridSize = $state([20, 20])
+  let gridSize = $state<[number, number]>([20, 20])
   const planeOptions = {
     xz: 'xz',
     xy: 'xy',
@@ -55,8 +55,6 @@
   let maxRadius = $state(10)
   let cellDividers = $state(6)
   let sectionDividers = $state(2)
-
-  let paneExpanded = false
 
   const terrainSize = 30
   const segments = 100

@@ -1,16 +1,16 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { Edges, Text } from '@threlte/extras'
   import { onDestroy } from 'svelte'
   import { Tween } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import type { ArcadeAudio } from '../sound'
   import { useTimeout } from '../hooks/useTimeout'
   import { game } from '../Game.svelte'
   import ThrelteLogo from '../objects/ThrelteLogo.svelte'
 
   const { timeout } = useTimeout()
-  let direction: 1 | -1 = $state(1)
+  let direction = $state<1 | -1>(1)
   const logoScale = new Tween(0)
   timeout(() => {
     logoScale.set(1)
@@ -25,7 +25,7 @@
   }, 200)
 
   let showPressSpaceToStart = $state(false)
-  let blinkClock: 0 | 1 = $state(0)
+  let blinkClock = $state<0 | 1>(0)
 
   timeout(() => {
     showPressSpaceToStart = true
@@ -48,7 +48,7 @@
     audio?.source.stop()
   })
 
-  const onKeyDown = (e: KeyboardEvent) => {
+  const onkeydown = (e: KeyboardEvent) => {
     if (e.key === 'ArrowLeft') {
       direction = -1
     } else if (e.key === 'ArrowRight') {
@@ -57,7 +57,7 @@
   }
 </script>
 
-<svelte:window on:keydown={onKeyDown} />
+<svelte:window {onkeydown} />
 
 <T.Group position.z={-0.35}>
   <ThrelteLogo
@@ -68,7 +68,7 @@
   <T.Group
     scale={textScale.current}
     position.z={1.3}
-    rotation.x={-90 * DEG2RAD}
+    rotation.x={-90 * MathUtils.DEG2RAD}
     rotation.z={textRotation}
   >
     <T.Mesh position.y={-0.05}>
@@ -95,7 +95,7 @@
   <T.Group
     scale={textScale.current}
     position.z={3.3}
-    rotation.x={-90 * DEG2RAD}
+    rotation.x={-90 * MathUtils.DEG2RAD}
     visible={!!blinkClock}
   >
     <Text
@@ -105,7 +105,7 @@
       textAlign="center"
       fontSize={0.35}
       color={game.baseColor}
-      text={`PRESS SPACE TO RESTART`}
+      text="PRESS SPACE TO RESTART"
     />
   </T.Group>
 {/if}

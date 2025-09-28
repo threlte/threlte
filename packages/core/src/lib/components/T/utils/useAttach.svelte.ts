@@ -79,7 +79,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
     // Custom attach function
     if (typeof attach === 'function') {
       const cleanup = attach({
-        ref: current as T,
+        ref: current as MaybeInstance<T>,
         parent: parent.current,
         parentObject3D: parentObject3D.current
       })

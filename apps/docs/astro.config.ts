@@ -3,7 +3,6 @@ import { defineConfig } from 'astro/config'
 import { resolve } from 'path'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
-import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
 import { threlteStudio } from '@threlte/studio/vite'
 import type { Plugin } from 'vite'
@@ -44,11 +43,7 @@ export default defineConfig({
       ]
     }),
     tailwind(),
-    svelte({
-      preprocess: preprocess({
-        postcss: true
-      })
-    }),
+    svelte(),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
@@ -78,11 +73,6 @@ export default defineConfig({
     ssr: {
       // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
-    },
-    legacy: {
-      // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
-      // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
-      proxySsrExternalModules: true
     },
     optimizeDeps: {
       esbuildOptions: {

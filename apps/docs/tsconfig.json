@@ -12,9 +12,12 @@
       "$examples/*": ["src/examples/*"],
       "$hooks/*": ["src/hooks/*"]
     },
-    "types": ["astro/client"],
+    "types": ["astro/client", "webxr"],
     "jsx": "preserve",
-    "exactOptionalPropertyTypes": false
+    "exactOptionalPropertyTypes": false,
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": false
   },
+  "include": [".astro/types.d.ts", "src/app.d.ts", "**/*"],
   "exclude": ["node_modules", "src/components/Example/stackblitz-template", "dist"]
 }

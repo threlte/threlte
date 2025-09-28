@@ -1,5 +1,5 @@
 ---
-order: 5.10
+order: 5.9
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/GradientTexture/RadialGradientTexture.svelte'
 name: '<RadialGradientTexture>'
@@ -46,7 +46,7 @@ componentSignature:
           description: 'list of stops applied to the gradient. more info at https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient',
           name: 'stops',
           required: false,
-          type: 'GradientStop[]'
+          type: 'ColorStop[]'
         }
       ]
   }
@@ -83,7 +83,7 @@ The `innerRadius` and `outerRadius` props control the size of the gradient. The 
 
 ## Gradient Stops
 
-`<RadialGradientTexture>` accepts a `stops` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a 2D context, notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in Three.js. Here are a couple examples of valid stops.
+`<RadialGradientTexture>` accepts a `stops` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a 2D context, notably the `offset` should be a number between 0 and 1 inclusive. Stop colors must be any acceptable CSS string. Here are a couple examples of valid stops.
 
 ```svelte
 <RadialGradientTexture
@@ -92,23 +92,15 @@ The `innerRadius` and `outerRadius` props control the size of the gradient. The 
     { color: 'white', offset: 1 }
   ]}
 />
-
-<RadialGradientTexture
-  stops={[
-    { color: '#00ffff', offset: 0 },
-    { color: '#ff00ff', offset: 0.5 },
-    { color: '#ffff00', offset: 1 }
-  ]}
-/>
 ```
 
-You can even mix and match color representations
+Three.js's Color class conveniently has a `getHexString` method which you can use to convert a color to a css color string.
 
 ```svelte
 <RadialGradientTexture
   stops={[
     { color: 'red', offset: 0 },
-    { color: 0xff_00_00, offset: 0.25 },
+    { color: new Color(0xff_00_00).getHexString(), offset: 0.25 },
     { color: 'rgb(255, 0, 0)', offset: 0.5 },
     { color: '#ff0000', offset: 0.75 },
     { color: new Color(new Color(new Color())).set(1, 0, 0), offset: 1 }

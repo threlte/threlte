@@ -1,7 +1,7 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import { Vector3 } from 'three'
   import { T } from '@threlte/core'
-  import { InstancedMesh, Instance, RoundedBoxGeometry } from '@threlte/extras'
+  import { InstancedMesh, Instance, RoundedBoxGeometry, Outlines } from '@threlte/extras'
   import { Collider, RigidBody } from '@threlte/rapier'
 
   const colors = [
@@ -15,6 +15,7 @@
     '#ffd740',
     '#bf360c'
   ] as const
+
   const positions = [
     [-1, -1],
     [-1, 0],
@@ -28,7 +29,7 @@
   ] as const
 
   type Block = {
-    position: THREE.Vector3
+    position: Vector3
     color: string
   }
 
@@ -40,16 +41,16 @@
   for (let i = 0; i < numCubes; i += 1) {
     const [x, y] = positions[Math.trunc(Math.random() * positions.length)]!
     cubes.push({
-      position: new THREE.Vector3(x - margin, y - margin, -i * spacing),
+      position: new Vector3(x - margin, y - margin, -i * spacing),
       color: colors[i % colors.length]!
     })
   }
 
   const boxRadius = 0.15
   const boxSize = 0.6
-  const offsetY = 1.5
+  const offsetY = 1.8
   const offsetZ = 50
-  const speed = 12
+  const speed = 9
 </script>
 
 <InstancedMesh limit={numCubes}>
@@ -61,6 +62,8 @@
     roughness={0}
     metalness={0.2}
   />
+
+  <Outlines />
 
   {#each cubes as { position, color }, index (index)}
     <T.Group

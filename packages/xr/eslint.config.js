@@ -62,7 +62,7 @@ export default ts.config(
           ignoreRestSiblings: true
         }
       ],
-      'no-undef': 'warn'
+      'no-undef': 'off'
     }
   }
 )

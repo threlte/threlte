@@ -2,7 +2,7 @@
   import type { LinearGradientTextureProps } from './types'
   import { CanvasTexture } from 'three'
   import { T, observe, useThrelte } from '@threlte/core'
-  import { applyGradient, addStops } from '../common'
+  import { addStops } from '../common'
 
   let {
     width = 1024,
@@ -23,6 +23,11 @@
 
   const canvas = new OffscreenCanvas(0, 0)
   const context = canvas.getContext('2d')
+
+  if (context === null) {
+    throw new Error('canvas texture context is null')
+  }
+
   const texture = new CanvasTexture(canvas)
 
   $effect.pre(() => {
@@ -42,20 +47,21 @@
   )
 
   const gradient = $derived.by(() => {
-    const gradient = context?.createLinearGradient(startX, startY, endX, endY)
-    if (gradient !== undefined) {
-      addStops(gradient, stops)
-    }
+    const gradient = context.createLinearGradient(startX, startY, endX, endY)
+    addStops(gradient, stops)
     return gradient
   })
 
   const { invalidate } = useThrelte()
+
   $effect(() => {
-    if (gradient !== undefined && context !== null) {
-      applyGradient(context, gradient)
-      texture.needsUpdate = true
-      invalidate()
-    }
+    context.save()
+    context.fillStyle = gradient
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+    context.restore()
+
+    texture.needsUpdate = true
+    invalidate()
   })
 </script>
 

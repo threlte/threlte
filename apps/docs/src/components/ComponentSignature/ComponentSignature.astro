@@ -1,6 +1,6 @@
 ---
 import type { TypeOf } from 'astro/zod'
-import type { componentSignature } from '../../content/config'
+import type { componentSignature } from '../../content.config'
 import { getShiki } from '../../lib/highlighter'
 
 interface Props {
@@ -69,7 +69,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
               >
                 {'T'}
               </a>
-              .
+              {'.'}
               <a
                 class="!text-white"
                 target="_blank"
@@ -80,7 +80,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
               </a>
               {'>'}
             </code>
-            and supports all its props, slot props, bindings and events.
+            and supports all its props, snippets, bindings and events.
           </p>
         )}
 

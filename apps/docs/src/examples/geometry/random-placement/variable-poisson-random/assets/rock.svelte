@@ -24,7 +24,10 @@
 </script>
 
 {#if $gltf}
-  <InstancedMesh>
+  <InstancedMesh
+    castShadow
+    receiveShadow
+  >
     <T is={$gltf.nodes.Rock_2.geometry} />
     <T.MeshStandardMaterial color="grey" />
     {#each transformData as randomValues}
