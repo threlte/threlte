@@ -1,19 +1,12 @@
 <script lang="ts">
-  import BallInstance from './BallInstance.svelte'
-  import { Color } from 'three'
-  import { DirectionalLight } from 'three'
-  import {
-    Instance,
-    Instance2,
-    InstancedMesh,
-    InstancedMesh2,
-    interactivity
-  } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
+  import { Instance2, InstancedMesh2, interactivity } from '@threlte/extras'
+  import { Color, DirectionalLight } from 'three'
+  import BallInstance from './BallInstance.svelte'
 
   let { paused = false }: { paused?: boolean } = $props()
 
-  const width = 5
+  const width = 10
   const limit = width * width
   const gap = 2.5
   const offset = (width * gap) / 2
@@ -73,31 +66,6 @@
   }}
 />
 
-<!-- <InstancedMesh
-  {limit}
-  range={limit}
->
-  <T.SphereGeometry />
-  <T.MeshToonMaterial />
-
-  {#each instances as instance}
-    <Instance
-      rotation.x={0.5 * Math.PI}
-      position.x={instance.x}
-      position.y={instance.y.current}
-      scale={instance.scale}
-      position.z={instance.z}
-      color={instance.color}
-      onpointerenter={() => {
-        instance.y.set(1)
-      }}
-      onpointerleave={() => {
-        instance.y.set(0)
-      }}
-    />
-  {/each}
-</InstancedMesh> -->
-
 <InstancedMesh2>
   <T.SphereGeometry args={[1.1]} />
   <T.MeshToonMaterial />
@@ -110,6 +78,12 @@
       scale={instance.scale}
       position.z={instance.z}
       color={instance.color}
+      onpointerenter={() => {
+        instance.y.set(1)
+      }}
+      onpointerleave={() => {
+        instance.y.set(0)
+      }}
     />
   {/each}
 </InstancedMesh2>

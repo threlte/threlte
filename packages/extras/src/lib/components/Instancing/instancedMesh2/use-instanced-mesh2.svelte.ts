@@ -1,8 +1,10 @@
 import { getContext, setContext } from 'svelte'
 import type { InstancedMesh2 } from '@three.ez/instanced-mesh'
+import { InstancedMesh2Interactivity } from './InstancedMesh2Interactivity.svelte'
 
-type InstancedMesh2Context = {
+export type InstancedMesh2Context = {
   readonly instancedMesh2: InstancedMesh2 | undefined
+  interactivity: InstancedMesh2Interactivity
 }
 
 export const createInstancedMesh2Context = (
@@ -11,7 +13,8 @@ export const createInstancedMesh2Context = (
   const context: InstancedMesh2Context = {
     get instancedMesh2() {
       return getInstancedMesh2()
-    }
+    },
+    interactivity: new InstancedMesh2Interactivity()
   }
 
   setContext<InstancedMesh2Context>('instancedMesh2', context)

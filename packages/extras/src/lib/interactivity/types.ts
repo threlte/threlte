@@ -51,3 +51,18 @@ export type ThrelteEvents = {
 export type InteractivityProps = {
   [K in keyof ThrelteEvents]?: (event: ThrelteEvents[K]) => void
 }
+
+export const events = [
+  'onclick',
+  'oncontextmenu',
+  'ondblclick',
+  'onwheel',
+  'onpointerup',
+  'onpointerdown',
+  'onpointerover',
+  'onpointerout',
+  'onpointerenter',
+  'onpointerleave',
+  'onpointermove',
+  'onpointermissed'
+] as const satisfies (keyof ThrelteEvents)[]
