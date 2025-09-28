@@ -6,7 +6,7 @@
 
   let { paused = false }: { paused?: boolean } = $props()
 
-  const width = 10
+  const width = 150
   const limit = width * width
   const gap = 2.5
   const offset = (width * gap) / 2
@@ -67,16 +67,14 @@
 />
 
 <InstancedMesh2>
-  <T.SphereGeometry args={[1.1]} />
+  <T.SphereGeometry />
   <T.MeshToonMaterial />
 
   {#each instances as instance}
     <Instance2
       rotation.x={0.5 * Math.PI}
-      position.x={instance.x}
-      position.y={instance.y.current}
+      position={[instance.x, instance.y.current, instance.z]}
       scale={instance.scale}
-      position.z={instance.z}
       color={instance.color}
       onpointerenter={() => {
         instance.y.set(1)
