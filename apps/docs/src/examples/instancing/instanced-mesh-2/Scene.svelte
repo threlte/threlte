@@ -6,7 +6,7 @@
 
   let { paused = false }: { paused?: boolean } = $props()
 
-  const width = 150
+  const width = 100
   const limit = width * width
   const gap = 2.5
   const offset = (width * gap) / 2
