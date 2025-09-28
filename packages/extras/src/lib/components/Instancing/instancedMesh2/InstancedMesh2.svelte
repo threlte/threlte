@@ -1,15 +1,15 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
   import { InstancedMesh2 } from '@three.ez/instanced-mesh'
-  import { Mesh } from 'three'
+  import { T } from '@threlte/core'
   import { setContext } from 'svelte'
+  import { Mesh } from 'three'
+  import { getInteractivityContext } from '../../../interactivity/context'
+  import { events, type IntersectionEvent } from '../../../interactivity/types'
   import type { InstancedMesh2Props } from './types'
-  import { useInteractivity } from '../../../interactivity'
   import {
     createInstancedMesh2Context,
     type InstancedMesh2Context
   } from './use-instanced-mesh2.svelte'
-  import { events, type IntersectionEvent } from '../../../interactivity/types'
 
   let {
     ref = $bindable(),
@@ -25,7 +25,8 @@
   let instancedMesh2 = $state<InstancedMesh2 | undefined>()
   let isCollecting = $state(true)
 
-  const { addInteractiveObject, removeInteractiveObject } = useInteractivity()
+  // todo review if this is a good and reactive approach - useInteractivity was throwing error if gone since that is meant for users more than internals
+  const interactivityContext = getInteractivityContext()
 
   const context: InstancedMesh2Context = createInstancedMesh2Context(() => instancedMesh2)
 
@@ -65,7 +66,7 @@
   })
 
   $effect(() => {
-    if (instancedMesh2) {
+    if (instancedMesh2 && interactivityContext) {
       if (context.interactivity.eventCount > 0) {
         const presentEventTypes: (typeof events)[number][] = []
 
@@ -92,10 +93,10 @@
             }
           }
 
-          addInteractiveObject(instancedMesh2, handlers)
+          interactivityContext.addInteractiveObject(instancedMesh2, handlers)
         }
       } else {
-        removeInteractiveObject(instancedMesh2)
+        interactivityContext.removeInteractiveObject(instancedMesh2)
       }
     }
   })

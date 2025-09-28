@@ -4,12 +4,15 @@
   import { useInstancedMesh2 } from './use-instanced-mesh2.svelte'
   import { events, type ThrelteEvents } from '../../../interactivity/types'
   import type { InteractivityCallback } from './InstancedMesh2Interactivity.svelte'
+  import { useInteractivity } from '../../../interactivity'
 
   let { ref = $bindable(), children, ...props }: InstanceProps = $props()
 
   let instanceId = $state<number | null>(null)
 
   const { interactivity, instancedMesh2 } = useInstancedMesh2()
+
+  // const { enabled } = useInteractivity()
 
   $effect.pre(() => {
     if (instancedMesh2) {
