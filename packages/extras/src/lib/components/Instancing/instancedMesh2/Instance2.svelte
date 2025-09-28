@@ -1,10 +1,9 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import type { InstanceProps } from './types'
-  import { useInstancedMesh2 } from './use-instanced-mesh2.svelte'
   import { events, type ThrelteEvents } from '../../../interactivity/types'
   import type { InteractivityCallback } from './InstancedMesh2Interactivity.svelte'
-  import { useInteractivity } from '../../../interactivity'
+  import type { InstanceProps } from './types'
+  import { useInstancedMesh2 } from './use-instanced-mesh2.svelte'
 
   let { ref = $bindable(), children, ...props }: InstanceProps = $props()
 
