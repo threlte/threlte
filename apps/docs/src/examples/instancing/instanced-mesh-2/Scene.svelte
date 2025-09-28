@@ -6,7 +6,7 @@
 
   let { paused = false }: { paused?: boolean } = $props()
 
-  const width = 100
+  const width = 20
   const limit = width * width
   const gap = 2.5
   const offset = (width * gap) / 2
@@ -70,14 +70,15 @@
   makeDefault
   position={[width, width, width]}
 >
-  <OrbitControls>
-    <Gizmo />
-  </OrbitControls>
+  <OrbitControls></OrbitControls>
 </T.PerspectiveCamera>
 
-<InstancedMesh2>
+<InstancedMesh2
+  bvh
+  sortObjects
+>
   <T.SphereGeometry />
-  <T.MeshToonMaterial />
+  <T.MeshToonMaterial transparent />
 
   {#each instances as instance}
     <Instance2
@@ -85,6 +86,7 @@
       position={[instance.x, instance.y.current, instance.z]}
       scale={instance.scale}
       color={instance.color}
+      opacity={0.25}
       onpointerenter={() => {
         instance.y.set(1)
       }}

@@ -119,6 +119,10 @@
         instancedMesh2.setColorAt(instance.id, props.color)
       }
 
+      if (props.opacity !== undefined) {
+        instancedMesh2.setOpacityAt(instance.id, props.opacity)
+      }
+
       instance.updateMatrix()
     }
   })
@@ -139,5 +143,5 @@
 <!-- todo this seems to add a few ms to load time -->
 <!-- but I do want to expose it to people because of nice utils https://agargaro.github.io/instanced-mesh/api/classes/instancedentity/  -->
 {#if instancedMesh2 && instanceId !== null && children}
-  {@render children?.({ ref: instancedMesh2.instances[instanceId] })}
+  {@render children?.({ instance: instancedMesh2.instances[instanceId] })}
 {/if}
