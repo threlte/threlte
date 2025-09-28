@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { Instance2, InstancedMesh2, interactivity } from '@threlte/extras'
+  import { Gizmo, Instance2, InstancedMesh2, interactivity, OrbitControls } from '@threlte/extras'
   import { Color, DirectionalLight } from 'three'
   import BallInstance from './BallInstance.svelte'
 
@@ -57,14 +57,23 @@
   })
 </script>
 
-<T.OrthographicCamera
+<!-- <T.OrthographicCamera
   position={[width, width, width]}
   {zoom}
   makeDefault
   oncreate={(ref) => {
     ref.lookAt(0, 0, 0)
   }}
-/>
+/> -->
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[width, width, width]}
+>
+  <OrbitControls>
+    <Gizmo />
+  </OrbitControls>
+</T.PerspectiveCamera>
 
 <InstancedMesh2>
   <T.SphereGeometry />

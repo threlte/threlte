@@ -11,7 +11,15 @@
   } from './use-instanced-mesh2.svelte'
   import { events, type IntersectionEvent } from '../../../interactivity/types'
 
-  let { ref = $bindable(), children, bvh, ...props }: InstancedMesh2Props = $props()
+  let {
+    ref = $bindable(),
+    children,
+    bvh,
+    perObjectFrustumCulled = true,
+    sortObjects = false,
+    raycastOnlyFrustum = false,
+    ...props
+  }: InstancedMesh2Props = $props()
 
   let tempMesh = $state(new Mesh(undefined, undefined))
   let instancedMesh2 = $state<InstancedMesh2 | undefined>()
@@ -35,6 +43,24 @@
       if (bvh) {
         instancedMesh2.computeBVH()
       }
+    }
+  })
+
+  $effect(() => {
+    if (instancedMesh2) {
+      instancedMesh2.perObjectFrustumCulled = perObjectFrustumCulled
+    }
+  })
+
+  $effect(() => {
+    if (instancedMesh2) {
+      instancedMesh2.sortObjects = sortObjects
+    }
+  })
+
+  $effect(() => {
+    if (instancedMesh2) {
+      instancedMesh2.raycastOnlyFrustum = raycastOnlyFrustum
     }
   })
 

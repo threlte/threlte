@@ -7,11 +7,17 @@ type Instance2InteractivityProps = {
   [K in keyof ThrelteEvents]?: (event: ThrelteEvents[K]) => void
 }
 
-export type InstanceProps = Props<{}> & {
+export type InstanceProps = Props<InstancedMesh2 | undefined> & {
   id?: string
   color?: ColorRepresentation
 } & Instance2InteractivityProps
 
 export type InstancedMesh2Props = Props<InstancedMesh2 | undefined> & {
   bvh?: boolean
+  perObjectFrustumCulled?: boolean
+  sortObjects?: boolean
+  raycastOnlyFrustum?: boolean
+
+  // todo - consider onFrustumEnter
+  // todo - consider autoUpdate and how to handle manual frustum culling
 }

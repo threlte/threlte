@@ -3,9 +3,8 @@
   import type { InstanceProps } from '../types'
   import { useInstancedMesh2 } from './use-instanced-mesh2.svelte'
   import { events, type ThrelteEvents } from '../../../interactivity/types'
-  import { Color } from 'three'
 
-  let { ref = $bindable(), ...props }: InstanceProps = $props()
+  let { ref = $bindable(), children, ...props }: InstanceProps = $props()
 
   let instanceId = $state<number | null>(null)
 
@@ -136,3 +135,5 @@
     }
   })
 </script>
+
+{@render children?.()}
