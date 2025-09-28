@@ -1,7 +1,7 @@
 import { SvelteMap } from 'svelte/reactivity'
 import type { ThrelteEvents } from '../../../interactivity/types'
 
-type InteractivityCallback<T extends keyof ThrelteEvents = keyof ThrelteEvents> = (
+export type InteractivityCallback<T extends keyof ThrelteEvents = keyof ThrelteEvents> = (
   event: ThrelteEvents[T]
 ) => void
 

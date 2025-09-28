@@ -1,4 +1,4 @@
-import type { InstancedMesh2 } from '@three.ez/instanced-mesh'
+import type { InstancedEntity, InstancedMesh2 } from '@three.ez/instanced-mesh'
 import type { Props } from '@threlte/core'
 import type { ColorRepresentation } from 'three'
 import type { ThrelteEvents } from '../../../interactivity/types'
@@ -7,7 +7,7 @@ type Instance2InteractivityProps = {
   [K in keyof ThrelteEvents]?: (event: ThrelteEvents[K]) => void
 }
 
-export type InstanceProps = Props<InstancedMesh2 | undefined> & {
+export type InstanceProps = Props<InstancedEntity> & {
   id?: string
   color?: ColorRepresentation
 } & Instance2InteractivityProps

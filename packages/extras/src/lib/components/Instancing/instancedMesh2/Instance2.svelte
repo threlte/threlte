@@ -1,8 +1,9 @@
 <script lang="ts">
   import { onDestroy } from 'svelte'
-  import type { InstanceProps } from '../types'
+  import type { InstanceProps } from './types'
   import { useInstancedMesh2 } from './use-instanced-mesh2.svelte'
   import { events, type ThrelteEvents } from '../../../interactivity/types'
+  import type { InteractivityCallback } from './InstancedMesh2Interactivity.svelte'
 
   let { ref = $bindable(), children, ...props }: InstanceProps = $props()
 
@@ -18,18 +19,17 @@
     }
   })
 
-  function isEventName(prop: string): prop is keyof ThrelteEvents {
-    return events.includes(prop as keyof ThrelteEvents)
-  }
-
   $effect(() => {
     if (instanceId !== null && instancedMesh2) {
       for (const prop in props) {
-        if (isEventName(prop)) {
+        if (events.includes(prop as keyof ThrelteEvents)) {
           const handler = props[prop]
 
           if (handler) {
-            interactivity[prop].set(instanceId, handler)
+            interactivity[prop as keyof ThrelteEvents].set(
+              instanceId,
+              handler as InteractivityCallback
+            )
           }
         }
       }
@@ -38,8 +38,8 @@
     return () => {
       if (instanceId !== null && instancedMesh2) {
         for (const prop in props) {
-          if (isEventName(prop)) {
-            interactivity[prop].delete(instanceId)
+          if (events.includes(prop as keyof ThrelteEvents)) {
+            interactivity[prop as keyof ThrelteEvents].delete(instanceId)
           }
         }
       }
@@ -128,12 +128,16 @@
       instancedMesh2.removeInstances(instanceId)
 
       for (const prop in props) {
-        if (isEventName(prop)) {
-          interactivity[prop].delete(instanceId)
+        if (events.includes(prop as keyof ThrelteEvents)) {
+          interactivity[prop as keyof ThrelteEvents].delete(instanceId)
         }
       }
     }
   })
 </script>
 
-{@render children?.()}
+<!-- todo this seems to add a few ms to load time -->
+<!-- but I do want to expose it to people because of nice utils https://agargaro.github.io/instanced-mesh/api/classes/instancedentity/  -->
+{#if instancedMesh2 && instanceId !== null && children}
+  {@render children?.({ ref: instancedMesh2.instances[instanceId] })}
+{/if}
