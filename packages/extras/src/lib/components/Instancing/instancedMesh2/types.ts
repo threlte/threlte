@@ -8,7 +8,7 @@ type Instance2InteractivityProps = {
   [K in keyof ThrelteEvents]?: (event: ThrelteEvents[K]) => void
 }
 
-export type InstanceProps = Props<{}> & {
+export type InstanceProps = Props<InstancedEntity> & {
   id?: string
   color?: ColorRepresentation
   children?: Snippet<[{ instance: InstancedEntity }]>

@@ -77,16 +77,16 @@
   bvh
   sortObjects
 >
-  <T.SphereGeometry />
+  <T.CylinderGeometry />
   <T.MeshToonMaterial transparent />
 
   {#each instances as instance}
     <Instance2
-      rotation.x={0.5 * Math.PI}
+      rotation={[0, 0, (instance.y.current * Math.PI) / 2]}
       position={[instance.x, instance.y.current, instance.z]}
       scale={instance.scale}
       color={instance.color}
-      opacity={0.25}
+      opacity={0.9}
       onpointerenter={() => {
         instance.y.set(1)
       }}
