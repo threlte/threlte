@@ -24,7 +24,7 @@ const allModules = import.meta.glob('../../examples/**/*', {
 }) as Record<string, string>
 
 for (const path in allModules) {
-  if (!path.replace('../../examples/', '').startsWith(Astro.props.path)) {
+  if (!path.replace('../../examples/', '').startsWith(Astro.props.path + '/')) {
     delete allModules[path]
   }
 }
@@ -76,7 +76,7 @@ const hidePreview = Astro.props.hidePreview ?? false
             <Code
               code={mod}
               lang={(path.split('.').pop() ?? 'svelte') as any}
-              class="!mb-0 !mt-0 h-full rounded-none border-none"
+              class="mb-0! mt-0! h-full rounded-none border-none"
             />
           </div>
         ))}

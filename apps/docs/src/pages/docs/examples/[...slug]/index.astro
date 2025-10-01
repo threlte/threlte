@@ -2,7 +2,7 @@
 import MdxCode from '$components/Code/MdxCode.astro'
 import DocsLayout from '$layouts/DocsLayout.astro'
 import { getCollection, render, type CollectionEntry } from 'astro:content'
-import QuickNav from '../../../../components/QuickNav/QuickNav.astro'
+import QuickNav from '$components/QuickNav/QuickNav.astro'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('examples')
@@ -29,7 +29,7 @@ const title = entry.id.split('/').pop()?.split('.')[0]
   {entry}
   title={`${title} | Threlte Example`}
 >
-  <h6 class="text-faded text-sm font-bold">
+  <h6>
     {category}
   </h6>
   <h1>

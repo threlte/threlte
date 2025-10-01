@@ -8,10 +8,9 @@
   interface Props {
     filePaths: string[]
     currentlySelectedFile: Writable<File>
-    class?: string
   }
 
-  let { filePaths, currentlySelectedFile, class: _class = '' }: Props = $props()
+  let { filePaths, currentlySelectedFile }: Props = $props()
 
   const tree: Directory['files'] = []
 
@@ -70,7 +69,9 @@
   setContext('selectFile', selectFile)
 </script>
 
-<div class="text-sm {_class}">
+<div
+  class="scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 text-sm max-md:shrink-0 md:border-b-0 md:border-r"
+>
   <DirectoryComponent
     {currentlySelectedFile}
     showDirectoryName={false}

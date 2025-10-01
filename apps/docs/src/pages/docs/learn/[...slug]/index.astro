@@ -2,7 +2,7 @@
 import DocsLayout from '$layouts/DocsLayout.astro'
 import { getCollection, render, type CollectionEntry } from 'astro:content'
 import MdxCode from '$components/Code/MdxCode.astro'
-import QuickNav from '../../../../components/QuickNav/QuickNav.astro'
+import QuickNav from '$components/QuickNav/QuickNav.astro'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('learn')
@@ -27,7 +27,7 @@ const { Content } = await render(entry)
   {entry}
   title={`${title} | Learn Threlte`}
 >
-  <h6 class="text-faded text-sm font-bold">
+  <h6>
     {category}
   </h6>
   <h1>

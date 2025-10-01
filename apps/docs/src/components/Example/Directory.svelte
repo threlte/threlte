@@ -37,7 +37,7 @@
     }}
     class="flex flex-row items-center gap-1 font-bold"
   >
-    <div class="[&>*]:w-[1em]">
+    <div class="*:w-[1em]">
       {#if expanded}
         <svg
           viewBox="0 0 33 33"

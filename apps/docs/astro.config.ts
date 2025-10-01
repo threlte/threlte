@@ -6,11 +6,12 @@ import rehypeSlug from 'rehype-slug'
 import mkcert from 'vite-plugin-mkcert'
 import { threlteStudio } from '@threlte/studio/vite'
 import type { Plugin } from 'vite'
-import tailwind from '@astrojs/tailwind'
+import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
 
+// "@theatre/core" needs to be externalized in development mode but not in production!
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
   noExternal.push('@theatre/core')
@@ -18,26 +19,22 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  markdown: {
+    syntaxHighlight: false
+  },
   prefetch: {
     prefetchAll: true
   },
   experimental: {
     clientPrerender: true
   },
-  build: {
-    inlineStylesheets: 'never'
-  },
   integrations: [
     AutoImport({
-      imports: [
-        '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro',
-        '$components/Card/Card.astro'
-      ]
+      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     }),
-    tailwind(),
     svelte(),
     mdx({
+      gfm: false,
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
     preact({ compat: true, include: ['**/*.tsx'] })
@@ -61,10 +58,9 @@ export default defineConfig({
       ...(process.argv.includes('--https') ? { https: {} } : {})
     },
     plugins: process.argv.includes('--https')
-      ? [threlteStudio() as unknown as Plugin, mkcert()]
-      : [threlteStudio() as unknown as Plugin],
+      ? [threlteStudio() as unknown as Plugin, mkcert(), tailwindcss()]
+      : [threlteStudio() as unknown as Plugin, tailwindcss()],
     ssr: {
-      // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
     },
     optimizeDeps: {
@@ -79,9 +75,5 @@ export default defineConfig({
         keep_classnames: true
       }
     }
-  },
-  markdown: {
-    syntaxHighlight: false
-    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
   }
 })

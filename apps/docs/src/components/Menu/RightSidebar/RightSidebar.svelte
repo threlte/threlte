@@ -83,10 +83,10 @@
       {#each headings as heading}
         <li
           class={[
-            'nav-list-item text-faded',
-            !!currentHeadingSlug &&
-              heading.slug === currentHeadingSlug &&
-              '!border-orange font-bold !text-orange'
+            'sidebar-list-item',
+            heading.slug === currentHeadingSlug
+              ? 'border-orange! text-orange font-bold'
+              : 'text-faded'
           ]}
         >
           <a
@@ -119,7 +119,7 @@
     class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
     ontransitionend={focusFirstDropdownLink}
   >
-    <li class="text-faded list-item">
+    <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
       <a
         class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
         href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
@@ -128,7 +128,6 @@
         target="_blank"
       >
         <svg
-          class="icon"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -146,7 +145,7 @@
     </li>
 
     {#if sourceUrl}
-      <li class="text-faded list-item">
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={sourceUrl}
@@ -155,7 +154,6 @@
           target="_blank"
         >
           <svg
-            class="icon"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -174,7 +172,7 @@
     {/if}
 
     {#if editUrl}
-      <li class="text-faded list-item">
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={editUrl}
@@ -183,7 +181,6 @@
           target="_blank"
         >
           <svg
-            class="icon"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -206,17 +203,3 @@
     {@render children?.()}
   </div>
 </div>
-
-<style lang="postcss">
-  .nav-list-item {
-    @apply border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
-  }
-
-  .list-item {
-    @apply relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white;
-  }
-
-  .list-item .icon {
-    @apply absolute right-full top-1/2 mr-3 h-[16px] w-[16px] -translate-y-1/2;
-  }
-</style>
