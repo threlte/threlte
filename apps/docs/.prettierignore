@@ -1,7 +1,6 @@
+README.md
 node_modules/**
 dist
-.astro
 .svelte-kit
 .changeset
-README.md
 CHANGELOG.md
