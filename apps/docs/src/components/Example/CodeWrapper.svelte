@@ -1,10 +1,8 @@
 <script lang="ts">
-  import type { File } from './types'
-
   import CodeExplorer from './CodeExplorer.svelte'
-  import { writable, type Writable } from 'svelte/store'
   import { fade } from 'svelte/transition'
   import type { Snippet } from 'svelte'
+  import { setCodeExampleContext } from './exampleContext.svelte'
 
   interface Props {
     filePaths: string[]
@@ -18,25 +16,6 @@
 
   let childrenElements: HTMLElement[] = $state([])
 
-  const onFileSelected = (file: File) => {
-    const path = file.path
-
-    // hide all children except the one that was selected
-    childrenElements.forEach((child) => {
-      const elPath = child.dataset.path
-      if (!elPath) return
-
-      // path is relative to the root of the example directory
-      if (elPath.endsWith(path)) {
-        child.style.display = 'block'
-      } else {
-        child.style.display = 'none'
-      }
-    })
-
-    currentlySelectedFile.set(file)
-  }
-
   const initialFilePath = showFile
     ? filePaths.includes(showFile)
       ? showFile
@@ -44,11 +23,8 @@
     : 'App.svelte'
   const initialFileName = initialFilePath.split('/').pop() || 'App.svelte'
 
-  const currentlySelectedFile: Writable<File> = writable({
-    name: initialFileName,
-    path: initialFilePath,
-    type: 'file'
-  })
+  let context = $state({ currentFilePath: initialFileName })
+  setCodeExampleContext(context)
 
   const setChildren = (node: HTMLDivElement) => {
     // the first child in node.children is an astro slot, so we need the children of that
@@ -58,8 +34,22 @@
         return item instanceof HTMLElement
       })
     }
-    onFileSelected($currentlySelectedFile)
   }
+
+  $effect(() => {
+    // hide all children except the one that was selected
+    childrenElements.forEach((child) => {
+      const elPath = child.dataset.path
+      if (!elPath) return
+
+      // path is relative to the root of the example directory
+      if (elPath.endsWith(context.currentFilePath)) {
+        child.style.display = 'block'
+      } else {
+        child.style.display = 'none'
+      }
+    })
+  })
 </script>
 
 <div
@@ -100,13 +90,7 @@
       </button>
     </div>
   {/if}
-  <CodeExplorer
-    {currentlySelectedFile}
-    {filePaths}
-    on:fileSelected={(e) => {
-      onFileSelected(e.detail)
-    }}
-  />
+  <CodeExplorer {filePaths} />
 
   <div
     use:setChildren
