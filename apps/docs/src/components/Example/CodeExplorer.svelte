@@ -1,16 +1,12 @@
 <script lang="ts">
-  import { setContext } from 'svelte'
-  import { createEventDispatcher } from 'svelte'
-  import type { Writable } from 'svelte/store'
   import DirectoryComponent from './Directory.svelte'
-  import type { Directory, File } from './types'
+  import type { Directory } from './types'
 
   interface Props {
     filePaths: string[]
-    currentlySelectedFile: Writable<File>
   }
 
-  let { filePaths, currentlySelectedFile }: Props = $props()
+  let { filePaths }: Props = $props()
 
   const tree: Directory['files'] = []
 
@@ -57,23 +53,12 @@
       })
     }
   })
-
-  const dispatch = createEventDispatcher<{
-    fileSelected: File
-  }>()
-
-  const selectFile = (file: File) => {
-    dispatch('fileSelected', file)
-  }
-
-  setContext('selectFile', selectFile)
 </script>
 
 <div
   class="scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 text-sm max-md:shrink-0 md:border-b-0 md:border-r"
 >
   <DirectoryComponent
-    {currentlySelectedFile}
     showDirectoryName={false}
     directory={{
       name: 'src',
