@@ -9,6 +9,12 @@
   let { category, activeUrlPathName }: Props = $props()
 
   let open = true
+
+  const trim = (x: string) => {
+    x = x.startsWith('/') ? x.slice(1) : x
+    x = x.endsWith('/') ? x.slice(0, -1) : x
+    return x
+  }
 </script>
 
 <Details
@@ -31,7 +37,7 @@
         <li
           class={[
             'sidebar-list-item',
-            activeUrlPathName === `${category.urlPrefix}/${item.slug}`
+            trim(activeUrlPathName) === trim(`${category.urlPrefix}/${item.slug}`)
               ? 'border-orange! text-orange font-bold'
               : 'text-faded'
           ]}
