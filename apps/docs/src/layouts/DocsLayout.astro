@@ -39,7 +39,7 @@ const activeLinkStyles = 'text-orange!'
 <AppLayout {title}>
   <Markprompt client:only="preact" />
   <header
-    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[70px] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex"
+    class="border-b-orange/25 fixed z-40 mx-auto hidden h-[var(--docs-navbar-height)] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex"
     transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 xl:gap-12">
@@ -189,7 +189,7 @@ const activeLinkStyles = 'text-orange!'
     class="grid min-h-[66vh] md:grid-cols-[var(--left-sidebar-width)_1fr] lg:grid-cols-[var(--left-sidebar-width)_1fr_var(--right-sidebar-width)]"
   >
     <aside
-      class="min-w-(--left-sidebar-width) fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] place-self-start justify-self-stretch overflow-hidden md:top-[70px] md:block lg:row-span-1"
+      class="min-w-(--left-sidebar-width) fixed top-0 z-10 row-span-2 hidden h-[calc(100vh-var(--docs-navbar-height))] place-self-start justify-self-stretch overflow-hidden md:top-[var(--docs-navbar-height)] md:block lg:row-span-1"
       transition:name="left_sidebar"
     >
       <div class="mx-6 mb-6 mt-6 flex flex-1 flex-col gap-3 xl:hidden">
@@ -210,7 +210,7 @@ const activeLinkStyles = 'text-orange!'
     </div>
 
     <aside
-      class="lg:top-(--docs-navbar-height) lg:w-(--right-sidebar-width) fixed right-0 top-0 z-10 row-span-2 hidden h-[calc(100vh-70px)] place-self-start justify-self-stretch overflow-hidden lg:block"
+      class="lg:top-(--docs-navbar-height) lg:w-(--right-sidebar-width) fixed right-0 top-0 z-10 row-span-2 hidden h-[calc(100vh-var(--docs-navbar-height))] place-self-start justify-self-stretch overflow-hidden lg:block"
       transition:name="right_sidebar"
     >
       <RightSidebar entry={Astro.props.entry}>

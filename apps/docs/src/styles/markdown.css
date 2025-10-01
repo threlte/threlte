@@ -6,8 +6,7 @@ https://github.com/withastro/starlight/blob/main/packages/starlight/style/markdo
 */
 @layer base {
   html {
-    /* todo: imported from old. it would be better to use css variables */
-    scroll-padding-top: calc(70px + 1.5rem);
+    scroll-padding-top: calc(var(--docs-navbar-height) + 1.5rem);
   }
 
   .markdown-content

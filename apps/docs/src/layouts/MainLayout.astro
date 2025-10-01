@@ -17,7 +17,9 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
 
 <AppLayout {title}>
   <!-- Desktop Nav -->
-  <div class="z-5 fixed left-0 top-0 h-[70px] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
+  <div
+    class="z-5 fixed left-0 top-0 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]"
+  >
     <!-- bottom gradient -->
     <div
       class="bg-linear-to-b pointer-events-none absolute left-0 top-full h-[10svh] w-full from-[#0A0F19] to-transparent"
@@ -26,7 +28,7 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
   </div>
 
   <header
-    class="fixed z-10 hidden h-[70px] w-screen flex-row items-center justify-between border-b border-blue-900/0 px-6 md:flex"
+    class="fixed z-10 hidden h-[var(--docs-navbar-height)] w-screen flex-row items-center justify-between border-b border-blue-900/0 px-6 md:flex"
   >
     <!-- Header Left -->
     <div class="flex flex-row items-center gap-12">
