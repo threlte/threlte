@@ -24,7 +24,7 @@ const allModules = import.meta.glob('../../examples/**/*', {
 }) as Record<string, string>
 
 for (const path in allModules) {
-  if (!path.replace('../../examples/', '').startsWith(Astro.props.path)) {
+  if (!path.replace('../../examples/', '').startsWith(Astro.props.path + '/')) {
     delete allModules[path]
   }
 }

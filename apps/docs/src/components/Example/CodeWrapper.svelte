@@ -102,7 +102,6 @@
   {/if}
   <CodeExplorer
     {currentlySelectedFile}
-    class="scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 max-md:shrink-0 md:border-b-0 md:border-r"
     {filePaths}
     on:fileSelected={(e) => {
       onFileSelected(e.detail)
