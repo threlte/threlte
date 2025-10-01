@@ -65,6 +65,6 @@
       <a href="/showcase"> Showcase </a>
     </div> -->
 
-    <slot name="after-navigation" />
+    <slot name="socials" />
   </div>
 </MobileNav>
