@@ -6,13 +6,21 @@
 
   interface Props {
     filePaths: string[]
+    exampleBasePath: string
     hidePreview: boolean
     showFile: string | null
     expanded?: boolean
     children: Snippet
   }
 
-  let { filePaths, hidePreview, showFile, children, expanded = $bindable(false) }: Props = $props()
+  let {
+    filePaths,
+    hidePreview,
+    showFile,
+    exampleBasePath,
+    children,
+    expanded = $bindable(false)
+  }: Props = $props()
 
   let childrenElements: HTMLElement[] = $state([])
 
@@ -37,13 +45,14 @@
   }
 
   $effect(() => {
+    const fullPath = `../../examples/${exampleBasePath}/${context.currentFilePath}`
     // hide all children except the one that was selected
     childrenElements.forEach((child) => {
       const elPath = child.dataset.path
       if (!elPath) return
 
       // path is relative to the root of the example directory
-      if (elPath.endsWith(context.currentFilePath)) {
+      if (elPath === fullPath) {
         child.style.display = 'block'
       } else {
         child.style.display = 'none'
