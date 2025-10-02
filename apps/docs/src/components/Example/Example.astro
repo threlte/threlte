@@ -61,6 +61,7 @@ const hidePreview = Astro.props.hidePreview ?? false
     !hideCode && (
       <CodeWrapper
         showFile={Astro.props.showFile}
+        exampleBasePath={Astro.props.path}
         expanded={hidePreview || (Astro.props.expandCode ?? false)}
         hidePreview={hidePreview}
         client:load
