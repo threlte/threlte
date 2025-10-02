@@ -39,6 +39,8 @@ Secondly, the render task that threlte automatically uses is disabled and a cust
 Lastly, the uvs are used in the fragment shader as an index into the render target's texture. Note that you can get a perfect circle by sending the size of the renderer into the fragment shader as a uniform.
 
 ```ts
+import { fromStore } from 'svelte/store'
+
 const fragmentShader = `
 	// ...
 	uniform vec2 uSize;
@@ -51,8 +53,10 @@ const uSize = new Uniform(new Vector2())
 
 const { size } = useThrelte()
 
+const sizeAsState = fromStore(size)
+
 $effect(() => {
-  uSize.value.set($size.width, $size.height)
+  uSize.value.set(sizeAsState.current.width, sizeAsState.current.height)
 })
 
 const material = new RawShaderMaterial({
