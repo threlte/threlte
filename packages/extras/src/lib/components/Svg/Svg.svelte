@@ -55,8 +55,6 @@
       }
     }
   })
-
-  let renderOrder = 0
 </script>
 
 <T.Group
@@ -66,10 +64,10 @@
   <T.Group scale.y={-1}>
     {#each paths as path, p (path)}
       {#if !skipFill && path.userData?.style.fill !== undefined && path.userData.style.fill !== 'none'}
-        {#each SVGLoader.createShapes(path) as shape (shape)}
+        {#each SVGLoader.createShapes(path) as shape, i (shape)}
           <T.Mesh
             {...fillMeshProps}
-            renderOrder={renderOrder++}
+            renderOrder={i}
           >
             <T.ShapeGeometry args={[shape]} />
             <T.MeshBasicMaterial
@@ -90,7 +88,7 @@
             <T.Mesh
               geometry={strokeGeometries[p]?.[s]}
               {...strokeMeshProps}
-              renderOrder={renderOrder++}
+              renderOrder={s}
             >
               <T.MeshBasicMaterial
                 color={path.userData?.style.stroke}
