@@ -9,20 +9,20 @@ The basic idea of postprocessing is to draw the scene to a frame-buffer ortextur
 1. a WebGL render target.
 2. a separate scene from the one that Threlte provides.
 
-Threlte's `useFBO` can give us a [WebGLRenderTarget](https://threejs.org/docs/index.html?q=webgl#api/en/renderers/WebGLRenderTarget) automatically resizes when the size of the canvas changes.
+Threlte's `useFBO` can give us a [WebGLRenderTarget](https://threejs.org/docs/index.html?q=webgl#api/en/renderers/WebGLRenderTarget) that automatically resizes when the size of the canvas updates.
 
-A separate scene is needed so that we can add the screen-quad mesh to it and render it. The only thing in this scene will be the screen-quad mesh that has the post-processed scene as its material texture. This mesh should not be added to the main scene because it would cause a circular dependency.
+A separate scene is needed so that we can add the screen-quad mesh to it and render it. The only object in the this scene will be the screen-quad mesh with the post-processed shader applied.
 
-So the steps are as follows:
+The steps are as follows:
 
-1. render the "main" scene to the render target. The target's texture is passed as a uniform into the post-procssing shader
-2. render the scene that only contains the screen-quad mesh.
+1. Render the "main" scene to the render target. The target's texture is passed as a uniform into the post-procssing shader.
+2. Render the scene that only contains the screen-quad mesh. This is what will be displayed on the canvas.
 
 There are some sub-steps inbetween but these are the two important bits that happen in the `useTask` callback in the `<Scene>` component.
 
 ## ScreenQuadGeometry
 
-This component creates a right triangle such that its right angle is positioned in the lower left of the canvas. The size of the triangle is such that the hypotenuse only touches the top right corner of the canvas. The triangle is in clip-space so we need a special vertex shader to use it.
+This component creates a buffer geometry triangle such that its right angle is positioned in the lower left of the canvas. The size of the triangle is such that the hypotenuse only touches the top right corner of the canvas. The triangle is in clip-space so we need a special vertex shader to use it.
 
 The vertex shader string is exported from the `<ScreenQuadGeometry>` component to be used with either a `Three.RawShaderMaterial` or `Three.ShaderMaterial`.
 
