@@ -50,10 +50,6 @@ Contributions are what make the open source community such an amazing place to l
 - **Filing Issues** - if you have feature requestions or you think you spotted a bug, [submit an issue](https://github.com/threlte/threlte/issues/new).
 - **Contributing Code** - if you would like to drop us a PR, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) first.
 
-## Sponsors
-
-[![Powered by Vercel](./assets/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
-
 ---
 
 ### License
