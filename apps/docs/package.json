@@ -31,7 +31,6 @@
     "@radix-ui/react-visually-hidden": "^1.0.3",
     "@tailwindcss/postcss": "^4.1.12",
     "@tailwindcss/vite": "^4.1.12",
-    "@vercel/analytics": "^1.0.1",
     "astro": "^5.13.5",
     "gl-noise": "^1.6.1",
     "highlight.js": "^11.8.0",
