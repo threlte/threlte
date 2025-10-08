@@ -51,10 +51,8 @@
       hit = hits.shift()
     }
 
-		if (hit) {
-			if ('userData' in hit.object && 'selectable' in hit.object.userData && !hit.object.userData.selectable) {
-				hit = undefined
-			}
+		if (hit?.object?.userData?.selectable === false) {
+			hit = undefined
 		}
 
     if (event.shiftKey) {
