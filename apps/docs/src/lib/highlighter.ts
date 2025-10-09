@@ -1,27 +1,29 @@
-import { getHighlighter, setCDN, type Highlighter } from 'shiki'
+import { createHighlighterCore } from 'shiki/core'
+import { createOnigurumaEngine } from 'shiki/engine/oniguruma'
+import draculaSoft from '@shikijs/themes/dracula-soft'
 
-setCDN('https://unpkg.com/shiki/')
+import astro from '@shikijs/langs/astro'
+import typescript from '@shikijs/langs/typescript'
+import javascript from '@shikijs/langs/javascript'
+import svelte from '@shikijs/langs/svelte'
+import markdown from '@shikijs/langs/markdown'
+import mdx from '@shikijs/langs/mdx'
+import md from '@shikijs/langs/md'
+import json from '@shikijs/langs/json'
+import html from '@shikijs/langs/html'
+import bash from '@shikijs/langs/bash'
+import glsl from '@shikijs/langs/glsl'
 
-let highlighter: Promise<Highlighter>
+import type { HighlighterCore } from 'shiki'
+
+let highlighter: Promise<HighlighterCore>
 
 export const getShiki = () => {
   if (highlighter) return highlighter
-  highlighter = getHighlighter({
-    theme: 'dracula-soft',
-    langs: [
-      'astro',
-      'typescript',
-      'javascript',
-      'svelte',
-      'astro',
-      'markdown',
-      'mdx',
-      'md',
-      'json',
-      'html',
-      'bash',
-      'glsl'
-    ]
+  highlighter = createHighlighterCore({
+    themes: [draculaSoft],
+    engine: createOnigurumaEngine(import('shiki/wasm')),
+    langs: [astro, typescript, javascript, svelte, markdown, mdx, md, json, html, bash, glsl]
   })
   return highlighter
 }
