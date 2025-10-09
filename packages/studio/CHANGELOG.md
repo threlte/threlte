@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.10
+
+### Patch Changes
+
+- 2d5dd10: add userData variable check for `selectable`
+
 ## 0.1.9
 
 ### Patch Changes

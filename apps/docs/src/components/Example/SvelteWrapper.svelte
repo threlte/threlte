@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import OpenInStackblitz from './OpenInStackblitz.svelte'
+  import { getAllAppModules } from './globLoader'
 
   interface Props {
     path: string
@@ -13,10 +14,7 @@
 
   let { path, files, hideCode, hideStackblitz = false, iframe, class: cls = '' }: Props = $props()
 
-  const allAppModules = import.meta.glob('../../examples/**/App.svelte') as Record<
-    string,
-    () => Promise<any>
-  >
+  const allAppModules = getAllAppModules()
 
   let mounted = $state(false)
 
