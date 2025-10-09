@@ -69,8 +69,11 @@ export default defineConfig({
       }
     },
     build: {
+      rollupOptions: {
+        external: ['sharp']
+      },
       target: 'esnext',
-      minify: 'terser',
+      minify: 'esbuild',
       terserOptions: {
         keep_classnames: true
       }

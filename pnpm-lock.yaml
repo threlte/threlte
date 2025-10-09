@@ -232,8 +232,8 @@ importers:
         specifier: ^0.15.3
         version: 0.15.3(svelte@5.26.2)
       sharp:
-        specifier: ^0.31.3
-        version: 0.31.3
+        specifier: ^0.33.4
+        version: 0.33.4
       shiki:
         specifier: ^0.14.3
         version: 0.14.3
@@ -3909,10 +3909,6 @@ packages:
     resolution: {integrity: sha512-reYkTUJAZb9gUuZ2RvVCNhVHdg62RHnJ7WJl8ftMi4diZ6NWlciOzQN88pUhSELEwflJht4oQDv0F0BMlwaYtA==}
     engines: {node: '>=8'}
 
-  detect-libc@2.0.2:
-    resolution: {integrity: sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==}
-    engines: {node: '>=8'}
-
   detect-libc@2.0.4:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
@@ -5940,9 +5936,6 @@ packages:
     resolution: {integrity: sha512-eSKV6s+APenqVh8ubJyiu/YhZgxQpGP66ntzUb3lY1xB9ukSRaGnx0AIxI+IM+1+IVYC1oWobgG5L3Lt9ARykQ==}
     engines: {node: '>=10'}
 
-  node-addon-api@5.1.0:
-    resolution: {integrity: sha512-eh0GgfEkpnoWDq+VY8OyvYhFEzBk6jIYbRKdIlyTiAXIVJ8PyBaKb0rp7oDtoddbdoHWhq8wwr+XZ81F1rpNdA==}
-
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
 
@@ -6980,10 +6973,6 @@ packages:
 
   setprototypeof@1.2.0:
     resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
-
-  sharp@0.31.3:
-    resolution: {integrity: sha512-XcR4+FCLBFKw1bdB+GEhnUNXNXvnt0tDo4WsBsraKymuo/IAuPuCBVAL2wIkUw2r/dwFW5Q5+g66Kwl2dgDFVg==}
-    engines: {node: '>=14.15.0'}
 
   sharp@0.32.6:
     resolution: {integrity: sha512-KyLTWwgcR9Oe4d9HwCwNM2l7+J0dUQwn/yf7S0EnTtb0eVS4RxO0eUSvxPtzT4F3SY+C4K6fqdv/DO27sJ/v/w==}
@@ -11749,8 +11738,6 @@ snapshots:
 
   detect-indent@6.1.0: {}
 
-  detect-libc@2.0.2: {}
-
   detect-libc@2.0.4: {}
 
   detect-node-es@1.1.0: {}
@@ -14535,8 +14522,6 @@ snapshots:
     dependencies:
       semver: 7.7.2
 
-  node-addon-api@5.1.0: {}
-
   node-addon-api@6.1.0: {}
 
   node-bitmap@0.0.1: {}
@@ -15710,24 +15695,13 @@ snapshots:
 
   setprototypeof@1.2.0: {}
 
-  sharp@0.31.3:
-    dependencies:
-      color: 4.2.3
-      detect-libc: 2.0.4
-      node-addon-api: 5.1.0
-      prebuild-install: 7.1.1
-      semver: 7.7.2
-      simple-get: 4.0.1
-      tar-fs: 2.1.1
-      tunnel-agent: 0.6.0
-
   sharp@0.32.6:
     dependencies:
       color: 4.2.3
-      detect-libc: 2.0.2
+      detect-libc: 2.0.4
       node-addon-api: 6.1.0
       prebuild-install: 7.1.1
-      semver: 7.5.4
+      semver: 7.7.2
       simple-get: 4.0.1
       tar-fs: 3.0.4
       tunnel-agent: 0.6.0
@@ -15757,7 +15731,6 @@ snapshots:
       '@img/sharp-wasm32': 0.33.4
       '@img/sharp-win32-ia32': 0.33.4
       '@img/sharp-win32-x64': 0.33.4
-    optional: true
 
   shebang-command@1.2.0:
     dependencies:
