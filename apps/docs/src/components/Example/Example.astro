@@ -2,6 +2,7 @@
 import SvelteWrapper from './SvelteWrapper.svelte'
 import Code from '../Code/Code.astro'
 import CodeWrapper from './CodeWrapper.svelte'
+import { getAllExamplesModules } from './globLoader'
 
 interface Props {
   /**
@@ -17,11 +18,7 @@ interface Props {
   hideStackblitz?: boolean
 }
 
-const allModules = import.meta.glob('../../examples/**/*', {
-  query: '?raw',
-  eager: true,
-  import: 'default'
-}) as Record<string, string>
+const allModules = getAllExamplesModules()
 
 for (const path in allModules) {
   if (!path.replace('../../examples/', '').startsWith(Astro.props.path + '/')) {
