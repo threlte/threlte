@@ -10,6 +10,9 @@ import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
+import { cpus } from 'os'
+
+const CPU_COUNT = cpus().length
 
 // "@theatre/core" needs to be externalized in development mode but not in production!
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
@@ -19,6 +22,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  compressHTML: false,
   markdown: {
     syntaxHighlight: false
   },
@@ -76,7 +80,16 @@ export default defineConfig({
       minify: 'esbuild',
       terserOptions: {
         keep_classnames: true
+      },
+      rollupOptions: {
+        maxParallelFileOps: CPU_COUNT * 3,
+        output: {
+          manualChunks: undefined
+        }
       }
     }
+  },
+  build: {
+    concurrency: 4
   }
 })
