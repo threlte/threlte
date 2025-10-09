@@ -1,16 +1,15 @@
 {
   "extends": "astro/tsconfigs/strictest",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "$lib/*": ["src/lib/*"],
-      "$components/*": ["src/components/*"],
-      "$layouts/*": ["src/layouts/*"],
-      "$pages/*": ["src/pages/*"],
-      "$styles/*": ["src/styles/*"],
-      "$assets/*": ["src/assets/*"],
-      "$examples/*": ["src/examples/*"],
-      "$hooks/*": ["src/hooks/*"]
+      "$lib/*": ["./src/lib/*"],
+      "$components/*": ["./src/components/*"],
+      "$layouts/*": ["./src/layouts/*"],
+      "$pages/*": ["./src/pages/*"],
+      "$styles/*": ["./src/styles/*"],
+      "$assets/*": ["./src/assets/*"],
+      "$examples/*": ["./src/examples/*"],
+      "$hooks/*": ["./src/hooks/*"]
     },
     "types": ["astro/client", "webxr"],
     "jsx": "preserve",
@@ -18,6 +17,6 @@
     "skipLibCheck": true,
     "noUncheckedIndexedAccess": false
   },
-  "include": [".astro/types.d.ts", "src/app.d.ts", "**/*"],
+  "include": [".astro/types.d.ts", "src/app.d.ts", "src"],
   "exclude": ["node_modules", "src/components/Example/stackblitz-template", "dist"]
 }
