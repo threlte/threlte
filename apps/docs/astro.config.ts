@@ -73,15 +73,13 @@ export default defineConfig({
       }
     },
     build: {
-      rollupOptions: {
-        external: ['sharp']
-      },
       target: 'esnext',
       minify: 'esbuild',
       terserOptions: {
         keep_classnames: true
       },
       rollupOptions: {
+        external: ['sharp'],
         maxParallelFileOps: CPU_COUNT * 3,
         output: {
           manualChunks: undefined
