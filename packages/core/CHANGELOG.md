@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.1.6
+
+### Patch Changes
+
+- 380e71a: fix vite resolve conditions for non-test envs
+
 ## 8.1.5
 
 ### Patch Changes
