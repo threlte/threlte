@@ -38,12 +38,11 @@
       >
         {#snippet children({ ref })}
           {#if selected}
-            <Portal object={scene}>
-              <T.DirectionalLightHelper
-                bind:ref={lightHelper}
-                args={[ref]}
-              />
-            </Portal>
+            <T.DirectionalLightHelper
+              bind:ref={lightHelper}
+              attach={scene}
+              args={[ref]}
+            />
           {/if}
         {/snippet}
       </T.DirectionalLight>
