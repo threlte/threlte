@@ -92,11 +92,25 @@ export const useAttach = <T extends MaybeInstance<any>>(
     // Attach to parent prop
     if (typeof attach === 'string') {
       const { target, key } = resolvePropertyPath(parent.current, attach)
-      const valueBeforeAttach = target[key]
-      target[key] = current
-      return () => {
-        invalidate()
-        target[key] = valueBeforeAttach
+
+      if (key in target) {
+        // If the key is already in the target, we need to save
+        // the value before attaching …
+        const valueBeforeAttach = target[key]
+        target[key] = current
+        return () => {
+          invalidate()
+          // … and restore it when the component unmounts
+          target[key] = valueBeforeAttach
+        }
+      } else {
+        // If the key is not in the target, we need to add it …
+        target[key] = current
+        return () => {
+          invalidate()
+          // … and delete it when the component unmounts
+          delete target[key]
+        }
       }
     }
 

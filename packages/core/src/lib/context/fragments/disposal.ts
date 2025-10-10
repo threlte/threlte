@@ -52,13 +52,6 @@ export const createDisposalContext = (): DisposalContext => {
       if (!context.shouldDispose && !force) return
       context.disposableObjects.forEach((mounted, object) => {
         if (mounted === 0 || force) {
-          // Special case for geometries: if an attribute is undefined, threejs will throw
-          if ((object as any).isBufferGeometry) {
-            const g = object as any
-            for (const k in g.attributes) {
-              if (!g.attributes[k]) delete g.attributes[k]
-            }
-          }
           object?.dispose?.()
           context.disposableObjects.delete(object)
         }
