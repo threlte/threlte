@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 7.3.2
+
+### Patch Changes
+
+- bfc480f: Skip circular references when disposing
+
 ## 7.3.1
 
 ### Patch Changes
