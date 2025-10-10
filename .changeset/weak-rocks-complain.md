@@ -2,4 +2,4 @@
 "@threlte/core": patch
 ---
 
-Sanitize attrs before geometry.dispose. This fixes crash when attach cleanup leaves an attribute undefined which threejs cannot handle.
+Do not preserve attribute values that were not present before attachment when attach cleanup is called.
