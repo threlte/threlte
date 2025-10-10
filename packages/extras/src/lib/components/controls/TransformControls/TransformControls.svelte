@@ -84,8 +84,16 @@
 
   watch([controlsStore, attachTo], ([controls, attachTo]) => {
     controls.attach(attachTo)
+    if ('getHelper' in controls) {
+      const helper = (controls as any).getHelper()
+      scene.add(helper)
+    }
     return () => {
       controls.detach()
+      if ('getHelper' in controls) {
+        const helper = (controls as any).getHelper()
+        scene.remove(helper)
+      }
     }
   })
 
