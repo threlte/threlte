@@ -1,6 +1,6 @@
 {
   "name": "@threlte/core",
-  "version": "7.3.1",
+  "version": "7.3.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "A 3D framework for the web, built on top of Svelte and Three.js",

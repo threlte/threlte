@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 8.12.3
+
+### Patch Changes
+
+- f1a220e: Add TransformControls helper for newer Three.js versions
+
 ## 8.12.2
 
 ### Patch Changes
