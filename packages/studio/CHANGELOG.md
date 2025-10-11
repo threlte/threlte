@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.1.11
+
+### Patch Changes
+
+- 8eeafcb: Use snippet based Portal component
+
 ## 0.1.10
 
 ### Patch Changes
