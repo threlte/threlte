@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { Environment, OrbitControls, Portal, SoftShadows } from '@threlte/extras'
+  import { Environment, OrbitControls, SoftShadows } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import type { DirectionalLightHelper } from 'three'
   import Suzanne from './Suzanne.svelte'
