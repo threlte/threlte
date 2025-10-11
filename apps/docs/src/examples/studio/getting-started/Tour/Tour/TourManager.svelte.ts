@@ -60,14 +60,16 @@ export class TourManager {
 
     tourStop.activate()
 
-    const cleanup = $effect.root(() => {
-      $effect(() => {
-        if (tourStop.isCompleted) {
-          cleanup()
-          tick().then(() => {
+    tick().then(() => {
+      const cleanup = $effect.root(() => {
+        $effect(() => {
+          if (tourStop.isCompleted) {
             this.nextStop()
-          })
-        }
+          }
+          if (!tourStop.isActive) {
+            cleanup()
+          }
+        })
       })
     })
   }

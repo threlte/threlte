@@ -126,9 +126,16 @@
       class="z-10001 pointer-events-auto absolute bottom-4 right-4 rounded-md bg-white px-1 py-0.5 text-sm text-neutral-600"
     >
       {#if tourManager.tourStarted}
-        <button onclick={() => tourManager.stopTour()}> Skip Tour → </button>
+        <button
+          onclickcapture={(e) => {
+            e.stopPropagation()
+            tourManager.stopTour()
+          }}
+        >
+          Skip Tour →
+        </button>
       {:else}
-        <button onclick={() => tourManager.startTour()}> Start Tour </button>
+        <button onclickcapture={() => location.reload()}> Start Tour </button>
       {/if}
     </div>
   </div>
