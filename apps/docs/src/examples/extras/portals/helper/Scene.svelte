@@ -1,7 +1,6 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { Grid, OrbitControls, Portal, TransformControls } from '@threlte/extras'
-  import type { DirectionalLightHelper } from 'three'
+  import { Grid, OrbitControls, TransformControls } from '@threlte/extras'
 
   const { scene } = useThrelte()
 </script>
