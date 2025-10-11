@@ -1,3 +1,4 @@
+import { tick } from 'svelte'
 import { InstructionsManager } from './instructions/InstructionsManager.svelte'
 import { MaskManager } from './masks/MaskManager.svelte'
 import { CameraPositionTourStop } from './TourStop/stops/CameraPositionTourStop/CameraPositionTourStop.svelte'
@@ -63,7 +64,9 @@ export class TourManager {
       $effect(() => {
         if (tourStop.isCompleted) {
           cleanup()
-          this.nextStop()
+          tick().then(() => {
+            this.nextStop()
+          })
         }
       })
     })

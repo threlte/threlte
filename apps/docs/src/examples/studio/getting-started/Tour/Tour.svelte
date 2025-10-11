@@ -15,7 +15,7 @@
   )
 </script>
 
-<svelte:window on:pointermove|capture={tourManager.tourStopMaskManager.onPointerMove} />
+<svelte:window onpointermovecapture={tourManager.tourStopMaskManager.onPointerMove} />
 
 <Portal target="#tour-target">
   <div class="contents">
