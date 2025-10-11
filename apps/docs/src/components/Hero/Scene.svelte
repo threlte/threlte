@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { ISheet } from '@theatre/core'
   import { T, useThrelte } from '@threlte/core'
-  import { Float, Grid, OrbitControls, Portal, RadialGradientTexture } from '@threlte/extras'
+  import { Float, Grid, OrbitControls, RadialGradientTexture } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import { onMount } from 'svelte'
   import AnimatableCube from './AnimatableCube.svelte'
@@ -79,9 +79,10 @@
             >
               {#snippet children({ ref: camera })}
                 {#if $debug}
-                  <Portal object={scene}>
-                    <T.CameraHelper args={[camera]} />
-                  </Portal>
+                  <T.CameraHelper
+                    args={[camera]}
+                    attach={scene}
+                  />
                 {/if}
               {/snippet}
             </T.PerspectiveCamera>

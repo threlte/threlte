@@ -1,22 +1,27 @@
 ---
-import type { Theme, HtmlRendererOptions, Lang } from 'shiki'
+import type { BundledTheme, BundledLanguage } from 'shiki'
+import {
+  transformerCompactLineOptions,
+  type TransformerCompactLineOption
+} from '@shikijs/transformers'
 import { getShiki } from '../../lib/highlighter'
 import CopyCodeButton from './CopyCodeButton.svelte'
 
 interface Props {
-  lang: Lang
-  theme?: Theme
+  lang: BundledLanguage
+  theme?: BundledTheme
   class?: string
   title?: string
   code: string
-  lineOptions?: HtmlRendererOptions['lineOptions']
+  lineOptions?: TransformerCompactLineOption[]
 }
 
 const highlighter = await getShiki()
 
 const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {
   lang: Astro.props.lang,
-  lineOptions: Astro.props.lineOptions ?? []
+  theme: 'dracula-soft',
+  transformers: [transformerCompactLineOptions(Astro.props.lineOptions ?? [])]
 })
 ---
 

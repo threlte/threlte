@@ -2,6 +2,7 @@
 import SvelteWrapper from './SvelteWrapper.svelte'
 import Code from '../Code/Code.astro'
 import CodeWrapper from './CodeWrapper.svelte'
+import { getAllExamplesModules } from './globLoader'
 
 interface Props {
   /**
@@ -17,25 +18,21 @@ interface Props {
   hideStackblitz?: boolean
 }
 
-const allModules = import.meta.glob('../../examples/**/*', {
-  query: '?raw',
-  eager: true,
-  import: 'default'
-}) as Record<string, string>
+const allModules = getAllExamplesModules()
 
-for (const path in allModules) {
-  if (!path.replace('../../examples/', '').startsWith(Astro.props.path + '/')) {
-    delete allModules[path]
-  }
-}
+const filteredModules = Object.fromEntries(
+  Object.entries(allModules).filter(([key]) => {
+    return key.replace('../../examples/', '').startsWith(Astro.props.path + '/')
+  })
+)
 
 const files: Record<string, string> = {}
-for (const path in allModules) {
+for (const path in filteredModules) {
   let relativePath = path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)
   if (relativePath.startsWith('/')) {
     relativePath = relativePath.slice(1)
   }
-  files[relativePath] = allModules[path] as string
+  files[relativePath] = filteredModules[path] as string
 }
 
 const hideCode = Astro.props.hideCode ?? false
@@ -64,11 +61,11 @@ const hidePreview = Astro.props.hidePreview ?? false
         expanded={hidePreview || (Astro.props.expandCode ?? false)}
         hidePreview={hidePreview}
         client:load
-        filePaths={Object.keys(allModules).map((path) =>
+        filePaths={Object.keys(filteredModules).map((path) =>
           path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)
         )}
       >
-        {Object.entries(allModules).map(([path, mod]) => (
+        {Object.entries(filteredModules).map(([path, mod]) => (
           <div
             data-path={path}
             class="h-full"
