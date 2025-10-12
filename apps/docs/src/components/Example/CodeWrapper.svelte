@@ -64,21 +64,21 @@
 
 <div
   class={[
-    'not-prose relative flex w-full flex-col items-stretch overflow-hidden !rounded-b-md border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
-    !expanded && '!max-h-[100px] overflow-hidden',
-    hidePreview && '!rounded-md border-t'
+    'not-content rounded-b-md! relative flex w-full flex-col items-stretch overflow-hidden border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
+    !expanded && 'max-h-[100px]! overflow-hidden',
+    hidePreview && 'rounded-md! border-t'
   ]}
 >
   {#if !expanded}
     <div
       transition:fade
-      class="absolute left-0 top-0 z-10 h-full w-full bg-gradient-to-t from-blue-900 to-blue-900/50"
+      class="bg-linear-to-t absolute left-0 top-0 z-10 h-full w-full from-blue-900 to-blue-900/50"
     ></div>
   {/if}
   {#if !expanded}
     <div class="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center">
       <button
-        class="z-10 flex flex-row items-center justify-center gap-3 rounded-sm border border-orange/10 bg-orange-800/50 px-2 py-1 text-sm text-orange backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400 focus:outline-none"
+        class="rounded-xs border-orange/10 text-orange focus:outline-hidden z-10 flex flex-row items-center justify-center gap-3 border bg-orange-800/50 px-2 py-1 text-sm backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400"
         onclick={() => (expanded = true)}
       >
         <svg
@@ -102,7 +102,6 @@
   {/if}
   <CodeExplorer
     {currentlySelectedFile}
-    class="scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 max-md:flex-shrink-0 md:border-b-0 md:border-r"
     {filePaths}
     on:fileSelected={(e) => {
       onFileSelected(e.detail)

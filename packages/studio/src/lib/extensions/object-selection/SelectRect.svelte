@@ -35,7 +35,8 @@
 
   const filter = (objects: Object3D[]): Object3D[] => {
     let objs = objects.filter((object) => {
-      return !studioObjectsRegistry.objects.has(object)
+			const isNotSelectable = object?.userData?.selectable === false
+      return !studioObjectsRegistry.objects.has(object) && !isNotSelectable
     })
     return objs
   }

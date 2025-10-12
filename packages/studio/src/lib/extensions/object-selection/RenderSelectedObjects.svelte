@@ -2,7 +2,6 @@
 
 <script lang="ts">
   import { isInstanceOf, T, useTask, useThrelte, watch } from '@threlte/core'
-  import { Portal } from '@threlte/extras'
   import { onMount } from 'svelte'
   import {
     Color,
@@ -152,31 +151,29 @@
 </script>
 
 {#key $camera.uuid}
-  <Portal object={$camera}>
-    <T is={selectionMesh}>
-      <T.PlaneGeometry />
+  <T is={selectionMesh} attach={$camera}>
+    <T.PlaneGeometry />
 
-      <T.ShaderMaterial
-        {fragmentShader}
-        {vertexShader}
-        uniforms={{
-          outlinedObjectsTexture: {
-            value: renderTarget.texture
-          },
-          lineWidth: {
-            value: 1.5
-          },
-          outlineColor: {
-            value: new Color('#FFFF00')
-          },
-          edgeFactor: {
-            value: 0.0001
-          }
-        }}
-        depthWrite={false}
-        depthTest={false}
-        transparent
-      />
-    </T>
-  </Portal>
+    <T.ShaderMaterial
+      {fragmentShader}
+      {vertexShader}
+      uniforms={{
+        outlinedObjectsTexture: {
+          value: renderTarget.texture
+        },
+        lineWidth: {
+          value: 1.5
+        },
+        outlineColor: {
+          value: new Color('#FFFF00')
+        },
+        edgeFactor: {
+          value: 0.0001
+        }
+      }}
+      depthWrite={false}
+      depthTest={false}
+      transparent
+    />
+  </T>
 {/key}

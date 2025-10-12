@@ -42,7 +42,7 @@ const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCatego
   {
     previousMenuItem && previousMenuItemCategory ? (
       <a
-        class="flex flex-row items-center gap-3 px-6 py-6 !text-inherit no-underline hover:!text-white"
+        class="text-inherit! hover:text-white! flex flex-row items-center gap-3 px-6 py-6 no-underline"
         href={makeHref(previousMenuItem, previousMenuItemCategory)}
       >
         <svg
@@ -80,7 +80,7 @@ const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCatego
   {
     nextMenuItem && nextMenuItemCategory ? (
       <a
-        class="flex flex-row items-center gap-3 self-end px-6 py-6 !text-inherit no-underline hover:!text-white md:self-auto"
+        class="text-inherit! hover:text-white! flex flex-row items-center gap-3 self-end px-6 py-6 no-underline md:self-auto"
         href={makeHref(nextMenuItem, nextMenuItemCategory)}
       >
         <div class="flex flex-col items-end">

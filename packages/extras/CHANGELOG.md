@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.5.5
+
+### Patch Changes
+
+- 8eeafcb: Use snippet based Portal component
+
 ## 9.5.4
 
 ### Patch Changes
