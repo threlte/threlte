@@ -176,6 +176,12 @@ importers:
       preact:
         specifier: ^10.27.1
         version: 10.27.1
+      starlight-sidebar-topics:
+        specifier: ^0.6.1
+        version: 0.6.1(@astrojs/starlight@0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1)))
+      starlight-sidebar-topics-dropdown:
+        specifier: ^0.5.1
+        version: 0.5.1(@astrojs/starlight@0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1)))(starlight-sidebar-topics@0.6.1(@astrojs/starlight@0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1))))
       three-custom-shader-material:
         specifier: ^6.3.7
         version: 6.3.7(react@18.2.0)(three@0.175.0)
@@ -7381,6 +7387,19 @@ packages:
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
+
+  starlight-sidebar-topics-dropdown@0.5.1:
+    resolution: {integrity: sha512-vEKQZnl90dVdqQWTauUs+L4I9cOqmw0gnNa6C9dB8KgXE1QxFAJikEMDDS9IF24kGRL+7dXr+ZZWWhY6Ve+mEA==}
+    engines: {node: ^18.17.1 || ^20.3.0 || >=21.0.0}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.30'
+      starlight-sidebar-topics: '>=0.6'
+
+  starlight-sidebar-topics@0.6.1:
+    resolution: {integrity: sha512-kBOFUTJEVVeeZ3t0la8V+of0JyahAYGPT0xacXl/qZ6poBwqKu0mR2qPv7D/ZdUVTxGuQghT2AXo3qo0ygXwjA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@astrojs/starlight': '>=0.32.0'
 
   statuses@2.0.1:
     resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
@@ -16412,6 +16431,16 @@ snapshots:
   stack-trace@1.0.0-pre2: {}
 
   stackback@0.0.2: {}
+
+  starlight-sidebar-topics-dropdown@0.5.1(@astrojs/starlight@0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1)))(starlight-sidebar-topics@0.6.1(@astrojs/starlight@0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1)))):
+    dependencies:
+      '@astrojs/starlight': 0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1))
+      starlight-sidebar-topics: 0.6.1(@astrojs/starlight@0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1)))
+
+  starlight-sidebar-topics@0.6.1(@astrojs/starlight@0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1))):
+    dependencies:
+      '@astrojs/starlight': 0.36.0(astro@5.13.5(@types/node@22.18.0)(jiti@2.5.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.7.1))
+      picomatch: 4.0.3
 
   statuses@2.0.1: {}
 

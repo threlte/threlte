@@ -11,6 +11,7 @@ import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
 import starlight from '@astrojs/starlight'
+import starlightSidebarTopics from 'starlight-sidebar-topics'
 import { cpus } from 'os'
 
 const CPU_COUNT = cpus().length
@@ -39,7 +40,25 @@ export default defineConfig({
     }),
     svelte(),
     starlight({
-      title: 'Threlte'
+      title: 'Threlte',
+      components: {
+        Sidebar: './src/components/Sidebar.astro'
+      },
+      plugins: [
+        starlightSidebarTopics([
+          {
+            label: 'Learn',
+            link: '/learn/',
+            icon: 'open-book',
+            items: [
+              { label: 'Getting Started', autogenerate: { directory: '/learn/getting-started' } },
+              { label: 'Basics', autogenerate: { directory: '/learn/basics' } },
+              { label: 'Advanced', autogenerate: { directory: '/learn/advanced' } },
+              { label: 'More', autogenerate: { directory: '/learn/more' } }
+            ]
+          }
+        ])
+      ]
     }),
     mdx({
       gfm: false,

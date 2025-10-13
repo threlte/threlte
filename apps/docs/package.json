@@ -38,6 +38,8 @@
     "highlight.js": "^11.8.0",
     "highlightjs-svelte": "^1.0.6",
     "preact": "^10.27.1",
+    "starlight-sidebar-topics": "^0.6.1",
+    "starlight-sidebar-topics-dropdown": "^0.5.1",
     "three-custom-shader-material": "^6.3.7",
     "typescript": "catalog:"
   },
