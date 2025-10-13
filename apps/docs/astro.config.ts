@@ -57,13 +57,24 @@ export default defineConfig({
         starlightSidebarTopics([
           {
             label: 'Learn',
-            link: '/learn/',
+            link: '/learn/getting-started/introduction',
             icon: 'open-book',
             items: [
               { label: 'Getting Started', autogenerate: { directory: '/learn/getting-started' } },
               { label: 'Basics', autogenerate: { directory: '/learn/basics' } },
               { label: 'Advanced', autogenerate: { directory: '/learn/advanced' } },
               { label: 'More', autogenerate: { directory: '/learn/more' } }
+            ]
+          },
+          {
+            label: 'Core',
+            link: '/reference/core/getting-started',
+            icon: 'right-caret',
+            items: [
+              { label: 'Getting Started', link: '/reference/core/getting-started' },
+              { label: 'Components', autogenerate: { directory: '/reference/core/components' } },
+              { label: 'Hooks', autogenerate: { directory: '/reference/core/hooks' } },
+              { label: 'Helpers', autogenerate: { directory: '/reference/core/helpers' } }
             ]
           }
         ])
