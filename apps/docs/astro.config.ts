@@ -10,6 +10,7 @@ import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
+import starlight from '@astrojs/starlight'
 import { cpus } from 'os'
 
 const CPU_COUNT = cpus().length
@@ -37,6 +38,9 @@ export default defineConfig({
       imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     }),
     svelte(),
+    starlight({
+      title: 'Threlte'
+    }),
     mdx({
       gfm: false,
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
