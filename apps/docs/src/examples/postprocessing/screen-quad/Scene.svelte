@@ -53,7 +53,6 @@
 
   useTask((delta) => {
     uTime.value += delta
-    // uRadius.value = 1 - 0.5 * (1 + Math.sin(time))
   })
 
   const material = new ShaderMaterial({
