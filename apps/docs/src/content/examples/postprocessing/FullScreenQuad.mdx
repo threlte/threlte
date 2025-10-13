@@ -11,7 +11,7 @@ The basic idea of postprocessing is to draw the scene to a frame-buffer that can
 
 ### Render Target
 
-Threlte's `useFBO` can give us a [WebGLRenderTarget](https://threejs.org/docs/index.html?q=webgl#api/en/renderers/WebGLRenderTarget) that automatically resizes when the size of the canvas updates.
+Threlte's `useFBO` gives us a [WebGLRenderTarget](https://threejs.org/docs/index.html?q=webgl#api/en/renderers/WebGLRenderTarget) that automatically resizes when the size of the canvas updates.
 
 ### FullScreenQuad
 
@@ -59,8 +59,8 @@ renderer.setRenderTarget(last)
 quad.render(renderer)
 ```
 
-**FullScreenQuad.render** accepts a renderer and renders to whatever its current render targetis. It usses a private camera when renderering.
+**FullScreenQuad.render** accepts a renderer and renders to whatever its current render targetis. It uses a private camera when renderering.
 
 ## Resources
 
-- [three.js's Pass class](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/Pass.js)
+- [three.js's Pass class](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/Pass.js) includes the implementation for **FullScreenQuad**
