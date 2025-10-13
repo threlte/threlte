@@ -1,0 +1,21 @@
+---
+order: 5.49
+category: '@threlte/extras'
+title: '<MeshDiscardMaterial>'
+sourcePath: 'packages/extras/src/lib/components/MeshDiscardMaterial/MeshDiscardMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial'
+      }
+  }
+---
+
+`<MeshDiscardMaterial>` is a material that renders nothing. It does so by discarding everything in the fragment shader. The difference between `<T.Mesh visible={false} />` and `<MeshDiscardMaterial>` is that shadows and children are still visible when using `<MeshDiscardMaterial>`.
+
+<Example path="extras/mesh-discard-material" />
+
+In the example above, the visible mesh does not use `<MeshDiscardMaterial>` nor sets `visible={false}`. The center mesh sets `visible={false}`. Notice how its shadow is missing. The final mesh uses `<MeshDiscardMaterial>` and its shadow is visible even though the mesh itself isn't.

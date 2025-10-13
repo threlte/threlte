@@ -1,0 +1,49 @@
+---
+category: '@threlte/core'
+title: Plugins
+sourcePath: 'packages/core/src/lib/plugins'
+order: 6.1
+---
+
+If you want to learn more about authoring plugins, see the [plugins section of the learn guide](/docs/learn/advanced/plugins).
+
+## `injectPlugin`
+
+The function `injectPlugin` adds a plugin to all descendant `<T>` components of the component that
+invokes it. This means that you can add plugins to a specific part of your scene graph without
+affecting the rest of the scene graph.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+injectPlugin('plugin-name', (args) => {
+  // We are *inside* a `<T>` component instance
+
+  // args is reactive and holds a reference to `ref`,
+  // `makeDefault`, `args`, `attach`, `manual`,
+  // `makeDefault`, `dispose` and all other props
+  // declared on the `<T>` component.
+
+  // Use effects to react to changes in args
+  $effect(() => {
+    console.log(args.ref)
+  })
+
+  // Use lifecycle functions
+  onMount(() => {
+    console.log('mounted')
+  })
+
+  return {
+    // These props are reserved for this plugin, the
+    // `<T>` component instance will not act on them.
+    pluginProps: ['plugin-prop-a', 'plugin-prop-b']
+  }
+})
+```
+
+You may also override a plugin namespace further down the tree by calling `injectPlugin` again with the same plugin name.
+
+<Tip type="tip">
+	`injectPlugin` is relying on a context provided by your root `<Canvas>` component and can therefore only be used inside a `<Canvas>` component.
+</Tip>

@@ -1,0 +1,72 @@
+---
+order: 4.15
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/HUD/HUD.svelte'
+title: <HUD>
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'autoRender',
+          type: 'boolean',
+          required: false,
+          description: 'Whether the HUD should automatically render its contents'
+        },
+        {
+          name: 'toneMapping',
+          type: 'THREE.ToneMapping',
+          required: false,
+          description: 'Defaults to the parent context toneMapping'
+        },
+        {
+          name: 'stage',
+          type: 'Stage',
+          required: false,
+          description: 'Defaults to the render stage'
+        }
+      ]
+  }
+---
+
+Renders a heads-up-display (HUD). Each HUD creates a new scene rendered on top of the main scene with a separate [Threlte context](/docs/reference/core/use-threlte) and camera.
+
+<Tip type="warning">
+  The HUD component creates a partially new Threlte context, specifically a new scene and camera.
+  Everything else in `useThrelte` is preserved and reused.
+</Tip>
+
+<Example path="extras/hud/simple" />
+
+Because creating a `<HUD>` is somewhat similar to creating a `<Canvas>`, it is recommended to use the same best practices and
+place all objects you want in the HUD within a new `Scene` component:
+
+```svelte title=MyHUD.svelte {2,6}+
+<script>
+  import Scene from './Scene.svelte'
+</script>
+
+<HUD>
+  <Scene />
+</HUD>
+```
+
+```svelte title=Scene.svelte
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[0, 0, 0]}
+  oncreate={(ref) => ref.lookAt(0, 0, 0)}
+/>
+
+<T.AmbientLight />
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```

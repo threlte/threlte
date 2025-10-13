@@ -1,0 +1,119 @@
+---
+order: 5.7
+category: '@threlte/extras'
+title: '<MeshRefractionMaterial>'
+sourcePath: 'packages/extras/src/lib/components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial'
+      },
+    props:
+      [
+        { name: 'envMap', type: 'CubeTexture | Texture', required: true },
+        {
+          name: 'bounces',
+          type: 'number',
+          default: '2',
+          required: false,
+          description: 'Number of ray-cast bounces, it can be expensive to have too many'
+        },
+        {
+          name: 'ior',
+          type: 'number',
+          default: '2.4',
+          required: false,
+          description: 'Refraction index'
+        },
+        {
+          name: 'fresnel',
+          type: 'number',
+          default: '0.0',
+          required: false,
+          description: 'Fresnel (strip light)'
+        },
+        {
+          name: 'aberrationStrength',
+          type: 'number',
+          default: '0.0',
+          required: false,
+          description: 'RGB shift intensity, can be expensive'
+        },
+        { name: 'color', type: 'ColorRepresentation', default: 'white', required: false },
+        {
+          name: 'fastChrome',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy'
+        }
+      ]
+  }
+---
+
+<Tip type="info">
+  To use this component you need to install the separate library `three-mesh-bvh`, please run `npm
+  install three-mesh-bvh` before adding this component to your project.
+</Tip>
+
+<Tip type="experimental">
+  This material may not work reliably on some devices or browsers. We're investigating possible
+  fixes.
+</Tip>
+
+This component is a port of [drei's `<MeshRefractionMaterial>`
+component](https://github.com/pmndrs/drei#meshrefractionmaterial), a convincing Glass/Diamond refraction material.
+
+<Example path="extras/mesh-refraction-material" />
+
+## Examples
+
+### Basic Example
+
+You can either pass in a texture to use as the environment:
+
+```svelte title="RefractionWithTexture.svelte"
+<script lang="ts">
+  import { T, useLoader } from '@threlte/core'
+  import { MeshRefractionMaterial } from '@threlte/extras'
+  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+
+  const env = useLoader(RGBELoader).load('/hdr/aerodynamics_workshop_1k.hdr')
+</script>
+
+{#await env then texture}
+  <T.Mesh>
+    <MeshRefractionMaterial envMap={texture} />
+    <T.IcosahedronGeometry args={[4, 0]} />
+  </T.Mesh>
+{/await}
+```
+
+or you can use a cube camera to generate the environment:
+
+```svelte title="RefractionWithCubeCamera.svelte"
+<script lang="ts">
+  import { T, useThrelte, useTask } from '@threlte/core'
+  import { MeshRefractionMaterial } from '@threlte/extras'
+  import { WebGLCubeRenderTarget, CubeCamera } from 'three'
+
+  let renderTarget: WebGLCubeRenderTarget = new WebGLCubeRenderTarget(128)
+  let cubeCamera: CubeCamera = new CubeCamera(0.1, 100, renderTarget)
+
+  const { scene, renderer } = useThrelte()
+
+  useTask(() => {
+    if (cubeCamera) {
+      cubeCamera.update(renderer, scene)
+    }
+  })
+</script>
+
+<T.Mesh>
+  <MeshRefractionMaterial envMap={renderTarget.texture} />
+  <T.IcosahedronGeometry args={[4, 0]} />
+</T.Mesh>
+```

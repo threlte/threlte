@@ -1,0 +1,19 @@
+---
+order: 6.2
+category: '@threlte/theatre'
+title: 'useStudio'
+sourcePath: 'packages/theatre/src/lib/studio/useStudio.ts'
+---
+
+The `useStudio` hook allows you to access the Theatre.js studio object.
+
+## Usage
+
+Unlike most Threlte hooks, this is _not_ a context hook, which means it can be used anywhere in your app.
+
+```svelte
+<script lang="ts">
+  import { useStudio } from '@threlte/theatre'
+  const studio = useStudio()
+</script>
+```

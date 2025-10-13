@@ -1,0 +1,150 @@
+---
+order: 4.12
+category: '@threlte/extras'
+title: '<Resize>'
+sourcePath: 'packages/extras/src/lib/components/Resize/Resize.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+		exports: [
+			{
+				name: 'resize',
+        type: '() => void',
+        description: 'Manually trigger a resize.'
+      }
+    ],
+    props:
+      [
+        {
+          description: 'Specifies which axis to constrain. If not provided, the maximum axis is used.',
+          name: 'axis',
+          required: false,
+          type: "'x' | 'y' | 'z'",
+          default: 'undefined'
+        },
+        {
+          default: 'false',
+          description: 'When true, will automatically resize when children are added or removed.',
+          name: 'auto',
+          required: false,
+          type: 'boolean'
+        },
+        {
+          name: 'stage',
+          type: 'Stage',
+          default: 'useStage("<Resize>", { before: renderStage })',
+          description: 'Bring your own stage to control when resizing occurs. If not provided, resizing will occur before the main render stage.',
+          required: false
+        },
+        {
+          default: 'undefined',
+          description: 'A callback function to run whenever resizing is done.',
+          name: 'onresize',
+          required: false,
+          type: '() => void'
+        },
+        {
+          description: 'Bring your own box to capture the bounding box.',
+          name: 'box',
+          required: false,
+          default: 'new Box3()',
+          type: 'THREE.Box3'
+        },
+        {
+          description: 'If true, use precise bounding box calculation when resizing',
+          name: 'precise',
+          required: false,
+          default: 'undefined',
+          type: 'boolean'
+        }
+      ]
+  }
+---
+
+Scales up or down a group of objects by the maximum dimension of their bounding
+box. Object proportions are preserved. This is particularly useful if you want
+to "normalize" the dimensions of an object to be in the range 0 to 1.
+
+<Example path="extras/resize/plugin" />
+
+## Choosing the Axis
+
+You can choose the axis by providing the `axis` prop, otherwise the maximum axis
+is used.
+
+```svelte
+<Resize axis="x">
+  <T.Mesh />
+</Resize>
+```
+
+<Tip type="warning">
+  If you use the `axis` prop, the dimensions will not be normalized to the range 0 to 1 unless the
+  maximum axis is chosen.
+</Tip>
+
+## Bring Your Own Box
+
+Use the `box` prop to provide your own Box3 instance. Doing so allows you to
+capture the bounding box of the objects prior to any scaling
+
+```svelte
+<script>
+  import { Box3 } from 'three'
+  const box = new Box3()
+</script>
+
+<Resize {box}>
+  <T.Mesh />
+</Resize>
+
+<T.Box3Helper args={[box]} />
+```
+
+## Normalizing Multiple Objects
+
+If you have a bunch of source objects that are all different sizes, a useful
+technique is to wrap each one in a `<Resize>`. Once they've all been normalized,
+it may be easier to reason about their relative sizes.
+
+<Example path="extras/resize/multiple-objects" />
+
+In the example above, the fox model is much larger than the duck and flower models. It is so much larger that you may have to pull the camera back in order to see it. Using `<Resize>` scales each model so that each one fits inside a unit cube. From there, their relative sizes and positions may be easier to work with.
+
+## Manual Resizing
+
+### Using the Export
+
+You can manually trigger a resize by calling the `resize` export.
+
+```svelte title="Scene.svelte"
+<script>
+  import { Resize } from '@threlte/extras'
+
+  let ref = $state<Resize>()
+
+  // ... later on
+  ref?.resize()
+</script>
+
+<Resize bind:this={ref}>
+  <!-- ... -->
+</Resize>
+```
+
+### Using the Snippet Argument
+
+You can also use the snippet argument to trigger a resize.
+
+```svelte title="Scene.svelte"
+<script>
+  import { Resize } from '@threlte/extras'
+</script>
+
+<Resize>
+  {#snippet children({ resize })}
+    <T.Mesh oncreate={resize} />
+  {/snippet}
+</Resize>
+```

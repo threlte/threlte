@@ -1,0 +1,25 @@
+---
+order: 5.9
+category: '@threlte/extras'
+title: <ShadowMaterial>
+sourcePath: 'packages/extras/src/lib/components/ShadowMaterial/ShadowMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'MeshBasicMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/MeshBasicMaterial'
+      },
+    props: [{ name: 'color', type: 'string', required: false, default: "'black'" }],
+    exports: []
+  }
+---
+
+A cheap [CanvasTexture](https://threejs.org/docs/?q=canvastexture#api/en/textures/CanvasTexture)-based material meant to look like a shadow without the need for any lights in the scene.
+
+<Example path="extras/shadow-material" />
+
+## Transparency
+
+Because the canvas texture uses an alpha channel, `<ShadowMaterial>` uses transparency by default. This means it will be sorted into a "transparent objects" render list by the renderer. In three.js, transparent objects are rendered _after_ opaque objects. This may be something to keep in mind when using `<ShadowMaterial>`.

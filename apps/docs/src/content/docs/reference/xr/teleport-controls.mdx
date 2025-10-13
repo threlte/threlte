@@ -1,0 +1,73 @@
+---
+category: '@threlte/xr'
+title: 'teleportControls'
+order: 3
+type: 'plugin'
+---
+
+The `teleportControls` plugin creates teleportation controls similar to many native XR experiences: **pressing the thumbstick forward** on a controller will create a visible ray to a teleport destination, and when the the thumbstick is released the user will be teleported to the end of the ray.
+
+<Example path="xr/teleport-controls" />
+
+```svelte
+<script>
+  import { teleportControls } from '@threlte/xr'
+  teleportControls('left' | 'right')
+</script>
+```
+
+Any mesh **within this component and all child components** can now be treated as a navigation mesh to which the user can teleport to.
+
+To register a mesh with `teleportControls`, add a `teleportSurface` property.
+
+```svelte
+<T.Mesh teleportSurface>
+  <T.CylinderGeometry args={[20, 0.01]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+If you wish to add teleport controls for both hands / controllers, simply call the plugin for both hands.
+
+```svelte
+<script>
+  import { teleportControls } from '@threlte/xr'
+  teleportControls('left')
+  teleportControls('right')
+</script>
+```
+
+Teleport controls can be enabled or disabled when initialized or during runtime.
+
+```svelte
+<script>
+  import { teleportControls } from '@threlte/xr'
+  // "enabled" is a currentWritable
+  const { enabled } = teleportControls('left', { enabled: false })
+
+  // At some later time...
+  enabled.set(true)
+</script>
+```
+
+A mesh can also be registered as a `teleportBlocker`, meaning that it will prevent teleportation through it.
+This can be useful when creating walls and doors that the user must navigate around.
+
+```svelte
+<T.Mesh teleportBlocker>
+  <T.BoxGeometry args={[0.8, 2, 0.1]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+This plugin can be composed with the `teleportControls` plugin to allow both teleporting and interaction.
+
+```svelte
+<script>
+  import { pointerControls, teleportControls } from '@threlte/xr'
+  teleportControls('left')
+  pointerControls('right')
+</script>
+```
+
+This will result in `pointerControls` taking over when pointing at a mesh with events, and `teleportControls` taking over otherwise.

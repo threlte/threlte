@@ -1,0 +1,113 @@
+---
+order: 0.2
+category: '@threlte/rapier'
+title: 'Physics Framerate'
+---
+
+import frameRate1 from './framerate-1.svg?url'
+import frameRate2 from './framerate-2.svg?url'
+
+Threlte's `<World>` component has a `framerate` prop that can be used to control
+the framerate of the physics simulation.
+
+## `requestAnimationFrame` Timing
+
+By default, the physics framerate is set to vary depending on the timestamp
+passed as the argument to the callback of `requestAnimationFrame`. Take this
+trivial example:
+
+```ts
+const render = (time: number) => {
+  console.log(time)
+  requestAnimationFrame(render)
+}
+requestAnimationFrame(render)
+```
+
+Unlucky for us, the time delta between frames varies depending on several
+factors such as the refresh rate of the monitor and the general load of your
+computer or application. When using a `varying` framerate, this time delta is
+used to _advance the physics simulation_ and while you would think that this
+wouldn't make much of a difference, computers are really bad at floating point
+arithmetic (`console.log(0.1 + 0.2)`): Realistically no two executions of the
+same physics simulation will yield the same result. In short: it's **not
+deterministic**.
+
+For most applications, this is still the best choice since it doesn't require
+you to think about the aspects of handling different framerates for physics and
+rendering.
+
+Sometimes, however, whether you're developing a game or wish to have more
+control art directing the outcome, you want a physics simulation to **always
+yield the same result**, e.g. to be **deterministic**. In this case, you can set
+the `framerate` prop to a fixed number. A fixed framerate of `50` for example
+will _step_ the physics simulation 50 times per second with a delta of exactly
+`1 / 50 = 0.02` seconds – no matter the timestamp passed to
+`requestAnimationFrame`.
+
+The following example illustrates the difference:
+
+<Example
+  path="rapier/framerate"
+  hideCode
+  hideStackblitz
+/>
+
+## Fixed Framerate
+
+In order to efficiently use a fixed framerate, it's important to understand how
+Threlte is able to advance the physics simulation in a deterministic fashion
+while keeping the visual output smooth and in sync.
+
+First, let's have a look at the timing of the `requestAnimationFrame` API:
+
+<img
+  src={frameRate1}
+  width="100%"
+  alt="Frame rate 1"
+/>
+
+In this example we're looking at two invokations of `requestAnimationFrame`.
+
+- **A** receives a delta of 16.35ms
+- **B** receives a delta of 16.1ms
+
+<Tip type="info">
+  Threlte is making use of [the scheduler's
+  ability](http://localhost:4321/docs/learn/basics/scheduling-tasks#creating-a-stage) to run the
+  tasks of a stage multiple times per frame and with a fixed delta.
+</Tip>
+
+We'd like to advance the physics simulation 200 times per second, so 5ms per step.
+
+<img
+  src={frameRate2}
+  width="100%"
+  alt="Frame rate 2"
+/>
+
+In this example, the physics simulation is advanced 4 times as part of
+`requestAnimationFrame` **A**. The simulation then runs **ahead of the visual
+output.** After advancing the physics simulation, the visual state of the
+objects is rolled back from 20ms to 16.35ms while internally maintaining the
+physics state of after the 4th simulation step.
+
+This cycle repeats in the next frame **B**: The simulation is advanced 3 times
+as part of `requestAnimationFrame` **B** in order to slightly run ahead of the
+render time and subsequently rolled back to match the time of the render.
+
+The following example visualizes how the framerate correlates with the physics
+simulation running ahead of the visual output.
+
+<Example
+  path="rapier/framerate-debug"
+  hideCode
+  hideStackblitz
+/>
+
+## `usePhysicsTask`
+
+Use the hook [`usePhysicsTask`](/docs/reference/rapier/use-physics-task) to
+interact with the physics simulation. It's a wrapper around the [`useTask`
+hook](/docs/reference/core/use-task) that automatically adds the handler to the
+`simulation` stage and always runs _before_ the physics world is stepped.

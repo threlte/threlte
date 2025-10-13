@@ -1,0 +1,47 @@
+---
+order: 5.2
+category: '@threlte/extras'
+title: <Edges>
+sourcePath: 'packages/extras/src/lib/components/Edges/Edges.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'LineSegments',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/LineSegments'
+      },
+    props:
+      [
+        { name: 'thresholdAngle', type: 'number', required: false },
+        { name: 'color', type: 'THREE.ColorRepresentation', required: false }
+      ]
+  }
+---
+
+Abstracts `THREE.EdgesGeometry`. This component automatically pulls the geometry from its parent.
+
+Edges are displayed when the angle between two faces exceeds the angle defined by the property `threshold`.
+
+<Example path="extras/edges" />
+
+<small>
+  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+</small>
+
+### Example
+
+```svelte
+<script lang="ts">
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
+  import { Edges } from '@threlte/extras'
+  import { T } from '@threlte/core'
+</script>
+
+<T.Mesh
+  geometry={new BoxGeometry()}
+  material={new MeshBasicMaterial()}
+>
+  <Edges color="black" />
+</T.Mesh>
+```

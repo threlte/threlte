@@ -1,0 +1,44 @@
+---
+order: 3.4
+category: '@threlte/extras'
+title: 'useSuspense'
+type: 'hook'
+sourcePath: 'packages/extras/src/lib/suspense/useSuspense.ts'
+---
+
+The hook `useSuspense` is used to mark a resource as being used in a
+`<Suspense>` boundary or to get the `suspended`-state of the closest
+`<Suspense>` boundary. For a complete implementation example, have a look at the
+[`<Suspense>` component](/docs/reference/extras/suspense).
+
+## Usage
+
+### Suspend an Async Resource
+
+The hook returns a function that allows you to mark a resource as being used in
+a `<Suspense>` boundary. To suspend the closest `<Suspense>` boundary, call the
+function returned by `useSuspense()` and pass a promise as the first argument.
+Because [`useLoader().load()`](/docs/reference/core/use-loader) returns an
+[`AsyncWritable`](/docs/reference/core/utilities#asyncwritable), the result of
+`useLoader().load()` can be passed directly to the function returned by
+`useSuspense()`.
+
+```svelte
+<script>
+  const suspend = useSuspense()
+
+  const promise = suspend(useTexture('/texture.png'))
+</script>
+```
+
+### Get Suspended State
+
+The hook can be used to get the `suspended`-state of the closest `<Suspense>` boundary.
+
+```svelte
+<script>
+  const { suspended } = useSuspense()
+
+  $inspect($suspended)
+</script>
+```

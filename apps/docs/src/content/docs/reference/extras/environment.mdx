@@ -1,0 +1,173 @@
+---
+order: 4.141
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/environment/Environment/Environment.svelte'
+title: <Environment>
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          description: 'the url to a texture to load and use',
+          name: 'url',
+          required: false,
+          type: 'string'
+        },
+        {
+          description: 'a bindable of the loaded texture',
+          name: 'texture',
+          required: false,
+          type: 'THREE.DataTexture | THREE.Texture'
+        },
+        {
+          default: 'false',
+          description: 'whether to set `scene.background` to the loaded environment texture',
+          name: 'isBackground',
+          required: false,
+          type: 'boolean'
+        },
+        {
+          default: 'useThrelte().scene',
+          description: 'the scene that will have its environment and/or background set',
+          name: 'scene',
+          required: false,
+          type: 'THREE.Scene'
+        },
+        {
+          default: 'false',
+          description: 'creates a ground projected skybox',
+          name: 'ground',
+          required: false,
+          type: 'boolean | { height?: number, radius?: number, resolution?: number }'
+        },
+        {
+          default: 'undefined',
+          description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
+          name: 'skybox',
+          required: false,
+          type: 'undefined | THREE.GroundedSkybox'
+        }
+      ]
+  }
+---
+
+Asynchronously loads a single equirectangular-mapped texture and sets the provided scene's `environment` and or `background` to the texture. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
+
+<Example path="extras/environment/basic" />
+
+## Fetching, Loading, and Assigning Textures
+
+`<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment`.
+
+`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by Three.js' [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
+
+Internally `<Environment>` creates a loader based on the extension of the `url` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
+
+| extension  | loader                                                                                             |
+| ---------- | -------------------------------------------------------------------------------------------------- |
+| exr        | [Three.EXRLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/EXRLoader.js/)  |
+| hdr        | [Three.RGBELoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/RGBELoader.js) |
+| all others | [Three.TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader)                      |
+
+<Tip type="info">
+	Any time `<Environment>` loads a texture, it will dispose of the old one. The texture is also disposed when `<Environment>` unmounts.
+</Tip>
+
+### Loaders Are Simple
+
+Loaders used inside `<Environment>` are not extendable. They only fetch and load the texture at `url`. If you need to use the methods that [Three.js loaders](https://threejs.org/docs/index.html?q=loader#api/en/loaders/Loader) have, you should create the loader outside of `<Environment>` and load it there then pass the texture through the `texture` prop.
+
+```svelte
+<script>
+  import { TextureLoader } from 'three'
+
+  const loader = new TextureLoader().setPath('https://path/to/texture/').setRequestHeader({
+    // .. request headers that will be used when fetching the texture
+  })
+
+  const promise = loader.loadAsync('texture.jpg').then((texture) => {
+    texture.mapping = EquirectangularReflectionMapping
+    return texture
+  })
+</script>
+
+{#await promise then texture}
+  <Environment {texture} />
+{/await}
+```
+
+### `texture` Prop for Preloaded Textures
+
+`<Environment>` provides a bindable `texture` prop that you can use if you've already loaded the texture somewhere else in your application. The example below provides a preloaded texture to `<Environment>` instead of having it fetch and load one.
+
+<Example path="extras/environment/bring-your-own-texture" />
+
+Be aware that if `<Environment>` loads a texture, it will set the `texture` bindable prop **after** it has been loaded. This means that if you provide both `url` and `texture` properties, the texture at `url` will eventually be assigned to `texture`.
+
+```typescript title="Scene.svelte"
+<Environment {texture} url="/path/to/texture/file" />
+```
+
+Loading only occurs if `url` is passed to `<Environment>`.
+
+## Restoring Props When Scene Updates
+
+All of `<Environment>`'s props are reactive, even `scene`. If the `scene` prop is updated, `<Environment>` will restore the initial `environment` and `background` properties of the last scene.
+
+The example below creates a custom render task that draws two scenes to the canvas - one on the left and one on the right. Pressing the button switches the environment to be applied to either the left or the right side. You can observe that when `side` updates, the original `background` and `environment` for the previous side are restored.
+
+<Example path="extras/environment/swapping-scenes" />
+
+## Suspended Loading
+
+Any textures that are loaded by `<Environment>` are suspended so they may be used in a suspense context. This means if you're fetching the file over a slow network, you can show something in the "fallback" snippet of a [\<Suspense>]('/docs/reference/extras/suspense') component while the texture is being fetched and loaded.
+
+```svelte title="Scene.svelte"
+<script>
+  import { Suspense, Text } from '@threlte/extras'
+</script>
+
+<Suspense>
+  {#snippet fallback()}
+    <Text text="loading environment" />
+  {/snippet}
+  <Environment url="https//url-of-your-file.hdr" />
+</Suspense>
+```
+
+Note that suspension only occurs if `url` is provided. When a texture is provided through the `texture` prop, there is nothing that needs to loaded, so there's nothing that needs to be suspended.
+
+## Grounded Skyboxes
+
+`<Environment>` also supports ground projected environments through ThreeJS's [GroundedSkybox](https://threejs.org/examples/#webgl_materials_envmaps_groundprojected) addon. To use this feature, set the `ground` prop to `true` or to an object with optional `height`, `radius` and `resolution` props. `height` defaults to `1`, `radius` to `1`, and `resolution` to `128`
+
+<Example path="extras/environment/ground-projection" />
+
+The bindable `skybox` prop is a reference to the created `GroundedSkybox` instance. When using this feature, ThreeJS recommends setting the instance's `position.y` to `height`. This will position the "flat" part of the skybox at the origin.
+
+```svelte title="Scene.svelte"
+<script>
+  let skybox = $state() // GroundedSkybox | undefined
+
+  const height = 15
+
+  $effect(() => {
+    skybox?.position.setY(height)
+  })
+</script>
+
+<Environment
+  bind:skybox
+  url="file.hdr"
+  ground={{ height }}
+/>
+```
+
+There are a couple of important things to consider when using the `ground` property:
+
+1. `skybox` is only set to a `GroundedSkybox` instance if `ground` !== `false` and **after** the texture is available. It is set to `undefined` when `<Environment>` unmounts.
+
+2. A new instance of `GroundedSkybox` is created whenever the `ground` prop updates to something other than `false`. This is a limitation of the addon. If you need to modify the skybox's properties, try to do it through the `skybox` bindable to avoid creating and destroying multiple instances.
+
+3. `scene.environment` and/or `scene.background` are still set to the environment texture. This is done so that the environment map still affects materials used in the scene.

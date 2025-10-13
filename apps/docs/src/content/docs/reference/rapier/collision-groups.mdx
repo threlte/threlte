@@ -1,0 +1,87 @@
+---
+order: 5
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/components/CollisionGroups/CollisionGroups.svelte'
+title: '<CollisionGroups>'
+type: 'component'
+componentSignature:
+  {
+    pretext: 'Provide either the shorthand property <code>groups</code> to set both <code>memberships</code> and <code>filter</code> to the same value or set them up individually.',
+    props:
+      [
+        { name: 'groups', type: 'CollisionGroupsBitMask', required: true },
+        { name: 'filter', type: 'CollisionGroupsBitMask', required: true },
+        { name: 'memberships', type: 'CollisionGroupsBitMask', required: true }
+      ]
+  }
+---
+
+The most efficient way of preventing some pairs of colliders from interacting with each other is to use a `<CollisionGroups>` component.
+
+Each collider that is a child (direct or indirect) of the component `<CollisionGroups>` is applied a `memberships` and `filters` attribute. The shorthand `groups` sets both properties at once.
+
+For general usage instructions, see the relevant documentation [here](https://rapier.rs/docs/user_guides/javascript/colliders#collision-groups-and-solver-groups).
+
+### Example
+
+- <span style="color: red">Collider A</span> is affected by <span style="color: limegreen">
+    Collider B
+  </span> and not by <span style="color: blue">Collider C</span>
+- <span style="color: limegreen">Collider B</span> is affected by <span style="color: red">
+    Collider A
+  </span> and <span style="color: blue">Collider C</span>
+- <span style="color: blue">Collider C</span> is affected by <span style="color: limegreen">
+    Collider B
+  </span> and not by <span style="color: red">Collider A</span>
+
+<Example path="rapier/collision-groups" />
+
+```svelte
+<!-- Collider A -->
+<CollisionGroups
+  memberships={[1]}
+  filter={[2]}
+>
+  <RigidBody>
+    <AutoColliders shape={'cuboid'}>
+      <Mesh
+        castShadow
+        {geometry}
+        {material}
+      />
+    </AutoColliders>
+  </RigidBody>
+</CollisionGroups>
+
+<!-- Collider B -->
+<CollisionGroups
+  memberships={[2]}
+  filter={[1, 3]}
+>
+  <RigidBody>
+    <AutoColliders shape={'cuboid'}>
+      <Mesh
+        castShadow
+        {geometry}
+        {material}
+      />
+    </AutoColliders>
+  </RigidBody>
+</CollisionGroups>
+
+<!-- Collider C -->
+<CollisionGroups
+  memberships={[3]}
+  filter={[2]}
+>
+  <RigidBody>
+    <AutoColliders shape={'cuboid'}>
+      <Mesh
+        castShadow
+        {geometry}
+        {material}
+      />
+    </AutoColliders>
+  </RigidBody>
+</CollisionGroups>
+```

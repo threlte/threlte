@@ -1,0 +1,233 @@
+---
+category: 'Documentation'
+title: Writing Documentation
+---
+
+## Code Blocks
+
+Code blocks are written in .mdx files using the three-backtick syntax. The language is added after the first set of backticks.
+
+{/* prettier-ignore-start */}
+<pre>
+  <code>\```svelte
+		\<T.Mesh position=\{5\} />
+		\```</code>
+</pre>
+{/* prettier-ignore-end */}
+
+renders as:
+
+```svelte
+<T.Mesh position=\{5\} />
+```
+
+### Highlighting Lines
+
+You can highlight lines by adding an attribute to the code block.
+
+**Highlight a single line**
+
+{/* prettier-ignore-start */}
+<pre>
+  <code>\```svelte \{2\}
+		\<T.Mesh position=\{5\}\>
+		\<T.Mesh position=\{10\}\>
+		\<T.Mesh position=\{20\}\>
+		\```</code>
+</pre>
+{/* prettier-ignore-end */}
+
+```svelte {2}
+<T.Mesh position={5}>
+<T.Mesh position={10}>
+<T.Mesh position={20}>
+```
+
+**Highlight multiple lines**
+
+{/* prettier-ignore-start */}
+<pre>
+  <code>\```svelte \{2\,3}
+		\<T.Mesh position=\{5\}\>
+		\<T.Mesh position=\{10\}\>
+		\<T.Mesh position=\{20\}\>
+		\```</code>
+</pre>
+{/* prettier-ignore-end */}
+
+```svelte {2,3}
+<T.Mesh position={5}>
+<T.Mesh position={10}>
+<T.Mesh position={20}>
+```
+
+**Highlight a range**
+
+{/* prettier-ignore-start */}
+<pre>
+  <code>\```svelte \{1-3}
+		\<T.Mesh position=\{5\}\>
+		\<T.Mesh position=\{10\}\>
+		\<T.Mesh position=\{20\}\>
+		\```</code>
+</pre>
+{/* prettier-ignore-end */}
+
+```svelte {1-3}
+<T.Mesh position={5}>
+<T.Mesh position={10}>
+<T.Mesh position={20}>
+```
+
+**Highlight as added, removed or modified line**
+
+{/* prettier-ignore-start */}
+<pre>
+  <code>\```svelte \{1}+ \{2}- \{3}m
+		\<T.Mesh position=\{5\}\>
+		\<T.Mesh position=\{10\}\>
+		\<T.Mesh position=\{20\}\>
+		\```</code>
+</pre>
+{/* prettier-ignore-end */}
+
+```svelte {1}+ {2}- {3}m
+<T.Mesh position={5}>
+<T.Mesh position={10}>
+<T.Mesh position={20}>
+```
+
+**Add a title**
+
+{/* prettier-ignore-start */}
+<pre>
+  <code>\```svelte title="App.svelte"
+		\<T.Mesh position=\{5\}\>
+		\<T.Mesh position=\{10\}\>
+		\<T.Mesh position=\{20\}\>
+		\```</code>
+</pre>
+{/* prettier-ignore-end */}
+
+```svelte title="App.svelte"
+<T.Mesh position={5}>
+<T.Mesh position={10}>
+<T.Mesh position={20}>
+```
+
+**Add custom css classes**
+
+{/* prettier-ignore-start */}
+<pre>
+  <code>\```svelte class="glow-blue/50"
+		\<T.Mesh position=\{5\}\>
+		\<T.Mesh position=\{10\}\>
+		\<T.Mesh position=\{20\}\>
+		\```</code>
+</pre>
+{/* prettier-ignore-end */}
+
+```svelte class="glow-blue/50"
+<T.Mesh position={5}>
+<T.Mesh position={10}>
+<T.Mesh position={20}>
+```
+
+## Auto-imported components
+
+These components can be used in .mdx files without importing them.
+
+### `<Tip>`
+
+A tip component.
+
+```mdx title="example.mdx"
+<Tip color="orange">orange</Tip>
+```
+
+Available styles:
+
+<Tip color="orange">`color="orange`</Tip>
+<Tip color="blue">`color="blue">`</Tip>
+<Tip color="dark">`color="dark">`</Tip>
+<Tip color="green">`color="green"`</Tip>
+<Tip type="info">`type="info"`</Tip>
+<Tip type="warning">`type="warning"`</Tip>
+<Tip type="danger">`type="danger"`</Tip>
+<Tip type="experimental">`type="experimental"`</Tip>
+<Tip type="note">`type="note"`</Tip>
+<Tip type="tip">`type="tip"`</Tip>
+<Tip
+  type="tip"
+  title="Tip with Title"
+>
+  `title="Tip with Title"`
+</Tip>
+
+#### Glowing Tips
+
+Add glow to tips by adding the `glow` attribute.
+
+<Tip
+  glow
+  color="orange"
+>
+  `color="orange"` `glow`
+</Tip>
+
+### `<Example>`
+
+The component `<Example>` renders an example that is defined in the `src/examples` folder.
+
+```mdx title="example.mdx"
+<Example path="core/use-frame" />
+```
+
+renders as:
+
+<Example path="core/use-frame" />
+
+Hide the code:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+  hideCode
+/>
+```
+
+Hide the preview:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+  hidePreview
+/>
+```
+
+Expand the code section by default:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+  expandCode
+/>
+```
+
+Show a specific file by default:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+  showFile="directory/file.ts"
+/>
+```
+
+Embed the example preview as an , which helps when third party UI libraries are used that overlay the whole page like Theatre.js Studio:
+
+```mdx title="example.mdx"
+<Example
+  path="core/use-frame"
+
+/>
+```

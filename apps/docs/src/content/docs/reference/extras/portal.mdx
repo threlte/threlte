@@ -1,0 +1,45 @@
+---
+order: 8.1
+category: '@threlte/extras'
+title: '<Portal>'
+sourcePath: 'packages/extras/src/lib/components/portals/Portal/Portal.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'id',
+          type: 'string',
+          default: '"default"',
+          description: 'The id of the portal to render into.',
+          required: false
+        }
+      ]
+  }
+---
+
+A component that renders its children as children of an object that can exist **anywhere in your Threlte application**.
+You can use the prop `id` to render into a `<PortalTarget>`.
+
+<Tip type="tip">
+  Although Portals are extremely helpful in certain situations, it can be hard to reason about them
+  at times. It's recommended to use them sparingly.
+</Tip>
+
+### You might not need `<Portal>`
+
+Some objects such as the [`THREE.DirectionalLightHelper`](https://threejs.org/docs/index.html#api/en/helpers/DirectionalLightHelper)
+need to be added to the scene itself to be functional.
+
+In this case, the portal target is easily accessible, and passing the `scene` object to the `<T>` component's [attach](http://localhost:4321/docs/reference/core/t#attach) property can accomplish everything we need.
+
+<Example path="extras/portals/helper" />
+
+### Rendering to a `<PortalTarget>`
+
+For more complex cases where it's hard to query the target, using `<Portal>` may be an easier solution.
+
+You can define where a `<Portal>` should render its children by using the component [`<PortalTarget>`](/docs/reference/extras/portal-target).
+
+<Example path="extras/portals/basic" />

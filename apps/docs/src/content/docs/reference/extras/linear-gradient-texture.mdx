@@ -1,0 +1,153 @@
+---
+order: 5.45
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/GradientTexture/LinearGradientTexture.svelte'
+title: '<LinearGradientTexture>'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'CanvasTexture',
+        url: 'https://threejs.org/docs/index.html#api/en/textures/CanvasTexture'
+      },
+    props:
+      [
+        {
+          default: '1024',
+          description: "width of the texture's canvas",
+          name: 'width',
+          required: false,
+          type: 'number'
+        },
+        {
+          default: '1024',
+          description: "height of the texture's canvas",
+          name: 'height',
+          required: false,
+          type: 'number'
+        },
+        {
+          required: false,
+          default: '0',
+          description: x-axis coordinate of the gradient's start point,
+          name: 'startX',
+          type: 'number'
+        },
+        {
+          required: false,
+          default: '0',
+          description: y-axis coordinate of the gradient's start point,
+          name: 'startY',
+          type: 'number'
+        },
+        {
+          required: false,
+          default: '0',
+          description: x-axis coordinate of the gradient's end point,
+          name: 'endX',
+          type: 'number'
+        },
+        {
+          required: false,
+          default: 'height',
+          description: y-axis coordinate of the gradient's end point,
+          name: 'endY',
+          type: 'number'
+        },
+        {
+          default: "[{color: '#000000', offset: 0}, {color: '#ffffff', offset: 1}]",
+          description: 'list of stops applied to the gradient. more info at https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient',
+          name: 'stops',
+          required: false,
+          type: 'ColorStop[]'
+        }
+      ]
+  }
+---
+
+A reactive linear gradient texture. The underlying texture uses an [OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) and a [CanvasTexture](https://threejs.org/docs/index.html#api/en/textures/CanvasTexture) and is assigned the same [colorspace](https://threejs.org/docs/index.html#api/en/textures/Texture.colorSpace) as the renderer.
+
+<Example path="extras/gradient-texture/linear" />
+
+## Attaching the Texture
+
+The texture is automatically attached to the `map` property of its parent. You can disable this behaviour by setting the `attach` prop to `false`. This may be useful if you want to create the texture but use it somewhere else.
+
+```svelte
+<script>
+  let texture = $state()
+</script>
+
+<LinearGradientTexture
+  attach={false}
+  bind:ref={texture}
+/>
+
+<SomeComponent {texture} />
+```
+
+## Gradient Stops
+
+`<LinearGradientTexture>` accepts a `stops` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient#examples), notably the `offset` should be a number between 0 and 1 inclusive. Stop colors can be any valid color representation in Three.js. Here are a couple examples of valid stops.
+
+```svelte
+<LinearGradientTexture
+  stops={[
+    { color: 'black', offset: 0 },
+    { color: 'white', offset: 1 }
+  ]}
+/>
+
+<LinearGradientTexture
+  stops={[
+    { color: '#00ffff', offset: 0 },
+    { color: '#ff00ff', offset: 0.5 },
+    { color: '#ffff00', offset: 1 }
+  ]}
+/>
+```
+
+You can even mix and match color representations
+
+```svelte
+<LinearGradientTexture
+  stops={[
+    { color: 'red', offset: 0 },
+    { color: 0xff_00_00, offset: 0.25 },
+    { color: 'rgb(255, 0, 0)', offset: 0.5 },
+    { color: '#ff0000', offset: 0.75 },
+    { color: new Color(new Color(new Color())).set(1, 0, 0), offset: 1 }
+  ]}
+/>
+```
+
+All of the colors above are valid representations of the color <span style="color: red">red</span>.
+
+## Gradient Start Point and End Point
+
+You can control the gradient start point and end point with the `startX`, `startY`, `endX`, and `endY` props. For example, the props for a gradient that starts at the bottom left corner of the texture and ends at the top right corner would be:
+
+```svelte
+<LinearGradientTexture
+  startX={0}
+  startY={height}
+  endX={width}
+  endY={0}
+/>
+```
+
+## Adjusting Scene Colors
+
+If the colors in your scene do not match the color in your stops, you may need to adjust the tone mapping of the scene. `ToneMapping` constants are imported from the three library.
+
+```svelte
+<script>
+  import { useThrelte } from '@threlte/core'
+  import { LinearToneMapping } from 'three'
+
+  const { toneMapping } = useThrelte()
+
+  toneMapping.set(LinearToneMapping)
+</script>
+```

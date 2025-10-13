@@ -1,0 +1,76 @@
+---
+order: 4.2
+category: '@threlte/extras'
+title: '<Stars>'
+sourcePath: 'packages/extras/src/lib/components/Stars/Stars.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Points', url: 'https://threejs.org/docs/index.html#api/en/objects/Points' },
+    props:
+      [
+        {
+          name: 'radius',
+          type: 'number',
+          default: '50',
+          required: false,
+          description: 'Minimum distance of points to center'
+        },
+        {
+          name: 'depth',
+          type: 'number',
+          default: '50',
+          required: false,
+          description: 'Radius + depth = maximum distance of points from center'
+        },
+        {
+          name: 'count',
+          type: 'number',
+          default: '5000',
+          required: false,
+          description: 'Number of stars'
+        },
+        {
+          name: 'factor',
+          type: 'number',
+          default: '6',
+          required: false,
+          description: 'Size of stars'
+        },
+        { name: 'saturation', type: 'number', default: '1.0', required: false },
+        { name: 'lightness', type: 'number', default: '0.8', required: false },
+        {
+          name: 'fade',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'If stars should fade at the edges (shows blurry circles instead of squares)'
+        },
+        {
+          name: 'speed',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Speed of blinking animation'
+        },
+        { name: 'opacity', type: 'number', default: '1.0', required: false }
+      ]
+  }
+---
+
+This component is a port of [drei's `<Stars>`
+component](https://github.com/pmndrs/drei#stars), which adds a blinking shader-based starfield to your scene.
+
+<Example path="extras/stars" />
+
+## Examples
+
+### Basic Example
+
+```svelte title="Billboard.svelte"
+<script lang="ts">
+  import { Stars } from '@threlte/extras'
+</script>
+
+<Stars />
+```

@@ -1,0 +1,76 @@
+---
+order: 1
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/components/World/World.svelte'
+title: '<World>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'gravity', type: 'Position', default: '{ y: -9.81 }', required: false },
+        { name: 'rawIntegrationParameters', type: 'RawIntegrationParameters', required: false },
+        { name: 'rawIslands', type: 'RawIslandManager', required: false },
+        { name: 'rawBroadPhase', type: 'RawBroadPhase', required: false },
+        { name: 'rawNarrowPhase', type: 'RawNarrowPhase', required: false },
+        { name: 'rawBodies', type: 'RawRigidBodySet', required: false },
+        { name: 'rawColliders', type: 'RawColliderSet', required: false },
+        { name: 'rawImpulseJoints', type: 'RawImpulseJointSet', required: false },
+        { name: 'rawMultibodyJoints', type: 'RawMultibodyJointSet', required: false },
+        { name: 'rawCCDSolver', type: 'RawCCDSolver', required: false },
+        { name: 'rawQueryPipeline', type: 'RawQueryPipeline', required: false },
+        { name: 'rawPhysicsPipeline', type: 'RawPhysicsPipeline', required: false },
+        { name: 'rawSerializationPipeline', type: 'RawSerializationPipeline', required: false },
+        { name: 'rawDebugRenderPipeline', type: 'RawDebugRenderPipeline', required: false }
+      ]
+  }
+---
+
+This component provides the basic physics context and loads [rapier](https://rapier.rs/).
+
+<Tip type="tip">
+	All components that rely on physics (e.g. `<RigidBody>` or `<Collider>`) must be a child of `<World>`.
+</Tip>
+
+## Structure
+
+A typical structure of a physics-enabled wrapper component might look like this:
+
+```svelte title="Wrapper.svelte"
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import { World } from '@threlte/rapier'
+  import Scene from './Scene.svelte'
+</script>
+
+<Canvas>
+  <World>
+    <Scene />
+    <!-- Everything is happening inside this component -->
+  </World>
+</Canvas>
+```
+
+This structure ensures that all components inside the component `<Scene>` have access to the physics context.
+
+## Fallback
+
+[rapier](https://rapier.rs/) is a Rust-based physics engine and as such bundled and used as a WASM module. If loading of rapier fails for any reason, a slot with the name `fallback` is mounted to e.g. display a fallback scene without physics.
+
+```svelte title="Wrapper.svelte"
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import { World } from '@threlte/rapier'
+  import Scene from './Scene.svelte'
+  import FallbackScene from './FallbackScene.svelte'
+</script>
+
+<Canvas>
+  <World>
+    <Scene />
+    {#snippet fallback()}
+      <FallbackScene />
+    {/snippet}
+  </World>
+</Canvas>
+```

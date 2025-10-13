@@ -1,0 +1,110 @@
+---
+order: 6.3
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/audio/PositionalAudio/PositionalAudio.svelte'
+title: <PositionalAudio>
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'PositionalAudio',
+        url: 'https://threejs.org/docs/index.html#api/en/audio/PositionalAudio'
+      },
+    props:
+      [
+        {
+          name: 'src',
+          type: 'string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream',
+          required: true
+        },
+        {
+          name: 'id',
+          type: 'string',
+          required: false,
+          default: 'default',
+          description: 'The id of the AudioListener this Audio will be attached to.'
+        },
+        { name: 'autoplay', type: 'boolean', required: false },
+        { name: 'loop', type: 'boolean', required: false },
+        { name: 'volume', type: 'number', required: false },
+        { name: 'playbackRate', type: 'number', required: false },
+        { name: 'detune', type: 'number', required: false },
+        {
+          name: 'directionalCone',
+          type: '{ coneInnerAngle: number, coneOuterAngle: number, coneOuterGain: number }',
+          required: false
+        },
+        { name: 'refDistance', type: 'number', required: false },
+        { name: 'rolloffFactor', type: 'number', required: false },
+        { name: 'distanceModel', type: 'string', required: false },
+        { name: 'maxDistance', type: 'number', required: false }
+      ],
+    events:
+      [
+        { name: 'load', payload: 'AudioBuffer', description: 'Fired when the audio has loaded.' },
+        {
+          name: 'progress',
+          payload: 'ProgressEvent<EventTarget>',
+          description: 'Fired when the audio is loading.'
+        },
+        { name: 'error', payload: 'ErrorEvent', description: 'Fired when the audio fails to load.' }
+      ],
+    exports:
+      [
+        { name: play, type: '(delay?: number) => Promise<THREE.Audio>' },
+        { name: pause, type: '() => THREE.Audio' },
+        { name: stop, type: '() => THREE.Audio' }
+      ]
+  }
+---
+
+Creates a positional audio entity.
+This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
+
+<Tip type="warning">
+You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted *before* any `<Audio>` or `<PositionalAudio>` components:
+
+```svelte
+<T.PerspectiveCamera makeDefault>
+  <AudioListener />
+</T.PerspectiveCamera>
+
+<PositionalAudio />
+```
+
+</Tip>
+
+<Example path="extras/positional-audio" />
+
+<small>Music: [legrisch](https://legrisch.com)</small>
+
+### Example
+
+```svelte
+<script>
+  import { T, Canvas } from '@threlte/core'
+  import { AudioListener, PositionalAudio } from '@threlte/extras'
+  import Car from './Car.svelte'
+</script>
+
+<Canvas>
+  <T.PerspectiveCamera
+    makeDefault
+    position={[3, 3, 3]}
+    lookAt={[0, 0, 0]}
+  >
+    <AudioListener />
+  </T.PerspectiveCamera>
+
+  <Car>
+    <PositionalAudio
+      autostart
+      loop
+      refDistance={10}
+      volume={0.2}
+      src={'/audio/car-noise.mp3'}
+    />
+  </Car>
+</Canvas>
+```

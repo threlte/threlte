@@ -1,0 +1,117 @@
+---
+order: 7.5
+category: '@threlte/extras'
+title: '<PerfMonitor>'
+sourcePath: 'packages/extras/src/lib/components/PerfMonitor/PerfMonitor.svelte'
+type: 'component'
+componentSignature:
+  {
+    'props':
+      [
+        {
+          name: 'domElement',
+          type: 'HTMLElement',
+          default: 'document.body',
+          required: false,
+          'description': 'Dom element to which stats block will be attached to.'
+        },
+        {
+          name: 'logsPerSecond',
+          type: 'number',
+          default: '10',
+          required: false,
+          'description': 'Refresh rate of the logs.'
+        },
+        {
+          name: 'showGraph',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          'description': 'Toggles cpu/gpu/fps graphs rendering.'
+        },
+        {
+          name: 'memory',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          'description': 'Toggles memory info visiblity (geometries, textures, shaders)'
+        },
+        {
+          name: 'enabled',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          'description': 'Toggles stats collection.'
+        },
+        {
+          name: 'visible',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          'description': 'Toggles visibility of the monitor html element. Setting `false` does not stop collection of the stats.'
+        },
+        {
+          name: 'actionToCallUI',
+          type: 'string',
+          default: ' ',
+          required: false,
+          'description': 'If set and given characters are typed in the the tab window, the three-perf dev gui will be shown. Disabled by default (empty string).'
+        },
+        {
+          name: 'guiVisible',
+          type: 'boolean',
+          default: 'false',
+          required: false,
+          'description': 'Toggles Three-perf dev gui visiblity.'
+        },
+        {
+          name: 'backgroundOpacity',
+          type: 'number',
+          default: '0.7',
+          required: false,
+          'description': 'Stats block background opacity level.'
+        },
+        {
+          name: 'scale',
+          type: 'number',
+          default: '1',
+          required: false,
+          'description': 'Scale of the stats block html element.'
+        },
+        {
+          name: 'anchorX',
+          type: "'left' | 'right'",
+          default: "'left'",
+          required: false,
+          'description': 'Stats html element horizontal anchor.'
+        },
+        {
+          name: 'anchorY',
+          type: "'top' | 'bottom'",
+          default: "'top'",
+          required: false,
+          'description': 'Stats html element vertical anchor.'
+        }
+      ]
+  }
+---
+
+Utility component for monitoring basic rendering statistics using [three-perf](https://github.com/TheoTheDev/three-perf).
+
+<Example path="extras/perf-monitor" />
+
+## Usage
+
+Simply drop in the `<PerfMonitor>` component as a child of Threlte `<Canvas>`.
+The component starts measuring before `mainStage` and ends after `renderStage`.
+Learn more about tasks in threlte [here](/docs/learn/basics/scheduling-tasks)
+
+```svelte
+<Canvas>
+  <PerfMonitor
+    anchorX={'right'}
+    logsPerSecond={30}
+  />
+  <Scene />
+</Canvas>
+```

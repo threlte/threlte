@@ -1,0 +1,39 @@
+---
+order: 201
+category: '@threlte/studio'
+sourcePath: 'packages/studio/src/lib/extensions/object-selection/useObjectSelection.svelte.ts'
+title: 'useObjectSelection'
+type: 'hook'
+---
+
+## Examples
+
+```ts
+import { useObjectSelection } from '@threlte/studio/extensions'
+
+const selection = useObjectSelection()
+
+// select an object
+selection.selectObjects([object])
+
+// select multiple objects
+selection.selectObjects([object1, object2])
+
+// clear the selection
+selection.clearSelection()
+
+// add an object to the selection
+selection.addToSelection(object)
+
+// remove an object from the selection
+selection.removeFromSelection(object)
+
+// toggle the selection of an object
+selection.toggleSelection([object])
+
+// toggle the selection of multiple objects
+selection.toggleSelection([object1, object2])
+
+// get the selected objects
+console.log(selection.selectedObjects) // [object1, object2]
+```

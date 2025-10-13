@@ -1,0 +1,65 @@
+---
+order: 4.142
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/environment/CubeEnvironment/CubeEnvironment.svelte'
+title: <CubeEnvironment>
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          description: 'a six-tuple of urls to load',
+          name: 'urls',
+          required: false,
+          type: '[positiveX: string, negativeX: string, positiveY: string, negativeY: string, positiveZ: string, negativeZ: string]'
+        },
+        {
+          default: 'false',
+          description: 'whether to set `scene.background` to the loaded environment texture',
+          name: 'isBackground',
+          required: false,
+          type: 'boolean'
+        },
+        {
+          default: 'useThrelte().scene',
+          description: 'the scene that will have its environment and/or background set',
+          name: 'scene',
+          required: false,
+          type: 'THREE.Scene'
+        },
+        {
+          description: 'a bindable of the loaded cube texture.',
+          name: 'texture',
+          required: false,
+          type: 'THREE.CubeTexture'
+        }
+      ]
+  }
+---
+
+`<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key
+differences, namely that its used to load and assign `THREE.CubeTexture`s to
+`scene.environment`. Other differences will be listed below. For all other
+information please refer to the
+[\<Environment>](/docs/reference/extras/environment) documentation.
+
+<Example path="extras/cube-environment/basic" />
+
+## URLs
+
+`<CubeEnvironment>`'s `urls` prop is a six-tuple of textures that comprise a
+cube texture. The first file's extension decides which loader to use to load the
+files. Refer to the table below to determine which loader is used for each
+extension. The order of the `urls` is important. The order is `[positiveX,
+negativeX, positiveY, negativeY, positiveZ, negativeZ]`.
+
+| extension  | loader                                                                                                                  |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------- |
+| .hdr       | [Three.HDRCubeTextureLoader](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/loaders/HDRCubeTextureLoader.js/) |
+| all others | [Three.CubeTextureLoader](https://threejs.org/docs/#api/en/loaders/CubeTextureLoader)                                   |
+
+## Grounded Skybox
+
+`<CubeEnvironment>` is other than `<Environment>` not able to create a
+`GroundedSkybox` instance.

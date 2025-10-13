@@ -1,0 +1,121 @@
+---
+order: 5.6
+category: '@threlte/extras'
+title: <MeshLineMaterial>
+sourcePath: 'packages/extras/src/lib/components/MeshLine/MeshLineMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      { type: 'ShaderMaterial', url: 'https://threejs.org/docs/#api/en/materials/ShaderMaterial' },
+    props:
+      [
+        {
+          name: 'color',
+          type: 'ColorRepresentation',
+          default: "'#ffffff'",
+          required: false,
+          description: 'The color of the line.'
+        },
+        {
+          name: 'width',
+          type: 'number',
+          default: '1',
+          required: false,
+          description: "The width of the line. If attenuate is true it's world units, otherwise it's screen pixels."
+        },
+        {
+          name: 'opacity',
+          type: 'number',
+          default: '1',
+          required: false,
+          description: 'The opacity of the line. For values less than 1 transparent must be set to true.'
+        },
+        {
+          name: 'dashArray',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'The length and space between dashes. 0 = no dash.'
+        },
+        {
+          name: 'dashOffset',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'The location where the dash will begin. Ideal to animate the line.'
+        },
+        {
+          name: 'dashRatio',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'The ratio between the visible and non-visible sections of the dash.'
+        },
+        {
+          name: 'attenuate',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Set to false to make the line width constant regardless distance.'
+        },
+        {
+          name: 'scaleDown',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: "The amount to scale down the line when points are close together. 0 = don't scale."
+        }
+      ]
+  }
+---
+
+Used in combination with [`<MeshLineGeometry>`](/docs/reference/extras/meshline-geometry) to create a line formed of a strip of billboarded triangles, based on <a href="https://github.com/spite/THREE.MeshLine" target="_blank">THREE.MeshLine</a>.
+
+<Example path="extras/meshline-material/animated" />
+
+## Usage
+
+This component works by taking a line geometry from `<MeshLineGeometry>` and projecting and expanding the vertices in screen space.
+Both `<MeshLineMaterial>` and `<MeshLineGeometry>` need belong to the same parent mesh.
+
+### Example
+
+```svelte
+<script>
+  const points = [new Vector3(-5, 1, 0), new Vector3(0, 1, 0), new Vector3(5, 1, 0)]
+</script>
+
+<T.Mesh>
+  <MeshLineGeometry {points} />
+  <MeshLineMaterial
+    width={0.5}
+    color="#fe3d00"
+  />
+</T.Mesh>
+```
+
+### Width and color
+
+By default the line will be white and have a width of 1.
+The `width` property will use world units and scale correctly with other objects in your scene.
+If you would like the line to be a fixed size regardless of distance from the camera you can set the `attenuate` property to `false`.
+
+### Opacity and dashes
+
+Just like other materials in Three.js you need to set `transparent` to `true` for opacity to have any effect.
+You must also set `transparent` to `true` for if you are using dashed lines.
+
+You can use a combination of `dashArray`, `dashRatio` and `dashOffset` to create dashed lines.
+
+<Tip type="tip">
+  If you're rendering transparent lines, dashed lines or lines with an alpha map you can avoid
+  issues where the line overlaps itself by setting <b>depthTest</b> to <b>false</b>.
+</Tip>
+
+### Alpha map
+
+You can pass a texture to the `alphaMap` property to use as an alpha mask along the length of the line, where black is invisible and white is visible.
+In the example below we load a paint brush texture with the `useTexture` hook.
+
+<Example path="extras/meshline-material/alpha-map" />

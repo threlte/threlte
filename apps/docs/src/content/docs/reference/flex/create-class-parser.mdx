@@ -1,0 +1,65 @@
+---
+order: 10.5
+category: '@threlte/flex'
+sourcePath: 'packages/flex/src/lib/parsers/createClassParser.ts'
+title: createClassParser
+---
+
+The prop `class` can be used on `<Box>` and `<Flex>` to easily configure the
+flexbox with predefined class names just as you would do in CSS. In order to use
+the prop, you need to create a `ClassParser` which accepts a single string and
+returns `NodeProps`. The function `createClassParser` is a helper function that
+provides the proper types.
+
+Let's assume, you want to create a parser that
+supports the following class names but in 3D space:
+
+```css
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  gap: 10px;
+  padding: 10px;
+}
+.item {
+  width: auto;
+  height: auto;
+  flex: 1;
+}
+```
+
+You then need to create a `ClassParser` which returns the corresponding props:
+
+```ts
+import { createClassParser } from '@threlte/flex'
+
+const classParser = createClassParser((string, props) => {
+  const classNames = string.split(' ')
+  for (const className of classNames) {
+    switch (className) {
+      case 'container':
+        props.flexDirection = 'Row'
+        props.justifyContent = 'Center'
+        props.alignItems = 'Stretch'
+        props.gap = 10
+        props.padding = 10
+        break
+      case 'item':
+        props.width = 'auto'
+        props.height = 'auto'
+        props.flex = 1
+    }
+  }
+  return props
+})
+```
+
+Now you can use the prop `class` on `<Flex>` and `<Box>` to configure the flexbox:
+
+<Example
+  path="flex/create-class-parser"
+  expandCode
+  showFile="Scene.svelte"
+/>

@@ -1,0 +1,77 @@
+---
+order: 5.3
+category: '@threlte/extras'
+title: '<FakeGlowMaterial>'
+sourcePath: 'packages/extras/src/lib/components/FakeGlowMaterial/FakeGlowMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial'
+      },
+    props:
+      [
+        { name: 'glowColor', type: 'ColorRepresentation', default: '"green"', required: false },
+        {
+          name: 'falloff',
+          type: 'number',
+          default: '0.1',
+          required: false,
+          description: 'Controls the value of the Falloff effect. Ranges from 0.0 to 1.0.'
+        },
+        {
+          name: 'glowInternalRadius',
+          type: 'number',
+          default: '6.0',
+          required: false,
+          description: 'Controls the internal glow radius. Ranges from -1.0 to 1.0. Set a darker color to get the fresnel effect only.'
+        },
+        { name: 'glowSharpness', type: 'number', default: '1.0', required: false }
+      ]
+  }
+---
+
+This component is a port of [ektogamat's `<FakeGlowMaterial>` r3f component](https://github.com/ektogamat/fake-glow-material-r3f)
+which displays a glowing outline around a mesh using a custom shader, instead of post-processing.
+
+<Example path="extras/fake-glow-material" />
+
+## Examples
+
+### Basic Example
+
+```svelte title="FakeGlowMaterial.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { FakeGlowMaterial } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <FakeGlowMaterial glowColor="red" />
+  <T.IcosahedronGeometry args={[4, 4]} />
+</T.Mesh>
+```
+
+This effect is mesh based, meaning you need to provide a mesh for this to work properly.
+The mesh must also be smooth enough that glsl can calculate the normals properly.
+
+For sharp meshes like a cube, you can use a sphere to simulate the glow, instead of a copy of the cube.
+
+```svelte title="FakeGlowMaterialCube.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { FakeGlowMaterial } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <FakeGlowMaterial glowColor="blue" />
+  <T.BoxGeometry args={[2, 2, 2]} />
+</T.Mesh>
+
+<T.Mesh>
+  <FakeGlowMaterial glowColor="blue" />
+  <T.IcosahedronGeometry args={[3, 4]} />
+</T.Mesh>
+```

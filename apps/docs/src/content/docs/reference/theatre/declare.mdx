@@ -1,0 +1,43 @@
+---
+order: 4.4
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/sheetObject/declare/Declare.svelte'
+title: '<Declare>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: props,
+          type:
+            {
+              name: 'UnknownShorthandCompoundProps',
+              url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+            },
+          required: true
+        }
+      ]
+  }
+---
+
+Sometimes we want our declarations to be closer to the place where we use them.
+
+Use the component `<Declare>` to from the [`<SheetObject>`](./sheet-object) slot prop to colocate
+an object and its properties with manual property declaration.
+
+```svelte
+<SheetObject>
+  {#snippet children({ Declare })}
+    <Declare props={{ transparent: false }}>
+      {#snippet children({ values })}
+        <T.MeshBasicMaterial transparent={values.transparent} />
+      {/snippet}
+    </Declare>
+  {/snippet}
+</SheetObject>
+```
+
+<Tip type="tip">
+  This can also be used to pass the prop declaration API to child components using a slot prop.
+</Tip>

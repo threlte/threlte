@@ -1,0 +1,116 @@
+---
+order: 7.3
+category: '@threlte/extras'
+title: '<InstancedMeshes>'
+sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'InstancedMesh',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+      },
+    props:
+      [
+        {
+          name: 'limit',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of possible <Instance> components.'
+        },
+        {
+          name: 'range',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of drawn <Instance> components.'
+        },
+        {
+          name: 'update',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Whether the THREE.InstancedMesh should be updated.'
+        },
+        { name: 'meshes', type: 'THREE.Mesh[] | Record<string, THREE.Mesh>', required: true }
+      ]
+  }
+---
+
+The component `<InstancedMeshes>` takes existing `THREE.Mesh` instances and creates a `THREE.InstancedMesh` per `THREE.Mesh`. This is especially useful if you want to instantiate a lot of meshes that have been loaded with hooks like [`useGltf`](/docs/reference/extras/use-gltf).
+
+It takes the same arguments as [`<InstancedMesh>`](/docs/reference/extras/instanced-mesh).
+
+<Example path="extras/instanced-mesh/merged" />
+
+## Usage
+
+### Passing a map
+
+Load a gltf file with the [`useGltf`](/docs/reference/extras/use-gltf) hook and pass the result to the `<InstancedMeshes>` component. The [slot prop](https://svelte.dev/docs#template-syntax-slot) `components` can be used to instantiate a mesh multiple times.
+
+```svelte
+<script lang="ts">
+  import { useGltf, InstancedMeshes } from '@threlte/extras'
+
+  // Let's say the file contains a mesh named "Cube".
+  // The hook `useGltf`  will automatically provide a map with
+  // all nodes of the gltf file at the key `nodes`. When
+  // passing that map to the `<InstancedMeshes>` component, it will
+  // automatically filter out all nodes that are not
+  // `THREE.Mesh` instances.
+  const gltf = useGltf('path/to/file.gltf')
+</script>
+
+{#if $gltf}
+  <!--
+    You can use object destructuring
+    to access the component <Cube>
+  -->
+  <InstancedMeshes meshes={$gltf.nodes}>
+    {#snippet children({ components: { Cube } })}
+      <Cube position.y={2} position.x={-1}>
+    {/snippet}
+  </InstancedMeshes>
+{/if}
+```
+
+<Tip type="tip">
+  When using `<InstancedMeshes>` with a large gltf file, be aware that `<InstancedMeshes>` will
+	create a new `<InstancedMesh>` for each `<Mesh>` in the gltf file.
+  This can lead to a lot of `<InstancedMesh>` components, which can have a negative
+  impact on performance. You might want to filter out the meshes you want to
+  instantiate beforehand.
+</Tip>
+
+### Passing an array
+
+If you don't want to use the `useGltf` hook, you can also pass an array of `THREE.Mesh` instances to the `<InstancedMeshes>` component.
+
+```svelte
+<script lang="ts">
+  import { InstancedMeshes } from '@threlte/extras'
+  import { Mesh, BoxGeometry, MeshStandardMaterial } from 'three'
+
+  const meshes = [
+    new Mesh(new BoxGeometry(), new MeshStandardMaterial()), // MeshA
+    new Mesh(new SphereGeometry(), new MeshStandardMaterial()), // MeshB
+    new Mesh(new PlaneGeometry(), new MeshStandardMaterial())  // MeshC
+  ]
+</script>
+
+<!--
+    You can use array destructuring
+    to access the components <MeshA>,
+    <MeshB> and <MeshC>
+  -->
+<InstancedMeshes meshes={meshes}>
+  {#snippet children({ components: [MeshA, MeshB, MeshC] })}
+    <MeshA position.y={2} position.x={-1}>
+    <MeshB position.y={-2}>
+    <MeshC position.y={0} position.x={1}>
+  {/snippet}
+</InstancedMeshes>
+```

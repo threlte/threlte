@@ -1,0 +1,97 @@
+---
+order: 5.5
+category: '@threlte/extras'
+title: <MeshLineGeometry>
+sourcePath: 'packages/extras/src/lib/components/MeshLine/MeshLineMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'BufferGeometry',
+        url: 'https://threejs.org/docs/index.html#api/en/core/BufferGeometry'
+      },
+    props:
+      [
+        {
+          name: 'points',
+          type: 'THREE.Vector3[]',
+          default: '[]',
+          required: true,
+          description: 'The array of points that form the line.'
+        },
+        {
+          name: 'shape',
+          type: "'none' | 'taper' | 'custom'",
+          default: "'none'",
+          required: false,
+          description: "The shape of the line. Use 'custom' to use your own function."
+        },
+        {
+          name: 'shapeFunction',
+          type: '(p:number) => number',
+          default: 'p => 1',
+          required: false,
+          description: 'A function to define the width of each point along the line. For example `p => 1 - p` will make the line taper.'
+        }
+      ]
+  }
+---
+
+Used in combination with [`<MeshLineMaterial>`](/docs/reference/extras/meshline-material) to create a line formed of a strip of billboarded triangles, based on <a href="https://github.com/spite/THREE.MeshLine" target="_blank">THREE.MeshLine</a>.
+
+<Example path="extras/meshline-geometry" />
+
+## Usage
+
+This component works by taking an array of points to form a line geometry without any thickness, which is then projected and expanded in screen space by `<MeshLineMaterial>`.
+Both `<MeshLineMaterial>` and `<MeshLineGeometry>` need to be the children of the same parent mesh.
+
+### Example
+
+```svelte
+<script>
+  const points = [new Vector3(-1, 1, -1), new Vector3(0, 1, 0), new Vector3(1, 1, 1)]
+</script>
+
+<T.Mesh>
+  <MeshLineGeometry {points} />
+  <MeshLineMaterial
+    width={0.5}
+    color="#fe3d00"
+  />
+</T.Mesh>
+```
+
+### Points
+
+The `points` property is required and accepts an array of `THREE.Vector3` objects.
+The `points` property is reactive and you can animate the line by updating the positions of the `Vector3` objects within the array.
+
+<Tip type="warning">
+  When updating the <b>points</b> array it is strongly recommended that the updated array is the
+  same length as the initial array, because when the array is resized many `BufferAttribute`s are
+  re-created.
+</Tip>
+
+### Shape
+
+By default the line will be a constant thickness along it's length, at a width defined in `<MeshLineMaterial>`.
+To create a line that tapers down to a point at each end you can set the `shape` property to `'taper'`.
+
+For more control over the shape of the line you can set the `shape` property to `'custom'` and pass a custom function to the `shapeFunction` property.
+
+The function will define the width at each point along the line, for example `p => 2` will make the line double the width.
+The property `p` is the percentage of the number of points, i.e. for point 200 of 250 points, p = 0.8.
+For example the following code will define a line that tapers off at one end:
+
+```svelte
+<T.Mesh>
+  <MeshLineGeometry
+    {points}
+    shape={'custom'}
+    shapeFunction={(p) => 1 - p}
+  />
+  <MeshLineMaterial />
+</T.Mesh>
+```

@@ -1,0 +1,182 @@
+---
+category: '@threlte/core'
+title: useLoader
+sourcePath: 'packages/core/src/lib/hooks/useLoader.ts'
+order: 5.4
+---
+
+A hook to load data with an arbitrary `THREE` loader class. The result of `load`
+is cached and subsequent calls with the same arguments will yield the same
+return value (i.e. the same reference) across the entire Threlte app. The hook
+can use async loaders (using `loader.loadAsync`) as well as sync/callback-based
+loaders (using `loader.load`) and will default to the async version if
+available.
+
+```typescript
+const loader = useLoader(AudioLoader)
+const soundA = loader.load('audio/ambient_ocean.ogg')
+// -> `soundA` is an AsyncWritable<AudioBuffer> that
+// resolves/is populated once the asset is loaded.
+
+// somewhere else …
+const soundB = loader.load('audio/ambient_ocean.ogg')
+// -> `soundB` is also an AsyncWritable<AudioBuffer>
+// that resolves/is populated with the same reference
+// as `soundA` once the asset is loaded.
+```
+
+### Instantiating a loader
+
+A loader must always be instantiated at the top level of a component. This is because the loader is depending on an application-wide cache:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const loader = useLoader(TextureLoader)
+</script>
+```
+
+A loader can be **extended**, to add custom features:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const loader = useLoader(CustomTextureLoader, {
+    extend: (loader) => {
+      // do something with the loader, e.g. add DRACO support for
+      // GLTFLoader or add custom headers for TextureLoader.
+    }
+  })
+</script>
+```
+
+If the constructor of a particular loader accepts arguments, they must be passed
+as an array to the option `args` of the second argument to `useLoader`:
+
+```svelte
+<script>
+  import { useLoader, useThrelte } from '@threlte/core'
+  import { SplatLoader } from '@pmndrs/vanilla'
+
+  const { renderer } = useThrelte()
+
+  const loader = useLoader(SplatLoader, {
+    args: [renderer]
+  })
+  // This resembles the following:
+  // const loader = new SplatLoader(renderer)
+</script>
+```
+
+### Loading an asset
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const texture = useLoader(TextureLoader).load('path/to/texture.png')
+
+  // A loader must always be instantiated at the top level of a component.
+  const { load } = useLoader(TextureLoader)
+  const onSomeEvent = () => {
+    // To load an asset outside of the top level, use the `load` method.
+    const texture = load('path/to/texture.png')
+  }
+</script>
+```
+
+The return type of `load` is a [custom Threlte store called
+`AsyncWritable`](/docs/reference/core/utilities#asyncwritable) and can be used
+as a regular Svelte store. Its initial value is `undefined` and will be updated
+once the asset is loaded.
+
+The store also exposes the underlying promise methods `then` and `catch` and can therefore be directly awaited:
+
+```svelte
+<script>
+  import { useLoader, T } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+
+  const onSomeEvent = async () => {
+    // Load an asset and await the result.
+    const texture = await load('path/to/texture.png')
+  }
+</script>
+
+<!-- Or make use of Svelte's await block -->
+{#await load('path/to/texture.png') then map}
+  <T.MeshStandardMaterial {map} />
+{/await}
+```
+
+### Loading multiple assets
+
+The function `load` of `useLoader` also accepts an array of paths in which case the return value is an array of loaded assets:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+  const textures = load(['texture1.png', 'texture2.png'])
+
+  $inspect($textures) // eventually [Texture, Texture]
+</script>
+```
+
+<Tip type="tip">
+  Keep in mind that the store will be updated and the promise resolves once all assets are loaded.
+</Tip>
+
+You can also provide a map of paths to load multiple assets at once. In this case the return value is a map of the loaded assets:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+  const textures = load({
+    texture1: 'texture1.png',
+    texture2: 'texture2.png'
+  })
+
+  $inspect($textures) // eventually { texture1: Texture, texture2: Texture }
+</script>
+```
+
+### Transforming the result
+
+<Tip
+  type="warning"
+  title="Caching"
+>
+  The result of the transformation is cached and subsequent calls will return the same result.
+</Tip>
+
+The `load` method accepts an optional second argument to transform the result of the loader:
+
+```svelte
+<script>
+  import { useLoader } from '@threlte/core'
+  import { TextureLoader } from 'three'
+
+  const { load } = useLoader(TextureLoader)
+  const texture = load('path/to/texture.png', {
+    transform: (texture) => {
+      // do something with the texture
+      return texture
+    }
+  })
+</script>
+```
+
+The return type of the transformation is used to infer the return type of the `load` method.

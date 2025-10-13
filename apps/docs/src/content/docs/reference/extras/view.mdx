@@ -1,0 +1,39 @@
+---
+order: 4.31
+category: '@threlte/extras'
+title: '<View>'
+sourcePath: 'packages/extras/src/lib/components/View/View.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'dom',
+          type: 'HTMLElement',
+          default: '',
+          description: 'The target DOM to scissor-cut and attach events. Does nothing if none given.',
+          required: false
+        }
+      ]
+  }
+---
+
+This is a port of [drei's `<View/>`
+component](https://drei.docs.pmnd.rs/portals/view). It is used to display
+multiple scenes using only one canvas and one renderer. Our implemenation
+re-uses parts of the main context but creates new camera, scene, parent, DOM,
+cache and user contexts. This ensures you can use Threlte's other components as
+per normal.
+
+The following example is equivalent to three.js's [multiple elements
+example](https://threejs.org/examples/#webgl_multiple_elements).
+
+<Example path="extras/view" />
+
+Under the hood, this component uses the renderer's [scissor-cut
+method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setScissor).
+[Three.js has documentation](https://threejs.org/manual/#en/multiple-scenes) for
+when using scissor-cuts as the styling of your canvas has different effects on
+the renderering. You access the `canvas` to switch between the options via the
+`useThrelte` hook.

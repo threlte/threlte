@@ -1,0 +1,83 @@
+---
+order: 4.13
+category: '@threlte/extras'
+title: <ContactShadows>
+sourcePath: 'packages/extras/src/lib/components/ContactShadows/ContactShadows.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: 'opacity', type: 'number', required: false },
+        { name: 'width', type: 'number', required: false },
+        { name: 'height', type: 'number', required: false },
+        { name: 'blur', type: 'number', required: false },
+        { name: 'far', type: 'number', required: false },
+        { name: 'smooth', type: 'boolean', required: false },
+        { name: 'resolution', type: 'number', required: false },
+        { name: 'frames', type: 'number', required: false },
+        { name: 'scale', type: 'number | [x: number, y: number]', required: false },
+        { name: 'color', type: 'THREE.ColorRepresentation', required: false },
+        { name: 'depthWrite', type: 'boolean', required: false }
+      ],
+    exports: [{ name: 'refresh', type: '() => void' }]
+  }
+---
+
+This component is a port of [drei's `<ContactShadows>` component](https://github.com/pmndrs/drei#contactshadows).
+
+A contact shadow implementation, facing upwards (positive Y) by default. `scale` can be a positive number or a 2D array (`x: number, y: number]`).
+
+```svelte
+<ContactShadows
+  opacity={1}
+  scale={10}
+  blur={1}
+  far={10}
+  resolution={256}
+  color="#000000"
+/>
+```
+
+Since this is a rather expensive effect you can limit the amount of frames it renders when your objects are static. For instance making it render only once:
+
+```svelte
+<ContactShadows frames={1} />
+```
+
+Use the binding `refresh` to manually refresh the shadows:
+
+```svelte
+<script>
+  let refresh
+
+  const onSomeEvent = () => {
+    if (refresh) refresh()
+  }
+</script>
+
+<ContactShadows
+  bind:refresh
+  frames={0}
+/>
+```
+
+Currently it has the same limitations of drei's version: It yields unexpected results if moved on the x or the z axis.
+
+<Example path="extras/contact-shadows" />
+
+### Example
+
+```svelte
+<script lang="ts">
+  import { ContactShadows } from 'threlte/extras'
+</script>
+
+<ContactShadows
+  scale={10}
+  blur={2}
+  far={2.5}
+  opacity={0.5}
+/>
+```

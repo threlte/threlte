@@ -1,0 +1,37 @@
+---
+order: 9
+category: '@threlte/rapier'
+title: 'useCollisionGroups'
+sourcePath: 'packages/rapier/src/lib/hooks/useCollisionGroups.ts'
+type: 'hook'
+---
+
+This hook can be used in conjunction with the component [`<CollisionGroups>`](/docs/reference/rapier/collision-groups). It uses the collision groups provided by a parent `<CollisionGroups>` component and lets you easily apply them to colliders.
+
+```svelte
+<script>
+  import { useRapier, useCollisionGroups } from '@threlte/rapier'
+
+  const { world } = useRapier()
+  const { registerColliders, removeColliders } = useCollisionGroups()
+
+  const collider = world.createCollider(colliderDesc)
+
+  // collider will be assigned the collision groups
+  // provided by a parent `<CollisionGroups>` component.
+  registerColliders([collider])
+
+  onDestroy(() => {
+    removeColliders([collider])
+  })
+</script>
+```
+
+### Types
+
+```ts
+const {
+  registerColliders, // (colliders: RAPIER.Collider[]) => void
+  removeColliders // (colliders: RAPIER.Collider[]) => void
+} = useCollisionGroups()
+```

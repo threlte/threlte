@@ -1,0 +1,198 @@
+---
+order: 4.11
+category: '@threlte/extras'
+title: '<Align>'
+sourcePath: 'packages/extras/src/lib/components/Align/Align.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        {
+          name: 'x',
+          type: 'number | false',
+          default: '0',
+          description: 'Align child objects on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis. If `false` is provided, this axis will be ignored.',
+          required: false
+        },
+        {
+          name: 'y',
+          type: 'number | false',
+          default: '0',
+          description: 'Align child objects on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis. If `false` is provided, this axis will be ignored.',
+          required: false
+        },
+        {
+          name: 'z',
+          type: 'number | false',
+          default: '0',
+          description: 'Align child objects on the z-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the z-axis. If `false` is provided, this axis will be ignored.',
+          required: false
+        },
+        {
+          name: 'precise',
+          type: 'boolean',
+          default: 'false',
+          description: 'See [setFromObject](https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject)',
+          required: false
+        },
+        {
+          name: 'auto',
+          type: 'boolean',
+          default: 'false',
+          description: 'Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts.',
+          required: false
+        },
+        {
+          name: 'stage',
+          type: 'Stage',
+          default: 'useStage("<Align>", { before: renderStage })',
+          description: 'Bring your own stage to control when aligning occurs. If not provided, aligning will occur before the main render stage.',
+          required: false
+        }
+      ],
+    events:
+      [
+        {
+          name: 'align',
+          description: 'Fires when the child objects have been aligned.',
+          payload: '{ container: Object3D, width: number, height: number, depth: number, boundingBox: Box3, boundingSphere: Sphere, align: Vector3, verticalAlignment: number, horizontalAlignment: number, depthAlignment: number }'
+        }
+      ],
+    exports: [{ name: 'align', type: '() => void', description: 'Manually trigger an alignment.' }]
+  }
+---
+
+This component will calculate a boundary box and align its children accordingly.
+
+<Example
+  path="extras/align"
+  showFile="Scene.svelte"
+/>
+
+The grouped objects will be aligned on the x, y, and z axes by default.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { Align } from '@threlte/extras'
+</script>
+
+<Align>
+  <T.Mesh position={[-1, 0, 0]}>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial />
+  </T.Mesh>
+
+  <T.Mesh position={[1, 0, -2]}>
+    <T.BoxGeometry args={[1, 5, 2]} />
+    <T.MeshBasicMaterial />
+  </T.Mesh>
+</Align>
+```
+
+### `x`, `y`, `z`
+
+You can also specify a number between -1 and 1 to align the objects on a respective axis. For example, providing `x={1}` will align the objects to the left (with respect to the default camera), `x={0}` will center the children, and `x={1}` will align them to the right whereas `x={false}` will ignore that axis completely.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { Align } from '@threlte/extras'
+</script>
+
+<!-- Align left on the x-axis, ignore the y- and z-axes -->
+<Align x={-1} y={false} z={false}>
+  <T.Mesh position={[-1, 0, 0]}>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial />
+
+  <T.Mesh position={[1, 0, -2]}>
+    <T.BoxGeometry args={[1, 5, 2]} />
+    <T.MeshBasicMaterial />
+  </T.Mesh>
+</Align>
+```
+
+### `auto`
+
+By default, the component `<Align>` will calculate the bounding box and align its children when the component mounts or any relevant props change. To account for child objects being mounted or unmounted, use the property `auto`.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { Align } from '@threlte/extras'
+
+  export let showOtherCube = true
+</script>
+
+<Align auto>
+  <T.Mesh position={[-1, 0, 0]}>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial />
+
+  {#if showOtherCube}
+    <T.Mesh position={[1, 0, -2]}>
+      <T.BoxGeometry args={[1, 5, 2]} />
+      <T.MeshBasicMaterial />
+    </T.Mesh>
+  {/if}
+</Align>
+```
+
+### Events
+
+The component `<Align>` provides an event `align` which fires when the child objects have been aligned. The event payload contains the following properties:
+
+```ts
+type AlignEventData = {
+  /** The outmost container group of the <Align> component */
+  container: Object3D
+  /** The width of the bounding box */
+  width: number
+  /** The height of the bounding box */
+  height: number
+  /** The depth of the bounding box */
+  depth: number
+  boundingBox: Box3
+  boundingSphere: Sphere
+  center: Vector3
+  verticalAlignment: number
+  horizontalAlignment: number
+  depthAlignment: number
+}
+```
+
+```svelte
+<Align
+  onalign={({ width }) => {
+    console.log('The width of the bounding box is', width)
+  }}
+>
+  <T.Mesh position={[-1, 0, 0]}>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial />
+  </T.Mesh>
+</Align>
+```
+
+### Snippet Props
+
+The component `<Align>` provides a snippet prop called `align` to schedule
+aligning all child objects. Be aware that this will not immediately align the
+objects, but rather schedule the alignment to happen exactly _once per frame_.
+It's a manual alternative to [`auto`](#auto).
+
+```svelte
+<Align>
+  {#snippet children({ align })}
+    {#if showOtherCube}
+      <T.Mesh oncreate={align}>
+        <T.BoxGeometry />
+        <T.MeshBasicMaterial />
+      </T.Mesh>
+    {/if}
+  {/snippet}
+</Align>
+```

@@ -1,0 +1,52 @@
+---
+order: 1.4
+category: '@threlte/extras'
+title: '<SVG>'
+sourcePath: 'packages/extras/src/lib/components/Svg/Svg.svelte'
+type: 'component'
+componentSignature:
+  {
+    'props':
+      [
+        { name: 'src', type: 'string', required: true, description: 'Can be a URL or SVG data.' },
+        { name: 'skipFill', type: 'boolean', required: false, default: 'false' },
+        { name: 'skipStrokes', type: 'boolean', required: false, default: 'false' },
+        {
+          name: 'fillMaterialProps',
+          type: 'Props<typeof MeshBasicMaterial>',
+          required: false,
+          default: '{}'
+        },
+        {
+          name: 'strokeMaterialProps',
+          type: 'Props<typeof MeshBasicMaterial>',
+          required: false,
+          default: '{}'
+        },
+        { name: 'fillMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' },
+        { name: 'strokeMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' }
+      ]
+  }
+---
+
+Renders an SVG using Three.js' SVGLoader.
+
+<Example path="extras/svg" />
+
+## Examples
+
+### Basic Example
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { SVG } from '@threlte/extras'
+</script>
+
+<SVG
+  src="/icons/svelte.svg"
+  scale={0.005}
+  position.x={-1.2}
+  position.y={1.5}
+/>
+```

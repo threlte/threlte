@@ -1,0 +1,39 @@
+---
+order: 6.3
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/sequence/useSequence.ts'
+title: 'useSequence'
+---
+
+The `useSequence` hook allows you to access a sequence's playback controls using a store API.
+
+## Usage
+
+The hook can be used within the [`<Sheet>`](/docs/reference/theatre/sheet) context or withing the [`<Sequence>`](/docs/reference/theatre/sequence) context:
+
+```svelte
+<!-- child of a <Sheet> or <Sequence> -->
+<script lang="ts">
+  import { useSequence } from '@threlte/theatre'
+  const { position, playing, length, play, pause, config } = useSequence()
+</script>
+```
+
+### Example
+
+This example uses the `useSequence` hook to allow you to control the feather's animation using the feather itself. Hover will pause the animation and clicking and dragging the feather up and down allow you to wind back and forth in time.
+
+<Example path="theatre/use-sequence" />
+
+## Output
+
+The following values are returned by the hook:
+
+| store    | type                                           | description                                                |
+| -------- | ---------------------------------------------- | ---------------------------------------------------------- |
+| length   | number                                         | The length of the sequence, which is set within the studio |
+| position | Writable\<number\>                             | The sequence playhead position                             |
+| playing  | Writable\<boolean\>                            | The sequence state (playing or paused)                     |
+| play     | (opts?: SequenceOptions) => Promise\<boolean\> | Method for playing the sequence                            |
+| pause    | () => void                                     | Method for pausing the sequence                            |
+| config   | (opts: SequenceOptions) => void                | Method for updating the sequence's options                 |

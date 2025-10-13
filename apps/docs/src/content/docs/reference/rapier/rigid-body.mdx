@@ -1,0 +1,89 @@
+---
+order: 2
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/components/RigidBody/RigidBody.svelte'
+title: '<RigidBody>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: type,
+          type: "'fixed' | 'dynamic' | 'kinematicPosition' | 'kinematicVelocity'",
+          default: "'dynamic'",
+          required: false
+        },
+        { name: 'canSleep', type: 'boolean', default: 'true', required: false },
+        { name: 'linearVelocity', type: 'Position', default: '{}', required: false },
+        { name: 'angularVelocity', type: 'Rotation', default: '{}', required: false },
+        { name: 'gravityScale', type: 'number', default: '1', required: false },
+        { name: 'ccd', type: 'boolean', default: 'false', required: false },
+        { name: 'lockRotations', type: 'boolean', default: 'false', required: false },
+        { name: 'lockTranslations', type: 'boolean', default: 'false', required: false },
+        {
+          name: 'enabledRotations',
+          type: 'Boolean3Array',
+          default: '[true, true, true]',
+          required: false
+        },
+        {
+          name: 'enabledTranslations',
+          type: 'Boolean3Array',
+          default: '[true, true, true]',
+          required: false
+        },
+        { name: 'dominance', type: 'number', default: '0', required: false },
+        { name: 'linearDamping', type: 'number', default: '0', required: false },
+        { name: 'angularDamping', type: 'number', default: '0', required: false },
+        { name: 'userData', type: 'Record<string, any>', default: '{}', required: false }
+      ],
+    events:
+      [
+        { name: 'create', payload: 'ref: RigidBody' },
+        { name: 'sleep', payload: 'void' },
+        { name: 'wake', payload: 'void' },
+        { name: 'collisionenter', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null,
+            manifold: TempContactManifold,
+            flipped: boolean
+            }' },
+        { name: 'collisionexit', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+            }' },
+        { name: 'sensorenter', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+            }' },
+        { name: 'sensorexit', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+            }' },
+        { name: 'contact', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null,
+            manifold: TempContactManifold,
+            flipped: boolean,
+            maxForceDirection: Vector,
+            maxForceMagnitude: number,
+            totalForce: Vector,
+            totalForceMagnitude: number
+            }' }
+      ],
+    bindings:
+      [
+        {
+          name: 'rigidBody',
+          type: { name: 'RigidBody', url: 'https://rapier.rs/javascript3d/classes/RigidBody.html' }
+        }
+      ]
+  }
+---
+
+The real-time simulation of rigid bodies subjected to forces and contacts is the main feature of a physics engine for videogames, robotics, or animation. Rigid bodies are typically used to simulate the dynamics of non-deformable solids as well as to integrate the trajectory of solids which velocities are controlled by the user (e.g. moving platforms).
+
+Note that rigid-bodies are only responsible for the dynamics and kinematics of the solid. Colliders can be attached to a rigid-body to specify its shape and enable collision-detection. A rigid-body without collider attached to it will not be affected by contacts (because there is no shape to compute contact against).
+
+<Example path="rapier/rigid-body" />

@@ -1,0 +1,37 @@
+---
+order: 1
+category: '@threlte/studio'
+title: 'Deploying To Production'
+---
+
+## Common Pattern
+
+Typically you would want to remove the Studio from your app in production. This
+can be done by wrapping the Studio component in a conditional statement that
+checks if the app is in development mode:
+
+```svelte title=App.svelte
+<script>
+  import { Canvas } from '@threlte/core'
+  import Scene from './Scene.svelte'
+</script>
+
+<Canvas>
+  {#if import.meta.env.MODE === 'development'}
+    {#await import('@threlte/studio') then { Studio }}
+      <Studio>
+        <Scene />
+      </Studio>
+    {/await}
+  {:else}
+    <Scene />
+  {/if}
+</Canvas>
+```
+
+This way, the Studio will only be included in your app when it is in
+[development mode](https://vitejs.dev/guide/env-and-mode.html#modes).
+
+### Vite Plugin
+
+The Threlte Studio vite plugin is only enabled in development mode.

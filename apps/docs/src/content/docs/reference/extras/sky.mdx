@@ -1,0 +1,124 @@
+---
+order: 4.18
+category: '@threlte/extras'
+title: '<Sky>'
+sourcePath: 'packages/extras/src/lib/components/Sky/Sky.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'scale',
+          type: 'number',
+          default: '1000',
+          descriptions: 'The scale of the cuboid skybox along every axis',
+          required: false
+        },
+        {
+          name: 'turbidity',
+          type: 'number',
+          default: '10',
+          descriptions: 'Relative clarity of the sky',
+          required: false
+        },
+        {
+          name: 'rayleigh',
+          type: 'number',
+          default: '3',
+          descriptions: 'Amount of rayleigh scattering',
+          required: false
+        },
+        {
+          name: 'mieCoefficient',
+          type: 'number',
+          default: '0.005',
+          descriptions: 'Mie scattering coefficient',
+          required: false
+        },
+        {
+          name: 'mieDirectionalG',
+          type: 'number',
+          default: '0.7',
+          descriptions: 'Mie scattering directionality',
+          required: false
+        },
+        {
+          name: 'elevation',
+          type: 'number',
+          default: '2',
+          descriptions: 'Elevation angle',
+          required: false
+        },
+        {
+          name: 'azimuth',
+          type: 'number',
+          default: '180',
+          descriptions: 'Azimuthal angle',
+          required: false
+        },
+        {
+          name: 'setEnvironment',
+          type: 'boolean',
+          default: 'true',
+          descriptions: 'Render the sky to the scene environment',
+          required: false
+        },
+        {
+          name: 'cubeMapSize',
+          type: 'number',
+          default: '128',
+          descriptions: 'The size of the cube map',
+          required: false
+        },
+        {
+          name: 'webGLRenderTargetOptions',
+          type: 'number',
+          default: '{}',
+          descriptions: 'The options for the WebGLCubeRenderTarget',
+          required: false
+        }
+      ]
+  }
+---
+
+This component adds a [Three.js `Sky` object](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/objects/Sky.js) to the scene, renders that on-demand to a cubemap which is assigned to the default scene as the environment map.
+
+<Example
+  path="extras/sky"
+  showFile="App.svelte"
+/>
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { T, Canvas } from '@threlte/core'
+  import { Sky } from '@threlte/extras'
+</script>
+
+<Canvas>
+  <Sky elevation={0.5} />
+
+  <T.PerspectiveCamera
+    makeDefault
+    position={[0, 3, 18]}
+    fov={60}
+    oncreate={(ref) => {
+      ref.lookAt(0, 0, 0)
+    }}
+  />
+</Canvas>
+```
+
+## Environment
+
+By default, this component will render the sky to the scene environment. This can be disabled by setting the `setEnvironment` prop to `false`.
+
+```svelte
+<Sky setEnvironment={false} />
+```
+
+## Performance
+
+The `<Sky>` component will only re-render the cubemap when the properties change.

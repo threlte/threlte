@@ -1,0 +1,20 @@
+---
+order: 17
+category: '@threlte/xr'
+title: 'useHandJoint'
+type: 'hook'
+---
+
+Provides a reference to a requested hand joint, once available.
+
+```svelte
+<script>
+  import { useHandJoint } from '@threlte/xr'
+
+  const wristJoint = useHandJoint('left', 'wrist')
+</script>
+```
+
+Reading hand joint positions in real time can be very useful, for example in providing rigid bodies for hands:
+
+<Example path="xr/use-hand-joint" />

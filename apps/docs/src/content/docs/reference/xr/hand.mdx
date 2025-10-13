@@ -1,0 +1,81 @@
+---
+category: '@threlte/xr'
+title: '<Hand>'
+order: 2
+type: 'component'
+componentSignature:
+  {
+    events:
+      [
+        {
+          name: 'connected',
+          payload: "XRHandEvent<'connected', null>",
+          description: 'Fired when the hand connects.'
+        },
+        {
+          name: 'disconnected',
+          payload: "XRHandEvent<'connected', null>",
+          description: 'Fired when the hand disconnects.'
+        },
+        {
+          name: 'pinchstart',
+          payload: "XRHandEvent<'pinchstart', THREE.XRHandSpace>",
+          description: 'Fired when a pinch gesture begins.'
+        },
+        {
+          name: 'pinchend',
+          payload: "XRHandEvent<'pinchend', THREE.XRHandSpace>",
+          description: 'Fired when a pinch gesture ends.'
+        }
+      ]
+  }
+---
+
+`<Hands />` instantiates [XRHand](https://developer.mozilla.org/en-US/docs/Web/API/XRHand) inputs for devices that allow hand tracking.
+
+```svelte
+<Hand left />
+<Hand right />
+```
+
+It will by default load a hand model.
+
+<Tip type="warning">
+  Default hand models are fetched from the immersive web group's [webxr input profile
+  repo](https://github.com/immersive-web/webxr-input-profiles). If you are developing an offline
+  app, you should download and provide any anticipated models.
+</Tip>
+
+`<Hand>` can accept a snippet to replace the default model.
+
+```svelte {2-5}+
+<Hand left>
+  <T.Mesh>
+    <T.IcosahedronGeometry args={[0.2]} />
+    <T.MeshStandardMaterial color="turquoise" />
+  </T.Mesh>
+</Hand>
+```
+
+A snippet, `wrist`, will place any children within the wrist space of the hand:
+
+```svelte
+<Hand left>
+  {#snippet wrist()}
+    <T.Mesh>
+      <T.IcosahedronGeometry args={[0.2]} />
+      <T.MeshStandardMaterial color="hotpink" />
+    </T.Mesh>
+  {/snippet}
+</Hand>
+```
+
+To trigger reactive changes based on whether hand input is or is not present, the `useXR` hook provides a [`currentWritable`](https://localhost:4321/docs/reference/core/utilities#currentwritable) store:
+
+```ts
+const { isHandTracking } = useXR()
+```
+
+Hand tracking can serve as a powerful input device, as any joint position, and not just the wrist, can be read from in real time:
+
+<Example path="xr/hands" />

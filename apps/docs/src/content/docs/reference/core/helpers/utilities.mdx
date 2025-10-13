@@ -1,0 +1,165 @@
+---
+category: '@threlte/core'
+title: Utilities
+sourcePath: 'packages/core/src/lib/lib/storeUtils.ts'
+order: 6.2
+---
+
+Threlte comes with a few utilities that are catered towards the use in a Threlte
+application but can also be used in other projects.
+
+## `watch`
+
+Watch a single store or multiple stores and call a callback when they change to
+trigger side effects. The callback will be called immediately with the current
+value of the store.
+
+```ts
+const store = writable(0)
+
+watch(store, (value) => {
+  console.log(value) // 0
+})
+```
+
+<Tip type="info">This utility function needs to be called during component initialization.</Tip>
+
+You can also watch multiple stores:
+
+```ts
+const store1 = writable(0)
+const store2 = writable(1)
+
+watch([store1, store2], ([value1, value2]) => {
+  console.log(value1, value2) // 0 1
+})
+```
+
+The callback can return a cleanup function that will be called when the stores change again.
+
+```ts
+const store = writable(0)
+
+watch(store, (value) => {
+  console.log(value) // 0
+  return () => {
+    console.log('cleanup')
+  }
+})
+```
+
+---
+
+## `observe`
+
+Watch a single or multiple reactive values or stores and call a callback when
+they change. This is the runes-equivalent to [`watch`](#watch) and supports both
+stores and reactive values. It does however serve a different purpose: As
+opposed to `watch`, the provided callback is not called synchronously when
+stores or reactive values change but in the next microtask. This utility uses
+[Svelte's `$effect`](https://svelte.dev/docs/svelte/$effect) under the hood.
+
+```ts
+let count = $state(0)
+let name = $state('John')
+const iteration = writable(0)
+
+observe(
+  () => [count, iteration],
+  ([count, iteration]) => {
+    // This callback is only called when `count` or `iteration` changes
+    // and not when `name` changes.
+    console.log(count, iteration, name)
+  }
+)
+```
+
+---
+
+## `observe.pre`
+
+This is the same as [`observe`](#observe) but it uses
+[`$effect.pre`](https://svelte.dev/docs/svelte/$effect#$effect.pre) instead of
+`$effect`.
+
+---
+
+## `asyncWritable`
+
+Creates a writable store that is initialized with a promise. The store also directly
+implements the `then` and `catch` methods of the promise so that it can be
+used in `await` expressions and `{#await}` blocks of Svelte.
+
+```svelte
+<script>
+  import { asyncWritable } from '@threlte/core'
+
+  const asyncOperation = async () => {
+    // Do something async
+  }
+  const store = asyncWritable(asyncOperation())
+  $inspect($store)
+</script>
+
+<h1>
+  {#await store then data}
+    // Do something with the data
+  {/await}
+</h1>
+```
+
+This type of store is the return type of the [`load` function of `useLoader`](/docs/reference/core/use-loader#loading-an-asset).
+
+If an error occurs in the promise, the error will be logged to the console
+and the error can be accessed via the `error` property of the store which is also a store.
+
+```svelte
+<script>
+  import { asyncWritable } from '@threlte/core'
+
+  const asyncOp = async () => {
+    throw new Error('Something went wrong')
+  }
+
+  const store = asyncWritable(asyncOp())
+  const error = store.error
+
+  $inspect($store, $error)
+</script>
+```
+
+---
+
+## `currentWritable`
+
+A writable store that also has a `current` property that is updated synchronously.
+For use in non-reactive contexts e.g. loops where unwrapping a store every frame
+(with Svelte's `get` method) is expensive.
+
+```ts
+const store = currentWritable(0)
+
+useTask(() => {
+  console.log(store.current) // 0
+})
+```
+
+---
+
+## `isInstanceOf`
+
+Check if an object is an instance of a given THREE class. This function can be
+used as a type guard and as an alternative to
+[`instanceof`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/instanceof)
+which is prone to error and [slower](https://jsperf.app/jazula). This function
+uses the `isFoo` property that THREE classes have to determine if an object is
+of a particular class.
+
+```ts
+const obj = new Object3D()
+
+// Later, in an unknown context
+if (isInstanceOf(obj, 'Object3D')) {
+  obj.position.x = 5
+}
+```

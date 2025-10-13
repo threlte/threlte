@@ -1,0 +1,292 @@
+---
+category: '@threlte/flex'
+title: '<Flex>'
+order: 0
+type: 'component'
+sourcePath: 'packages/flex/src/lib/Flex'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'reflowStage',
+          type: 'Stage',
+          required: false,
+          description: 'The stage used for reflowing the layout.'
+        },
+        { name: 'width', type: 'number', required: false },
+        { name: 'height', type: 'number', required: false },
+        { name: 'plane', type: 'FlexPlane', required: false },
+        { name: 'direction', type: 'keyof typeof Direction', required: false },
+        { name: 'scaleFactor', type: 'number', required: false },
+        {
+          name: 'classParser',
+          type: 'ClassParser',
+          required: false,
+          description: 'A ClassParser can be used to resolve Yoga Node Props based on classes passed to <Box> and <Flex> components.'
+        },
+        { name: order, type: 'number', required: false },
+        {
+          name: 'class',
+          type: 'string',
+          required: false,
+          description: 'declared classes will be resolved by a ClassParser declared on <Flex>'
+        },
+        {
+          name: 'alignItems',
+          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+          required: false
+        },
+        {
+          name: 'alignSelf',
+          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+          required: false
+        },
+        {
+          name: 'alignContent',
+          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+          required: false
+        },
+        {
+          name: 'justifyContent',
+          type: '"FlexStart" | "Center" | "FlexEnd" | "SpaceBetween" | "SpaceAround" | "SpaceEvenly"',
+          required: false
+        },
+        {
+          name: 'flexDirection',
+          type: '"Column" | "ColumnReverse" | "Row" | "RowReverse"',
+          required: false
+        },
+        { name: 'flexWrap', type: '"NoWrap" | "Wrap" | "WrapReverse"', required: false },
+        { name: 'flex', type: 'number', required: false },
+        { name: 'flexBasis', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'flexGrow', type: 'number', required: false },
+        { name: 'flexShrink', type: 'number', required: false },
+        { name: 'height', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'width', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'maxHeight', type: 'number | `${number}%`', required: false },
+        { name: 'maxWidth', type: 'number | `${number}%`', required: false },
+        { name: 'minHeight', type: 'number | `${number}%`', required: false },
+        { name: 'minWidth', type: 'number | `${number}%`', required: false },
+        { name: 'top', type: 'number | `${number}%`', required: false },
+        { name: 'right', type: 'number | `${number}%`', required: false },
+        { name: 'bottom', type: 'number | `${number}%`', required: false },
+        { name: 'left', type: 'number | `${number}%`', required: false },
+        { name: 'padding', type: 'number | `${number}%`', required: false },
+        { name: 'paddingTop', type: 'number | `${number}%`', required: false },
+        { name: 'paddingRight', type: 'number | `${number}%`', required: false },
+        { name: 'paddingBottom', type: 'number | `${number}%`', required: false },
+        { name: 'paddingLeft', type: 'number | `${number}%`', required: false },
+        { name: 'margin', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginTop', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginRight', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginBottom', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginLeft', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'gap', type: 'number', required: false },
+        { name: 'gapColumn', type: 'number', required: false },
+        { name: 'gapRow', type: 'number', required: false },
+        { name: 'aspectRatio', type: 'number', required: false }
+      ],
+    events:
+      [
+        {
+          name: 'reflow',
+          payload: '{ width: number, height: number }',
+          description: 'Fired as soon as a reflow happened with the resulting width and height.'
+        }
+      ]
+  }
+---
+
+The component `<Flex>` is used to create the root of a flex layout. It creates
+the root node for [Yoga](https://yogalayout.com) and provides a context for all
+child [`<Box>`](/docs/reference/flex/box) components to resolve their layout.
+
+## Usage
+
+The `<Flex>` component resembles the root `display: flex` container in CSS. It
+can be used to create a flex layout with the child components `<Box>`.
+
+Since there's no viewport to fill, you must specify the size of the container
+with the props `width` and `height`.
+
+```svelte
+<script lang="ts">
+  import { Flex } from '@threlte/flex'
+</script>
+
+<div style="display: flex; width: 100px; height: 100px">
+  <!-- ... -->
+</div>
+
+<!-- translates to this -->
+
+<Flex
+  width={100}
+  height={100}
+>
+  <!-- ... -->
+</Flex>
+```
+
+### Layout Direction
+
+Layout direction specifies the direction in which children and text in a
+hierarchy should be laid out. Layout direction also effects what edge `start` and
+`end` refer to. By default Yoga lays out with LTR layout direction.
+
+```svelte
+<Flex direction="RTL">
+  <!-- ... -->
+</Flex>
+```
+
+### Layout precision
+
+Yoga uses integers for layout computation. Because in Three.js we're dealing
+with floating point numbers, all values are internally multiplied by a
+`scaleFactor` of `1000` to increase precision which is suitable for most use
+cases. Depending on the size of your layout, you might need to increase the
+`scaleFactor` to `10000` or `100000` to avoid layout issues.
+
+```svelte
+<Flex scaleFactor={100000}>
+  <!-- ... -->
+</Flex>
+```
+
+### Using CSS Classes
+
+A `classParser` can be used to resolve Yoga Node Props based on classes passed
+to `<Box>` and `<Flex>` components. This is useful if you want to use a CSS-like
+syntax to define your layout. You can define your own `ClassParser` using the
+method [`createClassParser`](/docs/reference/flex/create-class-parser) or by
+using a parser provided, for instance the Tailwind CSS parser
+[`tailwindParser`](/docs/reference/flex/tailwind-parser).
+
+```svelte
+<script lang="ts">
+  import { Flex, tailwindParser } from '@threlte/flex'
+</script>
+
+<Flex classParser={tailwindParser}>
+  <!-- ... -->
+</Flex>
+```
+
+### Layout Orientationu
+
+Yoga computes the layout on a 2D plane. The elements will be positioned in the
+2D plane given by the two axes. By default, the layout plane is the `xy` plane.
+You can change the layout plane to `yz` or `xz` by setting the prop `plane`.
+
+```svelte
+<Flex plane="yz">
+  <!-- ... -->
+</Flex>
+```
+
+### Layout Reflow
+
+[Yoga](https://yogalayout.com) is a layout engine that computes the layout of a
+node tree. If a node (i.e. a [`<Box>`](/docs/reference/flex/box) component) is added or removed
+from the tree, or if a node changes its properties, the layout of the component
+tree needs to be recomputed. This is called a **reflow**.
+
+A reflow is triggered automatically when:
+
+- `<Flex>` props changes (`width`, `height`, `justifyContent`, …)
+- `<Box>` props changes (`justifyContent`, `flex`, …)
+- A `<Box>` component mounts or unmounts
+
+Because the width and height of a flex layout item may be calculated from its
+bounding box, the initial layout may be incorrect, for instance if a model loads
+into view after the initial layout has been computed. To manually request a
+reflow, you can use the snippet prop `reflow`:
+
+```svelte
+<script lang="ts">
+  import { Flex, Box } from '@threlte/flex'
+  import { GLTF } from '@threlte/extras'
+</script>
+
+<Flex>
+  {#snippet children({ reflow })}
+    <Box>
+      <GLTF
+        src="/model.glb"
+        onload={() => reflow()}
+      />
+    </Box>
+  {/snippet}
+</Flex>
+```
+
+<Tip type="tip">
+  The `reflow` snippet prop is also available on `<Box>` components to enable
+  encapsulated child components to easily request a reflow.
+</Tip>
+
+You may also use the hook [`useReflow`](/docs/reference/flex/use-reflow) to request
+a reflow.
+
+### Reflow Stage
+
+By default, the reflow of the layout is happening in [Threlte's
+mainStage](/docs/learn/basics/scheduling-tasks#default-stages). To change in
+what stage the layout should reflow, use the prop `reflowStage`:
+
+```svelte
+<script lang="ts">
+  import { useStage, useThrelte } from '@threlte/core'
+  import { Flex } from '@threlte/flex'
+
+  const { mainStage, renderStage } = useThrelte()
+
+  const reflowStage = useStage('reflow-stage', {
+    after: mainStage,
+    before: renderStage
+  })
+</script>
+
+<Flex {reflowStage}>
+  <!-- ... -->
+</Flex>
+```
+
+### Content Dimensions
+
+Although the width and the height of the `<Flex>` component are required, the
+**dimensions of the contents** of the `<Flex>` component will be measured after a
+[layout reflow](#layout-reflow) and can be retrieved using the following methods:
+
+- Using the hook [`useDimensions`](/docs/reference/flex/use-dimensions)
+- Using the snippet props `width` and `height`
+
+```svelte
+<script lang="ts">
+  import { Flex } from '@threlte/flex'
+</script>
+
+<Flex>
+  {#snippet children({ width, height })}
+    <!-- ... -->
+  {/snippet}
+</Flex>
+```
+
+- Using the `reflow` event
+
+```svelte
+<script lang="ts">
+  import { Flex } from '@threlte/flex'
+</script>
+
+<Flex
+  onreflow={({ width, height }) => {
+    console.log(width, height)
+  }}
+>
+  <!-- ... -->
+</Flex>
+```

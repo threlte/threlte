@@ -1,0 +1,73 @@
+---
+order: 1.2
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/project/Project.svelte'
+title: '<Project>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {name: 'name', type: 'string', default: 'default', required: false},
+        {name: 'config', type: 'IProjectConfig', required: false},
+      ],
+	bindings:
+	  [
+	    {name: 'project', type: 'IProject'},
+		{name: 'isReady', type: 'boolean'},
+	  ]
+  }
+---
+
+Theatre.js work is organized into projects that group animation [\<Sheet\>](./sheet)s.
+
+Projects also provide the means to inject configuration state exported as a JSON file from the [\<Studio\>](./studio) back into your code through a prop: `<Project config={{ state }}>`.
+
+While multiple projects may be created, one is usually sufficient for a whole Threlte application.
+
+#### Theatre.js Docs
+
+**Project** | [Project Manual](https://www.theatrejs.com/docs/latest/manual/projects) | [Project API Reference](https://www.theatrejs.com/docs/latest/api/core#project)
+
+### Creating a Project
+
+```svelte
+<script>
+  import { Project, Sheet, SheetObject } from '@threlte/theatre'
+</script>
+
+<!-- Will create a project with the name "Project A" -->
+<Project name="Project A">
+  <Sheet name="Sheet A">
+    <SheetObject key="ObjectA" />
+  </Sheet>
+</Project>
+```
+
+### Loading a Saved State
+
+The state of a project edited in the [\<Studio\>](./studio) is saved in your browser's local storage, and can be [exported from within the studio interface](https://www.theatrejs.com/docs/latest/manual/projects#state). It's a JSON file containing all animated and static properties of all sheets of the project.
+
+```svelte
+<script>
+  import { Project, Sheet, SheetObject } from '@threlte/theatre'
+  import state from './state.json'
+</script>
+
+<!--
+	Will create a project with the name "Project A",
+	load its state and mount all children when
+	finished loading
+-->
+<Project
+  config={{ state }}
+  name="Project A"
+>
+  <Sheet
+    name="Sheet A"
+    autoplay
+  >
+    <SheetObject key="ObjectA" />
+  </Sheet>
+</Project>
+```

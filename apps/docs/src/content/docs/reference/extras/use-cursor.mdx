@@ -1,0 +1,113 @@
+---
+order: 2.6
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/hooks/useCursor.ts'
+title: useCursor
+type: 'hook'
+---
+
+A hook that sets the css cursor property according to the hover state of a mesh, so that you can give the user visual feedback.
+
+If a context is present, the cursor property will be set on the DOM element of the renderer, otherwise it will be set on the body element.
+
+<Example path="extras/use-cursor" />
+
+## Examples
+
+### Simple Usage
+
+Provide arguments to determine the cursor style. The defaults are`'pointer'` for `onPointerOver` and `'auto'` for `onPointerOut`. `useCursor` returns event handlers that you can use to set the hovering state:
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { useCursor } from '@threlte/extras'
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
+
+  // Set the cursor to 'grab' if the pointer is
+  // hovering over the mesh and to 'crosshair'
+  // if the pointer is outside the mesh
+  const { onPointerEnter, onPointerLeave } = useCursor('grab', 'crosshair')
+</script>
+
+<T.Mesh
+  onpointerenter={onPointerEnter}
+  geometry={new BoxGeometry()}
+  material={new MeshBasicMaterial()}
+/>
+```
+
+### Renaming Event Handlers
+
+You can rename the event handlers to resolve naming conflicts. Additionally Svelte allows binding multiple event handlers to the same event:
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { useCursor } from '@threlte/extras'
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
+
+  const { onPointerEnter: cursorEnter, onPointerLeave: cursorLeave } = useCursor()
+
+  const onPointerEnter = () => {
+    console.log('Pointer entered!')
+  }
+  const onPointerLeave = () => {
+    console.log('Pointer left!')
+  }
+</script>
+
+<T.Mesh
+  onpointerenter={cursorEnter}
+  onpointerenter={onPointerEnter}
+  geometry={new BoxGeometry()}
+  material={new MeshBasicMaterial()}
+/>
+```
+
+### Store Usage
+
+If you want to implement custom logic, you can use the returned svelte store to set the hovering state:
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { useCursor } from '@threlte/extras'
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
+
+  const { hovering } = useCursor()
+</script>
+
+<T.Mesh
+  onpointerenter={() => ($hovering = true)}
+  onpointerleave={() => ($hovering = false)}
+  geometry={new BoxGeometry()}
+  material={new MeshBasicMaterial()}
+/>
+```
+
+### Change the Cursor Style
+
+Provide svelte stores to change the cursor style also while hovering:
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { useCursor } from '@threlte/extras'
+  import { BoxGeometry, MeshBasicMaterial } from 'three'
+  import { writable } from 'svelte/store'
+
+  const onPointerOverCursor = writable('grab')
+
+  const { onPointerEnter, onPointerLeave } = useCursor(onPointerOverCursor)
+
+  // somewhere in your application …
+  onPointerOverCursor.set('grabbing')
+</script>
+
+<T.Mesh
+  onpointerenter={onPointerEnter}
+  geometry={new BoxGeometry()}
+  material={new MeshBasicMaterial()}
+/>
+```

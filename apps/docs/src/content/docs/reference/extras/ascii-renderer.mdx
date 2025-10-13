@@ -1,0 +1,157 @@
+---
+order: 5.10
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/AsciiRenderer/AsciiRenderer.svelte'
+title: <AsciiRenderer>
+type: 'component'
+componentSignature:
+  {
+    exports:
+      [
+        { name: 'start', type: '() => void', description: 'Manually start the render task' },
+        { name: 'stop', type: '() => void', description: 'Manually stop the render task' },
+        {
+          name: 'getEffect',
+          type: '() => THREE.AsciiEffect',
+          description: 'Getter for the underlying AsciiEffect instance'
+        }
+      ],
+    props:
+      [
+        {
+          default: 'useThrelte().camera.current',
+          description: 'the camera to use when renderering',
+          name: 'camera',
+          required: false,
+          type: THREE.Camera
+        },
+        {
+          default: 'useThrelte().scene',
+          description: 'the scene to use when renderering',
+          name: 'scene',
+          required: false,
+          type: THREE.Scene
+        },
+        {
+          default: 'true',
+          description: 'whether to automatically run the render task',
+          name: 'autoRender',
+          required: false,
+          type: 'boolean'
+        },
+        {
+          name: 'characters',
+          default: "' .:-+*=%@#'",
+          description: 'character set used by the renderer. Sorted left-to-right from least to most opaque',
+          required: false,
+          type: 'string'
+        },
+        {
+          default: "'#000000'",
+          description: 'background color used when `options.color` is set to `false`',
+          name: 'bgColor',
+          required: false,
+          type: 'string'
+        },
+        {
+          default: "'#ffffff'",
+          description: 'text color used when `options.color` is set to `false`',
+          name: 'fgColor',
+          required: false,
+          type: 'string'
+        },
+        {
+          default: '{}',
+          description: "object passed to the effect's constructor. because the effect doesn't support adjusting individual option props, whenever an option prop changes, the effect must be recreated",
+          name: 'options',
+          required: false,
+          type: 'Three.AsciiEffectOptions'
+        },
+        {
+          name: 'onstart',
+          required: false,
+          type: '() => void',
+          description: 'function to call anytime the renderer has been started'
+        },
+        {
+          name: 'onstop',
+          required: false,
+          type: '() => void',
+          description: 'function to call anytime the renderer has been stopped'
+        }
+      ]
+  }
+---
+
+A wrapper around Three's [AsciiEffect](https://github.com/timoxley/threejs/blob/master/examples/js/effects/AsciiEffect.js) addon. It replaces the main render function with a function that renders the scene to an HTML table and overlays it on top of the canvas. Areas with a higher "brightness" are mapped to characters that appear "fuller".
+
+<Example path="extras/ascii-renderer/basic" />
+
+## Usage
+
+Typically you'd use `<AsciiRenderer>` alongside your main `Scene` component. `<AsciiRenderer>` creates an absolutely postioned table element that is appended to the dom element of the `<Canvas>`. You may need to set the wrapping element's position to `relative`
+
+```svelte
+<div>
+  <Canvas>
+    <AsciiRenderer />
+    <Scene />
+  </Canvas>
+</div>
+
+<style>
+  div {
+    position: relative;
+  }
+</style>
+```
+
+## Characters
+
+The `characters` prop should be sorted by ascending "opaqueness".
+
+```svelte
+<AsciiRenderer characters=" #" />
+```
+
+The example above uses a character set with two characters - ` ` and `#`.
+
+## Colors
+
+By default the renderer sets `options.color` to `false` and will only use the colors given by the `fgColor` and `bgColor` props. `fgColor` and `bgColor` can be any acceptable CSS color string. If your colors contain an alpha component, make sure to set `options.alpha` to `true`.
+
+If `options.color` is set to `true`, `fgColor` and `bgColor` will be ignored and the corresponding color of the scene will be used for each character.
+
+```svelte
+<AsciiRenderer options={{ color: true }} />
+```
+
+<Tip type="info">
+  Setting `options.color` to `true` slows down performance. Using a static scene or manually
+  rendering can help.
+</Tip>
+
+## Other Options Props
+
+Because the effect doesn't support dynamically updating options, any time an `options` property changes, a new `AsciiEffect` is created inside `<AsciiRenderer`. For this reason, `options` is passed as an object to `<AsciiRenderer>`
+
+- `options.block` makes the characters into color blocks. It is only applied if `options.color` is `true`.
+- `options.invert` inverts the `fgColor` and `bgColor` colors.
+- `options.resolution` controls how detailed the render is.
+- `options.scale` controls the scale of the characters. Note that zooming the camera does not control the size of the characters.
+
+<Tip type="info">
+  A new `AsciiEffect` instance must be created anytime `options` changes because an effect can not
+  have it options changed after it has been created. This is a limitation of the `AsciiEffect` addon
+  from Three.js.
+</Tip>
+
+## Disabling the Render Task
+
+If at some point your scene doesn't need to be rendered because it will no longer update or nothing will change between frames, you can turn off the rendering task by setting the `autoRender` prop to `false`. This will stop the render task from running which can improve performance. This is especially useful when using `options.color` which is known to slow down the renderer.
+
+`AsciiRenderer` passes its `AsciiEffect` instance to its `children` snippet. This allows you to opt out of `AsciiEffect`'s renderering task but still use the effect it creates. It can also be used for on-demand rendering.
+
+<Example path="extras/ascii-renderer/only-effect" />
+
+The example above demonstrates how to render on demand. The scene is only rendered when the `color` checkbox changes. The change causes the `options` object to update which triggers a new `AsciiEffect` to be created. The effect is passed into the `<Scene>` component and an `$effect` is used to rerender the scene.

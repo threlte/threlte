@@ -1,0 +1,66 @@
+---
+order: 4.1
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/sheetObject/SheetObject.svelte'
+title: '<SheetObject>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'key', type: 'string', required: true },
+        {
+          name: props,
+          type:
+            {
+              name: 'UnknownShorthandCompoundProps',
+              url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+            },
+          required: false
+        },
+        { name: 'detach', type: 'boolean', required: false, default: 'false' }
+      ]
+  }
+---
+
+The `<SheetObject>` component allows you to pool the properties of a **logical entity** which can be a anything from a single material, multiple meshes or a complete scene. The component `<SheetObject>` and
+make them editable and animatable in the Theatre.js studio. It's a great choice if you are making a reusable Threlte component which
+you want to make editable in the Theatre.js studio.
+
+#### Theatre.js Docs
+
+**Sheet Object** | [Sheet Object Manual](https://www.theatrejs.com/docs/latest/manual/objects) | [Sheet Object API Reference](https://www.theatrejs.com/docs/latest/api/core#object)
+
+## Overview
+
+The `<SheetObject>` component offers several distinct ways to declare and syncronize props in the Theatre.js studio. Convenient [auto prop APIs](#auto-props) address common usecases and allow
+quick and easy prop declaration. Meanwhile, [manual props APIs](#manual-prop) allow full customization of prop declaration. Many of these are offered through [slot props](https://svelte.dev/docs/special-elements#slot-slot-key-value).
+
+<Example path="theatre/sheet-object" />
+
+## Auto Props
+
+The [`<Sync>`](./sync) component automatically infers and synchronizes props of its parent component. Meanwhile the [`<Transform>`](./transform) component creates position and rotation props for its
+child components, and adds transform controls to the them.
+
+## Manual Props
+
+Sometimes we want to control prop declaration manually for better control when implementing custom domain
+specific props. We can achieve this using _manual prop declaration_. Provide the `props` property to the component
+`<SheetObject>` for a manual property declaration.
+
+```svelte
+<SheetObject props={{ x: 0 }}>
+  {#snippet children({ values })}
+    <T.Mesh position.x={values.x} />
+  {/snippet}
+</SheetObject>
+```
+
+You can also use the [`<Declare>`](./declare) prop slot component to colocate your manual declaration with other code.
+
+## Selection
+
+The `<SheetObject>` component offers a slot prop based API for controlling selection in the Theatre.js studio. Simply
+declare the `select` and `deselect` methods and the `selected` variables to use it. You then need to use these in the
+mesh of your choice; see the example above for a demonstration.

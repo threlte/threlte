@@ -1,0 +1,52 @@
+---
+category: '@threlte/core'
+title: Getting Started
+order: -1
+---
+
+The package `@threlte/core` is the core package of the Threlte framework. It provides the basic
+functionality of the framework, such as the `<Canvas>` and `<T>` components, and hooks to interact
+with the Threlte state.
+
+## Installation
+
+```bash title="Terminal"
+npm install @threlte/core three @types/three
+```
+
+## Usage
+
+Every Threlte application must be wrapped in a [`<Canvas>` component](/docs/reference/core/canvas). This component is responsible
+for creating `THREE.WebGLRenderer` and providing a state for every child component.
+
+```svelte title="App.svelte"
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import Scene from './Scene.svelte'
+</script>
+
+<Canvas>
+  <Scene />
+</Canvas>
+```
+
+The main building block of a Threlte application is the [`<T>` component](/docs/reference/core/t). Use this component to instantiate
+any Three.js object available in the `THREE` namespace.
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+</script>
+
+<T.PerspectiveCamera
+  position={[10, 10, 10]}
+  oncreate={(ref) => {
+    ref.lookAt(0, 0, 0)
+  }}
+/>
+
+<T.Mesh>
+  <T.BoxGeometry args={[1, 1, 1]} />
+  <T.MeshBasicMaterial color="red" />
+</T.Mesh>
+```

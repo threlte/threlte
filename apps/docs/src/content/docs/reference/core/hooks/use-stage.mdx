@@ -1,0 +1,116 @@
+---
+category: '@threlte/core'
+title: useStage
+sourcePath: 'packages/core/src/lib/hooks/useStage.ts'
+order: 5.2
+---
+
+<Tip type="info">
+  Tasks are part of Threlte's *Task Scheduling System*. For details on how to use stages and tasks,
+  see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
+</Tip>
+
+The hook `useStage` can be used to create or retrieve a stage.
+Stages are **groups of tasks**. They are executed in a specific order.
+
+## Creating a stage
+
+`useStage` will create a stage if it does not exist yet, or return the existing
+stage if it does.
+
+```ts
+const { renderStage } = useThrelte()
+
+// All tasks added to the stage `afterRenderStage`
+// will be executed after the tasks of the stage `renderStage`.
+const afterRenderStage = useStage('after-render', {
+  after: renderStage
+})
+```
+
+<Tip type="tip">
+  Be aware that `useStage` never removes a stage as that's usually not needed. If a stage is created
+  *once* in your Threlte app, it's available throughout the app's lifetime. If you want to remove a
+  stage, you can do so by calling `removeStage` on the scheduler instance returned by `useThrelte`.
+</Tip>
+
+A stage decides **when and how its tasks are executed**. By default, a stage will
+execute its tasks on every frame. You can change this behavior by passing a
+`callback` option to `useStage`. This callback will be called every frame. The
+first argument `delta` is the time elapsed since the last frame. The second
+argument `runTasks` is a function that when invoked will run all the tasks of
+the stage in their respective order. You can use it to run the tasks only when
+needed (e.g. when a condition is met) or to run them multiple times. If a number
+is passed as the first argument to runTasks, the tasks will receive that as the
+delta.
+
+```ts
+const { renderStage } = useThrelte()
+
+const conditionalStage = useStage('after-render', {
+  after: renderStage,
+  callback: (delta, runTasks) => {
+    // This callback will be called every frame. The first argument is the time elapsed
+    // since the last frame. The second argument is a function that will run all the
+    // tasks of the stage. You can use it to run the tasks only when needed (e.g. when
+    // a condition is met) or to run them multiple times. If a number is passed as the
+    // first argument to runTasks, the tasks will receive that as the delta.
+    if (condition) {
+      runTasks()
+    }
+  }
+})
+```
+
+## Examples
+
+### Implement performance profiling
+
+This component will implement
+[three-perf](https://www.npmjs.com/package/three-perf). It expects you to call a
+function `perf.begin()` before any frame callbacks are executed and `perf.end()`
+after all frame callbacks have been executed, including rendering. Assuming our
+app didn't add any other stages, we add a stage that runs before Threlte's
+[`mainStage`](/docs/learn/basics/scheduling-tasks#default-stages) (making it the
+first stage) and another stage that runs after Threlte's
+[`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) (making it
+the last stage). We then call `perf.begin()` in a task of the first stage and
+`perf.end()` in a task of the second stage.
+
+```svelte title="ThreePerf.svelte"
+<script>
+  import { useStage, useTask, useThrelte } from '@threlte/core'
+  import { ThreePerf } from 'three-perf'
+
+  const { renderer, mainStage, renderStage } = useThrelte()
+
+  const perf = new ThreePerf({
+    anchorX: 'left',
+    anchorY: 'top',
+    domElement: document.body,
+    renderer
+  })
+
+  const beforeMainStage = useStage('three-perf-begin', {
+    before: mainStage
+  })
+
+  useTask(
+    () => {
+      perf.begin()
+    },
+    { stage: beforeMainStage }
+  )
+
+  const afterRenderStage = useStage('three-perf-end', {
+    after: renderStage
+  })
+
+  useTask(
+    () => {
+      perf.end()
+    },
+    { stage: afterRenderStage }
+  )
+</script>
+```

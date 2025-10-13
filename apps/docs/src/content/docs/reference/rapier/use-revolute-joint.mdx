@@ -1,0 +1,46 @@
+---
+order: 14
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/hooks/useRevoluteJoint.ts'
+title: 'useRevoluteJoint'
+type: 'hook'
+---
+
+Use this hook to initialize a [`RevoluteImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint).
+
+```svelte
+<script>
+  import { useRevoluteJoint, RigidBody, Collider } from '@threlte/rapier'
+
+  const { joint, rigidBodyA, rigidBodyB } = useRevoluteJoint({ x: 1 }, {}, { y: 1 })
+</script>
+
+<RigidBody bind:rigidBody={$rigidBodyA}>
+  <Collider
+    shape="cuboid"
+    args={[1, 1, 1]}
+  />
+</RigidBody>
+
+<RigidBody bind:rigidBody={$rigidBodyB}>
+  <Collider
+    shape="cuboid"
+    args={[1, 1, 1]}
+  />
+</RigidBody>
+```
+
+### Signature
+
+```ts
+const {
+	joint: Writable<RevoluteImpulseJoint>
+	rigidBodyA: Writable<RAPIER.RigidBody>
+	rigidBodyB: Writable<RAPIER.RigidBody>
+} = useRevoluteJoint(
+	anchorA,  // Position
+  anchorB,  // Position
+  axis,     // Rotation
+  limits    // [min, max] | undefined
+)
+```

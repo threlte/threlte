@@ -1,0 +1,110 @@
+---
+category: '@threlte/core'
+title: '<Canvas>'
+sourcePath: 'packages/core/src/lib/Canvas.svelte'
+order: 0
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'dpr', type: 'number', default: 'window.devicePixelRatio', required: false },
+        {
+          name: 'toneMapping',
+          type:
+            {
+              name: 'THREE.ToneMapping',
+              url: 'https://threejs.org/docs/index.html#api/en/constants/Renderer'
+            },
+          default: 'THREE.AgXToneMapping',
+          required: false,
+          description: 'renderer.toneMapping'
+        },
+        {
+          name: 'colorSpace',
+          type:
+            {
+              name: 'THREE.ColorSpace',
+              url: 'https://github.com/mrdoob/three.js/blob/705e47d035591cb5a2e9cc83aa3576e21a4bf2c0/src/constants.js#L149-L153'
+            },
+          default: 'srgb',
+          required: false
+        },
+        {
+          name: 'colorManagementEnabled',
+          type:
+            {
+              name: 'boolean',
+              url: 'https://threejs.org/docs/#manual/en/introduction/Color-management'
+            },
+          default: 'true',
+          required: false
+        },
+        {
+          name: 'renderMode',
+          type: "'always' | 'on-demand' | 'manual'",
+          default: "'on-demand'",
+          required: false
+        },
+        {
+          name: 'autoRender',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Whether to automatically render the scene every frame. Set to `false` to implement custom render pipelines.'
+        },
+        {
+          name: 'shadows',
+          type: 'boolean | THREE.ShadowMapType',
+          default: 'THREE.PCFSoftShadowMap',
+          required: false
+        },
+        {
+          name: 'createRenderer',
+          type: '(canvas: HTMLCanvasElement) => THREE.Renderer',
+          required: false,
+          description: 'To set up a custom renderer, pass a function that returns a new renderer instance.'
+        }
+      ]
+  }
+---
+
+The `<Canvas>` component is the root of your Threlte scene. It provides contexts
+that all other components and many hooks depend on. This means they need to be
+**child components** to the `<Canvas>` component.
+
+<Tip
+  type="tip"
+  title="Structuring your app"
+>
+  Check out our [guide on structuring your app](/docs/learn/basics/app-structure) for a fail-safe
+  app architecture recipe.
+</Tip>
+
+## Size
+
+By default, the `<canvas>` (the **DOM element** inside `<Canvas>`) that is being
+rendered into takes up 100% of the width and height of its parent element and
+reacts to changes in the parent element's size. This means that – simply put –
+you define the size of the `<canvas>` element by layouting the parent element.
+
+```svelte title="App.svelte"
+<div style="width: 300px; height: 300px;">
+  <!-- The canvas will take up 300px by 300px -->
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+```
+
+<Tip type="info">
+  When taking the parent's size into account, [`offsetWidth` and
+  `offsetHeight`](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Object_Model/Determining_the_dimensions_of_elements#how_much_room_does_it_use_up)
+  are used.
+</Tip>
+
+## DOM reference
+
+The context provided by the `<Canvas>` component contains a `dom` element. It
+refers to the DOM element that a particular view is rendered into. In the most
+common case, this is the wrapper of the `canvas` element provided by Threlte.

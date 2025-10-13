@@ -1,0 +1,59 @@
+---
+order: 2.1
+category: '@threlte/extras'
+title: <Gizmo>
+sourcePath: 'packages/extras/src/lib/components/Gizmo/Gizmo.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'renderTask',
+          required: false,
+          type: 'TaskOptions',
+          description: 'Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`.'
+        },
+        { name: 'controls', type: 'OrbitControls | CameraControls', required: false }
+      ],
+    events:
+      [
+        {
+          name: 'start',
+          payload: "Event<'start', ViewportGizmo>",
+          description: 'Triggered when a view change interaction begins.'
+        },
+        {
+          name: 'change',
+          payload: "Event<'change', ViewportGizmo>",
+          description: 'Triggered during view changes.'
+        },
+        {
+          name: 'end',
+          payload: "Event<'end', ViewportGizmo>",
+          description: 'Triggered when a view change interaction ends.'
+        }
+      ]
+  }
+---
+
+A gizmo for snap-to camera controls.
+
+Uses the [Three Viewport Gizmo library](https://fennec-hub.github.io/three-viewport-gizmo/).
+
+<Example path="extras/gizmo" />
+
+Three's `OrbitControls` or yomotsu's [`CameraControls`](https://github.com/yomotsu/camera-controls) can be provided as a `controls` prop.
+
+Alternatively, the `<Gizmo>` can be placed as a child of a controls component.
+
+```svelte
+<OrbitControls>
+  <!-- Will attach itself to this OrbitControls -->
+  <Gizmo />
+</OrbitControls>
+```
+
+In addition to the props listed below, `<Gizmo>` can accept [any of the options](https://fennec-hub.github.io/three-viewport-gizmo/api.html#gizmooptions) from the underlying Three Viewport Gizmo instance as a prop.
+
+<Tip type="warning">These props cause the gizmo to rebuild itself, so update them sparingly.</Tip>

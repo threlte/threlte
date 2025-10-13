@@ -1,0 +1,292 @@
+---
+order: -2
+category: '@threlte/flex'
+title: Getting Started
+---
+
+Placing content and making layouts in 3D is hard. The flexbox engine
+[`Yoga`](https://yogalayout.com/) is a cross-platform layout engine which
+implements the flexbox spec. The package `@threlte/flex` provides components to
+easily use `Yoga` in Threlte.
+
+<Example
+  path="flex/intro"
+  showFile="Scene.svelte"
+/>
+
+<small>MatCap textures from https://github.com/emmelleppi/matcaps</small>
+
+## Installation
+
+```bash
+npm install @threlte/flex
+```
+
+## Usage
+
+### Basic Example
+
+Use the component [`<Flex>`](/docs/reference/flex/flex) to create a flexbox
+container. Since there's no viewport to fill, you must specify the size of the
+container. Add flex items with the component [`<Box>`](/docs/reference/flex/box).
+
+```svelte
+<script lang="ts">
+  import { Flex } from '@threlte/flex'
+  import Plane from './Plane.svelte'
+</script>
+
+<Flex
+  width={100}
+  height={100}
+>
+  <Box>
+    <Plane
+      width={20}
+      height={20}
+    />
+  </Box>
+
+  <Box>
+    <Plane
+      width={20}
+      height={20}
+    />
+  </Box>
+</Flex>
+```
+
+### Flex Props
+
+The components `<Flex>` and `<Box>` accept props to configure the flexbox. If no
+width or height is specified on `<Box>` components, a bounding box is used to
+determine the size of the flex item. The computed width or height may be
+different from what is specified on the `<Box>` component, depending on the
+flexbox configuration. To make use of the calculated dimensions of a flex item, use the slot props `width` and `height`.
+
+```svelte
+<Flex
+  width={100}
+  height={100}
+  flexDirection="Column"
+  justifyContent="SpaceEvenly"
+  alignItems="Stretch"
+>
+  <Box
+    width="auto"
+    height="auto"
+    flex={1}
+  >
+    {#snippet children({ width, height })}
+      <Plane
+        {width}
+        {height}
+      />
+    {/snippet}
+  </Box>
+
+  <Box
+    width="auto"
+    height="auto"
+    flex={1}
+  >
+    {#snippet children({ width, height })}
+      <Plane
+        {width}
+        {height}
+      />
+    {/snippet}
+  </Box>
+</Flex>
+```
+
+### Nested Flex
+
+Every `<Box>` component is also a flex container. Nesting `<Box>` components
+allows you to create complex layouts.
+
+```svelte
+<Flex
+  width={100}
+  height={100}
+  flexDirection="Column"
+  justifyContent="SpaceEvenly"
+  alignItems="Stretch"
+>
+  <Box
+    width="auto"
+    height="auto"
+    flex={1}
+    justifyContent="SpaceEvenly"
+    alignItems="Stretch"
+    padding={20}
+    margin={20}
+    gap={20}
+  >
+    {#snippet children({ width, height })}
+      <Plane
+        color="orange"
+        {width}
+        {height}
+        depth={1}
+      />
+      <Box
+        height="auto"
+        flex={1}
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="blue"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
+
+      <Box
+        height="auto"
+        flex={1}
+      >
+        {#snippet children({ width, height })}
+          <Plane
+            color="red"
+            {width}
+            {height}
+            depth={2}
+          />
+        {/snippet}
+      </Box>
+    {/snippet}
+  </Box>
+
+  <Box
+    height="auto"
+    width="auto"
+    flex={1}
+  >
+    {#snippet children({ width, height })}
+      <Plane
+        depth={1}
+        {width}
+        {height}
+      />
+    {/snippet}
+  </Box>
+</Flex>
+```
+
+### Align Flex Container
+
+The component [`<Align>`](/docs/reference/extras/align) can be used to align the resulting flex container.
+
+```svelte
+<script lang="ts">
+  import { Align } from '@threlte/extras'
+  import { Flex } from '@threlte/flex'
+  import Plane from './Plane.svelte'
+</script>
+
+<Align y={1}>
+  {#snippet children({ align })}
+    <Flex
+      width={100}
+      height={100}
+      onreflow={align}
+    >
+      <Box>
+        <Plane
+          width={20}
+          height={20}
+        />
+      </Box>
+
+      <Box>
+        <Plane
+          width={20}
+          height={20}
+        />
+      </Box>
+    </Flex>
+  {/snippet}
+</Align>
+```
+
+### Using the Prop `class`
+
+The prop `class` can be used on `<Box>` and `<Flex>` to easily configure the
+flexbox with predefined class names just as you would do in CSS. In order to use
+the prop, you need to create a `ClassParser` using the utility
+[`createClassParser`](/docs/reference/flex/create-class-parser) which accepts a
+single string and returns `NodeProps`. Let's assume, you want to create a parser
+that supports the following class names:
+
+```css
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: stretch;
+  gap: 10px;
+  padding: 10px;
+}
+.item {
+  width: auto;
+  height: auto;
+  flex: 1;
+}
+```
+
+You then need to create a `ClassParser` which returns the corresponding props:
+
+```ts
+import { createClassParser } from '@threlte/flex'
+
+const classParser = createClassParser((string, props) => {
+  const classNames = string.split(' ')
+  for (const className of classNames) {
+    switch (className) {
+      case 'container':
+        props.flexDirection = 'Row'
+        props.justifyContent = 'Center'
+        props.alignItems = 'Stretch'
+        props.gap = 10
+        props.padding = 10
+        break
+      case 'item':
+        props.width = 'auto'
+        props.height = 'auto'
+        props.flex = 1
+    }
+  }
+  return props
+})
+```
+
+Now you can use the prop `class` on `<Flex>` and `<Box>` to configure the flexbox:
+
+```svelte
+<Flex
+  width={100}
+  height={100}
+  {classParser}
+  class="container"
+>
+  <Box class="item">
+    <Plane
+      width={20}
+      height={20}
+    />
+  </Box>
+
+  <Box class="item">
+    <Plane
+      width={20}
+      height={20}
+    />
+  </Box>
+</Flex>
+```
+
+`@threlte/flex` ships with a [default `ClassParser` which supports Tailwind-like
+class names](/docs/reference/flex/tailwind-parser).

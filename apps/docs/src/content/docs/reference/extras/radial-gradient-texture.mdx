@@ -1,0 +1,124 @@
+---
+order: 5.9
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/GradientTexture/RadialGradientTexture.svelte'
+title: '<RadialGradientTexture>'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'CanvasTexture',
+        url: 'https://threejs.org/docs/index.html#api/en/textures/CanvasTexture'
+      },
+    props:
+      [
+        {
+          default: '1024',
+          description: "width of the texture's canvas",
+          name: 'width',
+          required: false,
+          type: 'number'
+        },
+        {
+          default: '1024',
+          description: "height of the texture's canvas",
+          name: 'height',
+          required: false,
+          type: 'number'
+        },
+        {
+          default: '0',
+          description: 'inner radius of the gradient',
+          name: 'innerRadius',
+          required: false,
+          type: 'number'
+        },
+        {
+          default: 'auto',
+          description: "outer radius of the gradient. if set to 'auto', becomes the radius of the circle that circumscribes the canvas",
+          name: 'outerRadius',
+          required: false,
+          type: 'RadialGradientOuterRadius'
+        },
+        {
+          default: "[{color: '#000000', offset: 0}, {color: '#ffffff', offset: 1}]",
+          description: 'list of stops applied to the gradient. more info at https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient',
+          name: 'stops',
+          required: false,
+          type: 'ColorStop[]'
+        }
+      ]
+  }
+---
+
+A reactive radial gradient texture that attaches to the "map" property of its parent. The underlying texture uses an [OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) and a [CanvasTexture](https://threejs.org/docs/index.html#api/en/textures/CanvasTexture) and is assigned the same [colorspace](https://threejs.org/docs/index.html#api/en/textures/Texture.colorSpace) as the renderer.
+
+<Example path="extras/gradient-texture/radial" />
+
+## Attaching the Texture
+
+The texture is automatically attached to the `map` property of its parent. You can disable this behaviour by setting the `attach` prop to `false`. This may be useful if you want to create the texture but use it somewhere else.
+
+```svelte
+<script>
+  let texture = $state()
+</script>
+
+<RadialGradientTexture
+  attach={false}
+  bind:ref={texture}
+/>
+
+<SomeComponent {texture} />
+```
+
+## Radius Props
+
+The `innerRadius` and `outerRadius` props control the size of the gradient. The `innerRadius` prop should be less than the `outerRadius` prop but it is not enforced. If `outerRadius` is set to `'auto'` the `outerRadius` is effectively set to the radius of the circle that circumscribes the canvas. For example, if the canvas's width and height are **1024**, and `outerRadius` is set to `'auto'`, the radius that will be used is **sqrt(1024\*\*2 + 1024\*\*2)** or roughly **724**.
+
+<Tip type="warning">
+  It is also not enforced that `innerRadius` and `outerRadius` are both positive.
+</Tip>
+
+## Gradient Stops
+
+`<RadialGradientTexture>` accepts a `stops` prop which is an array of color stops that define the gradient. A stop is defined by two things; an `offset` and a `color`. Gradient stops are identical to how you would use them with a 2D context, notably the `offset` should be a number between 0 and 1 inclusive. Stop colors must be any acceptable CSS string. Here are a couple examples of valid stops.
+
+```svelte
+<RadialGradientTexture
+  stops={[
+    { color: 'black', offset: 0 },
+    { color: 'white', offset: 1 }
+  ]}
+/>
+```
+
+Three.js's Color class conveniently has a `getHexString` method which you can use to convert a color to a css color string.
+
+```svelte
+<RadialGradientTexture
+  stops={[
+    { color: 'red', offset: 0 },
+    { color: new Color(0xff_00_00).getHexString(), offset: 0.25 },
+    { color: 'rgb(255, 0, 0)', offset: 0.5 },
+    { color: '#ff0000', offset: 0.75 },
+    { color: new Color(new Color(new Color())).set(1, 0, 0), offset: 1 }
+  ]}
+/>
+```
+
+## Adjusting Scene Colors
+
+If the colors in your scene do not match the color in your stops, you may need to adjust the tone mapping of the scene. `ToneMapping` constants are imported from the three library.
+
+```svelte
+<script>
+  import { useThrelte } from '@threlte/core'
+  import { LinearToneMapping } from 'three'
+
+  const { toneMapping } = useThrelte()
+
+  toneMapping.set(LinearToneMapping)
+</script>
+```

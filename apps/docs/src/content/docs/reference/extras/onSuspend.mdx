@@ -1,0 +1,39 @@
+---
+order: 3.4
+category: '@threlte/extras'
+title: 'onSuspend'
+type: 'hook'
+sourcePath: 'packages/extras/src/lib/suspense/onSuspend.ts'
+---
+
+`onSuspend` invokes a callback when the component becomes suspended
+within the boundaries of a [`<Suspense>`](/docs/reference/extras/suspense) component. If there is no `<Suspense>`
+component, the callback will never be executed, as the component will never
+suspend.
+
+## Example
+
+The following component loads a model with the hook `useGltf` and is potentially
+wrapped in a `<Suspense>` boundary.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { onSuspend, useGltf } from '@threlte/extras'
+
+  const gltf = useGltf('model.gltf')
+
+  onSuspend(() => {
+    console.log('The component has been suspended')
+  })
+</script>
+
+{#await gltf then { scene }}
+  <T is={scene}>
+{/await}
+```
+
+<Tip type="tip">
+	`onSuspend` can be used to execute additional logic
+	when a component becomes suspended within a `<Suspense>` boundary.
+</Tip>

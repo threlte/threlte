@@ -1,0 +1,148 @@
+---
+order: 4.2
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/sheetObject/sync/Sync.svelte'
+title: '<Sync>'
+type: 'component'
+componentSignature: { props: [{ name: type, type: 'any', required: false }] }
+---
+
+Use the component `<Sync>` from the [`<SheetObject>`](./sheet-object) slot prop to automatically pick up properties from its parent.
+
+```svelte
+<SheetObject>
+  {#snippet children({ Sync })}
+    <T.MeshBasicMaterial>
+      <Sync
+        color
+        roughness
+        rotation
+      />
+    </T.MeshBasicMaterial>
+  {/snippet}
+</SheetObject>
+```
+
+<Tip type="info">
+  #### Special Properties Note that some properties are treated differently. The `rotation` prop and
+  other properties with type `THREE.Euler` are automatically converted from radians to degrees.
+  Properties like `color` which have a type of `THREE.Color` receive a color picker in the studio
+  automatically.
+</Tip>
+
+## Labeled Prop
+
+To label an auto prop, just provide a string instead of a boolean value.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { SheetObject } from '@threlte/theatre'
+</script>
+
+<SheetObject key="cube">
+  {#snippet children({ Sync })}
+    <T.Mesh>
+      <T.BoxGeometry />
+      <T.MeshStandardMaterial>
+        <!-- labeled prop: rename color to tone in the studio -->
+        <Sync color="tone" />
+      </T.MeshStandardMaterial>
+    </T.Mesh>
+  {/snippet}
+</SheetObject>
+```
+
+## Pierced Prop
+
+Similarly to the pierced props of [`<T>`](/docs/reference/core/t), the props of the component `<Sync>` can be anotated in the same fashion.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { SheetObject } from '@threlte/theatre'
+</script>
+
+<SheetObject key="cube">
+  {#snippet children({ Sync })}
+    <T.Mesh>
+      <!-- pierced prop: edit only x coord. in the studio -->
+      <Sync position.x />
+      <T.BoxGeometry />
+      <T.MeshStandardMaterial />
+    </T.Mesh>
+  {/snippet}
+</SheetObject>
+```
+
+## Transformers
+
+The component `<Sync>` uses transformers to provide the best possible editing
+experience in the Theatre.js studio based on the type of the property. Sometimes
+this is not desireable and you may want to go further. One example is the
+property `intensity` on lights. By default, it's a regular numerical input, but
+in practice it makes sense to have a range slider that lets you select numbers from 0 to e.g. 10.
+
+To create a transformer that can be reused, you are provided a utility function:
+
+```ts
+import { createTransformer } from '@threlte/theatre'
+import { types } from '@theatre/core'
+
+const intensity = createTransformer({
+  transform(value) {
+    return types.number(value, {
+      range: [0, 10]
+    })
+  },
+  apply(target, path, value) {
+    target[path] = value
+  }
+})
+```
+
+The `transform` function is used to transform the value of a certain Three.js objects proerty to a property that Theatre.js can use in an `ISheetObject`. To ensure compatibility with the rest of the package, the return value must be any one of the functions available at Theatre.js' `types`.
+
+The `apply` function is used to apply the value to the target. `target` is the parent object of the property (usually a Three.js object), `path` is the name of the property and `value` is the value to apply.
+
+You may also declare transformers directly in the markup:
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { SheetObject } from '@threlte/theatre'
+  import { createTransformer, types } from '@threlte/theatre'
+</script>
+
+<SheetObject key="light">
+  {#snippet children({ Sync })}
+    <T.DirectionalLight>
+      <Sync
+        intensity={{
+          transformer: {
+            transform(value) {
+              // use the initial value and provide a range
+              // slider UI that goes from 0 to 2.
+              return types.number(value, {
+                range: [0, 2]
+              })
+            },
+            apply(target, path, value) {
+              // whenever the value changes, apply it back
+              // to the target.
+              target[path] = value
+            }
+          }
+        }}
+      />
+    </T.DirectionalLight>
+  {/snippet}
+</SheetObject>
+```
+
+<Tip type="info" title="Built-in components use transformers internally">
+
+`<Sync>` uses transformers to transform arbitrary props that are _discovered_ by a property path to a value that Theatre.js can handle.
+`<Transform>` uses transformers to transform the properties `position`, `rotation` and `scale` of a Three.js object to a value that Theatre.js can handle.
+
+</Tip>

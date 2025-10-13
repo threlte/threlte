@@ -1,0 +1,63 @@
+---
+order: 1.3
+category: '@threlte/theatre'
+title: '<Sheet>'
+sourcePath: 'packages/theatre/src/lib/sheet/Sheet.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'name', type: 'string', default: 'default', required: false },
+        { name: 'instance', type: 'string | undefined', default: 'undefined', required: false }
+      ],
+    bindings: [{ name: project, type: 'IProject' }, { name: sheet, type: 'ISheet' }]
+  }
+---
+
+Theatre.js sheets contain one or more Theatre.js objects and optionally a [`<Sequence>`](/docs/reference/theatre/sequence) component that allows controlling the animation.
+The animated objects can adjusted in the [`<Studio>`](/docs/reference/theatre/studio) using the [`<Editable>`](/docs/reference/theatre/editable) component.
+
+#### Theatre.js Docs
+
+**Sheet** | [Sheet Manual](https://www.theatrejs.com/docs/latest/manual/sheets) | [Sheet API Reference](https://www.theatrejs.com/docs/0.5/api/core#sheet)
+
+## Creating Sheets
+
+You can create a sheet by placing the component `<Sheet>` as a child of a [`<Project>`](/theatre/project) component. If a sheet with the given name already exists, it will represent the existing sheet instead of creating a new one.
+
+```svelte
+<script>
+  import { Project, Sheet, SheetObject } from '@threlte/theatre'
+</script>
+
+<Project>
+  <!-- Will create a sheet with the name "Sheet A" -->
+  <Sheet name="Sheet A">
+    <SheetObject key="ObjectA" />
+  </Sheet>
+
+  <!-- Will create a sheet with the name "Sheet B" -->
+  <Sheet name="Sheet B">
+    <SheetObject key="ObjectB" />
+  </Sheet>
+
+  <!-- Will NOT create a sheet but reference "Sheet A" -->
+  <Sheet name="Sheet A">
+    <SheetObject key="ObjectC" />
+  </Sheet>
+</Project>
+```
+
+## Playing a Sheet's animation
+
+Each Theatre.js sheet has a sequence attached to it. The sequence is the heart of the Theatre.js API: it determines where we are in the animation timeline, and
+provides and API to play and pause the animation in a variety of ways.
+
+#### Using the `<Sequence>` component
+
+The first way to control the sequence is using a reactive API with the [`<Sequence>`](/docs/reference/theatre/sequence) component.
+
+#### Using the `useSequence` hook
+
+xxx

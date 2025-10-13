@@ -1,0 +1,27 @@
+---
+order: 6.4
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/audio/useAudioListener.ts'
+title: useAudioListener
+type: 'hook'
+---
+
+`useAudioListener` is a hook that either returns an existing `THREE.AudioListener` or allows
+a callback to immediately operate on a `THREE.AudioListener` instance in a callback passed
+to the hook.
+
+### Retrieving an existing AudioListener
+
+```ts
+const { listener, context } = useAudioListener()
+console.log(listener) // THREE.AudioListener
+console.log(context) // AudioContext
+```
+
+### Using an AudioListener in a callback
+
+```ts
+const filter = useAudioListener(({ listener, context }) => {
+  return context.createBiquadFilter()
+})
+```

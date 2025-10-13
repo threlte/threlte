@@ -1,0 +1,76 @@
+---
+order: 7.1
+category: '@threlte/theatre'
+title: 'sheetObjectAction'
+sourcePath: 'packages/theatre/src/lib/sheet/createSheetObjectAction.ts'
+---
+
+When Theatre.js represents the animated elements on a page as **Sheet Objects** which have _props_ you can animate. A Sheet Object can be a Three.js element or a DOM element.
+
+The `createSheetObjectAction` hook allows you to animate DOM elements through a Svelte Action.
+
+#### Theatre.js Docs
+
+**Sheet Object** | [Sheet Object Manual](https://www.theatrejs.com/docs/latest/manual/objects) | [Sheet Object API Reference](https://www.theatrejs.com/docs/0.5/api/core#sheet.object)
+
+**Prop Types** | [Prop Types Manual](https://www.theatrejs.com/docs/latest/manual/prop-types) | [Prop Types API reference](https://www.theatrejs.com/docs/0.5/api/core#prop-types)
+
+## Usage
+
+This hook must be initialized inside a child component of `<Sheet>`:
+
+```svelte
+// Scene.svelte
+<script lang="ts">
+  import { createSheetObjectAction, useSequence } from '@threlte/theatre'
+
+  const sheetObjectAction = createSheetObjectAction()
+</script>
+
+<div
+	use:sheetObjectAction={{
+		key: 'foo',
+		props: { width: 230 },
+		callback: {node, { width }} => {
+			node.style.width = `${width}px`;
+		}
+	}}
+>
+	I Am Animated!
+</div>
+```
+
+Where the parent component looks something like this:
+
+```svelte
+<script lang="ts">
+  import { Project, Sheet, Sequence, Studio } from '@threlte/theatre'
+
+  import Scene from './Scene.svelte'
+  import state from './state.json'
+</script>
+
+// App.svelte
+<Project config={{ state }}>
+  <Sheet>
+    <Sequence />
+    <Scene />
+  </Sheet>
+</Project>
+```
+
+This is because under the hood we must first retrieve the _sheet context_ so we can instantiate the object in it.
+
+### Example
+
+<Example path="theatre/action-sheet-object" />
+
+## Action
+
+The action takes the following arguments:
+
+key (string) - The key of the object, shown in the studio UI (may be [namespaced with slashes](https://www.theatrejs.com/docs/latest/manual/objects#namespacing-objects))
+
+props (Props) - Declaration of your props and their types (see Theatre.js [manual entry](https://www.theatrejs.com/docs/latest/manual/prop-types) and [API reference](https://www.theatrejs.com/docs/0.5/api/core#prop-types))
+
+callback ((node: HTMLElement, props: Props) => void) - A callback function called to update the HTMLElement node whenever the prop changes.

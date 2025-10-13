@@ -1,0 +1,78 @@
+---
+category: '@threlte/core'
+title: useThrelteUserContext
+sourcePath: 'packages/core/src/lib/hooks/useThrelteUserContext.ts'
+order: 5.5
+---
+
+The `UserContext` is a store scoped to the context of your root `<Canvas>` component and can be used to
+store and retrieve arbitrary data from anywhere in the Threlte app.
+The `UserContext` contains `UserContextEntries`, which are arbitrary objects in a certain `namespace`.
+Because it's scoped, it's especially interesting for authoring reusable components and inter-component communication.
+In fact, the components [`<OrbitControls>`](/docs/reference/extras/orbit-controls) and
+[`<TransformControls>`](/docs/reference/extras/transform-controls) from `'@threlte/extras'` use this method
+to communicate with each other.
+
+`useThrelteUserContext` can set and get the user context store at the same time.
+
+### Get the user context store
+
+If no `namespace` is provided, the whole user context store is returned.
+
+```svelte
+<script>
+  import { useThrelteUserContext } from '@threlte/core'
+
+  const userCtx = useThrelteUserContext()
+  console.log($userCtx) // -> { 'some-context': { foo: 'bar' } }
+</script>
+```
+
+If a `namespace` is provided, the hook returns a derived store.
+
+```svelte
+<script>
+  import { useThrelteUserContext } from '@threlte/core'
+
+  const ctx = useThrelteUserContext('some-context')
+  console.log($ctx) // -> { foo: 'bar' }
+</script>
+```
+
+### Set the user context store
+
+- If a `UserContextEntry` is passed to the hook, and the `namespace` is not set, the `UserContextEntry` is set at the namespace and the `UserContextEntry` is returned.
+- If a `UserContextEntry` is passed to the hook, and the `namespace` is set, by default the `UserContextEntry` is **not set** and the existing `UserContextEntry` is returned.
+
+```svelte
+<script>
+  import { useThrelteUserContext } from '@threlte/core'
+
+  const getCtx = () => {
+    return {
+      foo: 'bar'
+    }
+  }
+
+  const ctx = useThrelteUserContext('some-context', getCtx)
+  console.log(ctx) // -> { foo: 'bar' }
+</script>
+```
+
+By default, when a context is set at a given namespace, setting it again will be ignored.
+You can override this behaviour:
+
+```svelte
+<script>
+  import { useThrelteUserContext } from '@threlte/core'
+
+  const getCtx = () => {
+    return {
+      foo: 'bar'
+    }
+  }
+
+  const ctx = useThrelteUserContext('some-context', getCtx, { exising: 'merge' })
+  console.log(ctx) // -> { foo: 'bar' }
+</script>
+```

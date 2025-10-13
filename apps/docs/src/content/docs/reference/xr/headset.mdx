@@ -1,0 +1,28 @@
+---
+category: '@threlte/xr'
+title: '<Headset>'
+order: 2
+type: 'component'
+componentSignature: {}
+---
+
+`<Headset />` provides the ability to attach objects to the pose of the user's headset.
+
+```svelte
+<script>
+  import { Headset } from '@threlte/xr'
+  import { AudioListener } from '@threlte/extras'
+</script>
+
+<Headset>
+  <AudioListener />
+</Headset>
+```
+
+If you need to only read from the current headset pose, the [useHeadset](/docs/reference/xr/use-headset) hook is available.
+
+Like a [Portal](/docs/reference/extras/portal), you can place it anywhere in your Threlte application.
+
+`<Headset>` will sync position and rotation with the current camera when not in an immersive XR session.
+
+<Example path="xr/headset" />

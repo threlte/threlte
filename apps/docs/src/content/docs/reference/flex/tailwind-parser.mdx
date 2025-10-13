@@ -1,0 +1,319 @@
+---
+order: 11
+category: '@threlte/flex'
+sourcePath: 'packages/flex/src/lib/parsers/tailwindParser.ts'
+title: tailwindParser
+---
+
+import Card from '$components/Card/Card.astro'
+
+`@threlte/flex` ships with a default parser for Tailwind-like classes on
+[`<Flex>`](/docs/reference/flex/flex) and [`<Box>`](/docs/reference/flex/box)
+components. If you are familiar with Tailwind, you will feel right at home.
+
+```svelte
+<Flex
+  width={300}
+  height={300}
+  classParser={tailwindParser}
+  class="flex-col items-center justify-center gap-10 p-10"
+>
+  <Box class="w-100 h-full shrink-0">
+    {#snippet children({ width, height })}
+      <Plane
+        {width}
+        {height}
+        color="yellow"
+        depth={1}
+      />
+    {/snippet}
+  </Box>
+
+  <Box class="flex-1">
+    {#snippet children({ width })}
+      <Plane
+        color="blue"
+        {width}
+        height={44}
+        depth={1}
+      />
+    {/snippet}
+  </Box>
+</Flex>
+```
+
+## Usage
+
+Add the `classParser` prop to your `<Flex>` or `<Box>` component and pass in the `tailwindParser` function.
+
+```svelte {2}m {8}+
+<script>
+  import { Flex, Box, Plane, tailwindParser } from '@threlte/flex'
+</script>
+
+<Flex
+  width={300}
+  height={300}
+  classParser={tailwindParser}
+  class="flex-col items-center justify-center gap-10 p-10"
+>
+  <Box class="h-100 w-100">
+    {#snippet children({ width, height })}
+      <!-- … -->
+    {/snippet}
+  </Box>
+</Flex>
+```
+
+## Differences to Tailwind
+
+The syntax is very similar to Tailwind, with a few differences:
+
+- If a value is a number, it is interpreted as a unit in Three.js. For example,
+  `gap-10` will set the gap to 10 Three.js units.
+- As opposed to Tailwind, you are not limited to the default set of values. You
+  can use any value: `gap-17.5` will set the gap to 17.5 Three.js units. `p-56%`
+  will set the padding to 56% of the parent's width. **Do not wrap the value in
+  brackets** as you would do with custom values in Tailwind CSS.
+
+## Supported Props
+
+The following props are supported by the Tailwind parser:
+
+<Card>
+
+### Flex Direction
+
+| Class              | CSS Properties                   |
+| ------------------ | -------------------------------- |
+| `flex-row`         | `flex-direction: row`            |
+| `flex-col`         | `flex-direction: column`         |
+| `flex-row-reverse` | `flex-direction: row-reverse`    |
+| `flex-col-reverse` | `flex-direction: column-reverse` |
+
+</Card>
+
+<Card>
+
+### Flex Wrap
+
+| Class               | CSS Properties            |
+| ------------------- | ------------------------- |
+| `flex-wrap`         | `flex-wrap: wrap`         |
+| `flex-wrap-reverse` | `flex-wrap: wrap-reverse` |
+| `flex-nowrap`       | `flex-wrap: nowrap`       |
+
+</Card>
+
+<Card>
+
+### Justify Content
+
+| Class             | CSS Properties                   |
+| ----------------- | -------------------------------- |
+| `justify-start`   | `justify-content: flex-start`    |
+| `justify-end`     | `justify-content: flex-end`      |
+| `justify-center`  | `justify-content: center`        |
+| `justify-between` | `justify-content: space-between` |
+| `justify-around`  | `justify-content: space-around`  |
+| `justify-evenly`  | `justify-content: space-evenly`  |
+
+</Card>
+
+<Card>
+
+### Align Items
+
+| Class            | CSS Properties            |
+| ---------------- | ------------------------- |
+| `items-start`    | `align-items: flex-start` |
+| `items-end`      | `align-items: flex-end`   |
+| `items-center`   | `align-items: center`     |
+| `items-baseline` | `align-items: baseline`   |
+| `items-stretch`  | `align-items: stretch`    |
+
+</Card>
+
+<Card>
+
+### Align Content
+
+| Class              | CSS Properties                 |
+| ------------------ | ------------------------------ |
+| `content-normal `  | `align-content: normal`        |
+| `content-start`    | `align-content: flex-start`    |
+| `content-end`      | `align-content: flex-end`      |
+| `content-center`   | `align-content: center`        |
+| `content-between`  | `align-content: space-between` |
+| `content-around`   | `align-content: space-around`  |
+| `content-stretch`  | `align-content: stretch`       |
+| `content-baseline` | `align-content: baseline`      |
+
+</Card>
+
+<Card>
+
+### Gap
+
+`value` is a number (e.g. `10`)
+
+| Class           | CSS Properties | Examples   |
+| --------------- | -------------- | ---------- |
+| `gap-{value}`   | `gap`          | `gap-10`   |
+| `gap-x-{value}` | `column-gap`   | `gap-x-10` |
+| `gap-y-{value}` | `row-gap`      | `gap-y-10` |
+
+</Card>
+
+<Card>
+
+### Flex Grow
+
+`value` is a number (e.g. `1`)
+
+| Class          | CSS Properties | Examples           |
+| -------------- | -------------- | ------------------ |
+| `grow-{value}` | `flex-grow`    | `grow-1`, `grow-0` |
+
+</Card>
+
+<Card>
+
+### Flex Shrink
+
+`value` is a number (e.g. `1`)
+
+| Class            | CSS Properties | Examples               |
+| ---------------- | -------------- | ---------------------- |
+| `shrink-{value}` | `flex-shrink`  | `shrink-1`, `shrink-0` |
+
+</Card>
+
+<Card>
+
+### Flex Basis
+
+`value` can be `auto`, `full`, a percentage (e.g. `55%`) or a number (e.g. `10`).
+
+| Class           | CSS Properties | Examples                                            |
+| --------------- | -------------- | --------------------------------------------------- |
+| `basis-{value}` | `flex-basis`   | `basis-10`, `basis-full`, `basis-55%`, `basis-auto` |
+
+</Card>
+
+<Card>
+
+### Flex
+
+`value` is a number (e.g. `1`)
+
+| Class          | CSS Properties | Examples             |
+| -------------- | -------------- | -------------------- |
+| `flex-{value}` | `flex`         | `flex-1`, `flex-0.5` |
+
+</Card>
+
+<Card>
+
+### Align Self
+
+| Class           | CSS Properties           |
+| --------------- | ------------------------ |
+| `self-auto`     | `align-self: auto`       |
+| `self-start`    | `align-self: flex-start` |
+| `self-end`      | `align-self: flex-end`   |
+| `self-center`   | `align-self: center`     |
+| `self-stretch`  | `align-self: stretch`    |
+| `self-baseline` | `align-self: baseline`   |
+
+</Card>
+
+<Card>
+
+### Padding
+
+`value` can be `full`, a percentage (e.g. `55%`) or a number (e.g. `10`).
+
+| Class        | CSS Properties                      | Examples                     |
+| ------------ | ----------------------------------- | ---------------------------- |
+| `p-{value}`  | `padding`                           | `p-10`, `p-full`, `p-55%`    |
+| `pt-{value}` | `padding-top`                       | `pt-10`, `pt-full`, `pt-55%` |
+| `pr-{value}` | `padding-right`                     | `pr-10`, `pr-full`, `pr-55%` |
+| `pb-{value}` | `padding-bottom`                    | `pb-10`, `pb-full`, `pb-55%` |
+| `pl-{value}` | `padding-left`                      | `pl-10`, `pl-full`, `pl-55%` |
+| `px-{value}` | `padding-left`<br />`padding-right` | `px-10`, `px-full`, `px-55%` |
+| `py-{value}` | `padding-top`<br />`padding-bottom` | `py-10`, `py-full`, `py-55%` |
+
+</Card>
+
+<Card>
+
+### Margin
+
+`value` can be `full`, a percentage (e.g. `55%`) or a number (e.g. `10`).
+
+| Class        | CSS Properties                    | Examples                     |
+| ------------ | --------------------------------- | ---------------------------- |
+| `m-{value}`  | `margin`                          | `m-10`, `m-full`, `m-55%`    |
+| `mt-{value}` | `margin-top`                      | `mt-10`, `mt-full`, `mt-55%` |
+| `mr-{value}` | `margin-right`                    | `mr-10`, `mr-full`, `mr-55%` |
+| `mb-{value}` | `margin-bottom`                   | `mb-10`, `mb-full`, `mb-55%` |
+| `ml-{value}` | `margin-left`                     | `ml-10`, `ml-full`, `ml-55%` |
+| `mx-{value}` | `margin-left`<br />`margin-right` | `mx-10`, `mx-full`, `mx-55%` |
+| `my-{value}` | `margin-top`<br />`margin-bottom` | `my-10`, `my-full`, `my-55%` |
+
+</Card>
+
+<Card>
+
+### Width
+
+`value` can be `auto`, `full`, a percentage (e.g. `55%`) or a number (e.g. `10`).
+
+| Class       | CSS Properties | Examples                            |
+| ----------- | -------------- | ----------------------------------- |
+| `w-{value}` | `width`        | `w-10`, `w-full`, `w-55%`, `w-auto` |
+
+</Card>
+
+<Card>
+
+### Height
+
+`value` can be `auto`, `full`, a percentage (e.g. `55%`) or a number (e.g. `10`).
+
+| Class       | CSS Properties | Examples                            |
+| ----------- | -------------- | ----------------------------------- |
+| `h-{value}` | `height`       | `h-10`, `h-full`, `h-55%`, `h-auto` |
+
+</Card>
+
+<Card>
+
+### Top, Right, Bottom, Left
+
+`value` can be a percentage (e.g. `55%`) or a number (e.g. `10`).
+
+| Class            | CSS Properties | Examples                  |
+| ---------------- | -------------- | ------------------------- |
+| `top-{value}`    | `top`          | `top-10`, `top-55%`       |
+| `right-{value}`  | `right`        | `right-10`, `right-55%`   |
+| `bottom-{value}` | `bottom`       | `bottom-10`, `bottom-55%` |
+| `left-{value}`   | `left`         | `left-10`, `left-55%`     |
+
+</Card>
+
+<Card>
+
+### Aspect Ratio
+
+`value` can be `square`, `portrait`, `landscape` or an arbitrary ratio (e.g. `32/9`).
+
+| Class              | CSS Properties          | Examples                    |
+| ------------------ | ----------------------- | --------------------------- |
+| `aspect-square `   | `aspect-ratio: 1 / 1`   |
+| `aspect-portrait`  | `aspect-ratio: 9 / 16`  |
+| `aspect-landscape` | `aspect-ratio: 16 / 9`  |
+| `aspect-{value}`   | `aspect-ratio: {value}` | `aspect-32/9`, `aspect-2/1` |
+
+</Card>

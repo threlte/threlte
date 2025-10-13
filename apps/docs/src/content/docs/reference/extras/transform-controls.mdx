@@ -1,0 +1,71 @@
+---
+order: 2.4
+category: '@threlte/extras'
+title: '<TransformControls>'
+sourcePath: 'packages/extras/src/lib/components/controls/TransformControls/TransformControls.svelte'
+type: 'component'
+componentSignature:
+  {
+    pretext: 'The component <code>&lt;TransformControls&gt;</code> extends both <code>&lt;T.TransformControls&gt;</code> and <code>&lt;T.Group&gt;</code>. You may pass any property of either of these components to the component <code>&lt;TransformControls&gt;</code>.',
+    props:
+      [
+        { name: 'autoPauseOrbitControls', type: 'boolean', required: false },
+        { name: 'autoPauseTrackballControls', type: 'boolean', required: false },
+        { name: 'object', type: 'THREE.Object3D', required: false }
+      ],
+    bindings:
+      [
+        { name: 'controls', type: 'THREE.TransformControls' },
+        { name: 'group', type: 'THREE.Group' }
+      ]
+  }
+---
+
+This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
+
+The component `<TransformControls>` needs to be the parent of the component to be transformed.
+
+To accommodate `<OrbitControls>` or `<TrackballControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` or `<TrackballControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` or `autoPauseTrackballControls` to `false`.
+
+<Example
+  path="extras/transform-controls"
+  iframe
+/>
+
+### Examples
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+  import { TransformControls } from '@threlte/extras'
+  import { MeshStandardMaterial, BoxGeometry } from 'three'
+</script>
+
+<TransformControls>
+  <T.Mesh
+    geometry={new BoxGeometry()}
+    material={new MeshStandardMaterial()}
+  />
+</TransformControls>
+```
+
+The `<TransformControls>` component can also be used to transform an object passed to it:
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+  import { TransformControls } from '@threlte/extras'
+  import { MeshStandardMaterial, BoxGeometry } from 'three'
+</script>
+
+<T.Mesh
+  geometry={new BoxGeometry()}
+  material={new MeshStandardMaterial()}
+>
+  {#snippet children({ ref })}
+    <TransformControls object={ref} />
+  {/snippet}
+</T.Mesh>
+
+<TransformControls object={someObject} />
+```

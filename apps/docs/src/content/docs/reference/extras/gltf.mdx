@@ -1,0 +1,135 @@
+---
+order: 1.1
+category: '@threlte/extras'
+title: <GLTF>
+sourcePath: 'packages/extras/src/lib/components/GLTF/GLTF.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: url, type: 'string', required: true },
+        { name: 'dracoLoader', type: 'DRACOLoader', required: false },
+        { name: 'meshoptDecoder', type: 'MeshoptDecoder', required: false },
+        { name: 'ktx2Loader', type: 'KTX2Loader', required: false }
+      ],
+    events:
+      [
+        {
+          name: 'load',
+          payload: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
+        },
+        { name: 'unload', payload: 'void' },
+        { name: 'error', payload: 'string' }
+      ],
+    bindings:
+      [
+        {
+          name: 'gltf',
+          type: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
+        },
+        { name: 'scene', type: 'THREE.Group' },
+        { name: 'animations', type: 'THREE.AnimationClip[]' },
+        { name: 'asset', type: "GLTF['asset']" },
+        { name: 'cameras', type: 'THREE.Camera[]' },
+        { name: 'scenes', type: 'THREE.Group[]' },
+        { name: 'userData', type: 'any' },
+        { name: 'parser', type: 'GLTFParser' },
+        { name: 'materials', type: 'Record<string, THREE.Material>' },
+        { name: 'nodes', type: 'Record<string, THREE.Object3D>' }
+      ]
+  }
+---
+
+`<GLTF />` loads a single model from a url. The `url` property is reactive and will load new 3D content if changed. The new content will be swapped as soon as loading is finished.
+
+<Tip type="tip">
+  Asset loading can sometimes produce surprising results. We've detailed common issues you may run
+  into on our [loading assets](/docs/learn/basics/loading-assets) page.
+</Tip>
+
+<Example path="extras/gltf" />
+
+<small>
+  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+</small>
+
+### Interaction
+
+The `<GLTF>` component supports interaction events with the use of `interactivity` plugin.
+
+```svelte
+<script>
+  import { interactivity } from '@threlte/extras'
+  interactivity()
+</script>
+
+<GLTF
+  position={{ y: 1 }}
+  scale={3}
+  url="/models/helmet/DamagedHelmet.gltf"
+  onclick={() => {
+    console.log('User clicked!')
+  }}
+/>
+```
+
+### Compression
+
+The `<GLTF>` component supports compressed glTF files.
+
+#### DRACO
+
+To use DRACO compression, import the `useDraco` hook or provide an instance of a `DRACOLoader`.
+
+```svelte
+<script>
+  import { GLTF, useDraco } from '@threlte/extras'
+
+  const dracoLoader = useDraco() // Creates a cached instance of DracoLoader
+</script>
+
+<GLTF
+  url="/models/helmet/DamagedHelmet.gltf"
+  {dracoLoader}
+/>
+```
+
+The `useDraco` hook will load a default DRACO decoder from Google servers, specifically `https://www.gstatic.com/draco/v1/decoders/`.
+
+### KTX 2
+
+To use KTX2 compressed textures, import the `useKtx2` hook or provide an instance of a `KTX2Loader`.
+
+```svelte
+<script>
+  import { useKtx2 } from '@threlte/extras'
+
+  const ktx2Loader = useKtx2('path/to/transcoder') // Creates a cached instance of KTX2Loader
+</script>
+
+<GLTF
+  url="/models/helmet/DamagedHelmet.gltf"
+  {ktx2Loader}
+/>
+```
+
+#### Meshopt
+
+To use meshopt compression, import the `useMeshopt` hook or provide an instance of a `MeshoptDecoder`.
+
+The `useMeshopt` hook will load a default meshopt decoder from Three, specifically `https://github.com/mrdoob/three.js/blob/dev/examples/jsm/libs/meshopt_decoder.module.js`.
+
+```svelte
+<script>
+  import { GLTF, useMeshopt } from '@threlte/extras'
+
+  const meshoptDecoder = useMeshopt() // Creates a cached instance of MeshoptDecoder
+</script>
+
+<GLTF
+  url="/models/helmet/DamagedHelmet.gltf"
+  {meshoptDecoder}
+/>
+```

@@ -1,0 +1,80 @@
+---
+category: '@threlte/core'
+title: useThrelte
+sourcePath: 'packages/core/src/lib/hooks/useThrelte.ts'
+order: 5.1
+---
+
+This hook lets you consume the main Threlte context (`ThrelteContext`) of your application (scoped to the root `<Canvas>`) which contains the renderer, camera, scene and other properties.
+
+Use this hook to manually invalidate the current frame …
+
+```ts
+const { invalidate } = useThrelte()
+invalidate()
+```
+
+… access the renderer or the currently active camera …
+
+```ts
+const { renderer, camera } = useThrelte()
+console.log(renderer, $camera)
+```
+
+… or update render properties:
+
+```ts
+const { toneMapping } = useThrelte()
+toneMapping.set(THREE.LinearToneMapping)
+```
+
+### Usage
+
+<Tip type="info">
+  This hook relies on context passed down by the [`<Canvas>`](/docs/reference/core/canvas) component and can only be used in a child of that component.
+</Tip>
+
+```ts
+const {
+  dom, // HTMLElement
+  size, // Readable<DOMRect>
+  canvas, // HTMLCanvasElement
+  camera, // CurrentWritable<Camera>
+  scene, // Scene
+  dpr, // CurrentWritable<number>
+  renderer, // WebGLRenderer
+  renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
+  autoRender, // CurrentWritable<boolean>
+  invalidate, // () => void
+  advance, // () => void
+  scheduler, // Scheduler
+  mainStage, // Stage
+  renderStage, // Stage
+  autoRenderTask, // Task
+  shouldRender, // () => boolean
+  colorManagementEnabled, // CurrentWritable<boolean>
+  colorSpace, // CurrentWritable<ColorSpace>
+  toneMapping, // CurrentWritable<ToneMapping>
+  shadows // CurrentWritable<boolean | ShadowMapType>
+} = useThrelte()
+```
+
+### `renderMode`
+
+If the [renderMode is set to `'on-demand'`](/docs/reference/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
+
+```ts
+const { invalidate } = useThrelte()
+
+invalidate()
+```
+
+If the [renderMode is set to `'manual'`](/docs/reference/core/canvas) you must manually trigger a re-render:
+
+```ts
+const { advance } = useThrelte()
+
+advance()
+```
+
+The property can be changed at any time, but it will only take effect on the next frame.

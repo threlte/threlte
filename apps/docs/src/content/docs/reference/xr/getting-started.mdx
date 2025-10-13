@@ -1,0 +1,80 @@
+---
+order: -2
+category: '@threlte/xr'
+title: Getting Started
+---
+
+The package `@threlte/xr` provides tools and abstractions to more easily create
+VR and AR experiences.
+
+<Example path="xr/bonksaber" />
+
+## Installation
+
+```bash title="Terminal"
+npm install @threlte/xr
+```
+
+## Usage
+
+### Setup
+
+The following adds a button to start your session and controllers inside an XR
+manager to prepare your scene for WebXR rendering and interaction.
+
+```svelte title="Scene.svelte" {3,11}+
+<script>
+  import { Canvas } from '@threlte/core'
+  import { VRButton } from '@threlte/xr'
+  import Scene from './scene.svelte'
+</script>
+
+<Canvas>
+  <Scene />
+</Canvas>
+<VRButton />
+```
+
+Then, in `scene.svelte`:
+
+```svelte
+<script>
+  import { XR, Controller, Hand } from '@threlte/xr'
+</script>
+
+<XR />
+<Controller left />
+<Controller right />
+<Hand left />
+<Hand right />
+```
+
+This will set up your project to be able to enter a VR session with controllers
+and hand inputs added.
+
+If you want hands, controllers, or any other objects to be added to your
+`THREE.Scene` only when the XR session starts, make them children of the `<XR>`
+component:
+
+```svelte
+<script>
+  import { XR, Controller, Hand } from '@threlte/xr'
+</script>
+
+<XR>
+  <Controller left />
+  <Controller right />
+  <Hand left />
+  <Hand right />
+</XR>
+```
+
+The `<XR>`, `<Controller>`, and `<Hand>` components can provide a powerful
+foundation when composed with other Threlte components.
+
+### HTML
+
+HTML cannot be rendered inside an XR environment, this is just a limitation of
+the WebXR API. An alternative approach for creating an HTML-like UI within your
+XR session is to use the
+[threlte-uikit](https://github.com/michealparks/threlte-uikit) package.

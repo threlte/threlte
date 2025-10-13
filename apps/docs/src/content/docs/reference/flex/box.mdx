@@ -1,0 +1,187 @@
+---
+category: '@threlte/flex'
+title: '<Box>'
+order: 1
+sourcePath: 'packages/flex/src/lib/Box'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: order, type: 'number', required: false },
+        {
+          name: 'class',
+          type: 'string',
+          required: false,
+          description: 'declared classes will be resolved by a ClassParser declared on <Flex>'
+        },
+        {
+          name: 'alignItems',
+          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+          required: false
+        },
+        {
+          name: 'alignSelf',
+          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+          required: false
+        },
+        {
+          name: 'alignContent',
+          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+          required: false
+        },
+        {
+          name: 'justifyContent',
+          type: '"FlexStart" | "Center" | "FlexEnd" | "SpaceBetween" | "SpaceAround" | "SpaceEvenly"',
+          required: false
+        },
+        {
+          name: 'flexDirection',
+          type: '"Column" | "ColumnReverse" | "Row" | "RowReverse"',
+          required: false
+        },
+        { name: 'flexWrap', type: '"NoWrap" | "Wrap" | "WrapReverse"', required: false },
+        { name: 'flex', type: 'number', required: false },
+        { name: 'flexBasis', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'flexGrow', type: 'number', required: false },
+        { name: 'flexShrink', type: 'number', required: false },
+        { name: 'height', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'width', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'maxHeight', type: 'number | `${number}%`', required: false },
+        { name: 'maxWidth', type: 'number | `${number}%`', required: false },
+        { name: 'minHeight', type: 'number | `${number}%`', required: false },
+        { name: 'minWidth', type: 'number | `${number}%`', required: false },
+        { name: 'top', type: 'number | `${number}%`', required: false },
+        { name: 'right', type: 'number | `${number}%`', required: false },
+        { name: 'bottom', type: 'number | `${number}%`', required: false },
+        { name: 'left', type: 'number | `${number}%`', required: false },
+        { name: 'padding', type: 'number | `${number}%`', required: false },
+        { name: 'paddingTop', type: 'number | `${number}%`', required: false },
+        { name: 'paddingRight', type: 'number | `${number}%`', required: false },
+        { name: 'paddingBottom', type: 'number | `${number}%`', required: false },
+        { name: 'paddingLeft', type: 'number | `${number}%`', required: false },
+        { name: 'margin', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginTop', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginRight', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginBottom', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'marginLeft', type: 'number | "auto" | `${number}%`', required: false },
+        { name: 'gap', type: 'number', required: false },
+        { name: 'gapColumn', type: 'number', required: false },
+        { name: 'gapRow', type: 'number', required: false },
+        { name: 'aspectRatio', type: 'number', required: false }
+      ]
+  }
+---
+
+The component `<Box>` creates a flexbox item. It can be used as a direct child
+of [`<Flex>`](/docs/reference/flex/flex) or as a child of another `<Box>` to
+create a nested flex layout.
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { Flex, Box } from '@threlte/flex'
+  import Model from './Model.svelte'
+</script>
+
+<Flex
+  width={100}
+  height={100}
+  justifyContent="Center"
+>
+  <Box
+    flex={1}
+    width="auto"
+  >
+    {#snippet children({ width })}
+      <Model {width} />
+    {/snippet}
+  </Box>
+</Flex>
+```
+
+### Content Sizing
+
+The `<Box>` component controls element positions only. However, if you wish to
+handle element dimensions based on the layout calculated by Yoga, you'll need to
+manually adapt the content's size. This is because `@threlte/flex` lacks
+knowledge about the inner content's sizing mechanisms. For this purpose,
+`@threlte/flex` offers the _computed dimensions_ in three ways:
+
+- Using the `width` and `height` snippet props
+
+```svelte
+<Box>
+  {#snippet children({ width, height })}
+    <T.Mesh
+      scale.x={width}
+      scale.y={height}
+    />
+  {/snippet}
+</Box>
+```
+
+- Using the [`useDimensions`](/docs/reference/flex/use-dimensions) hook in a child component to `<Box>`:
+
+```svelte title="Child.svelte"
+<script lang="ts">
+  import { useDimensions } from '@threlte/flex'
+  const { width, height } = useDimensions()
+</script>
+
+<T.Mesh
+  scale.x={$width}
+  scale.y={$height}
+/>
+```
+
+- Using the `reflow` event
+
+```svelte
+<Box
+  onreflow={({ width, height }) => {
+    console.log(width, height)
+  }}
+>
+  <!-- … -->
+</Box>
+```
+
+### Layout Reflow
+
+To trigger a [layout reflow](/docs/reference/flex/flex#layout-reflow), you can use the `reflow` slot prop:
+
+```svelte
+<script lang="ts">
+  import { Box } from '@threlte/flex'
+  import { Text } from '@threlte/extras'
+</script>
+
+<Box>
+  {#snippet children({ reflow })}
+    <Text text="Hello World" onsync={reflow}>
+  {/snippet}
+</Box>
+```
+
+### Item Ordering
+
+By default, the order of a flex item is determined by the order of insertion in
+the component tree. If for any reason you need to change the order of a flex
+item manually, you can use the `order` prop:
+
+```svelte
+<script lang="ts">
+  import { Box } from '@threlte/flex'
+</script>
+
+<Flex
+  width={100}
+  height={100}
+>
+  <Box order={2} />
+  <Box order={1} />
+  <Box order={3} />
+</Flex>
+```

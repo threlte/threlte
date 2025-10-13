@@ -1,0 +1,92 @@
+---
+order: 1.4
+category: '@threlte/extras'
+title: '<Text>'
+sourcePath: 'packages/extras/src/lib/components/Text/Text.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+    props:
+      [
+        { name: 'text', type: 'string', required: false },
+        { name: 'anchorX', type: "number | 'left' | 'center' | 'right' | string", required: false },
+        {
+          name: 'anchorY',
+          type: "number | 'top' | 'top-baseline' | 'middle' | 'bottom-baseline' | 'bottom' | string",
+          required: false
+        },
+        { name: 'curveRadius', type: 'number', required: false },
+        { name: 'direction', type: "'auto' | 'ltr' | 'rtl'", required: false },
+        { name: 'font', type: 'string', required: false },
+        {
+          name: 'characters',
+          type: 'string',
+          required: false,
+          description: 'The set of characters `<Text>` will preload while suspended.'
+        },
+        { name: 'fontSize', type: 'number', required: false },
+        { name: 'letterSpacing', type: 'number', required: false },
+        { name: 'lineHeight', type: 'number | string', required: false },
+        { name: 'maxWidth', type: 'number', required: false },
+        { name: 'overflowWrap', type: "'normal' | 'break-word' | 'normal'", required: false },
+        { name: 'textAlign', type: "'left' | 'right' | 'center' | 'justify'", required: false },
+        { name: 'textIndent', type: 'number', required: false },
+        { name: 'whiteSpace', type: "'normal' | 'nowrap' | 'pre-wrap'", required: false },
+        { name: 'material', type: 'Material | Material[]', required: false },
+        { name: 'color', type: 'string | number | Color', required: false },
+        { name: 'depthOffset', type: 'number', required: false },
+        { name: 'clipRect', type: '[number, number, number, number]', required: false },
+        { name: 'glyphGeometryDetail', type: 'number', required: false },
+        { name: 'sdfGlyphSize', type: 'number', required: false },
+        { name: 'outlineWidth', type: 'number | string', required: false },
+        { name: 'outlineColor', type: 'ColorRepresentation', required: false },
+        { name: 'outlineOpacity', type: 'number', required: false },
+        { name: 'outlineBlur', type: 'number | string', required: false },
+        { name: 'outlineOffsetX', type: 'number | string', required: false },
+        { name: 'outlineOffsetY', type: 'number | string', required: false },
+        { name: 'strokeWidth', type: 'number | string', required: false },
+        { name: 'strokeColor', type: 'ColorRepresentation | Color', required: false },
+        { name: 'strokeOpacity', type: 'number', required: false },
+        { name: 'fillOpacity', type: 'number', required: false }
+      ]
+  }
+---
+
+The `<Text>` component uses [troika-three-text](https://github.com/protectwise/troika/tree/master/packages/troika-three-text) to render text.
+
+<Example path="extras/text" />
+
+### Example
+
+```svelte
+<script>
+  import { Text } from '@threlte/extras'
+  let value = ''
+</script>
+
+<input
+  type="text"
+  bind:value
+/>
+<Text text={value} />
+```
+
+`<Text>` is [suspense-ready](/docs/reference/extras/suspense) and will suspend while the font is loading. You can use the `characters` prop to preload a specific set of characters to prevent [FOUC](https://en.wikipedia.org/wiki/Flash_of_unstyled_content).
+
+```svelte
+<script>
+  import { Text, Suspense } from '@threlte/extras'
+</script>
+
+<Suspense>
+  <Text
+    text="HELLO WORLD"
+    characters="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  />
+
+  {#snippet fallback()}
+    <!-- show fallback content while font data is loading -->
+  {/snippet}
+</Suspense>
+```

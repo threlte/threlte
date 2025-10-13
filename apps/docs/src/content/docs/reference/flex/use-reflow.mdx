@@ -1,0 +1,45 @@
+---
+order: 21
+category: '@threlte/flex'
+sourcePath: 'packages/flex/src/lib/hooks/useReflow.ts'
+title: useReflow
+type: 'hook'
+---
+
+The hook `useReflow` allows you to manually request a layout reflow, for
+instance when a [`<Text>`](/docs/reference/extras/text) component finished
+synchronizing or when a model has loaded into view and there's no easy access to
+the `reflow` slot prop of the components `<Flex>` or `<Box>` because of
+component composition. Calls to `reflow` will be limited to once per frame, so
+it's safe to call it from multiple components at a time.
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { Flex, Box } from '@threlte/flex'
+  import Label from './Label.svelte'
+</script>
+
+<Flex width={100}>
+  <Box>
+    <Label text="Hello World">
+  </Box>
+</Flex>
+```
+
+```svelte title="Label.svelte"
+<script lang="ts">
+  import { Text } from '@threlte/extras'
+  import { useReflow } from '@threlte/flex/hooks'
+
+  export let text: string
+
+  const reflow = useReflow()
+</script>
+
+<Text
+  {text}
+  onsync={() => {
+    reflow()
+  }}
+/>
+```

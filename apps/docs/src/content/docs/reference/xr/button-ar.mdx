@@ -1,0 +1,24 @@
+---
+category: '@threlte/xr'
+title: '<ARButton>'
+order: 2
+type: 'component'
+componentSignature:
+  {
+    events:
+      [
+        {
+          name: 'click',
+          payload: "CustomEvent<'unsupported' | 'insecure' | 'blocked' | 'supported'>",
+          description: 'Fired when a user clicks the VR button.'
+        },
+        {
+          name: 'error',
+          payload: 'CustomEvent<Error>',
+          description: 'Fired when an enter / exit session error occurs.'
+        }
+      ]
+  }
+---
+
+`<ARButton />` is an HTML `<button />` that can be used to init an AR session. It will also display info about browser support.

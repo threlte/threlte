@@ -1,0 +1,25 @@
+---
+order: 15
+category: '@threlte/xr'
+title: 'useController'
+type: 'hook'
+---
+
+Provides a reference to a current XRController, filtered by handedness.
+
+```svelte
+<script>
+  import { useController } from '@threlte/xr'
+
+  const leftController = useController('left')
+  const rightController = useController('right')
+  const gazeController = useController('gaze')
+</script>
+```
+
+### Signature
+
+```ts
+// CurrentReadable<XRController | undefined> - The current XRController
+const controller = useController('left')
+```

@@ -1,0 +1,128 @@
+---
+order: 4.14
+category: '@threlte/extras'
+title: <CSM>
+sourcePath: 'packages/extras/src/lib/components/CSM/CSM.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'enabled', type: 'boolean', required: false },
+        { name: 'camera', type: 'THREE.Camera | undefined', required: false },
+        { name: 'configure', type: '(csm: CSM) => void', required: false },
+        { name: 'args', type: 'CSMParameters', required: false },
+        { name: 'lightIntensity', type: 'number', required: false },
+        { name: 'lightColor', type: 'THREE.ColorRepresentation', required: false },
+        {
+          name: 'lightDirection',
+          type: 'THREE.Vector3Tuple',
+          required: false,
+          default: '[1, -1, 1]'
+        }
+      ]
+  }
+---
+
+The `<CSM/>` component offers a streamlined convenience integration of the Cascaded Shadow Maps technique, sourced from the Three.js addon.
+
+<Example path="extras/csm" />
+
+Cascaded Shadow Maps (CSM) are a technique employed to render shadows with varying levels of
+detail based on their distance from the camera. CSMs utilize multiple shadow maps to produce
+higher resolution shadows closer to the camera and gradually decrease this resolution for
+shadows farther away. This method is especially beneficial when rendering sun-cast
+shadows over vast terrains, ensuring detailed and performance-optimized shadow renderings.
+
+## Usage
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { CSM } from '@threlte/extras'
+  import { Vector3 } from 'three'
+</script>
+
+<CSM
+  enabled
+  args={{
+    lightDirection: new Vector3(1, -1, 1).normalize()
+  }}
+>
+  <!-- Your scene goes here -->
+</CSM>
+```
+
+For CSM to work, shadow maps must be enabled. Threlte does this by default. **Do not disable shadowmaps** by [`<Canvas shadows={false}>`](/docs/reference/core/canvas#component-signature).
+
+Then, wrap all of the objects that you wish to use CSM on (typically your entire scene) with the `<CSM>` component.
+
+Internally, the `<CSM>` component modifies the shader code of all materials inside the component.
+Currently, support is limited only to `THREE.MeshStandardMaterial` and `THREE.MeshPhongMaterial`.
+
+<Tip type="warning">Setting `castShadow` property on any lights in a scene with `<CSM>` enabled leads to crashes.</Tip>
+
+## CSM Parameters
+
+The `<CSM>` component exposes an optional `args` prop which is used to instantiate the class `CSM`. These arguments are not reactive and are only updated when CSM is enabled.
+
+### Parameters explained
+
+| Name                 | Type                                                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| camera               | `THREE.Camera`                                                                         | Camera which is currently used for rendering, defaults to the camera set via `makeDefault`.                                                                                                                                                                                                                                                                                                                                                   |
+| parent               | `THREE.Object3D`                                                                       | `THREE.Object3D` where lights will be stored.                                                                                                                                                                                                                                                                                                                                                                                                 |
+| cascades             | number                                                                                 | Number of shadow cascades.                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| maxFar               | number                                                                                 | Frustum far plane distance (i.e. shadows are not visible farther this distance from camera). May be smaller than `camera.far` value.                                                                                                                                                                                                                                                                                                          |
+| mode                 | `"uniform" \| "logarithmic" \| "practical" \| "custom"`                                | Defines a split scheme (~ how the large frustum is splitted into smaller ones). Can be `'uniform'`(linear), `'logarithmic'`, `'practical'` or `'custom'`. For most cases `'practical'` may be the best choice. Equations used for each scheme can be found in [GPU Gems 3. Chapter 10.](https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html) If mode is set to `'custom'`, you'll need to define your own `customSplitsCallback` |
+| shadowMapSize        | number                                                                                 | Resolution of shadow maps (one per cascade).                                                                                                                                                                                                                                                                                                                                                                                                  |
+| shadowBias           | number                                                                                 | Serves the same purpose as `THREE.LightShadow.bias`, but most likely you will need to use much smaller values.                                                                                                                                                                                                                                                                                                                                |
+| lightDirection       | `THREE.Vector3`                                                                        | Normalized `THREE.Vector3`. Should be set by the prop `lightDirection`                                                                                                                                                                                                                                                                                                                                                                        |
+| lightIntensity       | number                                                                                 | Same as `THREE.DirectionalLight.intensity`. Should be set by the prop `lightIntensity`                                                                                                                                                                                                                                                                                                                                                        |
+| lightNear            | number                                                                                 | Shadow camera frustum near plane.                                                                                                                                                                                                                                                                                                                                                                                                             |
+| lightFar             | number                                                                                 | Shadow camera frustum far plane.                                                                                                                                                                                                                                                                                                                                                                                                              |
+| lightMargin          | number                                                                                 | Defines how far the shadow camera is moved along the z-axis in cascade frustum space. The larger the value is, the more space `LightShadow` will be able to cover. Should be set to a higher values for larger scenes.                                                                                                                                                                                                                        |
+| customSplitsCallback | `(cascades: number, cameraNear: number, cameraFar: number, breaks: number[]) => void;` | A callback to compute custom cascade splits when `mode` is set to `'custom'`. The callback should accept three number parameters: `cascadeCount`, `nearDistance`, `farDistance` and return an array of split distances ranging from 0 to 1, where 0 is equal to `nearDistance` and 1 is equal to `farDistance`.                                                                                                                               |
+
+For implementation details, refer to [the Three.js GitHub repository](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/csm/CSM.js).
+
+## Custom configuration
+
+The `<CSM>` component offers a configuration callback, which is called when CSM is activated.
+This callback facilitates advanced configurations, such as enabling the fade feature.
+
+```svelte title="Scene.svelte"
+<CSM
+  configure={(csm) => {
+    // advanced CSM configuration can be handle here.
+    csm.fade = true
+  }}
+>
+  <!-- Your scene goes here -->
+</CSM>
+```
+
+<Tip type="tip">
+  With fade enabled, shadows subtly diminish close to `maxFar` distance, presenting a more aesthetic
+  transition compared to an abrupt cut-off. It may be more visually pleasing, but it's important to
+  consider potential performance implications. While typically minimal, the computational complexity
+  can escalate based on the number of cascades and lights present in the scene. Fade is disabled by
+  default.
+</Tip>
+
+## Providing a fallback
+
+You may want to use a regular `<T.DirectionalLight>` when CSM is not enabled,
+for instance if you are developing a game and want to support low-end devices by
+disabling shadows altogehter. You can do this by using the `enabled` prop and
+the `fallback` snippet:
+
+```svelte title="Scene.svelte"
+<CSM enabled={settings.shadows}>
+  <!-- Your scene goes here -->
+
+  {#snippet fallback()}
+    <!-- Will be mounted if settings.shadows is false -->
+    <T.DirectionalLight castShadow={false} />
+  {/snippet}
+</CSM>
+```

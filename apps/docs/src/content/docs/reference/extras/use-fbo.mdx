@@ -1,0 +1,134 @@
+---
+order: 8.5
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/hooks/useFBO.ts'
+title: useFBO
+type: 'hook'
+---
+
+`useFBO` (Framebuffer Object) is a port of [drei's useFBO](https://github.com/pmndrs/drei#usefbo) that creates a [THREE.WebGLRenderTarget](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderTarget).
+
+Framebuffer objects are useful when you want to render a scene to something other than the canvas. In Three.js, you do this by rendering the scene to a `RenderTarget`. The render target has a texture property that can be used for various things such as postprocessing effects or applying the texture to something in the scene.
+
+<Example path="extras/use-fbo" />
+
+## Options
+
+`useFBO`'s options object extends `THREE.RenderTargetOptions`. The additional properties are listed below.
+
+### `size`
+
+`size` is used to set the `width` and `height` of the render target.
+
+If `size` is not provided, the target's size is set to the size of the canvas and it will follow any updates to the size.
+
+```typescript
+const { size } = useThrelte()
+
+// use `size`'s width and height
+const target = useFBO()
+
+assert(target.width === size.current.width)
+assert(target.height === size.current.height)
+```
+
+If `size` is provided, the `width` and `height` of the texture are taken from `size`.
+
+```typescript
+const size = { width: 512, height: 512 }
+
+const target = useFBO({ size })
+assert(target.width === size.width)
+assert(target.height === size.height)
+```
+
+`width` and `height` both default to `1` if they are not found on the `size` object.
+
+```typescript
+const size = { width: 512 }
+
+const target = useFBO({ size })
+assert(target.width === size.width)
+assert(target.height === 1)
+```
+
+```typescript
+const size = { height: 512 }
+
+const target = useFBO({ size })
+assert(target.width === 1)
+assert(target.height === size.height)
+```
+
+```typescript
+const size = {}
+
+const target = useFBO({ size })
+assert(target.width === 1)
+assert(target.height === 1)
+```
+
+### `depth`
+
+`depth` is used to assign a [DepthTexture](https://threejs.org/docs/#api/en/textures/DepthTexture) to the `depthTexture` property of the render target. It can either be a boolean, "size" object, or `DepthTexture` instance. By default, `depth` is set to `false` and a depth texture is **not** created. When `depth` is used, the scene's depth is rendered to the `depthTexture` of the render target.
+
+If `depth` is set to `true`, a depth texture is created and sized to match the size of the render target, _after_ an appropriate size has been given to the render target.
+
+```typescript
+const { size } = useThrelte()
+
+const target = useFBO({ depth: true })
+
+assert(target.depthTexture.image.width === size.current.width)
+assert(target.depthTexture.image.height === size.current.height)
+```
+
+If `depth` is a depth texture instance, it is assigned to the `depthTexture` property of the returned render target.
+
+```typescript
+const depthTexture = new DepthTexture(512, 512)
+
+const target = useFBO({ depth: depthTexture })
+
+assert(target.depthTexture === depthTexture)
+```
+
+If `depth` is set to a "size" object, the depth texture size is set the `width` and `height` of the object.
+
+```typescript
+const depth = { width: 512, height: 512 }
+
+const target = useFBO({ depth })
+
+assert(target.depthTexture.image.width === depth.width)
+assert(target.depthTexture.image.height === depth.height)
+```
+
+`width` and `height` default to `1` if they are not found on the `depth` object.
+
+```typescript
+const depth = { width: 512 }
+
+const target = useFBO({ depth })
+
+assert(target.depthTexture.image.width === depth.width)
+assert(target.depthTexture.image.height === 1)
+```
+
+```typescript
+const depth = { height: 512 }
+
+const target = useFBO({ depth })
+
+assert(target.depthTexture.image.width === 1)
+assert(target.depthTexture.image.height === depth.height)
+```
+
+```typescript
+const depth = {}
+
+const target = useFBO({ depth })
+
+assert(target.depthTexture.image.width === 1)
+assert(target.depthTexture.image.height === 1)
+```

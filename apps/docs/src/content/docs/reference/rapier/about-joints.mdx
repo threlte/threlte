@@ -1,0 +1,64 @@
+---
+order: 11
+category: '@threlte/rapier'
+title: 'About Joints'
+---
+
+One of the most appealing features of a physics engine is to simulate articulations. Articulations, aka. joints, allow the restriction of the motion of one body relative to another body. For example, one well-known joint is the ball-in-socket joint also known as the spherical joint: it allows one object to rotate freely with regard to the other but not to translate. This is typically used to simulate shoulders of a ragdoll.
+
+To start off, get yourself comfortable with the [basic concepts of Joints](https://rapier.rs/docs/user_guides/javascript/joints#basic-concepts).
+
+Currently Rapier supports these joints:
+
+- **Fixed joint**
+  - [`useFixedJoint` hook](/docs/reference/rapier/use-fixed-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/FixedImpulseJoint.html)
+- **Revolute joint**
+  - [`useRevoluteJoint` hook](/docs/reference/rapier/use-revolute-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/RevoluteImpulseJoint.html)
+- **Prismatic joint**
+  - [`usePrismaticJoint` hook](/docs/reference/rapier/use-prismatic-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#prismatic-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/PrismaticImpulseJoint.html)
+- **Spherical joint**
+  - [`useSphericalJoint` hook](/docs/reference/rapier/use-spherical-joint)
+  - [Rapier Documentation](https://rapier.rs/docs/user_guides/javascript/joints#spherical-joint)
+  - [Rapier Reference](https://rapier.rs/javascript3d/classes/SphericalImpulseJoint.html)
+
+### Why hooks?
+
+Joints need two rigid bodies which the joint operates on. These two rigid bodies cannot always be infered from a component tree. See the following example:
+
+```svelte
+<script>
+  import { RigidBody, Collider } from '@threlte/rapier'
+</script>
+
+<!-- A -->
+<RigidBody>
+  <Collider
+    shape="cuboid"
+    args={[1, 1, 1]}
+  />
+</RigidBody>
+
+<!-- B -->
+<RigidBody>
+  <Collider
+    shape="cuboid"
+    args={[1, 1, 1]}
+  />
+</RigidBody>
+
+<!-- C -->
+<RigidBody>
+  <Collider
+    shape="cuboid"
+    args={[1, 1, 1]}
+  />
+</RigidBody>
+```
+
+There's no way to wrap `<RigidBody>` **A** and **B** in an imaginary component `<Joint>` as well as to wrap **A** and **C** in a separate component `<Joint>` to generate two joints which both act on `<RigidBody>` **A**.

@@ -1,0 +1,76 @@
+---
+order: 0
+category: '@threlte/studio'
+title: 'Getting Started'
+---
+
+Threlte Studio is a **spatial programming toolset**.
+
+It consists of two main parts: A GUI to inspect and edit your scene and a
+vite plugin to sync the changes in real-time to your code. It is made to be
+[extendable](./authoring-extensions), so you can create your own custom
+components to interact with your scene and hook into the Threlte Studio API and
+GUI.
+
+<Example
+  path="studio/getting-started"
+  hideStackblitz
+  hideCode
+  previewClass="aspect-[4/3.2]! h-auto!"
+/>
+
+## Installation
+
+```bash copy
+npm install @threlte/studio
+```
+
+## Quick Start
+
+To get started, encapsulate your whole scene in the [`<Studio>`](./studio) component.
+
+```svelte title=App.svelte {3,8,10}+
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import { Studio } from '@threlte/studio'
+  import Scene from './Scene.svelte'
+</script>
+
+<Canvas>
+  <Studio>
+    <Scene />
+  </Studio>
+</Canvas>
+```
+
+To use auto-sync, in your vite config, insert the Threlte Studio vite plugin
+**before any other plugin**.
+
+```js title=vite.config.js {2}+ {5}m
+import { sveltekit } from '@sveltejs/kit/vite'
+import { threlteStudio } from '@threlte/studio/vite'
+
+export default {
+  plugins: [threlteStudio(), sveltekit()]
+}
+```
+
+## Tips and Tricks
+
+### Hiding from the hierarchy tree
+
+To hide items from showing in the scene hierarchy pane, add `hideInTree` to
+your object's userData.
+
+```svelte
+<T.Mesh userData={{ hideInTree: true }} />
+```
+
+### Selectable objects
+
+Scene objects are selectable by default. If you add `selectable` to your
+objects userData and set it to `false` that object wont be selectable.
+
+```svelte
+<T.Mesh userData={{ selectable: false }} />
+```

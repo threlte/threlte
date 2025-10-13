@@ -1,0 +1,35 @@
+---
+order: 8.2
+category: '@threlte/extras'
+title: '<PortalTarget>'
+sourcePath: 'packages/extras/src/lib/components/portals/PortalTarget/PortalTarget.svelte'
+type: 'component'
+componentSignature:
+  { props: [{ name: 'id', type: 'string', default: '"default"', required: false }] }
+---
+
+A component that defines a target for a [`<Portal>`](/docs/reference/extras/portal) component.
+
+<Tip type="tip">
+  Although Portals are extremely helpful in certain situations, it can be hard to reason about them
+  at times. It's recommended to use them sparingly.
+</Tip>
+
+## Example
+
+```svelte title="ComponentA.svelte"
+<!-- Create a portal with the id "trail" -->
+<T.Object3D>
+  <PortalTarget id="trail" />
+</T.Object3D>
+```
+
+```svelte title="ComponentB.svelte"
+<Portal id="trail">
+  <!-- Use a portal with the id "trail -->
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial color="red" />
+  </T.Mesh>
+</Portal>
+```

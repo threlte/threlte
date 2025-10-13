@@ -1,0 +1,26 @@
+---
+order: 6
+category: '@threlte/studio'
+sourcePath: 'packages/studio/src/lib/components/Studio/Studio.svelte'
+title: '<Studio>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'extensions',
+          type: { name: 'SvelteComponent[]', url: './authoring-extensions' },
+          required: false
+        },
+        { name: 'transient', type: 'boolean', required: false, default: 'false' },
+        {
+          name: 'namespace',
+          type: 'boolean',
+          required: false,
+          default: "'default'",
+          description: 'The namespace to use for persisting the Studio state such as the editor camera position or the working space. Useful if you work on more than one Threlte app in the same origin.'
+        }
+      ]
+  }
+---

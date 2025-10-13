@@ -1,0 +1,89 @@
+---
+order: 6.1
+category: '@threlte/extras'
+title: <Audio>
+sourcePath: 'packages/extras/src/lib/audio/Audio/Audio.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Audio', url: 'https://threejs.org/docs/index.html#api/en/audio/Audio' },
+    props:
+      [
+        {
+          name: 'src',
+          type: 'string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream',
+          required: true
+        },
+        {
+          name: 'id',
+          type: 'string',
+          required: false,
+          default: 'default',
+          description: 'The id of the AudioListener this Audio will be attached to.'
+        },
+        { name: 'autoplay', type: 'boolean', required: false },
+        { name: 'loop', type: 'boolean', required: false },
+        {
+          name: 'volume',
+          type: 'number',
+          required: false,
+          description: 'The value should range between 0 to 1. Be cautious, values outside this range might cause unintended loudness.'
+        },
+        { name: 'playbackRate', type: 'number', required: false },
+        { name: 'detune', type: 'number', required: false }
+      ],
+    events:
+      [
+        { name: 'load', payload: 'AudioBuffer', description: 'Fired when the audio has loaded.' },
+        {
+          name: 'progress',
+          payload: 'ProgressEvent<EventTarget>',
+          description: 'Fired when the audio is loading.'
+        },
+        { name: 'error', payload: 'ErrorEvent', description: 'Fired when the audio fails to load.' }
+      ],
+    exports:
+      [
+        { name: play, type: '(delay?: number) => Promise<THREE.Audio>' },
+        { name: pause, type: '() => THREE.Audio' },
+        { name: stop, type: '() => THREE.Audio' }
+      ]
+  }
+---
+
+Create a non-positional (global) audio object.
+This uses the [Web Audio API](https://developer.mozilla.org/en-US/Web/API/Web_Audio_API).
+
+<Tip type="warning">
+You need to have an `<AudioListener>` component in your scene in order to use `<Audio>`and `<PositionalAudio>`components. The `<AudioListener>` component needs to be mounted *before* any `<Audio>` or `<PositionalAudio>` components:
+
+```svelte
+<T.PerspectiveCamera makeDefault>
+  <AudioListener />
+</T.PerspectiveCamera>
+
+<PositionalAudio />
+```
+
+</Tip>
+
+### Example
+
+```svelte
+<script>
+  import { T, Canvas } from '@threlte/core'
+  import { AudioListener, Audio } from '@threlte/extras'
+</script>
+
+<Canvas>
+  <T.PerspectiveCamera
+    makeDefault
+    position={[3, 3, 3]}
+    lookAt={[0, 0, 0]}
+  >
+    <AudioListener />
+  </T.PerspectiveCamera>
+
+  <Audio src={'/audio/track.mp3'} />
+</Canvas>
+```

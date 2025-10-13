@@ -1,0 +1,79 @@
+---
+order: 203
+category: '@threlte/studio'
+sourcePath: 'packages/studio/src/lib/extensions/transactions/useTransactions.ts'
+title: 'useTransactions'
+type: 'hook'
+---
+
+## Examples
+
+```ts
+import { useTransactions } from '@threlte/studio/extensions'
+
+const transactions = useTransactions()
+
+// convenience method for building a transaction
+const transaction = transactions.buildTransaction({
+  object: mesh,
+  propertyPath: 'material.color',
+  value: 'red',
+  createHistoryRecord: true,
+  sync: true
+})
+
+// commit a set of changes to the transaction queue
+transactions.commit([
+  transaction,
+  {
+    object: mesh,
+    write: (object, value) => {
+      object.position.set(value[0], value[1], value[2])
+    },
+    read(root) {
+      return root.position.toArray()
+    },
+    value: [1, 2, 3],
+    createHistoryRecord: true
+  }
+])
+
+// undo the last transaction
+transactions.undo()
+
+// redo the last transaction
+transactions.redo()
+
+// subscribe to events
+transactions.onTransaction(() => {
+  // called when a transaction is committed, undone, or redone
+  console.log('transaction')
+})
+transactions.onCommit(() => {
+  // called when a transaction is committed
+  console.log('commit')
+})
+transactions.onUndo(() => {
+  // called when a transaction is undone
+  console.log('undo')
+})
+transactions.onRedo(() => {
+  // called when a transaction is redone
+  console.log('redo')
+})
+
+// Clean up subscriptions
+const unsubscribe = transactions.onTransaction(() => {
+  /* ... */
+})
+unsubscribe()
+
+// open the editor for the given object
+transactions.openInEditor(mesh)
+
+// open the editor for the selected object
+transactions.openSelectedInEditor()
+
+// check if the Vite plugin is enabled
+transactions.vitePluginEnabled // true
+```

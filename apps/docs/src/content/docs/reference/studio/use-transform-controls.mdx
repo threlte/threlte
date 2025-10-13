@@ -1,0 +1,42 @@
+---
+order: 206
+category: '@threlte/studio'
+sourcePath: 'packages/studio/src/lib/extensions/transform-controls/useTransformControls.ts'
+title: 'useTransformControls'
+type: 'hook'
+---
+
+## Examples
+
+```ts
+import { useTransformControls } from '@threlte/studio/extensions'
+
+const tc = useTransformControls()
+
+// Enable the transform controls
+tc.enable()
+
+// Disable the transform controls
+tc.disable()
+
+// Toggle the transform controls
+tc.toggle()
+
+// Set the mode of the transform controls
+tc.setMode('translate') // 'translate', 'rotate', 'scale'
+
+// Translate the object
+tc.translate()
+
+// Rotate the object
+tc.rotate()
+
+// Scale the object
+tc.scale()
+
+// check if the transform controls are in use
+console.log(tc.inUse)
+
+// get the current mode
+console.log(tc.mode)
+```

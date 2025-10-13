@@ -1,0 +1,130 @@
+---
+category: '@threlte/xr'
+title: 'pointerControls'
+order: 3
+type: 'plugin'
+---
+
+The `pointerControls` plugin adds pointer events to an immersive XR session. This means that pointing at any mesh with your hand or a controller will trigger DOM-like pointer events.
+
+<Example path="xr/pointer-controls" />
+
+To get started, import and call the plugin in a component within your app.
+
+```svelte
+<script>
+  import { pointerControls } from '@threlte/xr'
+  pointerControls('left' | 'right')
+</script>
+```
+
+Any mesh **within this component and all child components** will now receive events if the controller or hand with the specified handedness points at it.
+
+```svelte
+<T.Mesh
+  onclick={() => {
+    console.log('clicked')
+  }}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial color="red" />
+</T.Mesh>
+```
+
+If you wish to add pointer controls for both hands / controllers, simply call the plugin for both hands.
+
+```svelte
+<script>
+  import { pointerControls } from '@threlte/xr'
+  pointerControls('left')
+  pointerControls('right')
+</script>
+```
+
+Pointer controls can be enabled or disabled when initialized or during runtime.
+
+```svelte
+<script>
+  import { pointerControls } from '@threlte/xr'
+  // "enabled" is a currentWritable
+  const { enabled } = pointerControls('left', { enabled: false })
+
+  // At some later time...
+  enabled.set(true)
+</script>
+```
+
+### Available Events
+
+The following events are available:
+
+```svelte
+<T.Mesh
+  onclick={(e) => console.log('click')}
+  onpointerup={(e) => console.log('up')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerover={(e) => console.log('over')}
+  onpointerout={(e) => console.log('out')}
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointermove={(e) => console.log('move')}
+/>
+```
+
+While a controller or hand is pointed at this mesh...
+
+- `click` fires when a user selects the primary action input. This usually means pulling a primary trigger with a controller or pinching with a hand.
+- `pointerdown` fires when a primary action begins, and `pointerup` fires when it ends.
+- `pointerover` and `pointerout` fire when the ray of the pointing device is moved onto an object, or onto one of its children. It bubbles, meaning it can trigger on the object that the pointer is over or any of its ancestor objects.
+- `pointerenter` and `pointerleave` fire when the ray of the pointing device enters / leaves the boundaries of an object, and does not bubble. It only triggers on the exact element the pointer has entered / left.
+
+To replace the default ray and cursor that are created by the plugin, the following snippets can be added to a `<Controller>` or a `<Hand>`:
+
+```svelte
+<script>
+  import { Hand, Controller } from '@threlte/xr'
+  import CustomRay from './CustomRay.svelte'
+  import CustomCursor from './CustomCursor.svelte'
+</script>
+
+<Controller left>
+  {#snippet pointerRay()}
+    <CustomRay>
+  {/snippet}
+
+  {#snippet pointerCursor()}
+    <CustomCursor>
+  {/snippet}
+</Controller>
+```
+
+This plugin can be used with the `teleportControls` plugin to allow both teleporting and interaction.
+
+```svelte
+<script>
+  import { pointerControls, teleportControls } from '@threlte/xr'
+  teleportControls('left')
+  pointerControls('right')
+</script>
+```
+
+Since the default behavior of pointer and teleport controls have no overlap, they can be added to the same hand.
+
+If these two plugins are added to the same hand, `pointerControls` will take over when pointing at a mesh with events, and `teleportControls` will take over otherwise.
+
+`pointerControls` can also be used with `interactivity` to allow pointer events within and outside an immersive session.
+
+```svelte
+<script>
+  import { interactivity } from '@threlte/extras'
+  import { pointerControls, teleportControls } from '@threlte/xr'
+  interactivity()
+  pointerControls('left')
+</script>
+```
+
+The will be a few subtle differences when events are fired within an immersive session:
+
+- Pointers / cursors will be `THREE.Vector3`s instead of `THREE.Vector2`s. In XR, the cursor that intersects with the object that you interact with can be anywhere within a 3d space.
+- There will be no `camera` property on the event, since raycasting will originate from hands or controllers.
+- The `nativeEvent` property on event objects will be a `XRControllerEvent` or `XRHandEvent` rather than a `DomEvent`. In the case of hover events such as `pointerMove`, there will be no native event.

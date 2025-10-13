@@ -1,0 +1,77 @@
+---
+order: 3
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/components/Colliders/Collider/Collider.svelte'
+title: '<Collider>'
+type: 'component'
+componentSignature:
+  {
+    pretext: "If a <code>&lt;Collider&gt;</code> component is not a child of a <code>&lt;RigidBody&gt;</code> component, the transform properties are reactive.<br /><br />If you don't provide any of the properties <code>density</code>, <code>mass</code> or <code>massProperties</code>, Rapier will figure that out for you.<br /><br />You can provide either a property <code>density</code>, <code>mass</code> <strong>or</strong> <code>massProperties</code>.",
+    props:
+      [
+        {
+          name: 'shape',
+          type: "'ball' | 'capsule' | 'segment' | 'triangle' | 'roundTriangle' | 'polyline' | 'trimesh' | 'cuboid' | 'roundCuboid' | 'heightfield' | 'cylinder' | 'roundCylinder' | 'cone' | 'roundCone' | 'convexHull' | 'convexMesh' | 'roundConvexHull' | 'roundConvexMesh'",
+          required: true
+        },
+        { name: 'args', type: 'Parameters<typeof ColliderDesc[Shape]>', required: true },
+        { name: 'density', required: false, type: 'number' },
+        { name: 'mass', required: false, type: 'number' },
+        { name: 'massProperties', required: false, type: '{
+            mass: number,
+            centerOfMass: Position,
+            principalAngularInertia: Position,
+            angularInertiaLocalFrame: Rotation,
+            }' },
+        { name: 'restitution', required: false, type: 'number' },
+        { name: 'restitutionCombineRule', required: false, type: 'CoefficientCombineRule' },
+        { name: 'friction', required: false, type: 'number' },
+        { name: 'frictionCombineRule', required: false, type: 'CoefficientCombineRule' },
+        { name: 'sensor', required: false, type: 'boolean' },
+        { name: 'contactForceEventThreshold', required: false, type: 'number' }
+      ],
+		exports:
+      [
+        {
+          name: 'refresh',
+          type: '() => void',
+          description: 'Invoke this function to update the colliders transforms.'
+        }
+      ],
+    events: [{ name: 'create', payload: 'ref: Collider' }, { name: 'collisionenter', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null,
+            manifold: TempContactManifold,
+            flipped: boolean
+            }' }, { name: 'collisionexit', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+            }' }, { name: 'sensorenter', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+            }' }, { name: 'sensorexit', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+            }' }, { name: 'contact', payload: '{
+            targetCollider: Collider,
+            targetRigidBody: RigidBody | null
+            manifold: TempContactManifold
+            flipped: boolean
+            maxForceDirection: Vector
+            maxForceMagnitude: number
+            totalForce: Vector
+            totalForceMagnitude: number
+            }' }],
+    bindings:
+      [
+        {
+          name: 'collider',
+          type: { name: 'Collider', url: 'https://rapier.rs/javascript3d/classes/Collider.html' }
+        }
+      ]
+  }
+---
+
+Colliders represent the geometric shapes that generate contacts and collision events when they touch. Attaching one or multiple colliders to a rigid body allow the rigid-body to be affected by contact forces.
+
+<Example path="rapier/collider" />

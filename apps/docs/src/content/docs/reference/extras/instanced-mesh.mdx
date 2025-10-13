@@ -1,0 +1,149 @@
+---
+order: 7.2
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMesh.svelte'
+title: '<InstancedMesh>'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'InstancedMesh',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
+      },
+    props:
+      [
+        { name: 'id', type: 'string', default: 'default', required: false },
+        {
+          name: 'limit',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of possible <Instance> components.'
+        },
+        {
+          name: 'range',
+          type: 'number',
+          default: '1000',
+          required: false,
+          description: 'Limits the amount of drawn <Instance> components.'
+        },
+        {
+          name: 'update',
+          type: 'boolean',
+          default: 'true',
+          required: false,
+          description: 'Whether the THREE.InstancedMesh should be updated.'
+        }
+      ]
+  }
+---
+
+The component `<InstancedMesh>` is wrapping the Three.js object InstancedMesh and provides instanced rendering support. Use `<InstancedMesh>` if you have to render a large number of objects with the same geometry and material but with different world transformations and colors. The usage of `<InstancedMesh>` will help you to reduce the number of draw calls and thus improve the overall rendering performance in your application.
+
+<Example path="extras/instanced-mesh/simple" />
+
+## Usage
+
+An `<InstancedMesh>` is used in conjunction with the [`<Instance>`](/docs/reference/extras/instance) component:
+
+```svelte
+<InstancedMesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+
+  <Instance />
+  <Instance />
+</InstancedMesh>
+```
+
+It's also possible to nest other objects in an `<InstancedMesh>` component:
+
+```svelte
+<InstancedMesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+
+  <Instance />
+  <Instance />
+
+  <GLTF />
+</InstancedMesh>
+```
+
+Provide an `id` to use multiple `<InstancedMesh>` components:
+
+```svelte
+<InstancedMesh id="tree">
+  <T is={treeGeometry} />
+  <T.MeshStandardMaterial map={treeTexture} />
+
+  <InstancedMesh id="leaf">
+    <T is={leafGeometry} />
+    <T.MeshStandardMaterial map={leafTexture} />
+
+    <T.Group position.x={1}>
+      <Instance id="tree" /> // Instance of InstancedMesh with id="tree"
+      <Instance id="leaf" /> // Instance of InstancedMesh with id="leaf"
+    </T.Group>
+
+    <T.Group position.x={-2}>
+      <Instance id="tree" />
+      <Instance id="leaf" />
+    </T.Group>
+  </InstancedMesh>
+</InstancedMesh>
+```
+
+## Instance count
+
+Use the property `limit` to set the maximum amount of `<Instance>` components (defaults to 1000). The property `limit` will be used to initialize the internally used Float32Array. Use the property `range` to optionally limit the amount of drawn instances.
+
+```svelte {2,3}+
+<InstancedMesh
+  limit={10000}
+  range={100}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+
+  <Instance />
+  <Instance />
+</InstancedMesh>
+```
+
+## Events
+
+Mouse around in the example below.
+
+<Example path="extras/instanced-mesh/colors" />
+
+Instances also support interactivity events.
+
+```svelte {5}
+<InstancedMesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+
+  <Instance onclick={onClick} />
+</InstancedMesh>
+```
+
+## Nesting
+
+Instances can be nested in other objects and all parent transformations apply as usual:
+
+```svelte
+<InstancedMesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+
+  <T.Group rotation.z={DEG2RAD * 180}>
+    <Instance />
+
+    <T.Group position.y={2}>
+      <Instance />
+    </T.Group>
+  </T.Group>
+</InstancedMesh>
+```

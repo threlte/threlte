@@ -1,0 +1,50 @@
+---
+order: 8.3
+category: '@threlte/extras'
+title: 'layers'
+sourcePath: 'packages/extras/src/lib/layers'
+type: 'plugin'
+---
+
+`layers` is a plugin that provides inheritance for the property `layers` on `<T>` components.
+Typically when assigning a value to `layers` on a `<T>` component, it will only be applied to that component.
+This plugin allows you to assign a value to `layers` on a parent component and have it be inherited by all child components.
+
+<Tip type="tip">
+  This plugin injects and relies on a context. It's affecting all `<T>` components that are
+	descendants of the component that uses it. Check out the [guide on structuring your
+  app](/docs/learn/basics/app-structure) to learn more about contexts.
+</Tip>
+
+## Usage
+
+```svelte title="Scene.svelte" {2,3}+
+<script>
+  import { layers } from '@threlte/extras'
+  layers()
+</script>
+
+<!--
+The camera needs to be on the same layer
+as an object for the object to be visible
+-->
+<T.PerspectiveCamera layers={[4, 5]} />
+
+<!--
+Everything inside this group that isn't
+assigned another layer is on layer 4 and
+is therefore visible to the camera
+-->
+<T.Group layers={4}>
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+
+  <!-- This Mesh is on all layers -->
+  <T.Mesh layers={'all'}>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+</T.Group>
+```

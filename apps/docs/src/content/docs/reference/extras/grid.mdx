@@ -1,0 +1,130 @@
+---
+order: 4.17
+category: '@threlte/extras'
+title: <Grid>
+sourcePath: 'packages/extras/src/lib/components/Grid/Grid.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+    props:
+      [
+        { name: 'plane', type: "'xz' | 'xy' | 'zy'", default: "'xz'", required: false },
+        { name: 'cellColor', type: 'ColorRepresentation', default: "'#000000'", required: false },
+        { name: 'cellSize', type: 'number', default: '1', required: false },
+        { name: 'cellThickness', type: 'number', default: '1', required: false },
+        {
+          name: 'sectionColor',
+          type: 'ColorRepresentation',
+          default: "'#0000ee'",
+          required: false
+        },
+        { name: 'sectionSize', type: 'number', default: '10', required: false },
+        { name: 'sectionThickness', type: 'number', default: '2', required: false },
+        {
+          name: 'gridSize',
+          type: 'number | [number, number]',
+          default: '[20,20]',
+          required: false
+        },
+        { name: 'followCamera', type: 'boolean', default: 'false', required: false },
+        { name: 'infiniteGrid', type: 'boolean', default: 'false', required: false },
+        { name: 'fadeDistance', type: 'number', default: '100', required: false },
+        { name: 'fadeStrength', type: 'number', default: '1', required: false },
+        {
+          name: 'fadeOrigin',
+          type: 'Vector3',
+          default: 'undefined',
+          required: false,
+          description: 'Set a custom fading point of origin. The current camera position will be used if unset.'
+        },
+        {
+          name: type,
+          type: "'grid' | 'lines' | 'circular' | 'polar'",
+          default: "'grid'",
+          required: false
+        },
+        {
+          name: 'axis',
+          type: "'x' | 'y' | 'z'",
+          default: "'x'",
+          required: false,
+          description: "'line' only. Designates the world axis along which the line will be oriented."
+        },
+        {
+          name: 'maxRadius',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: "'circular' and 'polar' only. 0 removes the constraint."
+        },
+        {
+          name: 'cellDividers',
+          type: 'number',
+          default: '6',
+          required: false,
+          description: "'polar' only. How many lines will divide the polar grid. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°."
+        },
+        {
+          name: 'sectionDividers',
+          type: 'number',
+          default: '2',
+          required: false,
+          description: "'polar' only. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°."
+        }
+      ]
+  }
+---
+
+A robust grid implementation with multiple tweakable parameters.
+
+<Example path="extras/grid" />
+
+## Usage
+
+This component provides sensible defaults. You can initialize the default grid with just `<Grid>`. `ref` passes a reference from the `<T.Mesh/>` the grid is constructed on.
+
+### Grid types
+
+The grid type can be selected by setting the `type` parameter. The available grid types are:
+
+- `grid`: represents a standard box grid. It does not require any additional properties. (default)
+- `lines`: grid consisting of lines that align along a single world axis. You specify this axis by providing either `x`, `y` or `z` to the `axis` property.
+- `circular`: grid formed of concentric circles. It includes a `maxRadius` property that sets the maximum growth extent for the grid. A value of `0` removes this limit, allowing the grid to occupy the entire geometry, even if it results in incomplete circles.
+- `polar`: similar to the circular type, but it also features lines that subdivide the concentric circles. It too has a `maxRadius` property. Additionally, it has two properties for specifying dividers: `cellDivider` and `sectionDivider`. These determine how many lines will segment the circle into various sectors. For example, 2 lines result in 4 segments at 90° each, while 6 lines create 12 sectors at 30° apiece.
+
+| Grid                                               | Lines                                               | Circular                                               | Polar                                               |
+| -------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
+| ![Grid preview](/images/docs/extras/grid/grid.jpg) | ![Grid preview](/images/docs/extras/grid/lines.jpg) | ![Grid preview](/images/docs/extras/grid/circular.jpg) | ![Grid preview](/images/docs/extras/grid/polar.jpg) |
+
+### Cells and Sections
+
+Grid is split into cells and sections. **Cell** is meant to represent the smallest units on your grid, whereas
+**section** is a group of cells. You can adjust the size of the grid by changing the `cellSize` and `sectionSize`
+parameters. Size is in Three world units, so for example a mesh with `BoxGeometry(1,1,1)` will fit perfectly into
+a size 1 cell. By default a cell is 1 unit and a section 10, which means that a grid of 10x10 cells will be
+outlined with a section line.
+
+### Lines
+
+You can adjust the color and thickness of cell and section lines with `cellColor`, `cellThickness`, `sectionColor`, `sectionThickness`.
+
+### Grid size and fading
+
+The `<Grid>` component is a `THREE.Mesh` with a `PlaneGeometry` attached to it. The `gridSize` parameter defines the size of the `PlaneGeometry`.
+You can extend the grid into infinity if you set the `infiniteGrid` parameter to `true`.
+Changing `fadeDistance` sets how far from the camera position the grid begins to fade by having its alpha reduced. `fadeStrength` determines how fast it happens (exponent). `fadeStrength = 0` means that there is no fading (not recommended for large grids). You can change the fading point of origin to not be the camera position but a custom point by setting `fadeOrigin`.
+
+### Custom geometry
+
+You have the option to insert your own custom geometry into the `<Grid/>` slot. The preceding example demonstrates this by showcasing a preview of a terrain-like geometry generated using Perlin noise.
+
+```svelte
+<Grid>
+  <T.BoxGeometry />
+</Grid>
+```
+
+### Follow camera
+
+Setting `followCamera` to true applies a transform that moves the grid to the camera's position on the chosen `plane`.

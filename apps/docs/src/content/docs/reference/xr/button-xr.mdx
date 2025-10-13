@@ -1,0 +1,47 @@
+---
+category: '@threlte/xr'
+title: '<XRButton>'
+order: 2
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'mode',
+          type: "'inline' | 'immersive-vr' | 'immersive-ar'",
+          required: true,
+          description: 'The type of XRSession to create.'
+        },
+        {
+          name: 'sessionInit',
+          type: 'XRSessionInit',
+          required: false,
+          description: 'XRSession configuration options.'
+        },
+        {
+          name: 'force',
+          type: "'enter' | 'exit'",
+          required: false,
+          description: 'Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways'
+        }
+      ],
+    events:
+      [
+        {
+          name: 'click',
+          payload: "CustomEvent<'unsupported' | 'insecure' | 'blocked' | 'supported'>",
+          description: 'Fired when a user clicks the VR button.'
+        },
+        {
+          name: 'error',
+          payload: 'CustomEvent<Error>',
+          description: 'Fired when an enter / exit session error occurs.'
+        }
+      ]
+  }
+---
+
+`<XRButton />` is an HTML `<button />` that can be used to init a WebXR session. It will also display info about XR session browser support.
+
+This is aliased by the more commonly used `ARButton` and `VRButton` which provide sensible session defaults.

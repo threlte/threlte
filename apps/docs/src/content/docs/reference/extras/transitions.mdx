@@ -1,0 +1,226 @@
+---
+order: 4.4
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/transitions'
+title: transitions
+type: 'plugin'
+---
+
+<Tip
+  type="experimental"
+  title="Experimental"
+>
+  The plugin `transitions` uses Svelte internals. Changes to the runtime of Svelte may break this
+  plugin. If you encounter any issues, please [open an issue on
+  GitHub](https://github.com/threlte/threlte/issues). It's recommended to lock the version of Svelte
+  to a specific version.
+</Tip>
+
+The plugin `transitions` enables [Svelte-like
+transitions](https://svelte.dev/docs/svelte/transition)
+on Threlte components.
+
+```svelte
+{#if visible}
+  <T.Mesh transition={scale({ duration: 400 })} />
+{/if}
+```
+
+<Example
+  path="extras/transitions"
+  showFile="Scene.svelte"
+/>
+
+## Usage
+
+To use Threlte transitions, you need to inject the
+[plugin](/docs/reference/core/plugins) first via invoking `transitions()`. All
+child `<T>` components will then accept the transition properties `in`, `out` and
+`transition`.
+
+### `createTransition`
+
+Threlte Transitions use regular [Svelte
+transitions](https://svelte.dev/docs/svelte/transition) under the hood and
+therefore provide a similar API. The function `createTransition` is used to
+conveniently create a transition.
+
+To create a transition, you need to provide a function which accepts a reference
+to the object referenced by the `<T>` component and returns an object with the
+following properties:
+
+- `duration`: The duration of the transition in milliseconds.
+- `tick`: A function that is called on every tick of the transition.
+- `easing` (optional): The easing function to use.
+- `delay` (optional): The delay of the transition in milliseconds.
+
+```ts
+import { isInstanceOf } from '@threlte/core'
+import { createTransition } from '@threlte/extras'
+import { cubicOut } from 'svelte/easing'
+
+const fade = createTransition((ref) => {
+  // Only apply the transition to materials
+  if (!isInstanceOf(ref, 'Material')) return
+
+  // Make the material transparent if it's not already
+  if (!ref.transparent) {
+    ref.transparent = true
+    ref.needsUpdate = true
+  }
+
+  return {
+    tick(t) {
+      // t is [0, 1]
+      ref.opacity = t
+    },
+    easing: cubicOut,
+    duration: 400,
+    delay: 100
+  }
+})
+```
+
+The transition `fade` can now be applied to all `<T>` components that
+instantiate classes extending `THREE.Material` like `THREE.MeshBasicMaterial` or
+`THREE.MeshStandardMaterial`:
+
+```svelte
+<T.MeshStandardMaterial transition={fade} />
+```
+
+### Transition Directions
+
+Run a transition only when the component mounts:
+
+```svelte
+<T.MeshStandardMaterial in={fade} />
+```
+
+Run a transition only when the component unmounts:
+
+```svelte
+<T.MeshStandardMaterial out={fade} />
+```
+
+Run a transition when the component mounts or unmounts:
+
+```svelte
+<T.MeshStandardMaterial transition={fade} />
+```
+
+To react on different transition directions in the same transition, you can use
+the `direction` parameter:
+
+```ts
+import { createTransition } from '@threlte/extras'
+
+// direction is 'in', 'out' or 'both'
+const fly = createTransition((ref, { direction }) => {
+  // …
+})
+```
+
+### Transition Parameters
+
+To make reusing transitions throughout your application easier, make
+`createTransition` the return value of a function that accepts parameters:
+
+```ts
+import { isInstanceOf } from '@threlte/core'
+import { createTransition } from '@threlte/extras'
+
+const scale = (duration: number) => {
+  return createTransition((ref) => {
+    // Only apply the transition to objects
+    if (!isInstanceOf(ref, 'Object3D')) return
+    return {
+      tick(t) {
+        ref.scale.setScalar(t)
+      },
+      duration
+    }
+  })
+}
+```
+
+The transition can now be used like this:
+
+```svelte
+<T.Mesh transition={scale(400)} />
+```
+
+## Transition Events
+
+Similar to Svelte transitions, Threlte transitions also emit events:
+
+```svelte
+{#if visible}
+  <T.Mesh
+    {geometry}
+    {material}
+    transition={fade}
+    onintrostart={() => console.log('intro started')}
+    onoutrostart={() => console.log('outro started')}
+    onintroend={() => console.log('intro ended')}
+    onoutroend={() => console.log('outro ended')}
+  />
+{/if}
+```
+
+## Global Transitions
+
+Transitions are [local by
+default](https://svelte.dev/docs/svelte/transition#Local-vs-global). Local
+transitions only play when the block they belong to is created or destroyed, not
+when parent blocks are created or destroyed. Threlte offers a function `global`
+that marks a transition as global.
+
+```svelte
+<script>
+  import { global } from '@threlte/extras'
+</script>
+
+{#if x}
+  {#if y}
+    <T.Mesh transition={global(scale(400))} />
+  {/if}
+{/if}
+```
+
+## TypeScript
+
+### Prop Types
+
+By default, the `transitions` plugin does not add any prop types to the `<T>`
+component. You can however extend the types of the `<T>` component by defining
+the `Threlte.UserProps` type in your ambient type definitions. In a typical
+SvelteKit application, you can find these [in
+`src/app.d.ts`](https://svelte.dev/docs/kit/types#app.d.ts). The transitions
+plugin exports the `TransitionsProps` type which you can use as shown below:
+
+```ts title="src/app.d.ts" {1}+ {4-6}+
+import type { TransitionsProps } from '@threlte/extras'
+
+declare global {
+  namespace Threlte {
+    interface UserProps extends TransitionsProps {}
+  }
+}
+
+export {}
+```
+
+Now all relevant properties on `<T>` components will be type safe.
+
+```svelte title="Scene.svelte"
+<script>
+  import { transitions } from '@threlte/extras'
+  transitions()
+</script>
+
+<T.Mesh
+  transition={scale(400)}
+  onintrostart={() => console.log('intro started')}
+/>
+```

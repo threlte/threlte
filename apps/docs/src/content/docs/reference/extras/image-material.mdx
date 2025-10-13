@@ -1,0 +1,180 @@
+---
+order: 5.4
+category: '@threlte/extras'
+title: <ImageMaterial>
+sourcePath: 'packages/extras/src/lib/components/ImageMaterial/ImageMaterial.svelte'
+type: 'component'
+'componentSignature':
+  {
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html?q=shaderm#api/en/materials/ShaderMaterial'
+      },
+    'props':
+      [
+        { name: 'color', type: 'THREE.ColorRepresentation', default: 'white', required: false },
+        { name: 'radius', type: 'number', default: '0', required: false },
+        {
+          name: 'brightness',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies brightness. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'contrast',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies contrast. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'hue',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies hue. Range from 0 to 1.'
+        },
+        {
+          name: 'saturation',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies saturation. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'lightness',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Modifies lightness. Recommended range from -1 to 1.'
+        },
+        {
+          name: 'monochromeColor',
+          type: 'THREE.ColorRepresentation',
+          default: '#535970',
+          required: false,
+          description: 'Sets a monochrome tint the image is converted to.'
+        },
+        {
+          name: 'monochromeStrength',
+          type: 'number',
+          default: '0',
+          required: false,
+          description: 'Sets the strength of monochrome effect. Range from 0 to 1.'
+        },
+        {
+          name: 'negative',
+          type: 'boolean',
+          default: 'false',
+          required: false,
+          description: 'Enables/disables negative effect.'
+        },
+        {
+          name: 'colorProcessingTexture',
+          type: 'THREE.Texture | THREE.VideoTexture',
+          required: false,
+          description: 'Sets a texture used to adjust the strength and the pattern of color processing effects. Each channel of the texture is responsible for a different color processing function. R - hue, G - saturation, B - lightness, A - alpha.'
+        },
+        { name: 'alphaThreshold', type: 'number', default: '0', required: false, description: '' },
+        { name: 'alphaSmoothing', type: 'number', default: '0', required: false, description: '' },
+        { name: 'zoom', type: 'number', default: '1', required: false },
+        { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
+        { name: 'transparent', type: 'boolean', default: 'false', required: false },
+        { name: 'opacity', type: 'number', default: '1', required: false },
+        { name: 'side', type: 'THREE.Side', default: 'THREE.FrontSide', required: false }
+      ]
+  }
+---
+
+Adapted from drei's [`<Image>`](https://github.com/pmndrs/drei?tab=readme-ov-file#image) component, with additional color processing extras.
+
+A shader-based image material component with auto-cover (similar to css/background: cover).
+
+<Example path="extras/image-material" />
+
+<small>
+  Images from
+  [Wikipedia](https://en.wikipedia.org/wiki/Wikipedia:Featured_pictures/Artwork/Paintings). Carousel
+  originally by [Cyd Stumpel](https://codesandbox.io/s/9s2wd9?file=/src/App.js:1160-1168).
+</small>
+
+## Example
+
+```svelte
+<script lang="ts">
+  import { DoubleSide } from 'three'
+  import { ImageMaterial } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <T.PlaneGeometry />
+  <ImageMaterial
+    transparent
+    side={DoubleSide}
+    url="KlimtDieJungfrau.jpg"
+    radius={0.1}
+    zoom={1.1}
+  />
+<T.Mesh>
+```
+
+`<ImageMaterial>` can also be used with instanced or batched meshes.
+
+## Color processing effects
+
+The `<ImageMaterial />` component offers a range of properties for dynamic color processing.
+
+The properties `brightness`, `contrast`, `hue`, `saturation`, and `lightness` adjust the image's initial values additively.
+To decrease brightness, for instance, you would use a negative value, while a positive value would increase it. The `hue` shift is the only exception,
+its values range from 0 to 1, representing a complete cycle around the color wheel. Notably, values 0 and 1 are equivalent, indicating the same hue position.
+
+For the monochrome effect, specify your preferred tint using the `monochromeColor` property,
+and control the effect's intensity with `monochromeStrength`.
+Setting this strength to 0 disables the effect entirely, while a value of 1 applies it fully,
+rendering the image in varying shades of a single color.
+
+### Advanced color processing with a texture
+
+The `colorProcessingTexture` property enables advanced color processing by allowing you to specify a texture
+that changes the strength and pattern of color effects. It can be used to create dynamic, animated effects as well as static ones that target only
+specified image areas.
+
+Each texture channel controls a different color processing effect:
+
+- <span class="text-red-500">Red</span> for hue
+- <span class="text-green-400">Green</span> for saturation,
+- <span class="text-cyan-300">Blue</span> for lightness
+- <span class="text-white">Alpha</span> for transparency.
+
+Red, green and blue channels are applied multiplicatively to the values of hue, saturation and lightness.
+
+The alpha channel acts differently, providing a flexible alpha override mechanism, that uses a range of values for
+dynamic image reveal effect. With changing the `alphaThreshold` property, areas with alpha values approaching 1 are revealed first,
+followed by regions with values tending towards 0.
+
+To further control this effect, the `alphaSmoothing` property allows for a gradual fade-in effect within a specified range.
+For instance, with an alphaThreshold of 0.5 and an alphaSmoothing set to 0.15, alpha values spanning from 0.5 to 0.65
+will smoothly transition into visibility.
+
+Enable "color processing with a texture" in the example on top of this page to see the effect applying RGBA color processing texture can have.
+
+<div class="flex w-full flex-col items-center">
+  <img
+    src="/textures/alpha.jpg"
+    class="max-w-[300px]"
+  />
+  <span>
+    *Alpha image used in the example. The lighter values towards the center are revealed first.*
+  </span>
+</div>
+
+### Order of processing effects
+
+1. Alpha override
+2. Brightness
+3. Contrast
+4. Hue, Saturation, Lightness
+5. Monochrome
+6. Negative

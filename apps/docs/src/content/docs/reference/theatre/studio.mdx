@@ -1,0 +1,42 @@
+---
+order: 1.5
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/studio/Studio.svelte'
+title: '<Studio>'
+type: 'component'
+componentSignature:
+  { props: [{ name: 'enabled', type: 'boolean', default: 'true', required: false }] }
+---
+
+The `<Studio>` component enables the Theatre.js studio interface in your browser. It is intended for use in development.
+
+See the Theatre.js docs for extended instructions for using the studio interface.
+
+#### Theatre.js Docs
+
+**Studio** | [Studio Manual](https://www.theatrejs.com/docs/latest/manual/Studio) | [Studio keyboard Shortcuts](https://www.theatrejs.com/docs/latest/manual/keyboard-shortcuts) | [Studio API Reference](https://www.theatrejs.com/docs/latest/api/studio)
+
+### Example
+
+In most cases, you want the interface while editing animations or laying out scenes. While other parts of Theatre.js are performant and built for production, `@theatre/studio` is currently not, and shouldn't be included in your production bundle.
+
+```svelte
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import { Studio } from '@threlte/theatre'
+  import Scene from './Scene.svelte'
+
+  // Using SvelteKit
+  import { dev } from '$app/environment'
+</script>
+
+<Studio enabled={dev} />
+
+<Canvas>
+  <Scene />
+</Canvas>
+```
+
+### Exporting State
+
+When editing your project in the studio, state is automatically saved to your browser's local storage. To export the state, select your project from the outline panel (top-left) and click the export in the details panel (top-right). For more information and a video, see [the Theatre.js state docs](https://www.theatrejs.com/docs/latest/manual/projects#state).

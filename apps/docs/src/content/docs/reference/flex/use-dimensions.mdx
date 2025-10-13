@@ -1,0 +1,72 @@
+---
+order: 22
+category: '@threlte/flex'
+sourcePath: 'packages/flex/src/lib/hooks/useDimensions.ts'
+title: useDimensions
+type: 'hook'
+---
+
+The hook `useDimensions` can be used to retrieve the _computed_ width and
+height of a `<Flex>` or `<Box>` component as
+[CurrentWritable](https://threlte.xyz/docs/reference/core/utilities#currentwritable)
+stores.
+
+<Tip type="tip">
+	The computed width and height is also available as slot props
+	on the components [`<Flex>`](/docs/reference/flex/flex#content-dimensions) and
+	[`<Box>`](/docs/reference/flex/box#content-sizing).
+</Tip>
+
+## In a `<Flex>` component
+
+Because there's no viewport to measure, the width and height of a `<Flex>`
+component need to be set manually. Nevertheless, the dimensions of the
+contents of the `<Flex>` component will be measured after a layout reflow and
+can be retrieved using `useDimensions` in a direct child component to
+`<Flex>`.
+
+## In a `<Box>` component
+
+The `<Box>` component controls element positions only. However, if you wish to
+handle element dimensions based on the layout calculated by Yoga, you'll need to
+manually adapt the content's size. This is because `@threlte/flex` lacks
+knowledge about the inner content's sizing mechanisms. You can do this by using
+`useDimensions` hook in a direct child component to `<Box>`.
+
+```svelte title="Parent.svelte"
+<script>
+  import { Flex, Box } from '@threlte/flex'
+  import Model from './Model.svelte'
+</script>
+
+<Flex
+  width={100}
+  height={100}
+  justifyContent="Center"
+  alignItems="Stretch"
+>
+  <Box
+    width="auto"
+    height="auto"
+    flex={1}
+  >
+    <Model />
+  </Box>
+</Flex>
+```
+
+```svelte title="Model.svelte"
+<script>
+  import { useDimensions } from '@threlte/flex'
+
+  const { width, height } = useDimensions()
+</script>
+
+<T.Mesh
+  scale.x={$width}
+  scale.y={$height}
+>
+  <T.BoxGeometry />
+  <T.MeshBasicMaterial color="red" />
+</T.Mesh>
+```

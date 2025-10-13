@@ -1,0 +1,42 @@
+---
+order: 205
+category: '@threlte/studio'
+sourcePath: 'packages/studio/src/lib/extensions/snapping/useSnapping.svelte.ts'
+title: 'useSnapping'
+type: 'hook'
+---
+
+## Examples
+
+```ts
+import { useSnapping } from '@threlte/studio/extensions'
+
+const snapping = useSnapping()
+
+// enable snapping
+snapping.setEnabled(true)
+
+// toggle snapping
+snapping.toggleEnabled()
+
+// set the translate snapping value
+snapping.setTranslate(10)
+
+// set the rotate snapping value
+snapping.setRotate(15)
+
+// set the scale snapping value
+snapping.setScale(0.1)
+
+// get the enabled state
+console.log(snapping.enabled) // true
+
+// get the translate snapping value
+console.log(snapping.translate) // 10
+
+// get the rotate snapping value
+console.log(snapping.rotate) // 15
+
+// get the scale snapping value
+console.log(snapping.scale) // 0.1
+```
