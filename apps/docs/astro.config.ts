@@ -52,6 +52,7 @@ export default defineConfig({
       components: {
         Sidebar: './src/components/Sidebar.astro'
       },
+      customCss: ['./src/styles/app.css'],
       plugins: [
         starlightSidebarTopics([
           {
