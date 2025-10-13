@@ -27,7 +27,7 @@
    */
   const fragmentShader = `
 		uniform sampler2D uScene;
-		uniform float uRadius;
+		uniform float uTime;
 
 		varying vec2 vUv;
 
@@ -37,7 +37,9 @@
 
 			vec2 center = vec2(0.5, 0.5);
 
-			if (length(center - vUv) - uRadius < 0.0) {
+			float radius = 1.0 - 0.5 * (1.0 + sin(uTime));
+
+			if (length(center - vUv) - radius < 0.0) {
 				gl_FragColor = texture2D(uScene, vUv);
 			}
 		}
@@ -47,19 +49,18 @@
 
   const uScene = new Uniform(target.texture)
 
-  const uRadius = new Uniform(0)
+  const uTime = new Uniform(0)
 
-  let time = 0
   useTask((delta) => {
-    time += delta
-    uRadius.value = 1 - 0.5 * (1 + Math.sin(time))
+    uTime.value += delta
+    // uRadius.value = 1 - 0.5 * (1 + Math.sin(time))
   })
 
   const material = new ShaderMaterial({
     fragmentShader,
     uniforms: {
       uScene,
-      uRadius
+      uTime
     },
     vertexShader
   })
