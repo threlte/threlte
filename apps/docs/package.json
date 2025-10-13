@@ -26,6 +26,7 @@
     "@astrojs/starlight": "^0.36.0",
     "@astrojs/starlight-tailwind": "^4.0.1",
     "@astrojs/svelte": "^7.1.0",
+    "@expressive-code/plugin-line-numbers": "^0.41.3",
     "@markprompt/css": "^0.10.0",
     "@markprompt/react": "^0.18.0",
     "@markprompt/web": "^0.14.3",
