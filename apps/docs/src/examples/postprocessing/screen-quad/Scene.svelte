@@ -37,7 +37,7 @@
 
 			vec2 center = vec2(0.5, 0.5);
 
-			if (length(center - uv) - uRadius < 0.0) {
+			if (length(center - vUv) - uRadius < 0.0) {
 				gl_FragColor = texture2D(uScene, vUv);
 			}
 		}
