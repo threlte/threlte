@@ -33,15 +33,13 @@
 
 		void main() {
 
-			vec4 color = vec4(0.0, 0.0, 0.0, 1.0);
+			gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
 
 			vec2 center = vec2(0.5, 0.5);
 
-			if (length(center - vUv) - uRadius < 0.0) {
-				color = texture2D(uScene, vUv);
+			if (length(center - uv) - uRadius < 0.0) {
+				gl_FragColor = texture2D(uScene, vUv);
 			}
-
-			gl_FragColor = color;
 		}
 	`
 
