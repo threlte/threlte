@@ -25,13 +25,13 @@ Three provides a FullScreenQuad class that both covers the screen and provides a
 
 There is a specific order to how the scene and the quad should be rendered.
 
-1. save the current render target of the renderer.
+1. save the current render target of the renderer
 
 ```ts
 const lastRenderTarget = renderer.getRenderTarget()
 ```
 
-2. set the render target of the renderer to the fbo.
+2. set the render target of the renderer to the fbo
 
 ```ts
 renderer.setRenderTarget(target)
@@ -45,7 +45,7 @@ const { camera } = useThrelte()
 renderer.render(scene, camera.current)
 ```
 
-Threlte's camera is a [currentWritable](/reference/core/utilities#currentwritable) so we can use its **.current** property to get the instance.
+Threlte's camera is a [currentWritable](/reference/core/utilities#currentwritable) so we can use its **.current** property to get the instance. Its important to use the **current** property to avoid having to read from the store every frame.
 
 4. restore the last render target
 

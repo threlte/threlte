@@ -51,11 +51,6 @@
 
   const uRadius = new Uniform(0)
 
-  const uniforms = {
-    uScene,
-    uRadius
-  }
-
   let time = 0
   useTask((delta) => {
     time += delta
@@ -64,11 +59,22 @@
 
   const material = new ShaderMaterial({
     fragmentShader,
-    uniforms,
+    uniforms: {
+      uScene,
+      uRadius
+    },
     vertexShader
   })
 
   const quad = new FullScreenQuad(material)
+
+  // not using the <T> component so we need to clean up after ourselves
+  $effect(() => {
+    return () => {
+      quad.dispose()
+      material.dispose()
+    }
+  })
 
   useTask(
     () => {
