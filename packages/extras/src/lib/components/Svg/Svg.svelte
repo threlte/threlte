@@ -56,6 +56,7 @@
     }
   })
 
+  // svelte-ignore non_reactive_update
   let renderOrder = 0
 </script>
 
