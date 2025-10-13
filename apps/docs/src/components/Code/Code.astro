@@ -19,7 +19,8 @@ interface Props {
 const highlighter = await getShiki()
 
 const formatted = highlighter.codeToHtml(Astro.props.code.replace(/\n$/, '') ?? '', {
-  lang: Astro.props.lang,
+  // @ts-ignore
+  lang: Astro.props.lang === 'svg' ? 'html' : Astro.props.lang,
   theme: 'dracula-soft',
   transformers: [transformerCompactLineOptions(Astro.props.lineOptions ?? [])]
 })
