@@ -41,6 +41,14 @@ export default defineConfig({
     svelte(),
     starlight({
       title: 'Threlte',
+      logo: {
+        src: './src/assets/logo/threlte-logo.png',
+        replacesTitle: true
+      },
+      social: [
+        { icon: 'github', label: 'Github', href: 'https://github.com/threlte/threlte' },
+        { icon: 'discord', label: 'Discord', href: 'https://discord.gg/EqUBCfCaGm' }
+      ],
       components: {
         Sidebar: './src/components/Sidebar.astro'
       },
