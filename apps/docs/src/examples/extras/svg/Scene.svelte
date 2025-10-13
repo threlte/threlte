@@ -1,6 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { SVG, OrbitControls } from '@threlte/extras'
+  import url from './ordering.svg?url'
 
   interface Props {
     selection: number
@@ -29,7 +30,7 @@
   />
 {:else}
   <SVG
-    src="/images/docs/extras/svg/ordering.svg"
+    src={url}
     scale={0.005}
     position.x={-1.2}
     position.y={1.5}
