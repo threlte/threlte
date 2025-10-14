@@ -103,6 +103,18 @@ export default defineConfig({
             ]
           },
           {
+            label: 'Rapier',
+            icon: 'right-caret',
+            link: '/reference/rapier/getting-started',
+            items: [
+              { label: 'Getting Started', link: '/reference/rapier/getting-started' },
+              { label: 'Concepts', autogenerate: { directory: '/reference/rapier/concepts' } },
+              { label: 'Components', autogenerate: { directory: '/reference/rapier/components' } },
+              { label: 'Hooks', autogenerate: { directory: '/reference/rapier/hooks' } },
+              { label: 'Joints', autogenerate: { directory: '/reference/rapier/joints' } }
+            ]
+          },
+          {
             label: 'GLTF (cli)',
             icon: 'right-caret',
             link: '/reference/gltf/getting-started',
