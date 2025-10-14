@@ -101,6 +101,12 @@ export default defineConfig({
               },
               { label: 'Misc', autogenerate: { directory: '/reference/extras/misc' } }
             ]
+          },
+          {
+            label: 'GLTF (cli)',
+            icon: 'right-caret',
+            link: '/reference/gltf/getting-started',
+            items: [{ label: 'Getting Started', link: '/reference/gltf/getting-started' }]
           }
         ])
       ]
