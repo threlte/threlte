@@ -67,6 +67,18 @@ export default defineConfig({
             ]
           },
           {
+            label: 'Examples',
+            link: '/examples/getting-started',
+            icon: 'document',
+            items: [
+              { label: 'Getting Started', link: '/examples/getting-started' },
+              { label: 'Content', autogenerate: { directory: '/examples/content' } },
+              { label: 'Staging', autogenerate: { directory: '/examples/staging' } },
+              { label: 'Visual Effects', autogenerate: { directory: '/examples/visual-effects' } },
+              { label: 'Misc', autogenerate: { directory: '/examples/misc' } }
+            ]
+          },
+          {
             label: 'Core',
             link: '/reference/core/getting-started',
             icon: 'right-caret',
