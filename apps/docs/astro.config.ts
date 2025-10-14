@@ -76,6 +76,31 @@ export default defineConfig({
               { label: 'Hooks', autogenerate: { directory: '/reference/core/hooks' } },
               { label: 'Helpers', autogenerate: { directory: '/reference/core/helpers' } }
             ]
+          },
+          {
+            label: 'Extras',
+            link: '/reference/extras/getting-started',
+            icon: 'right-caret',
+            items: [
+              { label: 'Getting Started', link: '/reference/extras/getting-started' },
+              { label: 'Content', autogenerate: { directory: '/reference/extras/content' } },
+              {
+                label: 'Interaction',
+                autogenerate: { directory: '/reference/extras/interaction' }
+              },
+              { label: 'Loading', autogenerate: { directory: '/reference/extras/loading' } },
+              { label: 'Staging', autogenerate: { directory: '/reference/extras/staging' } },
+              {
+                label: 'Visual Effects',
+                autogenerate: { directory: '/reference/extras/visual-effects' }
+              },
+              { label: 'Audio', autogenerate: { directory: '/reference/extras/audio' } },
+              {
+                label: 'Performance',
+                autogenerate: { directory: '/reference/extras/performance' }
+              },
+              { label: 'Misc', autogenerate: { directory: '/reference/extras/misc' } }
+            ]
           }
         ])
       ]
