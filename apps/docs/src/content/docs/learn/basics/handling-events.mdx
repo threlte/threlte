@@ -11,23 +11,23 @@ and raycasting.
 
 ## DOM events
 
-To get started, you'll need an HTML element. The [`useThrelte`](/docs/reference/core/use-threlte)
+To get started, you'll need an HTML element. The [`useThrelte`](/reference/core/use-threlte)
 hook provides you with direct access to Threltes HTML div wrapper - the `dom`.
 The `canvas` is also available if that is more appropriate for your events.
 
 ## Prop events
 
-The `<T>` component has it's own [events](/docs/reference/core/t#events). It can even pick up
-on events coming from the [underlying Three.js objects](/docs/reference/core/t#object-events).
+The `<T>` component has it's own [events](/reference/core/t#events). It can even pick up
+on events coming from the [underlying Three.js objects](/reference/core/t#object-events).
 
 ## Raycasting events
 
 Casting rays can end up being a big part of your 3D application. They're required for
-creating [`interactivity`](/docs/reference/extras/interactivity) (click, pointer
+creating [`interactivity`](/reference/extras/interactivity) (click, pointer
 and wheel events) on your scene's meshes. Raycasting can struggle with complex shapes
 or a high number of objects but this can be mitigated by either:
 
-- Raycasting against an simplier, invisible object (as is done by the [mesh bounds](/docs/reference/extras/mesh-bounds) extra).
-- Or introducing a better raycasting algorithm such as Bounding Volume Hirerchies ([BVH](/docs/learn/advanced/plugins#bvh-raycast-plugin)).
+- Raycasting against an simplier, invisible object (as is done by the [mesh bounds](/reference/extras/mesh-bounds) extra).
+- Or introducing a better raycasting algorithm such as Bounding Volume Hirerchies ([BVH](/learn/advanced/plugins#bvh-raycast-plugin)).
 
 For simple use cases, Three.js's default raycaster works well enough.

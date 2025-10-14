@@ -14,7 +14,7 @@ sidebar: {
 
 ## Structuring your app
 
-As a first step we create a new Svelte file called `App.svelte` where we import the [`<Canvas>` component](/docs/reference/core/canvas).
+As a first step we create a new Svelte file called `App.svelte` where we import the [`<Canvas>` component](/reference/core/canvas).
 
 ```svelte title="App.svelte"
 <script>
@@ -30,14 +30,14 @@ As a first step we create a new Svelte file called `App.svelte` where we import 
 The `<Canvas>` component is the root component of your Threlte application. It creates a
 renderer and sets up some sensible defaults for you like antialiasing and color management.
 It also creates a default camera and provides the context in which your Threlte application
-will run. For improving access to this runtime context, it's <a href="/docs/learn/basics/app-structure">best practice</a>
+will run. For improving access to this runtime context, it's <a href="/learn/basics/app-structure">best practice</a>
 to create a separate component called `Scene.svelte` and including it in our `App.svelte` file.
 
 ## Creating objects
 
 At this point we're just looking at a blank screen. Let's add a simple cube to it.
 
-In `Scene.svelte`, we import the [`<T>` component](/docs/reference/core/t), which is
+In `Scene.svelte`, we import the [`<T>` component](/reference/core/t), which is
 the **main building block** of your Threlte application. It's a **generic
 component** that we use to render **any Three.js object**. In this case we're creating a
 [`THREE.Mesh`](https://threejs.org/docs/index.html#api/en/objects/Mesh) which is made up from
@@ -260,7 +260,7 @@ The renderer now uses this camera to render our scene.
 
 <Tip type="info" title="Events">
 
-Threlte supports listening to certain <a href="/docs/reference/core/t#events">events on `<T/>` components</a>. Here, we use the `create`
+Threlte supports listening to certain <a href="/reference/core/t#events">events on `<T/>` components</a>. Here, we use the `create`
 event to get a reference to the underlying Three.js object as soon as it's created and use the method `lookAt` to look at the cube.
 
 </Tip>
@@ -268,8 +268,8 @@ event to get a reference to the underlying Three.js object as soon as it's creat
 ## Enabling interactivity
 
 Let's say we want to scale our cube as soon as we hover over it. We first have to import the
-[plugin](/docs/learn/advanced/plugins) [`interactivity`](/docs/reference/extras/interactivity) from
-[`@threlte/extras`](/docs/reference/extras/getting-started) and invoke it in our `Scene.svelte` file.
+[plugin](/learn/advanced/plugins) [`interactivity`](/reference/extras/interactivity) from
+[`@threlte/extras`](/reference/extras/getting-started) and invoke it in our `Scene.svelte` file.
 
 The `interactivity` plugin allows us to add interaction event listeners to our `<T>` components. We will add `pointerenter` and
 `pointerleave` event listeners to our cube. In the event handlers we'll update the value of a `Spring` from `svelte/motion`
@@ -337,7 +337,7 @@ and use its `.current` value to set the `scale` property of the `<T.Mesh>` compo
 
 ## Adding animation
 
-Let's add some motion to our cube. We will use Threlte's [`useTask`](/docs/reference/core/use-task) hook to tap
+Let's add some motion to our cube. We will use Threlte's [`useTask`](/reference/core/use-task) hook to tap
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 

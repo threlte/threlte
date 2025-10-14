@@ -52,7 +52,7 @@ will automatically invalidate the current frame and request a new frame.
 
 In some cases, you may want to manually invalidate the current frame because
 Threlte is not able to detect changes. To do this, you can use the `invalidate`
-function from the [`useThrelte`](/docs/reference/core/use-threlte) hook.
+function from the [`useThrelte`](/reference/core/use-threlte) hook.
 
 ```svelte
 <script>
@@ -76,7 +76,7 @@ function from the [`useThrelte`](/docs/reference/core/use-threlte) hook.
 
 ### `useTask`
 
-The [`useTask`](/docs/reference/core/use-task) hook is by default configured to
+The [`useTask`](/reference/core/use-task) hook is by default configured to
 automatically invalidate the current frame **on every frame**. This means that you
 can use it to animate your scene without having to manually invalidate the
 current frame.
@@ -92,7 +92,7 @@ useTask(() => {
 
 Sometimes you may want to manually invalidate the current frame from within a
 task. To do this, you can use the `invalidate` function from the
-[`useThrelte`](/docs/reference/core/use-threlte) hook and set the `autoInvalidate`
+[`useThrelte`](/reference/core/use-threlte) hook and set the `autoInvalidate`
 option to `false`:
 
 ```ts
@@ -135,7 +135,7 @@ used when necessary.
 ### `<Canvas>` prop
 
 You can set the render mode by setting the property `renderMode` on the
-[`<Canvas>`](/docs/reference/core/canvas) component:
+[`<Canvas>`](/reference/core/canvas) component:
 
 ```svelte
 <Canvas renderMode="on-demand" />
@@ -144,7 +144,7 @@ You can set the render mode by setting the property `renderMode` on the
 ### `useThrelte` hook
 
 You can also set the render mode from anywhere within your Threlte app using the
-[`useThrelte`](/docs/reference/core/use-threlte) hook:
+[`useThrelte`](/reference/core/use-threlte) hook:
 
 ```ts
 const { renderMode } = useThrelte()
@@ -159,9 +159,9 @@ renderMode.set('on-demand')
 ## Render modes and custom rendering
 
 By default, Threlte will automatically render the scene for you. In some cases,
-you may want to render the scene yourself, for example when using [postprocessing](/docs/examples/postprocessing/outlines).
+you may want to render the scene yourself, for example when using [postprocessing](/examples/postprocessing/outlines).
 
-1. Set `autoRender` to `false` on the [`<Canvas>`](/docs/reference/core/canvas)
+1. Set `autoRender` to `false` on the [`<Canvas>`](/reference/core/canvas)
    component. This will prevent Threlte from automatically rendering the scene
    and you can render the scene yourself.
 
@@ -172,7 +172,7 @@ you may want to render the scene yourself, for example when using [postprocessin
 2. Set up a task that renders the scene. There are two ways to do this:
 
 - Add a task to [Threlte's default
-  `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages). Tasks in
+  `renderStage`](/learn/basics/scheduling-tasks#default-stages). Tasks in
   that stage will be executed after tasks in Threlte's `mainStage` and only
   when a re-render is necessary based on the current render mode. This is the
   recommended approach.
@@ -191,11 +191,11 @@ useTask(
 ```
 
 - Use `shouldRender` from the hook
-  [`useThrelte`](/docs/reference/core/use-threlte). This function will evaluate
+  [`useThrelte`](/reference/core/use-threlte). This function will evaluate
   to `true` based on the current render mode. This allows for more fine-grained
   control over when to render and is useful when you want to render in a task
   that is not in [Threlte's default
-  `renderStage`](/docs/learn/basics/scheduling-tasks#default-stages).
+  `renderStage`](/learn/basics/scheduling-tasks#default-stages).
 
 ```ts
 import { useThrelte, useTask } from '@threlte/core'

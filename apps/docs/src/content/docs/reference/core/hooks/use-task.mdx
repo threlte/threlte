@@ -7,11 +7,11 @@ order: 5.21
 
 <Tip type="info">
   Tasks are part of Threlte's *Task Scheduling System*. For details on how to use stages and tasks,
-  see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
+  see the [scheduling tasks](/learn/basics/scheduling-tasks) page.
 </Tip>
 
 The hook `useTask` is used to create a
-[task](/docs/learn/basics/scheduling-tasks#tasks) that is used to run code on
+[task](/learn/basics/scheduling-tasks#tasks) that is used to run code on
 every frame.
 
 ## Creating an anonymous task
@@ -60,7 +60,7 @@ const {
 You can pass a stage that the task should be added to as an option to `useTask`,
 the stage can be passed by value or key. If no stage is passed, the task will be
 added to [Threlte's
-`mainStage`](/docs/learn/basics/scheduling-tasks#default-stages).
+`mainStage`](/learn/basics/scheduling-tasks#default-stages).
 
 ```ts
 useTask(
@@ -95,8 +95,8 @@ into account when they are created later on.
   If a task is passed by reference to the `before` or `after` option, the task created by `useTask`
   will automatically be added to the same stage as the task it depends on. If you pass a key instead
   and the task you want to reference is **not** in [Threlte's
-  `mainStage`](/docs/learn/basics/scheduling-tasks#default-stages), you will also need to pass the
-  stage, either by value or key.{' '}
+  `mainStage`](/learn/basics/scheduling-tasks#default-stages), you will also need to pass the stage,
+  either by value or key.{' '}
 </Tip>
 
 ## Examples
@@ -177,7 +177,7 @@ to make animations frame rate independent.
 ### Custom render pipeline
 
 To create a custom render pipeline, add a task to Threlte's
-[`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) which by
+[`renderStage`](/learn/basics/scheduling-tasks#default-stages) which by
 default only runs its tasks when a re-render is needed. Be sure to set the
 property `autoRender` to `false` on the `<Canvas>` component **or inside the
 `<Renderer>` component** to prevent Threlte from automatically rendering your

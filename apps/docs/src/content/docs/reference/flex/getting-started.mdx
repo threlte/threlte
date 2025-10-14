@@ -26,9 +26,9 @@ npm install @threlte/flex
 
 ### Basic Example
 
-Use the component [`<Flex>`](/docs/reference/flex/flex) to create a flexbox
+Use the component [`<Flex>`](/reference/flex/flex) to create a flexbox
 container. Since there's no viewport to fill, you must specify the size of the
-container. Add flex items with the component [`<Box>`](/docs/reference/flex/box).
+container. Add flex items with the component [`<Box>`](/reference/flex/box).
 
 ```svelte
 <script lang="ts">
@@ -178,7 +178,7 @@ allows you to create complex layouts.
 
 ### Align Flex Container
 
-The component [`<Align>`](/docs/reference/extras/align) can be used to align the resulting flex container.
+The component [`<Align>`](/reference/extras/align) can be used to align the resulting flex container.
 
 ```svelte
 <script lang="ts">
@@ -217,7 +217,7 @@ The component [`<Align>`](/docs/reference/extras/align) can be used to align the
 The prop `class` can be used on `<Box>` and `<Flex>` to easily configure the
 flexbox with predefined class names just as you would do in CSS. In order to use
 the prop, you need to create a `ClassParser` using the utility
-[`createClassParser`](/docs/reference/flex/create-class-parser) which accepts a
+[`createClassParser`](/reference/flex/create-class-parser) which accepts a
 single string and returns `NodeProps`. Let's assume, you want to create a parser
 that supports the following class names:
 
@@ -289,4 +289,4 @@ Now you can use the prop `class` on `<Flex>` and `<Box>` to configure the flexbo
 ```
 
 `@threlte/flex` ships with a [default `ClassParser` which supports Tailwind-like
-class names](/docs/reference/flex/tailwind-parser).
+class names](/reference/flex/tailwind-parser).

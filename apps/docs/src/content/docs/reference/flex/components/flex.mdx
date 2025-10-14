@@ -100,7 +100,7 @@ componentSignature:
 
 The component `<Flex>` is used to create the root of a flex layout. It creates
 the root node for [Yoga](https://yogalayout.com) and provides a context for all
-child [`<Box>`](/docs/reference/flex/box) components to resolve their layout.
+child [`<Box>`](/reference/flex/box) components to resolve their layout.
 
 ## Usage
 
@@ -160,9 +160,9 @@ cases. Depending on the size of your layout, you might need to increase the
 A `classParser` can be used to resolve Yoga Node Props based on classes passed
 to `<Box>` and `<Flex>` components. This is useful if you want to use a CSS-like
 syntax to define your layout. You can define your own `ClassParser` using the
-method [`createClassParser`](/docs/reference/flex/create-class-parser) or by
+method [`createClassParser`](/reference/flex/create-class-parser) or by
 using a parser provided, for instance the Tailwind CSS parser
-[`tailwindParser`](/docs/reference/flex/tailwind-parser).
+[`tailwindParser`](/reference/flex/tailwind-parser).
 
 ```svelte
 <script lang="ts">
@@ -189,7 +189,7 @@ You can change the layout plane to `yz` or `xz` by setting the prop `plane`.
 ### Layout Reflow
 
 [Yoga](https://yogalayout.com) is a layout engine that computes the layout of a
-node tree. If a node (i.e. a [`<Box>`](/docs/reference/flex/box) component) is added or removed
+node tree. If a node (i.e. a [`<Box>`](/reference/flex/box) component) is added or removed
 from the tree, or if a node changes its properties, the layout of the component
 tree needs to be recomputed. This is called a **reflow**.
 
@@ -227,13 +227,13 @@ reflow, you can use the snippet prop `reflow`:
   encapsulated child components to easily request a reflow.
 </Tip>
 
-You may also use the hook [`useReflow`](/docs/reference/flex/use-reflow) to request
+You may also use the hook [`useReflow`](/reference/flex/use-reflow) to request
 a reflow.
 
 ### Reflow Stage
 
 By default, the reflow of the layout is happening in [Threlte's
-mainStage](/docs/learn/basics/scheduling-tasks#default-stages). To change in
+mainStage](/learn/basics/scheduling-tasks#default-stages). To change in
 what stage the layout should reflow, use the prop `reflowStage`:
 
 ```svelte
@@ -260,7 +260,7 @@ Although the width and the height of the `<Flex>` component are required, the
 **dimensions of the contents** of the `<Flex>` component will be measured after a
 [layout reflow](#layout-reflow) and can be retrieved using the following methods:
 
-- Using the hook [`useDimensions`](/docs/reference/flex/use-dimensions)
+- Using the hook [`useDimensions`](/reference/flex/use-dimensions)
 - Using the snippet props `width` and `height`
 
 ```svelte

@@ -2,7 +2,7 @@
 title: Scope with zoom
 ---
 
-This example shows how to utilize the [`useFBO`](/docs/reference/extras/use-fbo) hook to create a sniper scope zoom effect, complete
+This example shows how to utilize the [`useFBO`](/reference/extras/use-fbo) hook to create a sniper scope zoom effect, complete
 with lens distortion and crosshairs.
 
 <Example path="shaders/useFboScope" />
@@ -11,14 +11,14 @@ with lens distortion and crosshairs.
 
 The hook is used to render a scene onto a texture, using
 it in a shader. The [WebGLRenderTarget](https://threejs.org/docs/#api/en/renderers/WebGLRenderTarget) texture
-from [`useFBO`](/docs/reference/extras/use-fbo) hook is used in the scope where a
+from [`useFBO`](/reference/extras/use-fbo) hook is used in the scope where a
 vignette and lens distortion effects are applied and a reticle is added.
 
 ### Scene setup
 
 The scene is constructed using two free models sourced from Sketchfab:
 a piece of terrain and a scope model. These models are converted into Svelte components using the
-[Threlte gltf CLI tool](/docs/reference/gltf/getting-started) tool.
+[Threlte gltf CLI tool](/reference/gltf/getting-started) tool.
 
 The scope model is attached directly to the `<PerspectiveCamera>` so that both move in sync with
 the user's mouse movements. A circular mesh is positioned as a child of the scope and serves as an eyepiece -
@@ -28,7 +28,7 @@ Control over the scope - activation, movement and pointer-lock toggling — is m
 
 ### Rendering the scene to a texture
 
-The [useFBO](/docs/reference/extras/use-fbo) hook is used to prepare a render target for the scope's view texture.
+The [useFBO](/reference/extras/use-fbo) hook is used to prepare a render target for the scope's view texture.
 Given that the scope's viewport occupies only a fraction of the full screen,
 the texture's resolution is appropriately downscaled to conserve resources.
 

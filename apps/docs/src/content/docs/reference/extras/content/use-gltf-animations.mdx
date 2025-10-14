@@ -6,7 +6,7 @@ title: useGltfAnimations
 type: 'hook'
 ---
 
-A convenience hook to use gltf animations loaded by a [\<GLTF>](/docs/reference/extras/gltf) component or by the [`useGltf`](/docs/reference/extras/use-gltf) hook.
+A convenience hook to use gltf animations loaded by a [\<GLTF>](/reference/extras/gltf) component or by the [`useGltf`](/reference/extras/use-gltf) hook.
 
 <Example path="extras/use-gltf-animations" />
 
@@ -41,7 +41,7 @@ Without any arguments, `useGltfAnimations` returns a store which can be bound to
 
 ### With the `useGltf` hook
 
-For cases where you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, `useGltfAnimations` accepts a writable store as its first argument. [`useGltf`](/docs/reference/extras/use-gltf) returns a store that can be directly passed to `useGltfAnimations`.
+For cases where you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, `useGltfAnimations` accepts a writable store as its first argument. [`useGltf`](/reference/extras/use-gltf) returns a store that can be directly passed to `useGltfAnimations`.
 
 ```svelte
 <script lang="ts">

@@ -128,7 +128,7 @@ The `<T>` component uses all the exports from `three`. It will error on things l
 `<T.MeshPhysicalNodeMaterial />` because the `MeshPhysicalNodeMaterial` class is an
 export of `three/webgpu` and not `three`. You have a few options to work this out.
 
-1. Extend `<T>` with all the definitions from `three/webgpu` by using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+1. Extend `<T>` with all the definitions from `three/webgpu` by using the [`extend`](/reference/core/t#extending-the-default-component-catalogue)
    function. Adding all of the definitions will increase the bundle size of your application because both `three` and `three/webgpu` will be imported in a non-tree-shakeable way.
 
 ```svelte title="App.svelte" {3-4}+ {6}+
@@ -154,7 +154,7 @@ export of `three/webgpu` and not `three`. You have a few options to work this ou
 ```
 
 2. Use explicit imports for the objects, functions, and other classes that you use from `three/webgpu`.
-   You can then use `<T>`'s [`is`](/docs/reference/core/t#property-is) prop with those imports from `three/webgpu`.
+   You can then use `<T>`'s [`is`](/reference/core/t#property-is) prop with those imports from `three/webgpu`.
 
 ```svelte title="Scene.svelte" {3}+ {5}+ {10}+
 <script>
@@ -170,7 +170,7 @@ export of `three/webgpu` and not `three`. You have a few options to work this ou
 </T.Mesh>
 ```
 
-3. Same as option #2 but using [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue) with the imports so that you can have `<T.MeshPhysicalNodeMaterial />` etc...
+3. Same as option #2 but using [`extend`](/reference/core/t#extending-the-default-component-catalogue) with the imports so that you can have `<T.MeshPhysicalNodeMaterial />` etc...
 
 ```svelte title="App.svelte" {3-4}+ {6}+
 <script>

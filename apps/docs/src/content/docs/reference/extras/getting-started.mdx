@@ -21,9 +21,9 @@ npm install @threlte/extras
 
 ### Components
 
-Most components are [**abstractions**](/docs/learn/advanced/custom-abstractions) of one or more `<T>` components and forward all props and event listeners to it.
+Most components are [**abstractions**](/learn/advanced/custom-abstractions) of one or more `<T>` components and forward all props and event listeners to it.
 
-Let's look at an example, the [`<OrbitControls>`](/docs/reference/extras/orbit-controls). They are a common component in Three.js applications and can be used to easily manipulate the camera. Let's implement it:
+Let's look at an example, the [`<OrbitControls>`](/reference/extras/orbit-controls). They are a common component in Three.js applications and can be used to easily manipulate the camera. Let's implement it:
 
 ```svelte title="Scene.svelte" {10}+
 <script>
@@ -75,8 +75,8 @@ event listener that is supported by the `<T>` component.
 
 ### Plugins
 
-The package also provides a few [plugins](/docs/learn/advanced/plugins) that can be used to extend the functionality of Threlte and `<T>` components.
-The most notable one is probably the plugin [`interactivity`](/docs/reference/extras/interactivity) that provides a way to interact with the scene. We can
+The package also provides a few [plugins](/learn/advanced/plugins) that can be used to extend the functionality of Threlte and `<T>` components.
+The most notable one is probably the plugin [`interactivity`](/reference/extras/interactivity) that provides a way to interact with the scene. We can
 extend our example from above and implement `interactivity`:
 
 ```svelte title="Scene.svelte" {5}+
@@ -106,20 +106,20 @@ extend our example from above and implement `interactivity`:
 
 Now, when we click on the box, we will see a message in the console. The `interactivity` plugin
 registers a global event listener on the `<canvas>` element and forwards all events to the
-respective `<T>` components. Check out the [guide on events](/docs/learn/basics/events) for more
+respective `<T>` components. Check out the [guide on events](/learn/basics/events) for more
 information on how to use events in Threlte.
 
 <Tip type="tip">
   Plugins are injected via context and therefore need to be implement at the root of your
   application, this is typically your `Scene.svelte` component. Check out our [recommended app
-  structure](/docs/learn/basics/context).
+  structure](/learn/basics/context).
 </Tip>
 
 ### Hooks
 
 Hooks are regular functions with the limitation that they can only be invoked from the top level of
 a component. `'@threlte/extras'` provides useful hooks for loading assets, creating animations
-and more. Let's look at an example where we use the hook [`useGltf`](/docs/reference/extras/use-gltf)
+and more. Let's look at an example where we use the hook [`useGltf`](/reference/extras/use-gltf)
 to load an asset:
 
 ```svelte title="Scene.svelte"
@@ -154,4 +154,4 @@ display a loading message:
 ```
 
 Keep in mind that the hook `useGltf` caches the result as it's using
-[`useLoader`](/docs/reference/core/use-loader) internally.
+[`useLoader`](/reference/core/use-loader) internally.

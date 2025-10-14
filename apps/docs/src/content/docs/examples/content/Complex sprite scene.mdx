@@ -2,7 +2,7 @@
 title: Instanced Sprites
 ---
 
-This example demonstrates [`<InstancedSprites>`](/docs/reference/extras/instanced-sprite), showing
+This example demonstrates [`<InstancedSprites>`](/reference/extras/instanced-sprite), showing
 a few different approaches for instancing and updating large numbers of sprites in your scene.
 
 <Example
@@ -48,7 +48,7 @@ In this case, the spritesheet image is arranged in a grid of 4 rows and 8 column
 `height` to `4` (indicating the number of rows), and `width` to `8` (representing the number of columns).
 The `animations` property is an array, where each element represents a separate animation with a `name` and a `frameRange`.
 
-For detailed information on defining animations and using frame ranges, refer to the [Spritesheet builder section](/docs/reference/extras/instanced-sprite#spritesheetmetadata)
+For detailed information on defining animations and using frame ranges, refer to the [Spritesheet builder section](/reference/extras/instanced-sprite#spritesheetmetadata)
 
 ### Adding the component to the scene
 
@@ -125,7 +125,7 @@ accessed via a `ref` binding.
 
 ### Static
 
-The example in `TreeSpriteAtlas.svelte` demonstrates the setup of static sprites, as outlined in [Static sprites & Atlassing](/docs/reference/extras/instanced-sprite#static-sprites--atlassing).
+The example in `TreeSpriteAtlas.svelte` demonstrates the setup of static sprites, as outlined in [Static sprites & Atlassing](/reference/extras/instanced-sprite#static-sprites--atlassing).
 
 Each frame is named and used as a different tree sprite, selected at random. Then, the playmode is set to "PAUSE," and auto-updates are disabled,
 ensuring that each sprite remains fixed. In this case, the `<Instance/>` component is used for setting positions and frames.

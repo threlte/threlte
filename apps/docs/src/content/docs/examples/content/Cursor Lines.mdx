@@ -2,7 +2,7 @@
 title: Meshlines
 ---
 
-This example was inspired by [OGL's Polyline example](https://oframe.github.io/ogl/examples/?src=polylines.html). It uses [`<MeshLineMaterial>`](/docs/reference/extras/meshline-material) and [`<MeshLineGeometry>`](/docs/reference/extras/meshline-geometry) to create a similar effect.
+This example was inspired by [OGL's Polyline example](https://oframe.github.io/ogl/examples/?src=polylines.html). It uses [`<MeshLineMaterial>`](/reference/extras/meshline-material) and [`<MeshLineGeometry>`](/reference/extras/meshline-geometry) to create a similar effect.
 
 <Tip type="tip">
   This effect is probably better implemented as a fragment shader but the example highlights some
@@ -34,7 +34,7 @@ The camera is positioned at the origin and the mesh is positioned down the z-axi
 
 ### Getting the Cursor Position
 
-To get the cursor position we use Threlte's [interactivity](/docs/reference/extras/interactivity) plugin. The event object that is passed to the `onpointermove` callback has a point property which tells you where the cursor position was when the event was triggered. The cursor position is updated and sent into the `<CursorLine>` component as a prop.
+To get the cursor position we use Threlte's [interactivity](/reference/extras/interactivity) plugin. The event object that is passed to the `onpointermove` callback has a point property which tells you where the cursor position was when the event was triggered. The cursor position is updated and sent into the `<CursorLine>` component as a prop.
 
 ```svelte
 <script lang="ts">

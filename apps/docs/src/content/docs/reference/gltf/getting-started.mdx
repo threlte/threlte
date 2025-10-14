@@ -29,27 +29,27 @@ npx @threlte/gltf@latest /path/to/Model.glb [options]
 
 ### Options
 
-| Option                                                                | Description                                                          |
-| --------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `--output, -o`                                                        | Output file name/path                                                |
-| `--types, -t`                                                         | Add Typescript definitions                                           |
-| `--keepnames, -k`                                                     | Keep original names                                                  |
-| `--meta, -m`                                                          | Include metadata (as `userData`)                                     |
-| `--shadows, -s`                                                       | Let meshes cast and receive shadows                                  |
-| `--printwidth, -w`                                                    | Prettier `printWidth` (default: 120)                                 |
-| `--precision, -p`                                                     | Number of fractional digits (default: 2)                             |
-| `--draco, -d`                                                         | Draco binary path                                                    |
-| `--preload -P`                                                        | Add preload method to module script                                  |
-| `--suspense -u`                                                       | Make the component [suspense-ready](/docs/reference/extras/suspense) |
-| `--isolated, -i`                                                      | Output as isolated module (No `$$restProps` usage)                   |
-| `--root, -r`                                                          | Sets directory from which .gltf file is served                       |
-| `--transform, -T`                                                     | Transform the asset for the web (draco, prune, resize)               |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--resolution, -R`                      | Transform resolution for texture resizing (default: 1024)            |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--simplify, -S`                        | Transform simplification (default: false, experimental)              |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--weld`  | Weld tolerance (default: 0.0001)                                     |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--ratio` | Simplifier ratio (default: 0.75)                                     |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--error` | Simplifier error threshold (default: 0.001)                          |
-| `--debug, -D`                                                         | Debug output                                                         |
+| Option                                                                | Description                                                     |
+| --------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `--output, -o`                                                        | Output file name/path                                           |
+| `--types, -t`                                                         | Add Typescript definitions                                      |
+| `--keepnames, -k`                                                     | Keep original names                                             |
+| `--meta, -m`                                                          | Include metadata (as `userData`)                                |
+| `--shadows, -s`                                                       | Let meshes cast and receive shadows                             |
+| `--printwidth, -w`                                                    | Prettier `printWidth` (default: 120)                            |
+| `--precision, -p`                                                     | Number of fractional digits (default: 2)                        |
+| `--draco, -d`                                                         | Draco binary path                                               |
+| `--preload -P`                                                        | Add preload method to module script                             |
+| `--suspense -u`                                                       | Make the component [suspense-ready](/reference/extras/suspense) |
+| `--isolated, -i`                                                      | Output as isolated module (No `$$restProps` usage)              |
+| `--root, -r`                                                          | Sets directory from which .gltf file is served                  |
+| `--transform, -T`                                                     | Transform the asset for the web (draco, prune, resize)          |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--resolution, -R`                      | Transform resolution for texture resizing (default: 1024)       |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--simplify, -S`                        | Transform simplification (default: false, experimental)         |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--weld`  | Weld tolerance (default: 0.0001)                                |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--ratio` | Simplifier ratio (default: 0.75)                                |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`--error` | Simplifier error threshold (default: 0.001)                     |
+| `--debug, -D`                                                         | Debug output                                                    |
 
 ## Example
 
@@ -288,7 +288,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 ## Animations
 
 If your GLTF contains animations it will add [@threlte/extras's
-`useGltfAnimations`](/docs/reference/extras/use-gltf-animations) hook, which
+`useGltfAnimations`](/reference/extras/use-gltf-animations) hook, which
 extracts all clips and prepares them as actions:
 
 ```svelte
@@ -305,7 +305,7 @@ const onEvent = () => {
 
 ## Suspense
 
-If you want to use the component [`<Suspense>`](/docs/reference/extras/suspense)
+If you want to use the component [`<Suspense>`](/reference/extras/suspense)
 to suspend the rendering of loading components (and therefore models) and
 optionally show a fallback in a parent component component, you can do so by
 passing the flag `--suspense` to make the generated Threlte component

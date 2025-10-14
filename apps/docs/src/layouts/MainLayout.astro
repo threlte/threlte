@@ -3,7 +3,6 @@ import { Image } from 'astro:assets'
 import AppLayout from './AppLayout.astro'
 import LogoWithText from '$assets/logo/threlte-logo.png'
 import Socials from '$components/Socials/Socials.astro'
-import MobileMainNav from '$components/Menu/MobileMainNav.svelte'
 import Footer from '$components/Footer/Footer.astro'
 
 export interface Props {
@@ -47,7 +46,7 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
         <!-- <a href="/showcase">Showcase</a> -->
         <a
           class="hover:text-white"
-          href="/docs/learn/getting-started/introduction"
+          href="/learn/getting-started/introduction"
           >Documentation</a
         >
         <a
@@ -64,19 +63,6 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
       <Socials />
     </div>
   </header>
-
-  <!-- Mobile Nav -->
-  <MobileMainNav client:load>
-    <Image
-      slot="logo"
-      src={LogoWithText}
-      alt="threlte logo"
-      width={152}
-      height={37}
-      class="h-[37px] w-auto"
-    />
-    <Socials slot="socials" />
-  </MobileMainNav>
 
   <slot name="external" />
 

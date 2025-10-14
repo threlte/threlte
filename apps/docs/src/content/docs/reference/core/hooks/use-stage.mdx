@@ -7,7 +7,7 @@ order: 5.2
 
 <Tip type="info">
   Tasks are part of Threlte's *Task Scheduling System*. For details on how to use stages and tasks,
-  see the [scheduling tasks](/docs/learn/basics/scheduling-tasks) page.
+  see the [scheduling tasks](/learn/basics/scheduling-tasks) page.
 </Tip>
 
 The hook `useStage` can be used to create or retrieve a stage.
@@ -71,9 +71,9 @@ This component will implement
 function `perf.begin()` before any frame callbacks are executed and `perf.end()`
 after all frame callbacks have been executed, including rendering. Assuming our
 app didn't add any other stages, we add a stage that runs before Threlte's
-[`mainStage`](/docs/learn/basics/scheduling-tasks#default-stages) (making it the
+[`mainStage`](/learn/basics/scheduling-tasks#default-stages) (making it the
 first stage) and another stage that runs after Threlte's
-[`renderStage`](/docs/learn/basics/scheduling-tasks#default-stages) (making it
+[`renderStage`](/learn/basics/scheduling-tasks#default-stages) (making it
 the last stage). We then call `perf.begin()` in a task of the first stage and
 `perf.end()` in a task of the second stage.
 

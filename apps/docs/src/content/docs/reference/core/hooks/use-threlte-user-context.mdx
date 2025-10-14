@@ -9,8 +9,8 @@ The `UserContext` is a store scoped to the context of your root `<Canvas>` compo
 store and retrieve arbitrary data from anywhere in the Threlte app.
 The `UserContext` contains `UserContextEntries`, which are arbitrary objects in a certain `namespace`.
 Because it's scoped, it's especially interesting for authoring reusable components and inter-component communication.
-In fact, the components [`<OrbitControls>`](/docs/reference/extras/orbit-controls) and
-[`<TransformControls>`](/docs/reference/extras/transform-controls) from `'@threlte/extras'` use this method
+In fact, the components [`<OrbitControls>`](/reference/extras/orbit-controls) and
+[`<TransformControls>`](/reference/extras/transform-controls) from `'@threlte/extras'` use this method
 to communicate with each other.
 
 `useThrelteUserContext` can set and get the user context store at the same time.
