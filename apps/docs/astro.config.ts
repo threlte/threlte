@@ -141,8 +141,35 @@ export default defineConfig({
             ]
           },
           {
-            label: 'GLTF (cli)',
+            label: 'Flex',
             icon: 'right-caret',
+            link: '/reference/flex/getting-started',
+            items: [
+              { label: 'Getting Started', link: '/reference/flex/getting-started' },
+              { label: 'Examples', link: '/reference/flex/examples' },
+              { label: 'Components', autogenerate: { directory: '/reference/flex/components' } },
+              { label: 'Utilities', autogenerate: { directory: '/reference/flex/utilities' } },
+              { label: 'Hooks', autogenerate: { directory: '/reference/flex/hooks' } }
+            ]
+          },
+          {
+            label: 'Studio',
+            icon: 'right-caret',
+            link: '/reference/studio/getting-started',
+            items: [
+              { label: 'Getting Started', link: '/reference/studio/getting-started' },
+              {
+                label: 'Deploying to Production',
+                link: '/reference/studio/deploying-to-production'
+              },
+              { label: 'Components', autogenerate: { directory: '/reference/studio/components' } },
+              { label: 'Advanced', autogenerate: { directory: '/reference/studio/advanced' } },
+              { label: 'Extensions', autogenerate: { directory: '/reference/studio/extensions' } }
+            ]
+          },
+          {
+            label: 'GLTF (cli)',
+            icon: 'forward-slash',
             link: '/reference/gltf/getting-started',
             items: [{ label: 'Getting Started', link: '/reference/gltf/getting-started' }]
           }
