@@ -22,23 +22,14 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.3.4",
-    "@astrojs/preact": "^4.1.0",
     "@astrojs/starlight": "^0.36.0",
     "@astrojs/starlight-tailwind": "^4.0.1",
     "@astrojs/svelte": "^7.1.0",
     "@expressive-code/plugin-line-numbers": "^0.41.3",
-    "@markprompt/css": "^0.10.0",
-    "@markprompt/react": "^0.18.0",
-    "@markprompt/web": "^0.14.3",
-    "@preact/signals": "^2.3.1",
-    "@radix-ui/react-visually-hidden": "^1.0.3",
     "@tailwindcss/postcss": "^4.1.12",
     "@tailwindcss/vite": "^4.1.12",
     "astro": "^5.13.5",
     "gl-noise": "^1.6.1",
-    "highlight.js": "^11.8.0",
-    "highlightjs-svelte": "^1.0.6",
-    "preact": "^10.27.1",
     "starlight-sidebar-topics": "^0.6.1",
     "starlight-sidebar-topics-dropdown": "^0.5.1",
     "three-custom-shader-material": "^6.3.7",
@@ -47,9 +38,7 @@
   "devDependencies": {
     "@dimforge/rapier3d-compat": "^0.16.2",
     "@floating-ui/dom": "^1.6.4",
-    "@inquirer/prompts": "^3.2.0",
     "@lumaai/luma-web": "^0.1.15",
-    "@macfja/svelte-persistent-store": "^2.4.2",
     "@pmndrs/vanilla": "^1.14.1",
     "@shikijs/langs": "^3.13.0",
     "@shikijs/themes": "^3.13.0",
@@ -98,9 +87,5 @@
     "tsx": "^4.8.1",
     "vite": "catalog:",
     "vite-plugin-mkcert": "^1.17.5"
-  },
-  "overrides": {
-    "react": "npm:@preact/compat@latest",
-    "react-dom": "npm:@preact/compat@latest"
   }
 }

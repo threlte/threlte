@@ -7,7 +7,6 @@ import mkcert from 'vite-plugin-mkcert'
 import { threlteStudio } from '@threlte/studio/vite'
 import type { Plugin } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
-import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
 import starlight from '@astrojs/starlight'
@@ -191,8 +190,7 @@ export default defineConfig({
     mdx({
       gfm: false,
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    }),
-    preact({ compat: true, include: ['**/*.tsx'] })
+    })
   ],
   output: 'static',
   vite: {
