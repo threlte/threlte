@@ -130,6 +130,17 @@ export default defineConfig({
             ]
           },
           {
+            label: 'XR',
+            icon: 'right-caret',
+            link: '/reference/xr/getting-started',
+            items: [
+              { label: 'Getting Started', link: '/reference/xr/getting-started' },
+              { label: 'Components', autogenerate: { directory: '/reference/xr/components' } },
+              { label: 'Controls', autogenerate: { directory: '/reference/xr/controls' } },
+              { label: 'Hooks', autogenerate: { directory: '/reference/xr/hooks' } }
+            ]
+          },
+          {
             label: 'GLTF (cli)',
             icon: 'right-caret',
             link: '/reference/gltf/getting-started',
