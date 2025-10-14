@@ -115,6 +115,21 @@ export default defineConfig({
             ]
           },
           {
+            label: 'Theatre',
+            icon: 'right-caret',
+            link: '/reference/theatre/getting-started',
+            items: [
+              { label: 'Getting Started', link: '/reference/theatre/getting-started' },
+              { label: 'Components', autogenerate: { directory: '/reference/theatre/components' } },
+              {
+                label: 'Sheet Object',
+                autogenerate: { directory: '/reference/theatre/sheet-object' }
+              },
+              { label: 'Hooks', autogenerate: { directory: '/reference/theatre/hooks' } },
+              { label: 'Actions', autogenerate: { directory: '/reference/theatre/actions' } }
+            ]
+          },
+          {
             label: 'GLTF (cli)',
             icon: 'right-caret',
             link: '/reference/gltf/getting-started',
