@@ -43,6 +43,9 @@ export default defineConfig({
         { icon: 'github', label: 'Github', href: 'https://github.com/threlte/threlte' },
         { icon: 'discord', label: 'Discord', href: 'https://discord.gg/EqUBCfCaGm' }
       ],
+      editLink: {
+        baseUrl: 'https://github.com/threlte/threlte/edit/main/'
+      },
       components: {
         Sidebar: './src/components/Sidebar.astro'
       },
