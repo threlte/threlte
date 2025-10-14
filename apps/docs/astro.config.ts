@@ -1,8 +1,6 @@
 import AutoImport from 'astro-auto-import'
 import { defineConfig } from 'astro/config'
 import { resolve } from 'path'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypeSlug from 'rehype-slug'
 import mkcert from 'vite-plugin-mkcert'
 import { threlteStudio } from '@threlte/studio/vite'
 import type { Plugin } from 'vite'
@@ -24,9 +22,6 @@ if (process.env.NODE_ENV === 'production') {
 // https://astro.build/config
 export default defineConfig({
   compressHTML: false,
-  markdown: {
-    syntaxHighlight: false
-  },
   prefetch: {
     prefetchAll: true
   },
@@ -187,10 +182,7 @@ export default defineConfig({
         ])
       ]
     }),
-    mdx({
-      gfm: false,
-      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    })
+    mdx()
   ],
   output: 'static',
   vite: {
