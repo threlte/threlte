@@ -82,6 +82,11 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
   filter: drop-shadow(0 0px 50px --value(--color-*));
 }
 
+/* Code blocks */
+.expressive-code .frame {
+  --code-background: var(--color-blue-900);
+}
+
 /* ======= Scrollbar ========================== */
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
