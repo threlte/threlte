@@ -14,7 +14,7 @@ sidebar: {
 
 ## Structuring your app
 
-As a first step we create a new Svelte file called `App.svelte` where we import the [`<Canvas>` component](/reference/core/canvas).
+As a first step we create a new Svelte file called `App.svelte` where we import the [`<Canvas>` component](/reference/core/components/canvas).
 
 ```svelte title="App.svelte"
 <script>
@@ -37,7 +37,7 @@ to create a separate component called `Scene.svelte` and including it in our `Ap
 
 At this point we're just looking at a blank screen. Let's add a simple cube to it.
 
-In `Scene.svelte`, we import the [`<T>` component](/reference/core/t), which is
+In `Scene.svelte`, we import the [`<T>` component](/reference/core/components/t), which is
 the **main building block** of your Threlte application. It's a **generic
 component** that we use to render **any Three.js object**. In this case we're creating a
 [`THREE.Mesh`](https://threejs.org/docs/index.html#api/en/objects/Mesh) which is made up from
@@ -260,7 +260,7 @@ The renderer now uses this camera to render our scene.
 
 <Tip type="info" title="Events">
 
-Threlte supports listening to certain <a href="/reference/core/t#events">events on `<T/>` components</a>. Here, we use the `create`
+Threlte supports listening to certain <a href="/reference/core/components/t#events">events on `<T/>` components</a>. Here, we use the `create`
 event to get a reference to the underlying Three.js object as soon as it's created and use the method `lookAt` to look at the cube.
 
 </Tip>
@@ -337,7 +337,7 @@ and use its `.current` value to set the `scale` property of the `<T.Mesh>` compo
 
 ## Adding animation
 
-Let's add some motion to our cube. We will use Threlte's [`useTask`](/reference/core/use-task) hook to tap
+Let's add some motion to our cube. We will use Threlte's [`useTask`](/reference/core/hooks/use-task) hook to tap
 into Threlte's **unified frame loop** and run a function on every frame. We again use a Pierced Prop to let the
 cube rotate around its y-axis.
 

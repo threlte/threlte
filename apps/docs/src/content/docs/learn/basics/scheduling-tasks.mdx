@@ -37,7 +37,7 @@ and tasks.
 
 ## Scheduler
 
-Every Threlte app has a single scheduler. It is accessible via [`useThrelte()`](/reference/core/use-threlte):
+Every Threlte app has a single scheduler. It is accessible via [`useThrelte()`](/reference/core/hooks/use-threlte):
 
 ```ts
 const { scheduler } = useThrelte()
@@ -63,7 +63,7 @@ By default, Threlte will create two stages for you:
   needed.
 
 These two stages are created automatically and are accessible via
-[`useThrelte()`](/reference/core/use-threlte):
+[`useThrelte()`](/reference/core/hooks/use-threlte):
 
 ```ts
 const { mainStage, renderStage } = useThrelte()
@@ -145,10 +145,10 @@ By default, Threlte will create a single task for you:
 
 - **`autoRenderTask`**: This task is part of [Threlte's
   `renderStage`](#default-stages) and will render the scene if
-  [`autoRender`](/reference/core/canvas) is set to `true`.
+  [`autoRender`](/reference/core/components/canvas) is set to `true`.
 
 This task is created automatically and is accessible via
-[`useThrelte()`](/reference/core/use-threlte):
+[`useThrelte()`](/reference/core/hooks/use-threlte):
 
 ```ts
 const { autoRenderTask } = useThrelte()

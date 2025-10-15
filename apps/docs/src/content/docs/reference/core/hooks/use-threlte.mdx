@@ -31,7 +31,7 @@ toneMapping.set(THREE.LinearToneMapping)
 ### Usage
 
 <Tip type="info">
-  This hook relies on context passed down by the [`<Canvas>`](/reference/core/canvas) component and can only be used in a child of that component.
+  This hook relies on context passed down by the [`<Canvas>`](/reference/core/components/canvas) component and can only be used in a child of that component.
 </Tip>
 
 ```ts
@@ -61,7 +61,7 @@ const {
 
 ### `renderMode`
 
-If the [renderMode is set to `'on-demand'`](/reference/core/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
+If the [renderMode is set to `'on-demand'`](/reference/core/components/canvas) and you are manually editing objects or materials, be sure to invalidate the current frame to request a rerender:
 
 ```ts
 const { invalidate } = useThrelte()
@@ -69,7 +69,7 @@ const { invalidate } = useThrelte()
 invalidate()
 ```
 
-If the [renderMode is set to `'manual'`](/reference/core/canvas) you must manually trigger a re-render:
+If the [renderMode is set to `'manual'`](/reference/core/components/canvas) you must manually trigger a re-render:
 
 ```ts
 const { advance } = useThrelte()

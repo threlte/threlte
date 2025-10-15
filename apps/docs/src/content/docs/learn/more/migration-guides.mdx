@@ -512,7 +512,7 @@ Threlte context available via `useThrelte()`.
 
 When `autoRender` is `false`, Threlte will not render your scene automatically
 and will enable you to implement a custom render pipeline using the hook
-[`useTask`](/reference/core/use-task). If adding a task to render the scene
+[`useTask`](/reference/core/hooks/use-task). If adding a task to render the scene
 to Threlte's
 [`renderStage`](/learn/basics/scheduling-tasks#default-stages), the task
 will only be called in respect to the `renderMode` prop. Previously, this
@@ -521,7 +521,7 @@ explicit here is better.
 
 ### `useFrame`
 
-The hook [`useTask`](/reference/core/use-task) replaces `useFrame`. It has
+The hook [`useTask`](/reference/core/hooks/use-task) replaces `useFrame`. It has
 a slightly different signature and allows you to to add a `task` to Threlte's
 _Task Scheduling System_. A task may have dependencies to other tasks, which you
 can think of as the big brother of the `order` option of `useFrame`.
@@ -531,7 +531,7 @@ can think of as the big brother of the `order` option of `useFrame`.
 The callback to `useTask` now only receives the delta time since the last frame.
 The Threlte context previously available as the first argument to the callback
 of `useFrame` should be retrieved using the hook
-[`useThrelte`](/reference/core/use-threlte).
+[`useThrelte`](/reference/core/hooks/use-threlte).
 
 ```ts title="Threlte 6"
 useFrame(({ camera, scene }, delta) => {
@@ -609,7 +609,7 @@ useTask(
 
 ### `useRender`
 
-The hook [`useTask`](/reference/core/use-task) also replaces `useRender`.
+The hook [`useTask`](/reference/core/hooks/use-task) also replaces `useRender`.
 Previously, `useRender` allowed you to define a callback that was invoked after
 all `useFrame` callbacks have been invoked to render your scene with a custom
 render pipeline. This is now possible with `useTask` as well. Threlte provides a
@@ -640,7 +640,7 @@ useTask(
 The callback to `useTask` now only receives the delta time since the last frame.
 The Threlte context previously available as the first argument to the callback
 of `useRender` should be retrieved using the hook
-[`useThrelte`](/reference/core/use-threlte).
+[`useThrelte`](/reference/core/hooks/use-threlte).
 
 ```ts title="Threlte 6"
 useRender(({ camera, scene }, delta) => {
@@ -729,7 +729,7 @@ your Threlte 5 project to Threlte v6.
 
 Preprocessing is not needed anymore starting from Threlte 6. This means you
 may remove the preprocessor `@threlte/preprocess` from your project as well as its
-configuration in `svelte.config.js`. You can now use the [component `<T>`](/reference/core/t) directly.
+configuration in `svelte.config.js`. You can now use the [component `<T>`](/reference/core/components/t) directly.
 
 ### `<Three>` is now `<T>`
 

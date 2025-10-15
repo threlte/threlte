@@ -9,7 +9,7 @@ There are a number of different asset types you might like to use in your
 Threlte application. Three.js has a [ton of different
 loaders](https://threejs.org/docs/index.html?q=loader) that Threlte integrates
 well with. You're recommended to use the
-[useLoader](/reference/core/use-loader) hook which will cache any asset it
+[useLoader](/reference/core/hooks/use-loader) hook which will cache any asset it
 loads and wrap the asset in an
 [asyncWritable](/reference/core/utilities#asyncwritable) for convenience.
 Caching assets will reduce network requests, bandwidth, and memory usage, which
@@ -208,7 +208,7 @@ effects you can achieve, then use those examples as a guide for your own
 
 ## Async loading
 
-The return value from [useLoader](/reference/core/use-loader) is an
+The return value from [useLoader](/reference/core/hooks/use-loader) is an
 `AsyncWritable` custom store. Its value will be `undefined` until the asset has
 loaded.
 

@@ -16,7 +16,7 @@ npm install @threlte/core three @types/three
 
 ## Usage
 
-Every Threlte application must be wrapped in a [`<Canvas>` component](/reference/core/canvas). This component is responsible
+Every Threlte application must be wrapped in a [`<Canvas>` component](/reference/core/components/canvas). This component is responsible
 for creating `THREE.WebGLRenderer` and providing a state for every child component.
 
 ```svelte title="App.svelte"
@@ -30,7 +30,7 @@ for creating `THREE.WebGLRenderer` and providing a state for every child compone
 </Canvas>
 ```
 
-The main building block of a Threlte application is the [`<T>` component](/reference/core/t). Use this component to instantiate
+The main building block of a Threlte application is the [`<T>` component](/reference/core/components/t). Use this component to instantiate
 any Three.js object available in the `THREE` namespace.
 
 ```svelte title="Scene.svelte"

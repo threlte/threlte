@@ -18,7 +18,7 @@ The hook `useSuspense` is used to mark a resource as being used in a
 The hook returns a function that allows you to mark a resource as being used in
 a `<Suspense>` boundary. To suspend the closest `<Suspense>` boundary, call the
 function returned by `useSuspense()` and pass a promise as the first argument.
-Because [`useLoader().load()`](/reference/core/use-loader) returns an
+Because [`useLoader().load()`](/reference/core/hooks/use-loader) returns an
 [`AsyncWritable`](/reference/core/utilities#asyncwritable), the result of
 `useLoader().load()` can be passed directly to the function returned by
 `useSuspense()`.
