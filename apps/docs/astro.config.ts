@@ -47,9 +47,10 @@ export default defineConfig({
         baseUrl: 'https://github.com/threlte/threlte/edit/main/'
       },
       components: {
-        Sidebar: './src/components/Sidebar.astro'
+        Sidebar: './src/components/Sidebar.astro',
+        SocialIcons: './src/components/SocialIcons.astro'
       },
-      customCss: ['./src/styles/app.css', './src/styles/globals.css'],
+      customCss: ['./src/styles/app.css'],
       plugins: [
         starlightSidebarTopics([
           {
