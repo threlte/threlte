@@ -1,48 +1,12 @@
-@import 'tailwindcss';
-
 /*
 Remember tailwind can't resolve dynamic class names.
 https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-names
 */
+@layer base, starlight, theme, components, utilities;
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-}
-
-@utility text-faded {
-  color: color-mix(in oklab, var(--color-white) 60%, transparent);
-}
-
-@utility text-highlight {
-  color: var(--color-white);
-  --tw-font-weight: var(--font-weight-bold);
-  font-weight: var(--font-weight-bold);
-}
-
-/* https://tailwindcss.com/docs/adding-custom-styles#functional-utilities */
-@utility glow-* {
-  /* prettier-ignore */
-  box-shadow: 0 0px 40px -3px --value(--color-*);
-}
-
-@utility text-glow-* {
-  /* prettier-ignore */
-  filter: drop-shadow(0 0px 50px --value(--color-*));
-}
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
 /* https://tailwindcss.com/docs/font-family */
 /* https://tailwindcss.com/docs/colors#customizing-your-colors */
@@ -91,6 +55,31 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
   --left-sidebar-width: 250px;
   --right-sidebar-width: 250px;
   --docs-navbar-height: 70px;
+  --sl-color-text-accent: var(--color-orange-500);
+  --sl-color-bg-nav: #0a0f19;
+  --sl-color-bg-sidebar: #0a0f19;
+  --sl-color-bg: #0a0f19;
+}
+
+@utility text-faded {
+  color: color-mix(in oklab, var(--color-white) 60%, transparent);
+}
+
+@utility text-highlight {
+  color: var(--color-white);
+  --tw-font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-bold);
+}
+
+/* https://tailwindcss.com/docs/adding-custom-styles#functional-utilities */
+@utility glow-* {
+  /* prettier-ignore */
+  box-shadow: 0 0px 40px -3px --value(--color-*);
+}
+
+@utility text-glow-* {
+  /* prettier-ignore */
+  filter: drop-shadow(0 0px 50px --value(--color-*));
 }
 
 /* ======= Scrollbar ========================== */
