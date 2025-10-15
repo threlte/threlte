@@ -1,5 +1,4 @@
 <script lang="ts">
-  import CopyCodeButton from '../Code/CopyCodeButton.svelte'
   import InstallButton from './InstallButton.svelte'
   import { onMount } from 'svelte'
 
@@ -222,5 +221,5 @@
     {installCode}
   </code>
 
-  <CopyCodeButton code={installCode} />
+  <!-- <CopyCodeButton code={installCode} /> -->
 </div>
