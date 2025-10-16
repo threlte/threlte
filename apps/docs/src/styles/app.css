@@ -81,6 +81,11 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
   filter: drop-shadow(0 0px 50px --value(--color-*));
 }
 
+/* ================= Header ================== */
+header.header {
+  border-bottom: 1px solid var(--color-orange-800);
+}
+
 /* ================= Sidebar ================== */
 .sidebar-pane {
   background-color: var(--sl-color-black);
