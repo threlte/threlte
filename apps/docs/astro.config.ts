@@ -50,6 +50,7 @@ export default defineConfig({
         Sidebar: './src/components/Sidebar.astro',
         SocialIcons: './src/components/SocialIcons.astro'
       },
+      favicon: '/icons/favicon-16x16.png',
       customCss: ['./src/styles/app.css'],
       plugins: [
         starlightSidebarTopics([
@@ -184,6 +185,16 @@ export default defineConfig({
             items: [{ label: 'Getting Started', link: '/reference/gltf/getting-started' }]
           }
         ])
+      ],
+      head: [
+        {
+          tag: 'link',
+          attrs: { rel: 'preconnect', href: 'https://fonts.googleapis.com' }
+        },
+        {
+          tag: 'link',
+          attrs: { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: true }
+        }
       ]
     }),
     mdx()
