@@ -52,13 +52,12 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
 }
 
 :root {
-  --left-sidebar-width: 250px;
-  --right-sidebar-width: 250px;
-  --docs-navbar-height: 70px;
+  --sl-nav-height: 70px;
+  --sl-sidebar-width: 250px;
   --sl-color-text-accent: var(--color-orange-500);
+  --sl-color-bg: #0a0f19;
   --sl-color-bg-nav: #0a0f19;
   --sl-color-bg-sidebar: #0a0f19;
-  --sl-color-bg: #0a0f19;
 }
 
 @utility text-faded {
@@ -82,9 +81,17 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
   filter: drop-shadow(0 0px 50px --value(--color-*));
 }
 
-/* Code blocks */
+/* ================= Code blocks ================== */
 .expressive-code .frame {
   --code-background: var(--color-blue-900);
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .title {
+  background-color: var(--color-blue-900);
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .header {
+  background: none;
 }
 
 /* ======= Scrollbar ========================== */
