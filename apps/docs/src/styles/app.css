@@ -100,6 +100,11 @@ details > ul > li:has(a[aria-current='page']) {
   border-color: var(--sl-color-text-accent);
 }
 
+/* ================= Search ================== */
+site-search > dialog > div.dialog-frame {
+  background-color: var(--sl-color-black);
+}
+
 /* ================= Code blocks ================== */
 .expressive-code .frame {
   --code-background: var(--color-blue-900);
