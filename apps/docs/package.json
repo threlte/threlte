@@ -31,7 +31,6 @@
     "astro": "^5.13.5",
     "gl-noise": "^1.6.1",
     "starlight-sidebar-topics": "^0.6.1",
-    "starlight-sidebar-topics-dropdown": "^0.5.1",
     "three-custom-shader-material": "^6.3.7",
     "typescript": "catalog:"
   },

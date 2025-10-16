@@ -47,6 +47,7 @@ export default defineConfig({
         baseUrl: 'https://github.com/threlte/threlte/edit/main/'
       },
       components: {
+        Header: './src/components/Header.astro',
         Sidebar: './src/components/Sidebar.astro',
         SocialIcons: './src/components/SocialIcons.astro'
       },

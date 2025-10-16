@@ -47,6 +47,7 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
   --color-green-700: oklch(0.4664 0.1318 145.42); /* #176C25 */
   --color-green-800: oklch(0.321 0.0857 145.86); /* #0D3E15 */
   --color-green-900: oklch(0.1516 0.0309 149.23); /* #030F05 */
+  --color-black: #0a0f19;
   --text-2xs: 0.625rem;
   --text-3xs: 0.5rem;
 }
@@ -55,9 +56,8 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
   --sl-nav-height: 70px;
   --sl-sidebar-width: 250px;
   --sl-color-text-accent: var(--color-orange-500);
-  --sl-color-bg: #0a0f19;
-  --sl-color-bg-nav: #0a0f19;
-  --sl-color-bg-sidebar: #0a0f19;
+  --sl-color-black: var(--color-black);
+  --sl-color-bg-nav: var(--color-black);
 }
 
 @utility text-faded {
@@ -79,6 +79,25 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
 @utility text-glow-* {
   /* prettier-ignore */
   filter: drop-shadow(0 0px 50px --value(--color-*));
+}
+
+/* ================= Sidebar ================== */
+.sidebar-pane {
+  background-color: var(--sl-color-black);
+}
+
+#starlight-sidebar-topics-dropdown-menu {
+  background-color: var(--sl-color-black);
+  border: 1px solid var(--sl-color-gray-5);
+}
+
+a[aria-current='page'] {
+  background: none;
+  color: var(--sl-color-text-accent);
+}
+
+details > ul > li:has(a[aria-current='page']) {
+  border-color: var(--sl-color-text-accent);
 }
 
 /* ================= Code blocks ================== */

@@ -1,0 +1,264 @@
+---
+import { Badge, Icon } from '@astrojs/starlight/components'
+import type { ComponentProps } from 'astro/types'
+
+const { topics } = Astro.locals.starlightSidebarTopics
+const currentTopic = topics.find((topic) => topic.isCurrent)
+---
+
+<div class="starlight-sidebar-topics-dropdown-dropdown">
+  <button
+    id="starlight-sidebar-topics-dropdown-button"
+    class="starlight-sidebar-topics-dropdown-button"
+  >
+    {
+      currentTopic?.icon && (
+        <div class="starlight-sidebar-topics-dropdown-button-icon">
+          <Icon name={currentTopic.icon as ComponentProps<typeof Icon>['name']} />
+        </div>
+      )
+    }
+    <span class="starlight-sidebar-topics-dropdown-button-label">{currentTopic?.label}</span>
+    {
+      currentTopic?.badge && (
+        <Badge
+          class="starlight-sidebar-topics-dropdown-badge"
+          text={currentTopic.badge.text}
+          variant={currentTopic.badge.variant}
+        />
+      )
+    }
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 15 15"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-4 w-4 opacity-50"
+      aria-hidden="true"
+      ><path
+        d="M4.93179 5.43179C4.75605 5.60753 4.75605 5.89245 4.93179 6.06819C5.10753 6.24392 5.39245 6.24392 5.56819 6.06819L7.49999 4.13638L9.43179 6.06819C9.60753 6.24392 9.89245 6.24392 10.0682 6.06819C10.2439 5.89245 10.2439 5.60753 10.0682 5.43179L7.81819 3.18179C7.73379 3.0974 7.61933 3.04999 7.49999 3.04999C7.38064 3.04999 7.26618 3.0974 7.18179 3.18179L4.93179 5.43179ZM10.0682 9.56819C10.2439 9.39245 10.2439 9.10753 10.0682 8.93179C9.89245 8.75606 9.60753 8.75606 9.43179 8.93179L7.49999 10.8636L5.56819 8.93179C5.39245 8.75606 5.10753 8.75606 4.93179 8.93179C4.75605 9.10753 4.75605 9.39245 4.93179 9.56819L7.18179 11.8182C7.35753 11.9939 7.64245 11.9939 7.81819 11.8182L10.0682 9.56819Z"
+        fill="currentColor"
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+      ></path></svg
+    >
+  </button>
+
+  <div
+    id="starlight-sidebar-topics-dropdown-menu"
+    class="starlight-sidebar-topics-dropdown-menu"
+    hidden
+  >
+    {
+      topics.map((topic) => {
+        return (
+          <a
+            href={topic.link}
+            class:list={{
+              'starlight-sidebar-topics-dropdown-item': true,
+              'starlight-sidebar-topics-dropdown-current-item': topic.isCurrent
+            }}
+          >
+            {topic.icon && (
+              <div class="starlight-sidebar-topics-dropdown-icon">
+                <Icon name={topic.icon as ComponentProps<typeof Icon>['name']} />
+              </div>
+            )}
+            <span class="starlight-sidebar-topics-dropdown-label">{topic.label}</span>
+            {topic.badge && (
+              <Badge
+                class="starlight-sidebar-topics-dropdown-badge"
+                text={topic.badge.text}
+                variant={topic.badge.variant}
+              />
+            )}
+          </a>
+        )
+      })
+    }
+  </div>
+</div>
+
+<style>
+  .starlight-sidebar-topics-dropdown-dropdown {
+    position: relative;
+    display: block;
+    width: calc(100% - 2 * 2px);
+    margin-inline: 2px;
+    margin-top: 4px;
+  }
+
+  .starlight-sidebar-topics-dropdown-button {
+    display: flex;
+    align-items: center;
+    background-color: var(--sl-color-black);
+    border: none;
+    border-radius: 0.25rem;
+    color: var(--sl-color-white);
+    padding: 0.3rem 0.5rem;
+    cursor: pointer;
+    width: 100%;
+  }
+
+  .starlight-sidebar-topics-dropdown-button::before {
+    content: '';
+    background-color: var(--sl-color-black);
+    border-radius: 0.25rem;
+    inset: -2px;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .starlight-sidebar-topics-dropdown-button:has(
+      .starlight-sidebar-topics-dropdown-button-icon
+    )::before {
+    content: '';
+    background-image: linear-gradient(
+      to right,
+      var(--sl-color-text-accent) calc(1.4rem + 16px + 2px),
+      var(--sl-color-gray-5) 0
+    );
+  }
+
+  .starlight-sidebar-topics-dropdown-button:has(.starlight-sidebar-topics-dropdown-button-icon) {
+    background: linear-gradient(
+      to right,
+      var(--sl-color-text-accent) calc(1.4rem + 16px),
+      var(--sl-color-black) 0
+    );
+  }
+
+  .starlight-sidebar-topics-dropdown-button-icon {
+    align-items: center;
+    border-radius: 0.25rem;
+    display: flex;
+    justify-content: center;
+    padding: 0.2rem;
+    background-color: var(--sl-color-text-accent);
+    color: var(--sl-color-text-invert);
+  }
+
+  .starlight-sidebar-topics-dropdown-button-label {
+    font-weight: 600;
+    margin-right: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .starlight-sidebar-topics-dropdown-button:has(.starlight-sidebar-topics-dropdown-button-icon)
+    .starlight-sidebar-topics-dropdown-button-label {
+    font-weight: 600;
+    margin-left: 1rem;
+  }
+
+  .starlight-sidebar-topics-dropdown-label {
+    font-weight: 600;
+    margin-right: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .starlight-sidebar-topics-dropdown-item:has(.starlight-sidebar-topics-dropdown-icon)
+    .starlight-sidebar-topics-dropdown-label {
+    margin-left: 0.5rem;
+  }
+
+  .starlight-sidebar-topics-dropdown-button > svg {
+    margin-left: auto;
+    font-size: 1rem;
+    color: var(--sl-color-white);
+  }
+
+  .starlight-sidebar-topics-dropdown-menu {
+    display: block;
+    position: absolute;
+    margin-top: 0.5rem;
+    width: 100%;
+    background-color: var(--sl-color-black);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    min-width: 200px;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    z-index: 1000000;
+  }
+
+  .starlight-sidebar-topics-dropdown-menu[hidden] {
+    display: none;
+  }
+
+  .starlight-sidebar-topics-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 0.3em;
+    color: var(--sl-color-white);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .starlight-sidebar-topics-dropdown-icon {
+    align-items: center;
+    border-radius: 0.25rem;
+    border: 1px solid var(--sl-color-gray-4);
+    display: flex;
+    justify-content: center;
+    padding: 0.25rem;
+  }
+
+  .starlight-sidebar-topics-dropdown-button:is(
+      .starlight-sidebar-topics-dropdown-current,
+      :hover,
+      :focus-visible
+    )
+    .starlight-sidebar-topics-dropdown-icon {
+    background-color: var(--sl-color-text-accent);
+    border-color: var(--sl-color-text-accent);
+    color: var(--sl-color-text-invert);
+  }
+
+  .starlight-sidebar-topics-dropdown-item:is(
+      :hover,
+      .starlight-sidebar-topics-dropdown-current-item
+    )
+    .starlight-sidebar-topics-dropdown-icon {
+    background-color: var(--sl-color-text-accent);
+    border-color: var(--sl-color-text-accent);
+    color: var(--sl-color-text-invert);
+  }
+
+  .starlight-sidebar-topics-dropdown-badge {
+    margin-left: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
+
+<script is:inline>
+  const dropdownButton = document.getElementById('starlight-sidebar-topics-dropdown-button')
+  const dropdownMenu = document.getElementById('starlight-sidebar-topics-dropdown-menu')
+
+  if (!dropdownButton || !dropdownMenu) {
+    throw new Error('Dropdown elements not found')
+  }
+
+  dropdownButton.addEventListener('click', () => {
+    const isOpen = !dropdownMenu.hidden
+    dropdownMenu.hidden = isOpen
+  })
+
+  function closeDropdown(event) {
+    if (
+      dropdownMenu &&
+      !dropdownMenu.contains(event.target) &&
+      dropdownButton &&
+      !dropdownButton.contains(event.target)
+    ) {
+      dropdownMenu.hidden = true
+    }
+  }
+
+  document.addEventListener('click', closeDropdown)
+</script>
