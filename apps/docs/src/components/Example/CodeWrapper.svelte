@@ -67,6 +67,7 @@
     !expanded && 'max-h-[100px]! overflow-hidden',
     hidePreview && 'rounded-md! border-t'
   ]}
+  data-pagefind-ignore
 >
   {#if !expanded}
     <div
