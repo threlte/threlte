@@ -21,8 +21,8 @@ const slug = Astro.params.slug
 <!doctype html>
 <html lang="en">
   <head></head>
-  <body>
-    <div>
+  <body class="m-0 overflow-hidden bg-blue-900 p-0">
+    <div class="absolute left-0 top-0 h-full w-full">
       <Loader
         client:load
         {slug}
@@ -30,19 +30,3 @@ const slug = Astro.params.slug
     </div>
   </body>
 </html>
-
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-  }
-
-  div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-  }
-</style>
