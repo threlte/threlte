@@ -1,22 +1,6 @@
 ---
-order: 8.1
-category: '@threlte/extras'
-title: '<Portal>'
+title: <Portal>
 sourcePath: 'packages/extras/src/lib/components/portals/Portal/Portal.svelte'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'id',
-          type: 'string',
-          default: '"default"',
-          description: 'The id of the portal to render into.',
-          required: false
-        }
-      ]
-  }
 ---
 
 A component that renders its children as children of an object that can exist **anywhere in your Threlte application**.
@@ -43,3 +27,19 @@ For more complex cases where it's hard to query the target, using `<Portal>` may
 You can define where a `<Portal>` should render its children by using the component [`<PortalTarget>`](/reference/extras/portal-target).
 
 <Example path="extras/portals/basic" />
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'id',
+        type: 'string',
+        default: '"default"',
+        description: 'The id of the portal to render into.',
+        required: false
+      }
+    ]
+  }}
+/>

@@ -1,32 +1,6 @@
 ---
-order: 1.4
-category: '@threlte/extras'
 title: '<SVG>'
 sourcePath: 'packages/extras/src/lib/components/Svg/Svg.svelte'
-type: 'component'
-componentSignature:
-  {
-    'props':
-      [
-        { name: 'src', type: 'string', required: true, description: 'Can be a URL or SVG data.' },
-        { name: 'skipFill', type: 'boolean', required: false, default: 'false' },
-        { name: 'skipStrokes', type: 'boolean', required: false, default: 'false' },
-        {
-          name: 'fillMaterialProps',
-          type: 'Props<typeof MeshBasicMaterial>',
-          required: false,
-          default: '{}'
-        },
-        {
-          name: 'strokeMaterialProps',
-          type: 'Props<typeof MeshBasicMaterial>',
-          required: false,
-          default: '{}'
-        },
-        { name: 'fillMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' },
-        { name: 'strokeMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' }
-      ]
-  }
 ---
 
 Renders an SVG using Three.js' SVGLoader.
@@ -50,3 +24,29 @@ Renders an SVG using Three.js' SVGLoader.
   position.y={1.5}
 />
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      { name: 'src', type: 'string', required: true, description: 'Can be a URL or SVG data.' },
+      { name: 'skipFill', type: 'boolean', required: false, default: 'false' },
+      { name: 'skipStrokes', type: 'boolean', required: false, default: 'false' },
+      {
+        name: 'fillMaterialProps',
+        type: 'Props<typeof MeshBasicMaterial>',
+        required: false,
+        default: '{}'
+      },
+      {
+        name: 'strokeMaterialProps',
+        type: 'Props<typeof MeshBasicMaterial>',
+        required: false,
+        default: '{}'
+      },
+      { name: 'fillMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' },
+      { name: 'strokeMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' }
+    ]
+  }}
+/>

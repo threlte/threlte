@@ -1,24 +1,6 @@
 ---
-order: 2.4
-category: '@threlte/extras'
 title: '<TransformControls>'
 sourcePath: 'packages/extras/src/lib/components/controls/TransformControls/TransformControls.svelte'
-type: 'component'
-componentSignature:
-  {
-    pretext: 'The component <code>&lt;TransformControls&gt;</code> extends both <code>&lt;T.TransformControls&gt;</code> and <code>&lt;T.Group&gt;</code>. You may pass any property of either of these components to the component <code>&lt;TransformControls&gt;</code>.',
-    props:
-      [
-        { name: 'autoPauseOrbitControls', type: 'boolean', required: false },
-        { name: 'autoPauseTrackballControls', type: 'boolean', required: false },
-        { name: 'object', type: 'THREE.Object3D', required: false }
-      ],
-    bindings:
-      [
-        { name: 'controls', type: 'THREE.TransformControls' },
-        { name: 'group', type: 'THREE.Group' }
-      ]
-  }
 ---
 
 This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
@@ -69,3 +51,21 @@ The `<TransformControls>` component can also be used to transform an object pass
 
 <TransformControls object={someObject} />
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    pretext:
+      '<code>&lt;TransformControls&gt;</code> extends both <code>&lt;T.TransformControls&gt;</code> and <code>&lt;T.Group&gt;</code>. You may pass any property of either of these components to the component <code>&lt;TransformControls&gt;</code>.',
+    props: [
+      { name: 'autoPauseOrbitControls', type: 'boolean', required: false },
+      { name: 'autoPauseTrackballControls', type: 'boolean', required: false },
+      { name: 'object', type: 'THREE.Object3D', required: false }
+    ],
+    bindings: [
+      { name: 'controls', type: 'THREE.TransformControls' },
+      { name: 'group', type: 'THREE.Group' }
+    ]
+  }}
+/>

@@ -1,17 +1,6 @@
 ---
-order: 2.3
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/controls/TrackballControls/TrackballControls.svelte'
 title: '<TrackballControls>'
-type: 'component'
-componentSignature:
-  {
-    extends:
-      {
-        type: 'TrackballControls',
-        url: 'https://threejs.org/docs/#examples/controls/TrackballControls'
-      }
-  }
+sourcePath: 'packages/extras/src/lib/components/controls/TrackballControls/TrackballControls.svelte'
 ---
 
 `<TrackballControls>` allow the camera to orbit freely around a target without causing gimbal lock. This type of camera controller is commonly used when the concepts of up and down are less important than the ability to carefully inspect a model from every angle. For an alternative camera controller, see [`<OrbitControls>`](/reference/extras/orbit-controls).
@@ -48,3 +37,15 @@ This example shows off just a few of the configurable properties of `<TrackballC
 
 `<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element
 the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
+
+## Component Signature
+
+<ComponentSignature
+  name="<TrackballControls>"
+  signature={{
+    extends: {
+      type: 'TrackballControls',
+      url: 'https://threejs.org/docs/#examples/controls/TrackballControls'
+    }
+  }}
+/>

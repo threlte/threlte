@@ -1,72 +1,6 @@
 ---
-order: 1.2
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/HTML/HTML.svelte'
 title: <HTML>
-type: 'component'
-componentSignature:
-  {
-    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-    exports:
-      [
-        {
-          name: 'startRendering',
-          type: '() => void',
-          description: 'Manually start the render task'
-        },
-        { name: 'stopRendering', type: '() => void', description: 'Manually stop the render task' },
-        {
-          description: 'renders a single frame of the provided html',
-          name: 'render',
-          type: '() => void'
-        }
-      ],
-    props:
-      [
-        { name: 'transform', type: 'boolean', default: 'false', required: false },
-        { name: 'calculatePosition', type: '(
-            obj: Object3D,
-            camera: Camera,
-            size: { width: number; height: number }
-            ) => [number, number]', required: false },
-        { name: 'eps', type: 'number', default: '0.001', required: false },
-        {
-          name: 'occlude',
-          type: "boolean | THREE.Object3D[] | 'blending'",
-          default: 'false',
-          required: false
-        },
-        {
-          name: 'zIndexRange',
-          type: '[number, number]',
-          default: '[16777271, 0]',
-          required: false
-        },
-        { name: 'sprite', type: 'boolean', default: 'false', required: false },
-        {
-          name: 'pointerEvents',
-          type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
-          default: "'auto'",
-          required: false
-        },
-        { name: 'center', type: 'boolean', default: 'false', required: false },
-        { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
-        { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
-        { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
-        { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false },
-        { name: 'castShadow', type: 'boolean', default: 'undefined', required: false },
-        { name: 'receiveShadow', type: 'boolean', default: 'undefined', required: false },
-        { name: 'material', type: 'THREE.Material', default: 'undefined', required: false },
-        { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined', required: false },
-        {
-          name: 'autoRender',
-          type: 'boolean',
-          default: 'true',
-          required: false,
-          description: 'whether the render task should be ran every frame'
-        }
-      ]
-  }
+sourcePath: 'packages/extras/src/lib/components/HTML/HTML.svelte'
 ---
 
 This component is a port of [drei's `<Html>`
@@ -294,3 +228,69 @@ vanilla code has be wrapped into
 [threlte-uikit](https://github.com/threlte/threlte-uikit) for use in
 threlte projects. There are situations where this package is necessary, for
 instance the `<HTML/>` component cannot be used within XR sessions.
+
+## Component Signature
+
+<ComponentSignature
+  name="<HTML>"
+  signature={{
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    exports: [
+      {
+        name: 'startRendering',
+        type: '() => void',
+        description: 'Manually start the render task'
+      },
+      { name: 'stopRendering', type: '() => void', description: 'Manually stop the render task' },
+      {
+        description: 'renders a single frame of the provided html',
+        name: 'render',
+        type: '() => void'
+      }
+    ],
+    props: [
+      { name: 'transform', type: 'boolean', default: 'false', required: false },
+      {
+        name: 'calculatePosition',
+        type: `(obj: Object3D, camera: Camera, size: { width: number; height: number }) => [number, number]`,
+        required: false
+      },
+      { name: 'eps', type: 'number', default: '0.001', required: false },
+      {
+        name: 'occlude',
+        type: "boolean | THREE.Object3D[] | 'blending'",
+        default: 'false',
+        required: false
+      },
+      {
+        name: 'zIndexRange',
+        type: '[number, number]',
+        default: '[16777271, 0]',
+        required: false
+      },
+      { name: 'sprite', type: 'boolean', default: 'false', required: false },
+      {
+        name: 'pointerEvents',
+        type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
+        default: "'auto'",
+        required: false
+      },
+      { name: 'center', type: 'boolean', default: 'false', required: false },
+      { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
+      { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
+      { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
+      { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false },
+      { name: 'castShadow', type: 'boolean', default: 'undefined', required: false },
+      { name: 'receiveShadow', type: 'boolean', default: 'undefined', required: false },
+      { name: 'material', type: 'THREE.Material', default: 'undefined', required: false },
+      { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined', required: false },
+      {
+        name: 'autoRender',
+        type: 'boolean',
+        default: 'true',
+        required: false,
+        description: 'whether the render task should be ran every frame'
+      }
+    ]
+  }}
+/>

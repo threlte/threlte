@@ -1,41 +1,6 @@
 ---
-order: 1.5
-category: '@threlte/extras'
 title: '<Text3DGeometry>'
 sourcePath: 'packages/extras/src/lib/components/Text3DGeometry/Text3DGeometry.svelte'
-type: 'component'
-componentSignature:
-  {
-    'props':
-      [
-        {
-          name: 'font',
-          type: 'Font | string',
-          required: true,
-          description: 'Either a loaded font or a path to a font file.'
-        },
-        { name: 'text', type: 'string', required: true, description: 'The text to display.' },
-        { name: 'size', type: 'number', required: false, default: '100' },
-        { name: 'height', type: 'number', required: false, default: '50' },
-        { name: 'curveSegments', type: 'number', required: false, default: '12' },
-        { name: 'bevelEnabled', type: 'boolean', required: false, default: 'false' },
-        { name: 'bevelThickness', type: 'number', required: false, default: '10' },
-        { name: 'bevelSize', type: 'number', required: false, default: '8' },
-        { name: 'bevelOffset', type: 'number', required: false, default: '0' },
-        { name: 'bevelSegments', type: 'number', required: false, default: '3' },
-        {
-          name: 'smooth',
-          type: 'number',
-          required: false,
-          default: '0',
-          description: 'Smooth all edges where the angle between faces is less than value'
-        },
-        { name: 'depth', type: 'number', required: false, default: '1' },
-        { name: 'extrudePath', type: 'Curve<Vector3>', required: false },
-        { name: 'steps', type: 'number', required: false, default: '1' },
-        { name: 'UVGenerator', type: 'UVGenerator', required: false }
-      ]
-  }
 ---
 
 Render 3D text as a geometry using Three.js' [TextGeometry](https://threejs.org/docs/index.html#examples/en/geometries/TextGeometry).
@@ -142,3 +107,38 @@ You can center a text by using the [`<Align>` component](/reference/extras/align
 ### Smoothing Text
 
 You can smooth the text by setting the `smooth` prop to a value above 0 to smooth all edges where the angle between faces is less than the `smooth` value.
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'font',
+        type: 'Font | string',
+        required: true,
+        description: 'Either a loaded font or a path to a font file.'
+      },
+      { name: 'text', type: 'string', required: true, description: 'The text to display.' },
+      { name: 'size', type: 'number', required: false, default: '100' },
+      { name: 'height', type: 'number', required: false, default: '50' },
+      { name: 'curveSegments', type: 'number', required: false, default: '12' },
+      { name: 'bevelEnabled', type: 'boolean', required: false, default: 'false' },
+      { name: 'bevelThickness', type: 'number', required: false, default: '10' },
+      { name: 'bevelSize', type: 'number', required: false, default: '8' },
+      { name: 'bevelOffset', type: 'number', required: false, default: '0' },
+      { name: 'bevelSegments', type: 'number', required: false, default: '3' },
+      {
+        name: 'smooth',
+        type: 'number',
+        required: false,
+        default: '0',
+        description: 'Smooth all edges where the angle between faces is less than value'
+      },
+      { name: 'depth', type: 'number', required: false, default: '1' },
+      { name: 'extrudePath', type: 'Curve<Vector3>', required: false },
+      { name: 'steps', type: 'number', required: false, default: '1' },
+      { name: 'UVGenerator', type: 'UVGenerator', required: false }
+    ]
+  }}
+/>
