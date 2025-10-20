@@ -1,54 +1,5 @@
 ---
-category: '@threlte/xr'
 title: '<Controller>'
-order: 2
-type: 'component'
-componentSignature:
-  {
-    events:
-      [
-        {
-          name: 'connected',
-          payload: "XRControllerEvent<'connected'>",
-          description: 'Fired when the controller connects.'
-        },
-        {
-          name: 'disconnected',
-          payload: "XRControllerEvent<'disconnected'>",
-          description: 'Fired when the controller disconnects.'
-        },
-        {
-          name: 'select',
-          payload: "XRControllerEvent<'select'>",
-          description: 'Fired when a the user has completed a primary action.'
-        },
-        {
-          name: 'selectstart',
-          payload: "XRControllerEvent<'selectstart'>",
-          description: 'Fired when a the user begins a primary action.'
-        },
-        {
-          name: 'selectend',
-          payload: "XRControllerEvent<'selectend'>",
-          description: 'Fired when a the user ends a primary action or when the controller that is in the process of handling an ongoing primary action is disconnected without successfully completing the action.'
-        },
-        {
-          name: 'squeeze',
-          payload: "XRControllerEvent<'squeeze'>",
-          description: 'Fired when the controller has completed a primary squeeze action.'
-        },
-        {
-          name: 'squeezestart',
-          payload: "XRControllerEvent<'squeezestart'>",
-          description: 'Fired when the user begins a primary squeeze action.'
-        },
-        {
-          name: 'squeezeend',
-          payload: "XRControllerEvent<'squeezeend'>",
-          description: 'Fired when a the user ends a primary squeeze action or when the controller that is in the process of handling an ongoing primary squeeeze action is disconnected without successfully completing the action.'
-        }
-      ]
-  }
 ---
 
 `<Controller />` represents a `THREE.XRTargetRaySpace`, a `THREE.XRGripSpace`, and a controller model for a specified hand.
@@ -100,3 +51,54 @@ Two additional snippets exist to place children in the controller's [grip space]
 ```
 
 <Example path="xr/controller" />
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    events: [
+      {
+        name: 'connected',
+        payload: "XRControllerEvent<'connected'>",
+        description: 'Fired when the controller connects.'
+      },
+      {
+        name: 'disconnected',
+        payload: "XRControllerEvent<'disconnected'>",
+        description: 'Fired when the controller disconnects.'
+      },
+      {
+        name: 'select',
+        payload: "XRControllerEvent<'select'>",
+        description: 'Fired when a the user has completed a primary action.'
+      },
+      {
+        name: 'selectstart',
+        payload: "XRControllerEvent<'selectstart'>",
+        description: 'Fired when a the user begins a primary action.'
+      },
+      {
+        name: 'selectend',
+        payload: "XRControllerEvent<'selectend'>",
+        description:
+          'Fired when a the user ends a primary action or when the controller that is in the process of handling an ongoing primary action is disconnected without successfully completing the action.'
+      },
+      {
+        name: 'squeeze',
+        payload: "XRControllerEvent<'squeeze'>",
+        description: 'Fired when the controller has completed a primary squeeze action.'
+      },
+      {
+        name: 'squeezestart',
+        payload: "XRControllerEvent<'squeezestart'>",
+        description: 'Fired when the user begins a primary squeeze action.'
+      },
+      {
+        name: 'squeezeend',
+        payload: "XRControllerEvent<'squeezeend'>",
+        description:
+          'Fired when a the user ends a primary squeeze action or when the controller that is in the process of handling an ongoing primary squeeeze action is disconnected without successfully completing the action.'
+      }
+    ]
+  }}
+/>

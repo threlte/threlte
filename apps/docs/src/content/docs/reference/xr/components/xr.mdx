@@ -1,57 +1,5 @@
 ---
-category: '@threlte/xr'
 title: '<XR>'
-order: 0
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'foveation',
-          type: 'number',
-          default: '1',
-          required: false,
-          description: 'Enables foveated rendering. 0 represents no foveation, full resolution. 1 represents maximum foveation, with the edges rendered at a lower resolution.'
-        },
-        {
-          name: 'frameRate',
-          type: 'number',
-          required: false,
-          description: 'The target framerate for the XRSystem. Recommended range is 72-120. Default is unset and left to the device. Smaller rates give more CPU headroom at the cost of responsiveness. If your experience cannot effectively reach the target framerate, it will be subject to frame reprojection which will halve the effective framerate. Choose a conservative estimate that balances responsiveness and headroom based on your experience.'
-        },
-        {
-          name: 'referenceSpace',
-          type: 'string',
-          required: false,
-          default: "'local-floor'",
-          description: 'Type of WebXR reference space to use.'
-        }
-      ],
-    events:
-      [
-        {
-          name: 'sessionstart',
-          payload: 'THREE.Event & { target: XRSession }',
-          description: 'Fired as an XRSession is requested.'
-        },
-        {
-          name: 'sessionend',
-          payload: 'THREE.Event & { target: XRSession }',
-          description: 'Fired after an XRSession is terminated.'
-        },
-        {
-          name: 'visibilitychange',
-          payload: 'THREE.Event & { target: XRSession }',
-          description: 'Fired when an XRSession is hidden or unfocused.'
-        },
-        {
-          name: 'inputsourceschange',
-          payload: 'THREE.Event & { target: XRSession }',
-          description: 'Fired when available inputsources change.'
-        }
-      ]
-  }
 ---
 
 The `<XR>` component prepares your scene for a WebXR session. It sets up context that is provided by the [`useXR`](/reference/xr/use-xr) hook.
@@ -103,3 +51,56 @@ XR sessions have to be requested actively and you might want to show contents to
   {/snippet}
 </XR>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'foveation',
+        type: 'number',
+        default: '1',
+        required: false,
+        description:
+          'Enables foveated rendering. 0 represents no foveation, full resolution. 1 represents maximum foveation, with the edges rendered at a lower resolution.'
+      },
+      {
+        name: 'frameRate',
+        type: 'number',
+        required: false,
+        description:
+          'The target framerate for the XRSystem. Recommended range is 72-120. Default is unset and left to the device. Smaller rates give more CPU headroom at the cost of responsiveness. If your experience cannot effectively reach the target framerate, it will be subject to frame reprojection which will halve the effective framerate. Choose a conservative estimate that balances responsiveness and headroom based on your experience.'
+      },
+      {
+        name: 'referenceSpace',
+        type: 'string',
+        required: false,
+        default: "'local-floor'",
+        description: 'Type of WebXR reference space to use.'
+      }
+    ],
+    events: [
+      {
+        name: 'sessionstart',
+        payload: 'THREE.Event & { target: XRSession }',
+        description: 'Fired as an XRSession is requested.'
+      },
+      {
+        name: 'sessionend',
+        payload: 'THREE.Event & { target: XRSession }',
+        description: 'Fired after an XRSession is terminated.'
+      },
+      {
+        name: 'visibilitychange',
+        payload: 'THREE.Event & { target: XRSession }',
+        description: 'Fired when an XRSession is hidden or unfocused.'
+      },
+      {
+        name: 'inputsourceschange',
+        payload: 'THREE.Event & { target: XRSession }',
+        description: 'Fired when available inputsources change.'
+      }
+    ]
+  }}
+/>
