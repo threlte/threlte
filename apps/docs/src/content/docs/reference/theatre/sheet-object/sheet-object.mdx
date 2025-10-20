@@ -1,26 +1,6 @@
 ---
-order: 4.1
-category: '@threlte/theatre'
-sourcePath: 'packages/theatre/src/lib/sheetObject/SheetObject.svelte'
 title: '<SheetObject>'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        { name: 'key', type: 'string', required: true },
-        {
-          name: props,
-          type:
-            {
-              name: 'UnknownShorthandCompoundProps',
-              url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
-            },
-          required: false
-        },
-        { name: 'detach', type: 'boolean', required: false, default: 'false' }
-      ]
-  }
+sourcePath: 'packages/theatre/src/lib/sheetObject/SheetObject.svelte'
 ---
 
 The `<SheetObject>` component allows you to pool the properties of a **logical entity** which can be a anything from a single material, multiple meshes or a complete scene. The component `<SheetObject>` and
@@ -64,3 +44,22 @@ You can also use the [`<Declare>`](./declare) prop slot component to colocate yo
 The `<SheetObject>` component offers a slot prop based API for controlling selection in the Theatre.js studio. Simply
 declare the `select` and `deselect` methods and the `selected` variables to use it. You then need to use these in the
 mesh of your choice; see the example above for a demonstration.
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      { name: 'key', type: 'string', required: true },
+      {
+        name: props,
+        type: {
+          name: 'UnknownShorthandCompoundProps',
+          url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+        },
+        required: false
+      },
+      { name: 'detach', type: 'boolean', required: false, default: 'false' }
+    ]
+  }}
+/>

@@ -1,22 +1,6 @@
 ---
-order: 4.3
-category: '@threlte/theatre'
-sourcePath: 'packages/theatre/src/lib/sheetObject/transform/Transform.svelte'
 title: '<Transform>'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        { name: 'label', type: 'string', required: false },
-        { name: 'key', type: 'string', required: false },
-        { name: 'mode', type: 'translate | rotate | scale', required: false, default: 'translate' },
-        { name: 'space', type: 'world | local', required: false, default: 'world' },
-        { name: 'translationSnap', type: 'number', required: false },
-        { name: 'rotationSnap', type: 'number', required: false },
-        { name: 'scaleSnap', type: 'number', required: false }
-      ]
-  }
+sourcePath: 'packages/theatre/src/lib/sheetObject/transform/Transform.svelte'
 ---
 
 One of the most common usecases in the studio is repositioning objects or groups of objects in the canvas.
@@ -32,3 +16,19 @@ Use the component `<Transform>` from the [`<SheetObject>`](./sheet-object) slot 
   {/snippet}
 </SheetObject>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      { name: 'label', type: 'string', required: false },
+      { name: 'key', type: 'string', required: false },
+      { name: 'mode', type: 'translate | rotate | scale', required: false, default: 'translate' },
+      { name: 'space', type: 'world | local', required: false, default: 'world' },
+      { name: 'translationSnap', type: 'number', required: false },
+      { name: 'rotationSnap', type: 'number', required: false },
+      { name: 'scaleSnap', type: 'number', required: false }
+    ]
+  }}
+/>

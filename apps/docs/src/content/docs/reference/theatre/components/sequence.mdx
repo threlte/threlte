@@ -1,89 +1,6 @@
 ---
-order: 1.4
-category: '@threlte/theatre'
 title: '<Sequence>'
 sourcePath: 'packages/theatre/src/lib/sequence/Sequence.svelte'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'rate',
-          type: 'number',
-          default: '1',
-          required: false,
-          description: 'Set the speed of playback (Theatre.js)'
-        },
-        {
-          name: 'range',
-          type: '[number, number] | undefined',
-          default: '[0, length]',
-          required: false,
-          description: 'Choose what part of the animation is played (Theatre.js)'
-        },
-        {
-          name: 'iterationCount',
-          type: 'number',
-          default: '1',
-          required: false,
-          description: 'Control how often the animation is played. Set Infinity to keep looping (Theatre.js)'
-        },
-        {
-          name: 'direction',
-          type: '"normal" | "reverse" | "alternate" | "alternateReverse"',
-          default: 'normal',
-          required: false,
-          description: 'Choose the direction of animation playback (Theatre.js)'
-        },
-        {
-          name: 'autoplay',
-          type: 'boolean',
-          default: 'false',
-          required: false,
-          description: 'Choose whether to automatically play the animation when the component is mounted (Threlte)'
-        },
-        {
-          name: 'delay',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: 'When using autoplay, how many milliseconds to wait before starting playback (Threlte)'
-        },
-        {
-          name: 'autoreset',
-          type: '"always" | "onMount" | "onDestroy" | undefined',
-          default: 'undefined',
-          required: false,
-          description: 'Reset the playhead when the component is mounted, unmounted**, both or neither (Threlte)'
-        },
-        {
-          name: 'autopause',
-          type: 'boolean',
-          default: 'false',
-          required: false,
-          description: 'Whether to pause playback when the component is unmounted (Threlte)'
-        },
-        {
-          name: 'audio',
-          type: "{source: AudioBuffer; audioContext: AudioContext; destinationNode: AudioContext['destination'];}",
-          default: '{}',
-          required: false,
-          description: 'Syncronize an audio track to the sequence; see the audio section below (Theatre.js)'
-        }
-      ],
-    bindings:
-      [
-        { name: 'position', type: 'number | undefined' },
-        {
-          name: play,
-          type: '(opts?) => Promise<boolean> (see Theatre.js Sequence API docs for options)'
-        },
-        { name: pause, type: '() => void' },
-        { name: sequence, type: 'ISequence' },
-        { name: sheet, type: 'ISheet' }
-      ]
-  }
 ---
 
 Sequences are the heart of the Theatre.js animation system. The sequence represents the animation timeline and provides an API for controlling its playback.
@@ -138,3 +55,90 @@ When using the sequence in a child component, a snippet prop can come in handy.
   </Sequence>
 </Sheet>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'rate',
+        type: 'number',
+        default: '1',
+        required: false,
+        description: 'Set the speed of playback (Theatre.js)'
+      },
+      {
+        name: 'range',
+        type: '[number, number] | undefined',
+        default: '[0, length]',
+        required: false,
+        description: 'Choose what part of the animation is played (Theatre.js)'
+      },
+      {
+        name: 'iterationCount',
+        type: 'number',
+        default: '1',
+        required: false,
+        description:
+          'Control how often the animation is played. Set Infinity to keep looping (Theatre.js)'
+      },
+      {
+        name: 'direction',
+        type: '"normal" | "reverse" | "alternate" | "alternateReverse"',
+        default: 'normal',
+        required: false,
+        description: 'Choose the direction of animation playback (Theatre.js)'
+      },
+      {
+        name: 'autoplay',
+        type: 'boolean',
+        default: 'false',
+        required: false,
+        description:
+          'Choose whether to automatically play the animation when the component is mounted (Threlte)'
+      },
+      {
+        name: 'delay',
+        type: 'number',
+        default: '0',
+        required: false,
+        description:
+          'When using autoplay, how many milliseconds to wait before starting playback (Threlte)'
+      },
+      {
+        name: 'autoreset',
+        type: '"always" | "onMount" | "onDestroy" | undefined',
+        default: 'undefined',
+        required: false,
+        description:
+          'Reset the playhead when the component is mounted, unmounted**, both or neither (Threlte)'
+      },
+      {
+        name: 'autopause',
+        type: 'boolean',
+        default: 'false',
+        required: false,
+        description: 'Whether to pause playback when the component is unmounted (Threlte)'
+      },
+      {
+        name: 'audio',
+        type: "{source: AudioBuffer; audioContext: AudioContext; destinationNode: AudioContext['destination'];}",
+        default: '{}',
+        required: false,
+        description:
+          'Syncronize an audio track to the sequence; see the audio section below (Theatre.js)'
+      }
+    ],
+    bindings: [
+      { name: 'position', type: 'number | undefined' },
+      {
+        name: play,
+        type: '(opts?) => Promise<boolean> (see Theatre.js Sequence API docs for options)'
+      },
+      { name: pause, type: '() => void' },
+      { name: sequence, type: 'ISequence' },
+      { name: sheet, type: 'ISheet' }
+    ]
+  }}
+/>

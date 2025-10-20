@@ -1,24 +1,6 @@
 ---
-order: 4.4
-category: '@threlte/theatre'
-sourcePath: 'packages/theatre/src/lib/sheetObject/declare/Declare.svelte'
 title: '<Declare>'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: props,
-          type:
-            {
-              name: 'UnknownShorthandCompoundProps',
-              url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
-            },
-          required: true
-        }
-      ]
-  }
+sourcePath: 'packages/theatre/src/lib/sheetObject/declare/Declare.svelte'
 ---
 
 Sometimes we want our declarations to be closer to the place where we use them.
@@ -41,3 +23,20 @@ an object and its properties with manual property declaration.
 <Tip type="tip">
   This can also be used to pass the prop declaration API to child components using a slot prop.
 </Tip>
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: props,
+        type: {
+          name: 'UnknownShorthandCompoundProps',
+          url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+        },
+        required: true
+      }
+    ]
+  }}
+/>

@@ -1,10 +1,6 @@
 ---
-order: 4.2
-category: '@threlte/theatre'
-sourcePath: 'packages/theatre/src/lib/sheetObject/sync/Sync.svelte'
 title: '<Sync>'
-type: 'component'
-componentSignature: { props: [{ name: type, type: 'any', required: false }] }
+sourcePath: 'packages/theatre/src/lib/sheetObject/sync/Sync.svelte'
 ---
 
 Use the component `<Sync>` from the [`<SheetObject>`](./sheet-object) slot prop to automatically pick up properties from its parent.
@@ -146,3 +142,7 @@ You may also declare transformers directly in the markup:
 `<Transform>` uses transformers to transform the properties `position`, `rotation` and `scale` of a Three.js object to a value that Theatre.js can handle.
 
 </Tip>
+
+## Component Signature
+
+<ComponentSignature signature={{ props: [{ name: type, type: 'any', required: false }] }} />
