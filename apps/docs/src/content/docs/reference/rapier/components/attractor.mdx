@@ -1,20 +1,6 @@
 ---
-order: 6
-category: '@threlte/rapier'
-sourcePath: 'packages/rapier/src/lib/components/Attractor/Attractor.svelte'
 title: '<Attractor>'
-type: 'component'
-componentSignature:
-  {
-    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-    props:
-      [
-        { name: 'strength', type: 'number', default: '1', required: false },
-        { name: 'range', type: 'number', default: '10', required: false },
-        { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'", required: false },
-        { name: 'gravitationalConstant', type: 'number', default: '6.673e-11', required: false }
-      ]
-  }
+sourcePath: 'packages/rapier/src/lib/components/Attractor/Attractor.svelte'
 ---
 
 An attractor simulates a source of gravity. Any rigid-body within range will be "pulled" toward the attractor's center.
@@ -47,3 +33,18 @@ Newtonian gravity uses the traditional method of calculating gravitational force
 ## Debugging
 
 The `<Debug />` component will activate a wireframe helper to visualize the attractor's range.
+
+## Component Signature
+
+<ComponentSignature
+  name="<Attractor>"
+  signature={{
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props: [
+      { name: 'strength', type: 'number', default: '1', required: false },
+      { name: 'range', type: 'number', default: '10', required: false },
+      { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'", required: false },
+      { name: 'gravitationalConstant', type: 'number', default: '6.673e-11', required: false }
+    ]
+  }}
+/>

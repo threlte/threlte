@@ -1,17 +1,6 @@
 ---
-order: 7
-category: '@threlte/rapier'
-sourcePath: 'packages/rapier/src/lib/components/Debug/Debug.svelte'
 title: '<Debug>'
-type: 'component'
-componentSignature:
-  {
-    extends:
-      {
-        type: 'LineBasicMaterial',
-        url: 'https://threejs.org/docs/index.html#api/en/materials/LineBasicMaterial'
-      }
-  }
+sourcePath: 'packages/rapier/src/lib/components/Debug/Debug.svelte'
 ---
 
 Use the Debug component to see live representations of all colliders in a scene.
@@ -32,3 +21,15 @@ Use the Debug component to see live representations of all colliders in a scene.
   </World>
 </Canvas>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  name="<Debug>"
+  signature={{
+    extends: {
+      type: 'LineBasicMaterial',
+      url: 'https://threejs.org/docs/index.html#api/en/materials/LineBasicMaterial'
+    }
+  }}
+/>

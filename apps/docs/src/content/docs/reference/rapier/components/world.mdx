@@ -1,29 +1,6 @@
 ---
-order: 1
-category: '@threlte/rapier'
-sourcePath: 'packages/rapier/src/lib/components/World/World.svelte'
 title: '<World>'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        { name: 'gravity', type: 'Position', default: '{ y: -9.81 }', required: false },
-        { name: 'rawIntegrationParameters', type: 'RawIntegrationParameters', required: false },
-        { name: 'rawIslands', type: 'RawIslandManager', required: false },
-        { name: 'rawBroadPhase', type: 'RawBroadPhase', required: false },
-        { name: 'rawNarrowPhase', type: 'RawNarrowPhase', required: false },
-        { name: 'rawBodies', type: 'RawRigidBodySet', required: false },
-        { name: 'rawColliders', type: 'RawColliderSet', required: false },
-        { name: 'rawImpulseJoints', type: 'RawImpulseJointSet', required: false },
-        { name: 'rawMultibodyJoints', type: 'RawMultibodyJointSet', required: false },
-        { name: 'rawCCDSolver', type: 'RawCCDSolver', required: false },
-        { name: 'rawQueryPipeline', type: 'RawQueryPipeline', required: false },
-        { name: 'rawPhysicsPipeline', type: 'RawPhysicsPipeline', required: false },
-        { name: 'rawSerializationPipeline', type: 'RawSerializationPipeline', required: false },
-        { name: 'rawDebugRenderPipeline', type: 'RawDebugRenderPipeline', required: false }
-      ]
-  }
+sourcePath: 'packages/rapier/src/lib/components/World/World.svelte'
 ---
 
 This component provides the basic physics context and loads [rapier](https://rapier.rs/).
@@ -74,3 +51,26 @@ This structure ensures that all components inside the component `<Scene>` have a
   </World>
 </Canvas>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      { name: 'gravity', type: 'Position', default: '{ y: -9.81 }', required: false },
+      { name: 'rawIntegrationParameters', type: 'RawIntegrationParameters', required: false },
+      { name: 'rawIslands', type: 'RawIslandManager', required: false },
+      { name: 'rawBroadPhase', type: 'RawBroadPhase', required: false },
+      { name: 'rawNarrowPhase', type: 'RawNarrowPhase', required: false },
+      { name: 'rawBodies', type: 'RawRigidBodySet', required: false },
+      { name: 'rawColliders', type: 'RawColliderSet', required: false },
+      { name: 'rawImpulseJoints', type: 'RawImpulseJointSet', required: false },
+      { name: 'rawMultibodyJoints', type: 'RawMultibodyJointSet', required: false },
+      { name: 'rawCCDSolver', type: 'RawCCDSolver', required: false },
+      { name: 'rawQueryPipeline', type: 'RawQueryPipeline', required: false },
+      { name: 'rawPhysicsPipeline', type: 'RawPhysicsPipeline', required: false },
+      { name: 'rawSerializationPipeline', type: 'RawSerializationPipeline', required: false },
+      { name: 'rawDebugRenderPipeline', type: 'RawDebugRenderPipeline', required: false }
+    ]
+  }}
+/>
