@@ -133,12 +133,12 @@ When using the sequence in a child component, a snippet prop can come in handy.
     bindings: [
       { name: 'position', type: 'number | undefined' },
       {
-        name: play,
+        name: 'play',
         type: '(opts?) => Promise<boolean> (see Theatre.js Sequence API docs for options)'
       },
-      { name: pause, type: '() => void' },
-      { name: sequence, type: 'ISequence' },
-      { name: sheet, type: 'ISheet' }
+      { name: 'pause', type: '() => void' },
+      { name: 'sequence', type: 'ISequence' },
+      { name: 'sheet', type: 'ISheet' }
     ]
   }}
 />
