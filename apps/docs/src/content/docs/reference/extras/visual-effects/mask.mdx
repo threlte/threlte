@@ -1,37 +1,6 @@
 ---
-order: 5.48
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/Mask/Mask.svelte'
 title: <Mask>
-type: 'component'
-componentSignature:
-  {
-    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
-    'props':
-      [
-        {
-          name: 'id',
-          type: 'number',
-          required: false,
-          default: '1',
-          'description': 'Each mask must have an id, you can have compound masks referring to the same id.'
-        },
-        {
-          name: 'colorWrite',
-          type: 'boolean',
-          required: false,
-          default: 'false',
-          'description': 'If colors of the masks own material will leak through.'
-        },
-        {
-          name: 'depthWrite',
-          type: 'boolean',
-          required: false,
-          default: 'false',
-          'description': 'If depth  of the masks own material will leak through.'
-        }
-      ]
-  }
+sourcePath: 'packages/extras/src/lib/components/Mask/Mask.svelte'
 ---
 
 Masks use the stencil buffer to cut out areas of the screen. This component is a port of [drei's `<Mask>` component](https://github.com/pmndrs/drei#mask).
@@ -89,3 +58,36 @@ Invert masks individually by providing a 2nd boolean argument to the useMask hoo
 ```ts
 const stencil = useMask(1, true)
 ```
+
+## Component Signature
+
+<ComponentSignature
+  name="<Mask>"
+  signature={{
+    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+    props: [
+      {
+        name: 'id',
+        type: 'number',
+        required: false,
+        default: '1',
+        description:
+          'Each mask must have an id, you can have compound masks referring to the same id.'
+      },
+      {
+        name: 'colorWrite',
+        type: 'boolean',
+        required: false,
+        default: 'false',
+        description: 'If colors of the masks own material will leak through.'
+      },
+      {
+        name: 'depthWrite',
+        type: 'boolean',
+        required: false,
+        default: 'false',
+        description: 'If depth  of the masks own material will leak through.'
+      }
+    ]
+  }}
+/>

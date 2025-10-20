@@ -1,41 +1,6 @@
 ---
-order: 4.142
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/environment/CubeEnvironment/CubeEnvironment.svelte'
 title: <CubeEnvironment>
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          description: 'a six-tuple of urls to load',
-          name: 'urls',
-          required: false,
-          type: '[positiveX: string, negativeX: string, positiveY: string, negativeY: string, positiveZ: string, negativeZ: string]'
-        },
-        {
-          default: 'false',
-          description: 'whether to set `scene.background` to the loaded environment texture',
-          name: 'isBackground',
-          required: false,
-          type: 'boolean'
-        },
-        {
-          default: 'useThrelte().scene',
-          description: 'the scene that will have its environment and/or background set',
-          name: 'scene',
-          required: false,
-          type: 'THREE.Scene'
-        },
-        {
-          description: 'a bindable of the loaded cube texture.',
-          name: 'texture',
-          required: false,
-          type: 'THREE.CubeTexture'
-        }
-      ]
-  }
+sourcePath: 'packages/extras/src/lib/components/environment/CubeEnvironment/CubeEnvironment.svelte'
 ---
 
 `<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key
@@ -63,3 +28,38 @@ negativeX, positiveY, negativeY, positiveZ, negativeZ]`.
 
 `<CubeEnvironment>` is other than `<Environment>` not able to create a
 `GroundedSkybox` instance.
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        description: 'a six-tuple of urls to load',
+        name: 'urls',
+        required: false,
+        type: '[positiveX: string, negativeX: string, positiveY: string, negativeY: string, positiveZ: string, negativeZ: string]'
+      },
+      {
+        default: 'false',
+        description: 'whether to set `scene.background` to the loaded environment texture',
+        name: 'isBackground',
+        required: false,
+        type: 'boolean'
+      },
+      {
+        default: 'useThrelte().scene',
+        description: 'the scene that will have its environment and/or background set',
+        name: 'scene',
+        required: false,
+        type: 'THREE.Scene'
+      },
+      {
+        description: 'a bindable of the loaded cube texture.',
+        name: 'texture',
+        required: false,
+        type: 'THREE.CubeTexture'
+      }
+    ]
+  }}
+/>

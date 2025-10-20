@@ -1,69 +1,6 @@
 ---
-order: 5.45
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/GradientTexture/LinearGradientTexture.svelte'
 title: '<LinearGradientTexture>'
-type: 'component'
-componentSignature:
-  {
-    extends:
-      {
-        type: 'CanvasTexture',
-        url: 'https://threejs.org/docs/index.html#api/en/textures/CanvasTexture'
-      },
-    props:
-      [
-        {
-          default: '1024',
-          description: "width of the texture's canvas",
-          name: 'width',
-          required: false,
-          type: 'number'
-        },
-        {
-          default: '1024',
-          description: "height of the texture's canvas",
-          name: 'height',
-          required: false,
-          type: 'number'
-        },
-        {
-          required: false,
-          default: '0',
-          description: x-axis coordinate of the gradient's start point,
-          name: 'startX',
-          type: 'number'
-        },
-        {
-          required: false,
-          default: '0',
-          description: y-axis coordinate of the gradient's start point,
-          name: 'startY',
-          type: 'number'
-        },
-        {
-          required: false,
-          default: '0',
-          description: x-axis coordinate of the gradient's end point,
-          name: 'endX',
-          type: 'number'
-        },
-        {
-          required: false,
-          default: 'height',
-          description: y-axis coordinate of the gradient's end point,
-          name: 'endY',
-          type: 'number'
-        },
-        {
-          default: "[{color: '#000000', offset: 0}, {color: '#ffffff', offset: 1}]",
-          description: 'list of stops applied to the gradient. more info at https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient',
-          name: 'stops',
-          required: false,
-          type: 'ColorStop[]'
-        }
-      ]
-  }
+sourcePath: 'packages/extras/src/lib/components/GradientTexture/LinearGradientTexture.svelte'
 ---
 
 A reactive linear gradient texture. The underlying texture uses an [OffscreenCanvas](https://developer.mozilla.org/en-US/docs/Web/API/OffscreenCanvas) and a [CanvasTexture](https://threejs.org/docs/index.html#api/en/textures/CanvasTexture) and is assigned the same [colorspace](https://threejs.org/docs/index.html#api/en/textures/Texture.colorSpace) as the renderer.
@@ -151,3 +88,67 @@ If the colors in your scene do not match the color in your stops, you may need t
   toneMapping.set(LinearToneMapping)
 </script>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  name="<LinearGradientTexture>"
+  signature={{
+    extends: {
+      type: 'CanvasTexture',
+      url: 'https://threejs.org/docs/index.html#api/en/textures/CanvasTexture'
+    },
+    props: [
+      {
+        default: '1024',
+        description: "width of the texture's canvas",
+        name: 'width',
+        required: false,
+        type: 'number'
+      },
+      {
+        default: '1024',
+        description: "height of the texture's canvas",
+        name: 'height',
+        required: false,
+        type: 'number'
+      },
+      {
+        required: false,
+        default: '0',
+        description: "x-axis coordinate of the gradient's start point",
+        name: 'startX',
+        type: 'number'
+      },
+      {
+        required: false,
+        default: '0',
+        description: "y-axis coordinate of the gradient's start point",
+        name: 'startY',
+        type: 'number'
+      },
+      {
+        required: false,
+        default: '0',
+        description: "x-axis coordinate of the gradient's end point",
+        name: 'endX',
+        type: 'number'
+      },
+      {
+        required: false,
+        default: 'height',
+        description: "y-axis coordinate of the gradient's end point",
+        name: 'endY',
+        type: 'number'
+      },
+      {
+        default: "[{color: '#000000', offset: 0}, {color: '#ffffff', offset: 1}]",
+        description:
+          'list of stops applied to the gradient. more info at https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient',
+        name: 'stops',
+        required: false,
+        type: 'ColorStop[]'
+      }
+    ]
+  }}
+/>

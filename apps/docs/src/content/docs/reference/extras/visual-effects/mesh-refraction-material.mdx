@@ -1,57 +1,6 @@
 ---
-order: 5.7
-category: '@threlte/extras'
 title: '<MeshRefractionMaterial>'
 sourcePath: 'packages/extras/src/lib/components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
-type: 'component'
-componentSignature:
-  {
-    extends:
-      {
-        type: 'ShaderMaterial',
-        url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial'
-      },
-    props:
-      [
-        { name: 'envMap', type: 'CubeTexture | Texture', required: true },
-        {
-          name: 'bounces',
-          type: 'number',
-          default: '2',
-          required: false,
-          description: 'Number of ray-cast bounces, it can be expensive to have too many'
-        },
-        {
-          name: 'ior',
-          type: 'number',
-          default: '2.4',
-          required: false,
-          description: 'Refraction index'
-        },
-        {
-          name: 'fresnel',
-          type: 'number',
-          default: '0.0',
-          required: false,
-          description: 'Fresnel (strip light)'
-        },
-        {
-          name: 'aberrationStrength',
-          type: 'number',
-          default: '0.0',
-          required: false,
-          description: 'RGB shift intensity, can be expensive'
-        },
-        { name: 'color', type: 'ColorRepresentation', default: 'white', required: false },
-        {
-          name: 'fastChrome',
-          type: 'boolean',
-          default: 'true',
-          required: false,
-          description: 'If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy'
-        }
-      ]
-  }
 ---
 
 <Tip type="info">
@@ -117,3 +66,55 @@ or you can use a cube camera to generate the environment:
   <T.IcosahedronGeometry args={[4, 0]} />
 </T.Mesh>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  name="<MeshRefractionMaterial>"
+  signature={{
+    extends: {
+      type: 'ShaderMaterial',
+      url: 'https://threejs.org/docs/index.html#api/en/materials/ShaderMaterial'
+    },
+    props: [
+      { name: 'envMap', type: 'CubeTexture | Texture', required: true },
+      {
+        name: 'bounces',
+        type: 'number',
+        default: '2',
+        required: false,
+        description: 'Number of ray-cast bounces, it can be expensive to have too many'
+      },
+      {
+        name: 'ior',
+        type: 'number',
+        default: '2.4',
+        required: false,
+        description: 'Refraction index'
+      },
+      {
+        name: 'fresnel',
+        type: 'number',
+        default: '0.0',
+        required: false,
+        description: 'Fresnel (strip light)'
+      },
+      {
+        name: 'aberrationStrength',
+        type: 'number',
+        default: '0.0',
+        required: false,
+        description: 'RGB shift intensity, can be expensive'
+      },
+      { name: 'color', type: 'ColorRepresentation', default: 'white', required: false },
+      {
+        name: 'fastChrome',
+        type: 'boolean',
+        default: 'true',
+        required: false,
+        description:
+          'If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy'
+      }
+    ]
+  }}
+/>

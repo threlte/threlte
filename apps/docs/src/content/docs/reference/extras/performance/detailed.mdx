@@ -1,11 +1,6 @@
 ---
-order: 7.6
-category: '@threlte/extras'
+title: <Detailed>
 sourcePath: 'packages/extras/src/lib/components/Detailed/Detailed.svelte'
-title: '<Detailed>'
-type: 'component'
-componentSignature:
-  { extends: { type: 'LOD', url: 'https://threejs.org/docs/#api/en/objects/LOD' }, props: [] }
 ---
 
 `<Detailed>` is an abstraction around Three.js' [LOD](https://threejs.org/docs/#api/en/objects/LOD). A common technique to improve performance is to swap out high-detail models or meshes for low-detail ones at large distances.
@@ -45,3 +40,12 @@ Children of `<Detailed>` accept a hysteresis prop which can be used to prevent f
   It is fairly common to export a high-detail, medium-detail, and low-detail model from 3D asset
   creation tools.
 </Tip>
+
+## Component Signature
+
+<ComponentSignature
+  name="<Detailed>"
+  signature={{
+    extends: { type: 'LOD', url: 'https://threejs.org/docs/#api/en/objects/LOD' }
+  }}
+/>

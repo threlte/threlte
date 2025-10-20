@@ -3,74 +3,7 @@ order: 7.4
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/InstancedSprite/InstancedSprite.svelte'
 title: <InstancedSprite>
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'alphaTest',
-          type: 'number',
-          required: false,
-          default: '0.1',
-          description: 'Sets the alpha value to be used when running an alpha test.'
-        },
-        {
-          name: 'autoUpdate',
-          type: 'boolean',
-          required: false,
-          default: 'true',
-          description: 'Update animations automatically every frame'
-        },
-        {
-          name: 'baseMaterial',
-          type: 'typeof MeshBasicMaterial | typeof MeshStandardMaterial | typeof MeshLambertMaterial | typeof MeshPhongMaterial',
-          required: false,
-          default: 'typeof MeshBasicMaterial',
-          description: 'Base material used to construct the sprite material.'
-        },
-        {
-          name: 'billboarding',
-          type: 'boolean',
-          required: false,
-          default: 'typeof MeshBasicMaterial',
-          description: 'Sets the default global billboarding state that is used unless the setAt was called on the instance.'
-        },
-        { name: 'count', type: 'number', required: true, description: 'Number of instances' },
-        {
-          name: 'fps',
-          type: 'boolean',
-          required: false,
-          default: '10',
-          description: 'The desired frames per second of the animation.'
-        },
-        {
-          name: 'playmode',
-          type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
-          required: false,
-          default: '"FORWARD"',
-          description: 'Sets playmode for all instances'
-        },
-        {
-          name: 'transparent',
-          type: 'boolean',
-          required: false,
-          default: 'true',
-          description: 'Whether or not the material should be transparent.'
-        },
-        {
-          name: 'randomPlaybackOffset',
-          type: 'boolean | number',
-          required: false,
-          default: 'true',
-          description: 'Offset sprite animation time by a random number of milliseconds.'
-        }
-      ],
-    bindings: [{ name: ref, type: 'InstancedSpriteMesh' }]
-  }
 ---
-
-import ComponentSignature from '$components/ComponentSignature/ComponentSignature.astro'
 
 <Tip type="experimental">
   This is an early version - features and API might change significantly over time. Please report
@@ -213,10 +146,9 @@ _Example: Set a position, scale and flipX for every instance._
 </InstancedSprite>
 ```
 
+### `<Instance>` Props
+
 <ComponentSignature
-  titleOverride={` `}
-  idOverride="instance-component-signature"
-  componentName={'<Instance/>'}
   signature={{
     props: [
       {
@@ -429,3 +361,71 @@ The `<Tree/>` component in the example above does this.
 
 Set `autoUpdate={false}` on static components and only update it manually with `sprite.update()`. This has to be done when the InstancedSprite is initiated or when spritesheet or atlas change.
 If you don't do it, then the spritesheet will run animation updates each frame to run animations that don't really exist.
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'alphaTest',
+        type: 'number',
+        required: false,
+        default: '0.1',
+        description: 'Sets the alpha value to be used when running an alpha test.'
+      },
+      {
+        name: 'autoUpdate',
+        type: 'boolean',
+        required: false,
+        default: 'true',
+        description: 'Update animations automatically every frame'
+      },
+      {
+        name: 'baseMaterial',
+        type: 'typeof MeshBasicMaterial | typeof MeshStandardMaterial | typeof MeshLambertMaterial | typeof MeshPhongMaterial',
+        required: false,
+        default: 'typeof MeshBasicMaterial',
+        description: 'Base material used to construct the sprite material.'
+      },
+      {
+        name: 'billboarding',
+        type: 'boolean',
+        required: false,
+        default: 'typeof MeshBasicMaterial',
+        description:
+          'Sets the default global billboarding state that is used unless the setAt was called on the instance.'
+      },
+      { name: 'count', type: 'number', required: true, description: 'Number of instances' },
+      {
+        name: 'fps',
+        type: 'boolean',
+        required: false,
+        default: '10',
+        description: 'The desired frames per second of the animation.'
+      },
+      {
+        name: 'playmode',
+        type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
+        required: false,
+        default: '"FORWARD"',
+        description: 'Sets playmode for all instances'
+      },
+      {
+        name: 'transparent',
+        type: 'boolean',
+        required: false,
+        default: 'true',
+        description: 'Whether or not the material should be transparent.'
+      },
+      {
+        name: 'randomPlaybackOffset',
+        type: 'boolean | number',
+        required: false,
+        default: 'true',
+        description: 'Offset sprite animation time by a random number of milliseconds.'
+      }
+    ],
+    bindings: [{ name: 'ref', type: 'InstancedSpriteMesh' }]
+  }}
+/>

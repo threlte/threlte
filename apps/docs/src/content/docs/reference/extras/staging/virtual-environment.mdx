@@ -1,85 +1,6 @@
 ---
-order: 4.143
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/environment/VirtualEnvironment/VirtualEnvironment.svelte'
 title: <VirtualEnvironment>
-type: 'component'
-componentSignature:
-  {
-    exports:
-      [
-        { name: 'restart', type: '() => void', description: 'Restarts the update task' },
-        {
-          name: 'update',
-          type: '() => void',
-          description: 'Causes the cube camera to render to its render target'
-        }
-      ],
-    props:
-      [
-        {
-          default: '0.1',
-          description: 'The near plane of the cube camera',
-          name: 'near',
-          required: false,
-          type: 'number'
-        },
-        {
-          default: '1000',
-          description: 'The far plane of the cube camera',
-          name: 'far',
-          required: false,
-          type: 'number'
-        },
-        {
-          default: 'Infinity',
-          description: 'Determines how many frames the internal task will run for',
-          name: 'frames',
-          required: false,
-          type: 'number'
-        },
-        {
-          description: 'Callback that is ran when the internal update task is started',
-          name: 'onupdatestart',
-          required: false,
-          type: '() => void'
-        },
-        {
-          description: 'Callback that is ran when the internal update task is stopped',
-          name: 'onupdatestop',
-          required: false,
-          type: '() => void'
-        },
-        {
-          default: '256',
-          description: 'The width and height of the cube cameras render target',
-          name: 'resolution',
-          required: false,
-          type: 'number'
-        },
-        {
-          default: 'false',
-          description: 'Whether to set `scene.background` to the environment texture',
-          name: 'isBackground',
-          required: false,
-          type: 'boolean'
-        },
-        {
-          default: 'useThrelte().scene',
-          description: 'The scene that will have its environment and/or background set',
-          name: 'scene',
-          required: false,
-          type: 'THREE.Scene'
-        },
-        {
-          default: 'false',
-          description: 'Whether to render the virtual environment into the scene',
-          name: 'visible',
-          required: false,
-          type: 'boolean'
-        }
-      ]
-  }
+sourcePath: 'packages/extras/src/lib/components/environment/VirtualEnvironment/VirtualEnvironment.svelte'
 ---
 
 <Example path="extras/virtual-environment/basic" />
@@ -214,3 +135,81 @@ You can also mix `<VirtualEnvironment>` with `<Environment>` or
 ```
 
 <Example path="extras/virtual-environment/mix" />
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    exports: [
+      { name: 'restart', type: '() => void', description: 'Restarts the update task' },
+      {
+        name: 'update',
+        type: '() => void',
+        description: 'Causes the cube camera to render to its render target'
+      }
+    ],
+    props: [
+      {
+        default: '0.1',
+        description: 'The near plane of the cube camera',
+        name: 'near',
+        required: false,
+        type: 'number'
+      },
+      {
+        default: '1000',
+        description: 'The far plane of the cube camera',
+        name: 'far',
+        required: false,
+        type: 'number'
+      },
+      {
+        default: 'Infinity',
+        description: 'Determines how many frames the internal task will run for',
+        name: 'frames',
+        required: false,
+        type: 'number'
+      },
+      {
+        description: 'Callback that is ran when the internal update task is started',
+        name: 'onupdatestart',
+        required: false,
+        type: '() => void'
+      },
+      {
+        description: 'Callback that is ran when the internal update task is stopped',
+        name: 'onupdatestop',
+        required: false,
+        type: '() => void'
+      },
+      {
+        default: '256',
+        description: 'The width and height of the cube cameras render target',
+        name: 'resolution',
+        required: false,
+        type: 'number'
+      },
+      {
+        default: 'false',
+        description: 'Whether to set `scene.background` to the environment texture',
+        name: 'isBackground',
+        required: false,
+        type: 'boolean'
+      },
+      {
+        default: 'useThrelte().scene',
+        description: 'The scene that will have its environment and/or background set',
+        name: 'scene',
+        required: false,
+        type: 'THREE.Scene'
+      },
+      {
+        default: 'false',
+        description: 'Whether to render the virtual environment into the scene',
+        name: 'visible',
+        required: false,
+        type: 'boolean'
+      }
+    ]
+  }}
+/>

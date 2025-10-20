@@ -1,91 +1,6 @@
 ---
-order: 5.4
-category: '@threlte/extras'
 title: <ImageMaterial>
 sourcePath: 'packages/extras/src/lib/components/ImageMaterial/ImageMaterial.svelte'
-type: 'component'
-'componentSignature':
-  {
-    extends:
-      {
-        type: 'ShaderMaterial',
-        url: 'https://threejs.org/docs/index.html?q=shaderm#api/en/materials/ShaderMaterial'
-      },
-    'props':
-      [
-        { name: 'color', type: 'THREE.ColorRepresentation', default: 'white', required: false },
-        { name: 'radius', type: 'number', default: '0', required: false },
-        {
-          name: 'brightness',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: 'Modifies brightness. Recommended range from -1 to 1.'
-        },
-        {
-          name: 'contrast',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: 'Modifies contrast. Recommended range from -1 to 1.'
-        },
-        {
-          name: 'hue',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: 'Modifies hue. Range from 0 to 1.'
-        },
-        {
-          name: 'saturation',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: 'Modifies saturation. Recommended range from -1 to 1.'
-        },
-        {
-          name: 'lightness',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: 'Modifies lightness. Recommended range from -1 to 1.'
-        },
-        {
-          name: 'monochromeColor',
-          type: 'THREE.ColorRepresentation',
-          default: '#535970',
-          required: false,
-          description: 'Sets a monochrome tint the image is converted to.'
-        },
-        {
-          name: 'monochromeStrength',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: 'Sets the strength of monochrome effect. Range from 0 to 1.'
-        },
-        {
-          name: 'negative',
-          type: 'boolean',
-          default: 'false',
-          required: false,
-          description: 'Enables/disables negative effect.'
-        },
-        {
-          name: 'colorProcessingTexture',
-          type: 'THREE.Texture | THREE.VideoTexture',
-          required: false,
-          description: 'Sets a texture used to adjust the strength and the pattern of color processing effects. Each channel of the texture is responsible for a different color processing function. R - hue, G - saturation, B - lightness, A - alpha.'
-        },
-        { name: 'alphaThreshold', type: 'number', default: '0', required: false, description: '' },
-        { name: 'alphaSmoothing', type: 'number', default: '0', required: false, description: '' },
-        { name: 'zoom', type: 'number', default: '1', required: false },
-        { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
-        { name: 'transparent', type: 'boolean', default: 'false', required: false },
-        { name: 'opacity', type: 'number', default: '1', required: false },
-        { name: 'side', type: 'THREE.Side', default: 'THREE.FrontSide', required: false }
-      ]
-  }
 ---
 
 Adapted from drei's [`<Image>`](https://github.com/pmndrs/drei?tab=readme-ov-file#image) component, with additional color processing extras.
@@ -178,3 +93,89 @@ Enable "color processing with a texture" in the example on top of this page to s
 4. Hue, Saturation, Lightness
 5. Monochrome
 6. Negative
+
+## Component Signature
+
+<ComponentSignature
+  name="<ImageMaterial>"
+  signature={{
+    extends: {
+      type: 'ShaderMaterial',
+      url: 'https://threejs.org/docs/index.html?q=shaderm#api/en/materials/ShaderMaterial'
+    },
+    props: [
+      { name: 'color', type: 'THREE.ColorRepresentation', default: 'white', required: false },
+      { name: 'radius', type: 'number', default: '0', required: false },
+      {
+        name: 'brightness',
+        type: 'number',
+        default: '0',
+        required: false,
+        description: 'Modifies brightness. Recommended range from -1 to 1.'
+      },
+      {
+        name: 'contrast',
+        type: 'number',
+        default: '0',
+        required: false,
+        description: 'Modifies contrast. Recommended range from -1 to 1.'
+      },
+      {
+        name: 'hue',
+        type: 'number',
+        default: '0',
+        required: false,
+        description: 'Modifies hue. Range from 0 to 1.'
+      },
+      {
+        name: 'saturation',
+        type: 'number',
+        default: '0',
+        required: false,
+        description: 'Modifies saturation. Recommended range from -1 to 1.'
+      },
+      {
+        name: 'lightness',
+        type: 'number',
+        default: '0',
+        required: false,
+        description: 'Modifies lightness. Recommended range from -1 to 1.'
+      },
+      {
+        name: 'monochromeColor',
+        type: 'THREE.ColorRepresentation',
+        default: '#535970',
+        required: false,
+        description: 'Sets a monochrome tint the image is converted to.'
+      },
+      {
+        name: 'monochromeStrength',
+        type: 'number',
+        default: '0',
+        required: false,
+        description: 'Sets the strength of monochrome effect. Range from 0 to 1.'
+      },
+      {
+        name: 'negative',
+        type: 'boolean',
+        default: 'false',
+        required: false,
+        description: 'Enables/disables negative effect.'
+      },
+      {
+        name: 'colorProcessingTexture',
+        type: 'THREE.Texture | THREE.VideoTexture',
+        required: false,
+        description:
+          'Sets a texture used to adjust the strength and the pattern of color processing effects. Each channel of the texture is responsible for a different color processing function. R - hue, G - saturation, B - lightness, A - alpha.'
+      },
+      { name: 'alphaThreshold', type: 'number', default: '0', required: false, description: '' },
+      { name: 'alphaSmoothing', type: 'number', default: '0', required: false, description: '' },
+      { name: 'zoom', type: 'number', default: '1', required: false },
+      { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
+      { name: 'transparent', type: 'boolean', default: 'false', required: false },
+      { name: 'opacity', type: 'number', default: '1', required: false },
+      { name: 'side', type: 'THREE.Side', default: 'THREE.FrontSide', required: false }
+    ]
+  }}
+/>

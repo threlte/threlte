@@ -1,33 +1,6 @@
 ---
-order: 4.15
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/HUD/HUD.svelte'
 title: <HUD>
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'autoRender',
-          type: 'boolean',
-          required: false,
-          description: 'Whether the HUD should automatically render its contents'
-        },
-        {
-          name: 'toneMapping',
-          type: 'THREE.ToneMapping',
-          required: false,
-          description: 'Defaults to the parent context toneMapping'
-        },
-        {
-          name: 'stage',
-          type: 'Stage',
-          required: false,
-          description: 'Defaults to the render stage'
-        }
-      ]
-  }
+sourcePath: 'packages/extras/src/lib/components/HUD/HUD.svelte'
 ---
 
 Renders a heads-up-display (HUD). Each HUD creates a new scene rendered on top of the main scene with a separate [Threlte context](/reference/core/hooks/use-threlte) and camera.
@@ -70,3 +43,30 @@ place all objects you want in the HUD within a new `Scene` component:
   <T.MeshStandardMaterial />
 </T.Mesh>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'autoRender',
+        type: 'boolean',
+        required: false,
+        description: 'Whether the HUD should automatically render its contents'
+      },
+      {
+        name: 'toneMapping',
+        type: 'THREE.ToneMapping',
+        required: false,
+        description: 'Defaults to the parent context toneMapping'
+      },
+      {
+        name: 'stage',
+        type: 'Stage',
+        required: false,
+        description: 'Defaults to the render stage'
+      }
+    ]
+  }}
+/>

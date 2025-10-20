@@ -1,79 +1,6 @@
 ---
-order: 4.17
-category: '@threlte/extras'
 title: <Grid>
 sourcePath: 'packages/extras/src/lib/components/Grid/Grid.svelte'
-type: 'component'
-componentSignature:
-  {
-    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
-    props:
-      [
-        { name: 'plane', type: "'xz' | 'xy' | 'zy'", default: "'xz'", required: false },
-        { name: 'cellColor', type: 'ColorRepresentation', default: "'#000000'", required: false },
-        { name: 'cellSize', type: 'number', default: '1', required: false },
-        { name: 'cellThickness', type: 'number', default: '1', required: false },
-        {
-          name: 'sectionColor',
-          type: 'ColorRepresentation',
-          default: "'#0000ee'",
-          required: false
-        },
-        { name: 'sectionSize', type: 'number', default: '10', required: false },
-        { name: 'sectionThickness', type: 'number', default: '2', required: false },
-        {
-          name: 'gridSize',
-          type: 'number | [number, number]',
-          default: '[20,20]',
-          required: false
-        },
-        { name: 'followCamera', type: 'boolean', default: 'false', required: false },
-        { name: 'infiniteGrid', type: 'boolean', default: 'false', required: false },
-        { name: 'fadeDistance', type: 'number', default: '100', required: false },
-        { name: 'fadeStrength', type: 'number', default: '1', required: false },
-        {
-          name: 'fadeOrigin',
-          type: 'Vector3',
-          default: 'undefined',
-          required: false,
-          description: 'Set a custom fading point of origin. The current camera position will be used if unset.'
-        },
-        {
-          name: type,
-          type: "'grid' | 'lines' | 'circular' | 'polar'",
-          default: "'grid'",
-          required: false
-        },
-        {
-          name: 'axis',
-          type: "'x' | 'y' | 'z'",
-          default: "'x'",
-          required: false,
-          description: "'line' only. Designates the world axis along which the line will be oriented."
-        },
-        {
-          name: 'maxRadius',
-          type: 'number',
-          default: '0',
-          required: false,
-          description: "'circular' and 'polar' only. 0 removes the constraint."
-        },
-        {
-          name: 'cellDividers',
-          type: 'number',
-          default: '6',
-          required: false,
-          description: "'polar' only. How many lines will divide the polar grid. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°."
-        },
-        {
-          name: 'sectionDividers',
-          type: 'number',
-          default: '2',
-          required: false,
-          description: "'polar' only. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°."
-        }
-      ]
-  }
 ---
 
 A robust grid implementation with multiple tweakable parameters.
@@ -128,3 +55,80 @@ You have the option to insert your own custom geometry into the `<Grid/>` slot. 
 ### Follow camera
 
 Setting `followCamera` to true applies a transform that moves the grid to the camera's position on the chosen `plane`.
+
+## Component Signature
+
+<ComponentSignature
+  name="<Grid>"
+  signature={{
+    extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
+    props: [
+      { name: 'plane', type: "'xz' | 'xy' | 'zy'", default: "'xz'", required: false },
+      { name: 'cellColor', type: 'ColorRepresentation', default: "'#000000'", required: false },
+      { name: 'cellSize', type: 'number', default: '1', required: false },
+      { name: 'cellThickness', type: 'number', default: '1', required: false },
+      {
+        name: 'sectionColor',
+        type: 'ColorRepresentation',
+        default: "'#0000ee'",
+        required: false
+      },
+      { name: 'sectionSize', type: 'number', default: '10', required: false },
+      { name: 'sectionThickness', type: 'number', default: '2', required: false },
+      {
+        name: 'gridSize',
+        type: 'number | [number, number]',
+        default: '[20,20]',
+        required: false
+      },
+      { name: 'followCamera', type: 'boolean', default: 'false', required: false },
+      { name: 'infiniteGrid', type: 'boolean', default: 'false', required: false },
+      { name: 'fadeDistance', type: 'number', default: '100', required: false },
+      { name: 'fadeStrength', type: 'number', default: '1', required: false },
+      {
+        name: 'fadeOrigin',
+        type: 'Vector3',
+        default: 'undefined',
+        required: false,
+        description:
+          'Set a custom fading point of origin. The current camera position will be used if unset.'
+      },
+      {
+        name: 'type',
+        type: "'grid' | 'lines' | 'circular' | 'polar'",
+        default: "'grid'",
+        required: false
+      },
+      {
+        name: 'axis',
+        type: "'x' | 'y' | 'z'",
+        default: "'x'",
+        required: false,
+        description: "'line' only. Designates the world axis along which the line will be oriented."
+      },
+      {
+        name: 'maxRadius',
+        type: 'number',
+        default: '0',
+        required: false,
+        description: "'circular' and 'polar' only. 0 removes the constraint."
+      },
+      {
+        name: 'cellDividers',
+        type: 'number',
+        default: '6',
+        required: false,
+        description:
+          "'polar' only. How many lines will divide the polar grid. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°."
+      },
+      {
+        name: 'sectionDividers',
+        type: 'number',
+        default: '2',
+        required: false,
+        description:
+          "'polar' only. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°."
+      }
+    ]
+  }}
+/>

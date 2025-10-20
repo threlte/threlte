@@ -1,132 +1,6 @@
 ---
-order: 5.1
-category: '@threlte/extras'
-sourcePath: 'packages/extras/src/lib/components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 title: <AnimatedSpriteMaterial>
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'textureUrl',
-          type: 'string',
-          required: true,
-          description: 'The URL of the spritesheet texture image.'
-        },
-        {
-          name: 'dataUrl',
-          type: 'string',
-          required: false,
-          description: 'The URL of the spritesheet JSON.'
-        },
-        {
-          name: 'animation',
-          type: 'string',
-          required: false,
-          description: 'The current playing animation name.'
-        },
-        {
-          name: 'loop',
-          type: 'boolean',
-          required: false,
-          default: 'true',
-          description: 'Whether or not the current animation should loop.'
-        },
-        {
-          name: 'autoplay',
-          type: 'boolean',
-          required: false,
-          default: 'true',
-          description: 'Controls whether or not to automatically run an animation on load.'
-        },
-        {
-          name: 'fps',
-          type: 'boolean',
-          required: false,
-          default: '10',
-          description: 'The desired frames per second of the animation.'
-        },
-        {
-          name: 'filter',
-          type: '"nearest" | "linear"',
-          required: false,
-          default: '"nearest"',
-          description: 'The texture filtering applied to the spritesheet.'
-        },
-        {
-          name: 'alphaTest',
-          type: 'number',
-          required: false,
-          default: '0.1',
-          description: 'Sets the alpha value to be used when running an alpha test.'
-        },
-        {
-          name: 'delay',
-          type: 'number',
-          required: false,
-          default: '0',
-          description: 'Delay the start of the animation in ms.'
-        },
-        {
-          name: 'transparent',
-          type: 'boolean',
-          required: false,
-          default: 'true',
-          description: 'Whether or not the material should be transparent.'
-        },
-        {
-          name: 'flipX',
-          type: 'boolean',
-          required: false,
-          default: 'false',
-          description: 'Whether or not the Sprite should flip sides on the x-axis.'
-        },
-
-        {
-          name: 'totalFrames',
-          type: 'number',
-          required: false,
-          default: 'rows * columns - 1',
-          description: 'The total number of frames in the spritesheet.'
-        },
-        {
-          name: 'startFrame',
-          type: 'number',
-          required: false,
-          default: '0',
-          description: 'The start frame of the current animation.'
-        },
-        {
-          name: 'endFrame',
-          type: 'number',
-          required: false,
-          default: 'totalFrames',
-          description: 'The end frame of the current animation.'
-        },
-        {
-          name: 'rows',
-          type: 'number',
-          required: false,
-          default: '1',
-          description: 'The number of rows in the spritesheet.'
-        },
-        {
-          name: 'columns',
-          type: 'number',
-          required: false,
-          description: 'The number of columns in the spritesheet.'
-        }
-      ],
-    events:
-      [
-        { name: 'load', payload: 'void', description: 'Fires when all resources have loaded.' },
-        { name: 'start', payload: 'void', description: 'Fires when an animation starts.' },
-        { name: 'end', payload: 'void', description: 'Fires when an animation ends.' },
-        { name: 'loop', payload: 'void', description: 'Fires when an animation loop completes.' }
-      ],
-    exports: [{ name: play, type: '() => void' }, { name: pause, type: '() => void' }]
-  }
+sourcePath: 'packages/extras/src/lib/components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 ---
 
 Provides animation tools for spritesheets.
@@ -197,3 +71,130 @@ Any other material type can be used as well.
   />
 </T.Mesh>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'textureUrl',
+        type: 'string',
+        required: true,
+        description: 'The URL of the spritesheet texture image.'
+      },
+      {
+        name: 'dataUrl',
+        type: 'string',
+        required: false,
+        description: 'The URL of the spritesheet JSON.'
+      },
+      {
+        name: 'animation',
+        type: 'string',
+        required: false,
+        description: 'The current playing animation name.'
+      },
+      {
+        name: 'loop',
+        type: 'boolean',
+        required: false,
+        default: 'true',
+        description: 'Whether or not the current animation should loop.'
+      },
+      {
+        name: 'autoplay',
+        type: 'boolean',
+        required: false,
+        default: 'true',
+        description: 'Controls whether or not to automatically run an animation on load.'
+      },
+      {
+        name: 'fps',
+        type: 'boolean',
+        required: false,
+        default: '10',
+        description: 'The desired frames per second of the animation.'
+      },
+      {
+        name: 'filter',
+        type: '"nearest" | "linear"',
+        required: false,
+        default: '"nearest"',
+        description: 'The texture filtering applied to the spritesheet.'
+      },
+      {
+        name: 'alphaTest',
+        type: 'number',
+        required: false,
+        default: '0.1',
+        description: 'Sets the alpha value to be used when running an alpha test.'
+      },
+      {
+        name: 'delay',
+        type: 'number',
+        required: false,
+        default: '0',
+        description: 'Delay the start of the animation in ms.'
+      },
+      {
+        name: 'transparent',
+        type: 'boolean',
+        required: false,
+        default: 'true',
+        description: 'Whether or not the material should be transparent.'
+      },
+      {
+        name: 'flipX',
+        type: 'boolean',
+        required: false,
+        default: 'false',
+        description: 'Whether or not the Sprite should flip sides on the x-axis.'
+      },
+      {
+        name: 'totalFrames',
+        type: 'number',
+        required: false,
+        default: 'rows * columns - 1',
+        description: 'The total number of frames in the spritesheet.'
+      },
+      {
+        name: 'startFrame',
+        type: 'number',
+        required: false,
+        default: '0',
+        description: 'The start frame of the current animation.'
+      },
+      {
+        name: 'endFrame',
+        type: 'number',
+        required: false,
+        default: 'totalFrames',
+        description: 'The end frame of the current animation.'
+      },
+      {
+        name: 'rows',
+        type: 'number',
+        required: false,
+        default: '1',
+        description: 'The number of rows in the spritesheet.'
+      },
+      {
+        name: 'columns',
+        type: 'number',
+        required: false,
+        description: 'The number of columns in the spritesheet.'
+      }
+    ],
+    events: [
+      { name: 'load', payload: 'void', description: 'Fires when all resources have loaded.' },
+      { name: 'start', payload: 'void', description: 'Fires when an animation starts.' },
+      { name: 'end', payload: 'void', description: 'Fires when an animation ends.' },
+      { name: 'loop', payload: 'void', description: 'Fires when an animation loop completes.' }
+    ],
+    exports: [
+      { name: 'play', type: '() => void' },
+      { name: 'pause', type: '() => void' }
+    ]
+  }}
+/>

@@ -1,47 +1,6 @@
 ---
-order: 4.16
-category: '@threlte/extras'
 title: '<Float>'
 sourcePath: 'packages/extras/src/lib/components/Float/Float.svelte'
-type: 'component'
-componentSignature:
-  {
-    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-    props:
-      [
-        {
-          name: 'speed',
-          type: 'number | [x: number, y: number, z: number]',
-          default: '1',
-          required: false
-        },
-        {
-          name: 'floatIntensity',
-          type: 'number | [x: number, y: number, z: number]',
-          default: '1',
-          required: false
-        },
-        {
-          name: 'floatingRange',
-          type: '[number, number] | [x: [number, number], y: [number, number], z: [number, number]]',
-          default: '[-0.1, 0.1]',
-          required: false
-        },
-        {
-          name: 'rotationIntensity',
-          type: 'number | [x: number, y: number, z: number]',
-          default: '0',
-          required: false
-        },
-        {
-          name: 'rotationSpeed',
-          type: 'number | [x: number, y: number, z: number]',
-          default: '0',
-          required: false
-        },
-        { name: 'seed', type: 'number', default: 'Math.random() * 10000', required: false }
-      ]
-  }
 ---
 
 This component is a port of [drei's `<Float>` component](https://github.com/pmndrs/drei#float) and makes its contents float or hover.
@@ -79,3 +38,45 @@ This component is a port of [drei's `<Float>` component](https://github.com/pmnd
 Rotation is set by `rotationSpeed` and `rotationIntensity`. Both of them need to be different from 0 to enable rotation. Providing a `number` in either of them applies it to all three axes. You get more granual control by passing an array `[x: number, y: number, z: number]`. `rotationSpeed` is responsible for the speed of the animation and `rotationIntensity` for the angle.
 
 `seed` is responsible for the starting state of the animations and is random by default. Setting to a fixed value to get a predictable starting result.
+
+## Component Signature
+
+<ComponentSignature
+  name="<Float>"
+  signature={{
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props: [
+      {
+        name: 'speed',
+        type: 'number | [x: number, y: number, z: number]',
+        default: '1',
+        required: false
+      },
+      {
+        name: 'floatIntensity',
+        type: 'number | [x: number, y: number, z: number]',
+        default: '1',
+        required: false
+      },
+      {
+        name: 'floatingRange',
+        type: '[number, number] | [x: [number, number], y: [number, number], z: [number, number]]',
+        default: '[-0.1, 0.1]',
+        required: false
+      },
+      {
+        name: 'rotationIntensity',
+        type: 'number | [x: number, y: number, z: number]',
+        default: '0',
+        required: false
+      },
+      {
+        name: 'rotationSpeed',
+        type: 'number | [x: number, y: number, z: number]',
+        default: '0',
+        required: false
+      },
+      { name: 'seed', type: 'number', default: 'Math.random() * 10000', required: false }
+    ]
+  }}
+/>

@@ -1,19 +1,6 @@
 ---
-order: 7.1
-category: '@threlte/extras'
+title: <Instance>
 sourcePath: 'packages/extras/src/lib/components/Instancing/Instance.svelte'
-title: '<Instance>'
-type: 'component'
-componentSignature:
-  {
-    extends:
-      { type: 'PositionalMesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
-    props:
-      [
-        { name: 'id', type: 'string', default: 'default', required: false },
-        { name: 'color', type: 'THREE.ColorRepresentation', required: false }
-      ]
-  }
 ---
 
 Every `<Instance>` component nested in an [`<InstancedMesh>`](/reference/extras/instanced-mesh) component resembles one instance. An `<Instance>` can therefore only be used as a child component to a `<InstancedMesh>` component. The `<Instance>` component can be transformed and colorized individually:
@@ -34,3 +21,19 @@ Every `<Instance>` component nested in an [`<InstancedMesh>`](/reference/extras/
   />
 </InstancedMesh>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  name="<Instance>"
+  signature={{
+    extends: {
+      type: 'PositionalMesh',
+      url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh'
+    },
+    props: [
+      { name: 'id', type: 'string', default: 'default', required: false },
+      { name: 'color', type: 'THREE.ColorRepresentation', required: false }
+    ]
+  }}
+/>
