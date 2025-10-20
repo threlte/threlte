@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.1.8
+
+### Patch Changes
+
+- 0499ca7: Update latest version on npm
+
 ## 8.1.7
 
 ### Patch Changes
