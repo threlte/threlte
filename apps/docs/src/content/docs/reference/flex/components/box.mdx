@@ -1,76 +1,6 @@
 ---
-category: '@threlte/flex'
 title: '<Box>'
-order: 1
 sourcePath: 'packages/flex/src/lib/Box'
-type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        { name: order, type: 'number', required: false },
-        {
-          name: 'class',
-          type: 'string',
-          required: false,
-          description: 'declared classes will be resolved by a ClassParser declared on <Flex>'
-        },
-        {
-          name: 'alignItems',
-          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
-          required: false
-        },
-        {
-          name: 'alignSelf',
-          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
-          required: false
-        },
-        {
-          name: 'alignContent',
-          type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
-          required: false
-        },
-        {
-          name: 'justifyContent',
-          type: '"FlexStart" | "Center" | "FlexEnd" | "SpaceBetween" | "SpaceAround" | "SpaceEvenly"',
-          required: false
-        },
-        {
-          name: 'flexDirection',
-          type: '"Column" | "ColumnReverse" | "Row" | "RowReverse"',
-          required: false
-        },
-        { name: 'flexWrap', type: '"NoWrap" | "Wrap" | "WrapReverse"', required: false },
-        { name: 'flex', type: 'number', required: false },
-        { name: 'flexBasis', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'flexGrow', type: 'number', required: false },
-        { name: 'flexShrink', type: 'number', required: false },
-        { name: 'height', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'width', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'maxHeight', type: 'number | `${number}%`', required: false },
-        { name: 'maxWidth', type: 'number | `${number}%`', required: false },
-        { name: 'minHeight', type: 'number | `${number}%`', required: false },
-        { name: 'minWidth', type: 'number | `${number}%`', required: false },
-        { name: 'top', type: 'number | `${number}%`', required: false },
-        { name: 'right', type: 'number | `${number}%`', required: false },
-        { name: 'bottom', type: 'number | `${number}%`', required: false },
-        { name: 'left', type: 'number | `${number}%`', required: false },
-        { name: 'padding', type: 'number | `${number}%`', required: false },
-        { name: 'paddingTop', type: 'number | `${number}%`', required: false },
-        { name: 'paddingRight', type: 'number | `${number}%`', required: false },
-        { name: 'paddingBottom', type: 'number | `${number}%`', required: false },
-        { name: 'paddingLeft', type: 'number | `${number}%`', required: false },
-        { name: 'margin', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'marginTop', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'marginRight', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'marginBottom', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'marginLeft', type: 'number | "auto" | `${number}%`', required: false },
-        { name: 'gap', type: 'number', required: false },
-        { name: 'gapColumn', type: 'number', required: false },
-        { name: 'gapRow', type: 'number', required: false },
-        { name: 'aspectRatio', type: 'number', required: false }
-      ]
-  }
 ---
 
 The component `<Box>` creates a flexbox item. It can be used as a direct child
@@ -185,3 +115,73 @@ item manually, you can use the `order` prop:
   <Box order={3} />
 </Flex>
 ```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      { name: order, type: 'number', required: false },
+      {
+        name: 'class',
+        type: 'string',
+        required: false,
+        description: 'declared classes will be resolved by a ClassParser declared on <Flex>'
+      },
+      {
+        name: 'alignItems',
+        type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+        required: false
+      },
+      {
+        name: 'alignSelf',
+        type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+        required: false
+      },
+      {
+        name: 'alignContent',
+        type: '"Auto" | "FlexStart" | "Center" | "FlexEnd" | "Stretch" | "Baseline" | "SpaceBetween" | "SpaceAround"',
+        required: false
+      },
+      {
+        name: 'justifyContent',
+        type: '"FlexStart" | "Center" | "FlexEnd" | "SpaceBetween" | "SpaceAround" | "SpaceEvenly"',
+        required: false
+      },
+      {
+        name: 'flexDirection',
+        type: '"Column" | "ColumnReverse" | "Row" | "RowReverse"',
+        required: false
+      },
+      { name: 'flexWrap', type: '"NoWrap" | "Wrap" | "WrapReverse"', required: false },
+      { name: 'flex', type: 'number', required: false },
+      { name: 'flexBasis', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'flexGrow', type: 'number', required: false },
+      { name: 'flexShrink', type: 'number', required: false },
+      { name: 'height', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'width', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'maxHeight', type: 'number | `${number}%`', required: false },
+      { name: 'maxWidth', type: 'number | `${number}%`', required: false },
+      { name: 'minHeight', type: 'number | `${number}%`', required: false },
+      { name: 'minWidth', type: 'number | `${number}%`', required: false },
+      { name: 'top', type: 'number | `${number}%`', required: false },
+      { name: 'right', type: 'number | `${number}%`', required: false },
+      { name: 'bottom', type: 'number | `${number}%`', required: false },
+      { name: 'left', type: 'number | `${number}%`', required: false },
+      { name: 'padding', type: 'number | `${number}%`', required: false },
+      { name: 'paddingTop', type: 'number | `${number}%`', required: false },
+      { name: 'paddingRight', type: 'number | `${number}%`', required: false },
+      { name: 'paddingBottom', type: 'number | `${number}%`', required: false },
+      { name: 'paddingLeft', type: 'number | `${number}%`', required: false },
+      { name: 'margin', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'marginTop', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'marginRight', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'marginBottom', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'marginLeft', type: 'number | "auto" | `${number}%`', required: false },
+      { name: 'gap', type: 'number', required: false },
+      { name: 'gapColumn', type: 'number', required: false },
+      { name: 'gapRow', type: 'number', required: false },
+      { name: 'aspectRatio', type: 'number', required: false }
+    ]
+  }}
+/>
