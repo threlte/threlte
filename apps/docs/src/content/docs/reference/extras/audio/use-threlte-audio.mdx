@@ -1,0 +1,19 @@
+---
+title: useThrelteAudio
+sourcePath: 'packages/extras/src/lib/audio/useThrelteAudio.ts'
+---
+
+When invoking the hook `useThrelteAudio` and there's no Threlte audio context yet, it will be
+created and returned, otherwise, the existing audio context will be returned. The components
+[`<AudioListener>`](/reference/extras/audio-listener), [`<Audio>`](/reference/extras/audio)
+and [`<PositionalAudio>`](/reference/extras/positional-audio) will create an audio context
+if mounted.
+
+```ts
+const {
+  audioListeners, // Map<string, AudioListener>
+  getAudioListener, // (id?: string) => AudioListener | undefined
+  addAudioListener, // (listener: AudioListener, id?: string) => void
+  removeAudioListener // (id?: string) => void
+} = useThrelteAudio()
+```

@@ -1,8 +1,7 @@
 ---
-import MdxCode from '$components/Code/MdxCode.astro'
 import { getCollection, render, type CollectionEntry } from 'astro:content'
-import BlogEntryMeta from '../../../components/Blog/BlogEntryMeta.astro'
-import MainLayout from '../../../layouts/MainLayout.astro'
+import BlogEntryMeta from '$components/Blog/BlogEntryMeta.astro'
+import MainLayout from '$layouts/MainLayout.astro'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('blog')
@@ -48,7 +47,7 @@ const { Content } = await render(entry)
       </div>
 
       <article class="[&_p]:text-faded [&_li]:text-faded markdown-content mt-12 w-full max-w-full">
-        <Content components={{ pre: MdxCode }} />
+        <Content />
       </article>
     </div>
   </div>

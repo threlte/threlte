@@ -1,0 +1,107 @@
+---
+title: Disposing Objects
+sidebar: {
+	order: 5
+}
+---
+
+Freeing resources is a [manual chore in
+Three.js](https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects),
+but Svelte is aware of component lifecycles, hence Threlte will attempt to free
+resources for you by calling `dispose`, if present, on all unmounted objects
+that are not being used anywhere else in your scene.
+
+## Automatic disposal
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+</script>
+
+<!--
+	The geometry and the material will be disposed
+	as soon as the <Mesh> component unmounts.
+-->
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+<Tip>
+  Be aware that calling `dispose` on a Three.js buffer, material or geometry is merely deallocating
+  it from the GPU memory. If an object is used after it's disposed it will be allocated again,
+  resulting in a performance drop for a single frame. It will **not produce a runtime error**.
+</Tip>
+
+## Manual disposal
+
+You can switch off automatic disposal by setting `dispose={false}` on
+components. This disables disposal for the **entire subtree**.
+
+```svelte
+<script>
+  import { T, useTexture } from '@threlte/core'
+
+  const map = useTexture('/some/texture')
+  const material = new MeshStandardMaterial({ map })
+</script>
+
+<T.Mesh dispose={false}>
+  <!-- will not be disposed -->
+  <T.BoxGeometry />
+  <!-- will not be disposed -->
+  <T.MeshStandardMaterial map={$map} />
+
+  <T.Mesh dispose>
+    <!-- will be disposed -->
+    <T.BoxGeometry />
+    <!-- will be disposed -->
+    <T.MeshStandardMaterial map={$map} />
+  </T.Mesh>
+</T.Mesh>
+```
+
+## Custom disposal
+
+You can use the return function of the `oncreate` prop to dispose of objects manually.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.MeshBasicMaterial
+  dispose={false}
+  oncreate={(ref) => {
+    return () => {
+      // Do your disposal here
+    }
+  }}
+/>
+```
+
+## Automatic Disposal Limitations
+
+Be aware that automatic disposal only happens on the objects that are referenced
+by a `<T>` component.
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+
+  const map = useTexture('/some/texture.png')
+</script>
+
+{#if $map}
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial map={$map} />
+  </T.Mesh>
+{/if}
+```
+
+In this example, the texture will not be disposed when the material unmounts,
+you will have to dispose of it manually.

@@ -1,0 +1,35 @@
+---
+title: '<Debug>'
+sourcePath: 'packages/rapier/src/lib/components/Debug/Debug.svelte'
+---
+
+Use the Debug component to see live representations of all colliders in a scene.
+
+```svelte
+<Canvas>
+  <World>
+    <Debug />
+
+    <RigidBody>
+      <AutoColliders>
+        <Mesh
+          {geometry}
+          {material}
+        />
+      </AutoColliders>
+    </RigidBody>
+  </World>
+</Canvas>
+```
+
+## Component Signature
+
+<ComponentSignature
+  name="<Debug>"
+  signature={{
+    extends: {
+      type: 'LineBasicMaterial',
+      url: 'https://threejs.org/docs/index.html#api/en/materials/LineBasicMaterial'
+    }
+  }}
+/>

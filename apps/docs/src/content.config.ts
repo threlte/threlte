@@ -1,5 +1,7 @@
 // 1. Import utilities from `astro:content`
 import { defineCollection, z } from 'astro:content'
+import { docsLoader } from '@astrojs/starlight/loaders'
+import { docsSchema } from '@astrojs/starlight/schema'
 import { glob } from 'astro/loaders'
 
 export const componentSignature = z.object({
@@ -64,57 +66,7 @@ export const componentSignature = z.object({
     .optional()
 })
 
-export const referenceCategories = [
-  '@threlte/core',
-  '@threlte/extras',
-  '@threlte/rapier',
-  '@threlte/theatre',
-  '@threlte/gltf',
-  '@threlte/xr',
-  '@threlte/flex',
-  '@threlte/studio',
-  'Documentation'
-] as const
-
 // 2. Define your collection(s)
-export const referenceCollection = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/reference' }),
-  schema: z.object({
-    schemaType: z.string().default('reference'),
-    type: z.enum(['component', 'hook', 'plugin']).optional(),
-    name: z.string(),
-    /**
-     * Path to the source file or directory, relative to the root of the repository.
-     */
-    sourcePath: z.string().optional(),
-    order: z.number().optional(),
-    isDivider: z.boolean().optional(),
-    category: z.enum(referenceCategories),
-    componentSignature: componentSignature.optional(),
-    showInSidebar: z.boolean().optional().default(true)
-  })
-})
-
-export const learnCollection = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/learn' }),
-  schema: z.object({
-    schemaType: z.string().default('learn'),
-    category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
-    isDivider: z.boolean().optional(),
-    title: z.string(),
-    order: z.number().optional(),
-    showInSidebar: z.boolean().optional().default(true)
-  })
-})
-
-export const examplesCollection = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/examples' }),
-  schema: z.object({
-    schemaType: z.string().default('examples'),
-    order: z.number().optional()
-  })
-})
-
 export const testimonialsCollection = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/testimonials' }),
   schema: z.object({
@@ -163,11 +115,9 @@ export const blogCollection = defineCollection({
 
 // 3. Export a single `collections` object to register your collection(s)
 export const collections = {
-  reference: referenceCollection,
-  learn: learnCollection,
+  docs: defineCollection({ loader: docsLoader(), schema: docsSchema() }),
   testimonials: testimonialsCollection,
   showcase: showcaseCollection,
-  examples: examplesCollection,
   blog: blogCollection,
   authors: authorsCollection
 }

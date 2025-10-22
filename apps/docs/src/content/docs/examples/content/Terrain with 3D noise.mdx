@@ -1,0 +1,54 @@
+---
+title: Terrain with 3D noise
+---
+
+Noise is often used in graphics and game development to create "smooth randomness".
+
+Three.js has a `SimplexNoise` addon that can be used for this purpose. In the example below, it is used to generate a smooth random surface.
+
+<Example path="geometry/terrain" />
+
+## Setting the Height of Each Vertex
+
+After the geometry is created, the z-value of each vertex's position is set with a value generated from the noise function.
+
+```typescript
+const noise = new SimplexNoise()
+
+for (let i = 0; i < positions.count; i += 1) {
+  const x = positions.getX(i) / flatness
+  const y = positions.getY(i) / flatness
+  positions.setZ(i, noise.noise(x, y))
+}
+```
+
+The `flatness` variable scales down the `x` and `y` values that are passed to the noise function. A higher `flatness` value corresponds to smaller changes between noise values thus a flatter surface.
+
+<Tip type="warning">
+  When updating attributes of a geometry after the first render, you may have to set
+  `attribute.needsUpdate` to `true`. It may also be necessary to recalculate the geometry's vertex
+  normals using `geometry.computeVertexNormals()`.
+</Tip>
+
+## Rotating the geometry
+
+One important thing to note is that the plane geometry is created in the xy-plane. This is why the z-value is treated as the height of the vertex and the geometry is rotated 90 degrees. The Z-up coordinate system is common to see in such areas as structural design and 3D-printing.
+
+## Deterministic noise values
+
+`SimplexNoise.noise` is deterministic. In other words, when given the same `x` and `y`, the output is always the same. If you want to produce different results, you can offset the `x` and `y` inputs by some amount.
+
+```typescript {4}+ {6-7}
+const noise = new SimplexNoise()
+
+$effect(() => {
+  const randomOffset = Math.random()
+  for (let i = 0; i < positions.count; i += 1) {
+    const x = positions.getX(i) / flatness + randomOffset
+    const y = positions.getY(i) / flatness + randomOffset
+    positions.setZ(i, noise.noise(x, y))
+  }
+
+  // ...
+})
+```

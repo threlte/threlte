@@ -17,9 +17,9 @@
 <button
   class={[
     'focus:outline-hidden flex flex-row items-center gap-1 border border-transparent *:w-[1em] hover:underline',
-    isSelected &&
-      'rounded-xs border-orange/5 text-orange -mx-1 -my-0.5 bg-orange-800/50 px-1 py-0.5'
+    isSelected && 'text-orange rounded bg-orange-800/50'
   ]}
+  style={isSelected ? '' : 'background:none;'}
   onclick={() => {
     context.currentFilePath = file.path
   }}

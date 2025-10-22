@@ -4,9 +4,7 @@ import type { componentSignature } from '../../content.config'
 import { getShiki } from '$lib/highlighter'
 
 interface Props {
-  titleOverride?: string
-  idOverride?: string
-  componentName: string
+  name: string
   signature: TypeOf<typeof componentSignature>
 }
 
@@ -44,28 +42,20 @@ const showComponentSignature =
   hasEvents || hasProps || hasBindings || !!Astro.props.signature.extends
 
 const shiki = await getShiki()
-
-const id = Astro.props.idOverride ?? 'component-signature'
 ---
 
 {
   showComponentSignature && (
     <>
-      <h2
-        class="mt-0"
-        {id}
-      >
-        {Astro.props.titleOverride ? Astro.props.titleOverride : `Component Signature`}
-      </h2>
       <div class="not-content [&_code]:p-0! my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl">
         {Astro.props.signature.extends && (
           <p class:list={['text-faded', !hasAnySignature && 'mb-0!']}>
-            <code>{Astro.props.componentName}</code> extends
+            <code>{Astro.props.name}</code> extends
             <code>
               {'<'}
               <a
                 class="text-white"
-                href="/docs/reference/core/t"
+                href="/reference/core/components/t"
               >
                 {'T'}
               </a>

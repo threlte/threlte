@@ -63,10 +63,11 @@
 
 <div
   class={[
-    'not-content rounded-b-md! relative flex w-full flex-col items-stretch overflow-hidden border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
+    'not-content rounded-b-md! relative mt-0 flex w-full flex-col items-stretch overflow-hidden border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
     !expanded && 'max-h-[100px]! overflow-hidden',
     hidePreview && 'rounded-md! border-t'
   ]}
+  data-pagefind-ignore
 >
   {#if !expanded}
     <div

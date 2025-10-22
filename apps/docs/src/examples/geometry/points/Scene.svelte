@@ -56,7 +56,7 @@
           ;(parent as BufferGeometry).setAttribute('position', ref)
           return () => {
             // cleanup function called when ref changes or the component unmounts
-            // https://threlte.xyz/docs/reference/core/t#attach
+            // https://threlte.xyz/reference/core/components/t#attach
           }
         }}
       />

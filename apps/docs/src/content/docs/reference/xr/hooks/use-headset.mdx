@@ -1,0 +1,28 @@
+---
+title: 'useHeadset'
+---
+
+Provides a reference to the user's headset pose.
+
+```svelte
+<script>
+  import { useTask } from '@threlte/core'
+  import { useHeadset } from '@threlte/xr'
+
+  const headset = useHeadset()
+
+  useTask(() => {
+    // Read the current headset position and rotation.
+    console.log(headset.position, headset.quaternion)
+  })
+</script>
+```
+
+If you would like to attach objects to the headset, the [`<Headset>`](/reference/xr/headset) component is available.
+
+### Signature
+
+```ts
+// THREE.Group - A group representing the headset pose.
+const headset = useHeadset()
+```

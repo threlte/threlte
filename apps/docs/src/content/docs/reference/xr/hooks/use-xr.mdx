@@ -1,0 +1,26 @@
+---
+title: 'useXR'
+---
+
+Provides context about the current WebXR session.
+
+```svelte
+<script>
+  import { useXR } from '@threlte/xr'
+
+  const { isPresenting, isHandTracking, session } = useXR()
+</script>
+```
+
+### Signature
+
+```ts
+const {
+  // Readable<boolean> - Whether the XR device is presenting in an XR session
+  isPresenting,
+  // Readable<boolean> - Whether hand tracking inputs are active
+  isHandTracking,
+  // Readable<XRSession | undefined> - The active `XRSession`
+  session
+} = useXR()
+```

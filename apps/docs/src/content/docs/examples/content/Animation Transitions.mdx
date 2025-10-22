@@ -1,0 +1,39 @@
+---
+title: Animation transitions
+---
+
+Transition seamlessly between glTF animations.
+
+<Example path="animation/transitions" />
+
+## Explanation
+
+glTF is a comprehensive file format for 3D models, and it supports animations.
+In this example, we extract the animations from the glTF file, play them, and crossfade between them.
+
+### What is the code doing?
+
+1. Extract the variables `gltf` and `actions`.
+
+```ts
+const { gltf, actions } = useGltfAnimations()
+```
+
+2. Bind `gltf` to the `<GLTF>` component.
+
+```svelte
+<GLTF
+  bind:gltf={$gltf}
+  url="https://threejs.org/examples/models/gltf/Xbot.glb"
+/>
+```
+
+This causes `actions` to be populated with an array of the available animations in that glTF file.
+
+<Tip type="tip">
+  Run `console.log(Object.entries($actions))` to see the available action strings and the shape of
+  the animation object. By doing this, you'll discover that this example is only using 3 of the 7
+  available animations attached to this glTF file.
+</Tip>
+
+3. selecting a different animation calls `transitionTo` function, which crossfades between the two animations

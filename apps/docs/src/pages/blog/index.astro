@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content'
-import BlogEntryMeta from '../../components/Blog/BlogEntryMeta.astro'
-import MainLayout from '../../layouts/MainLayout.astro'
+import BlogEntryMeta from '$components/Blog/BlogEntryMeta.astro'
+import MainLayout from '$layouts/MainLayout.astro'
 
 const collection = await getCollection('blog')
 const authors = await getCollection('authors')

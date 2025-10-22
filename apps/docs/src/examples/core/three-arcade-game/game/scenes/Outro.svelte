@@ -31,7 +31,7 @@
     showPressSpaceToStart = true
   }, 5e3)
 
-  let intervalHandler = setInterval(() => {
+  let intervalHandler = window.setInterval(() => {
     if (!showPressSpaceToStart) return
     blinkClock = blinkClock ? 0 : 1
   }, 500)

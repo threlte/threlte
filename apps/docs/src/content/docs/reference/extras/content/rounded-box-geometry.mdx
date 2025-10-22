@@ -1,0 +1,74 @@
+---
+title: <RoundedBoxGeometry>
+sourcePath: 'packages/extras/src/lib/components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
+---
+
+Creates a rounded box geometry with a Three.js ExtrudeGeometry.
+
+### Example
+
+```svelte
+<script>
+  import { T, Canvas } from '@threlte/core'
+  import { RoundedBoxGeometry } from '@threlte/extras'
+</script>
+
+<Canvas>
+  <T.PerspectiveCamera
+    makeDefault
+    position={[3, 3, 3]}
+    lookAt={[0, 0, 0]}
+  />
+
+  <T.Mesh>
+    <RoundedBoxGeometry />
+    <T.MeshPhongMaterial color="hotpink" />
+  </T.Mesh>
+</Canvas>
+```
+
+## Component Signature
+
+<ComponentSignature
+  signature={{
+    props: [
+      {
+        name: 'args',
+        type: '[number, number, number]',
+        required: false,
+        default: '[1, 1, 1]',
+        description: 'Width, height, depth'
+      },
+      {
+        name: 'radius',
+        type: 'number',
+        required: false,
+        default: '0.05',
+        description: 'Radius of the rounded corners.'
+      },
+      {
+        name: 'smoothness',
+        type: 'number',
+        required: false,
+        default: '4',
+        description: 'The number of curve segments.'
+      },
+      {
+        name: 'creaseAngle',
+        type: 'number',
+        required: false,
+        default: '0.4',
+        description:
+          'Smooth normals everywhere except faces that meet at an angle greater than the crease angle.'
+      },
+      {
+        name: 'steps',
+        type: 'number',
+        required: false,
+        default: '1',
+        description:
+          'Number of points used for subdividing segments along the depth of the extruded spline.'
+      }
+    ]
+  }}
+/>
