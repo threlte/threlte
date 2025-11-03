@@ -20,6 +20,22 @@ A material that visualizes the uvs of a geometry. Uvs are typically used for tex
 
 <Example path="extras/uv-material" />
 
+## Usage
+
+Simply import the component and add it as a child to a mesh
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+  import { UvMaterial } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <UvMaterial />
+</T.Mesh>
+```
+
 ## Caveats
 
 The geometry must have a "uv" attribute in order for this material to work. If you're creating your own geometry, be sure to assign the "uv" attribute.
@@ -30,4 +46,4 @@ const uvAttribute = new BufferAttribute(/* uv array here */)
 geometry.setAttribute('uv', uvAttribute)
 ```
 
-Most models that you import into your program should come with uv data baked in and three.js will automatically assign uv attributes when loading the model.
+Most models that you import into your program should come with uv data and three.js will automatically assign uv attributes when loading the model.

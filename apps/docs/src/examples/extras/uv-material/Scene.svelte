@@ -66,7 +66,7 @@
 </T>
 
 <Align
-  position.y={1}
+  position.y={2}
   oncreate={(ref) => {
     camera.lookAt(ref.position)
   }}
