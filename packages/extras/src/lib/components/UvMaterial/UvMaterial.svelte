@@ -23,7 +23,7 @@
   import { T } from '@threlte/core'
   import type { Props } from '@threlte/core'
 
-  let { children, ref = $bindable() }: Props<ShaderMaterial> = $props()
+  let { children, ref = $bindable(), ...restProps }: Props<ShaderMaterial> = $props()
 
   const material = new ShaderMaterial({
     fragmentShader,
@@ -34,6 +34,7 @@
 <T
   is={material}
   bind:ref
+  {...restProps}
 >
   {@render children?.({
     ref: material
