@@ -41,9 +41,9 @@
     Raycaster,
     Vector3
   } from 'three'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import { logFragment, logVertex, spriteVertex } from './shaders'
-  import type { HTMLProps } from './types'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { logFragment, logVertex, spriteVertex } from './shaders.js'
+  import type { HTMLProps } from './types.js'
   import {
     defaultCalculatePosition,
     epsilon,
@@ -54,7 +54,7 @@
     isObjectVisible,
     objectScale,
     objectZIndex
-  } from './utils'
+  } from './utils.js'
 
   let {
     autoRender = true,

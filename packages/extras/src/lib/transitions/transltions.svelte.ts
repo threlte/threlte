@@ -1,7 +1,7 @@
 import { injectPlugin, useThrelte } from '@threlte/core'
 import type { TransitionConfig } from 'svelte/transition'
-import { transition } from './internals'
-import type { ThrelteGlobalTransition, ThrelteTransition } from './types'
+import { transition } from './internals.js'
+import type { ThrelteGlobalTransition, ThrelteTransition } from './types.js'
 
 const el = typeof window !== 'undefined' ? document.createElement('div') : undefined
 
