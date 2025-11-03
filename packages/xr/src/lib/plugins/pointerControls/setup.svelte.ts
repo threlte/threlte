@@ -1,10 +1,16 @@
 import { Vector3, type Event, type Object3D } from 'three'
 import { observe, watch } from '@threlte/core'
-import type { ControlsContext, HandContext, Intersection, IntersectionEvent, events } from './types'
-import { getInternalContext } from './context'
+import type {
+  ControlsContext,
+  HandContext,
+  Intersection,
+  IntersectionEvent,
+  events
+} from './types.js'
+import { getInternalContext } from './context.js'
 import { controllers } from '../../hooks/useController.svelte'
 import { useHand } from '../../hooks/useHand.svelte'
-import { useFixed } from '../../internal/useFixed'
+import { useFixed } from '../../internal/useFixed.js'
 import { isPresenting, pointerIntersection } from '../../internal/state.svelte'
 
 type PointerEventName = (typeof events)[number]

@@ -1,4 +1,4 @@
-import type { XRHandObject } from '../types'
+import type { XRHandObject } from '../types.js'
 import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
 
 class Hands {

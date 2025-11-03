@@ -1,5 +1,5 @@
 import { session, referenceSpaceType, xr } from '../internal/state.svelte'
-import { getXRSessionOptions } from './getXRSessionOptions'
+import { getXRSessionOptions } from './getXRSessionOptions.js'
 
 /**
  * Starts / ends an XR session.

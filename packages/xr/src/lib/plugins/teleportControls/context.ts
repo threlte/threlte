@@ -1,8 +1,8 @@
 import { type Mesh, Raycaster, type Intersection } from 'three'
 import { getContext, setContext } from 'svelte'
 import type { CurrentWritable } from '@threlte/core'
-import { defaultComputeFunction } from './compute'
-import type { TeleportControlsOptions } from '.'
+import { defaultComputeFunction } from './compute.js'
+import type { TeleportControlsOptions } from './index.js'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
