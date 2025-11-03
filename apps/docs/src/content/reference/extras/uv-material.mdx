@@ -1,0 +1,33 @@
+---
+order: 5.91
+category: '@threlte/extras'
+name: <UvMaterial>
+sourcePath: 'packages/extras/src/lib/components/UvMaterial/UvMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'ShaderMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/objects/ShaderMaterial'
+      },
+    props: [],
+    exports: []
+  }
+---
+
+A material that visualizes the uvs of a geometry. Uvs are typically used for texture indexing.
+
+<Example path="extras/uv-material" />
+
+## Caveats
+
+The geometry must have a "uv" attribute in order for this material to work. If you're creating your own geometry, be sure to assign the "uv" attribute.
+
+```ts
+const geometry = new BufferGeometry()
+const uvAttribute = new BufferAttribute(/* uv array here */)
+geometry.setAttribute('uv', uvAttribute)
+```
+
+Most models that you import into your program should come with uv data baked in and three.js will automatically assign uv attributes when loading the model.

@@ -65,6 +65,7 @@ export { default as CubeCamera } from './components/CubeCamera/CubeCamera.svelte
 export { default as LinearGradientTexture } from './components/GradientTexture/linear/LinearGradientTexture.svelte'
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
 export type { ColorStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
+export { default as UvMaterial } from './components/UvMaterial/UvMaterial.svelte'
 export { default as View } from './components/View/View.svelte'
 export { default as Wireframe } from './components/Wireframe/Wireframe.svelte'
 
