@@ -6,7 +6,7 @@
   import Light from './bindings/Light.svelte'
   import Material from './bindings/Material.svelte'
   import Object3DBinding from './bindings/Object3D.svelte'
-  import { areCamera, areLight, haveMaterialProperty } from './bindings/utils'
+  import { areCamera, areLight, haveMaterialProperty } from './bindings/utils.js'
 
   const objectSelection = useObjectSelection()
   const keyFromObjects = (objects: Object3D[]) => {
