@@ -1,5 +1,5 @@
 import { getContext } from 'svelte'
-import { type Plugin, type PluginContext, pluginContextKey } from '../../../plugins/types'
+import { type Plugin, type PluginContext, pluginContextKey } from '../../../plugins/types.js'
 
 export const usePlugins = (args: () => Parameters<Plugin>[0]) => {
   const plugins = getContext<PluginContext | undefined>(pluginContextKey)

@@ -2,16 +2,16 @@
   lang="ts"
   generics="Type"
 >
-  import type { TProps } from './types'
+  import type { TProps } from './types.js'
   import { useAttach } from './utils/useAttach.svelte'
   import { useCamera } from './utils/useCamera.svelte'
   import { isDisposableObject, useDispose, useSetDispose } from './utils/useDispose.svelte'
   import { useEvents } from './utils/useEvents.svelte'
-  import { useIs } from './utils/useIs'
-  import { usePlugins } from './utils/usePlugins'
-  import { useProps } from './utils/useProps'
-  import { determineRef } from './utils/utils'
-  import { isInstanceOf } from '../../utilities'
+  import { useIs } from './utils/useIs.js'
+  import { usePlugins } from './utils/usePlugins.js'
+  import { useProps } from './utils/useProps.js'
+  import { determineRef } from './utils/utils.js'
+  import { isInstanceOf } from '../../utilities/index.js'
   import { untrack } from 'svelte'
 
   let {
