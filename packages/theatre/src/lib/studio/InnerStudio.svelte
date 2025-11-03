@@ -2,8 +2,9 @@
   lang="ts"
   module
 >
-  import Studio from '@theatre/studio'
-  import { studio } from '../consts'
+  const studioModule = await import('@theatre/studio')
+  const Studio = studioModule as unknown as typeof import('@theatre/studio').default
+  import { studio } from '../consts.js'
 
   Studio.initialize()
   studio.set(Studio)
