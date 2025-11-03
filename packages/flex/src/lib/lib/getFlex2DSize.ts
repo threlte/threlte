@@ -1,4 +1,4 @@
-import type { FlexPlane } from './props'
+import type { FlexPlane } from './props.js'
 
 export function getFlex2DSize(sizes: [number, number, number], plane: FlexPlane) {
   switch (plane) {
