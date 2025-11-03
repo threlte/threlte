@@ -30,8 +30,8 @@ This should be placed within a Threlte `<Canvas />`.
   } from '../internal/state.svelte'
   import { setupRaf } from '../internal/setupRaf.svelte'
   import { setupHeadset } from '../internal/setupHeadset.svelte'
-  import { setupControllers } from '../internal/setupControllers'
-  import { setupHands } from '../internal/setupHands'
+  import { setupControllers } from '../internal/setupControllers.js'
+  import { setupHands } from '../internal/setupHands.js'
 
   interface Props {
     /**

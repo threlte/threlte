@@ -1,6 +1,6 @@
 import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
-import { usePointerControls } from './hook'
-import { events, type ThrelteXREvents } from './types'
+import { usePointerControls } from './hook.js'
+import { events, type ThrelteXREvents } from './types.js'
 
 export const injectPointerControlsPlugin = (): void => {
   injectPlugin('threlte-pointer-controls', (args) => {

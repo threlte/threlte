@@ -5,9 +5,9 @@ import {
   type ComputeFunction,
   getHandContext,
   type HandContext
-} from './context'
+} from './context.js'
 import { injectTeleportControlsPlugin } from './plugin.svelte'
-import { setHandContext } from './context'
+import { setHandContext } from './context.js'
 import { setupTeleportControls } from './setup.svelte'
 import { teleportState } from '../../internal/state.svelte'
 
