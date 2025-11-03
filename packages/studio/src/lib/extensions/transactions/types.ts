@@ -2,7 +2,7 @@ import type { Object3D } from 'three'
 import type {
   TransactionQueue,
   TransactionQueueCommitArgs
-} from './TransactionQueue/TransactionQueue.svelte'
+} from './TransactionQueue/TransactionQueue.svelte.js'
 
 export const transactionsScope = 'transactions'
 

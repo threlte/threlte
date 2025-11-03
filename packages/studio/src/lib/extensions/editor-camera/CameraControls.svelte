@@ -24,8 +24,8 @@
 <script lang="ts">
   import { useTask, useThrelte } from '@threlte/core'
   import { onMount, tick } from 'svelte'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useTransformControls } from '../transform-controls/useTransformControls'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
+  import { useTransformControls } from '../transform-controls/useTransformControls.js'
   import { Gizmo } from '@threlte/extras'
 
   if (!installed) {

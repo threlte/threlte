@@ -5,15 +5,15 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
   import ContainerTransform from './ContainerTransform.svelte'
   import SingleTransform from './SingleTransform.svelte'
   import {
     transformControlsScope,
     type TransformControlsActions,
     type TransformControlsState
-  } from './types'
+  } from './types.js'
   import type { Snippet } from 'svelte'
 
   let { children }: { children?: Snippet } = $props()
