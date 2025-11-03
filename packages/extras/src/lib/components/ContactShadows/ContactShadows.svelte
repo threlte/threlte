@@ -14,7 +14,7 @@
   } from 'three'
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
-  import type { ContactShadowsProps } from './types'
+  import type { ContactShadowsProps } from './types.js'
 
   let {
     opacity = 1,

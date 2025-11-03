@@ -12,9 +12,9 @@
   import { useCache, useThrelte } from '@threlte/core'
   import { CubeTextureLoader } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
-  import { useSuspense } from '../../../suspense/useSuspense'
+  import { useSuspense } from '../../../suspense/useSuspense.js'
   import { useEnvironment } from '../utils/useEnvironment.svelte'
-  import type { CubeEnvironmentProps } from './types'
+  import type { CubeEnvironmentProps } from './types.js'
 
   const ctx = useThrelte()
 

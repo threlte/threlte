@@ -15,8 +15,8 @@
     Vector4,
     type PerspectiveCamera
   } from 'three'
-  import type { CameraControlsProps } from './types'
-  import CameraControls from 'camera-controls'
+  import type { CameraControlsProps } from './types.js'
+  import { CameraControls } from 'camera-controls/dist/CameraControls.js'
 
   export { default as CameraControlsRef } from 'camera-controls'
 

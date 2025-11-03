@@ -12,8 +12,8 @@
     Color
   } from 'three'
 
-  import type { WireframeProps } from './types'
-  import { setWireframeOverride } from './material'
+  import type { WireframeProps } from './types.js'
+  import { setWireframeOverride } from './material.js'
   import { isInstanceOf, useParent } from '@threlte/core'
 
   const getBarycentricCoordinates = (geometry: BufferGeometry, removeEdge?: boolean) => {
