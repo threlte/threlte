@@ -2,10 +2,10 @@ import type { Event, XRHandSpace } from 'three'
 import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
-import { hands } from '../hooks/useHand.svelte'
-import { useHandTrackingState } from './useHandTrackingState'
-import type { XRHandEvent, XRHandEvents } from '../types'
-import { handEvents } from './state.svelte'
+import { hands } from '../hooks/useHand.svelte.js'
+import { useHandTrackingState } from './useHandTrackingState.js'
+import type { XRHandEvent, XRHandEvents } from '../types.js'
+import { handEvents } from './state.svelte.js'
 
 export const setupHands = () => {
   const factory = new XRHandModelFactory()

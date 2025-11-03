@@ -1,7 +1,7 @@
 import { Matrix4 } from 'three'
 import { useThrelte, useTask } from '@threlte/core'
-import { controllers } from './useController.svelte'
-import { isPresenting, session } from '../internal/state.svelte'
+import { controllers } from './useController.svelte.js'
+import { isPresenting, session } from '../internal/state.svelte.js'
 
 export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
 
