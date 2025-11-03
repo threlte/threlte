@@ -10,7 +10,7 @@
     WebGLCubeRenderTarget
   } from 'three'
   import { Sky } from 'three/examples/jsm/objects/Sky.js'
-  import type { SkyProps } from './types'
+  import type { SkyProps } from './types.js'
 
   let {
     scale = 1000,
