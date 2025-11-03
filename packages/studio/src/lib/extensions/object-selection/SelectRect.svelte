@@ -4,14 +4,14 @@
   import { Object3D } from 'three'
   import { SelectionBox } from 'three/examples/jsm/interactive/SelectionBox.js'
   import { SelectionHelper } from 'three/examples/jsm/interactive/SelectionHelper.js'
-  import { useStudio } from '../../internal/extensions'
+  import { useStudio } from '../../internal/extensions.js'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useTransformControls } from '../transform-controls/useTransformControls'
+  import { useTransformControls } from '../transform-controls/useTransformControls.js'
   import {
     objectSelectionScope,
     type ObjectSelectionActions,
     type ObjectSelectionState
-  } from './types'
+  } from './types.js'
   import { useObjectSelection } from './useObjectSelection.svelte'
 
   const { camera, scene, renderer, dom } = useThrelte()

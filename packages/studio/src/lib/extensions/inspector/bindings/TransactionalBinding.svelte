@@ -28,8 +28,8 @@
   import { resolvePropertyPath, useTask } from '@threlte/core'
   import { onMount, tick } from 'svelte'
   import { Binding, type BindingRef, type Plugin } from 'svelte-tweakpane-ui'
-  import { useTransactions } from '../../transactions/useTransactions'
-  import { buildTransaction } from '../../transactions/TransactionQueue/buildTransaction'
+  import { useTransactions } from '../../transactions/useTransactions.js'
+  import { buildTransaction } from '../../transactions/TransactionQueue/buildTransaction.js'
 
   const { commit, onTransaction } = useTransactions()
 

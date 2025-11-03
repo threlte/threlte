@@ -1,9 +1,9 @@
 import { getContext, onDestroy, setContext } from 'svelte'
-import { createActions } from './actions'
-import { createKeyboardControls, hotkeyFns } from './keyboard'
+import { createActions } from './actions.js'
+import { createKeyboardControls, hotkeyFns } from './keyboard.js'
 import { createState } from './state.svelte'
-import { beforeUnload } from './useBeforeUnload'
-import type { ExtensionActions } from './types'
+import { beforeUnload } from './useBeforeUnload.js'
+import type { ExtensionActions } from './types.js'
 
 export const createRootContext = (namespace: string, transient: boolean) => {
   const state = createState(namespace, transient)
