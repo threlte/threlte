@@ -16,7 +16,7 @@
     type PerspectiveCamera
   } from 'three'
   import type { CameraControlsProps } from './types.js'
-  import { CameraControls } from 'camera-controls/dist/CameraControls.js'
+  import CameraControls from 'camera-controls'
 
   export { default as CameraControlsRef } from 'camera-controls'
 
@@ -27,7 +27,7 @@
       return
     }
 
-    CameraControls.install({
+    ;(CameraControls as any).install({
       THREE: {
         Vector2,
         Vector3,
@@ -64,7 +64,8 @@
 
     return $defaultCamera as PerspectiveCamera
   })
-
+  // svelte-ignore state_referenced_locally
+  // @ts-ignore
   const controls = new CameraControls(camera, dom)
   $effect.pre(() => {
     controls.camera = camera
