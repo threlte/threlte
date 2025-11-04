@@ -1,6 +1,6 @@
 <script lang="ts">
   import { observe, T, useThrelte, watch } from '@threlte/core'
-  import { CameraControls as CC } from 'camera-controls/dist/CameraControls.js'
+  import { default as CC } from 'camera-controls'
   import { onDestroy, type Snippet } from 'svelte'
   import { Checkbox, RadioGrid } from 'svelte-tweakpane-ui'
   import { Box3, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from 'three'
