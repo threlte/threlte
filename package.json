@@ -31,6 +31,9 @@
   "pnpm": {
     "overrides": {
       "vite": "catalog:"
+    },
+    "patchedDependencies": {
+      "camera-controls": "patches/camera-controls.patch"
     }
   },
   "engines": {

@@ -2,7 +2,7 @@
   module
   lang="ts"
 >
-  import { CameraControls } from 'camera-controls/dist/CameraControls.js';
+  import CameraControls from 'camera-controls';
   import {
     Box3,
     MathUtils,
