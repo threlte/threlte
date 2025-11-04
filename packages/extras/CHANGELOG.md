@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.6.0
+
+### Minor Changes
+
+- 5f1dc22: adds UvMaterial to visualize uvs of a geometry
+
 ## 9.5.5
 
 ### Patch Changes
