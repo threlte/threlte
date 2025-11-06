@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.1.9
+
+### Patch Changes
+
+- f5e182e: Fix: disallow calling .set on primitive values within createSetter internal
+
 ## 8.1.8
 
 ### Patch Changes
