@@ -15,7 +15,7 @@ describe('<T> plugins', () => {
     const fn = vi.fn()
     const { scene } = render(Scene, { props: { plugin: { fn, props: ['lookat'] } } })
 
-    const ref = scene.getObjectByName('child') as Mesh
+    const ref = scene.getObjectByName('child') as unknown as Mesh
     expect(fn).toHaveBeenNthCalledWith(3, {
       ref,
       args: undefined,

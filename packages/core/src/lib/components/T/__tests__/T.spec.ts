@@ -30,7 +30,7 @@ describe('<T>', () => {
     const material = new MeshBasicMaterial()
     const { scene } = render(T.Mesh, { props: { args: [geometry, material] } })
 
-    const mesh = scene.getObjectByProperty('type', 'Mesh') as Mesh
+    const mesh = scene.getObjectByProperty('type', 'Mesh') as unknown as Mesh
     expect(mesh.geometry).toBe(geometry)
     expect(mesh.material).toBe(material)
   })

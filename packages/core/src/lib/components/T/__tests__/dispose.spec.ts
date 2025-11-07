@@ -24,9 +24,9 @@ describe('<T> dispose', () => {
     const onDispose = vi.fn()
     const { unmount, scene } = render(Scene, { dispose: false })
 
-    const mesh = scene.getObjectByName('child') as Mesh
+    const mesh = scene.getObjectByName('child') as unknown as Mesh
     mesh.geometry.addEventListener('dispose', onDispose)
-    const material = mesh.material as MeshBasicMaterial
+    const material = mesh.material as unknown as MeshBasicMaterial
     material.addEventListener('dispose', onDispose)
     material.map?.addEventListener('dispose', onDispose)
 
@@ -39,9 +39,9 @@ describe('<T> dispose', () => {
     const onDispose = vi.fn()
     const { unmount, advance, rerender, scene } = render(Scene, { dispose: true })
 
-    const mesh = scene.getObjectByName('child') as Mesh
+    const mesh = scene.getObjectByName('child') as unknown as Mesh
     mesh.geometry.addEventListener('dispose', onDispose)
-    const material = mesh.material as MeshBasicMaterial
+    const material = mesh.material as unknown as MeshBasicMaterial
     material.addEventListener('dispose', onDispose)
     material.map?.addEventListener('dispose', onDispose)
 
@@ -59,19 +59,19 @@ describe('<T> dispose', () => {
     const { scene, unmount } = render(DisposeMany)
 
     const onDispose = vi.fn()
-    const box = scene.getObjectByName('box') as Mesh
-    const plane = scene.getObjectByName('plane') as Mesh
+    const box = scene.getObjectByName('box') as unknown as Mesh
+    const plane = scene.getObjectByName('plane') as unknown as Mesh
 
     box.geometry.addEventListener('dispose', onDispose)
     {
-      const material = box.material as MeshBasicMaterial
+      const material = box.material as unknown as MeshBasicMaterial
       material.addEventListener('dispose', onDispose)
       material.map?.addEventListener('dispose', onDispose)
     }
 
     plane.geometry.addEventListener('dispose', onDispose)
     {
-      const material = plane.material as MeshBasicMaterial
+      const material = plane.material as unknown as MeshBasicMaterial
       material.addEventListener('dispose', onDispose)
     }
 
@@ -126,7 +126,7 @@ describe('<T> dispose', () => {
     const { scene, rerender, unmount, advance } = render(DisposeN, { props: { count: 4 } })
 
     const onDispose = vi.fn()
-    const meshes = scene.getObjectsByProperty('type', 'Mesh') as Mesh[]
+    const meshes = scene.getObjectsByProperty('type', 'Mesh') as unknown as Mesh[]
     for (const mesh of meshes) {
       mesh.geometry.addEventListener('dispose', onDispose)
     }
