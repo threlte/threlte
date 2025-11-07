@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.2.1
+
+### Patch Changes
+
+- 642343b: [core] Fix: adjust type export
+
 ## 8.2.0
 
 ### Minor Changes
