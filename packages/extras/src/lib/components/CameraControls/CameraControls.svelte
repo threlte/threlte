@@ -64,7 +64,7 @@
 
     return $defaultCamera as PerspectiveCamera
   })
-
+  // svelte-ignore state_referenced_locally
   const controls = new CameraControls(camera, dom)
   $effect.pre(() => {
     controls.camera = camera
