@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.2.0
+
+### Minor Changes
+
+- db6a716: Add support for the Light abstract class to isInstanceOf function.
+
 ## 8.1.9
 
 ### Patch Changes
