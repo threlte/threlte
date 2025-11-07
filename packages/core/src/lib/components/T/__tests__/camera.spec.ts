@@ -39,10 +39,7 @@ describe('<T> camera', () => {
         props: { makeDefault: false }
       })
 
-      const camera = scene.getObjectByProperty(
-        'type',
-        'PerspectiveCamera'
-      ) as unknown as PerspectiveCamera
+      const camera = scene.getObjectByProperty('type', 'PerspectiveCamera') as PerspectiveCamera
       expect(context.camera.current).not.toBe(camera)
 
       await rerender({ makeDefault: true })
@@ -56,10 +53,7 @@ describe('<T> camera', () => {
       })
 
       const defaultCamera = context.camera.current
-      const camera = scene.getObjectByProperty(
-        'type',
-        'OrthographicCamera'
-      ) as unknown as OrthographicCamera
+      const camera = scene.getObjectByProperty('type', 'OrthographicCamera') as OrthographicCamera
       expect(context.camera.current).toBe(defaultCamera)
 
       await rerender({ makeDefault: true })
@@ -85,10 +79,7 @@ describe('<T> camera', () => {
       const reference = new PerspectiveCamera()
       const { scene } = render(T.PerspectiveCamera, { props: { manual: true } })
 
-      const camera = scene.getObjectByProperty(
-        'type',
-        'PerspectiveCamera'
-      ) as unknown as PerspectiveCamera
+      const camera = scene.getObjectByProperty('type', 'PerspectiveCamera') as PerspectiveCamera
       expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
     }
 
@@ -96,10 +87,7 @@ describe('<T> camera', () => {
       const reference = new OrthographicCamera()
       const { scene } = render(T.OrthographicCamera, { props: { manual: true } })
 
-      const camera = scene.getObjectByProperty(
-        'type',
-        'OrthographicCamera'
-      ) as unknown as OrthographicCamera
+      const camera = scene.getObjectByProperty('type', 'OrthographicCamera') as OrthographicCamera
       expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
     }
   })

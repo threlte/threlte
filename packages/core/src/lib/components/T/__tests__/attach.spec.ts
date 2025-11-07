@@ -72,7 +72,7 @@ describe('<T> attach', () => {
   it('auto-attaches and detaches a child Geometry and Material', () => {
     const { scene, unmount } = render(Scene)
 
-    const mesh = scene.getObjectByName('child') as unknown as Mesh
+    const mesh = scene.getObjectByName('child') as Mesh
     expect(mesh.geometry.name).toBe('geometry')
     expect((mesh.material as MeshBasicMaterial).name).toBe('material')
 
@@ -84,7 +84,7 @@ describe('<T> attach', () => {
   it('attaches and detaches an object to a property if attach="property"', () => {
     const { scene, unmount } = render(Scene)
 
-    const mesh = scene.getObjectByName('child') as unknown as Mesh
+    const mesh = scene.getObjectByName('child') as Mesh
     const material = mesh.material as MeshBasicMaterial
     expect(material.map?.name).toBe('texture')
 

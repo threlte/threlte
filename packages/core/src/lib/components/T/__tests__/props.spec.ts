@@ -78,10 +78,7 @@ describe('<T> props', () => {
       props: { aspect: 1, manual: true }
     })
 
-    const camera = scene.getObjectByProperty(
-      'type',
-      'PerspectiveCamera'
-    ) as unknown as PerspectiveCamera
+    const camera = scene.getObjectByProperty('type', 'PerspectiveCamera') as PerspectiveCamera
     expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
 
     await rerender({ aspect: 2 })
