@@ -1,19 +1,25 @@
 import { NodeIO } from '@gltf-transform/core'
 import {
+  reorder,
+  palette,
   simplify,
+  join,
   weld,
   dedup,
   resample,
   prune,
   textureCompress,
-  draco
+  draco,
+  sparse,
+  flatten
 } from '@gltf-transform/functions'
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions'
 import { MeshoptDecoder, MeshoptEncoder, MeshoptSimplifier } from 'meshoptimizer'
+import { ready as resampleReady, resample as resampleWASM } from 'keyframe-resample'
 import draco3d from 'draco3dgltf'
 import sharp from 'sharp'
 
-async function transform(file, output, config = {}) {
+export async function transform(file, output, config = {}) {
   await MeshoptDecoder.ready
   await MeshoptEncoder.ready
   const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies({
@@ -25,24 +31,29 @@ async function transform(file, output, config = {}) {
 
   const document = await io.read(file)
   const resolution = config.resolution ?? 1024
+  const normalResolution = Math.max(resolution, 2048)
 
-  const functions = [
-    // Losslessly resample animation frames.
-    resample(),
+  const functions = []
+
+  if (!config.keepmaterials) {
+    functions.push(palette({ min: 5 }))
+  }
+
+  functions.push(
+    reorder({ encoder: MeshoptEncoder }),
     // Remove duplicate vertex or texture data, if any.
     dedup(),
-    // Remove unused nodes, textures, or other data.
-    prune(),
-    // Resize and convert textures (using webp and sharp)
-    textureCompress({ targetFormat: 'webp', encoder: sharp, resize: [resolution, resolution] }),
-    // Add Draco compression.
-    draco()
-  ]
+    flatten()
+  )
+
+  if (!config.keepmeshes) {
+    functions.push(join())
+  }
+
+  functions.push(weld())
 
   if (config.simplify) {
     functions.push(
-      // Weld vertices
-      weld({ tolerance: config.weld ?? 0.0001 }),
       // Simplify meshes
       simplify({
         simplifier: MeshoptSimplifier,
@@ -52,9 +63,54 @@ async function transform(file, output, config = {}) {
     )
   }
 
+  functions.push(
+    // Losslessly resample animation frames.
+    resample({ ready: resampleReady, resample: resampleWASM }),
+    // Remove unused nodes, textures, or other data.
+    prune({ keepAttributes: false, keepLeaves: false }),
+    sparse()
+  )
+
+  if (config.degrade) {
+    // Custom per-file resolution
+    functions.push(
+      textureCompress({
+        encoder: sharp,
+        pattern: new RegExp(`^(?=${config.degrade}).*$`),
+        targetFormat: config.format,
+        resize: [degradeResolution, degradeResolution]
+      }),
+      textureCompress({
+        encoder: sharp,
+        pattern: new RegExp(`^(?!${config.degrade}).*$`),
+        targetFormat: config.format,
+        resize: [resolution, resolution]
+      })
+    )
+  } else {
+    // Keep normal maps near lossless
+    functions.push(
+      textureCompress({
+        slots: /^(?!normalTexture).*$/, // exclude normal maps
+        encoder: sharp,
+        targetFormat: config.format,
+        resize: [resolution, resolution]
+      }),
+      textureCompress({
+        slots: /^(?=normalTexture).*$/, // include normal maps
+        encoder: sharp,
+        targetFormat: 'jpeg',
+        resize: [normalResolution, normalResolution]
+      })
+    )
+  }
+
+  functions.push(
+    // Add Draco compression.
+    draco()
+  )
+
   await document.transform(...functions)
 
   await io.write(output, document)
 }
-
-export default transform

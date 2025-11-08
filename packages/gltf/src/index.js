@@ -1,82 +1,56 @@
 import 'jsdom-global'
-import fs from 'fs'
-import path from 'path'
-import transform from './utils/transform.js'
-// import { GLTFLoader, DRACOLoader } from 'three-stdlib'
+import fs from 'node:fs/promises'
+import path from 'node:path'
 import * as prettier from 'prettier'
-import THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { transform } from './utils/transform.js'
+import { parse } from './utils/parser.js'
+import { DRACOLoader } from './bin/DRACOLoader.js'
 
-global.THREE = THREE
+globalThis.self = globalThis
 
-import './bin/GLTFLoader.js'
-import DracoLoader from './bin/DRACOLoader.js'
-THREE.DRACOLoader.getDecoderModule = () => {}
+GLTFLoader.prototype.loadTextureImage = () => {}
 
-import parse from './utils/parser.js'
+const gltfLoader = new GLTFLoader()
+const draco = new DRACOLoader()
+gltfLoader.setDRACOLoader(draco)
 
-const gltfLoader = new THREE.GLTFLoader()
-gltfLoader.setDRACOLoader(new DracoLoader())
-
-function toArrayBuffer(buf) {
-  var ab = new ArrayBuffer(buf.length)
-  var view = new Uint8Array(ab)
-  for (var i = 0; i < buf.length; ++i) view[i] = buf[i]
-  return ab
-}
-
-export default function (file, output, options) {
-  function getFilePath(file) {
-    return `${options.root ?? '/'}${options.root ? path.basename(file) : path.normalize(file)}`
+export default async function (file, output, options) {
+  try {
+    await fs.stat(file)
+  } catch {
+    throw new Error(`${file} does not exist.`)
   }
 
-  return new Promise((resolve, reject) => {
-    const stream = fs.createWriteStream(output)
-    stream.once('open', async (fd) => {
-      if (!fs.existsSync(file)) {
-        reject(file + ' does not exist.')
-      } else {
-        // Process GLTF
-        if (options.transform || options.instance || options.instanceall) {
-          const { name } = path.parse(file)
-          const transformOut = path.join(name + '-transformed.glb')
-          await transform(file, transformOut, options)
-          file = transformOut
-        }
-        resolve()
+  // Process GLTF
+  if (options.transform || options.instance || options.instanceall) {
+    const { name } = path.parse(file)
+    const transformOut = path.join(`${name}-transformed.glb`)
+    await transform(file, transformOut, options)
+    file = transformOut
+  }
 
-        const filePath = getFilePath(file)
-        const data = fs.readFileSync(file)
-        const arrayBuffer = toArrayBuffer(data)
+  const filePath = `${options.root ?? '/'}${options.root ? path.basename(file) : path.normalize(file)}`
+  const data = await fs.readFile(file)
+  const gltf = await gltfLoader.parseAsync(data.buffer)
 
-        gltfLoader.parse(
-          arrayBuffer,
-          '',
-          async (gltf) => {
-            const raw = parse(filePath, gltf, options)
-            try {
-              const prettiered = await prettier.format(raw, {
-                singleQuote: true,
-                trailingComma: 'none',
-                semi: false,
-                printWidth: 100,
-                parser: 'svelte',
-                plugins: ['prettier-plugin-svelte'],
-                overrides: [{ files: '*.svelte', options: { parser: 'svelte' } }],
-                singleAttributePerLine: true
-              })
-              stream.write(prettiered)
-              stream.end()
-              resolve()
-            } catch (error) {
-              console.error(error)
-              stream.write(raw)
-              stream.end()
-              reject(error)
-            }
-          },
-          reject
-        )
+  const raw = parse(filePath, gltf, options)
+
+  const prettiered = await prettier.format(raw, {
+    singleQuote: true,
+    trailingComma: 'es5',
+    semi: false,
+    printWidth: 100,
+    parser: 'svelte',
+    plugins: ['prettier-plugin-svelte'],
+    overrides: [
+      {
+        files: '*.svelte',
+        options: { parser: 'svelte' }
       }
-    })
+    ],
+    singleAttributePerLine: true
   })
+
+  await fs.writeFile(output, prettiered)
 }
