@@ -37,7 +37,7 @@ export {
 } from './hooks/useLoader.js'
 
 // contexts
-export { type ThrelteContext } from './context/compounds/useThrelte.js'
+export type { ThrelteContext } from './context/compounds/useThrelte.js'
 export { createThrelteContext } from './context/createThrelteContext.svelte'
 export { createCacheContext, useCache } from './context/fragments/cache.js'
 export { createCameraContext, useCamera } from './context/fragments/camera.js'
