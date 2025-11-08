@@ -1,6 +1,6 @@
 import type { XRJointSpace } from 'three'
 import { useTask, useThrelte } from '@threlte/core'
-import type { HandJoints } from '../lib/handJoints'
+import type { HandJoints } from '../lib/handJoints.js'
 import { hands } from './useHand.svelte'
 import { toCurrentReadable } from './currentReadable.svelte'
 

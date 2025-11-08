@@ -2,7 +2,7 @@
   module
   lang="ts"
 >
-  import CameraControls from 'camera-controls'
+  import CameraControls from 'camera-controls';
   import {
     Box3,
     MathUtils,
@@ -25,7 +25,7 @@
   import { useTask, useThrelte } from '@threlte/core'
   import { onMount, tick } from 'svelte'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useTransformControls } from '../transform-controls/useTransformControls'
+  import { useTransformControls } from '../transform-controls/useTransformControls.js'
   import { Gizmo } from '@threlte/extras'
 
   if (!installed) {

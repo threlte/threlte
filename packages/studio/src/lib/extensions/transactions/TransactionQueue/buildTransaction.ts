@@ -1,6 +1,6 @@
 import { resolvePropertyPath } from '@threlte/core'
 import type { Transaction } from './TransactionQueue.svelte'
-import { getThrelteStudioUserData } from '../../../internal/getThrelteStudioUserData'
+import { getThrelteStudioUserData } from '../../../internal/getThrelteStudioUserData.js'
 
 type BuildTransactionOptions<T> = {
   object: any

@@ -1,7 +1,7 @@
 import type { RevoluteImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Vector3 } from 'three'
-import { useJoint } from './useJoint'
-import { isVector3 } from './utils'
+import { useJoint } from './useJoint.js'
+import { isVector3 } from './utils.js'
 
 export const useRevoluteJoint = (
   anchorA: Parameters<Vector3['set']> | Vector3,

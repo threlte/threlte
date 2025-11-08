@@ -3,7 +3,7 @@ import type { EventListener } from 'three'
 import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
-import type CameraControls from 'camera-controls'
+import CameraControls from 'camera-controls'
 
 export type Controls = OrbitControls | TrackballControls | InstanceType<typeof CameraControls>
 

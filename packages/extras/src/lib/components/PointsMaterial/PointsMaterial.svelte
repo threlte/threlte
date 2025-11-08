@@ -8,7 +8,7 @@
     type WebGLRenderer
   } from 'three'
   import { T } from '@threlte/core'
-  import type { PointsMaterialProps } from './types'
+  import type { PointsMaterialProps } from './types.js'
 
   const fragment = `
     #include <opaque_fragment>

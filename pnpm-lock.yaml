@@ -88,6 +88,11 @@ catalogs:
 overrides:
   vite: ^7.1.4
 
+patchedDependencies:
+  camera-controls:
+    hash: 2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9
+    path: patches/camera-controls.patch
+
 importers:
 
   .:
@@ -435,7 +440,7 @@ importers:
         version: 2.5.1(@types/three@0.175.0)(three@0.175.0)
       camera-controls:
         specifier: ^2.10.1
-        version: 2.10.1(three@0.175.0)
+        version: 2.10.1(patch_hash=2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9)(three@0.175.0)
       three-mesh-bvh:
         specifier: ^0.9.1
         version: 0.9.1(three@0.175.0)
@@ -774,7 +779,7 @@ importers:
         version: 0.3.0(tweakpane@4.0.5)
       camera-controls:
         specifier: ^2.10.1
-        version: 2.10.1(three@0.175.0)
+        version: 2.10.1(patch_hash=2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9)(three@0.175.0)
       estree-walker:
         specifier: ^3.0.3
         version: 3.0.3
@@ -11396,7 +11401,7 @@ snapshots:
 
   camelcase@8.0.0: {}
 
-  camera-controls@2.10.1(three@0.175.0):
+  camera-controls@2.10.1(patch_hash=2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9)(three@0.175.0):
     dependencies:
       three: 0.175.0
 

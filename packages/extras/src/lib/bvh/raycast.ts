@@ -23,7 +23,7 @@ import {
   MeshBVHHelper,
   NOT_INTERSECTED
 } from 'three-mesh-bvh'
-import type { BVHOptions } from './types'
+import type { BVHOptions } from './types.js'
 
 const material = new MeshBasicMaterial()
 const trianglePoint = new Vector3()

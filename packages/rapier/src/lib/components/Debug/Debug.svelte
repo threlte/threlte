@@ -2,8 +2,8 @@
   import { T, useTask } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { BufferAttribute, BufferGeometry, LineSegments } from 'three'
-  import { useRapier } from '../../hooks/useRapier'
-  import type { DebugProps } from './types'
+  import { useRapier } from '../../hooks/useRapier.js'
+  import type { DebugProps } from './types.js'
 
   let { ref = $bindable(new LineSegments()), ...props }: DebugProps = $props()
 

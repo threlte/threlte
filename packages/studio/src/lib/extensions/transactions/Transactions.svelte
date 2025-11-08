@@ -6,15 +6,15 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { clientRpc } from '../../rpc/clientRpc'
-  import type { StudioProps } from '../../types'
+  import { useStudio } from '../../internal/extensions.js'
+  import { clientRpc } from '../../rpc/clientRpc.js'
+  import type { StudioProps } from '../../types.js'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import Changes from './Changes.svelte'
-  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData'
+  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData.js'
   import { TransactionQueue } from './TransactionQueue/TransactionQueue.svelte'
-  import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
-  import { vitePluginEnabled } from './vitePluginEnabled'
+  import { transactionsScope, type TransactionsActions, type TransactionsState } from './types.js'
+  import { vitePluginEnabled } from './vitePluginEnabled.js'
 
   let { children }: { children?: Snippet } = $props()
 

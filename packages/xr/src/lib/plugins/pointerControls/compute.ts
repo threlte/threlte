@@ -1,5 +1,5 @@
 import { Vector3 } from 'three'
-import type { ControlsContext, HandContext } from './types'
+import type { ControlsContext, HandContext } from './types.js'
 import { controllers } from '../../hooks/useController.svelte'
 
 export type ComputeFunction = (state: ControlsContext, handState: HandContext) => void
