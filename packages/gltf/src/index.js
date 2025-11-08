@@ -2,14 +2,12 @@ import 'jsdom-global'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import * as prettier from 'prettier'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { transform } from './utils/transform.js'
 import { parse } from './utils/parser.js'
+import { GLTFLoader } from './bin/GLTFLoader.js'
 import { DRACOLoader } from './bin/DRACOLoader.js'
 
 globalThis.self = globalThis
-
-GLTFLoader.prototype.loadTextureImage = () => {}
 
 const gltfLoader = new GLTFLoader()
 const draco = new DRACOLoader()

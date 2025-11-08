@@ -1,4 +1,4 @@
-export const isVarName = (str) => {
+export function isVarName(str) {
   // eslint-disable-next-line no-misleading-character-class
   const regex = new RegExp(
     // eslint-disable-next-line no-misleading-character-class

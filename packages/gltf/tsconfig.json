@@ -17,14 +17,14 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
 
+    "noEmit": true,
     // Declarations: keep off in the main tsconfig; use a build tsconfig to emit types
-    "declaration": false,
     "declarationMap": false,
     "allowJs": true,
 
     // Svelte types
     "types": ["svelte"]
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.js"],
   "exclude": ["dist", "node_modules"]
 }

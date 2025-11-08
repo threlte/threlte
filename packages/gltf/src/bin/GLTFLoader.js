@@ -119,6 +119,12 @@ export class GLTFLoader extends THREE.Loader {
     return this
   }
 
+  parseAsync(data, path) {
+    return new Promise((resolve, reject) => {
+      this.parse(data, path, resolve, reject)
+    })
+  }
+
   parse(data, path, onLoad, onError) {
     var content
     var extensions = {}
