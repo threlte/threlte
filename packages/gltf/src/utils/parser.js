@@ -485,7 +485,7 @@ export function parse(fileName, gltf, options = {}) {
   const scene = printThrelte(gltf.scene)
 
   const useGltfOptions = {
-    draco: options.transform && options.draco ? (options.draco ? options.transform : true) : false
+    draco: options.transform || options.draco
   }
 
   const imports = `
@@ -507,7 +507,7 @@ export function parse(fileName, gltf, options = {}) {
 
   const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
     options.types ? '<GLTFResult>' : ''
-  }('${url}'${useGltfOptions.draco ? `, { dracoLoader: useDraco(${typeof useGltfOptions.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
+  }('${url}'${useGltfOptions.draco ? `, { dracoLoader: useDraco(${typeof options.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
     options.suspense ? ')' : ''
   }`
 

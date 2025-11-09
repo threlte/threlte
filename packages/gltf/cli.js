@@ -23,7 +23,7 @@ const cli = meow(
     --meta, -m          Include metadata (as userData)
     --shadows, -s       Let meshes cast and receive shadows
     --printwidth, -w    Prettier printWidth (default: 120)
-    --precision, -p     Number of fractional digits (default: 3)
+    --precision, -p     Number of fractional digits (default: 2)
     --draco, -d         Draco binary path
     --preload -P        Add preload method to module script
     --suspense -u       Make the component suspense-ready
