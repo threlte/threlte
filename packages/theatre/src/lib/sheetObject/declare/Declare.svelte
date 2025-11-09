@@ -5,8 +5,8 @@
   import type { UnknownShorthandCompoundProps } from '@theatre/core'
   import { watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { useSheet } from '../useSheet'
-  import type { DeclareProps } from './types'
+  import { useSheet } from '../useSheet.js'
+  import type { DeclareProps } from './types.js'
 
   let { props, children }: DeclareProps<P> = $props()
 
