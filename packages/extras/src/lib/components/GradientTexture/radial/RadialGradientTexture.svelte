@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { RadialGradientTextureProps } from './types.js'
+  import type { RadialGradientTextureProps } from './types'
   import { CanvasTexture } from 'three'
   import { T, observe, useThrelte } from '@threlte/core'
-  import { addStops } from '../common.js'
+  import { addStops } from '../common'
 
   let {
     width = 1024,

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { useGltf } from '../../hooks/useGltf.js'
-  import { useSuspense } from '../../suspense/useSuspense.js'
-  import type { ThrelteGltf } from '../../types/types.js'
-  import type { GltfProps } from './types.js'
+  import { useGltf } from '../../hooks/useGltf'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import type { ThrelteGltf } from '../../types/types'
+  import type { GltfProps } from './types'
 
   type Props = GltfProps & { gltf?: ThrelteGltf | undefined } & ThrelteGltf['materials']
 

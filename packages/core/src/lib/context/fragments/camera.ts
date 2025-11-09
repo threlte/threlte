@@ -1,7 +1,7 @@
 import { getContext, setContext } from 'svelte'
 import { PerspectiveCamera, type Camera } from 'three'
-import { currentWritable, watch, type CurrentWritable } from '../../utilities/index.js'
-import { useDOM } from './dom.js'
+import { currentWritable, watch, type CurrentWritable } from '../../utilities'
+import { useDOM } from './dom'
 import { useScheduler } from './scheduler.svelte'
 
 type CameraContext = {

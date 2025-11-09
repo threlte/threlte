@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Flex, Box } from '$lib/index.js'
+  import { Flex, Box } from '$lib'
   import Plane from '../../Plane.svelte'
 </script>
 

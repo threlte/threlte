@@ -1,6 +1,6 @@
 import { getContext } from 'svelte'
-import type { SheetContext } from '../sheet/types.js'
-import type { SequenceController } from './SequenceController.js'
+import type { SheetContext } from '../sheet/types'
+import type { SequenceController } from './SequenceController'
 
 /**
  * ### `useSequence`

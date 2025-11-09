@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { World } from '$lib/index.js'
+  import { World } from '$lib'
   import { Canvas } from '@threlte/core'
   import { WebGLRenderer } from 'three'
   import Scene from './Scene.svelte'

@@ -1,5 +1,5 @@
-import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { resolvePropertyPath } from '../../../utilities/index.js'
+import { useThrelte } from '../../../context/compounds/useThrelte'
+import { resolvePropertyPath } from '../../../utilities'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 

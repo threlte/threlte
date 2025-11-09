@@ -1,5 +1,5 @@
 import { useTask, type Key, type ThrelteUseTask, type ThrelteUseTaskOptions } from '@threlte/core'
-import { useRapier } from './useRapier.js'
+import { useRapier } from './useRapier'
 
 const isKey = (value: unknown): value is Key => {
   return typeof value === 'string' || typeof value === 'symbol'

@@ -2,7 +2,7 @@
   import type { LightShadow, OrthographicCamera, PerspectiveCamera } from 'three'
   import TransactionalList from './TransactionalList.svelte'
   import TransactionalBinding from './TransactionalBinding.svelte'
-  import { haveProperty } from './utils.js'
+  import { haveProperty } from './utils'
   import { Folder } from 'svelte-tweakpane-ui'
   import Camera from './Camera.svelte'
 

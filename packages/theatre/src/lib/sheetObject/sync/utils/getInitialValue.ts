@@ -1,7 +1,7 @@
 import { resolvePropertyPath } from '@threlte/core'
-import type { AnyProp } from '../types.js'
-import { getDefaultTransformer } from '../../transfomers/getDefaultTransformer.js'
-import { isComplexProp } from './isComplexProp.js'
+import type { AnyProp } from '../types'
+import { getDefaultTransformer } from '../../transfomers/getDefaultTransformer'
+import { isComplexProp } from './isComplexProp'
 
 export const getInitialValue = (
   propertyPath: string,

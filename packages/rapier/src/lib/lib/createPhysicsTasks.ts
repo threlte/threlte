@@ -1,8 +1,8 @@
 import { Collider, EventQueue, type World } from '@dimforge/rapier3d-compat'
 import { useTask, type CurrentWritable, type Stage } from '@threlte/core'
 import { Object3D, Quaternion, Vector3 } from 'three'
-import type { ColliderEvents, Framerate, RigidBodyEvents } from '../types/types.js'
-import { simulationKey, synchronizationKey } from './keys.js'
+import type { ColliderEvents, Framerate, RigidBodyEvents } from '../types/types'
+import { simulationKey, synchronizationKey } from './keys'
 
 const tempObject = new Object3D()
 const tempVector3 = new Vector3()

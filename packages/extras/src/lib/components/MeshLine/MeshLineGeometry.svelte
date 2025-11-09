@@ -4,12 +4,12 @@ A stripped down version of THREE.MeshLine:
 
 https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
 
-With performance improvements inspired by:
+With peformance improvements inspired by:
 
 https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
  -->
 <script lang="ts">
-  import type { MeshLineGeometryProps } from './types.js'
+  import type { MeshLineGeometryProps } from './types'
   import { T, useThrelte } from '@threlte/core'
   import { BufferGeometry, BufferAttribute } from 'three'
 

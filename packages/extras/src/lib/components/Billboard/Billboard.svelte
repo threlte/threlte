@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useStage, useTask, useThrelte } from '@threlte/core'
   import { Group, Quaternion } from 'three'
-  import type { BillboardProps } from './types.js'
+  import type { BillboardProps } from './types'
 
   let { follow = true, ref = $bindable(), children, ...props }: BillboardProps = $props()
 

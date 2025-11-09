@@ -1,7 +1,7 @@
 import type { RopeImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Vector3 } from 'three'
-import { useJoint } from './useJoint.js'
-import { isVector3 } from './utils.js'
+import { useJoint } from './useJoint'
+import { isVector3 } from './utils'
 
 /**
  * The rope joint limits the max distance between two bodies.

@@ -1,8 +1,8 @@
 import { onDestroy } from 'svelte'
 import { readable, writable, type Readable } from 'svelte/store'
 import { useScheduler } from '../context/fragments/scheduler.svelte'
-import { DAG, type Key, type Stage, type Task } from '../frame-scheduling/index.js'
-import { browser } from '../utilities/index.js'
+import { DAG, type Key, type Stage, type Task } from '../frame-scheduling'
+import { browser } from '../utilities'
 
 export type ThrelteUseTask = {
   task: Task

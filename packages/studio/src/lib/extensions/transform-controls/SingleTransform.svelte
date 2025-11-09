@@ -4,17 +4,17 @@
   import { Euler, Vector3, type Group, Object3D } from 'three'
   import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { useStudio } from '../../internal/extensions.js'
+  import { useStudio } from '../../internal/extensions'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import { useSnapping } from '../snapping/useSnapping.svelte'
-  import { useSpace } from '../space/useSpace.js'
+  import { useSpace } from '../space/useSpace'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useTransactions } from '../transactions/useTransactions.js'
+  import { useTransactions } from '../transactions/useTransactions'
   import {
     transformControlsScope,
     type TransformControlsActions,
     type TransformControlsState
-  } from './types.js'
+  } from './types'
 
   const { useExtension } = useStudio()
   const transformControlsExtension = useExtension<

@@ -1,7 +1,7 @@
 import { watch } from '@threlte/core'
 import { getContext, onMount } from 'svelte'
 import { writable } from 'svelte/store'
-import { suspenseContextIdentifier, type SuspenseContext } from './context.js'
+import { suspenseContextIdentifier, type SuspenseContext } from './context'
 
 /**
  * ### `onSuspend`

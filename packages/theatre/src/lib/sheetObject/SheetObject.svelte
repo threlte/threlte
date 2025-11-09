@@ -7,16 +7,16 @@
   lang="ts"
   generics="Props extends UnknownShorthandCompoundProps"
 >
-  import { useStudio } from '../studio/useStudio.js'
+  import { useStudio } from '../studio/useStudio'
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
   import { currentWritable, useThrelte, watch, type CurrentWritable } from '@threlte/core'
   import { getContext, onDestroy, onMount } from 'svelte'
-  import type { SheetContext } from '../sheet/types.js'
+  import type { SheetContext } from '../sheet/types'
   import Declare from './declare/Declare.svelte'
-  import type { SheetObjectProps } from './types.js'
+  import type { SheetObjectProps } from './types'
   import Sync from './sync/Sync.svelte'
   import Transform from './transform/Transform.svelte'
-  import { createSheetContext } from './useSheet.js'
+  import { createSheetContext } from './useSheet'
 
   let {
     key,

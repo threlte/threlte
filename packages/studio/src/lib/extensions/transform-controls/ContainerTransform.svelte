@@ -5,19 +5,19 @@
   import { Box3, Object3D, Vector3, type Group } from 'three'
   import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { useStudio } from '../../internal/extensions.js'
+  import { useStudio } from '../../internal/extensions'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import { useSnapping } from '../snapping/useSnapping.svelte'
-  import { useSpace } from '../space/useSpace.js'
+  import { useSpace } from '../space/useSpace'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
   import {
     transformControlsScope,
     type TransformControlsActions,
     type TransformControlsState
-  } from './types.js'
-  import { useTransactions } from '../transactions/useTransactions.js'
+  } from './types'
+  import { useTransactions } from '../transactions/useTransactions'
   import type { Transaction } from '../transactions/TransactionQueue/TransactionQueue.svelte'
-  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData.js'
+  import { getThrelteStudioUserData } from '../../internal/getThrelteStudioUserData'
 
   const objectSelection = useObjectSelection()
   const { useExtension } = useStudio()

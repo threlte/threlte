@@ -8,13 +8,13 @@ import {
   type ShadowMapType,
   type ToneMapping
 } from 'three'
-import type { Task } from '../../frame-scheduling/index.js'
-import { useTask } from '../../hooks/useTask.js'
-import { currentWritable, watch, type CurrentWritable } from '../../utilities/index.js'
-import { useCamera } from './camera.js'
-import { useDisposal } from './disposal.js'
-import { useDOM } from './dom.js'
-import { useScene } from './scene.js'
+import type { Task } from '../../frame-scheduling'
+import { useTask } from '../../hooks/useTask'
+import { currentWritable, watch, type CurrentWritable } from '../../utilities'
+import { useCamera } from './camera'
+import { useDisposal } from './disposal'
+import { useDOM } from './dom'
+import { useScene } from './scene'
 import { useScheduler } from './scheduler.svelte'
 import type { WebGPURenderer } from 'three/webgpu'
 

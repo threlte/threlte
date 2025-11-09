@@ -1,5 +1,5 @@
 import { injectPlugin, isInstanceOf } from '@threlte/core'
-import { useTeleportControls } from './context.js'
+import { useTeleportControls } from './context'
 import type { Mesh } from 'three'
 
 /**

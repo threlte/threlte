@@ -1,5 +1,5 @@
 import { derived, type Readable } from 'svelte/store'
-import { useUserContext } from '../context/fragments/user.js'
+import { useUserContext } from '../context/fragments/user'
 
 type UserContextEntry = Record<string, any>
 type UserContext = Record<string, UserContextEntry>

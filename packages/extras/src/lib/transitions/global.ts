@@ -1,4 +1,4 @@
-import type { ThrelteTransition } from './types.js'
+import type { ThrelteTransition } from './types'
 
 /**
  * # EXPERIMENTAL

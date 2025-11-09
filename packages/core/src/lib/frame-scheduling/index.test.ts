@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest'
-import { Scheduler } from './Scheduler.js'
+import { Scheduler } from './Scheduler'
 
 test('can run a task', () => {
   const scheduler = new Scheduler()

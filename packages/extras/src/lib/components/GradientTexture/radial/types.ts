@@ -1,5 +1,5 @@
 import type { CanvasTexture } from 'three'
-import type { ColorStop, RadialGradientOuterRadius } from '../types.js'
+import type { ColorStop, RadialGradientOuterRadius } from '../types'
 import type { Props } from '@threlte/core'
 
 export type RadialGradientTextureProps = Props<CanvasTexture> & {

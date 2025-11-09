@@ -1,20 +1,20 @@
-import { createCacheContext } from './fragments/cache.js'
-import { createCameraContext } from './fragments/camera.js'
-import { createDisposalContext } from './fragments/disposal.js'
-import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom.js'
-import { createParentContext } from './fragments/parent.js'
-import { createRootParentObject3DContext } from './fragments/parentObject3D.js'
+import { createCacheContext } from './fragments/cache'
+import { createCameraContext } from './fragments/camera'
+import { createDisposalContext } from './fragments/disposal'
+import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom'
+import { createParentContext } from './fragments/parent'
+import { createRootParentObject3DContext } from './fragments/parentObject3D'
 import {
   createRendererContext,
   type CreateRendererContextOptions,
   type Renderer
 } from './fragments/renderer.svelte'
-import { createSceneContext } from './fragments/scene.js'
+import { createSceneContext } from './fragments/scene'
 import {
   createSchedulerContext,
   type CreateSchedulerContextOptions
 } from './fragments/scheduler.svelte'
-import { createUserContext } from './fragments/user.js'
+import { createUserContext } from './fragments/user'
 
 export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererContextOptions<T> &
   CreateDOMContextOptions &

@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { IProject, ISheet } from '@theatre/core'
   import { getContext, setContext, type Snippet } from 'svelte'
-  import { SequenceController } from '../sequence/SequenceController.js'
-  import { globalSheets } from '../consts.js'
-  import type { SheetContext } from './types.js'
+  import { SequenceController } from '../sequence/SequenceController'
+  import { globalSheets } from '../consts'
+  import type { SheetContext } from './types'
 
   // parent context
   export const project = getContext('theatre-project') as IProject

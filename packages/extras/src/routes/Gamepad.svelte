@@ -4,7 +4,7 @@
   let sim: any
 
   onMount(async () => {
-    sim = (await import('./gamepadSimulator.js')).default
+    sim = (await import('./gamepadSimulator')).default
 
     sim.create()
     sim.connect()

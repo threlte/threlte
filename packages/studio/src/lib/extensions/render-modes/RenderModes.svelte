@@ -12,8 +12,8 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions.js'
-  import { renderModesScope, type RenderModesActions, type RenderModesState } from './types.js'
+  import { useStudio } from '../../internal/extensions'
+  import { renderModesScope, type RenderModesActions, type RenderModesState } from './types'
 
   let { children }: { children?: Snippet } = $props()
 

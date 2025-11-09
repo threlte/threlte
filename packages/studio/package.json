@@ -13,8 +13,7 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "cleanup": "rimraf node_modules .svelte-kit dist",
-    "test": "vitest run",
-    "test:watch": "vitest --watch"
+    "test": "vitest"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",

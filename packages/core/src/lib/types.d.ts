@@ -12,4 +12,4 @@ declare global {
   }
 }
 
-export * from './index.js'
+export * from './index'

@@ -1,4 +1,4 @@
-import type { FlexPlane } from './props.js'
+import type { FlexPlane } from './props'
 
 export function getDepthAxis(plane: FlexPlane) {
   switch (plane) {

@@ -1,6 +1,6 @@
 import type { Snippet } from 'svelte'
 import type { ConditionalKeys, Primitive } from 'type-fest'
-import type { Transformer } from '../transfomers/types.js'
+import type { Transformer } from '../transfomers/types'
 
 /* COPIED FROM @threlte/core START */
 type OmittedPropKeys =

@@ -1,5 +1,5 @@
-import { DAG, type AddNodeOptions, type Key } from './DAG.js'
-import { Stage } from './Stage.js'
+import { DAG, type AddNodeOptions, type Key } from './DAG'
+import { Stage } from './Stage'
 
 export type Schedule = ReturnType<Scheduler['getSchedule']>
 

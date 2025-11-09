@@ -20,9 +20,9 @@
     SpriteMaterial,
     type Texture
   } from 'three'
-  import { useTexture } from '../../hooks/useTexture.js'
-  import { useSuspense } from '../../suspense/useSuspense.js'
-  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types.js'
+  import { useTexture } from '../../hooks/useTexture'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types'
 
   let {
     textureUrl,

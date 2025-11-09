@@ -1,5 +1,5 @@
-import { useStudio } from '../../internal/extensions.js'
-import { snappingScope, type SnappingActions, type SnappingState } from './types.js'
+import { useStudio } from '../../internal/extensions'
+import { snappingScope, type SnappingActions, type SnappingState } from './types'
 
 export const useSnapping = () => {
   const { useExtension } = useStudio()

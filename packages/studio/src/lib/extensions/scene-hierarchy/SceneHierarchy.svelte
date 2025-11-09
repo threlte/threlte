@@ -4,13 +4,13 @@
   import Portal from '../../components/Portal.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions.js'
+  import { useStudio } from '../../internal/extensions'
   import Tree from './Tree.svelte'
   import {
     sceneHierarchyScope,
     type SceneHierarchyActions,
     type SceneHierarchyState
-  } from './types.js'
+  } from './types'
   import type { Snippet } from 'svelte'
 
   let { children }: { children?: Snippet } = $props()

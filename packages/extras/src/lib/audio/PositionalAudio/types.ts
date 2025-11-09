@@ -1,6 +1,6 @@
 import type { Props } from '@threlte/core'
 import type { PositionalAudio as ThreePositionalAudio } from 'three'
-import type { AudioProps as CommonAudioProps } from '../utils/useAudio.js'
+import type { AudioProps as CommonAudioProps } from '../utils/useAudio'
 
 export type PositionalAudioProps = Props<ThreePositionalAudio> &
   CommonAudioProps & {

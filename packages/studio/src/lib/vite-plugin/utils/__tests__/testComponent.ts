@@ -1,5 +1,5 @@
 import MagicString from 'magic-string'
-import { toMagicString } from '../magicStringUtils.js'
+import { toMagicString } from '../magicStringUtils'
 
 export const scriptModule = `<script lang="ts" context="module">
   const foo = 'bar'

@@ -1,7 +1,7 @@
 import { Mesh, MeshBasicMaterial } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { T } from '../T.js'
+import { T } from '../T'
 import Scene from './__fixtures__/Scene.svelte'
 import { tick } from 'svelte'
 import Dispose from './__fixtures__/Dispose.svelte'

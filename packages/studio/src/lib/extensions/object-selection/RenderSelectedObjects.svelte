@@ -12,8 +12,8 @@
     type Material
   } from 'three'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { fragmentShader } from './shader/fragment.js'
-  import { vertexShader } from './shader/vertex.js'
+  import { fragmentShader } from './shader/fragment'
+  import { vertexShader } from './shader/vertex'
   import { useObjectSelection } from './useObjectSelection.svelte'
 
   const { invalidate } = useThrelte()

@@ -12,7 +12,7 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import XRButton from './XRButton.svelte'
-  import { defaultFeatures } from '../internal/defaultFeatures.js'
+  import { defaultFeatures } from '../internal/defaultFeatures'
 
   type Props = Omit<ComponentProps<typeof XRButton>, 'mode' | 'sessionInit'> & {
     sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } | undefined }

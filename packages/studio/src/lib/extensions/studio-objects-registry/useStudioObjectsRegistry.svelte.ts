@@ -1,12 +1,12 @@
 import { isInstanceOf } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import type { Object3D } from 'three'
-import { useStudio } from '../../internal/extensions.js'
+import { useStudio } from '../../internal/extensions'
 import {
   studioObjectsRegistryScope,
   type StudioObjectsRegistryActions,
   type StudioObjectsRegistryState
-} from './types.js'
+} from './types'
 
 export const useStudioObjectsRegistry = () => {
   const { useExtension } = useStudio()

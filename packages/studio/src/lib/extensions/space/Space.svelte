@@ -2,8 +2,8 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
-  import { useStudio } from '../../internal/extensions.js'
-  import { spaceScope, type SpaceActions, type SpaceState } from './types.js'
+  import { useStudio } from '../../internal/extensions'
+  import { spaceScope, type SpaceActions, type SpaceState } from './types'
   import type { Snippet } from 'svelte'
 
   let { children }: { children?: Snippet } = $props()

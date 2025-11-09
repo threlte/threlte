@@ -2,7 +2,7 @@ import { Group, PerspectiveCamera } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { T } from '../T.js'
+import { T } from '../T'
 import { tick } from 'svelte'
 
 describe('<T> events', () => {

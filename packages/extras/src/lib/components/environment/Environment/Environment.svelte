@@ -15,9 +15,9 @@
   import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
   import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js'
-  import { useSuspense } from '../../../suspense/useSuspense.js'
+  import { useSuspense } from '../../../suspense/useSuspense'
   import { useEnvironment } from '../utils/useEnvironment.svelte'
-  import type { EquirectangularEnvironmentProps } from './types.js'
+  import type { EquirectangularEnvironmentProps } from './types'
 
   const ctx = useThrelte()
 

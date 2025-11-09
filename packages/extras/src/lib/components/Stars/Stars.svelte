@@ -10,9 +10,9 @@
     Vector3
   } from 'three'
   import { T, useTask } from '@threlte/core'
-  import type { StarsProps } from './types.js'
-  import { fragmentShader } from './fragment.js'
-  import { vertexShader } from './vertex.js'
+  import type { StarsProps } from './types'
+  import { fragmentShader } from './fragment'
+  import { vertexShader } from './vertex'
 
   let {
     count = 5000,

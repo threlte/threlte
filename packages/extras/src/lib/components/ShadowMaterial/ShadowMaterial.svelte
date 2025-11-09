@@ -14,8 +14,8 @@
 </script>
 
 <script lang="ts">
-  import type { ColorStop } from '../GradientTexture/types.js'
-  import type { ShadowProps } from './types.js'
+  import type { ColorStop } from '../GradientTexture/types'
+  import type { ShadowProps } from './types'
   import { DoubleSide, MeshBasicMaterial } from 'three'
   import RadialGradientTexture from '../GradientTexture/radial/RadialGradientTexture.svelte'
   import { T } from '@threlte/core'

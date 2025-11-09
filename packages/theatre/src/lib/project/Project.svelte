@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { globalProjects } from '../consts.js'
-  import { getProject } from '../theatre.js'
+  import { globalProjects } from '../consts'
+  import { getProject } from '../theatre'
   import { setContext, type Snippet } from 'svelte'
   import type { IProject, IProjectConfig } from '@theatre/core'
 

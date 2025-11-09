@@ -1,4 +1,4 @@
-import { createClassParser } from './createClassParser.js'
+import { createClassParser } from './createClassParser'
 
 const parseNumericOrAutoOrPercentageValue = (value: string): number | 'auto' | `${number}%` => {
   if (value === 'auto') {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
   import type { IProjectConfig } from '@theatre/core'
-  import { Project, Sheet, Studio } from '../index.js'
+  import { Project, Sheet, Studio } from '..'
 
   interface Props {
     studio?: {

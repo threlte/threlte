@@ -1,5 +1,5 @@
-import { useStudio } from '../../internal/extensions.js'
-import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types.js'
+import { useStudio } from '../../internal/extensions'
+import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
 
 export const useEditorCamera = () => {
   const { useExtension } = useStudio()

@@ -4,28 +4,21 @@ export const VERSION = 8
 export { default as Canvas } from './Canvas.svelte'
 
 // components (v6)
-export { T, extend } from './components/T/T.js'
-export type { Props } from './components/T/types.js'
+export { T, extend } from './components/T/T'
+export type { Props } from './components/T/types'
 
 // plugins
-export { injectPlugin } from './plugins/injectPlugin.js'
-export type { Plugin } from './plugins/types.js'
+export { injectPlugin } from './plugins/injectPlugin'
+export type { Plugin } from './plugins/types'
 
 // hooks
-export { useThrelte } from './context/compounds/useThrelte.js'
-export { useStage } from './hooks/useStage.js'
-export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask.js'
-export { useThrelteUserContext } from './hooks/useThrelteUserContext.js'
+export { useThrelte } from './context/compounds/useThrelte'
+export { useStage } from './hooks/useStage'
+export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask'
+export { useThrelteUserContext } from './hooks/useThrelteUserContext'
 
 // task scheduling system types
-export type {
-  Key,
-  Schedule,
-  Scheduler,
-  Stage,
-  Task,
-  TaskCallback
-} from './frame-scheduling/index.js'
+export type { Key, Schedule, Scheduler, Stage, Task, TaskCallback } from './frame-scheduling'
 
 // useLoader
 export {
@@ -34,24 +27,21 @@ export {
   type UseLoaderLoadInput,
   type UseLoaderLoadResult,
   type UseLoaderOptions
-} from './hooks/useLoader.js'
+} from './hooks/useLoader'
 
 // contexts
-export type { ThrelteContext } from './context/compounds/useThrelte.js'
+export type { ThrelteContext } from './context/compounds/useThrelte'
 export { createThrelteContext } from './context/createThrelteContext.svelte'
-export { createCacheContext, useCache } from './context/fragments/cache.js'
-export { createCameraContext, useCamera } from './context/fragments/camera.js'
-export { createDOMContext, useDOM } from './context/fragments/dom.js'
-export { createDisposalContext, useDisposal } from './context/fragments/disposal.js'
-export { createParentContext, useParent } from './context/fragments/parent.js'
-export {
-  createParentObject3DContext,
-  useParentObject3D
-} from './context/fragments/parentObject3D.js'
+export { createCacheContext, useCache } from './context/fragments/cache'
+export { createCameraContext, useCamera } from './context/fragments/camera'
+export { createDOMContext, useDOM } from './context/fragments/dom'
+export { createDisposalContext, useDisposal } from './context/fragments/disposal'
+export { createParentContext, useParent } from './context/fragments/parent'
+export { createParentObject3DContext, useParentObject3D } from './context/fragments/parentObject3D'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte'
-export { createSceneContext, useScene } from './context/fragments/scene.js'
+export { createSceneContext, useScene } from './context/fragments/scene'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte'
-export { createUserContext } from './context/fragments/user.js'
+export { createUserContext } from './context/fragments/user'
 
 // utils
-export * from './utilities/index.js'
+export * from './utilities'

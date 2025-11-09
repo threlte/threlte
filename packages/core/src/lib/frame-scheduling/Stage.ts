@@ -1,6 +1,6 @@
-import { DAG, type AddNodeOptions, type Key } from './DAG.js'
-import type { Scheduler } from './Scheduler.js'
-import { Task, type TaskCallback } from './Task.js'
+import { DAG, type AddNodeOptions, type Key } from './DAG'
+import type { Scheduler } from './Scheduler'
+import { Task, type TaskCallback } from './Task'
 
 /**
  * A Stage is a collection of steps. The steps are run in a topological sort

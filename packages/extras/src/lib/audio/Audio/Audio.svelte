@@ -1,9 +1,9 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Audio as ThreeAudio } from 'three'
-  import { useAudio } from '../utils/useAudio.js'
-  import { useThrelteAudio } from '../useThrelteAudio.js'
-  import type { AudioProps } from './types.js'
+  import { useAudio } from '../utils/useAudio'
+  import { useThrelteAudio } from '../useThrelteAudio'
+  import type { AudioProps } from './types'
 
   let {
     src,

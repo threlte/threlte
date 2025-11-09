@@ -1,6 +1,6 @@
 import type { Props } from '@threlte/core'
 import type { Group } from 'three'
-import type { GravityType } from '../../types/types.js'
+import type { GravityType } from '../../types/types'
 
 export type AttractorProps = Props<Group> & {
   /**

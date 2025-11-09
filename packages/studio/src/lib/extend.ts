@@ -1,4 +1,4 @@
-export { useStudio } from './internal/extensions.js'
+export { useStudio } from './internal/extensions'
 
 // GUI components
 export { default as DropDownPane } from './components/DropDownPane.svelte'

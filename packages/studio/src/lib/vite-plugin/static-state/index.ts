@@ -1,12 +1,12 @@
 import util from 'node:util'
 import { preprocess } from 'svelte/compiler'
 import ts from 'typescript'
-import { staticStateMetaKey } from '../../config.js'
-import type { Members, Modifier, StaticStateMeta } from '../../types.js'
-import * as hmr from '../hmr/index.js'
-import { readFile, writeFile } from '../utils/fileUtils.js'
-import { toMagicString } from '../utils/magicStringUtils.js'
-import { isModule } from '../utils/componentUtils.js'
+import { staticStateMetaKey } from '../../config'
+import type { Members, Modifier, StaticStateMeta } from '../../types'
+import * as hmr from '../hmr'
+import { readFile, writeFile } from '../utils/fileUtils'
+import { toMagicString } from '../utils/magicStringUtils'
+import { isModule } from '../utils/componentUtils'
 
 const createAst = (code: string, id: string) => {
   return ts.createSourceFile(id, code, ts.ScriptTarget.Latest, true)

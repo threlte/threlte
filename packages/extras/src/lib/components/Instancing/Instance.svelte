@@ -1,10 +1,10 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { PositionMesh } from './PositionMesh.js'
-  import { useApi } from './api.js'
-  import type { InstanceProps } from './types.js'
-  import { useInstanceId } from './useInstanceId.js'
+  import { PositionMesh } from './PositionMesh'
+  import { useApi } from './api'
+  import type { InstanceProps } from './types'
+  import { useInstanceId } from './useInstanceId'
 
   let { id = useInstanceId(), ref = $bindable(), children, ...props }: InstanceProps = $props()
 

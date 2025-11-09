@@ -1,5 +1,5 @@
-import { types } from '../../../theatre.js'
-import { createTransformer } from '../createTransformer.js'
+import { types } from '../../../theatre'
+import { createTransformer } from '../createTransformer'
 import { BackSide, DoubleSide, FrontSide } from 'three'
 
 export const side = createTransformer({
