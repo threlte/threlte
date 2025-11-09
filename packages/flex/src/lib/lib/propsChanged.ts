@@ -1,5 +1,5 @@
 import type { Node } from 'yoga-layout'
-import type { NodeProps } from './props.js'
+import type { NodeProps } from './props'
 
 const nodePropsMap = new WeakMap<Node, NodeProps>()
 

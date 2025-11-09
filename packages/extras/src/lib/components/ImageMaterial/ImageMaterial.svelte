@@ -1,10 +1,10 @@
 <script lang="ts">
   import { T, asyncWritable, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
   import { Color, ShaderMaterial, Vector2, Vector3, type Mesh, type Texture } from 'three'
-  import { useTexture } from '../../hooks/useTexture.js'
-  import { useSuspense } from '../../suspense/useSuspense.js'
-  import { fragmentShader, vertexShader } from './shaders.js'
-  import type { ImageMaterialProps } from './types.js'
+  import { useTexture } from '../../hooks/useTexture'
+  import { useSuspense } from '../../suspense/useSuspense'
+  import { fragmentShader, vertexShader } from './shaders'
+  import type { ImageMaterialProps } from './types'
 
   let {
     color = 'white',

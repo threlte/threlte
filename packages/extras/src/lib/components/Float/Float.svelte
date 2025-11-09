@@ -2,7 +2,7 @@
   import { MathUtils, Group } from 'three'
   import type { Vector2Tuple } from 'three'
   import { useTask, T } from '@threlte/core'
-  import type { FloatProps } from './types.js'
+  import type { FloatProps } from './types'
 
   let {
     speed = 1,

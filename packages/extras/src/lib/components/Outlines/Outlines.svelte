@@ -11,8 +11,8 @@
     Vector2
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import { fragmentShader, vertexShader } from './shaders.js'
-  import type { OutlinesProps } from './types.js'
+  import { fragmentShader, vertexShader } from './shaders'
+  import type { OutlinesProps } from './types'
   import { fromStore } from 'svelte/store'
 
   let {

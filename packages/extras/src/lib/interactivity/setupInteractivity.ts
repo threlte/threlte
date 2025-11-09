@@ -1,7 +1,7 @@
 import { watch } from '@threlte/core'
 import type * as THREE from 'three'
-import { type InteractivityContext, useInteractivity } from './context.js'
-import type { DomEvent, Intersection, IntersectionEvent } from './types.js'
+import { type InteractivityContext, useInteractivity } from './context'
+import type { DomEvent, Intersection, IntersectionEvent } from './types'
 
 function getIntersectionId(event: Intersection) {
   return `${(event.eventObject || event.object).uuid}/${event.index}${event.instanceId}`

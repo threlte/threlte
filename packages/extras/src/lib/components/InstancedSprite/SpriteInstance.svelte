@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getContext } from 'svelte'
-  import type { InstancedSpriteUserCtx, SpriteInstanceProps } from './types.js'
+  import type { InstancedSpriteUserCtx, SpriteInstanceProps } from './types'
 
   let {
     id = 0,

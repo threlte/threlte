@@ -1,4 +1,4 @@
-import type { ClassParser } from '../lib/props.js'
+import type { ClassParser } from '../lib/props'
 
 /**
  * This function is a type helper for creating a class parser. A class parser is

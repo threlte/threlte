@@ -1,6 +1,6 @@
 <script lang="ts">
   import InnerView from './InnerView.svelte'
-  import type { ViewProps } from './types.js'
+  import type { ViewProps } from './types'
 
   let { dom, children }: ViewProps = $props()
 </script>

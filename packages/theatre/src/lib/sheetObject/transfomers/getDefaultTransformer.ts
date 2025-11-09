@@ -1,9 +1,9 @@
-import { color } from './defaults/color.js'
-import { degrees } from './defaults/degrees.js'
-import { euler } from './defaults/euler.js'
-import { generic } from './defaults/generic.js'
-import { normalized } from './defaults/normalized.js'
-import { side } from './defaults/side.js'
+import { color } from './defaults/color'
+import { degrees } from './defaults/degrees'
+import { euler } from './defaults/euler'
+import { generic } from './defaults/generic'
+import { normalized } from './defaults/normalized'
+import { side } from './defaults/side'
 
 const isFullOrEndingPattern = (fullPropertyPath: string, pattern: string) => {
   return fullPropertyPath.endsWith(`.${pattern}`) || fullPropertyPath === pattern

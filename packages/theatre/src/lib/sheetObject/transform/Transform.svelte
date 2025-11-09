@@ -9,11 +9,11 @@
   import { Group } from 'three'
   import type { TransformControls as TC } from 'three/examples/jsm/controls/TransformControls.js'
   import { RAD2DEG } from 'three/src/math/MathUtils.js'
-  import { useStudio } from '../../studio/useStudio.js'
-  import { types } from '../../theatre.js'
-  import { getDefaultTransformer } from '../transfomers/getDefaultTransformer.js'
-  import { useSheet } from '../useSheet.js'
-  import type { TransformProps } from './types.js'
+  import { useStudio } from '../../studio/useStudio'
+  import { types } from '../../theatre'
+  import { getDefaultTransformer } from '../transfomers/getDefaultTransformer'
+  import { useSheet } from '../useSheet'
+  import type { TransformProps } from './types'
 
   let {
     label,

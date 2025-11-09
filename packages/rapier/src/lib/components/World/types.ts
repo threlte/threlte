@@ -12,7 +12,7 @@ import type {
   RawQueryPipeline,
   RawRigidBodySet,
   RawSerializationPipeline
-} from '@dimforge/rapier3d-compat/raw.js'
+} from '@dimforge/rapier3d-compat/raw'
 import type { Key, Stage } from '@threlte/core'
 import type { Snippet } from 'svelte'
 import type { Vector3 } from 'three'

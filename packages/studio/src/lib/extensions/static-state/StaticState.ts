@@ -1,7 +1,7 @@
 import { onDestroy } from 'svelte'
 import { SvelteMap, SvelteSet } from 'svelte/reactivity'
-import { staticStateMetaKey } from '../../config.js'
-import type { StaticStateMeta } from '../../types.js'
+import { staticStateMetaKey } from '../../config'
+import type { StaticStateMeta } from '../../types'
 
 export const register = Symbol('register')
 export const unregister = Symbol('unregister')

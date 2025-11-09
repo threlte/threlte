@@ -1,5 +1,5 @@
 import type { InstancedMesh } from 'three'
-import type { PositionMesh } from './PositionMesh.js'
+import type { PositionMesh } from './PositionMesh'
 import { getContext, setContext } from 'svelte'
 import { currentWritable, type CurrentWritable } from '@threlte/core'
 

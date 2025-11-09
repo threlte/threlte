@@ -1,7 +1,7 @@
 import { OrthographicCamera, PerspectiveCamera } from 'three'
 import { describe, it, expect } from 'vitest'
 import { render } from '@threlte/test'
-import { T } from '../T.js'
+import { T } from '../T'
 import Camera from './__fixtures__/Camera.svelte'
 
 describe('<T> camera', () => {

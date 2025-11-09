@@ -1,5 +1,5 @@
-import { useThrelte } from '../context/compounds/useThrelte.js'
-import type { CreateStageOptions, Key } from '../frame-scheduling/index.js'
+import { useThrelte } from '../context/compounds/useThrelte'
+import type { CreateStageOptions, Key } from '../frame-scheduling'
 
 /**
  * Creates a stage and returns it. If the stage already exists, it is returned.

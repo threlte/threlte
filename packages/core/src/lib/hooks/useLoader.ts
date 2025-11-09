@@ -1,5 +1,5 @@
-import { useCache } from '../context/fragments/cache.js'
-import { asyncWritable, type AsyncWritable } from '../utilities/index.js'
+import { useCache } from '../context/fragments/cache'
+import { asyncWritable, type AsyncWritable } from '../utilities'
 
 type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>

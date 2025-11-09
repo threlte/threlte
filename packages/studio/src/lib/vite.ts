@@ -1,1 +1,1 @@
-export { plugin as threlteStudio } from './vite-plugin/vitePlugin.js'
+export { plugin as threlteStudio } from './vite-plugin/vitePlugin'

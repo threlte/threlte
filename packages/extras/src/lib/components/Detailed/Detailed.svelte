@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { DetailedProps } from './types.js'
+  import type { DetailedProps } from './types'
   import type { Object3D } from 'three'
   import { LOD } from 'three'
   import { T, injectPlugin, isInstanceOf, observe, useParent } from '@threlte/core'

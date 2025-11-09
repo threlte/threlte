@@ -1,9 +1,9 @@
-import * as hmr from '../hmr/index.js'
-import * as componentParser from '../utils/componentParser.js'
-import { addStudioRuntimeProps, hasTComponent } from '../utils/componentParser.js'
-import * as componentUtils from '../utils/componentUtils.js'
-import * as fileUtils from '../utils/fileUtils.js'
-import { toMagicString } from '../utils/magicStringUtils.js'
+import * as hmr from '../hmr'
+import * as componentParser from '../utils/componentParser'
+import { addStudioRuntimeProps, hasTComponent } from '../utils/componentParser'
+import * as componentUtils from '../utils/componentUtils'
+import * as fileUtils from '../utils/fileUtils'
+import { toMagicString } from '../utils/magicStringUtils'
 
 export const transformComponent = async (code: string, id: string) => {
   if (!id.endsWith('.svelte')) return code

@@ -1,7 +1,7 @@
 import { PerspectiveCamera, Group } from 'three'
 import { describe, it, expect } from 'vitest'
 import { render } from '@threlte/test'
-import { T } from '../T.js'
+import { T } from '../T'
 
 describe('<T> props', () => {
   it('sets a prop on a Three.js instance', () => {

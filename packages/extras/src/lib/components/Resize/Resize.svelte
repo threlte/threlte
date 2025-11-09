@@ -18,7 +18,7 @@
   } from '@threlte/core'
   import { Box3, Group } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
-  import type { ResizeProps } from './types.js'
+  import type { ResizeProps } from './types'
 
   const { renderStage } = useThrelte()
 

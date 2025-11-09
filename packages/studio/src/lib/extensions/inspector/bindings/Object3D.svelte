@@ -3,7 +3,7 @@
   import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils.js'
   import { useSnapping } from '../../snapping/useSnapping.svelte'
   import TransactionalBinding from './TransactionalBinding.svelte'
-  import { haveProperty } from './utils.js'
+  import { haveProperty } from './utils'
 
   type Props = {
     objects: Object3D[]

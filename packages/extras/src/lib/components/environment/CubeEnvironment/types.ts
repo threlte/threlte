@@ -1,5 +1,5 @@
 import type { CubeTexture } from 'three'
-import type { CommonEnvironmentProps } from '../types.js'
+import type { CommonEnvironmentProps } from '../types'
 
 export type CubeEnvironmentProps = CommonEnvironmentProps<CubeTexture> & {
   /**

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, createCameraContext, createSceneContext, useThrelte } from '@threlte/core'
-  import type { HUDProps } from './types.js'
+  import type { HUDProps } from './types'
 
   const { renderStage, renderer, toneMapping } = useThrelte()
 

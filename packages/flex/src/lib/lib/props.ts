@@ -1,6 +1,6 @@
 import type { Align, FlexDirection, Justify, Node, Wrap } from 'yoga-layout'
 import * as Yoga from 'yoga-layout'
-import { alignFlexProps } from './alignFlexProps.js'
+import { alignFlexProps } from './alignFlexProps'
 
 export type FlexPlane = 'xy' | 'yz' | 'xz'
 

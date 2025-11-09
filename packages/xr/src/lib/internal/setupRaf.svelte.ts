@@ -1,5 +1,5 @@
 import { session } from './state.svelte'
-import { raf } from './raf.js'
+import { raf } from './raf'
 
 export const setupRaf = () => {
   if (typeof window === 'undefined') return

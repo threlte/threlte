@@ -1,12 +1,12 @@
 import { fromStore } from 'svelte/store'
-import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { createParentContext, useParent } from '../../../context/fragments/parent.js'
+import { useThrelte } from '../../../context/compounds/useThrelte'
+import { createParentContext, useParent } from '../../../context/fragments/parent'
 import {
   createParentObject3DContext,
   useParentObject3D
-} from '../../../context/fragments/parentObject3D.js'
-import { isInstanceOf, resolvePropertyPath } from '../../../utilities/index.js'
-import type { BaseProps, MaybeInstance } from '../types.js'
+} from '../../../context/fragments/parentObject3D'
+import { isInstanceOf, resolvePropertyPath } from '../../../utilities'
+import type { BaseProps, MaybeInstance } from '../types'
 
 const isObject = (ref: unknown): ref is Record<string, any> => {
   return typeof ref === 'object' && ref !== null

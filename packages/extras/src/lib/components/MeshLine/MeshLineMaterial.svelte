@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { MeshLineMaterialProps } from './types.js'
+  import type { MeshLineMaterialProps } from './types'
   import { T, useThrelte } from '@threlte/core'
   import { ShaderMaterial, Color, Vector2 } from 'three'
-  import { fragmentShader } from './fragment.js'
-  import { vertexShader } from './vertex.js'
+  import { fragmentShader } from './fragment'
+  import { vertexShader } from './vertex'
 
   let {
     opacity = 1,

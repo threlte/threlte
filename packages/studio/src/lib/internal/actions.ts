@@ -1,4 +1,4 @@
-import type { ExtensionActions } from './types.js'
+import type { ExtensionActions } from './types'
 
 export const createActions = () => {
   const actions = new Map<string, ExtensionActions<Record<string, any>>>()

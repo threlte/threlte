@@ -2,8 +2,8 @@
   import type { RigidBody } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { Group, Vector3 } from 'three'
-  import { useRapier } from '../../hooks/useRapier.js'
-  import type { AttractorProps } from './types.js'
+  import { useRapier } from '../../hooks/useRapier'
+  import type { AttractorProps } from './types'
 
   let {
     strength = 1,

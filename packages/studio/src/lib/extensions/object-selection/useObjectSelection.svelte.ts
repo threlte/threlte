@@ -1,9 +1,9 @@
-import { useStudio } from '../../internal/extensions.js'
+import { useStudio } from '../../internal/extensions'
 import {
   objectSelectionScope,
   type ObjectSelectionActions,
   type ObjectSelectionState
-} from './types.js'
+} from './types'
 
 export const useObjectSelection = () => {
   const { useExtension } = useStudio()

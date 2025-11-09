@@ -2,7 +2,7 @@
   import * as CamerakitPlugin from '@tweakpane/plugin-camerakit'
   import { OrthographicCamera, PerspectiveCamera } from 'three'
   import TransactionalBinding from './TransactionalBinding.svelte'
-  import { areOfType } from './utils.js'
+  import { areOfType } from './utils'
 
   type Props = {
     objects: (PerspectiveCamera | OrthographicCamera)[]

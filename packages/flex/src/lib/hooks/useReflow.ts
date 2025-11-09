@@ -1,5 +1,5 @@
 import { getContext } from 'svelte'
-import { flexContextName, type FlexContext } from '../Flex/context.js'
+import { flexContextName, type FlexContext } from '../Flex/context'
 
 /**
  * The hook useReflow allows you to manually request a [layout

@@ -13,8 +13,6 @@
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "types": ["webxr"],
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext"
+    "types": ["webxr"]
   }
 }

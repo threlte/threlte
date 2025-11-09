@@ -5,8 +5,8 @@
     TransformControls,
     type TransformControlsEventMap
   } from 'three/examples/jsm/controls/TransformControls.js'
-  import { useControlsContext } from '../useControlsContext.js'
-  import type { TransformControlsProps } from './types.js'
+  import { useControlsContext } from '../useControlsContext'
+  import type { TransformControlsProps } from './types'
 
   let {
     autoPauseOrbitControls = true,

@@ -1,4 +1,4 @@
-import type { AnyProp } from '../types.js'
+import type { AnyProp } from '../types'
 
 export const parsePropLabel = (alphaNumericKey: string, propValue: AnyProp): string => {
   let label = alphaNumericKey

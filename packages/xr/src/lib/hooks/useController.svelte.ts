@@ -1,4 +1,4 @@
-import type { XRController } from '../types.js'
+import type { XRController } from '../types'
 import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
 
 class Controllers {

@@ -1,6 +1,6 @@
 import { injectInteractivityPlugin } from './plugin.svelte'
-import { setupInteractivity } from './setupInteractivity.js'
-import { setInteractivityContext, type InteractivityOptions } from './context.js'
+import { setupInteractivity } from './setupInteractivity'
+import { setInteractivityContext, type InteractivityOptions } from './context'
 
 const interactivity = (options?: InteractivityOptions) => {
   const context = setInteractivityContext(options)
@@ -12,12 +12,12 @@ const interactivity = (options?: InteractivityOptions) => {
 }
 
 // exports
-export { useInteractivity } from './context.js'
+export { useInteractivity } from './context'
 export type {
   DomEvent,
   Intersection,
   IntersectionEvent,
   ThrelteEvents as EventMap,
   InteractivityProps
-} from './types.js'
+} from './types'
 export { interactivity }

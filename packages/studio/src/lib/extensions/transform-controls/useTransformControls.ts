@@ -1,9 +1,9 @@
-import { useStudio } from '../../internal/extensions.js'
+import { useStudio } from '../../internal/extensions'
 import {
   transformControlsScope,
   type TransformControlsActions,
   type TransformControlsState
-} from './types.js'
+} from './types'
 
 export const useTransformControls = () => {
   const { useExtension } = useStudio()

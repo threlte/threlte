@@ -2,7 +2,7 @@ import { currentWritable, useTask, watch, type CurrentWritable } from '@threlte/
 import { tick } from 'svelte'
 import { derived, writable, type Writable } from 'svelte/store'
 import { AnimationMixer, type AnimationAction, type Object3D } from 'three'
-import type { ThrelteGltf } from '../types/types.js'
+import type { ThrelteGltf } from '../types/types'
 
 type UseGltfAnimationsReturnType<Actions> = {
   gltf: Writable<ThrelteGltf | undefined>

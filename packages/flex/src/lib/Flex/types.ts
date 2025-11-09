@@ -3,7 +3,7 @@ import type { Snippet } from 'svelte'
 import type { Group } from 'three'
 import type Yoga from 'yoga-layout'
 import type { Direction } from 'yoga-layout'
-import type { ClassParser, FlexPlane, NodeProps } from '../lib/props.js'
+import type { ClassParser, FlexPlane, NodeProps } from '../lib/props'
 
 export type InnerFlexProps = NodeProps & {
   yoga: typeof Yoga

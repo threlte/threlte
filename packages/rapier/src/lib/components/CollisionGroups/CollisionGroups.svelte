@@ -4,9 +4,9 @@
 >
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import { computeBitMask } from '../../lib/computeBitMask.js'
-  import type { CollisionGroupsContext } from '../../types/types.js'
-  import type { CollisionGroupsProps, Groups, GroupsDef, MembershipsAndFilter } from './types.js'
+  import { computeBitMask } from '../../lib/computeBitMask'
+  import type { CollisionGroupsContext } from '../../types/types'
+  import type { CollisionGroupsProps, Groups, GroupsDef, MembershipsAndFilter } from './types'
 
   let { groups, filter, memberships, children }: CollisionGroupsProps<TGroupsDef> = $props()
 

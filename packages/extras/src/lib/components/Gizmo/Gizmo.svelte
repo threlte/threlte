@@ -14,7 +14,7 @@
     type PerspectiveCamera,
     type Event
   } from 'three'
-  import type { GizmoProps, Controls } from './types.js'
+  import type { GizmoProps, Controls } from './types'
   import { ViewportGizmo } from 'three-viewport-gizmo'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'

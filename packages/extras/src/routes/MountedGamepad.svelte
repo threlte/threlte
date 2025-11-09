@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useGamepad } from '../lib/index.js'
+  import { useGamepad } from '../lib'
 
   const gamepad = useGamepad()
   const { connected } = gamepad

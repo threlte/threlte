@@ -1,6 +1,6 @@
 <script lang="ts">
   import { observe, T, useThrelte, watch } from '@threlte/core'
-  import { default as CC } from 'camera-controls'
+  import type CC from 'camera-controls'
   import { onDestroy, type Snippet } from 'svelte'
   import { Checkbox, RadioGrid } from 'svelte-tweakpane-ui'
   import { Box3, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from 'three'
@@ -8,12 +8,12 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions.js'
+  import { useStudio } from '../../internal/extensions'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
   import CameraControls from './CameraControls.svelte'
   import DefaultCamera from './DefaultCamera.svelte'
-  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types.js'
+  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
 
   let { children }: { children?: Snippet } = $props()
 

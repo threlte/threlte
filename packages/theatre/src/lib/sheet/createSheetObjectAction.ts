@@ -2,7 +2,7 @@ import type { ISheet, ISheetObject, UnknownShorthandCompoundProps } from '@theat
 
 import { getContext } from 'svelte'
 
-import type { SheetContext } from './types.js'
+import type { SheetContext } from './types'
 
 // reconstruct theatre type
 type PropsValue<Props extends UnknownShorthandCompoundProps> = Parameters<

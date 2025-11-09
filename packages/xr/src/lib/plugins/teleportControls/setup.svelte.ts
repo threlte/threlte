@@ -1,8 +1,8 @@
 import { observe } from '@threlte/core'
-import type { Context, HandContext } from './context.js'
+import type { Context, HandContext } from './context'
 import { controllers } from '../../hooks/useController.svelte'
-import { useTeleport } from '../../hooks/useTeleport.js'
-import { useFixed } from '../../internal/useFixed.js'
+import { useTeleport } from '../../hooks/useTeleport'
+import { useFixed } from '../../internal/useFixed'
 import { isPresenting, teleportIntersection } from '../../internal/state.svelte'
 
 export const setupTeleportControls = (

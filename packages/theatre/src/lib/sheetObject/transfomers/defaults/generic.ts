@@ -1,6 +1,6 @@
-import { types } from '../../../theatre.js'
-import { isPrimitive } from '../../sync/utils/isPrimitive.js'
-import { createTransformer } from '../createTransformer.js'
+import { types } from '../../../theatre'
+import { isPrimitive } from '../../sync/utils/isPrimitive'
+import { createTransformer } from '../createTransformer'
 
 export const generic = createTransformer({
   transform(value) {

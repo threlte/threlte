@@ -2,11 +2,11 @@
   import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { Group, Object3D } from 'three'
-  import { useFlex } from '../Flex/context.js'
-  import { createUseDimensionsContext } from '../hooks/useDimensions.js'
-  import type { NodeProps } from '../lib/props.js'
-  import { createNodeContext } from '../nodes/context.js'
-  import type { BoxProps } from './types.js'
+  import { useFlex } from '../Flex/context'
+  import { createUseDimensionsContext } from '../hooks/useDimensions'
+  import type { NodeProps } from '../lib/props'
+  import { createNodeContext } from '../nodes/context'
+  import type { BoxProps } from './types'
 
   let { order, class: _class = '', onreflow, children, ...props }: BoxProps = $props()
 

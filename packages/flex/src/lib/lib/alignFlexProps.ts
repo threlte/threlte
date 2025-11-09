@@ -1,4 +1,4 @@
-import type { NodeProps } from './props.js'
+import type { NodeProps } from './props'
 
 /**
  * This function will align the flex props to the web-standard.

@@ -3,7 +3,7 @@
   lang="ts"
 >
   import type * as AllIcons from '@mdi/js'
-  export type Icons = Exclude<keyof typeof AllIcons, "default">
+  export type Icons = keyof typeof AllIcons
 </script>
 
 <script lang="ts">

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { SvelteSet } from 'svelte/reactivity'
-  import { useStudio } from '../../internal/extensions.js'
+  import { useStudio } from '../../internal/extensions'
   import {
     studioObjectsRegistryScope,
     type StudioObjectsRegistryActions,
     type StudioObjectsRegistryState
-  } from './types.js'
+  } from './types'
   import type { Snippet } from 'svelte'
 
   let {

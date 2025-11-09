@@ -2,7 +2,7 @@
   import { T, useParentObject3D, useThrelte, watch } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import { Group } from 'three'
-  import { createSuspenseContext } from './context.js'
+  import { createSuspenseContext } from './context'
 
   interface Props {
     final?: boolean

@@ -1,5 +1,5 @@
-import { useStudio } from '../../extend.js'
-import { staticStateScope, type StaticStateActions, type StaticStateState } from './types.js'
+import { useStudio } from '../../extend'
+import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
 
 export const useStaticState = () => {
   const { useExtension } = useStudio()

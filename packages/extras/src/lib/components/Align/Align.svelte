@@ -10,7 +10,7 @@
   } from '@threlte/core'
   import { Box3, Group, Sphere, Vector3 } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
-  import type { AlignProps } from './types.js'
+  import type { AlignProps } from './types'
 
   const { renderStage } = useThrelte()
 

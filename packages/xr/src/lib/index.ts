@@ -8,22 +8,22 @@ export { default as Headset } from './components/Headset.svelte'
 export { default as XR } from './components/XR.svelte'
 
 // Utilities
-export { getXRSupportState } from './lib/getXRSupportState.js'
-export { toggleXRSession } from './lib/toggleXRSession.js'
-export { handJoints } from './lib/handJoints.js'
+export { getXRSupportState } from './lib/getXRSupportState'
+export { toggleXRSession } from './lib/toggleXRSession'
+export { handJoints } from './lib/handJoints'
 
 // Plugins
-export { pointerControls } from './plugins/pointerControls/index.js'
-export { teleportControls } from './plugins/teleportControls/index.js'
+export { pointerControls } from './plugins/pointerControls'
+export { teleportControls } from './plugins/teleportControls'
 
 // Hooks
 export { useController } from './hooks/useController.svelte'
 export { useHand } from './hooks/useHand.svelte'
 export { useHandJoint } from './hooks/useHandJoint.svelte'
-export { useHeadset } from './hooks/useHeadset.js'
+export { useHeadset } from './hooks/useHeadset'
 export { useHitTest } from './hooks/useHitTest.svelte'
-export { useTeleport } from './hooks/useTeleport.js'
-export { useXR } from './hooks/useXR.js'
+export { useTeleport } from './hooks/useTeleport'
+export { useXR } from './hooks/useXR'
 
 // Types
 export type {
@@ -34,4 +34,4 @@ export type {
   XRController,
   XRHandObject,
   XRHandEvent
-} from './types.js'
+} from './types'

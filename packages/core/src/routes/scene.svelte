@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Color } from 'three'
-  import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib/index.js'
+  import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib'
 
   const { scene } = useThrelte()
   scene.background = new Color('black')

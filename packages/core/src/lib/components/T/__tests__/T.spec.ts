@@ -2,7 +2,7 @@ import { BufferGeometry, Group, Mesh, MeshBasicMaterial, PerspectiveCamera } fro
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { extend, T } from '../T.js'
+import { extend, T } from '../T'
 import Bindable from './__fixtures__/Bindable.svelte'
 
 describe('<T>', () => {

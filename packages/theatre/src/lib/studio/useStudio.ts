@@ -1,4 +1,4 @@
-import { studio } from '../consts.js'
+import { studio } from '../consts'
 
 /**
  * ### `useStudio`

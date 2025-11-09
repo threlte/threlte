@@ -4,15 +4,15 @@
 >
   import { resolvePropertyPath, useParent, watch } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { useStudio } from '../../studio/useStudio.js'
-  import type { Transformer } from '../transfomers/types.js'
-  import { useSheet } from '../useSheet.js'
-  import type { AnyProp, SyncProps } from './types.js'
-  import { getInitialValue } from './utils/getInitialValue.js'
-  import { isComplexProp } from './utils/isComplexProp.js'
-  import { isStringProp } from './utils/isStringProp.js'
-  import { makeAlphanumeric } from './utils/makeAlphanumeric.js'
-  import { parsePropLabel } from './utils/parsePropLabel.js'
+  import { useStudio } from '../../studio/useStudio'
+  import type { Transformer } from '../transfomers/types'
+  import { useSheet } from '../useSheet'
+  import type { AnyProp, SyncProps } from './types'
+  import { getInitialValue } from './utils/getInitialValue'
+  import { isComplexProp } from './utils/isComplexProp'
+  import { isStringProp } from './utils/isStringProp'
+  import { makeAlphanumeric } from './utils/makeAlphanumeric'
+  import { parsePropLabel } from './utils/parsePropLabel'
 
   let { type, children, ...rest }: SyncProps<Type> = $props()
 

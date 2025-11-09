@@ -3,8 +3,8 @@
 import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
-import type { Props } from './types.js'
-import { setIs } from './utils/useIs.js'
+import type { Props } from './types'
+import { setIs } from './utils/useIs'
 
 type Extensions = Record<string, unknown>
 

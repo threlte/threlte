@@ -1,7 +1,7 @@
 <script lang="ts">
   import { useStage, useTask, useThrelte } from '@threlte/core'
   import { ThreePerf } from 'three-perf'
-  import type { PerfMonitorProps } from './types.js'
+  import type { PerfMonitorProps } from './types'
 
   let {
     domElement = document.body,

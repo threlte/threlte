@@ -5,14 +5,14 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions.js'
+  import { useStudio } from '../../internal/extensions'
   import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
   import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useTransactions } from '../transactions/useTransactions.js'
+  import { useTransactions } from '../transactions/useTransactions'
   import AxesHelper from './AxesHelper.svelte'
   import GroupHelper from './GroupHelper.svelte'
   import Mounter from './Mounter.svelte'
-  import { helpersScope, type HelpersActions, type HelpersState } from './types.js'
+  import { helpersScope, type HelpersActions, type HelpersState } from './types'
   import type { Snippet } from 'svelte'
 
   let { children }: { children?: Snippet } = $props()
