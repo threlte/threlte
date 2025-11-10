@@ -88,6 +88,11 @@ catalogs:
 overrides:
   vite: ^7.1.4
 
+patchedDependencies:
+  '@theatre/studio':
+    hash: 1be11589f12d362f0a72e118ac4ef7b2c48bbd564289a80be63f7f5ac6f4e07f
+    path: patches/@theatre__studio.patch
+
 importers:
 
   .:
@@ -218,7 +223,7 @@ importers:
         version: 0.6.2
       '@theatre/studio':
         specifier: ^0.6.2
-        version: 0.6.2(@theatre/core@0.6.2)
+        version: 0.6.2(patch_hash=1be11589f12d362f0a72e118ac4ef7b2c48bbd564289a80be63f7f5ac6f4e07f)(@theatre/core@0.6.2)
       '@threlte/core':
         specifier: workspace:*
         version: link:../../packages/core
@@ -901,7 +906,7 @@ importers:
         version: 0.6.2
       '@theatre/studio':
         specifier: '>=0.6'
-        version: 0.6.2(@theatre/core@0.6.2)
+        version: 0.6.2(patch_hash=1be11589f12d362f0a72e118ac4ef7b2c48bbd564289a80be63f7f5ac6f4e07f)(@theatre/core@0.6.2)
     devDependencies:
       '@eslint/js':
         specifier: 'catalog:'
@@ -10449,7 +10454,7 @@ snapshots:
     dependencies:
       lodash-es: 4.17.21
 
-  '@theatre/studio@0.6.2(@theatre/core@0.6.2)':
+  '@theatre/studio@0.6.2(patch_hash=1be11589f12d362f0a72e118ac4ef7b2c48bbd564289a80be63f7f5ac6f4e07f)(@theatre/core@0.6.2)':
     dependencies:
       '@theatre/core': 0.6.2
       '@theatre/dataverse': 0.6.2

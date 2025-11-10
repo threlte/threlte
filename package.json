@@ -31,6 +31,9 @@
   "pnpm": {
     "overrides": {
       "vite": "catalog:"
+    },
+    "patchedDependencies": {
+      "@theatre/studio": "patches/@theatre__studio.patch"
     }
   },
   "engines": {
