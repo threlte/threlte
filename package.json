@@ -33,7 +33,8 @@
       "vite": "catalog:"
     },
     "patchedDependencies": {
-      "@theatre/studio": "patches/@theatre__studio.patch"
+      "@theatre/studio": "patches/@theatre__studio.patch",
+      "mitt": "patches/mitt.patch"
     }
   },
   "engines": {

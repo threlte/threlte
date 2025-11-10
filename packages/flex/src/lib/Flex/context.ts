@@ -1,9 +1,5 @@
 import type { CurrentWritable } from '@threlte/core'
-import type { Emitter } from 'mitt'
-// We need to cast here because TypeScript with "moduleResolution": "NodeNext"
-// fails to resolve the default export otherwise.
-import mittModule from 'mitt'
-const mitt = mittModule as unknown as typeof import('mitt').default
+import mitt, { type Emitter } from 'mitt'
 import { getContext, onDestroy, setContext } from 'svelte'
 import type { Group } from 'three'
 import type { Node } from 'yoga-layout'
