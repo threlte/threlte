@@ -14,7 +14,7 @@
     "lint": "pnpm -r --aggregate-output lint",
     "check": "pnpm -r --aggregate-output check",
     "release": "changeset publish",
-    "cleanup": "turbo run cleanup && rimraf node_modules",
+    "cleanup": "node ./scripts/cleanup.js",
     "test": "turbo run test"
   },
   "devDependencies": {
@@ -25,7 +25,6 @@
     "prettier-plugin-astro": "^0.14.0",
     "prettier-plugin-svelte": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "rimraf": "catalog:",
     "turbo": "^2.3.1"
   },
   "pnpm": {

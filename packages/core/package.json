@@ -13,8 +13,7 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
-    "test:watch": "vitest --watch",
-    "cleanup": "rimraf node_modules .svelte-kit dist"
+    "test:watch": "vitest --watch"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",
@@ -34,7 +33,6 @@
     "prettier": "catalog:",
     "prettier-plugin-svelte": "catalog:",
     "publint": "catalog:",
-    "rimraf": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
     "svelte2tsx": "catalog:",
