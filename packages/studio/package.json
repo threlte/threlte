@@ -12,7 +12,6 @@
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
-    "cleanup": "rimraf node_modules .svelte-kit dist",
     "test": "vitest"
   },
   "devDependencies": {
@@ -35,7 +34,6 @@
     "prettier": "catalog:",
     "prettier-plugin-svelte": "catalog:",
     "publint": "catalog:",
-    "rimraf": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
     "svelte2tsx": "catalog:",

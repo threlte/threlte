@@ -3,7 +3,6 @@
   "version": "3.0.1",
   "description": "GLTF to Threlte converter",
   "scripts": {
-    "cleanup": "rimraf node_modules",
     "lint": "prettier --check .",
     "format": "prettier --write ."
   },
@@ -54,8 +53,7 @@
     "fs-extra": "^9.0.1",
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
-    "read-pkg-up": "^9.1.0",
-    "rimraf": "catalog:"
+    "read-pkg-up": "^9.1.0"
   },
   "husky": {
     "hooks": {
