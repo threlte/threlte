@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    // ESM out, modern syntax in source
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+
+    // Stricter, modern TS defaults
+    "strict": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "useDefineForClassFields": true,
+    "verbatimModuleSyntax": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Type ergonomics
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+
+    "noEmit": true,
+    // Declarations: keep off in the main tsconfig; use a build tsconfig to emit types
+    "declarationMap": false,
+    "allowJs": true,
+
+    // Svelte types
+    "types": ["svelte"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.js"],
+  "exclude": ["dist", "node_modules"]
+}

@@ -1,5 +1,5 @@
-import THREE from 'three'
-import isVarName from './isVarName.js'
+import * as THREE from 'three'
+import { isVarName } from './isVarName.js'
 
 /**
  * @param {string} fileName
@@ -7,7 +7,12 @@ import isVarName from './isVarName.js'
  * @param {import('./Options.d.ts').Options} options
  * @returns {string}
  */
-function parse(fileName, gltf, options = {}) {
+export function parse(fileName, gltf, options = {}) {
+  if (gltf.isObject3D) {
+    // Wrap scene in a GLTF Structure
+    gltf = { scene: gltf, animations: [], parser: { json: {} } }
+  }
+
   const url = fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
@@ -25,38 +30,40 @@ function parse(fileName, gltf, options = {}) {
 
   function uniqueName(attempt, index = 0) {
     const newAttempt = index > 0 ? attempt + index : attempt
-    if (Object.values(duplicates.geometries).find(({ name }) => name === newAttempt) === undefined)
+    if (
+      Object.values(duplicates.geometries).find(({ name }) => name === newAttempt) === undefined
+    ) {
       return newAttempt
-    else return uniqueName(attempt, index + 1)
+    } else {
+      return uniqueName(attempt, index + 1)
+    }
   }
 
   gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-      if (child.material) {
-        if (!duplicates.materials[child.material.name]) {
-          duplicates.materials[child.material.name] = 1
-        } else {
-          duplicates.materials[child.material.name]++
-        }
+    if (!child.isMesh) {
+      return
+    }
+
+    if (child.material) {
+      if (!duplicates.materials[child.material.name]) {
+        duplicates.materials[child.material.name] = 1
+      } else {
+        duplicates.materials[child.material.name]++
       }
     }
-  })
 
-  gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-      if (child.geometry) {
-        const key = child.geometry.uuid + child.material?.name ?? ''
-        if (!duplicates.geometries[key]) {
-          let name = (child.name || 'Part').replace(/[^a-zA-Z]/g, '')
-          name = name.charAt(0).toUpperCase() + name.slice(1)
-          duplicates.geometries[key] = {
-            count: 1,
-            name: uniqueName(name),
-            node: 'nodes' + sanitizeName(child.name)
-          }
-        } else {
-          duplicates.geometries[key].count++
+    if (child.geometry) {
+      const key = child.geometry.uuid + child.material?.name ?? ''
+      if (!duplicates.geometries[key]) {
+        let name = (child.name || 'Part').replace(/[^a-zA-Z]/g, '')
+        name = name.charAt(0).toUpperCase() + name.slice(1)
+        duplicates.geometries[key] = {
+          count: 1,
+          name: uniqueName(name),
+          node: 'nodes' + sanitizeName(child.name)
         }
+      } else {
+        duplicates.geometries[key].count++
       }
     }
   })
@@ -64,7 +71,9 @@ function parse(fileName, gltf, options = {}) {
   // Prune duplicate geometries
   for (let key of Object.keys(duplicates.geometries)) {
     const duplicate = duplicates.geometries[key]
-    if (duplicate.count === 1) delete duplicates.geometries[key]
+    if (duplicate.count === 1) {
+      delete duplicates.geometries[key]
+    }
   }
 
   function sanitizeName(name) {
@@ -72,17 +81,17 @@ function parse(fileName, gltf, options = {}) {
   }
 
   const rNbr = (number) => {
-    return parseFloat(number.toFixed(Math.round(options.precision || 2)))
+    return Number.parseFloat(number.toFixed(Math.round(options.precision || 2)))
   }
 
   const rDeg = (number) => {
-    const abs = Math.abs(Math.round(parseFloat(number) * 100000))
+    const abs = Math.abs(Math.round(Number.parseFloat(number) * 100000))
     for (let i = 1; i <= 10; i++) {
-      if (abs === Math.round(parseFloat(Math.PI / i) * 100000))
+      if (abs === Math.round(Number.parseFloat(Math.PI / i) * 100000))
         return `${number < 0 ? '-' : ''}Math.PI${i > 1 ? ' / ' + i : ''}`
     }
     for (let i = 1; i <= 10; i++) {
-      if (abs === Math.round(parseFloat(Math.PI * i) * 100000))
+      if (abs === Math.round(Number.parseFloat(Math.PI * i) * 100000))
         return `${number < 0 ? '-' : ''}Math.PI${i > 1 ? ' * ' + i : ''}`
     }
     return rNbr(number)
@@ -125,10 +134,20 @@ function parse(fileName, gltf, options = {}) {
 
   function getType(obj) {
     let type = obj.type.charAt(0).toLowerCase() + obj.type.slice(1)
+
     // Turn object3d's into groups, it should be faster according to the threejs docs
-    if (type === 'object3D') type = 'group'
-    if (type === 'perspectiveCamera') type = 'PerspectiveCamera'
-    if (type === 'orthographicCamera') type = 'OrthographicCamera'
+    if (type === 'object3D') {
+      return 'group'
+    }
+
+    if (type === 'perspectiveCamera') {
+      return 'PerspectiveCamera'
+    }
+
+    if (type === 'orthographicCamera') {
+      return 'OrthographicCamera'
+    }
+
     return type
   }
 
@@ -261,7 +280,6 @@ function parse(fileName, gltf, options = {}) {
       const firstProps = handleThrelteProps(first)
       const regex = /([a-z-A-Z]*)={([a-zA-Z0-9\.\[\]\-\,\ \/]*)}/g
       const keys1 = [...result.matchAll(regex)].map(([, match]) => match)
-      const values1 = [...result.matchAll(regex)].map(([, , match]) => match)
       const keys2 = [...firstProps.matchAll(regex)].map(([, match]) => match)
 
       /** Double negative rotations
@@ -467,7 +485,7 @@ function parse(fileName, gltf, options = {}) {
   const scene = printThrelte(gltf.scene)
 
   const useGltfOptions = {
-    draco: options.transform && options.draco ? (options.draco ? options.transform : true) : false
+    draco: options.transform || options.draco
   }
 
   const imports = `
@@ -489,7 +507,7 @@ function parse(fileName, gltf, options = {}) {
 
   const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
     options.types ? '<GLTFResult>' : ''
-  }('${url}'${useGltfOptions.draco ? `, { dracoLoader: useDraco(${typeof useGltfOptions.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
+  }('${url}'${useGltfOptions.draco ? `, { dracoLoader: useDraco(${typeof options.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
     options.suspense ? ')' : ''
   }`
 
@@ -575,5 +593,3 @@ ${
 		</${hasAnimations ? 'T' : 'T.Group'}>
 	`
 }
-
-export default parse
