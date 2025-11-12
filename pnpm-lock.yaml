@@ -633,6 +633,9 @@ importers:
       jsdom-global:
         specifier: ^3.0.2
         version: 3.0.2(jsdom@27.1.0)
+      keyframe-resample:
+        specifier: ^0.1.0
+        version: 0.1.0
       meow:
         specifier: ^14.0.0
         version: 14.0.0
@@ -670,9 +673,6 @@ importers:
       husky:
         specifier: ^9.1.7
         version: 9.1.7
-      keyframe-resample:
-        specifier: ^0.1.0
-        version: 0.1.0
       lint-staged:
         specifier: ^16.2.6
         version: 16.2.6
