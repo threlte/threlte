@@ -1,5 +1,5 @@
 import type { CurrentWritable } from '@threlte/core'
-import { type Emitter } from 'mitt'
+import type { Emitter } from 'mitt'
 // We need to cast here because TypeScript with "moduleResolution": "NodeNext"
 // fails to resolve the default export otherwise.
 import mittModule from 'mitt'
