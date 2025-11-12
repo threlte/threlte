@@ -4,7 +4,7 @@ title: App Structure
 order: -900
 ---
 
-Threlte uses Svelte’s [Context API](https://svelte.dev/docs/svelte/context) to share `renderer`, `camera`, [and others](/docs/reference/core/use-threlte#usage) to any child component.
+Threlte uses Svelte's [Context API](https://svelte.dev/tutorial/svelte/context-api) to share `renderer`, `camera`, [and others](/docs/reference/core/use-threlte#usage) to any child component.
 Hooks like `useThrelte()` read from this context, so anything that needs it must be inside `<Canvas>`.
 
 ```svelte title="SomeComponent.svelte"

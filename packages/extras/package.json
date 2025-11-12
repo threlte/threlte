@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "9.5.1",
+  "version": "9.6.1",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Utilities, abstractions and plugins for your Threlte apps",
@@ -33,7 +33,6 @@
     "rimraf": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
-    "svelte-preprocess": "catalog:",
     "svelte2tsx": "catalog:",
     "three": "catalog:",
     "tslib": "catalog:",
@@ -90,7 +89,7 @@
   "dependencies": {
     "@threejs-kit/instanced-sprite-mesh": "^2.5.1",
     "camera-controls": "^2.10.1",
-    "three-mesh-bvh": "^0.9.0",
+    "three-mesh-bvh": "^0.9.1",
     "three-perf": "^1.0.11",
     "three-viewport-gizmo": "^2.2.0",
     "troika-three-text": "^0.52.4"

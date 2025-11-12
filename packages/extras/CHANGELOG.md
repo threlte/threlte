@@ -1,5 +1,41 @@
 # @threlte/extras
 
+## 9.6.1
+
+### Patch Changes
+
+- 642343b: [core] Fix: adjust type export
+
+## 9.6.0
+
+### Minor Changes
+
+- 5f1dc22: adds UvMaterial to visualize uvs of a geometry
+
+## 9.5.5
+
+### Patch Changes
+
+- 8eeafcb: Use snippet based Portal component
+
+## 9.5.4
+
+### Patch Changes
+
+- 3e6c3cc: Ensure bvh calls disposeBoundsTree on correct geometries
+
+## 9.5.3
+
+### Patch Changes
+
+- 20c11ad: Add bvh plugin
+
+## 9.5.2
+
+### Patch Changes
+
+- 6f5effb: fix RadialGradientTexture to clear its canvas whenever the `stops` prop is updated and a new gradient is created
+
 ## 9.5.1
 
 ### Patch Changes

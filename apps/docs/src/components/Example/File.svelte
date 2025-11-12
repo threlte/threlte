@@ -1,29 +1,28 @@
 <script lang="ts">
-  import { getContext } from 'svelte'
-  import type { Writable } from 'svelte/store'
+  import { getCodeExampleContext } from './exampleContext.svelte'
   import type { File } from './types'
 
   interface Props {
     file: File
-    currentlySelectedFile: Writable<File>
   }
 
-  let { file, currentlySelectedFile }: Props = $props()
+  let { file }: Props = $props()
 
-  let isSelected = $derived(file.path === $currentlySelectedFile.path)
+  let context = getCodeExampleContext()
+  let isSelected = $derived(file.path === context.currentFilePath)
 
   const fileExtension = file.name.split('.').pop()
-
-  const selectFile = getContext('selectFile') as (file: File) => void
 </script>
 
 <button
   class={[
-    'flex flex-row items-center gap-1 border border-transparent hover:underline focus:outline-none [&>*]:w-[1em]',
+    'focus:outline-hidden flex flex-row items-center gap-1 border border-transparent *:w-[1em] hover:underline',
     isSelected &&
-      '-mx-1 -my-0.5 rounded-sm border-orange/5 bg-orange-800/50 px-1 py-0.5 text-orange'
+      'rounded-xs border-orange/5 text-orange -mx-1 -my-0.5 bg-orange-800/50 px-1 py-0.5'
   ]}
-  onclick={() => selectFile(file)}
+  onclick={() => {
+    context.currentFilePath = file.path
+  }}
 >
   {#if fileExtension === 'ts'}
     <svg

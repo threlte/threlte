@@ -1,44 +1,33 @@
 <script lang="ts">
   import { useTask } from '@threlte/core'
-  import type { Euler, Vector3 } from 'three'
+  import { MathUtils, Quaternion, Vector3 } from 'three'
   import Particle from './Particle.svelte'
-
-  const getId = () => {
-    return Math.random().toString(16).slice(2)
-  }
-
-  const getRandomPosition = (): Parameters<Vector3['set']> => {
-    return [0.5 - Math.random() * 1, 5 - Math.random() * 1 + 10, 0.5 - Math.random() * 1]
-  }
-
-  const getRandomRotation = (): Parameters<Euler['set']> => {
-    return [Math.random() * 10, Math.random() * 10, Math.random() * 10]
-  }
 
   type Body = {
     id: string
     mounted: number
-    position: Parameters<Vector3['set']>
-    rotation: Parameters<Euler['set']>
+    position: Vector3
+    quaternion: Quaternion
   }
 
   let bodies = $state<Body[]>([])
 
-  let lastBodyMounted: number = 0
+  let lastBodyMounted = 0
   let bodyEveryMilliseconds = 100
   let longevityMilliseconds = 8000
 
   useTask(() => {
     if (lastBodyMounted + bodyEveryMilliseconds < Date.now()) {
       const body: Body = {
-        id: getId(),
+        id: MathUtils.generateUUID(),
         mounted: Date.now(),
-        position: getRandomPosition(),
-        rotation: getRandomRotation()
+        position: new Vector3(0, 15, 0),
+        quaternion: new Quaternion().random()
       }
       bodies.unshift(body)
       lastBodyMounted = Date.now()
     }
+
     const deleteIds: string[] = []
     bodies.forEach((body) => {
       if (body.mounted + longevityMilliseconds < Date.now()) {
@@ -56,8 +45,5 @@
 </script>
 
 {#each bodies as body (body.id)}
-  <Particle
-    position={body.position}
-    rotation={body.rotation}
-  />
+  <Particle {...body} />
 {/each}

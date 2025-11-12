@@ -65,6 +65,7 @@ export { default as CubeCamera } from './components/CubeCamera/CubeCamera.svelte
 export { default as LinearGradientTexture } from './components/GradientTexture/linear/LinearGradientTexture.svelte'
 export { default as RadialGradientTexture } from './components/GradientTexture/radial/RadialGradientTexture.svelte'
 export type { ColorStop, RadialGradientOuterRadius } from './components/GradientTexture/types'
+export { default as UvMaterial } from './components/UvMaterial/UvMaterial.svelte'
 export { default as View } from './components/View/View.svelte'
 export { default as Wireframe } from './components/Wireframe/Wireframe.svelte'
 
@@ -117,5 +118,11 @@ export {
   buildSpritesheet,
   type SpritesheetMetadata
 } from './components/InstancedSprite/instancedSpriteUtils'
+
+// bvh
+export { bvh } from './bvh/bvh.svelte'
+export type { BVHOptions, BVHProps } from './bvh/types'
+import { SAH, CENTER, AVERAGE } from 'three-mesh-bvh'
+export const BVHSplitStrategy = { SAH, CENTER, AVERAGE }
 
 export type { ThrelteGltf } from './types/types'

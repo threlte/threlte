@@ -1,5 +1,41 @@
 # @threlte/core
 
+## 8.2.1
+
+### Patch Changes
+
+- 642343b: [core] Fix: adjust type export
+
+## 8.2.0
+
+### Minor Changes
+
+- db6a716: Add support for the Light abstract class to isInstanceOf function.
+
+## 8.1.9
+
+### Patch Changes
+
+- f5e182e: Fix: disallow calling .set on primitive values within createSetter internal
+
+## 8.1.8
+
+### Patch Changes
+
+- 0499ca7: Update latest version on npm
+
+## 8.1.7
+
+### Patch Changes
+
+- 6c36258: Do not preserve attribute values that were not present before attachment when attach cleanup is called.
+
+## 8.1.6
+
+### Patch Changes
+
+- 380e71a: fix vite resolve conditions for non-test envs
+
 ## 8.1.5
 
 ### Patch Changes

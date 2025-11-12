@@ -20,8 +20,6 @@
 
   let torchX = $state(0)
   let torchZ = $state(0)
-  let candlesX = $state(0)
-  let candlesZ = $state(0)
 
   const dracoLoader = useDraco()
   const gltf = useGltf('/models/xr/ruins.glb', {
@@ -33,8 +31,6 @@
     })
     torchX = gltf.nodes.Torch1.position.x
     torchZ = gltf.nodes.Torch1.position.z
-    candlesX = gltf.nodes.Torch1.position.x
-    candlesZ = gltf.nodes.Torch1.position.z
 
     return gltf
   })

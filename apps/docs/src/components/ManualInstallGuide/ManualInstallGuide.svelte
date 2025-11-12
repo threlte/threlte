@@ -74,7 +74,7 @@
 </script>
 
 <div
-  class="grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
+  class="mt-4 grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
 >
   <InstallButton
     disabled
@@ -86,7 +86,7 @@
     Simple, transparent Three.js bindings. <code>three</code> is required as a peer dependency.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -104,7 +104,7 @@
     and more that add functionality.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -122,7 +122,7 @@
     need <code>@threlte/extras</code> to work.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -139,7 +139,7 @@
     >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -156,7 +156,7 @@
     >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -167,7 +167,7 @@
 
   <p class="my-0 self-center text-sm md:text-base">Components and hooks for VR and AR.</p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -184,7 +184,7 @@
     >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -200,7 +200,7 @@
     > for Threlte.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -215,7 +215,7 @@
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>
 
 <div
-  class="not-prose group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl [&>*]:!bg-transparent"
+  class="not-content *:bg-transparent! group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl"
 >
   <code class="p-0 text-[1em]">
     {installCode}

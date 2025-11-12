@@ -3,8 +3,8 @@
   interface Props {
     position: number
     playing: boolean
-    play: (opts?: {}) => Promise<boolean>
-    pause: (opts?: {}) => Promise<boolean>
+    play?: (opts?: {}) => Promise<boolean>
+    pause?: (opts?: {}) => Promise<boolean>
     rate?: number
   }
 
@@ -26,11 +26,11 @@
 
 <menu>
   {#if !playing}
-    <button onclick={() => play()}>
+    <button onclick={() => play?.()}>
       <PlayIcon />
     </button>
   {:else}
-    <button onclick={() => pause()}>
+    <button onclick={() => pause?.()}>
       <PauseIcon />
     </button>
   {/if}

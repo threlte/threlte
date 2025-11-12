@@ -4,8 +4,8 @@
   import Settings from './Settings.svelte'
   import { OrbitControls } from '@threlte/extras'
 
-  let billboarding = false
-  let fps = 10
+  let billboarding = $state(false)
+  let fps = $state(10)
 </script>
 
 <div>

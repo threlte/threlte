@@ -1,16 +1,16 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
-  import type { Axis } from './MarchingPlane'
   import { Canvas } from '@threlte/core'
   import { Pane, Folder, List, Slider } from 'svelte-tweakpane-ui'
+  import type { MarchingPlaneAxis } from './types'
 
   let ballCount = $state(15)
   let isolation = $state(80)
-  let planeAxis: Axis = $state('y')
+  let planeAxis = $state<MarchingPlaneAxis>('y')
   let resolution = $state(35)
 
   type AxisOptions = {
-    [Key in Axis]: Key
+    [Key in MarchingPlaneAxis]: Key
   }
 
   const axisOptions: AxisOptions = {

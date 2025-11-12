@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { Sequence, createSheetObjectAction } from '@threlte/theatre'
-  import Button from '../../Button/Button.svelte'
+  import Button from '$components/Button/Button.svelte'
   import FadeOut from '../FadeOut.svelte'
   import { springScrollPos } from '../scrollPos'
   import TheatreTextBox from './TheatreTextBox.svelte'
@@ -22,7 +21,7 @@
   >
     <div>
       <TheatreTextBox key="mission">
-        <div class="mb-2 text-center text-xl text-white/60">The Mission:</div>
+        <div class="text-faded mb-2 text-center text-xl">The Mission:</div>
       </TheatreTextBox>
 
       <TheatreTextBox key="statement">
@@ -33,15 +32,13 @@
               use:sheetObject={{
                 key: 'underline',
                 props: {
-                  scaleX: types.number(0, {
-                    range: [0, 1]
-                  })
+                  scaleX: 0
                 },
                 callback(node, props) {
                   node.style.transform = `scaleX(${props.scaleX})`
                 }
               }}
-              class="absolute bottom-0 left-0 -z-10 h-4 w-full origin-left bg-orange will-change-transform"
+              class="bg-orange absolute bottom-0 left-0 -z-10 h-4 w-full origin-left will-change-transform"
             ></div>
             3D apps
           </span> for the web.
@@ -51,8 +48,8 @@
 
     <TheatreTextBox key="start-building">
       <div class="flex flex-col-reverse items-center justify-center gap-6 md:flex-row md:gap-3">
-        <code class="px-7 py-4 text-[1em] text-sm md:text-base">
-          <span class="mr-2 select-none font-bold text-orange">{'>'}</span>npm i @threlte/core
+        <code class="rounded-xs bg-[#ffffff1a] px-7 py-4 text-[1em] text-sm md:text-base">
+          <span class="text-orange mr-2 select-none font-bold">{'>'}</span>npm i @threlte/core
         </code>
 
         <Button
@@ -78,12 +75,8 @@
             node.style.opacity = props.opacity
           },
           props: {
-            opacity: types.number(0, {
-              range: [0, 1]
-            }),
-            translateY: types.number(0, {
-              range: [-100, 100]
-            })
+            opacity: 0,
+            translateY: 0
           }
         }}
       >

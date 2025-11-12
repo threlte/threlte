@@ -6,7 +6,7 @@ import { defineConfig } from 'vite'
 export default defineConfig(({ mode }) => ({
   plugins: [sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
   resolve: {
-    conditions: mode === 'test' ? ['browser'] : [],
+    conditions: mode === 'test' ? ['browser'] : undefined,
     alias: {
       threlte: resolve('./src/lib')
     }

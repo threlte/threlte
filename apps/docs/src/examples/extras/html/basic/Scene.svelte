@@ -54,7 +54,7 @@
   <T.SphereGeometry args={[0.5]} />
   <HTML
     position.y={1.25}
-    position.z={$htmlPosZ}
+    position.z={htmlPosZ.current}
     transform
     {autoRender}
   >

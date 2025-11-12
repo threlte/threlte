@@ -13,7 +13,6 @@
     sliceColor = defaultColor,
     startAngle = defaultStartAngle,
     ref = $bindable(),
-    children,
     ...props
   }: SliceMaterialProps = $props()
 
@@ -33,6 +32,4 @@
   castShadowNode={shadowNodeFn({ startAngle: uStartAngle, arcAngle: uArcAngle })}
   bind:ref
   {...props}
->
-  {@render children?.({ ref })}
-</T.MeshPhysicalNodeMaterial>
+/>

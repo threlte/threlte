@@ -82,8 +82,21 @@ const applyScaleFactor = (prop: any, scaleFactor: number) => {
 }
 
 export const applyNodeProps = (node: Node, props: NodeProps, scaleFactor: number) => {
-  return Object.entries(alignFlexProps(props)).forEach(([key, value]) => {
-    const scaledValue = applyScaleFactor(value, scaleFactor)
-    propSetter[key as keyof typeof propSetter]?.(scaledValue as never, node)
-  })
+  const alignedProps = alignFlexProps(props)
+
+  for (const key in alignedProps) {
+    // limit to the known keys of propSetter
+    if (!(key in propSetter)) continue
+
+    const k = key as keyof typeof propSetter
+
+    const prop = alignedProps[k]
+    if (prop === undefined) continue
+
+    const scaled = applyScaleFactor(prop, scaleFactor) as Parameters<
+      (typeof propSetter)[typeof k]
+    >[0]
+
+    propSetter[k](scaled as never, node)
+  }
 }

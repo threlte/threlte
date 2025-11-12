@@ -1,5 +1,5 @@
 import { input, select } from '@inquirer/prompts'
-import chalk from 'chalk'
+import { styleText } from 'node:util'
 import { copyFileSync, existsSync, mkdirSync, readdirSync } from 'node:fs'
 import { confirm } from '@inquirer/prompts'
 import { execSync } from 'node:child_process'
@@ -35,7 +35,8 @@ const init = async () => {
 
   if (existsSync(directory)) {
     console.log(
-      chalk.red(
+      styleText(
+        'red',
         `The directory "${directory}" already exists. Please choose another name or delete the existing example.`
       )
     )
@@ -50,7 +51,7 @@ const init = async () => {
     copyFileSync(`${templateDirectory}/${file}`, `${directory}/${file}`)
   }
 
-  console.log(chalk.green(`> Example "${name}" created in "${directory}".`))
+  console.log(styleText('green', `> Example "${name}" created in "${directory}".`))
 
   const startDev = await confirm({
     message: 'Do you want to start the dev server and open the example in your browser?',
@@ -58,12 +59,14 @@ const init = async () => {
   })
 
   if (!startDev) {
-    console.log(chalk.green(`\nTo run your example, run the following command:`))
-    console.log(chalk.blue(`pnpm run dev`))
-    console.log(chalk.green(`Then open the following URL in your browser:`))
-    console.log(chalk.blue(`http://localhost:4321/examples/${directoryNames[pkg]}/${name}\n`))
+    console.log(styleText('green', `\nTo run your example, run the following command:`))
+    console.log(styleText('blue', `pnpm run dev`))
+    console.log(styleText('green', `Then open the following URL in your browser:`))
+    console.log(
+      styleText('blue', `http://localhost:4321/examples/${directoryNames[pkg]}/${name}\n`)
+    )
   } else {
-    console.log(chalk.green(`Starting dev server...\n`))
+    console.log(styleText('green', `Starting dev server...\n`))
     open(`http://localhost:4321/examples/${directoryNames[pkg]}/${name}`)
     execSync('pnpm run dev', {
       stdio: 'inherit'

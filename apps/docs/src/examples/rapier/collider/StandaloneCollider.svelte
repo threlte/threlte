@@ -12,7 +12,7 @@
   position={[0, 1, 0]}
 >
   <Collider
-    shape={'cuboid'}
+    shape="cuboid"
     args={[1, 1, 1]}
   />
 </T.Group>

@@ -1,0 +1,96 @@
+---
+order: 2.51
+category: '@threlte/extras'
+title: 'bvh'
+sourcePath: 'packages/extras/src/lib/bvh/bvh.svelte.ts'
+type: 'plugin'
+componentSignature: { props: [] }
+---
+
+A plugin that uses [`three-mesh-bvh`](https://github.com/gkjohnson/three-mesh-bvh) to speed up raycasting and enable
+spatial queries against Three.js objects. Any Mesh, BatchedMesh, or Points that are created in the component
+and child component where this plugin is called are patched with BVH raycasting methods.
+
+<Example
+  path="extras/bvh/simple"
+  showFile="Scene.svelte"
+/>
+
+### Basic example
+
+The plugin can be configured by passing a function that returns an object or `$state` rune as an argument.
+The following options are available and will be set for every Three.js object.
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { bvh, interactivity, BVHSplitStrategy, type BVHOptions } from '@threlte/extras'
+
+  // Usually, you'll also want to call the interactivity plugin.
+  const { raycaster } = interactivity()
+
+  // This option is usually set with three-mesh-bvh,
+  // unless you need multiple hits.
+  raycaster.firstHitOnly = true
+
+  // These are the default options.
+  const options = $state<BVHOptions>({
+    enabled: true,
+    helper: false,
+    strategy: BVHSplitStrategy.SAH,
+    indirect: false,
+    verbose: false,
+    maxDepth: 20,
+    maxLeafTris: 10,
+    setBoundingBox: true
+  })
+
+  bvh(() => options)
+</script>
+```
+
+Setting options at a per object level is possible with the `bvh` prop.
+
+```svelte
+<T.Mesh bvh={{ maxDepth: 10 }}>
+  <T.TorusGeometry />
+  <T.MeshStandardMaterial >
+</T.Mesh>
+```
+
+If you want this prop to be typesafe, you can extend `Threlte.UserProps` like so:
+
+```ts
+import type { InteractivityProps, BVHProps } from '@threlte/extras'
+
+declare global {
+  namespace Threlte {
+    interface UserProps extends InteractivityProps, BVHProps {}
+  }
+}
+```
+
+### Points
+
+The `bvh` plugin will shapecast against points, attempting to match Three.js' raycasting behavior with
+added `three-mesh-bvh` optimizations.
+
+<Example
+  path="extras/bvh/points"
+  showFile="Scene.svelte"
+/>
+
+### Limitations
+
+To avoid unnecessary bounds tree computations, the plugin will **not** recompute bounds trees when
+geometry changes occur. The plugin is set to recompute only if a reference to a mesh changes. So, if
+you want to recompute a bounds tree based on a geometry change, you'll have to regenerate the mesh as well.
+
+```svelte
+{#key geometry}
+  <T.Mesh>
+    <T is={geometry} />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+{/key}
+```

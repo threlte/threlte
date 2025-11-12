@@ -3,21 +3,18 @@ import { defineConfig } from 'astro/config'
 import { resolve } from 'path'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
-import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
 import { threlteStudio } from '@threlte/studio/vite'
 import type { Plugin } from 'vite'
-
-// https://astro.build/config
-import tailwind from '@astrojs/tailwind'
-
-// https://astro.build/config
+import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
-
-// https://astro.build/config
 import mdx from '@astrojs/mdx'
+import { cpus } from 'os'
 
+const CPU_COUNT = cpus().length
+
+// "@theatre/core" needs to be externalized in development mode but not in production!
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
   noExternal.push('@theatre/core')
@@ -25,30 +22,23 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  compressHTML: false,
+  markdown: {
+    syntaxHighlight: false
+  },
   prefetch: {
     prefetchAll: true
   },
   experimental: {
     clientPrerender: true
   },
-  build: {
-    inlineStylesheets: 'never'
-  },
   integrations: [
     AutoImport({
-      imports: [
-        '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro',
-        '$components/Card/Card.astro'
-      ]
+      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     }),
-    tailwind(),
-    svelte({
-      preprocess: preprocess({
-        postcss: true
-      })
-    }),
+    svelte(),
     mdx({
+      gfm: false,
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
     preact({ compat: true, include: ['**/*.tsx'] })
@@ -72,16 +62,10 @@ export default defineConfig({
       ...(process.argv.includes('--https') ? { https: {} } : {})
     },
     plugins: process.argv.includes('--https')
-      ? [threlteStudio() as unknown as Plugin, mkcert()]
-      : [threlteStudio() as unknown as Plugin],
+      ? [threlteStudio() as unknown as Plugin, mkcert(), tailwindcss()]
+      : [threlteStudio() as unknown as Plugin, tailwindcss()],
     ssr: {
-      // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
-    },
-    legacy: {
-      // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
-      // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
-      proxySsrExternalModules: true
     },
     optimizeDeps: {
       esbuildOptions: {
@@ -90,14 +74,20 @@ export default defineConfig({
     },
     build: {
       target: 'esnext',
-      minify: 'terser',
+      minify: 'esbuild',
       terserOptions: {
         keep_classnames: true
+      },
+      rollupOptions: {
+        external: ['sharp'],
+        maxParallelFileOps: CPU_COUNT * 3,
+        output: {
+          manualChunks: undefined
+        }
       }
     }
   },
-  markdown: {
-    syntaxHighlight: false
-    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
+  build: {
+    concurrency: 4
   }
 })
