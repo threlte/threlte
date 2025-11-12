@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.6.2
+
+### Patch Changes
+
+- 339742c: Improve interactivity performance
+
 ## 9.6.1
 
 ### Patch Changes
