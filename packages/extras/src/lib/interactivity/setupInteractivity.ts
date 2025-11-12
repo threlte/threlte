@@ -11,7 +11,7 @@ const DOM_EVENTS = [
   ['click', false],
   ['contextmenu', false],
   ['dblclick', false],
-  ['wheel', true],
+  ['wheel', false],
   ['pointerdown', true],
   ['pointerup', true],
   ['pointerleave', true],
