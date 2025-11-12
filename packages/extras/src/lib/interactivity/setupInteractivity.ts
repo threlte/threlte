@@ -3,8 +3,8 @@ import type * as THREE from 'three'
 import { type InteractivityContext, useInteractivity } from './context'
 import type { DomEvent, Intersection, IntersectionEvent } from './types'
 
-function getIntersectionId(event: Intersection) {
-  return `${(event.eventObject || event.object).uuid}/${event.index}${event.instanceId}`
+function createIntersectionId(intersection: Intersection) {
+  return `${(intersection.eventObject || intersection.object).uuid}|${intersection.index}|${intersection.instanceId}`
 }
 
 const DOM_EVENTS = [
@@ -30,21 +30,21 @@ export const setupInteractivity = (context: InteractivityContext) => {
   }
 
   const cancelPointer = (intersections: Intersection[]) => {
-    for (const hoveredObj of context.hovered.values()) {
+    if (context.hovered.size === 0) {
+      return
+    }
+
+    const hitIds = new Set<string>()
+    for (const intersection of intersections) {
+      hitIds.add(createIntersectionId(intersection))
+    }
+
+    for (const [id, hoveredObj] of context.hovered) {
       // When no objects were hit or the the hovered object wasn't found underneath the cursor
       // we call pointerout and delete the object from the hovered elements map
-      if (
-        intersections.length === 0 ||
-        !intersections.some((hit) => {
-          return (
-            hit.object === hoveredObj.object &&
-            hit.index === hoveredObj.index &&
-            hit.instanceId === hoveredObj.instanceId
-          )
-        })
-      ) {
+      if (!hitIds.has(id)) {
         const { eventObject } = hoveredObj
-        context.hovered.delete(getIntersectionId(hoveredObj))
+        context.hovered.delete(id)
         const events = handlers.get(eventObject)
         if (events) {
           // Clear out intersects, they are outdated by now
@@ -162,7 +162,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
           events.onpointerout ||
           events.onpointerleave
         ) {
-          const id = getIntersectionId(intersectionEvent)
+          const id = createIntersectionId(intersectionEvent)
           const hoveredItem = context.hovered.get(id)
           if (!hoveredItem) {
             // If the object wasn't previously hovered, book it and call its handler
@@ -205,10 +205,43 @@ export const setupInteractivity = (context: InteractivityContext) => {
     }
   }
 
+  let moveRAF = 0
+  let queuedMoveEvent: DomEvent | null = null
+  let lastMoveX = -Infinity
+  let lastMoveY = -Infinity
+  const MIN_MOVE_DELTA = 0.25 // pixels; ignore tiny jitter
+
+  // pointermove can occur at a much higher frequency than requestAnimationFrame, throttle it
+  const handlePointerMove = (event: DomEvent) => {
+    // ignore sub-pixel jitter to cut redundant raycasts
+    if (
+      Math.abs(event.offsetX - lastMoveX) < MIN_MOVE_DELTA &&
+      Math.abs(event.offsetY - lastMoveY) < MIN_MOVE_DELTA
+    ) {
+      return
+    }
+
+    lastMoveX = event.offsetX
+    lastMoveY = event.offsetY
+
+    queuedMoveEvent = event
+    if (!moveRAF) {
+      moveRAF = requestAnimationFrame(() => {
+        moveRAF = 0
+        if (queuedMoveEvent) {
+          handleEvent(queuedMoveEvent)
+          queuedMoveEvent = null
+        }
+      })
+    }
+  }
+
   const disconnect = (target: HTMLElement) => {
     for (const [eventName] of DOM_EVENTS) {
       if (eventName === 'pointerleave' || eventName === 'pointercancel') {
         target.removeEventListener(eventName, handlePointerLeaveOrCancel)
+      } else if (eventName === 'pointermove') {
+        target.removeEventListener(eventName, handlePointerMove)
       } else if (eventName === 'pointerenter') {
         target.removeEventListener(eventName, handlePointerEnter)
       } else {
@@ -221,6 +254,8 @@ export const setupInteractivity = (context: InteractivityContext) => {
     for (const [eventName, passive] of DOM_EVENTS) {
       if (eventName === 'pointerleave' || eventName === 'pointercancel') {
         target.addEventListener(eventName, handlePointerLeaveOrCancel, { passive })
+      } else if (eventName === 'pointermove') {
+        target.addEventListener(eventName, handlePointerMove, { passive })
       } else if (eventName === 'pointerenter') {
         target.addEventListener(eventName, handlePointerEnter, { passive })
       } else {
