@@ -1,5 +1,5 @@
 import { input, select, confirm } from '@inquirer/prompts'
-import chalk from 'chalk'
+import { styleText } from 'node:util'
 import launch from 'launch-editor'
 import { mkdirSync, readdirSync, writeFileSync, copyFileSync, existsSync } from 'node:fs'
 import Slugger from 'github-slugger'
@@ -50,7 +50,7 @@ const init = async () => {
   for (const file of files) {
     const targetFilePath = `${exampleDirectory}/${file}`
     if (existsSync(targetFilePath)) {
-      console.log(chalk.red(`> File already exists: ${targetFilePath}, exiting ...`))
+      console.log(styleText('red', `> File already exists: ${targetFilePath}, exiting ...`))
       process.exit(1)
     }
     copyFileSync(`${templateDirectory}/${file}`, targetFilePath)
@@ -62,7 +62,9 @@ const init = async () => {
 
   const examplePageTargetFilePath = `${examplePageDirectory}/${title}.mdx`
   if (existsSync(examplePageTargetFilePath)) {
-    console.log(chalk.red(`> File already exists: ${examplePageTargetFilePath}, exiting ...`))
+    console.log(
+      styleText('red', `> File already exists: ${examplePageTargetFilePath}, exiting ...`)
+    )
     process.exit(1)
   }
 
@@ -80,7 +82,8 @@ const init = async () => {
     })
   } catch (error) {
     console.log(
-      chalk.red(
+      styleText(
+        'red',
         `> Editor could not be launched. Open the file manually: ${examplePageDirectory}/${title}.mdx`
       )
     )
@@ -94,12 +97,12 @@ const init = async () => {
   const examplePageDevUrl = `http://localhost:4321/docs/examples/${exampleCategorySlug}/${exampleTitleSlug}`
 
   if (!startDev) {
-    console.log(chalk.green(`\nTo visit the example page, run the following command:`))
-    console.log(chalk.blue(`pnpm run dev`))
-    console.log(chalk.green(`Then open the following URL in your browser:`))
-    console.log(chalk.blue(`${examplePageDevUrl}\n`))
+    console.log(styleText('green', `\nTo visit the example page, run the following command:`))
+    console.log(styleText('blue', `pnpm run dev`))
+    console.log(styleText('green', `Then open the following URL in your browser:`))
+    console.log(styleText('blue', `${examplePageDevUrl}\n`))
   } else {
-    console.log(chalk.green(`Starting dev server...\n`))
+    console.log(styleText('green', `Starting dev server...\n`))
     open(examplePageDevUrl)
     execSync('pnpm run dev', {
       stdio: 'inherit'
