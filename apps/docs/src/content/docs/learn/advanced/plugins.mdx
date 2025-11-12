@@ -1,0 +1,298 @@
+---
+title: Plugins
+sidebar: {
+	order: 2
+}
+---
+
+Plugins allow you to extend Threlte's [`<T>`](/reference/core/components/t)
+component. They can be used to add props, event handlers, custom logic and
+customize the component instance. You can think of a plugin as code that
+is injected into every child `<T>` component.
+
+Plugins can be overridden in child components.
+
+The [interactivity plugin in
+`@threlte/extras`](/reference/extras/interactivity) is an example of what a
+plugins can do and there are a couple of other examples below.
+
+## When to use a plugin
+
+A plugin has access to all props and the lifecycle of the `<T>` component.
+
+Use it to:
+
+- add custom props to the `<T>` component such as [`lookAt`](#lookat).
+- add custom logic to the `<T>` component, such as automatically add helpers for
+  certain objects in development mode.
+- collect object references from child components for app-wide systems such as
+  an ECS.
+- build custom integrations for external libraries.
+
+<Tip type="tip" title="When to use oncreate">
+
+[`<T>`'s `oncreate`](/reference/core/components/t#create-event) shares some
+similarities to a plugin but only has access to the object referenced by the
+`<T>` component. Also, it has to be defined on every `<T>` component
+individually.
+
+You can think of `oncreate` as a [Svelte
+Attachment](https://svelte.dev/docs/svelte/@attach) for `<T>` components. Use it for
+one-time setup logic that does not need access to the component's props.
+
+</Tip>
+
+## Injecting a plugin
+
+Plugins are _injected_ to a plugin context and are **accessible to all child
+`<T>` components**.
+
+```svelte title="Scene.svelte"
+<script>
+  import { injectPlugin } from '@threlte/core'
+  import myPlugin from './myPlugin'
+  import OtherComponent from './OtherComponent.svelte'
+
+  injectPlugin('my-plugin', myPlugin)
+</script>
+
+<!--
+This component is affected by the plugin 'my-plugin'
+-->
+<T.Mesh />
+
+<!--
+<T> components in this component are
+also affected by the plugin 'my-plugin'
+-->
+<OtherComponent />
+```
+
+### Plugin internals
+
+Plugins open up the component `<T>` to external code that will be injected via
+context into every child instance of a `<T>` component. The callback function
+receives a **reactive `args` object** that contains the `ref` of the respective
+`<T>` component, all base props (`makeDefault`, `args`, `attach`, `manual`,
+`makeDefault` and `dispose`) and all props (anything else) passed to it.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+injectPlugin('plugin-name', (args) => {
+  console.log(args.ref) // e.g. a Mesh
+  console.log(args.props) // e.g. { position: [0, 10, 0] }
+})
+```
+
+If a plugin decides via `args.ref` or `args.props` analysis that it doesn't need
+to act in the context of a certain `<T>` component, it can return early.
+
+```ts
+import { injectPlugin, isInstanceOf } from '@threlte/core'
+
+injectPlugin('raycast-plugin', (args) => {
+  if (!isInstanceOf(args.ref, 'Object3D') || !('raycast' in args.props)) return
+})
+```
+
+The code of a plugin **acts as if it would be part of the `<T>` component
+itself** and has access to all properties. A plugin can run arbitrary code in
+lifecycle functions such as `onMount`, `onDestroy` and effects.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+import { onMount } from 'svelte'
+
+injectPlugin('plugin-name', (args) => {
+  // Use lifecycle hooks as if it would run inside a <T> component.
+  // This code runs when the `<T>` component this plugin is injected
+  // into is mounted.
+  onMount(() => {
+    console.log('onMount')
+  })
+
+  // Use any prop that is defined on the <T> component, in this
+  // example `count`: <T.Mesh count={10} />
+  const count = $derived(args.props.count ?? 0)
+
+  $effect(() => {
+    // This code runs whenever count changes.
+    console.log(count)
+  })
+
+  return {
+    // Claiming the property "count" so that the <T> component
+    // does not act on it.
+    pluginProps: ['count']
+  }
+})
+```
+
+A Plugin can also _claim properties_ so that the component `<T>` does not act on it.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+injectPlugin('ecs', () => {
+  return {
+    // Without claiming the properties, <T> would apply the
+    // property to the object.
+    pluginProps: ['entity', 'health', 'velocity', 'position']
+  }
+})
+```
+
+Plugins are passed down by context and can be overridden to prevent the effects of a plugin for a certain tree.
+
+```ts
+import { injectPlugin } from '@threlte/core'
+
+// this overrides the plugin with the name "plugin-name" for all child components.
+injectPlugin('plugin-name', () => {})
+```
+
+### Creating a plugin
+
+Plugins can also be _created_ for external consumption. This creates a _named plugin_. The name is used to identify the plugin and to override it.
+
+```ts
+import { createPlugin } from '@threlte/core'
+
+export const layersPlugin = createPlugin('layers', () => {
+  // ... Plugin Code
+})
+```
+
+```ts
+// somewhere else, e.g. in a component
+
+import { injectPlugin } from '@threlte/core'
+import { layersPlugin } from '$plugins'
+
+injectPlugin(layersPlugin)
+```
+
+## Examples
+
+### `lookAt`
+
+This is en example implementation that adds the property `lookAt` to all `<T>` components, so that `<T.Mesh lookAt={[0, 10, 0]} />` is possible:
+
+<Example path="plugins/lookAt" />
+
+### BVH raycast plugin
+
+A Plugin that implements [BVH raycasting](https://github.com/gkjohnson/three-mesh-bvh) on all child meshes and geometries.
+
+This plugin outlines the basic setup of the extras [bvh plugin](/reference/extras/bvh).
+
+```ts title="bvhRaycasting.svelte.ts"
+import { injectPlugin, isInstanceOf } from '@threlte/core'
+import type { BufferGeometry, Mesh } from 'three'
+import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh'
+
+const bvhRaycasting = () => {
+  injectPlugin('bvh-raycast', (args) => {
+    $effect(() => {
+      if (isInstanceOf(args.ref, 'BufferGeometry')) {
+        args.ref.computeBoundsTree = computeBoundsTree
+        args.ref.disposeBoundsTree = disposeBoundsTree
+        args.ref.computeBoundsTree()
+      }
+      if (isInstanceOf(args.ref, 'Mesh')) {
+        args.ref.raycast = acceleratedRaycast
+      }
+      return () => {
+        if (isInstanceOf(args.ref, 'BufferGeometry')) {
+          args.ref.disposeBoundsTree()
+        }
+      }
+    })
+  })
+}
+```
+
+Implementing this plugin in your scene looks like this.
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import bvhRaycasting from './plugins/bvhRaycasting.svelte'
+
+  bvhRaycasting()
+</script>
+
+<T.Mesh>
+  <T.MeshBasicMaterial />
+  <T.BoxGeometry />
+</T.Mesh>
+```
+
+## TypeScript
+
+Using TypeScript, we can achieve **end-to-end type safety for plugins**, from
+the plugin implementation to the props of the `<T>` component. The example below
+shows how to type the props of the [`lookAt` plugin](#lookat) so that the prop
+`lookAt` is strictly typed on the `<T>` component as well as in the plugin
+implementation.
+
+### Typing a plugin
+
+The function `injectPlugin` accepts a type argument that you may use to type the
+props passed to a plugin.
+
+```ts
+injectPlugin<{ lookAt?: [number, number, number] }>('lookAt', (args) => {
+  // args.props.lookAt is now typed as [number, number, number] | undefined
+})
+```
+
+### Typing the `<T>` component props
+
+By default, the custom props of plugins are not present on the types of the
+`<T>` component. You can however extend the types of the `<T>` component by
+defining the `Threlte.UserProps` type in your ambient type definitions. In a
+typical SvelteKit application, you can find these type definitions [in
+`src/app.d.ts`](https://svelte.dev/docs/kit/types#app.d.ts).
+
+```ts title="src/app.d.ts"
+declare global {
+  namespace App {
+    // interface Error {}
+    // interface Locals {}
+    // interface PageData {}
+    // interface PageState {}
+    // interface Platform {}
+  }
+
+  namespace Threlte {
+    interface UserProps {
+      lookAt?: [number, number, number]
+    }
+  }
+}
+
+export {}
+```
+
+The prop `lookAt` is now available on the `<T>` component and is typed as
+`[number, number, number] | undefined`.
+
+```svelte title="Svelte.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+</script>
+
+<!-- This is now type safe -->
+<T.Mesh lookAt={[0, 10, 0]} />
+
+<!-- This will throw an error -->
+<T.Mesh lookAt="this object please" />
+```
+
+<Tip type="tip">
+  As your app grows in size, you should consider moving these type these type definitions to a
+  separate file and merge all available props to a single type definition. This type may then be
+  used by `injectPlugin` as well as your ambient type defintions.
+</Tip>

@@ -1,0 +1,74 @@
+---
+order: 1.01
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/hooks/useTexture.ts'
+title: useTexture
+type: 'hook'
+---
+
+`useTexture` is a convenience hook wrapping
+[`useLoader`](/reference/core/hooks#useloader) that returns an
+[`AsyncWritable`](/reference/core/utilities#asyncwritable) store that is eventually populated
+with a `THREE.Texture`. The texture is automatically assigned the
+[`colorSpace`](https://threejs.org/docs/#api/en/textures/Texture.colorSpace)
+that the renderer uses.
+
+## Usage
+
+### Basic Example
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+
+  const texture = useTexture('texture.png')
+
+  texture.then(() => {
+    console.log('texture has loaded')
+  })
+
+  $inspect($texture) // eventually a Three.Texture
+</script>
+
+{#await texture then map}
+  <T.Mesh>
+    <T.SphereGeometry />
+    <T.MeshBasicMaterial {map} />
+  </T.Mesh>
+{/await}
+```
+
+### Transforming the Texture
+
+You can pass a `transform` function to transform the texture **once** its
+loaded.
+
+```svelte
+<script>
+  import { RepeatWrapping } from 'three'
+  import { T } from '@threlte/core'
+  import { useTexture } from '@threlte/extras'
+
+  const texture = useTexture('texture.png', {
+    transform: (texture) => {
+      texture.wrapS = RepeatWrapping
+      texture.wrapT = RepeatWrapping
+      texture.repeat.set(4, 4)
+      return texture
+    }
+  })
+</script>
+
+{#await texture then map}
+  <T.Mesh>
+    <T.SphereGeometry />
+    <T.MeshBasicMaterial {map} />
+  </T.Mesh>
+{/await}
+```
+
+<Tip type="warning">
+  Be aware that the transformed result will be cached for subsequent calls to `useTexture` with the
+  same URL.
+</Tip>

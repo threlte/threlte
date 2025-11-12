@@ -29,6 +29,7 @@
       expanded = !expanded
     }}
     class="flex flex-row items-center gap-1 font-bold"
+    style="background:none;"
   >
     <div class="*:w-[1em]">
       {#if expanded}
@@ -97,13 +98,13 @@
 
 <ul
   class={[
-    'list-none',
+    'list-none pl-0',
     !expanded && 'hidden',
     showDirectoryName && 'ml-1.5 border-l border-white/20 pl-3'
   ]}
 >
   {#each sortedFiles as file}
-    <li class="my-1 list-outside pl-0">
+    <li class="my-1 list-outside">
       {#if file.type === 'directory'}
         <Self directory={file} />
       {:else}

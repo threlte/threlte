@@ -1,48 +1,12 @@
-@import 'tailwindcss';
-
 /*
 Remember tailwind can't resolve dynamic class names.
 https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-names
 */
+@layer base, starlight, theme, components, utilities;
 
-/*
-  The default border color has changed to `currentcolor` in Tailwind CSS v4,
-  so we've added these compatibility styles to make sure everything still
-  looks the same as it did with Tailwind CSS v3.
-
-  If we ever want to remove these styles, we need to add an explicit border
-  color utility to any element that depends on these defaults.
-*/
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
-  }
-}
-
-@utility text-faded {
-  color: color-mix(in oklab, var(--color-white) 60%, transparent);
-}
-
-@utility text-highlight {
-  color: var(--color-white);
-  --tw-font-weight: var(--font-weight-bold);
-  font-weight: var(--font-weight-bold);
-}
-
-/* https://tailwindcss.com/docs/adding-custom-styles#functional-utilities */
-@utility glow-* {
-  /* prettier-ignore */
-  box-shadow: 0 0px 40px -3px --value(--color-*);
-}
-
-@utility text-glow-* {
-  /* prettier-ignore */
-  filter: drop-shadow(0 0px 50px --value(--color-*));
-}
+@import '@astrojs/starlight-tailwind';
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
 /* https://tailwindcss.com/docs/font-family */
 /* https://tailwindcss.com/docs/colors#customizing-your-colors */
@@ -83,14 +47,80 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
   --color-green-700: oklch(0.4664 0.1318 145.42); /* #176C25 */
   --color-green-800: oklch(0.321 0.0857 145.86); /* #0D3E15 */
   --color-green-900: oklch(0.1516 0.0309 149.23); /* #030F05 */
+  --color-black: #0a0f19;
   --text-2xs: 0.625rem;
   --text-3xs: 0.5rem;
 }
 
 :root {
-  --left-sidebar-width: 250px;
-  --right-sidebar-width: 250px;
-  --docs-navbar-height: 70px;
+  --sl-nav-height: 70px;
+  --sl-sidebar-width: 250px;
+  --sl-color-text-accent: var(--color-orange-500);
+  --sl-color-black: var(--color-black);
+  --sl-color-bg-nav: var(--color-black);
+}
+
+@utility text-faded {
+  color: color-mix(in oklab, var(--color-white) 60%, transparent);
+}
+
+@utility text-highlight {
+  color: var(--color-white);
+  --tw-font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-bold);
+}
+
+/* https://tailwindcss.com/docs/adding-custom-styles#functional-utilities */
+@utility glow-* {
+  /* prettier-ignore */
+  box-shadow: 0 0px 40px -3px --value(--color-*);
+}
+
+@utility text-glow-* {
+  /* prettier-ignore */
+  filter: drop-shadow(0 0px 50px --value(--color-*));
+}
+
+/* ================= Header ================== */
+header.header {
+  border-bottom: 1px solid var(--color-orange-800);
+}
+
+/* ================= Sidebar ================== */
+.sidebar-pane {
+  background-color: var(--sl-color-black);
+}
+
+#starlight-sidebar-topics-dropdown-menu {
+  background-color: var(--sl-color-black);
+  border: 1px solid var(--sl-color-gray-5);
+}
+
+a[aria-current='page'] {
+  background: none;
+  color: var(--sl-color-text-accent);
+}
+
+details > ul > li:has(a[aria-current='page']) {
+  border-color: var(--sl-color-text-accent);
+}
+
+/* ================= Search ================== */
+site-search > dialog > div.dialog-frame {
+  background-color: var(--sl-color-black);
+}
+
+/* ================= Code blocks ================== */
+.expressive-code .frame {
+  --code-background: var(--color-blue-900);
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .title {
+  background-color: var(--color-blue-900);
+}
+
+.expressive-code .frame.has-title:not(.is-terminal) .header {
+  background: none;
 }
 
 /* ======= Scrollbar ========================== */

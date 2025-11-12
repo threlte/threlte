@@ -3,9 +3,6 @@
   import { fade } from 'svelte/transition'
   import { customSlide } from './customSlide'
   import BurgerIcon from './BurgerIcon.svelte'
-  import Search from '$components/Search/Search.svelte'
-
-  export let search = false
 
   let showMenu = false
 
@@ -45,11 +42,6 @@
         in:fade={{ delay: 200, duration: 200 }}
         out:fade={{ duration: 200 }}
       >
-        {#if search}
-          <div class="relative w-full pb-8 pt-4">
-            <Search />
-          </div>
-        {/if}
         <slot name="content" />
       </div>
     </div>

@@ -1,0 +1,203 @@
+---
+order: 1.12
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/hooks/useGltf.ts'
+title: useGltf
+type: 'hook'
+---
+
+A Hook to load glTF files and use separate object nodes and materials of it.
+
+Use the component [`<GLTF>`](/reference/extras/gltf) if you want to use a model in its entirety.
+
+<Example path="extras/use-gltf" />
+
+<small>
+  Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
+</small>
+
+## Examples
+
+### Basic Example
+
+`gltf` is a store which gets populated as soon as the model loaded.
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { useGltf } from '@threlte/extras'
+  import { MeshBasicMaterial } from 'three'
+
+  const gltf = useGltf('/path/to/model.glb')
+</script>
+
+<!-- Use an object node entirely -->
+{#if $gltf}
+  <T is={$gltf.nodes['node-name']} />
+{/if}
+
+<!-- or only the geometry -->
+{#if $gltf}
+  <T.Mesh
+    geometry={$gltf.nodes['node-name'].geometry}
+    material={new MeshBasicMaterial()}
+  />
+{/if}
+```
+
+### DRACO decoding
+
+Use the `useDraco` hook for compressed glTF files, defaults to CDN loaded DRACO binaries.
+
+```ts
+import { useGltf, useDraco } from '@threlte/extras'
+
+const dracoLoader = useDraco()
+const gltf = useGltf('/path/to/model.glb', {
+  dracoLoader
+})
+```
+
+You can set a custom path to DRACO decoder binaries.
+
+```ts
+import { useGltf, useDraco } from '@threlte/extras'
+
+const dracoLoader = useDraco('/custom/draco/decoders/path')
+const gltf = useGltf('/path/to/model.glb', {
+  dracoLoader
+})
+```
+
+You can also provide your own instance of `DRACOLoader`.
+
+This is especially useful when you can confidently dispose of the loader, as the default loader is indefinitely cached.
+
+```ts
+import { useGltf } from '@threlte/extras'
+
+const dracoLoader = new DRACOLoader().setDecoderPath(path)
+const gltf = useGltf('/path/to/model.glb', {
+  dracoLoader
+})
+```
+
+### Meshopt decoding
+
+Use the `useMeshopt` hook for compressed glTF files, defaults to Three's included decoder.
+
+You can also provide your own instance of MeshoptDecoder.
+
+```ts
+import { useGltf, useMeshopt } from '@threlte/extras'
+
+const meshoptDecoder = useMeshopt()
+const gltf = useGltf('/path/to/model.glb', {
+  meshoptDecoder
+})
+```
+
+### KTX2Loader
+
+Use the `useKtx2` hook for [KTX 2 texture support](https://threejs.org/docs/#examples/en/loaders/KTX2Loader).
+
+This hook requires a `transcoder` path.
+
+```ts
+import { useGltf, useKtx2 } from '@threlte/extras'
+
+const ktx2Loader = useKtx2('path/to/transcoder/')
+const gltf = useGltf('/path/to/model.glb', {
+  ktx2Loader
+})
+```
+
+You can also provide your own instance of `KTX2Loader`.
+
+This is especially useful when you can confidently dispose of the loader, as the default loader is indefinitely cached.
+
+```ts
+import { useThrelte } from '@threlte/core'
+import { useGltf } from '@threlte/extras'
+
+const { renderer } = useThrelte()
+
+const ktx2Loader = new KTX2Loader()
+ktx2Loader.setTranscoderPath('path/to/transcoder/')
+ktx2Loader.detectSupport(renderer)
+
+const gltf = useGltf('/path/to/model.glb', {
+  ktx2Loader
+})
+```
+
+### Nodes and Materials
+
+The hook provides a map of all objects and materials in the loaded glTF.
+
+```svelte
+<script lang="ts">
+  import { useGltf } from '@threlte/extras'
+
+  const gltf = useGltf('/path/to/model.glb')
+
+  let nodes = $derived($gltf?.nodes)
+  let materials = $derived($gltf?.materials)
+</script>
+```
+
+Provide types and you will gain autocompletion for these objects and materials.
+
+```svelte
+<script lang="ts">
+  import { useGltf } from '@threlte/extras'
+
+  const gltf = useGltf<{
+    nodes: {
+      MeshA: THREE.Mesh
+      MeshB: THREE.Mesh
+      Object3DA: THREE.Object3D
+    }
+    materials: {
+      MaterialA: THREE.MeshStandardMaterial
+      MaterialB: THREE.MeshBasicMaterial
+    }
+  }>('/path/to/model.glb')
+
+  $effect(() => {
+    if ($gltf) {
+      const objectA = $gltf.nodes['MeshA'] // -> THREE.Mesh
+      const materialA = $gltf.materials['MaterialA'] // -> THREE.MeshStandardMaterial
+    }
+  })
+</script>
+```
+
+<Tip
+  type="tip"
+  title="How to get the types?"
+>
+  On the [loading-assets](/learn/basics/loading-assets) page, Threlte provides the `@threlte/gltf`
+  CLI tool that can be used to generate a reusable Svelte component for your gltf as well as its
+  types.
+</Tip>
+
+Types can be separated into a typescript file and imported like so if you feel the need.
+
+```ts title=SomeGltf.ts
+export type SomeGltf = {
+  nodes: {
+    Suzanne: THREE.Mesh
+  }
+  materials: {}
+}
+```
+
+```svelte title=MyComponent.svelte
+<script lang="ts">
+  import { useGltf } from '@threlte/extras'
+  import type { SomeGltf } from './SomeGltf.ts'
+
+  useGltf<SomeGltf>('model.glb')
+</script>
+```

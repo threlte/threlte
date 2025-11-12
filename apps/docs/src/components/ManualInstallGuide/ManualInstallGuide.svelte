@@ -1,5 +1,4 @@
 <script lang="ts">
-  import CopyCodeButton from '../Code/CopyCodeButton.svelte'
   import InstallButton from './InstallButton.svelte'
   import { onMount } from 'svelte'
 
@@ -99,7 +98,7 @@
 
   <p class="my-0 self-center text-sm md:text-base">
     <a
-      href="/docs/reference/extras/getting-started"
+      href="/reference/extras/getting-started"
       target="_blank">Components, helpers, hooks</a
     >
     and more that extend the core functionality.
@@ -116,7 +115,7 @@
 
   <p class="my-0 self-center text-sm md:text-base">
     A <a
-      href="/docs/reference/gltf/getting-started"
+      href="/reference/gltf/getting-started"
       target="_blank">command-line tool</a
     >
     that turns GLTF assets into declarative and re-usable Threlte components. The generated Threlte components
@@ -196,7 +195,7 @@
 
   <p class="my-0 self-center text-sm md:text-base">
     <a
-      href="/docs/reference/studio/getting-started"
+      href="/reference/studio/getting-started"
       target="_blank">Spatial Programming Toolset</a
     > for Threlte.
   </p>
@@ -222,5 +221,5 @@
     {installCode}
   </code>
 
-  <CopyCodeButton code={installCode} />
+  <!-- <CopyCodeButton code={installCode} /> -->
 </div>

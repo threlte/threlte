@@ -67,7 +67,7 @@
   pointerControls('right')
 
   let lookIntervalId = 0
-  let blinkIntervalId = setInterval(blink, 3000)
+  let blinkIntervalId = window.setInterval(blink, 3000)
 
   $effect(() => {
     if (happy) {
