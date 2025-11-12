@@ -82,7 +82,7 @@ export const referenceCollection = defineCollection({
   schema: z.object({
     schemaType: z.string().default('reference'),
     type: z.enum(['component', 'hook', 'plugin']).optional(),
-    name: z.string(),
+    title: z.string(),
     /**
      * Path to the source file or directory, relative to the root of the repository.
      */
