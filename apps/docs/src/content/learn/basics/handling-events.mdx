@@ -1,0 +1,34 @@
+---
+title: Handling Events
+category: Basics
+order: -700
+---
+
+Most events work the same as any other svelte application. Theres the DOM events you know from
+HTML, some Svelte [component props](https://svelte.dev/docs/svelte/basic-markup#Component-props)
+but also raycasting which is specific to 3D applications.
+
+## DOM events
+
+The [`useThrelte`](/docs/reference/core/use-threlte) hook provides you with
+direct access to Threltes wrapper div called the `dom`. The `canvas` element is
+also available if needed.
+
+## Prop events
+
+The `<T>` component has it's own [events](/docs/reference/core/t#events). It can even pick up
+on events coming from the [underlying Three.js objects](/docs/reference/core/t#object-events).
+
+## Raycasting events
+
+Casting rays may end up being a big part of your 3D application. They're
+required for creating [`interactivity`](/docs/reference/extras/interactivity)
+(click, pointer, mouseover etc...) on your scene's meshes.
+
+Raycasting can become expensive on complex shapes or if you have a high number
+of objects. This can be mitigated by either:
+
+- Raycasting against a simplier, invisible object (as is done by [mesh bounds](/docs/reference/extras/mesh-bounds)).
+- And/or introducing a better raycasting algorithm such as Bounding Volume Hirerchies ([BVH](/docs/reference/extras/bvh)).
+
+For simple use cases, Three.js's default raycaster works well.
