@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
 ## 3.0.7
 
 ### Patch Changes
