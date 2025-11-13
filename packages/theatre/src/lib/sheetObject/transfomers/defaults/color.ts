@@ -1,5 +1,5 @@
-import { types } from '../../../theatre'
-import { createTransformer } from '../createTransformer'
+import { types } from '../../../theatre.js'
+import { createTransformer } from '../createTransformer.js'
 import { Color, SRGBColorSpace } from 'three'
 
 const _color = new Color()

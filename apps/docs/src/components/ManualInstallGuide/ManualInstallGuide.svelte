@@ -74,7 +74,7 @@
 </script>
 
 <div
-  class="grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
+  class="mt-4 grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
 >
   <InstallButton
     disabled
@@ -83,11 +83,10 @@
   >
 
   <p class="my-0 self-center text-sm md:text-base">
-    Compose Three.js scenes in a declarative and state-driven way. Three.js is required as a peer
-    dependency.
+    Simple, transparent Three.js bindings. <code>three</code> is required as a peer dependency.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -102,10 +101,10 @@
       href="/docs/reference/extras/getting-started"
       target="_blank">Components, helpers, hooks</a
     >
-    and more that extend the core functionality.
+    and more that add functionality.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -120,10 +119,10 @@
       target="_blank">command-line tool</a
     >
     that turns GLTF assets into declarative and re-usable Threlte components. The generated Threlte components
-    make use of the package <code>@threlte/extras</code>.
+    need <code>@threlte/extras</code> to work.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -137,10 +136,10 @@
       href="https://rapier.rs/"
       target="_blank"
       rel="noreferrer">Rapier physics engine</a
-    > in Threlte.
+    >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -154,10 +153,10 @@
       href="https://www.theatrejs.com/"
       target="_blank"
       rel="noreferrer">Theatre.js</a
-    > in Threlte.
+    >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -168,7 +167,7 @@
 
   <p class="my-0 self-center text-sm md:text-base">Components and hooks for VR and AR.</p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -182,10 +181,10 @@
       href="https://yogalayout.com/"
       target="_blank"
       rel="noreferrer">Yoga</a
-    > in Threlte.
+    >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -201,7 +200,7 @@
     > for Threlte.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
     onclick={() => {
@@ -216,7 +215,7 @@
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>
 
 <div
-  class="not-prose group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl [&>*]:!bg-transparent"
+  class="not-content *:bg-transparent! group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl"
 >
   <code class="p-0 text-[1em]">
     {installCode}

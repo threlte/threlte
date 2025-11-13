@@ -1,5 +1,23 @@
 # @threlte/studio
 
+## 0.2.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 0.1.11
+
+### Patch Changes
+
+- 8eeafcb: Use snippet based Portal component
+
+## 0.1.10
+
+### Patch Changes
+
+- 2d5dd10: add userData variable check for `selectable`
+
 ## 0.1.9
 
 ### Patch Changes

@@ -1,22 +1,15 @@
 <script lang="ts">
   import Self from './Directory.svelte'
-  import type { Writable } from 'svelte/store'
-  import FileComponent from './File.svelte'
-  import type { Directory, File } from './types'
+  import File from './File.svelte'
+  import type { Directory } from './types'
 
   interface Props {
     directory: Directory
     showDirectoryName?: boolean
     expanded?: boolean
-    currentlySelectedFile: Writable<File>
   }
 
-  let {
-    directory,
-    showDirectoryName = true,
-    expanded = $bindable(true),
-    currentlySelectedFile
-  }: Props = $props()
+  let { directory, showDirectoryName = true, expanded = $bindable(true) }: Props = $props()
 
   const sortedFiles = directory.files.sort((a, b) => {
     if (a.type === 'directory' && b.type === 'file') {
@@ -37,7 +30,7 @@
     }}
     class="flex flex-row items-center gap-1 font-bold"
   >
-    <div class="[&>*]:w-[1em]">
+    <div class="*:w-[1em]">
       {#if expanded}
         <svg
           viewBox="0 0 33 33"
@@ -112,15 +105,9 @@
   {#each sortedFiles as file}
     <li class="my-1 list-outside pl-0">
       {#if file.type === 'directory'}
-        <Self
-          directory={file}
-          {currentlySelectedFile}
-        />
+        <Self directory={file} />
       {:else}
-        <FileComponent
-          {file}
-          {currentlySelectedFile}
-        />
+        <File {file} />
       {/if}
     </li>
   {/each}

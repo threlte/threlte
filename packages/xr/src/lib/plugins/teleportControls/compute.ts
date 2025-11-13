@@ -1,6 +1,6 @@
 import { Vector3 } from 'three'
-import { controllers } from '../../hooks/useController.svelte'
-import type { Context, HandContext } from './context'
+import { controllers } from '../../hooks/useController.svelte.js'
+import type { Context, HandContext } from './context.js'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 

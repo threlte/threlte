@@ -1,12 +1,12 @@
 import { fromStore } from 'svelte/store'
-import { useThrelte } from '../../../context/compounds/useThrelte'
-import { createParentContext, useParent } from '../../../context/fragments/parent'
+import { useThrelte } from '../../../context/compounds/useThrelte.js'
+import { createParentContext, useParent } from '../../../context/fragments/parent.js'
 import {
   createParentObject3DContext,
   useParentObject3D
-} from '../../../context/fragments/parentObject3D'
-import { isInstanceOf, resolvePropertyPath } from '../../../utilities'
-import type { BaseProps, MaybeInstance } from '../types'
+} from '../../../context/fragments/parentObject3D.js'
+import { isInstanceOf, resolvePropertyPath } from '../../../utilities/index.js'
+import type { BaseProps, MaybeInstance } from '../types.js'
 
 const isObject = (ref: unknown): ref is Record<string, any> => {
   return typeof ref === 'object' && ref !== null
@@ -92,11 +92,25 @@ export const useAttach = <T extends MaybeInstance<any>>(
     // Attach to parent prop
     if (typeof attach === 'string') {
       const { target, key } = resolvePropertyPath(parent.current, attach)
-      const valueBeforeAttach = target[key]
-      target[key] = current
-      return () => {
-        invalidate()
-        target[key] = valueBeforeAttach
+
+      if (key in target) {
+        // If the key is already in the target, we need to save
+        // the value before attaching …
+        const valueBeforeAttach = target[key]
+        target[key] = current
+        return () => {
+          invalidate()
+          // … and restore it when the component unmounts
+          target[key] = valueBeforeAttach
+        }
+      } else {
+        // If the key is not in the target, we need to add it …
+        target[key] = current
+        return () => {
+          invalidate()
+          // … and delete it when the component unmounts
+          delete target[key]
+        }
       }
     }
 

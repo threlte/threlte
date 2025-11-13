@@ -1,5 +1,5 @@
-import type { XRHandObject } from '../types'
-import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
+import type { XRHandObject } from '../types.js'
+import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte.js'
 
 class Hands {
   left = $state.raw<XRHandObject>()

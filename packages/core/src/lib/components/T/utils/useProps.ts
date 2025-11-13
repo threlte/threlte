@@ -1,5 +1,5 @@
-import { useThrelte } from '../../../context/compounds/useThrelte'
-import { resolvePropertyPath } from '../../../utilities'
+import { useThrelte } from '../../../context/compounds/useThrelte.js'
+import { resolvePropertyPath } from '../../../utilities/index.js'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 
@@ -53,7 +53,11 @@ const createSetter = (target: any, key: any, value: any): PropSetter => {
       target[key].setScalar(value)
     }
   } else {
-    if (typeof target[key]?.set === 'function' && typeof target === 'object' && target !== null) {
+    if (
+      typeof target[key]?.set === 'function' &&
+      typeof target[key] === 'object' &&
+      target[key] !== null
+    ) {
       // if the property has a "set" function, we can use it
       if (Array.isArray(value)) {
         return (target: any, key: any, value: any) => {

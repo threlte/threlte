@@ -12,9 +12,9 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { gridScope, type GridActions, type GridState } from './types'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { gridScope, type GridActions, type GridState } from './types.js'
   import type { Snippet } from 'svelte'
 
   let { children }: { children?: Snippet } = $props()

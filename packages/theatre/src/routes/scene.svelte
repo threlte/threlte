@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
-  import { SheetObject } from '$lib'
+  import { SheetObject } from '$lib/index.js'
 </script>
 
 <T.PerspectiveCamera

@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte'
-import { type AnyProps, type Plugin, type PluginContext, pluginContextKey } from './types'
+import { type AnyProps, type Plugin, type PluginContext, pluginContextKey } from './types.js'
 
 export function injectPlugin<Props extends AnyProps = AnyProps>(
   name: string,

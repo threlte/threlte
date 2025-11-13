@@ -1,9 +1,9 @@
-import * as fileUtils from '../utils/fileUtils'
-import * as componentParser from '../utils/componentParser'
-import * as componentUtils from '../utils/componentUtils'
-import { toMagicString } from '../utils/magicStringUtils'
+import * as fileUtils from '../utils/fileUtils.js'
+import * as componentParser from '../utils/componentParser.js'
+import * as componentUtils from '../utils/componentUtils.js'
+import { toMagicString } from '../utils/magicStringUtils.js'
 import indexToPosition from 'index-to-position'
-import * as logger from '../utils/logger'
+import * as logger from '../utils/logger.js'
 
 export const getColumnAndRow = async (moduleId: string, componentIndex: number) => {
   const code = fileUtils.readFile(moduleId)

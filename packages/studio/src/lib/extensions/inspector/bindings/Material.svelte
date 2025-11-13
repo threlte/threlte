@@ -33,7 +33,7 @@
   import TransactionalBinding from './TransactionalBinding.svelte'
   import TransactionalList from './TransactionalList.svelte'
   // import TransactionalTextureImage from './TransactionalTextureImage.svelte'
-  import { haveProperty, mutualType } from './utils'
+  import { haveProperty, mutualType } from './utils.js'
 
   type Props = {
     objects: (Object3D & { material: Material })[]

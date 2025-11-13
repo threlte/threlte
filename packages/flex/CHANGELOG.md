@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
 ## 2.0.6
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { Environment, OrbitControls, Portal, SoftShadows } from '@threlte/extras'
+  import { Environment, OrbitControls, SoftShadows } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import type { DirectionalLightHelper } from 'three'
   import Suzanne from './Suzanne.svelte'
@@ -38,12 +38,11 @@
       >
         {#snippet children({ ref })}
           {#if selected}
-            <Portal object={scene}>
-              <T.DirectionalLightHelper
-                bind:ref={lightHelper}
-                args={[ref]}
-              />
-            </Portal>
+            <T.DirectionalLightHelper
+              bind:ref={lightHelper}
+              attach={scene}
+              args={[ref]}
+            />
           {/if}
         {/snippet}
       </T.DirectionalLight>

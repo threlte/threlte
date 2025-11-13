@@ -18,11 +18,15 @@ type OmitNever<T> = { [K in keyof T as T[K] extends never ? never : K]: T[K] }
  * A type that contains all the classes in THREE that have a static `isFoo` property.
  */
 type ThreeClassTypes = OmitNever<{
-  [K in keyof typeof THREE]: (typeof THREE)[K] extends { new (...args: any[]): any }
+  [K in keyof typeof THREE]: (typeof THREE)[K] extends abstract new (...args: any[]) => any
     ? InstanceType<(typeof THREE)[K]> extends { [P in `is${K}`]: boolean }
       ? (typeof THREE)[K]
       : never
-    : never
+    : (typeof THREE)[K] extends { new (...args: any[]): any }
+      ? InstanceType<(typeof THREE)[K]> extends { [P in `is${K}`]: boolean }
+        ? (typeof THREE)[K]
+        : never
+      : never
 }>
 
 /**

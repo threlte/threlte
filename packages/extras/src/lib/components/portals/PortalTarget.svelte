@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { isInstanceOf, useParent, watch } from '@threlte/core'
-  import { usePortalContext } from './usePortalContext.svelte'
+  import { usePortalContext } from './usePortalContext.svelte.js'
 
   interface Props {
     id?: string
@@ -8,19 +7,12 @@
 
   let { id = 'default' }: Props = $props()
 
-  const parent = useParent()
-
-  if (!$parent) {
-    throw new Error('<PortalTarget> must be used within a <Canvas> component.')
-  }
-
-  const { addPortal, removePortal } = usePortalContext()
-
-  watch(parent, (parent) => {
-    if (!parent || !isInstanceOf(parent, 'Object3D')) return
-    addPortal(parent, id)
-    return () => {
-      removePortal(id)
-    }
-  })
+  const portals = usePortalContext()
+  const childrenArray = $derived(portals.get(id))
 </script>
+
+{#if childrenArray !== undefined}
+  {#each childrenArray as children (children)}
+    {@render children()}
+  {/each}
+{/if}

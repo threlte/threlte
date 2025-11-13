@@ -1,5 +1,35 @@
 # @threlte/extras
 
+## 9.7.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 9.6.2
+
+### Patch Changes
+
+- 339742c: Improve interactivity performance
+
+## 9.6.1
+
+### Patch Changes
+
+- 642343b: [core] Fix: adjust type export
+
+## 9.6.0
+
+### Minor Changes
+
+- 5f1dc22: adds UvMaterial to visualize uvs of a geometry
+
+## 9.5.5
+
+### Patch Changes
+
+- 8eeafcb: Use snippet based Portal component
+
 ## 9.5.4
 
 ### Patch Changes

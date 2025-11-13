@@ -1,5 +1,5 @@
 import { getContext, onMount, setContext } from 'svelte'
-import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../utilities'
+import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../utilities/index.js'
 
 type DOMContext = {
   /** The canvas wrapper element */

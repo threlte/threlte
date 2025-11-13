@@ -4,9 +4,8 @@ title: App Structure
 order: -900
 ---
 
-Threlte makes heavy use of [Svelte's Context
-API](https://svelte.dev/tutorial/context-api) as a way to pass data through the
-component tree without having to pass props down manually at every level:
+Threlte uses Svelte's [Context API](https://svelte.dev/tutorial/svelte/context-api) to share `renderer`, `camera`, [and others](/docs/reference/core/use-threlte#usage) to any child component.
+Hooks like `useThrelte()` read from this context, so anything that needs it must be inside `<Canvas>`.
 
 ```svelte title="SomeComponent.svelte"
 <script>
@@ -16,14 +15,10 @@ component tree without having to pass props down manually at every level:
 </script>
 ```
 
-To let Threlte do its magic, we recommend to follow our best practices for
-structuring your app.
-
 ## Recommended app structure
 
-The [`<Canvas>`](/docs/reference/core/canvas) component provides all basic contexts in a Threlte application.
-The recommended app structure is to have a single child component of `<Canvas>` (typically named "Scene.svelte" in examples) for
-your Threlte app. This will allow contexts provided by `useThrelte` and other hooks to be used.
+Wrap your 3D app in a single `<Canvas>` and give it one direct child: `Scene.svelte`.
+Put all 3D content under that node to access Threlte hooks.
 
 ```svelte title="App.svelte"
 <script>
@@ -93,13 +88,11 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 </Canvas>
 ```
 
-## Additional app structures
+## Using a single `<Canvas>`
 
-### SvelteKit setup using a single `<Canvas>`
-
-In a typical SvelteKit application, a single `<Canvas>` component instance
-renders all 3D content to circumvent the WebGL Error `"WARNING: Too many active
-WebGL contexts. Oldest context will be lost."`. We can use [Svelte 5
+In a larger Svelte app or when using SvelteKit, prefer a single `<Canvas>` to avoid the WebGL error
+“Too many active WebGL contexts. Oldest context will be lost.”
+We can use [Svelte 5
 Snippets](https://svelte.dev/docs/svelte/snippet) to easily _portal_ our 3D
 content to a global `<Canvas>`. For that, let's first create a component that
 renders portal content:
