@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { pointerIntersection, pointerState } from '../../internal/state.svelte'
+  import { pointerIntersection, pointerState } from '../../internal/state.svelte.js'
   import Cursor from './Cursor.svelte'
   import type { Snippet } from 'svelte'
 

@@ -1,7 +1,7 @@
 <script>
   import { T } from '@threlte/core'
   import { Instance, InstancedMesh, RoundedBoxGeometry } from '@threlte/extras'
-  import { BaseConfig } from './config.svelte'
+  import { BaseConfig } from './config.svelte.js'
   import { StaticState } from '@threlte/studio'
 
   class SceneConfig extends StaticState {

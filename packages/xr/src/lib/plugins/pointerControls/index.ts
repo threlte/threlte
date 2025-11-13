@@ -1,17 +1,17 @@
 import { Raycaster, Vector3 } from 'three'
 import { currentWritable, watch } from '@threlte/core'
-import { defaultComputeFunction, type ComputeFunction } from './compute'
-import { injectPointerControlsPlugin } from './plugin.svelte'
-import { setupPointerControls } from './setup.svelte'
+import { defaultComputeFunction, type ComputeFunction } from './compute.js'
+import { injectPointerControlsPlugin } from './plugin.svelte.js'
+import { setupPointerControls } from './setup.svelte.js'
 import {
   getControlsContext,
   getHandContext,
   setControlsContext,
   setHandContext,
   setInternalContext
-} from './context'
-import type { FilterFunction, HandContext } from './types'
-import { pointerState } from '../../internal/state.svelte'
+} from './context.js'
+import type { FilterFunction, HandContext } from './types.js'
+import { pointerState } from '../../internal/state.svelte.js'
 
 let controlsCounter = 0
 

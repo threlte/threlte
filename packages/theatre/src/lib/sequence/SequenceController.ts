@@ -1,8 +1,8 @@
 import type { ISequence } from '@theatre/core'
 import type { Readable, Subscriber, Writable } from 'svelte/store'
 import { get } from 'svelte/store'
-import { onChange, val } from '../theatre'
-import type { SequenceOptions } from './types'
+import { onChange, val } from '../theatre.js'
+import type { SequenceOptions } from './types.js'
 
 /**
  * ### `SequenceController`

@@ -1,6 +1,6 @@
 import { Group } from 'three'
 import { useThrelte, useTask } from '@threlte/core'
-import { isPresenting } from './state.svelte'
+import { isPresenting } from './state.svelte.js'
 
 export const headset = new Group()
 

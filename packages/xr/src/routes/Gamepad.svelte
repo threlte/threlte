@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useGamepad } from '../../../extras/src/lib/index'
+  import { useGamepad } from '../../../extras/src/lib/index.js'
 
   const leftPad = useGamepad({ xr: true, hand: 'left' })
   const rightPad = useGamepad({ xr: true, hand: 'right' })

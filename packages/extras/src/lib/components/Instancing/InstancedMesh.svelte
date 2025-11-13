@@ -3,7 +3,7 @@
   import { InstancedMesh } from 'three'
   import Api from './Api.svelte'
 
-  import type { InstancedMeshProps } from './types'
+  import type { InstancedMeshProps } from './types.js'
 
   let {
     id = 'default',

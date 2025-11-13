@@ -1,8 +1,8 @@
 import type { XRJointSpace } from 'three'
 import { useTask, useThrelte } from '@threlte/core'
-import type { HandJoints } from '../lib/handJoints'
-import { hands } from './useHand.svelte'
-import { toCurrentReadable } from './currentReadable.svelte'
+import type { HandJoints } from '../lib/handJoints.js'
+import { hands } from './useHand.svelte.js'
+import { toCurrentReadable } from './currentReadable.svelte.js'
 
 /**
  * Provides a reference to a requested hand joint, once available.

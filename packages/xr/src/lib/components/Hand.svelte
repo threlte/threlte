@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Group } from 'three'
   import { T, useThrelte, useTask } from '@threlte/core'
-  import type { XRHandEvents } from '../types'
-  import { isHandTracking, handEvents } from '../internal/state.svelte'
-  import { hands } from '../hooks/useHand.svelte'
+  import type { XRHandEvents } from '../types.js'
+  import { isHandTracking, handEvents } from '../internal/state.svelte.js'
+  import { hands } from '../hooks/useHand.svelte.js'
   import type { Snippet } from 'svelte'
 
   type Props = {

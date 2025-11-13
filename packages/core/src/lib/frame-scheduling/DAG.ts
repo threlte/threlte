@@ -1,4 +1,9 @@
-import mitt, { type Emitter } from 'mitt'
+import { type Emitter } from 'mitt'
+
+// We need to cast here because TypeScript with "moduleResolution": "NodeNext"
+// fails to resolve the default export otherwise.
+import mittModule from 'mitt'
+const mitt = mittModule as unknown as typeof import('mitt').default
 
 type Vertex<T> = { value: T | undefined; previous: Set<Key>; next: Set<Key> }
 

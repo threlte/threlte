@@ -8,12 +8,12 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
   import CameraControls from './CameraControls.svelte'
   import DefaultCamera from './DefaultCamera.svelte'
-  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
+  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types.js'
 
   let { children }: { children?: Snippet } = $props()
 

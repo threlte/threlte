@@ -19,9 +19,9 @@ display info about your WebXR session. This is aliased by `ARButton` and
 -->
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements'
-  import { getXRSupportState } from '../lib/getXRSupportState'
-  import { toggleXRSession } from '../lib/toggleXRSession'
-  import { isPresenting, xr } from '../internal/state.svelte'
+  import { getXRSupportState } from '../lib/getXRSupportState.js'
+  import { toggleXRSession } from '../lib/toggleXRSession.js'
+  import { isPresenting, xr } from '../internal/state.svelte.js'
   import type { Snippet } from 'svelte'
 
   type Props = HTMLButtonAttributes & {

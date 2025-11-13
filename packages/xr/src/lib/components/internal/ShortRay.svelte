@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { pointerState, teleportState, teleportIntersection } from '../../internal/state.svelte'
+  import { pointerState, teleportState, teleportIntersection } from '../../internal/state.svelte.js'
   import type { Snippet } from 'svelte'
 
   interface Props {

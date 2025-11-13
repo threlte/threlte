@@ -1,7 +1,7 @@
 import { ActiveEvents, Collider, ColliderDesc, RigidBody, World } from '@dimforge/rapier3d-compat'
 import { isInstanceOf } from '@threlte/core'
 import { Mesh, Quaternion, Vector3, type Object3D } from 'three'
-import type { AutoCollidersShapes } from '../types/types'
+import type { AutoCollidersShapes } from '../types/types.js'
 
 const offset = new Vector3()
 const worldPosition = new Vector3()

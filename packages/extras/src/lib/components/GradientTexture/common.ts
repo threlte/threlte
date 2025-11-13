@@ -1,4 +1,4 @@
-import type { ColorStop } from './types'
+import type { ColorStop } from './types.js'
 
 /**
  * applies `gradient` to `context`

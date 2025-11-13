@@ -3,14 +3,14 @@
 -->
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { controllers } from '../hooks/useController.svelte'
+  import { controllers } from '../hooks/useController.svelte.js'
   import {
     isHandTracking,
     pointerState,
     teleportState,
     controllerEvents
-  } from '../internal/state.svelte'
-  import type { XRControllerEvents } from '../types'
+  } from '../internal/state.svelte.js'
+  import type { XRControllerEvents } from '../types.js'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
   import TeleportCursor from './internal/TeleportCursor.svelte'
