@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.2.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
 ## 1.1.1
 
 ### Patch Changes
