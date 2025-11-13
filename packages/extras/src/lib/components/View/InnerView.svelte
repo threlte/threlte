@@ -12,7 +12,7 @@
   } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import { Vector4 } from 'three'
-  import { OffscreenObserver } from './OffscreenObserver.svelte'
+  import { OffscreenObserver } from './OffscreenObserver.svelte.js'
 
   let { dom, children }: { dom: HTMLElement; children: Snippet<[]> } = $props()
 

@@ -3,12 +3,12 @@
   import type { Pane as TpPane } from 'tweakpane'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { browser } from '../../internal/browser'
-  import { useStudio } from '../../internal/extensions'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useTransactions } from '../transactions/useTransactions'
+  import { browser } from '../../internal/browser.js'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
+  import { useTransactions } from '../transactions/useTransactions.js'
   import Bindings from './Bindings.svelte'
-  import { inspectorScope, type InspectorActions, type InspectorState } from './types'
+  import { inspectorScope, type InspectorActions, type InspectorState } from './types.js'
   import type { Snippet } from 'svelte'
 
   let { children }: { children?: Snippet } = $props()

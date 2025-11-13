@@ -1,5 +1,5 @@
 import { ActiveEvents, type Collider } from '@dimforge/rapier3d-compat'
-import type { ColliderEvents, RigidBodyEvents } from '../types/types'
+import type { ColliderEvents, RigidBodyEvents } from '../types/types.js'
 
 export const applyColliderActiveEvents = (
   collider: Collider,

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Element, Pane, ThemeUtils } from 'svelte-tweakpane-ui'
-  import { browser } from '../internal/browser'
+  import { browser } from '../internal/browser.js'
 
   let innerWidth = browser ? window.innerWidth : 0
 </script>

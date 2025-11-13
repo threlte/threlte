@@ -10,9 +10,9 @@
     type PerspectiveCamera
   } from 'three'
   import Portal from '../../components/Portal.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types.js'
 
   const { useExtension } = useStudio()
   const { renderer, canvas, scene, autoRenderTask, invalidate } = useThrelte()

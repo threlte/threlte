@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { usePortalContext } from './usePortalContext.svelte'
+  import { usePortalContext } from './usePortalContext.svelte.js'
 
   interface Props {
     id?: string

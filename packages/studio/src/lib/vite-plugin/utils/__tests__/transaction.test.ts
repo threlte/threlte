@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest'
-import { TransactionQueue } from '../../../extensions/transactions/TransactionQueue/TransactionQueue.svelte'
-import { buildTransaction } from '../../../extensions/transactions/TransactionQueue/buildTransaction'
+import { TransactionQueue } from '../../../extensions/transactions/TransactionQueue/TransactionQueue.svelte.js'
+import { buildTransaction } from '../../../extensions/transactions/TransactionQueue/buildTransaction.js'
 
 describe('Transaction System', () => {
   test('commit', () => {

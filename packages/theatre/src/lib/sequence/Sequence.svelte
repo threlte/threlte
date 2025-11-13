@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { IRafDriver, ISequence } from '@theatre/core'
   import { getContext, onDestroy, setContext } from 'svelte'
-  import type { SheetContext } from '../sheet/types'
+  import type { SheetContext } from '../sheet/types.js'
   import type {
     Autoreset,
     IterationCount,
@@ -9,7 +9,7 @@
     PlaybackRange,
     SequenceAudioOptions,
     SequenceOptions
-  } from './types'
+  } from './types.js'
 
   // Parent context
   const { sequences } = getContext<SheetContext>('theatre-sheet')

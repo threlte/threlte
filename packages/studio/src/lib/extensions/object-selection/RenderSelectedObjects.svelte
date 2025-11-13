@@ -11,10 +11,10 @@
     WebGLRenderTarget,
     type Material
   } from 'three'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { fragmentShader } from './shader/fragment'
-  import { vertexShader } from './shader/vertex'
-  import { useObjectSelection } from './useObjectSelection.svelte'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { fragmentShader } from './shader/fragment.js'
+  import { vertexShader } from './shader/vertex.js'
+  import { useObjectSelection } from './useObjectSelection.svelte.js'
 
   const { invalidate } = useThrelte()
   const objectSelection = useObjectSelection()

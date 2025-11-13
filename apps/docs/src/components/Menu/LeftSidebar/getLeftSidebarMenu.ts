@@ -25,7 +25,7 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
       .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         return {
-          title: item.data.name,
+          title: item.data.title,
           slug: item.id,
           isDivider: item.data.isDivider ?? false
         }

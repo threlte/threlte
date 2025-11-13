@@ -4,12 +4,12 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { staticStateMetaKey } from '../../config'
-  import { useStudio } from '../../internal/extensions'
-  import { clientRpc } from '../../rpc/clientRpc'
-  import type { Modifier } from '../../types'
-  import { accessors, instances, setValue, StaticState } from './StaticState'
-  import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
+  import { staticStateMetaKey } from '../../config.js'
+  import { useStudio } from '../../internal/extensions.js'
+  import { clientRpc } from '../../rpc/clientRpc.js'
+  import type { Modifier } from '../../types.js'
+  import { accessors, instances, setValue, StaticState } from './StaticState.js'
+  import { staticStateScope, type StaticStateActions, type StaticStateState } from './types.js'
 
   let { children }: { children?: Snippet } = $props()
 

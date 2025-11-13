@@ -2,7 +2,7 @@
   import { T, useLoader, type Props as ThrelteProps } from '@threlte/core'
   import { DoubleSide, type Group, type Mesh, type MeshBasicMaterial } from 'three'
   import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
-  import { useSuspense } from '../../suspense/useSuspense'
+  import { useSuspense } from '../../suspense/useSuspense.js'
 
   interface Props extends ThrelteProps<typeof Group> {
     /** Can be a URL or SVG data */

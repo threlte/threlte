@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AsciiRendererProps } from './types'
+  import type { AsciiRendererProps } from './types.js'
   import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
   import { fromStore } from 'svelte/store'
   import { useTask, useThrelte } from '@threlte/core'

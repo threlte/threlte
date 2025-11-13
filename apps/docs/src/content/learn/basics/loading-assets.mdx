@@ -4,23 +4,21 @@ title: Loading Assets
 order: -750
 ---
 
-There are a number of different asset types you might like to use in your
-Threlte application. Three.js has a [ton of different
-loaders](https://threejs.org/docs/index.html?q=loader) that Threlte integrates
-well with. You're recommended to use the
-[useLoader](/docs/reference/core/use-loader) hook which will cache any asset it
-loads and wrap the asset in an
-[asyncWritable](/docs/reference/core/utilities#asyncwritable) for convenience.
-Caching assets will reduce network requests, bandwidth, and memory usage, which
-will improve the performance of your application.
+Threlte works seamlessly with Three.js loaders, and provides a hook,
+[useLoader](/docs/reference/core/use-loader), to help solve common loading issues.
+It caches results to prevent duplicate fetch/parse work and returns an async store,
+[asyncWritable](/docs/reference/core/utilities#asyncwritable) for convenient usage in Svelte.
 
-You are highly recommended to use SvelteKit's [asset
-function](https://svelte.dev/docs/kit/$app-paths#asset) so that you can catch common asset loading
-problems. There are other equivalent vite plugins which will help you in the same way.
+Caching cuts network requests, bandwidth, and memory, improving app performance.
 
 <Tip type="info">
   This section assumes you placed your assets in your public folder or in a place in your
   application where you can import them easily.
+</Tip>
+<Tip type="tip">
+  We recommend using SvelteKit's [asset function](https://svelte.dev/docs/kit/$app-paths#asset) to
+  help catch common loading problems. There are other equivalent vite plugins if your not using
+  SvelteKit.
 </Tip>
 
 ## Models

@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte'
 import type { Node } from 'yoga-layout'
-import { useReflow } from '..'
+import { useReflow } from '../hooks/useReflow.js'
 
 export type NodeContext = {
   insertNode: (childNode: Node, order?: number) => void

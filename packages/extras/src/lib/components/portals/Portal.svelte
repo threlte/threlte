@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
-  import { usePortalContext } from './usePortalContext.svelte'
+  import { usePortalContext } from './usePortalContext.svelte.js'
   import { SvelteSet } from 'svelte/reactivity'
 
   interface Props {

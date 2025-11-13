@@ -1,0 +1,33 @@
+diff --git a/dist/index.d.ts b/dist/index.d.ts
+index 207c813eeb6cda585b23a8b988343da4f1652d8c..fe7689c8235de9cfa9180949413a049df4fe6a32 100644
+--- a/dist/index.d.ts
++++ b/dist/index.d.ts
+@@ -1,2 +1,2 @@
+-export { CameraControls as default } from './CameraControls';
+-export { EventDispatcher } from './EventDispatcher';
++export { CameraControls as default } from './CameraControls.js'
++export { EventDispatcher } from './EventDispatcher.js'
+diff --git a/package.json b/package.json
+index 0c5b96f3d8b306a0350537a659734da89683727f..3c4bf55eb1a3dc8d8cac317db81c06b6b4d93b59 100644
+--- a/package.json
++++ b/package.json
+@@ -6,6 +6,19 @@
+   "main": "dist/camera-controls.cjs",
+   "module": "dist/camera-controls.module.js",
+   "types": "dist/index.d.ts",
++  "exports": {
++    ".": {
++      "import": {
++        "types": "./dist/index.d.ts",
++        "default": "./dist/camera-controls.module.js"
++      },
++      "require": {
++        "types": "./dist/index.d.ts",
++        "default": "./dist/camera-controls.cjs"
++      }
++    }
++  },
++  "type": "module",
+   "files": [
+     "dist"
+   ],

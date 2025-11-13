@@ -1,10 +1,14 @@
 import type { CurrentWritable } from '@threlte/core'
-import mitt, { type Emitter } from 'mitt'
+import type { Emitter } from 'mitt'
+// We need to cast here because TypeScript with "moduleResolution": "NodeNext"
+// fails to resolve the default export otherwise.
+import mittModule from 'mitt'
+const mitt = mittModule as unknown as typeof import('mitt').default
 import { getContext, onDestroy, setContext } from 'svelte'
 import type { Group } from 'three'
 import type { Node } from 'yoga-layout'
 import type Yoga from 'yoga-layout'
-import type { Axis, ClassParser, NodeProps } from '../lib/props'
+import type { Axis, ClassParser, NodeProps } from '../lib/props.js'
 
 type FlexContextEvents = {
   'reflow:before': void

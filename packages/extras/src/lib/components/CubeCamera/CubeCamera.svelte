@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { CubeCameraProps } from './types'
+  import type { CubeCameraProps } from './types.js'
   import { Group } from 'three'
   import { observe, T, useTask, useThrelte } from '@threlte/core'
-  import { useCubeCamera } from '../../hooks/useCubeCamera.svelte'
+  import { useCubeCamera } from '../../hooks/useCubeCamera.svelte.js'
 
   let {
     background = 'auto',

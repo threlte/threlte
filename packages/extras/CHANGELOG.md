@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 9.7.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 9.6.2
+
+### Patch Changes
+
+- 339742c: Improve interactivity performance
+
 ## 9.6.1
 
 ### Patch Changes

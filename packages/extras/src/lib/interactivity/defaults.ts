@@ -1,5 +1,5 @@
 import { useThrelte, watch, type CurrentWritable } from '@threlte/core'
-import type { ComputeFunction } from './context'
+import type { ComputeFunction } from './context.js'
 
 export const getDefaultComputeFunction = (
   target: CurrentWritable<HTMLElement>
