@@ -41,6 +41,8 @@ export { default as InstancedMesh } from './components/Instancing/InstancedMesh.
 export { default as Instance } from './components/Instancing/Instance.svelte'
 export { default as InstancedMeshes } from './components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
 export { default as SoftShadows } from './components/SoftShadows/SoftShadows.svelte'
+export { default as Center } from './components/Center/Center.svelte'
+export { default as Sparkles } from './components/Sparkles/Sparkles.svelte'
 export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeometry.svelte'
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
 export { default as PointsMaterial } from './components/PointsMaterial/PointsMaterial.svelte'

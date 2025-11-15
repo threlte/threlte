@@ -1,0 +1,72 @@
+---
+{
+  order: 11.1,
+  'category': '@threlte/extras',
+  'name': '<Sparkles>',
+  'type': 'component',
+  'componentSignature':
+    {
+      props:
+        [
+          {
+            name: 'count',
+            type: 'number',
+            default: '100',
+            description: 'Number of particles.',
+            required: false
+          },
+          {
+            name: 'speed',
+            type: 'number | Float32Array',
+            default: '1',
+            description: 'Speed of particles.',
+            required: false
+          },
+          {
+            name: 'opacity',
+            type: ' number | Float32Array',
+            default: '100',
+            description: 'Opacity of particles',
+            required: false
+          },
+          {
+            name: 'color',
+            type: 'ColorRepresentation | Float32Array',
+            default: '100',
+            description: 'Color of the particles.',
+            required: false
+          },
+          {
+            name: 'size',
+            type: 'number | Float32Array',
+            default: 'randomized (between 0 and 1)',
+            description: 'Size of the particles.',
+            required: false
+          },
+          {
+            name: 'scale',
+            type: 'number | [number, number, number] | Vector3',
+            default: '100',
+            description: 'Number of particles.',
+            required: false
+          },
+          {
+            name: 'noise',
+            type: 'number | [number, number, number] | Vector3 | Float32Array',
+            default: '100',
+            description: 'Movement factor',
+            required: false
+          }
+        ]
+    }
+}
+---
+
+This component is a port of the component [`<Sparkles>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/Sparkles.tsx).
+
+Adds a blinking shader-based starfield to your scene.
+
+<Example
+  path="extras/sparkles"
+  iframe
+/>
