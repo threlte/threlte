@@ -3,13 +3,14 @@
   import InstallButton from './InstallButton.svelte'
   import { onMount } from 'svelte'
 
-  let useGltf = false
-  let installExtras = false
-  let installRapier = false
-  let installTheatre = false
-  let installXR = false
-  let installFlex = false
-  let installTypes = false
+  let useGltf = $state(false)
+  let installExtras = $state(false)
+  let installRapier = $state(false)
+  let installTheatre = $state(false)
+  let installXR = $state(false)
+  let installFlex = $state(false)
+  let installTypes = $state(false)
+  let installStudio = $state(false)
 
   let divider = ' \\'
   let merger = '\n'
@@ -19,35 +20,49 @@
     return args.some(Boolean) ? divider : ''
   }
 
-  let tag = '@next'
+  let tag = ''
 
-  $: coreDivider = useDivider(
-    installExtras,
-    useGltf,
-    installRapier,
-    installTheatre,
-    installXR,
-    installFlex,
-    installTypes
+  let coreDivider = $derived(
+    useDivider(
+      installExtras,
+      useGltf,
+      installRapier,
+      installTheatre,
+      installXR,
+      installFlex,
+      installTypes,
+      installStudio
+    )
   )
-  $: extrasDivider = useDivider(installRapier, installTheatre, installXR, installFlex, installTypes)
-  $: rapierDivider = useDivider(installTheatre, installXR, installFlex, installTypes)
-  $: theatreDivider = useDivider(installXR, installFlex, installTypes)
-  $: xrDivider = useDivider(installFlex, installTypes)
-  $: flexDivider = useDivider(installTypes)
+  let extrasDivider = $derived(
+    useDivider(installRapier, installTheatre, installXR, installFlex, installTypes, installStudio)
+  )
+  let rapierDivider = $derived(
+    useDivider(installTheatre, installXR, installFlex, installTypes, installStudio)
+  )
+  let theatreDivider = $derived(useDivider(installXR, installFlex, installTypes, installStudio))
+  let xrDivider = $derived(useDivider(installFlex, installTypes, installStudio))
+  let flexDivider = $derived(useDivider(installTypes, installStudio))
+  let studioDivider = $derived(useDivider(installTypes))
 
-  $: installCode = [
-    `npm install three @threlte/core${tag}${coreDivider}`,
-    (installExtras || useGltf || installTheatre) && `${space}@threlte/extras${tag}${extrasDivider}`,
-    installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
-    installTheatre &&
-      `${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
-    installXR && `${space}@threlte/xr${tag}${xrDivider}`,
-    installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
-    installTypes && `${space}@types/three`
-  ]
-    .filter(Boolean)
-    .join(merger)
+  let extrasPassivelyActive = $derived(useGltf || installTheatre || installStudio)
+
+  let installCode = $derived(
+    [
+      `npm install three @threlte/core${tag}${coreDivider}`,
+      (installExtras || useGltf || installTheatre || installStudio) &&
+        `${space}@threlte/extras${tag}${extrasDivider}`,
+      installRapier && `${space}@threlte/rapier${tag} @dimforge/rapier3d-compat${rapierDivider}`,
+      installTheatre &&
+        `${space}@threlte/theatre${tag} @theatre/core @theatre/studio${theatreDivider}`,
+      installXR && `${space}@threlte/xr${tag}${xrDivider}`,
+      installFlex && `${space}@threlte/flex${tag}${flexDivider}`,
+      installStudio && `${space}@threlte/studio${tag}${studioDivider}`,
+      installTypes && `${space}@types/three`
+    ]
+      .filter(Boolean)
+      .join(merger)
+  )
 
   onMount(() => {
     if (window.navigator.userAgent.includes('Windows')) {
@@ -59,7 +74,7 @@
 </script>
 
 <div
-  class="grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
+  class="mt-4 grid grid-cols-1 items-start justify-start gap-x-4 gap-y-2 max-md:justify-items-start md:grid-cols-[auto_auto] md:gap-y-2 md:[&>button]:my-1"
 >
   <InstallButton
     disabled
@@ -68,18 +83,17 @@
   >
 
   <p class="my-0 self-center text-sm md:text-base">
-    Compose Three.js scenes in a declarative and state-driven way. Three.js is required as a peer
-    dependency.
+    Simple, transparent Three.js bindings. <code>three</code> is required as a peer dependency.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installExtras = !installExtras
     }}
     active={installExtras}
-    passivelyActive={useGltf || installTheatre}>@threlte/extras</InstallButton
+    passivelyActive={extrasPassivelyActive}>@threlte/extras</InstallButton
   >
 
   <p class="my-0 self-center text-sm md:text-base">
@@ -87,13 +101,13 @@
       href="/docs/reference/extras/getting-started"
       target="_blank">Components, helpers, hooks</a
     >
-    and more that extend the core functionality.
+    and more that add functionality.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       useGltf = !useGltf
     }}
     active={useGltf}>@threlte/gltf</InstallButton
@@ -105,13 +119,13 @@
       target="_blank">command-line tool</a
     >
     that turns GLTF assets into declarative and re-usable Threlte components. The generated Threlte components
-    make use of the package <code>@threlte/extras</code>.
+    need <code>@threlte/extras</code> to work.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installRapier = !installRapier
     }}
     active={installRapier}>@threlte/rapier</InstallButton
@@ -122,13 +136,13 @@
       href="https://rapier.rs/"
       target="_blank"
       rel="noreferrer">Rapier physics engine</a
-    > in Threlte.
+    >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installTheatre = !installTheatre
     }}
     active={installTheatre}>@threlte/theatre</InstallButton
@@ -139,13 +153,13 @@
       href="https://www.theatrejs.com/"
       target="_blank"
       rel="noreferrer">Theatre.js</a
-    > in Threlte.
+    >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installXR = !installXR
     }}
     active={installXR}>@threlte/xr</InstallButton
@@ -153,10 +167,10 @@
 
   <p class="my-0 self-center text-sm md:text-base">Components and hooks for VR and AR.</p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
       installFlex = !installFlex
     }}
     active={installFlex}>@threlte/flex</InstallButton
@@ -167,13 +181,29 @@
       href="https://yogalayout.com/"
       target="_blank"
       rel="noreferrer">Yoga</a
-    > in Threlte.
+    >.
   </p>
 
-  <hr class="m-0 w-full p-0 opacity-50 max-md:my-3 md:col-span-2" />
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
 
   <InstallButton
-    on:click={() => {
+    onclick={() => {
+      installStudio = !installStudio
+    }}
+    active={installStudio}>@threlte/studio</InstallButton
+  >
+
+  <p class="my-0 self-center text-sm md:text-base">
+    <a
+      href="/docs/reference/studio/getting-started"
+      target="_blank">Spatial Programming Toolset</a
+    > for Threlte.
+  </p>
+
+  <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
+
+  <InstallButton
+    onclick={() => {
       installTypes = !installTypes
     }}
     active={installTypes}>@types/three</InstallButton
@@ -185,7 +215,7 @@
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>
 
 <div
-  class="not-prose group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl [&>*]:!bg-transparent"
+  class="not-content *:bg-transparent! group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl"
 >
   <code class="p-0 text-[1em]">
     {installCode}

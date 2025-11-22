@@ -1,19 +1,21 @@
 <script lang="ts">
-  import { c } from '../../lib/classes'
+  interface Props {
+    code?: string
+  }
 
-  export let code: string = ''
+  let { code = '' }: Props = $props()
 
-  let copying = false
-  let success = false
+  let copying = $state(false)
+  let success = $state(false)
 </script>
 
 <button
-  class={c(
+  class={[
     'group/copybtn absolute right-0 top-0 flex items-center gap-1 p-1 max-md:hidden',
     success ? 'text-green-300' : 'text-white/30 hover:text-orange-400',
     copying && 'scale-90'
-  )}
-  on:click={() => {
+  ]}
+  onclick={() => {
     copying = true
     navigator.clipboard.writeText(code)
     setTimeout(() => {
@@ -25,12 +27,12 @@
     }, 150)
   }}
 >
-  <span class={c('text-xs group-hover/copybtn:opacity-100', !success && 'opacity-0')}>
+  <span class={['text-xs group-hover/copybtn:opacity-100', !success && 'opacity-0']}>
     {success ? 'Success' : 'Copy'}
   </span>
 
   <svg
-    class={c('h-5 w-5 fill-green-300', success ? 'block' : 'hidden')}
+    class={['h-5 w-5 fill-green-300', success ? 'block' : 'hidden']}
     xmlns="http://www.w3.org/2000/svg"
     width="76"
     height="76"
@@ -47,10 +49,10 @@
   </svg>
 
   <svg
-    class={c(
+    class={[
       'h-5 w-5 fill-white/20 group-hover/copybtn:fill-orange-400',
       success ? 'hidden' : 'block'
-    )}
+    ]}
     xmlns="http://www.w3.org/2000/svg"
     width="76"
     height="76"

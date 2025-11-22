@@ -27,7 +27,7 @@ export const readFromFirstObject = (objects: any[], propertyPath: string) => {
 
 export const areCamera = (
   objects: any[]
-): objects is (PerspectiveCamera | OrthographicCamera)[] => {
+): objects is PerspectiveCamera[] | OrthographicCamera[] => {
   return (
     areOfType<PerspectiveCamera>(objects, 'isPerspectiveCamera') ||
     areOfType<OrthographicCamera>(objects, 'isOrthographicCamera')

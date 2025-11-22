@@ -1,10 +1,9 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, Outlines, useDraco, useGltf } from '@threlte/extras'
-  import { BufferGeometry, Mesh, MeshStandardMaterial } from 'three'
-  import { MathUtils } from 'three'
+  import { Mesh, MeshStandardMaterial, MathUtils } from 'three'
 
-  let rotation = 0
+  let rotation = $state(0)
   useTask((delta) => {
     rotation += delta
   })
@@ -18,11 +17,7 @@
     }
   }>('/models/helmet/DamagedHelmet.gltf')
 
-  let helmetGeometry: BufferGeometry | undefined
-  $: if ($helmetGltf) {
-    const mesh = $helmetGltf.nodes['node_damagedHelmet_-6514'] as Mesh
-    helmetGeometry = mesh.geometry
-  }
+  const helmetGeometry = $derived($helmetGltf?.nodes['node_damagedHelmet_-6514'].geometry)
 
   const dracoLoader = useDraco()
   const suziGltf = useGltf<{

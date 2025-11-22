@@ -1,0 +1,56 @@
+---
+import { getCollection } from 'astro:content'
+import BlogEntryMeta from '../../components/Blog/BlogEntryMeta.astro'
+import MainLayout from '../../layouts/MainLayout.astro'
+
+const collection = await getCollection('blog')
+const authors = await getCollection('authors')
+
+const entries = collection
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .map((entry) => {
+    const author = authors.find((author) => author.data.name === entry.data.author)
+    if (!author) {
+      throw new Error(
+        `Author with name "${entry.data.author}" not found, add an author entry to the authors collection or reference an existing author`
+      )
+    }
+    return {
+      title: entry.data.title,
+      subtitle: entry.data.subtitle,
+      slug: entry.id,
+      date: entry.data.date,
+      author
+    }
+  })
+---
+
+<MainLayout title="Blog">
+  <div class="w-full pb-12 pt-6">
+    <div class="mx-auto max-w-5xl">
+      <div class="flex flex-col gap-12">
+        {
+          entries.map((entry) => {
+            return (
+              <div>
+                <a
+                  class="group mb-5 block"
+                  href={`/blog/${entry.slug}`}
+                >
+                  <h2 class="mb-0 text-[2.25rem] font-bold leading-tight decoration-dashed decoration-2 underline-offset-4 group-hover:underline">
+                    {entry.title}
+                  </h2>
+                  <h3 class="text-faded text-xl">{entry.subtitle}</h3>
+                </a>
+                <BlogEntryMeta
+                  author={entry.author.data}
+                  date={entry.date}
+                />
+              </div>
+            )
+          })
+        }
+      </div>
+    </div>
+  </div>
+</MainLayout>

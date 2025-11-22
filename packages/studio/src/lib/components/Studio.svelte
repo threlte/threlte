@@ -13,14 +13,15 @@
   import StudioObjectsRegistry from '../extensions/studio-objects-registry/StudioObjectsRegistry.svelte'
   import Transactions from '../extensions/transactions/Transactions.svelte'
   import TransformControls from '../extensions/transform-controls/TransformControls.svelte'
-  import { createRootContext, useStudio } from '../internal/extensions'
+  import { createRootContext, useStudio } from '../internal/extensions.js'
   import NestedComponents from './NestedComponents.svelte'
   import Toolbar from './Toolbar.svelte'
+
 
   type Props = {
     namespace?: string
     transient?: boolean
-    extensions?: ConstructorOfATypedSvelteComponent[]
+    extensions?: Component[]
     children: Snippet
   }
 

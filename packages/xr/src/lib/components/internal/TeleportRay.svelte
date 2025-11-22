@@ -1,11 +1,24 @@
-<script lang="ts">
+<script
+  module
+  lang="ts"
+>
   import { Vector3, QuadraticBezierCurve3, type XRTargetRaySpace, Vector2 } from 'three'
+
+  const rayStart = new Vector3()
+  const rayMidpoint = new Vector3()
+  const curve = new QuadraticBezierCurve3()
+  const vec3 = new Vector3()
+  const v2_1 = new Vector2()
+  const v2_2 = new Vector2()
+</script>
+
+<script lang="ts">
+  import type { Snippet } from 'svelte'
   import { Line2 } from 'three/examples/jsm/lines/Line2.js'
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
-  import { T, useTask } from '@threlte/core'
-  import { teleportIntersection } from '../../internal/stores'
-  import type { Snippet } from 'svelte'
+  import { T, useTask, useThrelte } from '@threlte/core'
+  import { teleportIntersection } from '../../internal/state.svelte.js'
 
   interface Props {
     handedness: 'left' | 'right'
@@ -13,26 +26,18 @@
     children?: Snippet
   }
 
-  let { handedness, targetRay, children }: Props = $props()
+  const { handedness, targetRay, children }: Props = $props()
 
-  let lineGeometry = new LineGeometry()
-
-  const rayStart = new Vector3()
-  const rayMidpoint = new Vector3()
-  const curve = new QuadraticBezierCurve3()
+  const { scene } = useThrelte()
   const rayDivisions = 40
   const positions = new Float32Array(rayDivisions * 3)
-  const vec3 = new Vector3()
-
-  const v2_1 = new Vector2()
-  const v2_2 = new Vector2()
-
-  let intersection = $derived(teleportIntersection[handedness])
+  const lineGeometry = new LineGeometry()
+  const intersection = $derived(teleportIntersection[handedness])
 
   const setCurvePoints = (alpha = 0.3) => {
-    if (intersection.current === undefined) return
+    if (intersection === undefined) return
 
-    const rayEnd = intersection.current.point
+    const rayEnd = intersection.point
     targetRay.getWorldPosition(rayStart)
 
     rayMidpoint.x = (rayStart.x + rayEnd.x) / 2
@@ -69,7 +74,7 @@
   )
 
   $effect.pre(() => {
-    if ($intersection === undefined) {
+    if (intersection === undefined) {
       stop()
     } else {
       setCurvePoints(1)
@@ -83,13 +88,14 @@
 {:else}
   <T
     is={Line2}
-    visible={$intersection !== undefined}
+    attach={scene}
+    visible={intersection !== undefined}
     position.z={-0.01}
   >
     <T is={lineGeometry} />
     <T
       is={LineMaterial}
-      linewidth={0.004}
+      linewidth={3}
     />
   </T>
 {/if}

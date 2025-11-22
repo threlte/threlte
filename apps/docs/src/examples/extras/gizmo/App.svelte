@@ -1,28 +1,19 @@
 <script lang="ts">
-  import { Canvas, T, currentWritable, type CurrentWritable } from '@threlte/core'
+  import type { Vector3Tuple } from 'three'
+  import { Canvas, T } from '@threlte/core'
   import { Gizmo, type GizmoOptions, OrbitControls } from '@threlte/extras'
-  import {
-    Checkbox,
-    Color,
-    Folder,
-    List,
-    Pane,
-    Ring,
-    Slider,
-    ThemeUtils
-  } from 'svelte-tweakpane-ui'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+  import { Folder, List, Pane, Slider, ThemeUtils } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
 
-  let type = $state('sphere')
+  let type = $state<'sphere' | 'cube' | undefined>('sphere')
   let speed = $state(1)
-  let placement: GizmoOptions['placement'] = $state('bottom-left')
+  let placement = $state<GizmoOptions['placement']>('bottom-left')
   let size = $state(86)
   let left = $state(10)
   let top = $state(10)
   let right = $state(10)
   let bottom = $state(10)
-  let center: [number, number, number] = $state([0, 0, 0])
+  let center = $state<Vector3Tuple>([0, 0, 0])
 </script>
 
 <Pane
@@ -102,7 +93,7 @@
   </Folder>
 </Pane>
 
-<div style="position:relative; height:100%; width:100%; background-color: rgb(14,22,37)">
+<div>
   <Canvas>
     <T.PerspectiveCamera
       makeDefault
@@ -133,3 +124,12 @@
     <Scene {center} />
   </Canvas>
 </div>
+
+<style>
+  div {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: rgb(14, 22, 37);
+  }
+</style>

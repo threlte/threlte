@@ -1,15 +1,31 @@
 <script lang="ts">
   import Icon, { type Icons } from './Icon.svelte'
 
-  export let icon: Icons
-  export let label: string
+  interface Props {
+    icon: Icons
+    label: string
+    activityColor?: 'transparent' | 'red' | 'orange' | 'green'
+    active?: boolean
+    warn?: boolean
+    success?: boolean
+    disabled?: boolean
+    error?: boolean
+    [key: string]: any
+    onclick?: () => void
+  }
 
-  export let activityColor: 'transparent' | 'red' | 'orange' | 'green' = 'transparent'
-  export let active: boolean = false
-  export let warn: boolean = false
-  export let success: boolean = false
-  export let disabled: boolean = false
-  export let error: boolean = false
+  let {
+    icon,
+    label,
+    activityColor = 'transparent',
+    active = false,
+    warn = false,
+    success = false,
+    disabled = false,
+    error = false,
+    onclick,
+    ...rest
+  }: Props = $props()
 
   const activityColors: Record<Exclude<typeof activityColor, undefined>, string> = {
     red: '#dc2626',
@@ -63,31 +79,33 @@
     error: 'white'
   }
 
-  $: state = error
-    ? 'error'
-    : warn
-      ? 'warn'
-      : success
-        ? 'success'
-        : active
-          ? 'active'
-          : ('default' as 'active' | 'warn' | 'default' | 'success' | 'error')
-  $: colors = {
+  let state = $derived(
+    error
+      ? 'error'
+      : warn
+        ? 'warn'
+        : success
+          ? 'success'
+          : active
+            ? 'active'
+            : ('default' as 'active' | 'warn' | 'default' | 'success' | 'error')
+  )
+  let colors = $derived({
     activityColor: activityColors[activityColor],
     backgroundColor: backgroundColors[state],
     backgroundColorHover: backgroundColorsHover[state],
     backgroundColorFocus: backgroundColorsFocus[state],
     backgroundColorActive: backgroundColorsActive[state],
     textColor: textColor[state]
-  }
+  })
 </script>
 
 <button
   aria-label={label}
-  on:click
+  {onclick}
   style="--activityColor: {colors.activityColor}; --background-color: {colors.backgroundColor}; --background-color-hover: {colors.backgroundColorHover}; --background-color-focus: {colors.backgroundColorFocus}; --background-color-active: {colors.backgroundColorActive}; --text-color: {colors.textColor};"
   {disabled}
-  {...$$restProps}
+  {...rest}
 >
   <Icon
     size="15"

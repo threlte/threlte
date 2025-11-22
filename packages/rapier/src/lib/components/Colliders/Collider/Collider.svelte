@@ -10,16 +10,16 @@
   import { createParentObject3DContext, useParentObject3D, useTask, watch } from '@threlte/core'
   import { onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
-  import { useCollisionGroups } from '../../../hooks/useCollisionGroups'
-  import { useRapier } from '../../../hooks/useRapier'
-  import { useRigidBody } from '../../../hooks/useRigidBody'
-  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents'
-  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion'
-  import { getWorldPosition, getWorldQuaternion } from '../../../lib/getWorldTransforms'
-  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext'
-  import { scaleColliderArgs } from '../../../lib/scaleColliderArgs'
-  import { useCreateEvent } from '../../../lib/useCreateEvent'
-  import type { ColliderProps, MassDef, Shape } from './types'
+  import { useCollisionGroups } from '../../../hooks/useCollisionGroups.js'
+  import { useRapier } from '../../../hooks/useRapier.js'
+  import { useRigidBody } from '../../../hooks/useRigidBody.js'
+  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents.js'
+  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion.js'
+  import { getWorldPosition, getWorldQuaternion } from '../../../lib/getWorldTransforms.js'
+  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext.js'
+  import { scaleColliderArgs } from '../../../lib/scaleColliderArgs.js'
+  import { useCreateEvent } from '../../../lib/useCreateEvent.js'
+  import type { ColliderProps, MassDef, Shape } from './types.js'
 
   let {
     shape,
@@ -77,7 +77,7 @@
 
     const scaledArgs = scaleColliderArgs(shape, args, scale)
 
-    // @ts-ignore
+    // @ts-expect-error
     const colliderDesc = ColliderDesc[shape](...scaledArgs) as ColliderDesc
 
     collider = world.createCollider(colliderDesc, rigidBody)

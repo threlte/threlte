@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { useStudio } from '../../internal/extensions'
-  import { transactionsScope, type TransactionsActions, type TransactionsState } from './types'
+  import { useStudio } from '../../internal/extensions.js'
+  import { transactionsScope, type TransactionsActions, type TransactionsState } from './types.js'
 
   const { useExtension } = useStudio()
   const extension = useExtension<TransactionsState, TransactionsActions>(transactionsScope)
@@ -17,7 +17,7 @@
   {#if fileNames.length}
     Unsaved changes in:<br />
     <ul>
-      {#each fileNames as fileName}
+      {#each fileNames as fileName (fileName)}
         <li>
           {fileName}
         </li>

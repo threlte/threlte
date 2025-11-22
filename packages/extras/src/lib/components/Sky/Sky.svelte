@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { observe, T, useTask, useThrelte } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import {
     CubeCamera,
@@ -10,7 +10,7 @@
     WebGLCubeRenderTarget
   } from 'three'
   import { Sky } from 'three/examples/jsm/objects/Sky.js'
-  import type { SkyProps } from './types'
+  import type { SkyProps } from './types.js'
 
   let {
     scale = 1000,
@@ -90,16 +90,10 @@
     }
   )
 
-  $effect.pre(() => {
-    scale
-    turbidity
-    rayleigh
-    mieCoefficient
-    mieDirectionalG
-    elevation
-    azimuth
-    scheduleUpdate()
-  })
+  observe.pre(
+    () => [scale, turbidity, rayleigh, mieCoefficient, mieDirectionalG, elevation, azimuth],
+    () => scheduleUpdate()
+  )
 
   onDestroy(() => {
     sky.material.dispose()

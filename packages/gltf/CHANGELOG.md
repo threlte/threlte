@@ -1,5 +1,28 @@
 # @threlte/gltf
 
+## 3.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 3.0.0
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+- bb726da: fix prettier formatting
+- e27c1e4: Remove forwardEventHandlers from generated svelte files
+- fa8a61c: Bump Svelte compiler version
+- cec4b57: update deps
+- 7a3281c: Split out gltf-related loaders into hooks for better tree shaking
+- 958c375: Fix T.Group parser error
+- 36128d5: Replace events with callback props and slots with snippets
+- 60fcc29: Bump dev dependencies
+- 54bdef9: Fix gltf parser template for isolated components
+- 946e7a8: fix parser for animated assets
+- a257643: Update Svelte + Three.js deps
+
 ## 3.0.0-next.11
 
 ### Patch Changes

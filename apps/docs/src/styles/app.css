@@ -1,14 +1,99 @@
-@tailwind utilities;
+@import 'tailwindcss';
 
-@layer utilities {
-  .text-faded {
-    @apply text-white/60;
-  }
+/*
+Remember tailwind can't resolve dynamic class names.
+https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-names
+*/
 
-  .text-highlight {
-    @apply font-bold text-white;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
   }
 }
+
+@utility text-faded {
+  color: color-mix(in oklab, var(--color-white) 60%, transparent);
+}
+
+@utility text-highlight {
+  color: var(--color-white);
+  --tw-font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-bold);
+}
+
+/* https://tailwindcss.com/docs/adding-custom-styles#functional-utilities */
+@utility glow-* {
+  /* prettier-ignore */
+  box-shadow: 0 0px 40px -3px --value(--color-*);
+}
+
+@utility text-glow-* {
+  /* prettier-ignore */
+  filter: drop-shadow(0 0px 50px --value(--color-*));
+}
+
+/* https://tailwindcss.com/docs/font-family */
+/* https://tailwindcss.com/docs/colors#customizing-your-colors */
+/* https://tailwindcss.com/docs/font-size */
+@theme {
+  --font-sans: 'Inter', 'sans-serif', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --color-orange: oklch(0.6518 0.2339 34.08); /* #FE3D00 */
+  --color-orange-50: oklch(0.8771 0.0673 37.87); /* #FFC8B7 */
+  --color-orange-100: oklch(0.8433 0.0885 37.93); /* #FFB8A2 */
+  --color-orange-200: oklch(0.7819 0.1308 38.18); /* #FF9979 */
+  --color-orange-300: oklch(0.728 0.171971 37.7375); /* #FF7A51 */
+  --color-orange-400: oklch(0.684 0.2086 36.7); /* #FF5B28 */
+  --color-orange-500: oklch(0.6518 0.2339 34.08); /* #FE3D00 */
+  --color-orange-600: oklch(0.5426 0.19205 34.638); /* #C63000 */
+  --color-orange-700: oklch(0.4268 0.1484 35.36); /* #8E2200 */
+  --color-orange-800: oklch(0.304 0.1002 37.68); /* #561500 */
+  --color-orange-900: oklch(0.1668 0.0461 46.99); /* #1E0700 */
+  --color-blue: oklch(0.5779 0.1354 250.22); /* #2F7DC6 */
+  --color-blue-50: oklch(0.8676 0.0435 246.18); /* #BDD7EF */
+  --color-blue-100: oklch(0.8348 0.0544 246.77); /* #ADCDEB */
+  --color-blue-200: oklch(0.7693 0.0784 247.73); /* #8CB9E4 */
+  --color-blue-300: oklch(0.7041 0.1014 248.19); /* #6BA5DC */
+  --color-blue-400: oklch(0.6406 0.1239 249.14); /* #4A91D4 */
+  --color-blue-500: oklch(0.5779 0.1354 250.22); /* #2F7DC6 */
+  --color-blue-600: oklch(0.4793 0.1107 250.37); /* #246099 */
+  --color-blue-700: oklch(0.3773 0.082 249.05); /* #19446B */
+  --color-blue-800: oklch(0.2663 0.0526 249.56); /* #0F273E */
+  --color-blue-900: oklch(0.2006 0.0326 262.35); /* #0E1625 */
+  --color-green: oklch(0.7314 0.2153 145.02); /* #2AC944 */
+  --color-green-50: oklch(0.9083 0.0839 149.38); /* #BAF1C3 */
+  --color-green-100: oklch(0.886 0.1037 148.93); /* #A9EDB4 */
+  --color-green-200: oklch(0.8462 0.1423 148.21); /* #87E697 */
+  --color-green-300: oklch(0.8103 0.1781 146.89); /* #66DF79 */
+  --color-green-400: oklch(0.7783 0.2077 145.85); /* #44D85C */
+  --color-green-500: oklch(0.7314 0.2153 145.02); /* #2AC944 */
+  --color-green-600: oklch(0.6038 0.176 145.11); /* #209B34 */
+  --color-green-700: oklch(0.4664 0.1318 145.42); /* #176C25 */
+  --color-green-800: oklch(0.321 0.0857 145.86); /* #0D3E15 */
+  --color-green-900: oklch(0.1516 0.0309 149.23); /* #030F05 */
+  --text-2xs: 0.625rem;
+  --text-3xs: 0.5rem;
+}
+
+:root {
+  --left-sidebar-width: 250px;
+  --right-sidebar-width: 250px;
+  --docs-navbar-height: 70px;
+}
+
+/* ======= Scrollbar ========================== */
 
 /* For Webkit-based browsers (Chrome, Safari and Opera) */
 .scrollbar-hide::-webkit-scrollbar {
@@ -21,23 +106,36 @@
   scrollbar-width: none; /* Firefox */
 }
 
-/* width */
-::-webkit-scrollbar {
-  width: 6px;
+/* Modern browsers with `scrollbar-*` support */
+@supports (scrollbar-width: auto) {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2f7dc630 rgba(0, 0, 255, 0);
+  }
 }
 
-/* Track */
-::-webkit-scrollbar-track {
-  border-radius: 8px;
+/* Legacy browsers with `::-webkit-scrollbar-*` support */
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2f7dc630;
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2f7dc6aa;
+  }
 }
 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #2f7dc630;
-  border-radius: 10px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #2f7dc6aa;
+@layer component {
+  ul li.sidebar-list-item {
+    @apply border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
+  }
 }

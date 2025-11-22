@@ -1,0 +1,55 @@
+---
+import MdxCode from '$components/Code/MdxCode.astro'
+import { getCollection, render, type CollectionEntry } from 'astro:content'
+import BlogEntryMeta from '../../../components/Blog/BlogEntryMeta.astro'
+import MainLayout from '../../../layouts/MainLayout.astro'
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog')
+  const authors = await getCollection('authors')
+  return blogEntries.map((entry) => {
+    const author = authors.find((author) => author.data.name === entry.data.author)
+    if (!author) {
+      throw new Error(
+        `Author with name "${entry.data.author}" not found, add an author entry to the authors collection or reference an existing author`
+      )
+    }
+    return {
+      params: { slug: entry.id },
+      props: { entry, author }
+    }
+  })
+}
+
+interface Props {
+  entry: CollectionEntry<'blog'>
+  author: CollectionEntry<'authors'>
+}
+
+const { entry, author } = Astro.props
+const { Content } = await render(entry)
+---
+
+<MainLayout title={`${entry.data.title}`}>
+  <div class="w-full pb-12 pt-6">
+    <div class="mx-auto max-w-5xl">
+      <div class="mb-5 block">
+        <h2 class="mb-0 text-[3rem] font-bold leading-tight">
+          {entry.data.title}
+        </h2>
+        <h3 class="text-faded text-xl">{entry.data.subtitle}</h3>
+      </div>
+
+      <div class="mt-6">
+        <BlogEntryMeta
+          author={author.data}
+          date={entry.data.date}
+        />
+      </div>
+
+      <article class="[&_p]:text-faded [&_li]:text-faded markdown-content mt-12 w-full max-w-full">
+        <Content components={{ pre: MdxCode }} />
+      </article>
+    </div>
+  </div>
+</MainLayout>

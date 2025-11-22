@@ -3,7 +3,8 @@
   import Scene from './Scene.svelte'
 </script>
 
-<p>mouse around the canvas</p>
+<p>Move mouse around the canvas</p>
+
 <Canvas>
   <Scene />
 </Canvas>
@@ -12,5 +13,6 @@
   p {
     color: white;
     position: fixed;
+    padding: 0.5rem;
   }
 </style>

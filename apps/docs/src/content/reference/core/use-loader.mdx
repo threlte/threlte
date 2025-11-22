@@ -1,6 +1,6 @@
 ---
 category: '@threlte/core'
-name: useLoader
+title: useLoader
 sourcePath: 'packages/core/src/lib/hooks/useLoader.ts'
 order: 5.4
 ---
@@ -25,7 +25,7 @@ const soundB = loader.load('audio/ambient_ocean.ogg')
 // as `soundA` once the asset is loaded.
 ```
 
-### Instantiating A Loader
+### Instantiating a loader
 
 A loader must always be instantiated at the top level of a component. This is because the loader is depending on an application-wide cache:
 
@@ -72,7 +72,7 @@ as an array to the option `args` of the second argument to `useLoader`:
 </script>
 ```
 
-### Loading An Asset
+### Loading an asset
 
 ```svelte
 <script>
@@ -116,7 +116,7 @@ The store also exposes the underlying promise methods `then` and `catch` and can
 {/await}
 ```
 
-### Loading Multiple Assets
+### Loading multiple assets
 
 The function `load` of `useLoader` also accepts an array of paths in which case the return value is an array of loaded assets:
 
@@ -128,7 +128,7 @@ The function `load` of `useLoader` also accepts an array of paths in which case 
   const { load } = useLoader(TextureLoader)
   const textures = load(['texture1.png', 'texture2.png'])
 
-  $: console.log($textures) // [Texture, Texture]
+  $inspect($textures) // eventually [Texture, Texture]
 </script>
 ```
 
@@ -149,11 +149,11 @@ You can also provide a map of paths to load multiple assets at once. In this cas
     texture2: 'texture2.png'
   })
 
-  $: console.log($textures) // { texture1: Texture, texture2: Texture }
+  $inspect($textures) // eventually { texture1: Texture, texture2: Texture }
 </script>
 ```
 
-### Transforming The Result
+### Transforming the result
 
 <Tip
   type="warning"

@@ -2,7 +2,7 @@
   import { T, useTask } from '@threlte/core'
   import { Instance, InstancedMesh } from '@threlte/extras'
 
-  let dn = Date.now()
+  let dn = $state(Date.now())
   useTask(() => (dn = Date.now()))
 </script>
 

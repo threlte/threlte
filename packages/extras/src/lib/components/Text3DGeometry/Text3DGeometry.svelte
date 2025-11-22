@@ -3,8 +3,8 @@
   import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
   import { FontLoader, type Font } from 'three/examples/jsm/loaders/FontLoader.js'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { Text3DProps } from './types'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import type { Text3DProps } from './types.js'
 
   let {
     text,
@@ -27,11 +27,12 @@
   }: Text3DProps = $props()
 
   const suspend = useSuspense()
+  const loader = useLoader(FontLoader)
 
   let loadedFont = $derived(
     suspend<AsyncWritable<Font>>(
       typeof font === 'string'
-        ? useLoader(FontLoader).load(font)
+        ? loader.load(font)
         : asyncWritable<Font>(new Promise((resolve) => resolve(font as Font)))
     )
   )

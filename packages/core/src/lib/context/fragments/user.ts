@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte'
-import { currentWritable, type CurrentWritable } from '../../utilities'
+import { currentWritable, type CurrentWritable } from '../../utilities/index.js'
 
 export type ThrelteUserContext = CurrentWritable<Record<string | symbol, unknown>>
 
@@ -7,6 +7,8 @@ export const createUserContext = () => {
   const userCtx: ThrelteUserContext = currentWritable({})
 
   setContext<ThrelteUserContext>('threlte-user-context', userCtx)
+
+  return userCtx
 }
 
 /**

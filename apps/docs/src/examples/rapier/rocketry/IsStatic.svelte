@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type RigidBody as RapierRigidBody, type Vector } from '@dimforge/rapier3d-compat'
+  import type { RigidBody as RapierRigidBody, Vector } from '@dimforge/rapier3d-compat'
   import { useTask } from '@threlte/core'
   import { useRapier } from '@threlte/rapier'
   import { Vector3 } from 'three'

@@ -1,12 +1,12 @@
 import { isInstanceOf } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import type { Object3D } from 'three'
-import { useStudio } from '../../internal/extensions'
+import { useStudio } from '../../internal/extensions.js'
 import {
   studioObjectsRegistryScope,
   type StudioObjectsRegistryActions,
   type StudioObjectsRegistryState
-} from './types'
+} from './types.js'
 
 export const useStudioObjectsRegistry = () => {
   const { useExtension } = useStudio()
@@ -28,8 +28,6 @@ export const useStudioObjectsRegistry = () => {
 
     let ref = $state<T | undefined>()
 
-    const studioObjectsRegistry = useStudioObjectsRegistry()
-
     $effect(() => {
       if (!ref) return
       objects.push(ref)
@@ -40,13 +38,13 @@ export const useStudioObjectsRegistry = () => {
         node.userData.ignoreOverrideMaterial = true
       })
       new Set(objects).forEach((object) => {
-        studioObjectsRegistry.addObject(object)
+        extension.addObject(object)
       })
     })
 
     onDestroy(() => {
       new Set(objects).forEach((object) => {
-        studioObjectsRegistry.addObject(object)
+        extension.removeObject(object)
       })
     })
 

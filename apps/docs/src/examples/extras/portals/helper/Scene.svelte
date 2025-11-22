@@ -1,12 +1,8 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { Grid, OrbitControls, Portal, TransformControls } from '@threlte/extras'
-  import type { DirectionalLightHelper } from 'three'
+  import { Grid, OrbitControls, TransformControls } from '@threlte/extras'
 
   const { scene } = useThrelte()
-
-  let helperA: DirectionalLightHelper
-  let helperB: DirectionalLightHelper
 </script>
 
 <T.PerspectiveCamera
@@ -26,19 +22,17 @@
   position={[1.5, 2, 0.5]}
 >
   {#snippet children({ ref })}
-    <TransformControls
-      object={ref}
-      onobjectChange={() => {
-        if (!helperA) return
-        helperA.update()
-      }}
-    />
-    <Portal object={scene}>
-      <T.DirectionalLightHelper
-        args={[ref]}
-        bind:ref={helperA}
-      />
-    </Portal>
+    <T.DirectionalLightHelper
+      attach={scene}
+      args={[ref]}
+    >
+      {#snippet children({ ref: helperA })}
+        <TransformControls
+          object={ref}
+          onobjectChange={() => helperA.update()}
+        />
+      {/snippet}
+    </T.DirectionalLightHelper>
   {/snippet}
 </T.DirectionalLight>
 
@@ -49,19 +43,17 @@
   position={[-1, -2, 1]}
 >
   {#snippet children({ ref })}
-    <TransformControls
-      object={ref}
-      onobjectChange={() => {
-        if (!helperB) return
-        helperB.update()
-      }}
-    />
-    <Portal object={scene}>
-      <T.DirectionalLightHelper
-        args={[ref]}
-        bind:ref={helperB}
-      />
-    </Portal>
+    <T.DirectionalLightHelper
+      attach={scene}
+      args={[ref]}
+    >
+      {#snippet children({ ref: helperB })}
+        <TransformControls
+          object={ref}
+          onobjectChange={() => helperB.update()}
+        />
+      {/snippet}
+    </T.DirectionalLightHelper>
   {/snippet}
 </T.DirectionalLight>
 

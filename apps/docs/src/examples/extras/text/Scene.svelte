@@ -2,14 +2,18 @@
   import { T, useTask } from '@threlte/core'
   import { Grid, Text } from '@threlte/extras'
 
-  let rotation = 0
+  interface Props {
+    text: string
+    fontSize: number
+  }
 
-  export let text: string
-  export let fontSize: number
+  let { text, fontSize }: Props = $props()
+
+  let rotation = $state(0)
 
   useTask((delta) => {
     const f = 1 / 60 / delta // ~1 at 60fps
-    rotation += 0.002 * f
+    rotation += 0.0005 * f
   })
 </script>
 

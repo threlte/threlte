@@ -1,8 +1,8 @@
 <script lang="ts">
   import { Color } from 'three'
-  import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib'
+  import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib/index.js'
 
-  const { scene, invalidate } = useThrelte()
+  const { scene } = useThrelte()
   scene.background = new Color('black')
 
   let posY = $state(0)

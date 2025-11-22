@@ -1,9 +1,10 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
-  import Studio from '@theatre/studio'
-  import { studio } from '../consts'
+  const studioModule = await import('@theatre/studio')
+  const Studio = studioModule as unknown as typeof import('@theatre/studio').default
+  import { studio } from '../consts.js'
 
   Studio.initialize()
   studio.set(Studio)
@@ -13,10 +14,17 @@
   import { watch } from '@threlte/core'
   import { writable } from 'svelte/store'
 
-  export let hide: boolean
+  interface Props {
+    hide: boolean
+    children?: import('svelte').Snippet
+  }
+
+  let { hide, children }: Props = $props()
 
   const hideStore = writable(hide)
-  $: hideStore.set(hide)
+  $effect(() => {
+    hideStore.set(hide)
+  })
 
   watch([studio, hideStore], ([studio, hide]) => {
     if (hide) {
@@ -31,4 +39,4 @@
   })
 </script>
 
-<slot />
+{@render children?.()}

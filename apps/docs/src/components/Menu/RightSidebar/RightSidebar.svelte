@@ -1,18 +1,22 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import type { MarkdownHeading } from 'astro'
   import { onMount } from 'svelte'
   import { onDestroy } from 'svelte'
 
-  export let editUrl: string | undefined = undefined
-  export let sourceUrl: string | undefined = undefined
-  export let headings: MarkdownHeading[]
+  interface Props {
+    editUrl?: string | undefined
+    sourceUrl?: string | undefined
+    headings: MarkdownHeading[]
+    children?: import('svelte').Snippet
+  }
+
+  let { editUrl = undefined, sourceUrl = undefined, headings, children }: Props = $props()
 
   const lowestHeadingDepth = Math.min(...headings.map((heading) => heading.depth))
 
   let intersectionObserver: IntersectionObserver | undefined = undefined
 
-  let currentHeadingSlug: string | undefined = undefined
+  let currentHeadingSlug: string | undefined = $state(undefined)
   let currentHeading: MarkdownHeading | undefined = headings[0]
 
   const setCurrentHeading = (id: string) => {
@@ -74,26 +78,26 @@
 
     <ul
       class="duration-50 mb-8 w-full bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
-      on:transitionend={focusFirstDropdownLink}
+      ontransitionend={focusFirstDropdownLink}
     >
       {#each headings as heading}
         <li
-          class={c(
-            'nav-list-item text-faded',
-            !!currentHeadingSlug &&
-              heading.slug === currentHeadingSlug &&
-              '!border-orange font-bold !text-orange'
-          )}
+          class={[
+            'sidebar-list-item',
+            heading.slug === currentHeadingSlug
+              ? 'border-orange! text-orange font-bold'
+              : 'text-faded'
+          ]}
         >
           <a
             data-depth={heading.depth}
             class="block py-2 pr-4 no-underline hover:underline lg:py-0"
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}
-            on:keypress={() => {
+            onkeypress={() => {
               headingClicked(heading.slug)
             }}
-            on:click={() => {
+            onclick={() => {
               headingClicked(heading.slug)
             }}
           >
@@ -113,9 +117,9 @@
 
   <ul
     class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
-    on:transitionend={focusFirstDropdownLink}
+    ontransitionend={focusFirstDropdownLink}
   >
-    <li class="text-faded list-item">
+    <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
       <a
         class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
         href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
@@ -124,7 +128,6 @@
         target="_blank"
       >
         <svg
-          class="icon"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -142,7 +145,7 @@
     </li>
 
     {#if sourceUrl}
-      <li class="text-faded list-item">
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={sourceUrl}
@@ -151,7 +154,6 @@
           target="_blank"
         >
           <svg
-            class="icon"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -170,7 +172,7 @@
     {/if}
 
     {#if editUrl}
-      <li class="text-faded list-item">
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
           class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={editUrl}
@@ -179,7 +181,6 @@
           target="_blank"
         >
           <svg
-            class="icon"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -199,20 +200,6 @@
   </ul>
 
   <div class="ml-[-9px]">
-    <slot />
+    {@render children?.()}
   </div>
 </div>
-
-<style lang="postcss">
-  .nav-list-item {
-    @apply border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
-  }
-
-  .list-item {
-    @apply relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white;
-  }
-
-  .list-item .icon {
-    @apply absolute right-full top-1/2 mr-3 h-[16px] w-[16px] -translate-y-1/2;
-  }
-</style>

@@ -1,8 +1,10 @@
 ---
-import Loader from './Loader.svelte'
+import '$styles/app.css'
+import Loader from './_Loader.svelte'
+import { getAllAppModules } from './_appModules'
 
 export async function getStaticPaths() {
-  const examples = import.meta.glob('../../../examples/**/App.svelte')
+  const examples = getAllAppModules()
   const keys = Object.keys(examples) as string[]
   const slugs = keys.map((key) => key.replace('../../../examples/', '').replace('/App.svelte', ''))
 

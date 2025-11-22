@@ -16,7 +16,7 @@
     scrollPos,
     springScrollPos
   } from './scrollPos'
-  import { debug } from './state'
+  // import { debug } from './state'
   import state from './state.json'
 
   const onScroll = () => {
@@ -37,8 +37,8 @@
     })
   })
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'd') debug.set(!debug.current)
+  const onKeyDown = (_e: KeyboardEvent) => {
+    // if (e.key === 'd') debug.set(!debug.current)
   }
 
   const onMouseMove = (e: MouseEvent) => {
@@ -51,9 +51,9 @@
 </script>
 
 <svelte:window
-  on:scroll={onScroll}
-  on:keydown={onKeyDown}
-  on:mousemove={onMouseMove}
+  onscroll={onScroll}
+  onkeydown={onKeyDown}
+  onmousemove={onMouseMove}
 />
 
 <div class="pointer-events-none relative z-20 h-[500vh]">
@@ -61,10 +61,10 @@
     config={{ state }}
     studio={{ enabled: false }}
   >
-    <div class="fixed left-0 top-0 z-10 h-[100lvh] w-screen">
+    <div class="fixed left-0 top-0 z-10 h-lvh w-screen">
       <Canvas
         toneMapping={NoToneMapping}
-        createRenderer={(canvas) => {
+        createRenderer={(canvas: HTMLCanvasElement) => {
           return new WebGLRenderer({
             canvas,
             alpha: true,
@@ -90,7 +90,7 @@
       in={0.5}
       out={2.7}
     >
-      <svelte:fragment>
+      {#snippet children()}
         {@const start = 0.6}
         {@const stagger = 0.3}
         {@const duration = 0.6}
@@ -112,7 +112,7 @@
                   to={outEnd}
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Learn Threlte</h3>
-                  <p class="text-sm text-white/60">
+                  <p class="text-faded text-sm">
                     Threlte puts the simplicity of Svelte 5 and the power of Three.js right at your
                     fingertips. It's designed to be powerful and flexible while still being
                     approachable and easy to use.
@@ -133,7 +133,7 @@
                   to={outEnd}
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Master Three.js</h3>
-                  <p class="text-sm text-white/60">
+                  <p class="text-faded text-sm">
                     The web is becoming more and more 3D. At its core, Threlte provides an
                     extendable declarative API for creating scalable Three.js applications for the
                     web.
@@ -154,7 +154,7 @@
                   to={outEnd}
                 >
                   <h3 class="mb-2 text-2xl font-bold text-white/90">Integrate Anything</h3>
-                  <p class="text-sm text-white/60">
+                  <p class="text-faded text-sm">
                     Threlte comes with solutions for physics, XR, animation, layouting, model
                     loading, and countless helpers to make creating immersive 3D apps for the web a
                     breeze.
@@ -164,7 +164,7 @@
             </div>
           </div>
         </div>
-      </svelte:fragment>
+      {/snippet}
     </Trigger>
 
     <Trigger

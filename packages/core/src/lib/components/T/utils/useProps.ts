@@ -1,5 +1,5 @@
-import { useThrelte } from '../../../context/compounds/useThrelte'
-import { resolvePropertyPath } from '../../../utilities'
+import { useThrelte } from '../../../context/compounds/useThrelte.js'
+import { resolvePropertyPath } from '../../../utilities/index.js'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 
@@ -34,17 +34,14 @@ export const memoizeProp = (value: unknown): boolean => {
   return false
 }
 
-type PropOptions = {
-  manualCamera?: boolean
-  pluginsProps?: string[]
-}
-
 type PropSetter = (target: any, key: any, value: any) => void
 
 const createSetter = (target: any, key: any, value: any): PropSetter => {
   if (
     !Array.isArray(value) &&
     typeof value === 'number' &&
+    typeof target[key] === 'object' &&
+    target[key] !== null &&
     typeof target[key]?.setScalar === 'function' &&
     // colors do have a setScalar function, but we don't want to use it, because
     // the hex notation (i.e. 0xff0000) is very popular and matches the number
@@ -56,7 +53,11 @@ const createSetter = (target: any, key: any, value: any): PropSetter => {
       target[key].setScalar(value)
     }
   } else {
-    if (typeof target[key]?.set === 'function') {
+    if (
+      typeof target[key]?.set === 'function' &&
+      typeof target[key] === 'object' &&
+      target[key] !== null
+    ) {
       // if the property has a "set" function, we can use it
       if (Array.isArray(value)) {
         return (target: any, key: any, value: any) => {
@@ -88,7 +89,7 @@ export const useProps = () => {
   >()
   const memoizedSetters = new Map<string, PropSetter>()
 
-  const setProp = <T>(instance: T, propertyPath: string, value: any, options: PropOptions) => {
+  const setProp = <T>(instance: T, propertyPath: string, value: any, manualCamera?: boolean) => {
     if (memoizeProp(value)) {
       const memoizedProp = memoizedProps.get(propertyPath)
       if (memoizedProp && memoizedProp.instance === instance && memoizedProp.value === value) {
@@ -115,7 +116,7 @@ export const useProps = () => {
       createSetter(target, key, value)(target, key, value)
     }
 
-    if (options.manualCamera) return
+    if (manualCamera) return
 
     if (
       updateProjectionMatrixKeys.has(key) &&
@@ -125,9 +126,15 @@ export const useProps = () => {
     }
   }
 
-  const updateProp = <T>(instance: T, key: string, value: any, options: PropOptions) => {
-    if (!ignoredProps.has(key) && !options.pluginsProps?.includes(key)) {
-      setProp(instance, key, value, options)
+  const updateProp = <T>(
+    instance: T,
+    key: string,
+    value: any,
+    pluginsProps?: string[],
+    manualCamera?: boolean
+  ) => {
+    if (!ignoredProps.has(key) && !pluginsProps?.includes(key)) {
+      setProp(instance, key, value, manualCamera)
     }
     invalidate()
   }

@@ -3,7 +3,7 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
-  import { useStudio } from '../../internal/extensions'
+  import { useStudio } from '../../internal/extensions.js'
   import RenderSelectedObjects from './RenderSelectedObjects.svelte'
   import SelectRect from './SelectRect.svelte'
   import SelectTweak from './SelectTweak.svelte'
@@ -11,10 +11,12 @@
     objectSelectionScope,
     type ObjectSelectionActions,
     type ObjectSelectionState
-  } from './types'
-  import { useOnRemove } from '../../internal/useOnRemove'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { tick } from 'svelte'
+  } from './types.js'
+  import { useOnRemove } from '../../internal/useOnRemove.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { tick, type Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
   const { invalidate } = useThrelte()
@@ -112,7 +114,7 @@
   <HorizontalButtonGroup>
     <ToolbarButton
       label="Select Tweak"
-      on:click={() => {
+      onclick={() => {
         extension.setMode('tweak')
       }}
       active={extension.state.mode === 'tweak'}
@@ -122,7 +124,7 @@
 
     <ToolbarButton
       label="Select Box"
-      on:click={() => {
+      onclick={() => {
         extension.setMode('rect')
       }}
       active={extension.state.mode === 'rect'}
@@ -132,4 +134,4 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}

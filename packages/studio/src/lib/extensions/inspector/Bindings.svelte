@@ -1,12 +1,12 @@
 <script lang="ts">
   import { Folder, Textarea } from 'svelte-tweakpane-ui'
   import type { Object3D } from 'three'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
   import Camera from './bindings/Camera.svelte'
   import Light from './bindings/Light.svelte'
   import Material from './bindings/Material.svelte'
   import Object3DBinding from './bindings/Object3D.svelte'
-  import { areCamera, areLight, haveMaterialProperty } from './bindings/utils'
+  import { areCamera, areLight, haveMaterialProperty } from './bindings/utils.js'
 
   const objectSelection = useObjectSelection()
   const keyFromObjects = (objects: Object3D[]) => {

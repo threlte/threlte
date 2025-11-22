@@ -1,8 +1,8 @@
 import { currentWritable, type CurrentWritable, useDOM } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster, type Object3D, type Intersection } from 'three'
-import type { IntersectionEvent, DomEvent } from './types'
-import { getDefaultComputeFunction } from './defaults'
+import type { IntersectionEvent, DomEvent } from './types.js'
+import { getDefaultComputeFunction } from './defaults.js'
 
 export type FilterFunction = (
   items: Intersection[],
@@ -43,7 +43,7 @@ export type InteractivityContext = {
   interactiveObjects: Object3D[]
   handlers: WeakMap<Object3D, Events>
   compute: ComputeFunction
-  filter?: FilterFunction
+  filter?: FilterFunction | undefined
   addInteractiveObject: (object: Object3D, events: Events) => void
   removeInteractiveObject: (object: Object3D) => void
 }

@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges } from '@threlte/extras'
-  import { BoxGeometry, MeshBasicMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BoxGeometry, MeshBasicMaterial, MathUtils } from 'three'
   import { game } from '../Game.svelte'
 
   type Props = {
@@ -26,7 +25,7 @@
 </script>
 
 <T.Group
-  rotation.x={-65 * DEG2RAD}
+  rotation.x={-65 * MathUtils.DEG2RAD}
   rotation.y={rotationY}
   position.z={positionZ}
   {scale}

@@ -1,38 +1,15 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
+  import { T } from '@threlte/core'
   import { OrbitControls, Grid, Float, TransformControls, Mask, useMask } from '@threlte/extras'
   import { Pane, Checkbox, List } from 'svelte-tweakpane-ui'
 
-  let rotation = 0
-  let inverse = true
-  let move = false
-  let target: 1 | 2 | 3 = 1
+  let inverse = $state(true)
+  let move = $state(false)
+  let id = $state<1 | 2 | 3>(1)
 
-  let torusStencil: any = useMask(1, true)
-  let boxStencil: any = useMask(2, true)
-  let icoStencil: any = useMask(3, true)
-
-  const settingsChanged = () => {
-    if (inverse) {
-      torusStencil = useMask(1, true)
-      boxStencil = useMask(2, true)
-      icoStencil = useMask(3, true)
-    } else {
-      torusStencil = target === 1 ? useMask(1, false) : {}
-      boxStencil = target === 2 ? useMask(2, false) : {}
-      icoStencil = target === 3 ? useMask(3, false) : {}
-    }
-  }
-
-  $: {
-    settingsChanged()
-    inverse
-    target
-  }
-
-  useTask(() => {
-    rotation -= 0.001
-  })
+  const torusStencil = $derived(useMask(1, inverse))
+  const boxStencil = $derived(useMask(2, inverse))
+  const icoStencil = $derived(useMask(3, inverse))
 </script>
 
 <Pane
@@ -44,7 +21,7 @@
     label="inverse"
   />
   <List
-    bind:value={target}
+    bind:value={id}
     label="target"
     options={{ torus: 1, box: 2, ico: 3 }}
   />
@@ -67,7 +44,7 @@
 
 <T.Group position={[0, 1, 2]}>
   {#snippet children({ ref })}
-    <Mask id={target}>
+    <Mask {id}>
       <T.CircleGeometry args={[0.65]} />
       <T.MeshBasicMaterial />
     </Mask>
@@ -93,9 +70,8 @@
 
 <Grid
   gridSize={[8, 8]}
-  cellColor={'#46536b'}
+  cellColor="#46536b"
   position.y={-0.3}
-  sectionColor="#ffffff"
   sectionThickness={0}
   fadeDistance={50}
 />
@@ -135,7 +111,6 @@
 >
   <T.Mesh
     position={[1.5, 0.3, -2]}
-    rotation={[rotation, 128, rotation]}
     scale={0.8}
   >
     <T.IcosahedronGeometry />

@@ -1,0 +1,79 @@
+---
+title: Shadow mesh
+---
+
+[ShadowMesh](https://github.com/mrdoob/three.js/blob/master/examples/jsm/objects/ShadowMesh.js) is a threejs addon that is used as very performant alternative to shadow mapping. It uses the renderer's stencil buffer and a locally computed matrix.
+
+<Example path="shadows/shadow-mesh" />
+
+## Limitations
+
+`ShadowMesh` has a few limitations, notably
+
+1. shadows must be cast onto a flat plane
+2. it does not support soft shadows
+3. you must use the renderer's stencil buffer
+
+## Updating Mesh Geometry
+
+If you update the shadow-casting mesh to a new instance, you must create an entirely new ShadowMesh instance or assign the shadow mesh's geometry to the new geometry.
+
+```ts
+// mesh.geometry = someNewGeometry
+shadowMesh.geometry = mesh.geometry
+```
+
+This is because the geometry of the shadow mesh is pulled from the mesh passed into its constructor at instantiation and does not update if the reference mesh's geometry is updated.
+
+## Enabling the Stencil Buffer
+
+When using the ShadowMesh, you must enable the stencil buffer of the renderer. This can be done with the `createRenderer` prop of the [\<Canvas/>](/docs/reference/core/canvas) component
+
+```svelte
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGLRenderer({
+      antialias: true,
+      canvas,
+      stencil: true
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+## Light Source
+
+Because light sources are assumed to be pointed towards the plane, creating a light instance is unnecessary (unless you're using materials that require lighting). Instead, all you need is the position of the light source.
+
+```ts
+const lightPosition4D = new Vector4(5, 5, 5, 0.1)
+
+// later
+
+shadowMesh.update(plane, lightPosition4D)
+```
+
+### W Component
+
+The **w** component of the light position vector controls the _spread_ of the shadow. Values closer to 0 are suited for directional lights whereas values closer to 1 are for point lights.
+
+## Offsetting and Orienting the Plane
+
+The plane should be offset from the ground or floor by a small amount. This is done to avoid z-fighting. An easy way to do this is to create the plane first and then orient the floor mesh to look in the direction of the plane's normal.
+
+```ts
+const yHat = new Vector3(0, 1, 0)
+
+// make a plane that faces straight up with a slight offset
+const plane = new Plane(yHat, 0.01)
+const planeGeometry = new PlaneGeometry()
+
+const mesh = new Mesh(planeGeometry)
+
+// orient the mesh to face in the plane's normal direction
+mesh.lookAt(plane.normal)
+```
+
+Unfortunately, there's not an easy way to get the normal of a plane geometry and involves accessing the geometry's buffer attributes.

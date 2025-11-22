@@ -1,6 +1,6 @@
 ---
 category: '@threlte/core'
-name: useStage
+title: useStage
 sourcePath: 'packages/core/src/lib/hooks/useStage.ts'
 order: 5.2
 ---
@@ -13,7 +13,7 @@ order: 5.2
 The hook `useStage` can be used to create or retrieve a stage.
 Stages are **groups of tasks**. They are executed in a specific order.
 
-## Creating a Stage
+## Creating a stage
 
 `useStage` will create a stage if it does not exist yet, or return the existing
 stage if it does.
@@ -64,7 +64,7 @@ const conditionalStage = useStage('after-render', {
 
 ## Examples
 
-### Implement Performance Profiling
+### Implement performance profiling
 
 This component will implement
 [three-perf](https://www.npmjs.com/package/three-perf). It expects you to call a

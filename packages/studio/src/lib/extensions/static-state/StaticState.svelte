@@ -4,12 +4,12 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { staticStateMetaKey } from '../../config'
-  import { useStudio } from '../../internal/extensions'
-  import { clientRpc } from '../../rpc/clientRpc'
-  import type { Modifier } from '../../types'
-  import { accessors, instances, setValue, StaticState } from './StaticState'
-  import { staticStateScope, type StaticStateActions, type StaticStateState } from './types'
+  import { staticStateMetaKey } from '../../config.js'
+  import { useStudio } from '../../internal/extensions.js'
+  import { clientRpc } from '../../rpc/clientRpc.js'
+  import type { Modifier } from '../../types.js'
+  import { accessors, instances, setValue, StaticState } from './StaticState.js'
+  import { staticStateScope, type StaticStateActions, type StaticStateState } from './types.js'
 
   let { children }: { children?: Snippet } = $props()
 
@@ -89,7 +89,7 @@
       let v = modifier.value
       try {
         v = JSON.parse(v)
-      } catch (error) {
+      } catch {
         // ignore
       }
       options[modifier.name] = v
@@ -97,7 +97,9 @@
     return options
   }
 
-  const buildAutoValueOptions = (state: StaticState, accessor: string) => {
+  const buildAutoValueOptions = (state: StaticState | undefined, accessor: string) => {
+    // In some rare cases, Svelte may provide an undefined state.
+    if (!state) return {}
     const modifiers = findModifiers(state, accessor)
     const options = buildOptionsFromModifiers(modifiers)
     // must be any because of the way the AutoValue component works
@@ -114,7 +116,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={extension.toggleEditor}
+      onclick={extension.toggleEditor}
       active={extension.state.editorEnabled}
       label="Static State"
       icon="mdiAppsBox"
@@ -132,7 +134,7 @@
     y={6 + 60 + 6}
   >
     {#if hasStates}
-      {#each StaticState[instances].entries() as [constructor, ix]}
+      {#each StaticState[instances].entries() as [constructor, ix] (constructor.name)}
         {#if ix.size > 0}
           <Folder title={constructor.name}>
             {@const [instance] = ix}

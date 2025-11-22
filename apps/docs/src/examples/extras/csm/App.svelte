@@ -1,13 +1,13 @@
 <script lang="ts">
-  import { Pane, Slider, Checkbox, Color, Point } from 'svelte-tweakpane-ui'
-  import { Canvas } from '@threlte/core'
+  import { Pane, Slider, Checkbox, Color } from 'svelte-tweakpane-ui'
+  import { Canvas, T } from '@threlte/core'
   import { CSM } from '@threlte/extras'
   import Scene from './Scene.svelte'
 
-  let enabled = true
+  let enabled = $state(true)
   let lightDirection = { x: 1, y: -1, z: 1 }
-  let lightIntensity = Math.PI
-  let lightColor = '#fffceb'
+  let lightIntensity = $state(Math.PI)
+  let lightColor = $state('#fffceb')
 </script>
 
 <Pane
@@ -44,6 +44,10 @@
       {lightColor}
     >
       <Scene />
+
+      {#snippet fallback()}
+        <T.DirectionalLight castShadow={false} />
+      {/snippet}
     </CSM>
   </Canvas>
 </div>

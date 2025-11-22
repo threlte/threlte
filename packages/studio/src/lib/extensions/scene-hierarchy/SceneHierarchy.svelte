@@ -1,16 +1,19 @@
 <script lang="ts">
   import { Element, Pane } from 'svelte-tweakpane-ui'
-  import { type Pane as TpPane } from 'tweakpane'
+  import type { Pane as TpPane } from 'tweakpane'
   import Portal from '../../components/Portal.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions'
+  import { useStudio } from '../../internal/extensions.js'
   import Tree from './Tree.svelte'
   import {
     sceneHierarchyScope,
     type SceneHierarchyActions,
     type SceneHierarchyState
-  } from './types'
+  } from './types.js'
+  import type { Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
 
@@ -51,7 +54,7 @@
   <ToolbarButton
     label="Scene Hierarchy"
     icon="mdiFormatListBulletedSquare"
-    on:click={ext.toggleEnabled}
+    onclick={ext.toggleEnabled}
     active={ext.state.enabled}
   />
 </ToolbarItem>
@@ -72,4 +75,4 @@
   </Portal>
 {/if}
 
-<slot />
+{@render children?.()}

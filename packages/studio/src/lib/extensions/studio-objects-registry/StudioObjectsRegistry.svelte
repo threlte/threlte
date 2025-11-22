@@ -1,11 +1,18 @@
 <script lang="ts">
   import { SvelteSet } from 'svelte/reactivity'
-  import { useStudio } from '../../internal/extensions'
+  import { useStudio } from '../../internal/extensions.js'
   import {
     studioObjectsRegistryScope,
     type StudioObjectsRegistryActions,
     type StudioObjectsRegistryState
-  } from './types'
+  } from './types.js'
+  import type { Snippet } from 'svelte'
+
+  let {
+    children
+  }: {
+    children?: Snippet
+  } = $props()
 
   const { createExtension } = useStudio()
 
@@ -27,4 +34,4 @@
   })
 </script>
 
-<slot />
+{@render children?.()}

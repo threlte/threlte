@@ -1,21 +1,26 @@
 <script lang="ts">
-  import type { IProject } from '@theatre/core'
-  import { getContext, setContext } from 'svelte'
-  import { SequenceController } from '../sequence/SequenceController'
-  import { globalSheets } from '../consts'
-  import type { SheetContext } from './types'
+  import type { IProject, ISheet } from '@theatre/core'
+  import { getContext, setContext, type Snippet } from 'svelte'
+  import { SequenceController } from '../sequence/SequenceController.js'
+  import { globalSheets } from '../consts.js'
+  import type { SheetContext } from './types.js'
 
   // parent context
   export const project = getContext('theatre-project') as IProject
   const projectName = project.address.projectId
 
-  // props
-  export let name = 'default'
-  export let instance: string | undefined = undefined
+  interface Props {
+    // props
+    name?: string
+    instance?: string | undefined
+    sheet?: ISheet
+    children?: Snippet<[{ sheet: ISheet }]>
+  }
+
+  let { name = 'default', sheet = $bindable(), instance = undefined, children }: Props = $props()
 
   // bindings
-  export const sheet =
-    globalSheets.get(`${projectName}-${name}-${instance}`) ?? project.sheet(name, instance)
+  sheet = globalSheets.get(`${projectName}-${name}-${instance}`) ?? project.sheet(name, instance)
 
   // register instance logic
   globalSheets.set(`${projectName}-${name}-${instance}`, sheet)
@@ -29,4 +34,4 @@
   setContext<SheetContext>('theatre-sheet', { sheet, sequences })
 </script>
 
-<slot {sheet} />
+{@render children?.({ sheet })}

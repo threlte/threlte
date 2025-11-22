@@ -1,5 +1,5 @@
 import { createRPCClient } from 'vite-dev-rpc'
-import type { ClientFunctions, ServerFunctions } from './rpc'
+import type { ClientFunctions, ServerFunctions } from './rpc.js'
 import type { BirpcReturn } from 'birpc'
 
 const getClientRpc = () => {

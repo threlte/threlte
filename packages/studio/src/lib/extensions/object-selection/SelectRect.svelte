@@ -4,15 +4,15 @@
   import { Object3D } from 'three'
   import { SelectionBox } from 'three/examples/jsm/interactive/SelectionBox.js'
   import { SelectionHelper } from 'three/examples/jsm/interactive/SelectionHelper.js'
-  import { useStudio } from '../../internal/extensions'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useTransformControls } from '../transform-controls/useTransformControls'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { useTransformControls } from '../transform-controls/useTransformControls.js'
   import {
     objectSelectionScope,
     type ObjectSelectionActions,
     type ObjectSelectionState
-  } from './types'
-  import { useObjectSelection } from './useObjectSelection.svelte'
+  } from './types.js'
+  import { useObjectSelection } from './useObjectSelection.svelte.js'
 
   const { camera, scene, renderer, dom } = useThrelte()
 
@@ -35,7 +35,8 @@
 
   const filter = (objects: Object3D[]): Object3D[] => {
     let objs = objects.filter((object) => {
-      return !studioObjectsRegistry.objects.has(object)
+			const isNotSelectable = object?.userData?.selectable === false
+      return !studioObjectsRegistry.objects.has(object) && !isNotSelectable
     })
     return objs
   }

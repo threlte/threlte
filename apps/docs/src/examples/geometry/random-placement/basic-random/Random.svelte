@@ -10,10 +10,10 @@
   const distinctObjects = 4
   const commonRatio = 0.5
 
-  let randomBushes: number[][] = []
-  let randomTrees: number[][] = []
-  let randomBirchTrees: number[][] = []
-  let randomRocks: number[][] = []
+  let randomBushes: [number, number, number, number][] = []
+  let randomTrees: [number, number, number, number][] = []
+  let randomBirchTrees: [number, number, number, number][] = []
+  let randomRocks: [number, number, number, number][] = []
 
   watch([regen, numberOfObjects], () => {
     generateRandomNumbers()
@@ -27,10 +27,10 @@
       distinctObjects,
       commonRatio
     )
-    const totalBushes = exponentialSumValues[0]
-    const totalTrees = exponentialSumValues[1]
-    const totalBirchTrees = exponentialSumValues[2]
-    const totalRocks = exponentialSumValues[3]
+    const totalBushes = exponentialSumValues[0] ?? 0
+    const totalTrees = exponentialSumValues[1] ?? 0
+    const totalBirchTrees = exponentialSumValues[2] ?? 0
+    const totalRocks = exponentialSumValues[3] ?? 0
 
     randomBushes = []
     randomTrees = []

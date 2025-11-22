@@ -3,8 +3,8 @@
   import { onMount } from 'svelte'
   import * as THREE from 'three'
   import { Raycaster } from 'three'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useObjectSelection } from './useObjectSelection.svelte'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { useObjectSelection } from './useObjectSelection.svelte.js'
 
   const raycaster = new Raycaster()
 
@@ -50,6 +50,10 @@
     while (hit && (isOrIsChildOfStudioObject(hit.object) || isScene(hit.object))) {
       hit = hits.shift()
     }
+
+		if (hit?.object?.userData?.selectable === false) {
+			hit = undefined
+		}
 
     if (event.shiftKey) {
       if (!hit || !hit.object) return

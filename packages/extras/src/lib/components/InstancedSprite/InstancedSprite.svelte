@@ -10,7 +10,7 @@
   } from 'three'
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types'
+  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types.js'
   import SpriteInstance from './SpriteInstance.svelte'
 
   let {
@@ -40,7 +40,6 @@
   const { renderer } = useThrelte()
 
   const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
-  ref = mesh
 
   const animationMap = writable<Map<string, number>>(new Map())
 
@@ -136,6 +135,7 @@
 
 <T
   is={mesh}
+  bind:ref
   frustumCulled={false}
   {...props}
 >

@@ -19,9 +19,9 @@ display info about your WebXR session. This is aliased by `ARButton` and
 -->
 <script lang="ts">
   import type { HTMLButtonAttributes } from 'svelte/elements'
-  import { getXRSupportState } from '../lib/getXRSupportState'
-  import { toggleXRSession } from '../lib/toggleXRSession'
-  import { session, xr } from '../internal/stores'
+  import { getXRSupportState } from '../lib/getXRSupportState.js'
+  import { toggleXRSession } from '../lib/toggleXRSession.js'
+  import { isPresenting, xr } from '../internal/state.svelte.js'
   import type { Snippet } from 'svelte'
 
   type Props = HTMLButtonAttributes & {
@@ -57,7 +57,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
   type SupportState = 'unsupported' | 'insecure' | 'blocked' | 'supported'
 
   const handleButtonClick = async (nativeEvent: MouseEvent, state: SupportState) => {
-    if (!$xr) {
+    if (!xr.current) {
       throw new Error(
         'The <XR> component was not created. This is required to start an XR session.'
       )
@@ -75,7 +75,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     }
   }
 
-  let modeText = $derived(
+  const modeText = $derived(
     {
       'immersive-vr': 'VR',
       'immersive-ar': 'AR',
@@ -83,7 +83,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     }[mode]
   )
 
-  let style = $derived(
+  const style = $derived(
     styled
       ? `
       position: absolute;
@@ -111,7 +111,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     {style}
   >
     {#if children}
-      {@render children?.({ state })}
+      {@render children({ state })}
     {:else if state === 'unsupported'}
       {modeText} unsupported
     {:else if state === 'insecure'}
@@ -119,7 +119,7 @@ display info about your WebXR session. This is aliased by `ARButton` and
     {:else if state === 'blocked'}
       {modeText} blocked
     {:else if state === 'supported'}
-      {$session ? 'Exit' : 'Enter'} {modeText}
+      {isPresenting.current ? 'Exit' : 'Enter'} {modeText}
     {/if}
   </button>
 {/await}

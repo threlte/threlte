@@ -1,0 +1,125 @@
+---
+date: '2025-01-20'
+image: '/images/blog/threlte-8.png'
+author: 'Threlte Team'
+title: 'Threlte 8'
+subtitle: 'The next major release of Threlte'
+---
+
+Today we are releasing **Threlte 8**, a significant milestone that marks a leap
+forward in performance, flexibility, and developer experience. This release has
+been cooking for the last 6 months. We're super excited about the potential it
+unlocks for the next chapter of 3D graphics on the web.
+
+The new features of **Svelte 5** are groundbreaking for us as developers and
+embracing it was also an opportunity to refine the existing APIs. Furthermore, a
+lot has been happening within the world of **Three.js**. We've carved the path
+for Threlte to take advantage of those developments too.
+
+## What's new in Threlte 8?
+
+Threlte 8 is packed with enhancements in `@threlte/core` and updates in all our
+other packages. Here are the highlights:
+
+### All-new `<T>` component
+
+The universal [`<T>` component](/docs/reference/core/t) has been **reduced in
+complexity** all while **adding features and flexibility** that were just not
+possible before.
+
+- Props are now evaluated individually
+- [`attach` got a lot more
+  powerful](/docs/learn/advanced/migration-guides#attach-api--trait-components)
+- [Automatic disposal is more
+  transparent](docs/learn/advanced/migration-guides#automatic-disposal) and
+- [Events have been algined with svelte 5](/docs/learn/advanced/migration-guides#events)
+
+### New `@threlte/extras` components
+
+We've added a lot of new things to play around with in `@threlte/extras` including:
+[`<AsciiRenderer>`](/docs/reference/extras/ascii-renderer),
+[`<CubeCamera>`](/docs/reference/extras/cube-camera),
+[`<MeshDiscardMaterial>`](/docs/reference/extras/discard-material),
+[`<RadialGradientTexture>`](/docs/reference/extras/radial-gradient-texture),
+[`<LinearGradientTexture>`](/docs/reference/extras/linear-gradient-texture),
+[`useViewport`](/docs/reference/extras/use-viewport),
+[`<HUD>`](/docs/reference/extras/hud),
+[`<Resize>`](/docs/reference/extras/resize),
+[`<meshBounds>`](/docs/reference/extras/mesh-bounds),
+[`<Detailed>`](/docs/reference/extras/detailed) and
+[`<View>`](/docs/reference/extras/view).
+
+### Custom type support for `<T>`
+
+Plugins such as
+[`interactivity`](/docs/reference/extras/interactivity#prop-types) now expose
+types which can be added to your ambient type definitions for the `<T>`
+component to pick up. Event handlers and custom `<T>` component objects are now
+type-safe.
+
+### Fixed frame physics
+
+`@threlte/rapier` now supports [fixed frame
+physics](/docs/reference/rapier/framerate) letting you craft simulations with
+predictability and consistency.
+
+### Threlte plugin API
+
+The **Plugin API** got an update to [fully embrace Svelte 5's reactivity
+model](/docs/learn/advanced/migration-guides#plugin-api). The doc page also
+had an update to better introduce the API's capabilities.
+
+### This is the _WebGPU_ way
+
+Threlte 8 introduces a clear path for [using
+WebGPU](/docs/learn/advanced/webgpu). Threlte requires minimal changes to
+projects in order to start using three.js's new WebGPU renderer and we've also
+outlined how to get started with [three's new shading
+language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) -
+TSL.
+
+### A new package appears
+
+An alpha release of [Threlte Studio](/docs/reference/studio/getting-started) is
+part of this release 🎉 It's a step towards visual editing; letting you tweak
+values in browser and then automatically having those changes written into your
+code. Theres a guided tour to help you get started. We hope it helps get things
+where you want them 🚀😀
+
+## How to migrate to Threlte 8
+
+There are breaking changes. Threlte 8 is not backward-compatible but we've
+tried our best to cover the details within our [migration
+guide](/docs/learn/advanced/migration-guides#threlte-8). For further help,
+reach out to us on discord.
+
+## Built with the community, for the community
+
+<img
+  width="200"
+  src="/threlte-8-diff.png"
+  alt="THrelte8Diff"
+/>
+
+This rewrite was a team effort with great contributions from the community.
+Thank you to everyone who tested out any of our `@next` releases. We're immensely
+grateful for the time, talent, and passion of our community. You guys rock 😃
+
+## What's next?
+
+We decided to deprecate the `npm create threlte` command. We're excited about
+Svelte's new `sv` CLI to incorporate third party packages and we're going to
+offer Threlte as a package to be installed with `sv` in the near future.
+
+We'd love to hear about what everyone makes with Threlte 8! Take it for a spin,
+explore the new documentation, and start building your next 3D application with
+the super powers of Threlte 8 🎉
+
+<div class="mt-12 flex justify-center">
+  <a
+    href="/docs/learn/getting-started/introduction"
+    class="bg-orange glow-orange hover:glow-orange-400 group flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center hover:bg-orange-400 hover:no-underline"
+  >
+    <p class="text-white! no-underline! my-0 text-lg">Start Building →</p>
+  </a>
+</div>

@@ -5,14 +5,17 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useTransactions } from '../transactions/useTransactions'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { useTransactions } from '../transactions/useTransactions.js'
   import AxesHelper from './AxesHelper.svelte'
   import GroupHelper from './GroupHelper.svelte'
   import Mounter from './Mounter.svelte'
-  import { helpersScope, type HelpersActions, type HelpersState } from './types'
+  import { helpersScope, type HelpersActions, type HelpersState } from './types.js'
+  import type { Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { autoRenderTask } = useThrelte()
   const { createExtension } = useStudio()
@@ -77,7 +80,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={ext.toggleEnabled}
+      onclick={ext.toggleEnabled}
       active={ext.state.enabled}
       label="Helpers"
       icon="mdiFitToScreen"
@@ -157,4 +160,4 @@
   {/each}
 {/if}
 
-<slot />
+{@render children?.()}

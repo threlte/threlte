@@ -1,38 +1,82 @@
-import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
-import { useTeleportControls } from './context'
+import { injectPlugin, isInstanceOf } from '@threlte/core'
+import { useTeleportControls } from './context.js'
+import type { Mesh } from 'three'
 
 /**
  * Registers T components with "teleportSurface" or "teleportBlocker" attributes.
  */
 export const injectTeleportControlsPlugin = (): void => {
-  injectPlugin('threlte-teleport-controls', (args) => {
+  injectPlugin('threlte-teleport-controls-surfaces', (args) => {
     if (!isInstanceOf(args.ref, 'Mesh')) return
+    if (!('teleportSurface' in args.props)) return
 
-    const isSurface = $derived('teleportSurface' in args.props && !!args.props.teleportSurface)
-    const isBlocker = $derived('teleportBlocker' in args.props && !!args.props.teleportBlocker)
+    let ref = $state<Mesh | undefined>(args.ref)
+    let isSurface = $state<boolean>(args.props.teleportSurface)
 
-    const surfaceRef = $derived(isSurface ? args.ref : undefined)
-    const blockerRef = $derived(isBlocker ? args.ref : undefined)
+    const { addSurface, removeSurface } = useTeleportControls()
 
-    if (!isSurface && !isBlocker) return
+    $effect(() => {
+      if (!ref) return
 
-    const { addBlocker, addSurface, removeBlocker, removeSurface } = useTeleportControls()
+      const mesh = ref
 
-    observe.pre(
-      () => [surfaceRef, blockerRef],
-      ([surfaceRef, blockerRef]) => {
-        if (surfaceRef) {
-          addSurface(surfaceRef, args.props)
-          return removeSurface(surfaceRef)
-        } else if (blockerRef) {
-          addBlocker(blockerRef)
-          return removeBlocker(blockerRef)
-        }
+      if (isSurface) {
+        addSurface(mesh, args.props)
+      } else {
+        removeSurface(mesh)
       }
-    )
+
+      return () => removeSurface(mesh)
+    })
 
     return {
-      pluginProps: ['teleportSurface', 'teleportBlocker']
+      pluginProps: ['teleportSurface'],
+      onRefChange: (nextRef: Mesh) => {
+        ref = nextRef
+        return () => {
+          ref = undefined
+        }
+      },
+      onPropsChange: (props: { teleportSurface: boolean }) => {
+        isSurface = props.teleportSurface
+      }
+    }
+  })
+
+  injectPlugin('threlte-teleport-controls-blockers', (args) => {
+    if (!isInstanceOf(args.ref, 'Mesh')) return
+    if (!('teleportBlocker' in args.props)) return
+
+    let ref = $state<Mesh | undefined>(args.ref)
+    let isBlocker = $state<boolean>(args.props.teleportBlocker)
+
+    const { addBlocker, removeBlocker } = useTeleportControls()
+
+    $effect(() => {
+      if (!ref) return
+
+      const mesh = ref
+
+      if (isBlocker) {
+        addBlocker(mesh)
+      } else {
+        removeBlocker(mesh)
+      }
+
+      return () => removeBlocker(mesh)
+    })
+
+    return {
+      pluginProps: ['teleportBlocker'],
+      onRefChange: (nextRef: Mesh) => {
+        ref = nextRef
+        return () => {
+          ref = undefined
+        }
+      },
+      onPropsChange: (props: { teleportBlocker: boolean }) => {
+        isBlocker = props.teleportBlocker
+      }
     }
   })
 }

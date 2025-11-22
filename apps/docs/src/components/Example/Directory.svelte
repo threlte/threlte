@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
-  import type { Writable } from 'svelte/store'
-  import FileComponent from './File.svelte'
-  import type { Directory, File } from './types'
+  import Self from './Directory.svelte'
+  import File from './File.svelte'
+  import type { Directory } from './types'
 
-  export let directory: Directory
-  export let showDirectoryName = true
-  export let expanded = true
-  export let currentlySelectedFile: Writable<File>
-
-  function toggle() {
-    expanded = !expanded
+  interface Props {
+    directory: Directory
+    showDirectoryName?: boolean
+    expanded?: boolean
   }
+
+  let { directory, showDirectoryName = true, expanded = $bindable(true) }: Props = $props()
 
   const sortedFiles = directory.files.sort((a, b) => {
     if (a.type === 'directory' && b.type === 'file') {
@@ -27,10 +25,12 @@
 {#if showDirectoryName}
   <button
     class:expanded
-    on:click={toggle}
+    onclick={() => {
+      expanded = !expanded
+    }}
     class="flex flex-row items-center gap-1 font-bold"
   >
-    <div class="[&>*]:w-[1em]">
+    <div class="*:w-[1em]">
       {#if expanded}
         <svg
           viewBox="0 0 33 33"
@@ -80,10 +80,10 @@
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 1 16 16"
-      class={c(
+      class={[
         'ml-1 h-[1em] w-[1em] translate-y-px rotate-0 transition-all duration-200',
         expanded && '-translate-y-px rotate-90'
-      )}
+      ]}
       aria-hidden="true"
     >
       <path
@@ -96,24 +96,18 @@
 {/if}
 
 <ul
-  class={c(
+  class={[
     'list-none',
     !expanded && 'hidden',
     showDirectoryName && 'ml-1.5 border-l border-white/20 pl-3'
-  )}
+  ]}
 >
   {#each sortedFiles as file}
-    <li class={c('my-1 list-outside pl-0')}>
+    <li class="my-1 list-outside pl-0">
       {#if file.type === 'directory'}
-        <svelte:self
-          directory={file}
-          {currentlySelectedFile}
-        />
+        <Self directory={file} />
       {:else}
-        <FileComponent
-          {file}
-          {currentlySelectedFile}
-        />
+        <File {file} />
       {/if}
     </li>
   {/each}

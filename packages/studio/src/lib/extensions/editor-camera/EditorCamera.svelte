@@ -1,19 +1,21 @@
 <script lang="ts">
   import { observe, T, useThrelte, watch } from '@threlte/core'
   import type CC from 'camera-controls'
-  import { onDestroy } from 'svelte'
+  import { onDestroy, type Snippet } from 'svelte'
   import { Checkbox, RadioGrid } from 'svelte-tweakpane-ui'
   import { Box3, OrthographicCamera, PerspectiveCamera, Sphere, Vector3 } from 'three'
   import DropDownPane from '../../components/DropDownPane.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
   import CameraControls from './CameraControls.svelte'
   import DefaultCamera from './DefaultCamera.svelte'
-  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
+  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types.js'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
   const { camera } = useThrelte()
@@ -154,7 +156,7 @@
 <ToolbarItem position="left">
   <HorizontalButtonGroup>
     <ToolbarButton
-      on:click={extension.toggleEnabled}
+      onclick={extension.toggleEnabled}
       active={editorCameraEnabled}
       label="Editor Camera"
       icon="mdiCamera"
@@ -162,7 +164,7 @@
     />
 
     <ToolbarButton
-      on:click={extension.focusSelectedObjects}
+      onclick={extension.focusSelectedObjects}
       disabled={objectSelection.selectedObjects.length === 0}
       label="Focus Selected"
       icon="mdiImageFilterCenterFocusStrongOutline"
@@ -227,4 +229,4 @@
   {/if}
 {/if}
 
-<slot />
+{@render children?.()}

@@ -1,5 +1,73 @@
 # @threlte/extras
 
+## 3.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 3.0.7
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 3.0.6
+
+### Patch Changes
+
+- 9d3de86: Make sheet bindable
+
+## 3.0.5
+
+### Patch Changes
+
+- 9d8c56c: Migrate components to runes mode
+
+## 3.0.4
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
+## 3.0.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 3.0.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 3.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 3.0.0
+
+### Major Changes
+
+- 1fb46bd: Refactor theatre types to auto generated component type definitions
+- f25685a: Experimental Svelte 5 compatibility
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+
 ## 3.0.0-next.11
 
 ### Patch Changes

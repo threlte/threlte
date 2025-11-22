@@ -2,8 +2,8 @@
   import type { RigidBody } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { Group, Vector3 } from 'three'
-  import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProps } from './types'
+  import { useRapier } from '../../hooks/useRapier.js'
+  import type { AttractorProps } from './types.js'
 
   let {
     strength = 1,
@@ -20,9 +20,9 @@
   const group = new Group()
 
   const calcForceByType = {
-    static: (s: number, m2: number, r: number, d: number, G: number): number => s,
-    linear: (s: number, m2: number, r: number, d: number, G: number) => s * (d / r),
-    newtonian: (s: number, m2: number, r: number, d: number, G: number) =>
+    static: (s: number, _m2: number, _r: number, _d: number, _G: number): number => s,
+    linear: (s: number, _m2: number, r: number, d: number, _G: number) => s * (d / r),
+    newtonian: (s: number, m2: number, _r: number, d: number, G: number) =>
       (G * s * m2) / Math.pow(d, 2)
   }
 

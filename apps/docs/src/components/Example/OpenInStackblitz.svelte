@@ -2,7 +2,11 @@
   import { files as projectTemplate } from './stackblitz-template'
   import sdk from '@stackblitz/sdk'
 
-  export let files: Record<string, string>
+  interface Props {
+    files: Record<string, string>
+  }
+
+  let { files }: Props = $props()
 
   const projectFiles: Record<string, string> = {}
   for (const path in files) {
@@ -10,7 +14,7 @@
     projectFiles[newPath] = files[path] as string
   }
 
-  const onClick = () => {
+  const onclick = () => {
     sdk.openProject(
       {
         title: 'Some title',
@@ -29,12 +33,12 @@
 </script>
 
 <button
-  class="rounded-sm border border-orange/5 bg-orange-800/50 px-2 py-1 text-sm text-orange hover:bg-orange-800/70 hover:text-orange-400 hover:underline focus:outline-none"
-  on:click={onClick}
+  class="rounded-xs border-orange/5 text-orange focus:outline-hidden border bg-orange-800/50 px-2 py-1 text-sm hover:bg-orange-800/70 hover:text-orange-400 hover:underline"
   aria-label="open in stackblitz"
+  {onclick}
 >
   <svg
-    class="[&>*]:!fill-current"
+    class="*:fill-current!"
     width="99"
     height="20"
     viewBox="0 0 99 20"

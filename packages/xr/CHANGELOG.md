@@ -1,5 +1,102 @@
 # @threlte/xr
 
+## 1.2.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 1.1.1
+
+### Patch Changes
+
+- c351b20: Improve internal types
+
+## 1.1.0
+
+### Minor Changes
+
+- 40c52ae: Migrate internals to runes
+
+## 1.0.8
+
+### Patch Changes
+
+- 05a642f: Simplify internal components and replace deprecated svelte APIs
+
+## 1.0.7
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
+## 1.0.6
+
+### Patch Changes
+
+- 183eb5a: Fix pointer controls still sending pointerdown/pointerup/click events when disabled
+
+## 1.0.5
+
+### Patch Changes
+
+- 3798493: Fix an issue where the XR session was left presenting after navigating away from the Threlte scene
+
+## 1.0.4
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 1.0.3
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 1.0.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 1.0.1
+
+### Patch Changes
+
+- fa5c4e9: Fixed a check for secure contexts that previously prevented WebXR apps from running on localhost
+
+## 1.0.0
+
+### Major Changes
+
+- f25685a: Experimental Svelte 5 compatibility
+
+### Patch Changes
+
+- b8ea70d: Fix teleport plugin
+- b7e6927: Adapt new core Attachment API
+- b7045f5: Svelte dependency update
+- 6016286: Adapt plugins to new plugin API
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 7cc5701: Remove raw event dispatching
+- 995e592: Implement type guard utility, clean up
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- 2107848: Fix xr events and migrate remaining slots to snippets
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+
+## 1.0.0-next.16
+
+### Patch Changes
+
+- b8ea70d: Fix teleport plugin
+
 ## 1.0.0-next.15
 
 ### Patch Changes

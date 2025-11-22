@@ -1,0 +1,63 @@
+---
+order: 5.92
+category: '@threlte/extras'
+title: '<Wireframe>'
+sourcePath: 'packages/extras/src/lib/components/Wireframe/Wireframe.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'simplify', type: 'boolean', default: 'false', required: false },
+        { name: 'thickness', type: 'number', default: '0.05', required: false },
+        { name: 'squeeze', type: 'boolean', default: 'false', required: false },
+        { name: 'squeezeMin', type: 'number', default: '0.2', required: false },
+        { name: 'squeezeMax', type: 'number', default: '1', required: false },
+        {
+          name: 'stroke',
+          type: 'THREE.ColorRepresentation',
+          default: '"#ff0000"',
+          required: false
+        },
+        {
+          name: 'backfaceStroke',
+          type: 'THREE.ColorRepresentation',
+          default: '"#0000ff"',
+          required: false
+        },
+        { name: 'strokeOpacity', type: 'number', default: '1', required: false },
+        { name: 'fill', type: 'THREE.ColorRepresentation', default: '"#00ff00"', required: false },
+        { name: 'fillOpacity', type: 'number', default: '0', required: false },
+        { name: 'fillMix', type: 'number', default: '0', required: false },
+        { name: 'colorBackfaces', type: 'boolean', default: 'false', required: false },
+        { name: 'dash', type: 'boolean', default: 'false', required: false },
+        { name: 'dashRepeats', type: 'number', default: '4', required: false },
+        { name: 'dashLength', type: 'number', default: '0.5', required: false },
+        { name: 'dashInvert', type: 'boolean', default: 'true', required: false },
+        { name: 'fillOpacity', type: 'number', default: 'false', required: false }
+      ]
+  }
+---
+
+`<Wireframe>` patches the material of its parent to render an antialiased, shader based wireframe on a geometry.
+
+<Example path="extras/wireframe" />
+
+`<Wireframe>` uses barycentric coordinates to generate the wireframe, which requires a non-indexed geometry to create.
+
+This means that any geometry with a `<Wireframe>` that has indices will be converted to a non-indexed version.
+
+## Basic Example
+
+```svelte title="Wireframe.svelte"
+<script>
+  import { T } from '@threlte/core'
+  import { Wireframe } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+  <Wireframe />
+</T.Mesh>
+```

@@ -3,15 +3,26 @@
   import { Align, OrbitControls, RoundedBoxGeometry, TransformControls } from '@threlte/extras'
   import { Box3, type Vector3 } from 'three'
 
-  export let x: number = 0
-  export let y: number = 0
-  export let z: number = 0
-  export let precise: boolean = false
-  export let showSphere: boolean = false
-  export let autoAlign: boolean = false
+  interface Props {
+    x?: number
+    y?: number
+    z?: number
+    precise?: boolean
+    showSphere?: boolean
+    autoAlign?: boolean
+  }
+
+  let {
+    x = 0,
+    y = 0,
+    z = 0,
+    precise = false,
+    showSphere = false,
+    autoAlign = false
+  }: Props = $props()
 
   let box = new Box3()
-  let center: Vector3 | undefined
+  let center = $state<Vector3>()
 </script>
 
 <T.PerspectiveCamera

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 declare global {
@@ -11,4 +12,4 @@ declare global {
   }
 }
 
-export * from './index'
+export * from './index.js'

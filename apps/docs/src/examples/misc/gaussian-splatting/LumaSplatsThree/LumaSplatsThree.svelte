@@ -62,9 +62,9 @@
     { autoStart: false }
   )
 
-  let previousEnvironment: Scene['environment'] = $state(null)
-  let previousBackground: Scene['background'] = $state(null)
-  let previousBackgroundBluriness: Scene['backgroundBlurriness'] = $state()
+  let previousEnvironment = $state<Scene['environment']>(null)
+  let previousBackground = $state<Scene['background']>(null)
+  let previousBackgroundBluriness = $state<Scene['backgroundBlurriness']>()
 
   $effect(() => {
     if ($splats && $splats[1]) {
@@ -82,7 +82,7 @@
     if (captureCubemap) {
       scene.environment = previousEnvironment
       scene.background = previousBackground
-      scene.backgroundBlurriness = previousBackgroundBluriness
+      scene.backgroundBlurriness = previousBackgroundBluriness ?? 0
       invalidate()
     }
   })
@@ -90,12 +90,12 @@
 
 {#if (mode === 'object' || mode === 'object-env') && $splats && $splats[0]}
   <T
-    dispose={false}
     is={$splats[0]}
     oncreate={() => {
       start()
     }}
     {...rest}
+    dispose={false}
   >
     {@render children?.({ ref: $splats[0] })}
   </T>

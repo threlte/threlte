@@ -14,7 +14,7 @@
   } from 'three'
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
-  import type { ContactShadowsProps } from './types'
+  import type { ContactShadowsProps } from './types.js'
 
   let {
     opacity = 1,
@@ -36,7 +36,6 @@
   const { scene, renderer } = useThrelte()
 
   const group = new Group()
-
   const scaledWidth = $derived(width * (Array.isArray(scale) ? scale[0] : scale || 1))
   const scaledHeight = $derived(height * (Array.isArray(scale) ? scale[1] : scale || 1))
 

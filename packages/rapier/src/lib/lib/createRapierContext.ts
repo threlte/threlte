@@ -8,9 +8,9 @@ import RAPIER from '@dimforge/rapier3d-compat'
 import { currentWritable, type Key, type Stage } from '@threlte/core'
 import { derived, writable } from 'svelte/store'
 import type { Object3D } from 'three'
-import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types'
-import { createPhysicsStages } from './createPhysicsStages'
-import { createPhysicsTasks } from './createPhysicsTasks'
+import type { ColliderEvents, Framerate, RapierContext, RigidBodyEvents } from '../types/types.js'
+import { createPhysicsStages } from './createPhysicsStages.js'
+import { createPhysicsTasks } from './createPhysicsTasks.js'
 
 export const createRapierContext = (
   worldArgs: ConstructorParameters<typeof RAPIER.World>,

@@ -10,9 +10,9 @@
     Vector3
   } from 'three'
   import { T, useTask } from '@threlte/core'
-  import type { StarsProps } from './types'
-  import { fragmentShader } from './fragment'
-  import { vertexShader } from './vertex'
+  import type { StarsProps } from './types.js'
+  import { fragmentShader } from './fragment.js'
+  import { vertexShader } from './vertex.js'
 
   let {
     count = 5000,
@@ -41,14 +41,15 @@
     )
   }
 
-  let positions = new BufferAttribute(new Float32Array(count * 3), 3)
-  let colors = new BufferAttribute(new Float32Array(count * 3), 3)
-  let sizes = new BufferAttribute(new Float32Array(count), 1)
+  const geometry = new BufferGeometry()
+  const positions = $derived(new BufferAttribute(new Float32Array(count * 3), 3))
+  const colors = $derived(new BufferAttribute(new Float32Array(count * 3), 3))
+  const sizes = $derived(new BufferAttribute(new Float32Array(count), 1))
 
   $effect.pre(() => {
-    positions = new BufferAttribute(new Float32Array(count * 3), 3)
-    colors = new BufferAttribute(new Float32Array(count * 3), 3)
-    sizes = new BufferAttribute(new Float32Array(count), 1)
+    geometry.setAttribute('position', positions)
+    geometry.setAttribute('color', colors)
+    geometry.setAttribute('size', sizes)
   })
 
   $effect.pre(() => {
@@ -96,11 +97,6 @@
   $effect.pre(() => {
     uniforms.opacity.value = opacity
   })
-
-  const geometry = new BufferGeometry()
-  geometry.setAttribute('position', positions)
-  geometry.setAttribute('color', colors)
-  geometry.setAttribute('size', sizes)
 </script>
 
 <T

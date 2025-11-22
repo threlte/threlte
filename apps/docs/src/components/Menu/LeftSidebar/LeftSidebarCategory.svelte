@@ -1,18 +1,19 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import Details from '../Details.svelte'
 
-  export let category: LeftSidebarMenuCategory
-  export let activeUrlPathName: string
+  interface Props {
+    category: LeftSidebarMenuCategory
+    activeUrlPathName: string
+  }
+
+  let { category, activeUrlPathName }: Props = $props()
 
   let open = true
 
-  const isEqual = (a: string, b: string) => {
-    a = a.startsWith('/') ? a.slice(1) : a
-    a = a.endsWith('/') ? a.slice(0, -1) : a
-    b = b.startsWith('/') ? b.slice(1) : b
-    b = b.endsWith('/') ? b.slice(0, -1) : b
-    return a === b
+  const trim = (x: string) => {
+    x = x.startsWith('/') ? x.slice(1) : x
+    x = x.endsWith('/') ? x.slice(0, -1) : x
+    return x
   }
 </script>
 
@@ -20,11 +21,11 @@
   {open}
   id="sidebar-category-{category.title}"
 >
-  <svelte:fragment slot="summary">
+  {#snippet summary()}
     {category.title}
-  </svelte:fragment>
+  {/snippet}
 
-  <ul class="text-faded my-2">
+  <ul class="my-2">
     {#each category.menuItems as item}
       {#if item.isDivider}
         <div
@@ -33,16 +34,15 @@
           {item.title}
         </div>
       {:else}
-        <li class="last:mb-0">
-          <a
-            class={c(
-              'group relative block border-l-2 py-1 pl-4 pr-4 hover:text-white',
-              isEqual(activeUrlPathName, `${category.urlPrefix}/${item.slug}`)
-                ? 'border-orange font-bold text-orange'
-                : 'border-white/20 hover:border-white'
-            )}
-            href={`${category.urlPrefix}/${item.slug}`}
-          >
+        <li
+          class={[
+            'sidebar-list-item',
+            trim(activeUrlPathName) === trim(`${category.urlPrefix}/${item.slug}`)
+              ? 'border-orange! text-orange font-bold'
+              : 'text-faded'
+          ]}
+        >
+          <a href={`${category.urlPrefix}/${item.slug}`}>
             {item.title}
           </a>
         </li>

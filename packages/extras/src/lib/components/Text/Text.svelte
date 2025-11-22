@@ -1,21 +1,21 @@
 <script lang="ts">
-  import { T, useThrelte } from '@threlte/core'
+  import { observe, T, useThrelte } from '@threlte/core'
   import { tick } from 'svelte'
-  import { preloadFont, Text } from 'troika-three-text'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { TextProps } from './types'
+  import { preloadFont, Text as TroikaText } from 'troika-three-text'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import type { TextProps } from './types.js'
 
   let {
-    font,
-    characters,
-    sdfGlyphSize,
+    font = null,
+    characters = null,
+    sdfGlyphSize = null,
     ref = $bindable(),
     onsync,
     children,
     ...props
   }: TextProps = $props()
 
-  const text = new Text()
+  const text = new TroikaText()
 
   const { invalidate } = useThrelte()
 
@@ -27,10 +27,47 @@
     })
   }
 
-  $effect.pre(() => {
-    props
-    onUpdate()
-  })
+  const propsToListenTo = [
+    'text',
+    'anchorX',
+    'anchorY',
+    'curveRadius',
+    'direction',
+    'font',
+    'fontSize',
+    'letterSpacing',
+    'lineHeight',
+    'maxWidth',
+    'overflowWrap',
+    'textAlign',
+    'textIndent',
+    'whiteSpace',
+    'material',
+    'color',
+    'depthOffset',
+    'clipRect',
+    'glyphGeometryDetail',
+    'sdfGlyphSize',
+    'outlineWidth',
+    'outlineColor',
+    'outlineOpacity',
+    'outlineBlur',
+    'outlineOffsetX',
+    'outlineOffsetY',
+    'strokeWidth',
+    'strokeColor',
+    'strokeOpacity',
+    'fillOpacity',
+    'characters',
+    'colorRanges'
+  ]
+
+  observe(
+    () => propsToListenTo.map((key) => props[key]) as [any, ...any[]],
+    () => {
+      onUpdate()
+    }
+  )
 
   const suspend = useSuspense()
 

@@ -3,15 +3,16 @@
   "compilerOptions": {
     "noErrorTruncation": true,
     "strict": true,
-    "paths": {
-      "$lib": ["./src/lib"],
-      "$lib/*": ["./src/lib/*"],
-      "threlte": ["./src/lib/index.ts"],
-      "threlte/*": ["./src/lib/*"],
-      "$components": ["./src/components"],
-      "$components/*": ["./src/components/*"],
-      "$examples": ["./src/examples"],
-      "$examples/*": ["./src/examples/*"]
-    }
+    "skipLibCheck": true,
+    "verbatimModuleSyntax": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext"
   }
 }

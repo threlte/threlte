@@ -4,24 +4,21 @@ title: App Structure
 order: -900
 ---
 
-Threlte makes heavy use of [Svelte's Context
-API](https://svelte.dev/tutorial/context-api) as a way to pass data through the
-component tree without having to pass props down manually at every level:
+Threlte uses Svelte's [Context API](https://svelte.dev/tutorial/svelte/context-api) to share `renderer`, `camera`, [and others](/docs/reference/core/use-threlte#usage) to any child component.
+Hooks like `useThrelte()` read from this context, so anything that needs it must be inside `<Canvas>`.
 
 ```svelte title="SomeComponent.svelte"
 <script>
+  import { useThrelte } from '@threlte/core'
+
   const { camera, renderer } = useThrelte()
 </script>
 ```
 
-To let Threlte do its magic, we recommend to follow our best practices for
-structuring your app.
+## Recommended app structure
 
-## Recommended App Structure
-
-The [`<Canvas>`](/docs/reference/core/canvas) component provides all basic contexts in a Threlte application.
-The recommended app structure is to have a single child component of `<Canvas>` (typically named "Scene.svelte" in examples) for
-your Threlte app. This will allow contexts provided by `useThrelte` and other hooks to be used.
+Wrap your 3D app in a single `<Canvas>` and give it one direct child: `Scene.svelte`.
+Put all 3D content under that node to access Threlte hooks.
 
 ```svelte title="App.svelte"
 <script>
@@ -41,7 +38,7 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
   import Player from './Player.svelte'
   import World from './World.svelte'
 
-  let rotation = 0
+  let rotation = $state(0)
 
   // useTask is relying on a context provided
   // by <Canvas>. Because we are definitely *inside*
@@ -64,7 +61,7 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 <World />
 ```
 
-## Context Not Available
+## Context not available
 
 <Tip type="danger">
 	The following app structure is deceiving. It looks like it should work, but **it
@@ -89,4 +86,114 @@ your Threlte app. This will allow contexts provided by `useThrelte` and other ho
 <Canvas>
   <T.Mesh rotation.y={rotation} />
 </Canvas>
+```
+
+## Using a single `<Canvas>`
+
+In a larger Svelte app or when using SvelteKit, prefer a single `<Canvas>` to avoid the WebGL error
+“Too many active WebGL contexts. Oldest context will be lost.”
+We can use [Svelte 5
+Snippets](https://svelte.dev/docs/svelte/snippet) to easily _portal_ our 3D
+content to a global `<Canvas>`. For that, let's first create a component that
+renders portal content:
+
+```svelte title="src/lib/components/CanvasPortalTarget.svelte"
+<script
+  lang="ts"
+  module
+>
+  import type { Snippet } from 'svelte'
+  import { SvelteSet } from 'svelte/reactivity'
+  let snippets = new SvelteSet<Snippet>()
+
+  export const addCanvasPortalSnippet = (snippet: Snippet) => {
+    snippets.add(snippet)
+  }
+
+  export const removeCanvasPortalSnippet = (snippet: Snippet) => {
+    snippets.delete(snippet)
+  }
+</script>
+
+{#each snippets as snippet}
+  {@render snippet()}
+{/each}
+```
+
+Then implement this component in the root +layout.svelte component:
+
+```svelte title="src/routes/+layout.svelte"
+<script lang="ts">
+  import CanvasPortalTarget from '$lib/components/CanvasPortalTarget.svelte'
+  import { Canvas } from '@threlte/core'
+  import type { Snippet } from 'svelte'
+
+  let { children }: { children: Snippet } = $props()
+</script>
+
+<div>
+  <Canvas>
+    <CanvasPortalTarget />
+  </Canvas>
+</div>
+
+{@render children()}
+
+<style>
+  div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>
+```
+
+All we need is another component that we can utilize to easily portal 3D content
+into the global canvas:
+
+```svelte title="src/lib/components/CanvasPortal.svelte"
+<script lang="ts">
+  import {
+    addCanvasPortalSnippet,
+    removeCanvasPortalSnippet
+  } from '$lib/components/CanvasPortalTarget.svelte'
+  import { onDestroy, type Snippet } from 'svelte'
+
+  let { children }: { children: Snippet } = $props()
+
+  addCanvasPortalSnippet(children)
+
+  onDestroy(() => {
+    removeCanvasPortalSnippet(children)
+  })
+</script>
+```
+
+Now we can use this component to portal 3D content into the global canvas from
+anywhere in our app all while using regular DOM elements alongside our 3D
+content:
+
+```svelte title="src/routes/+page.svelte"
+<script lang="ts">
+  import CanvasPortal from '$lib/components/CanvasPortal.svelte'
+  import { T } from '@threlte/core'
+</script>
+
+<!-- Regular DOM elements for UI -->
+<button>Click me</button>
+
+<!-- 3D content -->
+<CanvasPortal>
+  <T.PerspectiveCamera
+    position.z={10}
+    makeDefault
+  />
+
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshBasicMaterial color="red" />
+  </T.Mesh>
+</CanvasPortal>
 ```

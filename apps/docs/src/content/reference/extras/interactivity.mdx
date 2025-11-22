@@ -1,8 +1,8 @@
 ---
-order: 3.5
+order: 2.5
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/interactivity'
-name: 'interactivity'
+title: 'interactivity'
 type: 'plugin'
 ---
 
@@ -35,7 +35,7 @@ All child components can now make use of the new events.
 </T.Mesh>
 ```
 
-## Available Events
+## Available events
 
 The following interaction events are available:
 
@@ -56,7 +56,7 @@ The following interaction events are available:
 />
 ```
 
-## Event Data
+## Event data
 
 All interaction events contain the following data:
 
@@ -75,7 +75,7 @@ type Event = THREE.Intersection & {
 }
 ```
 
-## Event Propagation
+## Event propagation
 
 Propagation works a bit differently to the DOM because objects can occlude each other in 3D.
 The intersections array in the event data includes all objects intersecting the ray, not just the
@@ -99,7 +99,7 @@ even if you don't want this object to respond to the pointer event. If you do wa
 event as well as using `stopPropagation()`, remember that the `pointerout` events will happen during
 the `stopPropagation()` call. You probably want your other event handling to happen after this.
 
-## Interactivity Event Target
+## Event targets
 
 If no event target is specified, all event handlers listen to events on the `domElement` of the
 `renderer` (which is the canvas element by default). You can specify a different target by passing
@@ -130,7 +130,7 @@ It's also possible to change the target at runtime by updating the store `target
 </script>
 ```
 
-## Interactivity Event Compute
+## Compute function
 
 In the event that your event target is not the same size as the canvas, you can pass a `compute` function
 to the `interactivity` plugin. This function receives the DOM event and the interactivity state and should
@@ -150,6 +150,8 @@ as set the raycaster up for raycasting.
       state.pointer.update((p) => {
         p.x = (event.clientX / window.innerWidth) * 2 - 1
         p.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+        return p
       })
 
       // Update the raycaster
@@ -159,7 +161,7 @@ as set the raycaster up for raycasting.
 </script>
 ```
 
-## Interactivity Event Filtering
+## Event filtering
 
 You can filter and sort events by passing a `filter` to the `interactivity` plugin. The function receives all hits and the interactivity state and should return the hits that should be delivered to the event handlers in the order they should be delivered.
 
@@ -176,7 +178,7 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
-## Interactivity State
+## Interactivity state
 
 To access the interactivity state, you can use the `useInteractivity` hook in any child component of the component that implements the `interactivity` plugin as follows:
 
@@ -217,7 +219,7 @@ export type State = {
 
 ## TypeScript
 
-### Prop Types
+### Prop types
 
 By default, the `interactivity` plugin does not add any prop types to the `<T>`
 component. You can however extend the types of the `<T>` component by defining

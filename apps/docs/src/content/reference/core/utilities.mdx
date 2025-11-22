@@ -1,6 +1,6 @@
 ---
 category: '@threlte/core'
-name: Utilities
+title: Utilities
 sourcePath: 'packages/core/src/lib/lib/storeUtils.ts'
 order: 6.2
 ---
@@ -98,7 +98,7 @@ used in `await` expressions and `{#await}` blocks of Svelte.
     // Do something async
   }
   const store = asyncWritable(asyncOperation())
-  $: console.log($store) // asyncOperation result
+  $inspect($store)
 </script>
 
 <h1>
@@ -124,8 +124,7 @@ and the error can be accessed via the `error` property of the store which is als
   const store = asyncWritable(asyncOp())
   const error = store.error
 
-  $: console.log($store) // undefined
-  $: console.log($error) // Error: Something went wrong
+  $inspect($store, $error)
 </script>
 ```
 

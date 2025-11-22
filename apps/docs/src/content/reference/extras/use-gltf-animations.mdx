@@ -1,12 +1,12 @@
 ---
-order: 4.2
+order: 1.13
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/hooks/useGltfAnimations.ts'
-name: useGltfAnimations
+title: useGltfAnimations
 type: 'hook'
 ---
 
-Convenience hook to use animations loaded with a `<GLTF>` Threlte component or the `useGltf` hook.
+A convenience hook to use gltf animations loaded by a [\<GLTF>](/docs/reference/extras/gltf) component or by the [`useGltf`](/docs/reference/extras/use-gltf) hook.
 
 <Example path="extras/use-gltf-animations" />
 
@@ -17,47 +17,40 @@ Convenience hook to use animations loaded with a `<GLTF>` Threlte component or t
 
 ## Examples
 
-### Basic
+### With the `<GLTF>` component
+
+Without any arguments, `useGltfAnimations` returns a store which can be bound to the `<GLTF>` component.
 
 ```svelte
 <script lang="ts">
   import { GLTF, useGltfAnimations } from '@threlte/extras'
-  // `useGltfAnimations` returns stores that populate
-  // when the `<GLTF>` component finished loading.
-  const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>()
 
-  // Play them whenever you need
+  const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>()
+  mixer.timeScale = 0.5
+
   export const triggerAnimation = () => {
-    if ($mixer) {
-      $mixer.timeScale = 0.5
-    }
     $actions['All Animations']?.play()
   }
 </script>
 
-<!-- Bind the store `gltf` -->
 <GLTF
-  url="/Bengal.glb"
+  url="/path/to/model.glb"
   bind:gltf={$gltf}
 />
 ```
 
-### Using the `useGltf` Hook
+### With the `useGltf` hook
 
-Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-gltf) to reuse parts of a model or use the embedded camera. In this case, the hook `useGltf` returns an object with a property `gltf` which you can pass as the first argument to the hook `useGltfAnimations`.
+For cases where you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, `useGltfAnimations` accepts a writable store as its first argument. [`useGltf`](/docs/reference/extras/use-gltf) returns a store that can be directly passed to `useGltfAnimations`.
 
 ```svelte
 <script lang="ts">
   import { T } from '@threlte/core'
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 
-  // In this example, the useGltf hook returns a Writable<THREE.GLTF> store
   const gltf = useGltf('/path/to/model.glb')
-
-  // Provide that store to the hook useGltfAnimations
   const { actions, mixer } = useGltfAnimations<'All Animations'>(gltf)
 
-  // play the animation as soon as it's loaded
   $effect(() => {
     $actions['All Animations']?.play()
   })
@@ -68,9 +61,9 @@ Sometimes you might want to use the hook [`useGltf`](/docs/reference/extras/use-
 {/await}
 ```
 
-### Applying Animations to a Different Root
+## Applying Animations to a Different Root
 
-Sometimes you want to apply the animations to a root other than the GLTF scene. In this case, pass the root as the second argument.
+`useGltfAnimations`'s second optional argument allows you to apply the animations to a root other than the GLTF scene.
 
 ```svelte
 <script>
@@ -82,6 +75,7 @@ Sometimes you want to apply the animations to a root other than the GLTF scene. 
   const group = new Group()
 
   const { root } = useGltfAnimations(gltf, group)
+  // $root === group
 </script>
 
 {#await gltf then { scene }}
@@ -91,7 +85,7 @@ Sometimes you want to apply the animations to a root other than the GLTF scene. 
 {/await}
 ```
 
-This can also be done after the animations have been loaded. In this case, you can use the `bind:ref` directive to bind the root to the `root` store returned by the hook.
+You can also set the root store without passing in the second argument
 
 ```svelte
 <script>
@@ -100,7 +94,7 @@ This can also be done after the animations have been loaded. In this case, you c
 
   const gltf = useGltf('/path/to/model.glb')
 
-  const { root } = useGltfAnimations(gltf, group)
+  const { root } = useGltfAnimations(gltf)
 </script>
 
 {#await gltf then { scene }}
@@ -108,15 +102,4 @@ This can also be done after the animations have been loaded. In this case, you c
     <T is={scene} />
   </T.Group>
 {/await}
-```
-
-## Types
-
-```ts
-const {
-  gltf, // Writable<GLTF | undefined>
-  mixer, // AnimationMixer
-  actions, // CurrentWritable<Record<string, AnimationAction>>
-  root // CurrentWritable<Root | undefined>
-} = useGLtfAnimations()
 ```

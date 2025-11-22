@@ -1,0 +1,80 @@
+---
+order: 1.0
+category: '@threlte/extras'
+title: '<Decal>'
+sourcePath: 'packages/extras/src/lib/components/Decal/Decal.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Mesh', url: 'https://threejs.org/docs/#api/en/objects/Mesh' },
+    'props':
+      [
+        {
+          name: 'src',
+          type: 'string | Texture',
+          required: false,
+          description: 'A url or texture prop can be used instead of a material override'
+        },
+        {
+          name: 'position',
+          type: 'Vector3Tuple',
+          required: false,
+          description: 'Positions the center of the decal projector'
+        },
+        {
+          name: 'rotation',
+          type: 'EulerTuple',
+          required: false,
+          description: 'Euler for manual orientation or a single float for closest-vertex-normal orient'
+        },
+        { name: 'scale', type: 'Vector3Tuple', required: false },
+        { name: 'polygonOffsetFactor', type: 'number', required: false, default: '-10' },
+        { name: 'depthTest', type: 'boolean', required: false, default: 'true' },
+        {
+          name: 'mesh',
+          type: 'Mesh',
+          required: false,
+          description: 'An optional parent mesh to project the decal'
+        }
+      ]
+  }
+---
+
+A declarative component for Three.js' [DecalGeometry](https://threejs.org/docs/#examples/en/geometries/DecalGeometry).
+
+<Example path="extras/decal" />
+
+By default, the decal will use its parent mesh as the decal surface.
+
+The decal projector must intersect the surface to be visible.
+
+If you do not specifiy a rotation the decal projector will look at the parents center point.
+You can also pass a single number as the rotation, which will spin the decal along its surface.
+
+## Examples
+
+### Basic example
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { Decal } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <T.SphereGeometry />
+  <T.MeshStandardMaterial />
+  <Decal
+    position={[0, 0, 0]}
+    rotation={[0, 0, 0]}
+    scale={1}
+  >
+    <!-- Will override the default material if added -->
+    <T.MeshBasicMaterial
+      map={texture}
+      polygonOffset
+      polygonOffsetFactor={-1}
+    />
+  </Decal>
+</mesh>
+```

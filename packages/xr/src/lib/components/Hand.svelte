@@ -1,23 +1,11 @@
-<script
-  lang="ts"
-  context="module"
->
+<script lang="ts">
   import { Group } from 'three'
   import { T, useThrelte, useTask } from '@threlte/core'
-  import type { XRHandEvents } from '../types'
-  import { isHandTracking, handEvents } from '../internal/stores'
-  import { left as leftStore, right as rightStore } from '../hooks/useHand'
-  import ScenePortal from './internal/ScenePortal.svelte'
-  import { writable } from 'svelte/store'
+  import type { XRHandEvents } from '../types.js'
+  import { isHandTracking, handEvents } from '../internal/state.svelte.js'
+  import { hands } from '../hooks/useHand.svelte.js'
   import type { Snippet } from 'svelte'
 
-  const stores = {
-    left: leftStore,
-    right: rightStore
-  } as const
-</script>
-
-<script lang="ts">
   type Props = {
     children?: Snippet
     targetRay?: Snippet
@@ -44,7 +32,7 @@
         }
     )
 
-  let {
+  const {
     left,
     right,
     hand,
@@ -57,23 +45,24 @@
     wrist
   }: Props = $props()
 
-  const { renderer, scheduler, renderStage } = useThrelte()
-  const { xr } = renderer
-  const space = xr.getReferenceSpace()
+  const { scene, renderer, scheduler, renderStage } = useThrelte()
 
-  const handedness = writable<'left' | 'right'>(left ? 'left' : right ? 'right' : hand)
-  $effect.pre(() => handedness.set(left ? 'left' : right ? 'right' : (hand as 'left' | 'right')))
+  const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : hand ?? 'left')
 
-  $effect.pre(() =>
-    handEvents[$handedness].set({
+  $effect.pre(() => {
+    handEvents[handedness] = {
       onconnected,
       ondisconnected,
       onpinchend,
       onpinchstart
-    })
-  )
+    }
 
-  let group = new Group()
+    return () => {
+      handEvents[handedness] = undefined
+    }
+  })
+
+  const group = new Group()
 
   /**
    * Currently children of a hand XRSpace or model will not
@@ -85,8 +74,9 @@
    */
   const { start, stop } = useTask(
     () => {
-      const frame = xr.getFrame()
-      const joint = inputSource?.get('wrist' as unknown as number)
+      const frame = renderer.xr.getFrame()
+      const space = renderer.xr.getReferenceSpace()
+      const joint = inputSource?.get('wrist')
 
       if (joint === undefined || space === null) return
 
@@ -106,37 +96,41 @@
   )
 
   $effect.pre(() => {
-    if ($isHandTracking && (wrist !== undefined || children !== undefined) && inputSource) {
+    if (isHandTracking.current && (wrist !== undefined || children !== undefined) && inputSource) {
       start()
     } else {
       stop()
     }
   })
 
-  let store = $derived(stores[$handedness])
-  let inputSource = $derived($store?.inputSource)
-  let model = $derived($store?.model)
+  const xrHand = $derived(hands[handedness])
+  const inputSource = $derived(xrHand?.inputSource)
+  const model = $derived(xrHand?.model)
 </script>
 
-{#if $store?.hand && $isHandTracking}
-  <T is={$store.hand}>
+{#if xrHand?.hand && isHandTracking.current}
+  <T
+    is={xrHand.hand}
+    attach={scene}
+  >
     {#if children === undefined}
       <T is={model} />
     {/if}
   </T>
 
   {#if targetRay !== undefined}
-    <T is={$store.targetRay}>
+    <T is={xrHand.targetRay}>
       {@render targetRay()}
     </T>
   {/if}
 {/if}
 
-{#if $isHandTracking}
-  <ScenePortal>
-    <T is={group}>
-      {@render wrist?.()}
-      {@render children?.()}
-    </T>
-  </ScenePortal>
+{#if isHandTracking.current}
+  <T
+    is={group}
+    attach={scene}
+  >
+    {@render wrist?.()}
+    {@render children?.()}
+  </T>
 {/if}

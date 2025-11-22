@@ -1,7 +1,7 @@
 ---
-order: 7.14
+order: 4.14
 category: '@threlte/extras'
-name: <CSM>
+title: <CSM>
 sourcePath: 'packages/extras/src/lib/components/CSM/CSM.svelte'
 type: 'component'
 componentSignature:
@@ -114,15 +114,15 @@ This callback facilitates advanced configurations, such as enabling the fade fea
 You may want to use a regular `<T.DirectionalLight>` when CSM is not enabled,
 for instance if you are developing a game and want to support low-end devices by
 disabling shadows altogehter. You can do this by using the `enabled` prop and
-the `disabled` slot:
+the `fallback` snippet:
 
 ```svelte title="Scene.svelte"
 <CSM enabled={settings.shadows}>
   <!-- Your scene goes here -->
 
-  <slot name="disabled">
+  {#snippet fallback()}
     <!-- Will be mounted if settings.shadows is false -->
     <T.DirectionalLight castShadow={false} />
-  </slot>
+  {/snippet}
 </CSM>
 ```

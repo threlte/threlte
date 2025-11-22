@@ -3,19 +3,31 @@
   lang="ts"
 >
   import type * as AllIcons from '@mdi/js'
-  export type Icons = keyof typeof AllIcons
+  export type Icons = Exclude<keyof typeof AllIcons, "default">
 </script>
 
 <script lang="ts">
-  export let name: Icons
-  export let size: string | undefined = '24'
-  export let viewBox: string | undefined = '0 0 24 24'
-  export let flip = 'none'
-  export let rotate = 0
+  interface Props {
+    name: Icons
+    size?: string | undefined
+    viewBox?: string | undefined
+    flip?: string
+    rotate?: number
+    [key: string]: any
+  }
 
-  $: sx = ['both', 'horizontal'].includes(flip) ? '-1' : '1'
-  $: sy = ['both', 'vertical'].includes(flip) ? '-1' : '1'
-  $: r = Number.isNaN(rotate) ? rotate : `${rotate}deg`
+  let {
+    name,
+    size = '24',
+    viewBox = '0 0 24 24',
+    flip = 'none',
+    rotate = 0,
+    ...rest
+  }: Props = $props()
+
+  let sx = $derived(['both', 'horizontal'].includes(flip) ? '-1' : '1')
+  let sy = $derived(['both', 'vertical'].includes(flip) ? '-1' : '1')
+  let r = $derived(Number.isNaN(rotate) ? rotate : `${rotate}deg`)
 </script>
 
 {#await import(`@mdi/js`) then paths}
@@ -25,7 +37,7 @@
     {viewBox}
     style="--sx:{sx}; --sy:{sy}; --r:{r}"
     class:spin={name === 'mdiLoading'}
-    {...$$restProps}
+    {...rest}
   >
     <path d={paths[name]} />
   </svg>

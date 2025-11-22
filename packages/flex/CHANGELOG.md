@@ -1,5 +1,74 @@
 # @threlte/flex
 
+## 2.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 2.0.6
+
+### Patch Changes
+
+- 6ef7086: Improve internal types
+
+## 2.0.5
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 2.0.4
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
+## 2.0.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 2.0.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 2.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 2.0.0
+
+### Major Changes
+
+- f25685a: Experimental Svelte 5 compatibility
+- 0e3a020: Migrate to generated component types
+
+### Minor Changes
+
+- 811ce98: bump Yoga 2.0 > Yoga 3.1
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+- b7045f5: Svelte dependency update
+- f7c501d: Remove legacy useFrame and useRender hooks
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+- 37d3cdc: Remove inspect
+
 ## 2.0.0-next.15
 
 ### Patch Changes

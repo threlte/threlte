@@ -31,29 +31,30 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import {
-    Vector3,
-    Group,
-    Mesh,
-    PerspectiveCamera,
-    Object3D,
     DoubleSide,
+    Group,
     Matrix4,
+    Mesh,
+    Object3D,
     OrthographicCamera,
-    Raycaster
+    PerspectiveCamera,
+    Raycaster,
+    Vector3
   } from 'three'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { logFragment, logVertex, spriteVertex } from './shaders.js'
+  import type { HTMLProps } from './types.js'
   import {
     defaultCalculatePosition,
     epsilon,
     getCameraCSSMatrix,
     getObjectCSSMatrix,
+    getViewportFactor,
     isObjectBehindCamera,
     isObjectVisible,
     objectScale,
-    objectZIndex,
-    getViewportFactor
-  } from './utils'
-  import { logVertex, logFragment, spriteVertex } from './shaders'
-  import type { HTMLProps } from './types'
+    objectZIndex
+  } from './utils.js'
 
   let {
     autoRender = true,
@@ -65,8 +66,8 @@
     sprite = false,
     transform = false,
     occlude = false,
-    castShadow,
-    receiveShadow,
+    castShadow = false,
+    receiveShadow = false,
     material,
     geometry,
     zIndexRange = [16777271, 0],
@@ -76,14 +77,13 @@
     pointerEvents = 'auto',
     ref = $bindable(),
     visible = $bindable(),
-    style,
     children,
     ...props
   }: HTMLProps = $props()
 
   visible = true
 
-  const { camera, scene, size, dom, canvas } = useThrelte()
+  const { camera, scene, size, dom, canvas, renderStage } = useThrelte()
 
   const group = new Group()
 
@@ -257,14 +257,19 @@
   }
 
   export const { start: startRendering, stop: stopRendering } = useTask(render, {
-    autoStart: false
+    autoStart: false,
+    autoInvalidate: false,
+    stage: renderStage
   })
+
   $effect(() => {
-    if (autoRender) {
-      startRendering()
-      return () => {
-        stopRendering()
-      }
+    if (!autoRender) {
+      return
+    }
+
+    startRendering()
+    return () => {
+      stopRendering()
     }
   })
 
@@ -284,6 +289,8 @@
       destroy: () => el.remove()
     }
   }
+
+  const { suspended } = useSuspense()
 </script>
 
 <T
@@ -333,6 +340,7 @@
   style:overflow={transform ? 'hidden' : undefined}
   style:transform={transform ? undefined : `translate3d(${pos[0]}px,${pos[1]}px,0)`}
   style:transform-origin={transform ? undefined : '0 0'}
+  style:display={$suspended ? 'none' : undefined}
 >
   {#if transform}
     <div
@@ -364,7 +372,7 @@
       style:transform={center ? 'translate3d(-50%,-50%,0)' : 'none'}
       style:top={fullscreen ? `${-height / 2}px` : undefined}
       style:left={fullscreen ? `${-width / 2}px` : undefined}
-      style:width={fullscreen ? `${width / 2}px` : undefined}
+      style:width={fullscreen ? `${width}px` : undefined}
       style:height={fullscreen ? `${height}px` : undefined}
       style={props.style}
       class={props.class}

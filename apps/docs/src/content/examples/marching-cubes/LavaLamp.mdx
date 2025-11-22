@@ -1,8 +1,12 @@
-A small [MarchingCubes](https://en.wikipedia.org/wiki/Marching_cubes) example using [three.js's marching cubes addon](https://threejs.org/examples/webgl_marchingcubes.html).
+---
+title: Marching cubes
+---
+
+A small [MarchingCubes](https://en.wikipedia.org/wiki/Marching_cubes) example using [Three.js' marching cubes addon](https://threejs.org/examples/webgl_marchingcubes.html).
 
 <Example path="marching-cubes/lava-lamp" />
 
-The addon is a little too limited to be ported into a component but this example shows how it might be incorporated into threlte.
+The addon is a little too limited to be ported into a component but this example shows how it might be incorporated into Threlte.
 
 ## Placement
 
@@ -23,7 +27,12 @@ The original example only allows for planes positioned at x = -1, y = -1, and z 
 
 ## Materials
 
-The example above utilizes vertex coloring but the original three.js example has support for any kind of material. Vertex coloring requires a little more memory since each vertex now carries a color with it. If you're not using vertex colors, you can leave `enableColors` turned off. The `<MarchingCubes>` component uses the same default material that `Three.Mesh`es do. Setting different materials is the same process as setting different materials for `<T.Mesh>`.
+The example above utilizes vertex coloring but the original Three.js example has
+support for any kind of material. Vertex coloring requires a little more memory
+since each vertex now carries a color with it. If you're not using vertex colors,
+you can leave `enableColors` turned off. The `<MarchingCubes>` component has the
+same default material that a `Mesh` has. Setting different materials is the same
+process as setting different materials for `<T.Mesh>`.
 
 ```svelte
 <MarchingCubes>

@@ -2,11 +2,11 @@
   import { useThrelte } from '@threlte/core'
   import { TreeViewItem, TreeViewWebComponent } from 'flexible-tree'
   import type * as THREE from 'three'
-  import { useOnAdd } from '../../internal/useOnAdd'
-  import { useOnRemove } from '../../internal/useOnRemove'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
+  import { useOnAdd } from '../../internal/useOnAdd.js'
+  import { useOnRemove } from '../../internal/useOnRemove.js'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
   import { onMount, tick } from 'svelte'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
 
   const treeview = new TreeViewWebComponent()
   treeview.scrollable = true
@@ -209,7 +209,7 @@ max-height: 50vh;
       treeItems.forEach((treeitem) => {
         try {
           treeitem.selected = false
-        } catch (error) {
+        } catch {
           // ignore
         }
       })

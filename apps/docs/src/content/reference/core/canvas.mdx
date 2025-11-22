@@ -1,6 +1,6 @@
 ---
 category: '@threlte/core'
-name: '<Canvas>'
+title: '<Canvas>'
 sourcePath: 'packages/core/src/lib/Canvas.svelte'
 order: 0
 type: 'component'
@@ -65,41 +65,46 @@ componentSignature:
           required: false,
           description: 'To set up a custom renderer, pass a function that returns a new renderer instance.'
         }
-      ],
-    bindings:
-      [
-        {
-          name: 'ctx',
-          type: { name: 'ThrelteContext', url: '/docs/reference/core/hooks#usethrelte' }
-        }
       ]
   }
 ---
 
-The `<Canvas>` component is the root of your Threlte scene. It provides contexts that all other components and many hooks are depending on. This means they need to be **child components** to the `<Canvas>` component.
+The `<Canvas>` component is the root of your Threlte scene. It provides contexts
+that all other components and many hooks depend on. This means they need to be
+**child components** to the `<Canvas>` component.
 
 <Tip
   type="tip"
-  title="Structuring Your App"
+  title="Structuring your app"
 >
   Check out our [guide on structuring your app](/docs/learn/basics/app-structure) for a fail-safe
   app architecture recipe.
 </Tip>
 
-By default, the `<canvas>` element and the renderer will resize to fit the parent
-element whenever the window resizes. Provide the property `size` to set a fixed
-`<canvas>` size.
+## Size
 
-`<Canvas>` also provides a default camera, located at `{ z: 5 }`.
+By default, the `<canvas>` (the **DOM element** inside `<Canvas>`) that is being
+rendered into takes up 100% of the width and height of its parent element and
+reacts to changes in the parent element's size. This means that – simply put –
+you define the size of the `<canvas>` element by layouting the parent element.
 
-If `renderMode` is set to `on-demand` (default) property changes to components and other changes that are picked up by Threlte automatically invalidate the current frame.<br />
-If `renderMode` is set to `always` a re-render is automatically scheduled every frame.<br />
-If `renderMode` is set to `manual` a re-render must manually be triggered with `useThrelte().advance()`.
+```svelte title="App.svelte"
+<div style="width: 300px; height: 300px;">
+  <!-- The canvas will take up 300px by 300px -->
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+```
 
-<Tip
-  type="note"
-  title="Events"
->
-  It's recommended to use the `dom` element given from the `useThrelte` hook to add events to rather
-  than the `canvas`.
+<Tip type="info">
+  When taking the parent's size into account, [`offsetWidth` and
+  `offsetHeight`](https://developer.mozilla.org/en-US/docs/Web/API/CSS_Object_Model/Determining_the_dimensions_of_elements#how_much_room_does_it_use_up)
+  are used.
 </Tip>
+
+## DOM reference
+
+The context provided by the `<Canvas>` component contains a `dom` element. It
+refers to the DOM element that a particular view is rendered into. In the most
+common case, this is the wrapper of the `canvas` element provided by Threlte.

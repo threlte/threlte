@@ -6,13 +6,13 @@ import {
   type ToneMapping,
   type WebGLRenderer
 } from 'three'
-import type { Scheduler, Stage, Task } from '../../frame-scheduling'
-import type { CurrentReadable, CurrentWritable } from '../../utilities'
-import { useCamera } from '../fragments/camera'
-import { useDOM } from '../fragments/dom'
-import { useRenderer } from '../fragments/renderer.svelte'
-import { useScene } from '../fragments/scene'
-import { useScheduler } from '../fragments/scheduler.svelte'
+import type { Scheduler, Stage, Task } from '../../frame-scheduling/index.js'
+import type { CurrentReadable, CurrentWritable } from '../../utilities/index.js'
+import { useCamera } from '../fragments/camera.js'
+import { useDOM } from '../fragments/dom.js'
+import { useRenderer, type Renderer } from '../fragments/renderer.svelte.js'
+import { useScene } from '../fragments/scene.js'
+import { useScheduler } from '../fragments/scheduler.svelte.js'
 
 /**
  * ### `ThrelteContext`
@@ -20,14 +20,14 @@ import { useScheduler } from '../fragments/scheduler.svelte'
  * This is the main context of a Threlte application.
  * It's exposed to the user via the hook `useThrelte`.
  */
-export type ThrelteContext = {
+export type ThrelteContext<T extends Renderer> = {
   dom: HTMLElement
   canvas: HTMLCanvasElement
-  size: CurrentReadable<DOMRect>
+  size: CurrentReadable<{ width: number; height: number }>
   camera: CurrentWritable<Camera>
   scene: Scene
   dpr: CurrentWritable<number>
-  renderer: WebGLRenderer
+  renderer: T
   /**
    * If set to 'on-demand', the scene will only be rendered when the current frame is invalidated
    * If set to 'manual', the scene will only be rendered when advance() is called
@@ -85,14 +85,14 @@ export type ThrelteContext = {
  * </script>
  * ```
  */
-export const useThrelte = (): ThrelteContext => {
+export const useThrelte = <T extends Renderer = WebGLRenderer>(): ThrelteContext<T> => {
   const schedulerCtx = useScheduler()
   const rendererCtx = useRenderer()
   const cameraCtx = useCamera()
   const sceneCtx = useScene()
   const domCtx = useDOM()
 
-  const context: ThrelteContext = {
+  const context: ThrelteContext<T> = {
     advance: schedulerCtx.advance,
     autoRender: schedulerCtx.autoRender,
     autoRenderTask: rendererCtx.autoRenderTask,
@@ -102,7 +102,7 @@ export const useThrelte = (): ThrelteContext => {
     dpr: rendererCtx.dpr,
     invalidate: schedulerCtx.invalidate,
     mainStage: schedulerCtx.mainStage,
-    renderer: rendererCtx.renderer as ThrelteContext['renderer'],
+    renderer: rendererCtx.renderer as T,
     renderMode: schedulerCtx.renderMode,
     renderStage: schedulerCtx.renderStage,
     scheduler: schedulerCtx.scheduler,

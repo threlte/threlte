@@ -11,10 +11,10 @@
 <script lang="ts">
   import { useCache, useThrelte } from '@threlte/core'
   import { CubeTextureLoader } from 'three'
-  import { HDRCubeTextureLoader } from 'three/examples/jsm/Addons.js'
-  import { useSuspense } from '../../../suspense/useSuspense'
-  import { useEnvironment } from '../utils/useEnvironment.svelte'
-  import type { CubeEnvironmentProps } from './types'
+  import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
+  import { useSuspense } from '../../../suspense/useSuspense.js'
+  import { useEnvironment } from '../utils/useEnvironment.svelte.js'
+  import type { CubeEnvironmentProps } from './types.js'
 
   const ctx = useThrelte()
 
@@ -54,22 +54,24 @@
   })
 
   $effect(() => {
-    if (urls !== undefined && loader !== undefined) {
-      const suspendedTexture = suspend(
-        cache.remember(() => {
-          return loader.loadAsync(urls)
-        }, urls)
-      )
+    if (urls === undefined || loader === undefined) {
+      return
+    }
 
-      suspendedTexture.then((t) => {
-        texture = t
+    const suspendedTexture = suspend(
+      cache.remember(() => {
+        return loader.loadAsync(urls)
+      }, urls)
+    )
+
+    suspendedTexture.then((t) => {
+      texture = t
+    })
+
+    return () => {
+      suspendedTexture.then((texture) => {
+        texture.dispose()
       })
-
-      return () => {
-        suspendedTexture.then((texture) => {
-          texture.dispose()
-        })
-      }
     }
   })
 </script>

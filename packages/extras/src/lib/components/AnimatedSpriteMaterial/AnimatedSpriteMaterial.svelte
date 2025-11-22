@@ -20,9 +20,9 @@
     SpriteMaterial,
     type Texture
   } from 'three'
-  import { useTexture } from '../../hooks/useTexture'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types'
+  import { useTexture } from '../../hooks/useTexture.js'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types.js'
 
   let {
     textureUrl,
@@ -41,7 +41,7 @@
     rows = 1,
     columns = undefined,
     totalFrames = 0,
-    is = $bindable(),
+    is,
     ref = $bindable(),
 
     onload,
@@ -80,17 +80,12 @@
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
 
-  let fpsInterval = 0
-  let isMesh = $state(false)
+  let fpsInterval = $derived(1000 / fps)
+  let isMesh = $derived($parent !== undefined && isInstanceOf($parent, 'Mesh'))
 
   $effect.pre(() => {
-    isMesh = $parent !== undefined && isInstanceOf($parent, 'Mesh')
+    is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
   })
-  $effect.pre(() => {
-    fpsInterval = 1000 / fps
-  })
-
-  is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
 
   const suspend = useSuspense()
 

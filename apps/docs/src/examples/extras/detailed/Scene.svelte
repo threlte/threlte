@@ -15,7 +15,7 @@
     { color: 0x00_00_ff, distance: 6 }
   ]
 
-  let detailed = $state<LOD>()
+  let detailed = $state.raw<LOD>()
 
   let time = 0
   useTask((delta) => {
@@ -24,11 +24,7 @@
   })
 </script>
 
-<Detailed
-  oncreate={(ref) => {
-    detailed = ref
-  }}
->
+<Detailed bind:ref={detailed}>
   {#each items as { color, distance }, i}
     {@const detail = items.length - i - 1}
     <T.Mesh

@@ -1,5 +1,5 @@
-import { type Snippet } from 'svelte'
-import type { NodeProps } from '../lib/props'
+import type { Snippet } from 'svelte'
+import type { NodeProps } from '../lib/props.js'
 
 export type BoxProps = NodeProps & {
   order?: number | undefined

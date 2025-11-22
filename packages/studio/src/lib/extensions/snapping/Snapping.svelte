@@ -4,8 +4,15 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { snappingScope, type SnappingActions, type SnappingState } from './types'
+  import { useStudio } from '../../internal/extensions.js'
+  import { snappingScope, type SnappingActions, type SnappingState } from './types.js'
+  import type { Snippet } from 'svelte'
+
+  let {
+    children
+  }: {
+    children?: Snippet
+  } = $props()
 
   const { createExtension } = useStudio()
 
@@ -51,7 +58,7 @@
       icon="mdiMagnet"
       label="Snapping"
       tooltip="Snapping (M)"
-      on:click={extension.toggleEnabled}
+      onclick={extension.toggleEnabled}
     />
     <DropDownPane title="Snapping Settings">
       <Slider
@@ -83,4 +90,4 @@
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}

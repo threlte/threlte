@@ -1,12 +1,20 @@
-/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 
 import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
-import type { Props } from './types'
-import { setIs } from './utils/useIs'
+import type { Props } from './types.js'
+import { setIs } from './utils/useIs.js'
 
 type Extensions = Record<string, unknown>
+
+type ThreeCatalogue = {
+  [K in keyof typeof THREE]: (typeof THREE)[K]
+}
+
+type TComponentProxy = {
+  [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
+}
 
 const catalogue: Extensions = {}
 
@@ -49,10 +57,7 @@ export const extend = (extensions: Extensions) => {
  * </T.Mesh>
  * ```
  */
-export const T = new Proxy(function () {}, {
-  apply(_target, _thisArg, argArray: [internal: unknown, props: { is: unknown }]) {
-    return TComp(...argArray)
-  },
+export const T = new Proxy(TComp, {
   get(_target, is: keyof typeof THREE) {
     // Handle snippets
     if (typeof is !== 'string') {
@@ -69,8 +74,7 @@ export const T = new Proxy(function () {}, {
 
     return TComp
   }
-}) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
-} & {
-  [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
-} & Record<string, Component>
+}) as typeof TComp &
+  TComponentProxy & {
+    [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
+  } & Record<string, Component>

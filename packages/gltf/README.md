@@ -35,7 +35,7 @@ This helps with performance optimization for asset-heavy Threlte apps. It also a
 
 #### The GLTF workflow on the web is not ideal ...
 
-- GLTF is thrown wholesale into the scene which prevents re-use, in threejs objects can only be mounted once
+- GLTF is thrown wholesale into the scene which prevents re-use, in Three.js objects can only be mounted once
 - Contents can only be found by traversal which is cumbersome and slow
 - Changes to queried nodes are made by mutation, which alters the source data and prevents re-use
 - Re-structuring content, making nodes conditional or adding/removing is cumbersome
@@ -322,10 +322,6 @@ Contributions are what make the open source community such an amazing place to l
 
 - **Filing Issues** - if you have feature requestions or you think you spotted a bug, [submit an issue](https://github.com/threlte/threlte/issues/new).
 - **Contributing Code** - if you would like to drop us a PR, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) first.
-
-## Sponsors
-
-[![Powered by Vercel](./assets/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
 
 ---
 

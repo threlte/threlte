@@ -1,6 +1,6 @@
 {
   "name": "@threlte/gltf",
-  "version": "3.0.0-next.11",
+  "version": "3.0.1",
   "description": "GLTF to Threlte converter",
   "scripts": {
     "cleanup": "rimraf node_modules",
@@ -31,9 +31,6 @@
   "homepage": "https://github.com/threlte/threlte.git#readme",
   "bin": "./cli.js",
   "main": "./src/utils/exports.js",
-  "engines": {
-    "node": ">=16"
-  },
   "dependencies": {
     "@gltf-transform/core": "^3.2.1",
     "@gltf-transform/extensions": "^3.2.1",
@@ -44,10 +41,10 @@
     "jsdom-global": "^3.0.2",
     "meow": "^11.0.0",
     "meshoptimizer": "^0.18.1",
-    "prettier": "^3.2.5",
-    "prettier-plugin-svelte": "^3.2.2",
+    "prettier": "catalog:",
+    "prettier-plugin-svelte": "catalog:",
     "sharp": "^0.32.0",
-    "svelte": "^5.14.4",
+    "svelte": "catalog:",
     "three": "0.122.0",
     "three-stdlib": "^2.21.8"
   },
@@ -58,7 +55,7 @@
     "husky": "^4.3.0",
     "lint-staged": "^10.4.0",
     "read-pkg-up": "^9.1.0",
-    "rimraf": "^5.0.1"
+    "rimraf": "catalog:"
   },
   "husky": {
     "hooks": {

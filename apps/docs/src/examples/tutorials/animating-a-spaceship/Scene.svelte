@@ -1,38 +1,54 @@
-<script>
+<script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import Spaceship from './models/spaceship.svelte'
-  import { Color, Mesh, PMREMGenerator, PlaneGeometry, Raycaster, Vector2, Vector3 } from 'three'
-  import { onMount } from 'svelte'
+  import {
+    Color,
+    type Group,
+    Mesh,
+    MeshStandardMaterial,
+    PMREMGenerator,
+    PlaneGeometry,
+    Raycaster,
+    Vector2,
+    Vector3,
+    WebGLRenderTarget
+  } from 'three'
   import Stars from './Stars.svelte'
   import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js'
   import { RenderPass } from 'three/addons/postprocessing/RenderPass.js'
   import { OutputPass } from 'three/addons/postprocessing/OutputPass.js'
   import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 
-  const { scene, camera, renderer } = useThrelte()
-  let spaceShipRef
-  let intersectionPoint
-  let translY = 0
+  const { scene, size, camera, renderer } = useThrelte()
+
+  let intersectionPoint: Vector3 | undefined
   let translAccelleration = 0
-  let angleZ = 0
   let angleAccelleration = 0
   let pmrem = new PMREMGenerator(renderer)
-  let envMapRT
+  let envMapRT: WebGLRenderTarget
+
+  let spaceShipRef = $state<Group>()
+  let translY = $state(0)
+  let angleZ = $state(0)
 
   const composer = new EffectComposer(renderer)
-  composer.setSize(innerWidth, innerHeight)
+  const renderPass = new RenderPass(scene, $camera)
+  const bloomPass = new UnrealBloomPass(new Vector2($size.width, $size.height), 0.275, 1, 0)
+  const outputPass = new OutputPass()
 
-  const setupEffectComposer = () => {
-    const renderPass = new RenderPass(scene, camera.current)
-    composer.addPass(renderPass)
+  composer.addPass(renderPass)
+  composer.addPass(bloomPass)
+  composer.addPass(outputPass)
 
-    const bloomPass = new UnrealBloomPass(new Vector2(innerWidth, innerHeight), 0.275, 1, 0)
-    composer.addPass(bloomPass)
+  $effect(() => {
+    composer.setSize($size.width, $size.height)
+    bloomPass.resolution.set($size.width, $size.height)
+  })
 
-    const outputPass = new OutputPass()
-    composer.addPass(outputPass)
-  }
+  $effect(() => {
+    renderPass.camera = $camera
+  })
 
   // Replaces the default render task, which does not execute because autoRender=false
   // https://threlte.xyz/docs/learn/basics/render-modes#render-modes-and-custom-rendering
@@ -56,21 +72,28 @@
         angleZ += angleAccelleration
       }
 
-      if (envMapRT) envMapRT.dispose()
+      if (envMapRT) {
+        envMapRT.dispose()
+      }
 
-      spaceShipRef.visible = false
-      scene.background = null
-      envMapRT = pmrem.fromScene(scene, 0, 0.1, 1000)
-      scene.background = new Color('#598889').multiplyScalar(0.05)
-      spaceShipRef.visible = true
+      if (spaceShipRef) {
+        spaceShipRef.visible = false
+        scene.background = null
+        envMapRT = pmrem.fromScene(scene, 0, 0.1, 1000)
+        scene.background = new Color('#598889').multiplyScalar(0.05)
+        spaceShipRef.visible = true
 
-      spaceShipRef.traverse((child) => {
-        if (child?.material?.envMapIntensity) {
-          child.material.envMap = envMapRT.texture
-          child.material.envMapIntensity = 100
-          child.material.normalScale.set(0.3, 0.3)
-        }
-      })
+        spaceShipRef.traverse((child) => {
+          if ('material' in child) {
+            const material = child.material as MeshStandardMaterial
+            if ('envMapIntensity' in material) {
+              material.envMap = envMapRT.texture
+              material.envMapIntensity = 100
+              material.normalScale.set(0.3, 0.3)
+            }
+          }
+        })
+      }
 
       composer.render()
     },
@@ -79,44 +102,38 @@
     }
   )
 
-  onMount(() => {
-    setupEffectComposer()
+  const planeGeo = new PlaneGeometry(20, 20)
+  const mesh = new Mesh(planeGeo)
 
-    const planeGeo = new PlaneGeometry(20, 20)
-    const mesh = new Mesh(planeGeo)
+  const raycaster = new Raycaster()
+  const pointer = new Vector2()
 
-    const raycaster = new Raycaster()
-    const pointer = new Vector2()
+  function onpointermove(event: PointerEvent) {
+    pointer.x = (event.clientX / window.innerWidth) * 2 - 1
+    pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
 
-    function onPointerMove(event) {
-      pointer.x = (event.clientX / window.innerWidth) * 2 - 1
-      pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
+    raycaster.setFromCamera(pointer, $camera)
+    const intersects = raycaster.intersectObject(mesh)
+    intersectionPoint = intersects[0]?.point
 
-      raycaster.setFromCamera(pointer, $camera)
-      const intersects = raycaster.intersectObject(mesh)
-      intersectionPoint = intersects[0]?.point
-
-      if (intersectionPoint) {
-        // this prevents the spring motion to be different while the pointer
-        // spans the x axis
-        intersectionPoint.x = 3
-      }
+    if (intersectionPoint) {
+      // this prevents the spring motion to be different while the pointer
+      // spans the x axis
+      intersectionPoint.x = 3
     }
-
-    window.addEventListener('pointermove', onPointerMove)
-    return () => {
-      window.removeEventListener('pointermove', onPointerMove)
-    }
-  })
+  }
 </script>
+
+<svelte:window {onpointermove} />
 
 <T.PerspectiveCamera
   makeDefault
-  position={[-5, 6, 10]}
+  position={[-10, 6, 15]}
   fov={25}
 >
   <OrbitControls
     enableDamping
+    enableZoom={false}
     target={[0, 0, 0]}
   />
 </T.PerspectiveCamera>

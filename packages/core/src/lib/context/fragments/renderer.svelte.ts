@@ -5,23 +5,25 @@ import {
   PCFSoftShadowMap,
   WebGLRenderer,
   type ColorSpace,
-  type Renderer,
   type ShadowMapType,
   type ToneMapping
 } from 'three'
-import type { Task } from '../../frame-scheduling'
-import { useTask } from '../../hooks/useTask'
-import { currentWritable, watch, type CurrentWritable } from '../../utilities'
-import { useCamera } from './camera'
-import { useDOM } from './dom'
-import { useDisposal } from './disposal'
-import { useScene } from './scene'
-import { useScheduler } from './scheduler.svelte'
+import type { Task } from '../../frame-scheduling/index.js'
+import { useTask } from '../../hooks/useTask.js'
+import { currentWritable, watch, type CurrentWritable } from '../../utilities/index.js'
+import { useCamera } from './camera.js'
+import { useDisposal } from './disposal.js'
+import { useDOM } from './dom.js'
+import { useScene } from './scene.js'
+import { useScheduler } from './scheduler.svelte.js'
+import type { WebGPURenderer } from 'three/webgpu'
+
+export type Renderer = WebGLRenderer | WebGPURenderer
 
 type CreateRenderer<T extends Renderer> = (canvas: HTMLCanvasElement) => T
 
-type RendererContext = {
-  renderer: Renderer
+type RendererContext<T extends Renderer> = {
+  renderer: T
   colorManagementEnabled: CurrentWritable<boolean>
   colorSpace: CurrentWritable<ColorSpace>
   toneMapping: CurrentWritable<ToneMapping>
@@ -64,7 +66,7 @@ export type CreateRendererContextOptions<T extends Renderer> = {
 
 export const createRendererContext = <T extends Renderer>(
   options: CreateRendererContextOptions<T>
-): RendererContext => {
+): RendererContext<T> => {
   const { dispose } = useDisposal()
   const { camera } = useCamera()
   const { scene } = useScene()
@@ -84,8 +86,8 @@ export const createRendererContext = <T extends Renderer>(
     renderer.render(scene, camera.current)
   })
 
-  const context: RendererContext = {
-    renderer: renderer,
+  const context: RendererContext<T> = {
+    renderer: renderer as T,
     colorManagementEnabled: currentWritable(options.colorManagementEnabled ?? true),
     colorSpace: currentWritable(options.colorSpace ?? 'srgb'),
     dpr: currentWritable(options.dpr ?? window.devicePixelRatio),
@@ -94,7 +96,7 @@ export const createRendererContext = <T extends Renderer>(
     autoRenderTask
   }
 
-  setContext<RendererContext>('threlte-renderer-context', context)
+  setContext<RendererContext<T>>('threlte-renderer-context', context)
 
   watch([context.colorManagementEnabled], ([colorManagementEnabled]) => {
     ColorManagement.enabled = colorManagementEnabled
@@ -158,7 +160,7 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   if ('setAnimationLoop' in context.renderer) {
-    const renderer = context.renderer as WebGLRenderer
+    const renderer = context.renderer
     renderer.setAnimationLoop((time) => {
       dispose()
       scheduler.run(time)
@@ -173,27 +175,27 @@ export const createRendererContext = <T extends Renderer>(
     }
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     context.colorManagementEnabled.set(options.colorManagementEnabled ?? true)
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.colorSpace.set(options.colorSpace ?? 'srgb')
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.toneMapping.set(options.toneMapping ?? AgXToneMapping)
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.shadows.set(options.shadows ?? PCFSoftShadowMap)
   })
-  $effect(() => {
+  $effect.pre(() => {
     context.dpr.set(options.dpr ?? window.devicePixelRatio)
   })
 
   return context
 }
 
-export const useRenderer = (): RendererContext => {
-  const context = getContext<RendererContext>('threlte-renderer-context')
+export const useRenderer = <T extends Renderer>(): RendererContext<T> => {
+  const context = getContext<RendererContext<T>>('threlte-renderer-context')
 
   if (!context) {
     throw new Error('useRenderer can only be used in a child component to <Canvas>.')

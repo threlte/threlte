@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import { onMount, tick } from 'svelte'
   import Portal from 'svelte-portal'
   import { TourManager } from './Tour/TourManager.svelte'
@@ -16,13 +15,13 @@
   )
 </script>
 
-<svelte:window on:pointermove|capture={tourManager.tourStopMaskManager.onPointerMove} />
+<svelte:window onpointermovecapture={tourManager.tourStopMaskManager.onPointerMove} />
 
 <Portal target="#tour-target">
   <div class="contents">
     <!-- MASK -->
     <div
-      class="absolute left-0 top-0 z-[10000] h-full w-full"
+      class="z-10000 absolute left-0 top-0 h-full w-full"
       bind:this={tourManager.tourStopMaskManager.wrapperRef}
     >
       <svg
@@ -82,7 +81,7 @@
     <!-- TOOLTIP INSTRUCTIONS -->
     {#if tourManager.instructionsManager.isToolTip}
       <div
-        class="pointer-events-none absolute left-0 top-0 z-[10000] w-max max-w-96 select-none"
+        class="z-10000 pointer-events-none absolute left-0 top-0 w-max max-w-96 select-none"
         bind:this={tourManager.instructionsManager.tooltipElement}
       >
         {#if tourManager.instructionsManager.currentInstructions}
@@ -90,8 +89,7 @@
             class="pointer-events-auto rounded-md bg-white px-3 py-2 text-black shadow-2xl"
             bind:this={tourManager.instructionsManager.wrapper}
           >
-            <svelte:component
-              this={tourManager.instructionsManager.currentInstructions.content.component}
+            <tourManager.instructionsManager.currentInstructions.content.component
               {...tourManager.instructionsManager.currentInstructions.content.props}
             />
           </div>
@@ -104,20 +102,19 @@
     {:else}
       <!-- INSTRUCTIONS -->
       <div
-        class={c(
-          'pointer-events-none absolute z-[10000] flex w-full select-none items-center justify-center',
+        class={[
+          'z-10000 pointer-events-none absolute flex w-full select-none items-center justify-center',
           instructionsPlacement === 'bottom' || !instructionsPlacement
             ? 'bottom-2'
             : 'top-1/2 -translate-y-1/2'
-        )}
+        ]}
       >
         {#if tourManager.instructionsManager.currentInstructions}
           <div
             class="pointer-events-auto max-w-[60%] rounded-md bg-white px-3 py-2 text-black"
             bind:this={tourManager.instructionsManager.wrapper}
           >
-            <svelte:component
-              this={tourManager.instructionsManager.currentInstructions.content.component}
+            <tourManager.instructionsManager.currentInstructions.content.component
               {...tourManager.instructionsManager.currentInstructions.content.props}
             />
           </div>
@@ -126,12 +123,19 @@
     {/if}
 
     <div
-      class="pointer-events-auto absolute bottom-4 right-4 z-[10001] rounded-md bg-white px-1 py-0.5 text-sm text-neutral-600"
+      class="z-10001 pointer-events-auto absolute bottom-4 right-4 rounded-md bg-white px-1 py-0.5 text-sm text-neutral-600"
     >
       {#if tourManager.tourStarted}
-        <button onclick={() => tourManager.stopTour()}> Skip Tour → </button>
+        <button
+          onclickcapture={(e) => {
+            e.stopPropagation()
+            tourManager.stopTour()
+          }}
+        >
+          Skip Tour →
+        </button>
       {:else}
-        <button onclick={() => tourManager.startTour()}> Start Tour </button>
+        <button onclickcapture={() => location.reload()}> Start Tour </button>
       {/if}
     </div>
   </div>

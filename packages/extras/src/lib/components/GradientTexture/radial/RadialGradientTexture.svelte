@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { RadialGradientTextureProps } from './types'
+  import type { RadialGradientTextureProps } from './types.js'
   import { CanvasTexture } from 'three'
   import { T, observe, useThrelte } from '@threlte/core'
-  import { applyGradient, addStops } from '../common'
+  import { addStops } from '../common.js'
 
   let {
     width = 1024,
@@ -21,6 +21,11 @@
 
   const canvas = new OffscreenCanvas(0, 0)
   const context = canvas.getContext('2d')
+
+  if (context === null) {
+    throw new Error('radial gradient texture context is null')
+  }
+
   const texture = new CanvasTexture(canvas)
 
   $effect.pre(() => {
@@ -39,40 +44,47 @@
     }
   )
 
-  let canvasCenterX = $derived(0.5 * width)
-  let canvasCenterY = $derived(0.5 * height)
+  const halfWidth = $derived(0.5 * width)
+
+  const halfHeight = $derived(0.5 * height)
+
+  const _outerRadius = $derived(
+    outerRadius === 'auto' ? Math.hypot(halfWidth, halfHeight) : outerRadius
+  )
 
   const gradient = $derived.by(() => {
-    const gradient = context?.createRadialGradient(
-      canvasCenterX,
-      canvasCenterY,
+    const gradient = context.createRadialGradient(
+      halfWidth,
+      halfHeight,
       innerRadius,
-      canvasCenterX,
-      canvasCenterY,
-
-      outerRadius === 'auto' ? Math.hypot(canvasCenterX, canvasCenterY) : outerRadius
+      halfWidth,
+      halfHeight,
+      _outerRadius
     )
-    if (gradient !== undefined) {
-      addStops(gradient, stops)
-    }
+    addStops(gradient, stops)
     return gradient
   })
 
   const { invalidate } = useThrelte()
+
   $effect(() => {
-    if (gradient !== undefined && context !== null) {
-      applyGradient(context, gradient)
-      texture.needsUpdate = true
-      invalidate()
+    context.fillStyle = gradient
+    context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+
+    texture.needsUpdate = true
+    invalidate()
+
+    return () => {
+      context.clearRect(0, 0, context.canvas.width, context.canvas.height)
     }
   })
 </script>
 
 <T
   is={texture}
+  bind:ref
   {...props}
   {attach}
-  bind:ref
 >
   {@render children?.({ ref: texture })}
 </T>

@@ -3,7 +3,7 @@ import { walk, type Node } from 'estree-walker'
 import MagicString from 'magic-string'
 import { inspect } from 'node:util'
 import { parse } from 'svelte/compiler'
-import type { StudioProps } from '../../types'
+import type { StudioProps } from '../../types.js'
 import json5 from 'json5'
 
 export const hasTComponent = (code: string): boolean => {

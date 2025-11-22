@@ -3,35 +3,34 @@
   import IconButton from './IconButton.svelte'
   import Tooltip from './Tooltip.svelte'
 
-  export let icon: Icons
-  export let label: string
+  interface Props {
+    icon: Icons
+    label: string
+    active?: boolean
+    warn?: boolean
+    success?: boolean
+    error?: boolean
+    disabled?: boolean
+    tooltip?: string
+    onclick?: () => void
+  }
 
-  export let active = false
-  export let warn = false
-  export let success = false
-  export let error = false
-  export let disabled = false
-
-  export let tooltip: string = ''
+  let {
+    icon,
+    label,
+    active = false,
+    warn = false,
+    success = false,
+    error = false,
+    disabled = false,
+    tooltip: tooltipProp = '',
+    onclick
+  }: Props = $props()
 </script>
 
-{#if tooltip.length}
-  <Tooltip>
-    <IconButton
-      on:click
-      {disabled}
-      {active}
-      {warn}
-      {success}
-      {icon}
-      {label}
-      {error}
-    />
-    <span slot="tooltip">{tooltip}</span>
-  </Tooltip>
-{:else}
+{#snippet button()}
   <IconButton
-    on:click
+    {onclick}
     {disabled}
     {active}
     {warn}
@@ -40,4 +39,15 @@
     {label}
     {error}
   />
+{/snippet}
+
+{#if tooltipProp.length}
+  <Tooltip>
+    {@render button()}
+    {#snippet tooltip()}
+      <span>{tooltipProp}</span>
+    {/snippet}
+  </Tooltip>
+{:else}
+  {@render button()}
 {/if}

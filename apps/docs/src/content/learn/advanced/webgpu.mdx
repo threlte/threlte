@@ -18,8 +18,8 @@ order: 1
 
 ## WebGPU
 
-To use Three.js's WebGPU renderer, import it and then initialize it within your
-`<Canvas>`'s `createRenderer` prop.
+To use the Three.js WebGPU renderer, import it and then initialize it within your
+`<Canvas>`'s `createRenderer` prop. This will replace the default WebGL renderer.
 
 ```svelte title="App.svelte" {4}+ {8-14}+
 <script>
@@ -42,9 +42,9 @@ To use Three.js's WebGPU renderer, import it and then initialize it within your
 ```
 
 <Tip type="note">
-  WebGPU is still an experimental browser api and at the time of writing has [limited availability
-  across major browsers](https://caniuse.com/?search=webgpu). For this reason, Three.js's webgpu
-  renderer fallbacks to webgl when webgpu is not available.
+  WebGPU is still young and has [limited availability across major
+  browsers](https://caniuse.com/?search=webgpu). For this reason, Three.js's WebGPU renderer
+  fallbacks to WebGL when WebGPU is not available.
 </Tip>
 <Tip type="tip">
   This same approach can be used to swap out the default renderer for any other custom renderer.
@@ -62,7 +62,7 @@ can defer rendering by initially setting the renderMode to `manual` like so:
 
 ```svelte title="App.svelte"
 <script>
-  import { Canvas, T } from '@threlte/core@next'
+  import { Canvas, T } from '@threlte/core'
   import { WebGPURenderer } from 'three/webgpu'
   let renderMode = $state('manual')
 </script>
@@ -110,7 +110,7 @@ can be used, although less success has been reported with this method.
 
 ## TSL
 
-A question that comes up often in Three.js development is "How do I extend Three.js's materials?".
+A question that comes up often in Three.js development is "How do I extend Three.js materials?".
 External libraries such as [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
 use a find and replace solution to get this job done. Three.js has identified
 that it's not an ideal solution and recommends using the [Three.js Shading Language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) or TSL for short.
@@ -125,7 +125,7 @@ within Three.js that you can use or adapt for your project.
 
 The `<T>` component uses all the exports from `three`. It will error on things like
 `<T.MeshPhysicalNodeMaterial />` because the `MeshPhysicalNodeMaterial` class is an
-export of `three/webgpu` not `three`. You have a few options to work this out.
+export of `three/webgpu` and not `three`. You have a few options to work this out.
 
 1. Extend `<T>` with all the definitions from `three/webgpu` by using the [`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
    function. Adding all of the definitions will increase the bundle size of your application because both `three` and `three/webgpu` will be imported in a non-tree-shakeable way.
@@ -269,7 +269,7 @@ from the camera,
 
 Any fragment that is discarded in the shadowNode will not cast shadows.
 
-### Updating Uniforms
+### Updating uniforms
 
 If your node uses uniforms, they can be declared in the `script` tag of
 the component and updated via `$effect` or a callback.
