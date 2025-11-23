@@ -88,11 +88,6 @@ catalogs:
 overrides:
   vite: ^7.1.4
 
-patchedDependencies:
-  camera-controls:
-    hash: 2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9
-    path: patches/camera-controls.patch
-
 importers:
 
   .:
@@ -436,8 +431,8 @@ importers:
         specifier: ^2.5.1
         version: 2.5.1(@types/three@0.175.0)(three@0.175.0)
       camera-controls:
-        specifier: ^2.10.1
-        version: 2.10.1(patch_hash=2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9)(three@0.175.0)
+        specifier: ^3.1.2
+        version: 3.1.2(three@0.175.0)
       three-mesh-bvh:
         specifier: ^0.9.1
         version: 0.9.1(three@0.175.0)
@@ -775,8 +770,8 @@ importers:
         specifier: ^0.3.0
         version: 0.3.0(tweakpane@4.0.5)
       camera-controls:
-        specifier: ^2.10.1
-        version: 2.10.1(patch_hash=2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9)(three@0.175.0)
+        specifier: ^3.1.2
+        version: 3.1.2(three@0.175.0)
       estree-walker:
         specifier: ^3.0.3
         version: 3.0.3
@@ -3509,8 +3504,9 @@ packages:
     resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
     engines: {node: '>=16'}
 
-  camera-controls@2.10.1:
-    resolution: {integrity: sha512-KnaKdcvkBJ1Irbrzl8XD6WtZltkRjp869Jx8c0ujs9K+9WD+1D7ryBsCiVqJYUqt6i/HR5FxT7RLASieUD+Q5w==}
+  camera-controls@3.1.2:
+    resolution: {integrity: sha512-xkxfpG2ECZ6Ww5/9+kf4mfg1VEYAoe9aDSY+IwF0UEs7qEzwy0aVRfs2grImIECs/PoBtWFrh7RXsQkwG922JA==}
+    engines: {node: '>=22.0.0', npm: '>=10.5.1'}
     peerDependencies:
       three: '>=0.126.1'
 
@@ -11398,7 +11394,7 @@ snapshots:
 
   camelcase@8.0.0: {}
 
-  camera-controls@2.10.1(patch_hash=2f52cff787ab140c8c5d444db6b9572efcd2ba717008bde72e902e4e76ef1ba9)(three@0.175.0):
+  camera-controls@3.1.2(three@0.175.0):
     dependencies:
       three: 0.175.0
 

@@ -88,7 +88,7 @@
   },
   "dependencies": {
     "@threejs-kit/instanced-sprite-mesh": "^2.5.1",
-    "camera-controls": "^2.10.1",
+    "camera-controls": "^3.1.2",
     "three-mesh-bvh": "^0.9.1",
     "three-perf": "^1.0.11",
     "three-viewport-gizmo": "^2.2.0",
