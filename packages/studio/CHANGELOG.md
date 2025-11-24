@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.2.1
+
+### Patch Changes
+
+- c1623a9: Update camera-controls and remove patch
+
 ## 0.2.0
 
 ### Minor Changes

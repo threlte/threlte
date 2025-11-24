@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.7.1
+
+### Patch Changes
+
+- c1623a9: Update camera-controls and remove patch
+
 ## 9.7.0
 
 ### Minor Changes
