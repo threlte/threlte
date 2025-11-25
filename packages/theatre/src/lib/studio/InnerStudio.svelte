@@ -3,7 +3,7 @@
   module
 >
   const studioModule = await import('@theatre/studio')
-  const Studio = studioModule as unknown as typeof import('@theatre/studio').default
+  const Studio = studioModule.default as unknown as typeof import('@theatre/studio').default
   import { studio } from '../consts.js'
 
   Studio.initialize()
