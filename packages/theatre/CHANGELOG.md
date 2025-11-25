@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.1.1
+
+### Patch Changes
+
+- d84a789: Fix default import for @threlte/theatre
+
 ## 3.1.0
 
 ### Minor Changes
