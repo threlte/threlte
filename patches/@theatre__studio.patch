@@ -1,0 +1,18 @@
+diff --git a/package.json b/package.json
+index aa09e66263b13f638acd295697b8831ac4525ba0..22c2534d47178d4f0f2a55cba9a366b478c84c61 100644
+--- a/package.json
++++ b/package.json
+@@ -18,6 +18,13 @@
+   "files": [
+     "dist/*"
+   ],
++  "type": "module",
++  "exports": {
++    ".": {
++      "types": "./dist/index.d.ts",
++      "default": "./dist/index.js"
++    }
++  },
+   "scripts": {
+     "prepublish": "node ../../devEnv/ensurePublishing.js"
+   },
