@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.1.2
+
+### Patch Changes
+
+- a43cd0e: patch @theatre/studio and remove workarounds
+
 ## 3.1.1
 
 ### Patch Changes
