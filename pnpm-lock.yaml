@@ -92,6 +92,9 @@ patchedDependencies:
   '@theatre/studio':
     hash: 1be11589f12d362f0a72e118ac4ef7b2c48bbd564289a80be63f7f5ac6f4e07f
     path: patches/@theatre__studio.patch
+  mitt:
+    hash: 325af173b7ab05fc16e066f43bc80a68f7fd58ddbfc1d0df37f773af1c79bb42
+    path: patches/mitt.patch
 
 importers:
 
@@ -343,7 +346,7 @@ importers:
     dependencies:
       mitt:
         specifier: ^3.0.1
-        version: 3.0.1
+        version: 3.0.1(patch_hash=325af173b7ab05fc16e066f43bc80a68f7fd58ddbfc1d0df37f773af1c79bb42)
     devDependencies:
       '@eslint/js':
         specifier: 'catalog:'
@@ -531,7 +534,7 @@ importers:
     dependencies:
       mitt:
         specifier: ^3.0.1
-        version: 3.0.1
+        version: 3.0.1(patch_hash=325af173b7ab05fc16e066f43bc80a68f7fd58ddbfc1d0df37f773af1c79bb42)
       yoga-layout:
         specifier: ^3.2.1
         version: 3.2.1
@@ -14495,7 +14498,7 @@ snapshots:
     dependencies:
       minipass: 7.1.2
 
-  mitt@3.0.1: {}
+  mitt@3.0.1(patch_hash=325af173b7ab05fc16e066f43bc80a68f7fd58ddbfc1d0df37f773af1c79bb42): {}
 
   mixme@0.5.4: {}
 
