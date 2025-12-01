@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.3.1
+
+### Patch Changes
+
+- 0c6bc84: patch mitt and remove workarounds
+
 ## 8.3.0
 
 ### Minor Changes
