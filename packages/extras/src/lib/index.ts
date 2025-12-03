@@ -125,4 +125,6 @@ export type { BVHOptions, BVHProps } from './bvh/types.js'
 import { SAH, CENTER, AVERAGE } from 'three-mesh-bvh'
 export const BVHSplitStrategy = { SAH, CENTER, AVERAGE }
 
+
+export type { SceneGraph } from './lib/buildSceneGraph.js'
 export type { ThrelteGltf } from './types/types.js'
