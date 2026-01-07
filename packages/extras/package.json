@@ -69,6 +69,10 @@
     ".": {
       "types": "./src/lib/index.ts",
       "svelte": "./src/lib/index.ts"
+    },
+    "./webgpu": {
+      "types": "./src/lib/webgpu/index.ts",
+      "svelte": "./src/lib/webgpu/index.ts"
     }
   },
   "types": "./src/lib/index.ts",
@@ -82,6 +86,10 @@
       ".": {
         "types": "./dist/index.d.ts",
         "svelte": "./dist/index.js"
+      },
+      "./webgpu": {
+        "types": "./src/lib/webgpu/index.ts",
+        "svelte": "./src/lib/webgpu/index.ts"
       }
     },
     "types": "./dist/index.d.ts"
