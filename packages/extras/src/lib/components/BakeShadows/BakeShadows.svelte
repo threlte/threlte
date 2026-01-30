@@ -1,5 +1,11 @@
-<script lang="ts">
-  import { useSuspense } from '$lib/suspense/useSuspense.js'
+<!--
+@component
 
-  useSuspense()
+@deprecated favor using `useBakeShadows`
+-->
+
+<script lang="ts">
+  import { useBakeShadows } from '@threlte/extras'
+
+  useBakeShadows()
 </script>

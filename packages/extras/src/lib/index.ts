@@ -9,10 +9,10 @@ export { useProgress } from './hooks/useProgress.js'
 export { useTexture } from './hooks/useTexture.js'
 export { useFBO } from './hooks/useFBO.js'
 export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad.js'
-export { useBakeShadows } from './hooks/useBakeShadows.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.js'
 export { meshBounds } from './utilities/meshBounds.js'
+export { useBakeShadows } from './hooks/useBakeShadows.svelte.js'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
