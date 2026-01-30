@@ -1,7 +1,7 @@
 <script lang="ts">
   import Spaceship from './Spaceship.svelte'
   import type { SpaceshipProps } from './types'
-  import { BakeShadows, OrbitControls, Suspense } from '@threlte/extras'
+  import { useBakeShadows, OrbitControls, Suspense } from '@threlte/extras'
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
 
@@ -25,6 +25,8 @@
     { name: 'Striker', position: [8, -1, -10] },
     { name: 'Zenith', position: [-1, 0, 13] }
   ]
+
+  useBakeShadows()
 </script>
 
 <T.OrthographicCamera
@@ -45,15 +47,12 @@
   angle={Math.PI / 3}
 />
 
-<Suspense final>
-  {#each ships as { name, position }}
-    <Spaceship
-      {name}
-      {position}
-    />
-  {/each}
-  <BakeShadows />
-</Suspense>
+{#each ships as { name, position }}
+  <Spaceship
+    {name}
+    {position}
+  />
+{/each}
 
 <T.Mesh
   receiveShadow

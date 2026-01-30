@@ -1,16 +1,11 @@
 <script lang="ts">
+  import { Suspense } from '@threlte/extras'
   import Scene from './Scene.svelte'
   import { Canvas } from '@threlte/core'
 </script>
 
-<div>
-  <Canvas>
+<Canvas>
+  <Suspense final>
     <Scene />
-  </Canvas>
-</div>
-
-<style>
-  div {
-    height: 100%;
-  }
-</style>
+  </Suspense>
+</Canvas>

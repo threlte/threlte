@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Mesh } from 'three'
-  import { BakeShadows } from '@threlte/extras'
+  import { useBakeShadows } from '@threlte/extras'
   import { T, useTask } from '@threlte/core'
 
   type Props = {
@@ -13,6 +13,10 @@
 
   useTask((delta) => {
     mesh.rotation.y += delta
+  })
+
+  $effect(() => {
+    if (bake) useBakeShadows()
   })
 </script>
 
@@ -45,7 +49,3 @@
   <T.CircleGeometry args={[4, 40]} />
   <T.MeshStandardMaterial color="white" />
 </T.Mesh>
-
-{#if bake}
-  <BakeShadows />
-{/if}
