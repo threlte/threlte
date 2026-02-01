@@ -1,7 +1,7 @@
 <script lang="ts">
   import Spaceship from './Spaceship.svelte'
   import type { SpaceshipProps } from './types'
-  import { useBakeShadows, OrbitControls, Suspense } from '@threlte/extras'
+  import { useBakeShadows, OrbitControls } from '@threlte/extras'
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
 
