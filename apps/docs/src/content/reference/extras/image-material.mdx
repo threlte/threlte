@@ -13,77 +13,68 @@ type: 'component'
       },
     'props':
       [
-        { name: 'color', type: 'THREE.ColorRepresentation', default: 'white', required: false },
-        { name: 'radius', type: 'number', default: '0', required: false },
+        { name: 'color', type: 'THREE.ColorRepresentation', default: 'white' },
+        { name: 'radius', type: 'number', default: '0' },
         {
           name: 'brightness',
           type: 'number',
           default: '0',
-          required: false,
           description: 'Modifies brightness. Recommended range from -1 to 1.'
         },
         {
           name: 'contrast',
           type: 'number',
           default: '0',
-          required: false,
           description: 'Modifies contrast. Recommended range from -1 to 1.'
         },
         {
           name: 'hue',
           type: 'number',
           default: '0',
-          required: false,
           description: 'Modifies hue. Range from 0 to 1.'
         },
         {
           name: 'saturation',
           type: 'number',
           default: '0',
-          required: false,
           description: 'Modifies saturation. Recommended range from -1 to 1.'
         },
         {
           name: 'lightness',
           type: 'number',
           default: '0',
-          required: false,
           description: 'Modifies lightness. Recommended range from -1 to 1.'
         },
         {
           name: 'monochromeColor',
           type: 'THREE.ColorRepresentation',
           default: '#535970',
-          required: false,
           description: 'Sets a monochrome tint the image is converted to.'
         },
         {
           name: 'monochromeStrength',
           type: 'number',
           default: '0',
-          required: false,
           description: 'Sets the strength of monochrome effect. Range from 0 to 1.'
         },
         {
           name: 'negative',
           type: 'boolean',
           default: 'false',
-          required: false,
           description: 'Enables/disables negative effect.'
         },
         {
           name: 'colorProcessingTexture',
           type: 'THREE.Texture | THREE.VideoTexture',
-          required: false,
           description: 'Sets a texture used to adjust the strength and the pattern of color processing effects. Each channel of the texture is responsible for a different color processing function. R - hue, G - saturation, B - lightness, A - alpha.'
         },
-        { name: 'alphaThreshold', type: 'number', default: '0', required: false, description: '' },
-        { name: 'alphaSmoothing', type: 'number', default: '0', required: false, description: '' },
-        { name: 'zoom', type: 'number', default: '1', required: false },
-        { name: 'toneMapped', type: 'boolean', default: 'true', required: false },
-        { name: 'transparent', type: 'boolean', default: 'false', required: false },
-        { name: 'opacity', type: 'number', default: '1', required: false },
-        { name: 'side', type: 'THREE.Side', default: 'THREE.FrontSide', required: false }
+        { name: 'alphaThreshold', type: 'number', default: '0', description: '' },
+        { name: 'alphaSmoothing', type: 'number', default: '0', description: '' },
+        { name: 'zoom', type: 'number', default: '1' },
+        { name: 'toneMapped', type: 'boolean', default: 'true' },
+        { name: 'transparent', type: 'boolean', default: 'false' },
+        { name: 'opacity', type: 'number', default: '1' },
+        { name: 'side', type: 'THREE.Side', default: 'THREE.FrontSide' }
       ]
   }
 ---

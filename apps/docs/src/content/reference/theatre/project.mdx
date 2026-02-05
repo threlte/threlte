@@ -8,13 +8,13 @@ componentSignature:
   {
     props:
       [
-        {name: 'name', type: 'string', default: 'default', required: false},
-        {name: 'config', type: 'IProjectConfig', required: false},
+        { name: 'name', type: 'string', default: "'default'" },
+        { name: 'config', type: 'IProjectConfig' }
       ],
 	bindings:
 	  [
-	    {name: 'project', type: 'IProject'},
-		{name: 'isReady', type: 'boolean'},
+	    { name: 'project', type: 'IProject' },
+			{ name: 'isReady', type: 'boolean' }
 	  ]
   }
 ---

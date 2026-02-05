@@ -23,46 +23,34 @@ componentSignature:
       ],
     props:
       [
-        { name: 'transform', type: 'boolean', default: 'false', required: false },
+        { name: 'transform', type: 'boolean', default: 'false' },
         { name: 'calculatePosition', type: '(
             obj: Object3D,
             camera: Camera,
             size: { width: number; height: number }
-            ) => [number, number]', required: false },
-        { name: 'eps', type: 'number', default: '0.001', required: false },
-        {
-          name: 'occlude',
-          type: "boolean | THREE.Object3D[] | 'blending'",
-          default: 'false',
-          required: false
-        },
-        {
-          name: 'zIndexRange',
-          type: '[number, number]',
-          default: '[16777271, 0]',
-          required: false
-        },
-        { name: 'sprite', type: 'boolean', default: 'false', required: false },
+            ) => [number, number]' },
+        { name: 'eps', type: 'number', default: '0.001' },
+        { name: 'occlude', type: "boolean | THREE.Object3D[] | 'blending'", default: 'false' },
+        { name: 'zIndexRange', type: '[number, number]', default: '[16777271, 0]' },
+        { name: 'sprite', type: 'boolean', default: 'false' },
         {
           name: 'pointerEvents',
           type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
-          default: "'auto'",
-          required: false
+          default: "'auto'"
         },
-        { name: 'center', type: 'boolean', default: 'false', required: false },
-        { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
-        { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
-        { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
-        { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false },
-        { name: 'castShadow', type: 'boolean', default: 'undefined', required: false },
-        { name: 'receiveShadow', type: 'boolean', default: 'undefined', required: false },
-        { name: 'material', type: 'THREE.Material', default: 'undefined', required: false },
-        { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined', required: false },
+        { name: 'center', type: 'boolean', default: 'false' },
+        { name: 'fullscreen', type: 'boolean', default: 'false' },
+        { name: 'distanceFactor', type: 'number', default: 'undefined' },
+        { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'" },
+        { name: 'portal', type: 'HTMLElement', default: 'undefined' },
+        { name: 'castShadow', type: 'boolean', default: 'undefined' },
+        { name: 'receiveShadow', type: 'boolean', default: 'undefined' },
+        { name: 'material', type: 'THREE.Material', default: 'undefined' },
+        { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined' },
         {
           name: 'autoRender',
           type: 'boolean',
           default: 'true',
-          required: false,
           description: 'whether the render task should be ran every frame'
         }
       ]
