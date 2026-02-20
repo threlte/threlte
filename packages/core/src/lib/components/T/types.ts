@@ -1,5 +1,5 @@
 import type { Snippet } from 'svelte'
-import type { Object3D, PerspectiveCamera } from 'three'
+import type { Camera, Object3D } from 'three'
 
 /** Inlined from type-fest */
 type ConditionalKeys<Base, Condition> = {
@@ -96,7 +96,7 @@ export type RefProps<Type> = {
  * ### Camera Props
  */
 export type CameraProps<Type> =
-  MaybeInstance<Type> extends Pick<PerspectiveCamera, 'isCamera'>
+  MaybeInstance<Type> extends Pick<Camera, 'isCamera'>
     ? {
         /**
          * By default, Threlte will update the cameras aspect ratio or frustum
