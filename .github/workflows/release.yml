@@ -9,6 +9,7 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 jobs:
   release:
@@ -22,6 +23,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install pnpm 🔧
         uses: pnpm/action-setup@v4
@@ -39,4 +41,3 @@ jobs:
           publish: pnpm release
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
