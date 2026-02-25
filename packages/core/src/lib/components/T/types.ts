@@ -96,7 +96,7 @@ export type RefProps<Type> = {
  * ### Camera Props
  */
 export type CameraProps<Type> =
-  MaybeInstance<Type> extends Pick<Camera, 'isCamera'>
+  MaybeInstance<Type> extends Camera
     ? {
         /**
          * By default, Threlte will update the cameras aspect ratio or frustum
