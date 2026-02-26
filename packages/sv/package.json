@@ -1,0 +1,43 @@
+{
+	"name": "@joanofxyz/sv-add-threlte",
+	"version": "0.1.1",
+	"description": "sv add-on for threlte",
+	"keywords": [
+		"sv",
+		"sv-add",
+		"svelte",
+		"sveltekit"
+	],
+	"homepage": "https://github.com/joanofxyz/sv-add-threlte#readme",
+	"bugs": {
+		"url": "https://github.com/joanofxyz/sv-add-threlte/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/joanofxyz/sv-add-threlte.git"
+	},
+	"license": "MIT",
+	"type": "module",
+	"exports": {
+		".": {
+			"default": "./src/index.js"
+		}
+	},
+	"directories": {
+		"test": "tests"
+	},
+	"files": [
+		"src",
+		"!src/**/*.test.*"
+	],
+	"scripts": {
+		"test": "vitest run"
+	},
+	"dependencies": {
+		"sv": "latest"
+	},
+	"devDependencies": {
+		"@playwright/test": "^1.58.2",
+		"vitest": "^4.0.18"
+	}
+}
