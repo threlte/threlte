@@ -1,5 +1,5 @@
 {
-	"name": "@joanofxyz/sv-add-threlte",
+	"name": "@threlte/sv",
 	"version": "0.1.1",
 	"description": "sv add-on for threlte",
 	"keywords": [
@@ -8,13 +8,14 @@
 		"svelte",
 		"sveltekit"
 	],
-	"homepage": "https://github.com/joanofxyz/sv-add-threlte#readme",
+	"homepage": "https://github.com/threlte/packages/sv#readme",
 	"bugs": {
-		"url": "https://github.com/joanofxyz/sv-add-threlte/issues"
+		"url": "https://github.com/threlte/threlte/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/joanofxyz/sv-add-threlte.git"
+		"url": "git+https://github.com/threlte/threlte.git",
+		"directory": "packages/sv"
 	},
 	"license": "MIT",
 	"type": "module",
