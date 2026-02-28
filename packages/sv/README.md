@@ -8,7 +8,7 @@
 To install the add-on, run:
 
 ```shell
-npx sv add @joanofxyz/sv-add-threlte
+npx sv add @threlte/sv
 ```
 
 ## What you get
