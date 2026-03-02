@@ -1,5 +1,5 @@
 ---
-"@threlte/sv": patch
+"@threlte/sv": minor
 ---
 
-svelte cli tool addon to scaffold a threlte project
+svelte cli tool `sv` addon to install threlte into a project
