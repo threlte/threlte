@@ -19,9 +19,7 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "default": "./src/index.js"
-    }
+    ".": "./src/index.js"
   },
   "files": [
     "src"

@@ -1,4 +1,4 @@
-import { defineAddon, defineAddonOptions } from 'sv/core'
+import { defineAddon, defineAddonOptions } from 'sv'
 import corePackage from '../../core/package.json' with { type: 'json' }
 import extrasPackage from '../../extras/package.json' with { type: 'json' }
 import flexPackage from '../../flex/package.json' with { type: 'json' }
