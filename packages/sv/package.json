@@ -1,44 +1,32 @@
 {
-	"name": "@threlte/sv",
-	"version": "0.1.1",
-	"description": "sv add-on for threlte",
-	"keywords": [
-		"sv",
-		"sv-add",
-		"svelte",
-		"sveltekit"
-	],
-	"homepage": "https://github.com/threlte/packages/sv#readme",
-	"bugs": {
-		"url": "https://github.com/threlte/threlte/issues"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/threlte/threlte.git",
-		"directory": "packages/sv"
-	},
-	"license": "MIT",
-	"type": "module",
-	"exports": {
-		".": {
-			"default": "./src/index.js"
-		}
-	},
-	"directories": {
-		"test": "tests"
-	},
-	"files": [
-		"src",
-		"!src/**/*.test.*"
-	],
-	"scripts": {
-		"test": "vitest run"
-	},
-	"dependencies": {
-		"sv": "latest"
-	},
-	"devDependencies": {
-		"@playwright/test": "^1.58.2",
-		"vitest": "^4.0.18"
-	}
+  "name": "@threlte/sv",
+  "version": "0.1.0",
+  "description": "sv add-on for threlte",
+  "keywords": [
+    "sv",
+    "sv-add",
+    "svelte"
+  ],
+  "homepage": "https://github.com/threlte/packages/sv#readme",
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/threlte/threlte.git",
+    "directory": "packages/sv"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "default": "./src/index.js"
+    }
+  },
+  "files": [
+    "src"
+  ],
+  "dependencies": {
+    "sv": "^0.12.4"
+  }
 }
