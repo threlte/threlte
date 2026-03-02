@@ -1,5 +1,6 @@
 import { defineAddon, defineAddonOptions } from 'sv'
 
+const versionTag = 'latest'
 const dimforgeVersion = '^0.16.2'
 const theatreVersion = '^0.7.2'
 const webxrTypesVersion = '^0.5.14'
@@ -8,13 +9,13 @@ const packages = [
   {
     id: 'extras',
     package: '@threlte/extras',
-    version: '@latest',
+    version: versionTag,
     description: 'Components, helpers, hooks and more'
   },
   {
     id: 'rapier',
     package: '@threlte/rapier',
-    version: '@latest',
+    version: versionTag,
     description: 'Physics engine',
     dependencies: [
       {
@@ -26,26 +27,26 @@ const packages = [
   {
     id: 'theatre',
     package: '@threlte/theatre',
-    version: '@latest',
+    version: versionTag,
     description: 'Animation library',
     dependencies: [{ package: '@theatre/core', version: theatreVersion }]
   },
   {
     id: 'xr',
     package: '@threlte/xr',
-    version: '@latest',
+    version: versionTag,
     description: 'VR and AR support'
   },
   {
     id: 'flex',
     package: '@threlte/flex',
-    version: '@latest',
+    version: versionTag,
     description: 'Flexbox for 3D'
   },
   {
     id: 'studio',
     package: '@threlte/studio',
-    version: '@latest',
+    version: versionTag,
     description: 'Visual editor'
   }
 ]
@@ -76,19 +77,17 @@ export default defineAddon({
   homepage: 'https://threlte.xyz',
   options,
   run: ({ sv, options }) => {
-    sv.dependency('three', '@latest')
+    sv.dependency('three', versionTag)
     if (options.types) {
-      sv.devDependency('@types/three', '@latest')
+      sv.devDependency('@types/three', versionTag)
     }
-    sv.dependency('@threlte/core', '@latest')
+    sv.dependency('@threlte/core', versionTag)
 
     for (const pkgId of options.packages) {
       const pkg = packages.find((p) => p.id === pkgId)
       if (!pkg) continue
 
-      const version = pkg.version
-
-      sv.dependency(pkg.package, version)
+      sv.dependency(pkg.package, pkg.version)
 
       if (pkg.dependencies) {
         for (const dep of pkg.dependencies) {
