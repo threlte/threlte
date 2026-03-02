@@ -26,5 +26,13 @@
   ],
   "dependencies": {
     "sv": "^0.12.4"
+  },
+  "publishOverrides": {
+    "files": [
+      "dist"
+    ],
+    "exports": {
+      ".": "./dist/index.js"
+    }
   }
 }
