@@ -1,1 +1,1 @@
-export { transition } from 'svelte/internal/client'
+export { transition, render_effect } from 'svelte/internal/client'
