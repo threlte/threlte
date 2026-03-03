@@ -1,6 +1,6 @@
 import { injectPlugin, useThrelte } from '@threlte/core'
 import type { TransitionConfig } from 'svelte/transition'
-import { transition, render_effect } from './internals.js'
+import { transition, active_effect } from './internals.js'
 import type { ThrelteGlobalTransition, ThrelteTransition } from './types.js'
 
 const el = typeof window !== 'undefined' ? document.createElement('div') : undefined
@@ -114,14 +114,10 @@ export const transitions = () => {
       transition: 3
     }
 
-    // Probe the effect tree to discover the current component effect.
-    // render_effect creates a child of active_effect and returns it.
-    const probe = render_effect(() => {}) as any
-    const componentEffect = probe?.parent
-
     // For new Svelte (PR #17293+): ensure nodes exists on the component effect.
     // In old Svelte, effects have a 'transitions' property; in new Svelte they don't.
-    if (componentEffect && !('transitions' in componentEffect) && componentEffect.nodes === null) {
+    const componentEffect = active_effect as any
+    if (componentEffect && !('transitions' in componentEffect) && componentEffect.nodes == null) {
       componentEffect.nodes = { start: null, end: null, a: null, t: null }
     }
 
