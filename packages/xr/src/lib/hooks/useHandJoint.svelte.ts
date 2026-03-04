@@ -13,17 +13,16 @@ export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) =>
 
   let jointSpace = $state.raw<XRJointSpace>()
 
-  const { stop } = useTask(
+  useTask(
     () => {
       const space = xrhand?.hand.joints[joint]
       // The joint radius is a good indicator that the joint is ready
       if (space?.jointRadius !== undefined) {
         jointSpace = space
         invalidate()
-        stop()
       }
     },
-    { autoInvalidate: false }
+    { running: () => jointSpace === undefined }
   )
 
   return toCurrentReadable(() => jointSpace)

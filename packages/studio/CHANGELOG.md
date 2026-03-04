@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.3.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
 ## 0.2.1
 
 ### Patch Changes

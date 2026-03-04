@@ -256,21 +256,10 @@
     }
   }
 
-  export const { start: startRendering, stop: stopRendering } = useTask(render, {
-    autoStart: false,
+  useTask(render, {
     autoInvalidate: false,
-    stage: renderStage
-  })
-
-  $effect(() => {
-    if (!autoRender) {
-      return
-    }
-
-    startRendering()
-    return () => {
-      stopRendering()
-    }
+    stage: renderStage,
+    running: () => autoRender
   })
 
   let pos = $derived.by(() => {
@@ -362,7 +351,7 @@
           class={props.class}
           style={props.style}
         >
-          {@render children?.({ render, startRendering, stopRendering })}
+          {@render children?.({ render })}
         </div>
       </div>
     </div>
@@ -377,7 +366,7 @@
       style={props.style}
       class={props.class}
     >
-      {@render children?.({ render, startRendering, stopRendering })}
+      {@render children?.({ render })}
     </div>
   {/if}
 </svelte:element>

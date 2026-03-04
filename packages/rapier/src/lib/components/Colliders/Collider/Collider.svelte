@@ -168,19 +168,14 @@
    * If the Collider isAttached (i.e. NOT child of a RigidBody), update the
    * transforms on every frame.
    */
-  const { start, stop } = useTask(
+  useTask(
     () => {
       refresh()
     },
     {
-      autoStart: !hasRigidBodyParent && type === 'dynamic'
+      running: () => !hasRigidBodyParent && type === 'dynamic'
     }
   )
-
-  $effect.pre(() => {
-    if (!hasRigidBodyParent && type === 'dynamic') start()
-    else stop()
-  })
 
   /**
    * Cleanup

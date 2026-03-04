@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 9.8.1
+
+### Patch Changes
+
+- c0518f2: npm publish via OIDC test
+
+## 9.8.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
 ## 9.7.1
 
 ### Patch Changes

@@ -40,10 +40,13 @@
    */
   const { width: computedWidth, height: computedHeight } = createUseDimensionsContext()
 
+  let shouldReflow = $state(false)
+  const reflow = () => (shouldReflow = true)
+
   /**
    * Reflowing inside useTask automatically batches reflows to 1 per frame.
    */
-  const { start: reflow, stop } = useTask(
+  useTask(
     Symbol('threlte-flex-reflow'),
     () => {
       flexContext.emit('reflow:before')
@@ -107,11 +110,11 @@
         height: computedHeight.current
       })
 
-      stop()
+      shouldReflow = false
     },
     {
       stage: reflowStage,
-      autoStart: false
+      running: () => shouldReflow
     }
   )
 

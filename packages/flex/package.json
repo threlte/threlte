@@ -1,6 +1,6 @@
 {
   "name": "@threlte/flex",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Components to easily use the flexbox spec with Threlte",
@@ -61,7 +61,7 @@
   "homepage": "https://threlte.xyz",
   "repository": {
     "type": "git",
-    "url": "https://github.com/threlte/threlte.git",
+    "url": "https://github.com/threlte/threlte",
     "directory": "packages/flex"
   },
   "bugs": {

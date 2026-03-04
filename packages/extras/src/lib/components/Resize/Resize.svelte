@@ -58,12 +58,18 @@
     onresize?.()
   }
 
-  const { start: scheduleResizing, stop } = useTask(
+  let running = $state(false)
+
+  const scheduleResizing = () => {
+    running = true
+  }
+
+  useTask(
     () => {
       doResize()
       stop()
     },
-    { autoStart: false, stage }
+    { stage, running: () => running }
   )
 
   /** Manually trigger resizing */

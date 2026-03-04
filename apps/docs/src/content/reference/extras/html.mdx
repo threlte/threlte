@@ -10,59 +10,41 @@ componentSignature:
     exports:
       [
         {
-          name: 'startRendering',
-          type: '() => void',
-          description: 'Manually start the render task'
-        },
-        { name: 'stopRendering', type: '() => void', description: 'Manually stop the render task' },
-        {
-          description: 'renders a single frame of the provided html',
+          description: 'Manually renders a single frame of the provided html',
           name: 'render',
           type: '() => void'
         }
       ],
     props:
       [
-        { name: 'transform', type: 'boolean', default: 'false', required: false },
+        { name: 'transform', type: 'boolean', default: 'false' },
         { name: 'calculatePosition', type: '(
             obj: Object3D,
             camera: Camera,
             size: { width: number; height: number }
-            ) => [number, number]', required: false },
-        { name: 'eps', type: 'number', default: '0.001', required: false },
-        {
-          name: 'occlude',
-          type: "boolean | THREE.Object3D[] | 'blending'",
-          default: 'false',
-          required: false
-        },
-        {
-          name: 'zIndexRange',
-          type: '[number, number]',
-          default: '[16777271, 0]',
-          required: false
-        },
-        { name: 'sprite', type: 'boolean', default: 'false', required: false },
+            ) => [number, number]' },
+        { name: 'eps', type: 'number', default: '0.001' },
+        { name: 'occlude', type: "boolean | THREE.Object3D[] | 'blending'", default: 'false' },
+        { name: 'zIndexRange', type: '[number, number]', default: '[16777271, 0]' },
+        { name: 'sprite', type: 'boolean', default: 'false' },
         {
           name: 'pointerEvents',
           type: "'auto' | 'none' | 'visiblePainted' | 'visibleFill' | 'visibleStroke' | 'visible' | 'painted' | 'fill' | 'stroke' | 'all' | 'inherit'",
-          default: "'auto'",
-          required: false
+          default: "'auto'"
         },
-        { name: 'center', type: 'boolean', default: 'false', required: false },
-        { name: 'fullscreen', type: 'boolean', default: 'false', required: false },
-        { name: 'distanceFactor', type: 'number', default: 'undefined', required: false },
-        { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'", required: false },
-        { name: 'portal', type: 'HTMLElement', default: 'undefined', required: false },
-        { name: 'castShadow', type: 'boolean', default: 'undefined', required: false },
-        { name: 'receiveShadow', type: 'boolean', default: 'undefined', required: false },
-        { name: 'material', type: 'THREE.Material', default: 'undefined', required: false },
-        { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined', required: false },
+        { name: 'center', type: 'boolean', default: 'false' },
+        { name: 'fullscreen', type: 'boolean', default: 'false' },
+        { name: 'distanceFactor', type: 'number', default: 'undefined' },
+        { name: 'as', type: 'keyof HTMLElementTagNameMap', default: "'div'" },
+        { name: 'portal', type: 'HTMLElement', default: 'undefined' },
+        { name: 'castShadow', type: 'boolean', default: 'undefined' },
+        { name: 'receiveShadow', type: 'boolean', default: 'undefined' },
+        { name: 'material', type: 'THREE.Material', default: 'undefined' },
+        { name: 'geometry', type: 'THREE.BufferGeoemtry', default: 'undefined' },
         {
           name: 'autoRender',
           type: 'boolean',
           default: 'true',
-          required: false,
           description: 'whether the render task should be ran every frame'
         }
       ]
@@ -220,9 +202,8 @@ render task. If at some point you no longer need to update `<HTML>`,
 you can set `autoRender` to `false`. If you need to resume updates,
 set `autoRender` back to `true`.
 
-`<HTML>` also exports its internal render task and the `startRendering`,
-`stopRendering`, and `render` functions so you can either manually render
-or start and stop the internal task based on your needs.
+`<HTML>` also exports its internal render function so you can manually
+render based on your needs.
 
 ```svelte title="manually-rendering.svelte"
 <script lang="ts">
@@ -247,40 +228,20 @@ or start and stop the internal task based on your needs.
 <script lang="ts">
   import { HTML } from '@threlte/extras'
 
-  let html = $state<HTML>()
-
   // turn this on and off in accordance with your application
   let renderWhileTrue = $state(false)
-
-  $effect(() => {
-    if (renderWhileTrue) {
-      html?.startRendering()
-      // always stop rendering if it was started
-      return () => {
-        html?.stopRendering()
-      }
-    }
-  })
 </script>
 
-<HTML
-  autoRender={false}
-  bind:this={html}
->
+<HTML autoRender={renderWhileTrue}>
   <h1>Hello World</h1>
 </HTML>
 ```
 
-In both cases you should set `autoRender` to `false` so that the render task
-doesn't automatically begin.
-
-Lastly, you can access these functions from the `<HTML>`'s children snippet.
+Lastly, you can access render from the `<HTML>`'s children snippet.
 
 ```svelte
 <HTML autoRender={false}>
-  {#snippet children({ render, startRendering, stopRendering })}
-    <button onclick={startRendering}>start rendering</button>
-    <button onclick={stopRendering}>stop rendering</button>
+  {#snippet children({ render })}
     <button onclick={render}>render a single frame</button>
   {/snippet}
 </HTML>

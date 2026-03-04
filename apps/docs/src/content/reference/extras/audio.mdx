@@ -17,20 +17,18 @@ componentSignature:
         {
           name: 'id',
           type: 'string',
-          required: false,
           default: 'default',
           description: 'The id of the AudioListener this Audio will be attached to.'
         },
-        { name: 'autoplay', type: 'boolean', required: false },
-        { name: 'loop', type: 'boolean', required: false },
+        { name: 'autoplay', type: 'boolean' },
+        { name: 'loop', type: 'boolean' },
         {
           name: 'volume',
           type: 'number',
-          required: false,
           description: 'The value should range between 0 to 1. Be cautious, values outside this range might cause unintended loudness.'
         },
-        { name: 'playbackRate', type: 'number', required: false },
-        { name: 'detune', type: 'number', required: false }
+        { name: 'playbackRate', type: 'number' },
+        { name: 'detune', type: 'number' }
       ],
     events:
       [

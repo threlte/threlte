@@ -12,30 +12,22 @@ componentSignature:
         {
           name: 'src',
           type: 'string | Texture',
-          required: false,
           description: 'A url or texture prop can be used instead of a material override'
         },
         {
           name: 'position',
           type: 'Vector3Tuple',
-          required: false,
           description: 'Positions the center of the decal projector'
         },
         {
           name: 'rotation',
           type: 'EulerTuple',
-          required: false,
           description: 'Euler for manual orientation or a single float for closest-vertex-normal orient'
         },
-        { name: 'scale', type: 'Vector3Tuple', required: false },
-        { name: 'polygonOffsetFactor', type: 'number', required: false, default: '-10' },
-        { name: 'depthTest', type: 'boolean', required: false, default: 'true' },
-        {
-          name: 'mesh',
-          type: 'Mesh',
-          required: false,
-          description: 'An optional parent mesh to project the decal'
-        }
+        { name: 'scale', type: 'Vector3Tuple' },
+        { name: 'polygonOffsetFactor', type: 'number', default: '-10' },
+        { name: 'depthTest', type: 'boolean', default: 'true' },
+        { name: 'mesh', type: 'Mesh', description: 'An optional parent mesh to project the decal' }
       ]
   }
 ---

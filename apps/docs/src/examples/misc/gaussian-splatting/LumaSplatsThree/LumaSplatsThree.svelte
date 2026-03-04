@@ -2,8 +2,7 @@
   import { LumaSplatsThree } from '@lumaai/luma-web'
   import { T, asyncWritable, useCache, useTask, useThrelte } from '@threlte/core'
   import { useSuspense } from '@threlte/extras'
-  import { onDestroy } from 'svelte'
-  import type { CubeTexture, Scene } from 'three'
+  import type { CubeTexture } from 'three'
   import type { LumaSplatsThreeProps } from './types'
 
   let {
@@ -51,35 +50,35 @@
   let preheat =
     particleRevealEnabled && loadingAnimationEnabled ? 400 : loadingAnimationEnabled ? 100 : 10
   let frame = 0
-  const { start, stop } = useTask(
+
+  let running = $state(false)
+  useTask(
     () => {
       frame++
       if (frame >= preheat) {
-        stop()
+        running = false
         frame = 0
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
-  let previousEnvironment = $state<Scene['environment']>(null)
-  let previousBackground = $state<Scene['background']>(null)
-  let previousBackgroundBluriness = $state<Scene['backgroundBlurriness']>()
-
   $effect(() => {
-    if ($splats && $splats[1]) {
-      previousEnvironment = scene.environment
-      previousBackground = scene.background
-      previousBackgroundBluriness = scene.backgroundBlurriness
-      scene.environment = $splats[1]
-      scene.background = $splats[1]
-      scene.backgroundBlurriness = 0.5
-      invalidate()
+    if (!$splats?.[1]) {
+      return
     }
-  })
 
-  onDestroy(() => {
-    if (captureCubemap) {
+    const previousEnvironment = scene.environment
+    const previousBackground = scene.background
+    const previousBackgroundBluriness = scene.backgroundBlurriness
+
+    scene.environment = $splats[1]
+    scene.background = $splats[1]
+    scene.backgroundBlurriness = 0.5
+
+    invalidate()
+
+    return () => {
       scene.environment = previousEnvironment
       scene.background = previousBackground
       scene.backgroundBlurriness = previousBackgroundBluriness ?? 0
@@ -92,7 +91,7 @@
   <T
     is={$splats[0]}
     oncreate={() => {
-      start()
+      running = true
     }}
     {...rest}
     dispose={false}

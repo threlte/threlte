@@ -9,22 +9,12 @@ componentSignature:
     'props':
       [
         { name: 'src', type: 'string', required: true, description: 'Can be a URL or SVG data.' },
-        { name: 'skipFill', type: 'boolean', required: false, default: 'false' },
-        { name: 'skipStrokes', type: 'boolean', required: false, default: 'false' },
-        {
-          name: 'fillMaterialProps',
-          type: 'Props<typeof MeshBasicMaterial>',
-          required: false,
-          default: '{}'
-        },
-        {
-          name: 'strokeMaterialProps',
-          type: 'Props<typeof MeshBasicMaterial>',
-          required: false,
-          default: '{}'
-        },
-        { name: 'fillMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' },
-        { name: 'strokeMeshProps', type: 'Props<typeof Mesh>', required: false, default: '{}' }
+        { name: 'skipFill', type: 'boolean', default: 'false' },
+        { name: 'skipStrokes', type: 'boolean', default: 'false' },
+        { name: 'fillMaterialProps', type: 'Props<typeof MeshBasicMaterial>', default: '{}' },
+        { name: 'strokeMaterialProps', type: 'Props<typeof MeshBasicMaterial>', default: '{}' },
+        { name: 'fillMeshProps', type: 'Props<typeof Mesh>', default: '{}' },
+        { name: 'strokeMeshProps', type: 'Props<typeof Mesh>', default: '{}' }
       ]
   }
 ---

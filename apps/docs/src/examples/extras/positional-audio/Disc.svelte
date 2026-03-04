@@ -7,19 +7,15 @@
   let { discSpeed = 0, ...rest }: DiscProps = $props()
 
   let discRotation = $state(0)
-  const { start, stop, started } = useTask(
+
+  useTask(
     (delta) => {
       discRotation += delta * discSpeed
     },
     {
-      autoStart: false
+      running: () => discSpeed > 0
     }
   )
-
-  $effect(() => {
-    if (discSpeed <= 0 && $started) stop()
-    else if (discSpeed > 0 && !$started) start()
-  })
 
   const gltf = useGltf<{
     nodes: {

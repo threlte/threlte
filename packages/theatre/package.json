@@ -64,7 +64,7 @@
   "homepage": "https://threlte.xyz",
   "repository": {
     "type": "git",
-    "url": "https://github.com/threlte/threlte.git",
+    "url": "https://github.com/threlte/threlte",
     "directory": "packages/theatre"
   },
   "bugs": {

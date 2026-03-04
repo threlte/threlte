@@ -69,20 +69,21 @@
     }
   })
 
-  const { start: startRendering, stop: stopRendering } = useTask(
+  let running = $state(false)
+  useTask(
     () => {
       asciiEffect.render(scene ?? defaultScene, camera ?? defaultCamera.current)
     },
-    { autoInvalidate: false, autoStart: false, stage: renderStage }
+    { autoInvalidate: false, stage: renderStage, running: () => running }
   )
 
   export const start = () => {
-    startRendering()
+    running = true
     onstart?.()
   }
 
   export const stop = () => {
-    stopRendering()
+    running = false
     onstop?.()
   }
 

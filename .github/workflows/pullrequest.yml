@@ -14,19 +14,15 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm 🔧
-        with:
-          run_install: false
-
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 24
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
 
       - name: Lint 💅
         run: pnpm run lint
@@ -38,19 +34,15 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm 🔧
-        with:
-          run_install: false
-
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 24
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
 
       - name: Check
         run: pnpm run check
@@ -62,19 +54,15 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm 🔧
-        with:
-          run_install: false
-
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 24
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
 
       - name: Test
         run: pnpm run test

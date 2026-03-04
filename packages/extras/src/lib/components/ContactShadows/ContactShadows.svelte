@@ -173,30 +173,20 @@
     renderShadows()
   }
 
-  const task = useTask(
-    () => {
-      renderShadows()
-    },
-    { autoStart: false }
-  )
+  const continuous = $derived(frames === Number.POSITIVE_INFINITY)
+
+  useTask(renderShadows, {
+    running: () => continuous
+  })
 
   let count = 0
-  const countTask = useTask(
+  useTask(
     () => {
       renderShadows()
       count += 1
-      if (count >= frames) countTask.stop()
     },
-    { autoStart: false }
+    { running: () => !continuous && count < frames }
   )
-
-  $effect.pre(() => {
-    if (frames === Number.POSITIVE_INFINITY) {
-      task.start()
-    } else if (count < frames) {
-      countTask.start()
-    }
-  })
 
   onDestroy(() => {
     renderTarget.dispose()

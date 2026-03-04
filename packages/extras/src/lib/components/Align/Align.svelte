@@ -74,27 +74,34 @@
    * We're only aligning at most *once* per frame, so even if a lot of child
    * components request aligning, it's only done *once*.
    */
-  const { start: scheduleAligning, stop } = useTask(
+  let scheduleAligning = $state(false)
+
+  useTask(
     () => {
       calculate()
       stop()
     },
-    { autoStart: false, stage }
+    { stage, running: () => scheduleAligning }
   )
 
   /** Manually trigger aligning */
-  export const align = scheduleAligning
+  export const align = () => (scheduleAligning = true)
 
-  observe(() => [x, y, z, precise], scheduleAligning)
+  observe(
+    () => [x, y, z, precise],
+    () => {
+      scheduleAligning = true
+    }
+  )
 
   const plugin: Plugin = (args) => {
     if (!isInstanceOf(args.ref, 'Object3D')) return
     observe.pre(
       () => [args.ref],
       () => {
-        if (auto) scheduleAligning()
+        if (auto) scheduleAligning = true
         return () => {
-          if (auto) scheduleAligning()
+          if (auto) scheduleAligning = true
         }
       }
     )
@@ -112,7 +119,7 @@
         name="align"
         {plugin}
       >
-        {@render children?.({ align: scheduleAligning, ref: group })}
+        {@render children?.({ align: () => (scheduleAligning = true), ref: group })}
       </InjectPlugin>
     </T>
   </T>

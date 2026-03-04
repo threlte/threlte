@@ -1,6 +1,5 @@
 <script lang="ts">
   import { observe, T, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
   import {
     CubeCamera,
     HalfFloatType,
@@ -36,7 +35,7 @@
 
   const { renderer, scene, invalidate } = useThrelte()
 
-  let renderTarget: WebGLCubeRenderTarget | undefined = $state()
+  let renderTarget = $state.raw<WebGLCubeRenderTarget>()
   let cubeCamera: CubeCamera | undefined
 
   const init = () => {
@@ -61,7 +60,9 @@
     }
   })
 
-  const { start: scheduleUpdate, stop } = useTask(
+  let running = $state(false)
+
+  useTask(
     () => {
       sky.scale.setScalar(scale)
 
@@ -82,26 +83,31 @@
       }
 
       invalidate()
-      stop()
+      running = false
     },
     {
-      autoStart: false,
-      autoInvalidate: false
+      autoInvalidate: false,
+      running: () => running
     }
   )
 
   observe.pre(
     () => [scale, turbidity, rayleigh, mieCoefficient, mieDirectionalG, elevation, azimuth],
-    () => scheduleUpdate()
+    () => {
+      running = true
+    }
   )
 
-  onDestroy(() => {
-    sky.material.dispose()
-    scene.environment = originalEnvironment
-    try {
-      renderTarget?.dispose()
-    } catch (error) {
-      console.warn('Could not dispose renderTarget:', error)
+  $effect(() => {
+    return () => {
+      sky.material.dispose()
+      scene.environment = originalEnvironment
+
+      try {
+        renderTarget?.dispose()
+      } catch (error) {
+        console.warn('Could not dispose renderTarget:', error)
+      }
     }
   })
 </script>

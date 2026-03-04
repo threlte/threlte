@@ -1,8 +1,17 @@
 {
   "name": "@threlte/studio",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte",
+    "directory": "packages/studio"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
+  "homepage": "https://threlte.xyz",
   "scripts": {
     "dev": "vite dev",
     "build:vite-plugin": "tsup",

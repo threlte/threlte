@@ -37,18 +37,12 @@
 
   let rotation = $state(0)
 
-  const { start, stop } = useTask(
+  useTask(
     (delta) => {
       rotation += 0.1 * delta
     },
-    { autoStart: false }
+    { running: () => rotate }
   )
-
-  $effect(() => {
-    if (!rotate) return
-    start()
-    return stop
-  })
 
   const metalness = 0.5
   const roughness = 0.25

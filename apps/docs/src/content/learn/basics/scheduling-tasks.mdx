@@ -162,7 +162,7 @@ argument. By default, the created task is added to [Threlte's
 `mainStage`](#default-stages) in an arbitrary order (i.e. without dependencies).
 
 ```ts
-const { start, stop, started, task } = useTask((delta) => {
+const { task, started } = useTask((delta) => {
   // This function will be executed on every frame
 })
 ```
@@ -185,12 +185,7 @@ makes referencing this task easier across your app. The key can be any `string`
 or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
-const {
-  start,
-  stop,
-  started,
-  task: someTask
-} = useTask('some-task', (delta) => {
+const { task, started } = useTask('some-task', (delta) => {
   // This function will be executed on every frame
 })
 ```

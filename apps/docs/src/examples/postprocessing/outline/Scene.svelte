@@ -32,24 +32,20 @@
     time = 0
   })
 
-  const { start, stop } = useTask((delta) => {
-    time += delta
-    if (time > 0.5) {
-      positionIndex += 1
-      positionIndex %= positions.length
-      positionTween.set(positions[positionIndex])
-      time = 0
+  useTask(
+    (delta) => {
+      time += delta
+      if (time > 0.5) {
+        positionIndex += 1
+        positionIndex %= positions.length
+        positionTween.set(positions[positionIndex])
+        time = 0
+      }
+    },
+    {
+      running: () => play
     }
-  })
-
-  $effect(() => {
-    if (play) {
-      start()
-    }
-    return () => {
-      stop()
-    }
-  })
+  )
 
   const extrudeOptions: ExtrudeGeometryOptions = { bevelEnabled: false }
 </script>

@@ -69,14 +69,12 @@
     }
   })
 
-  const { stop, start } = useTask(
+  useTask(
     (dt) => {
       uniforms.time.value += dt * speed
     },
-    { autoStart: false }
+    { running: () => speed > 0 }
   )
-
-  $effect.pre(() => (speed === 0 ? stop() : start()))
 
   const uniforms = {
     time: { value: 0 },

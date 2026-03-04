@@ -21,24 +21,22 @@ componentSignature:
         {
           name: 'id',
           type: 'string',
-          required: false,
           default: 'default',
           description: 'The id of the AudioListener this Audio will be attached to.'
         },
-        { name: 'autoplay', type: 'boolean', required: false },
-        { name: 'loop', type: 'boolean', required: false },
-        { name: 'volume', type: 'number', required: false },
-        { name: 'playbackRate', type: 'number', required: false },
-        { name: 'detune', type: 'number', required: false },
+        { name: 'autoplay', type: 'boolean' },
+        { name: 'loop', type: 'boolean' },
+        { name: 'volume', type: 'number' },
+        { name: 'playbackRate', type: 'number' },
+        { name: 'detune', type: 'number' },
         {
           name: 'directionalCone',
-          type: '{ coneInnerAngle: number, coneOuterAngle: number, coneOuterGain: number }',
-          required: false
+          type: '{ coneInnerAngle: number, coneOuterAngle: number, coneOuterGain: number }'
         },
-        { name: 'refDistance', type: 'number', required: false },
-        { name: 'rolloffFactor', type: 'number', required: false },
-        { name: 'distanceModel', type: 'string', required: false },
-        { name: 'maxDistance', type: 'number', required: false }
+        { name: 'refDistance', type: 'number' },
+        { name: 'rolloffFactor', type: 'number' },
+        { name: 'distanceModel', type: 'string' },
+        { name: 'maxDistance', type: 'number' }
       ],
     events:
       [
@@ -99,7 +97,6 @@ You need to have an `<AudioListener>` component in your scene in order to use `<
 
   <Car>
     <PositionalAudio
-      autostart
       loop
       refDistance={10}
       volume={0.2}

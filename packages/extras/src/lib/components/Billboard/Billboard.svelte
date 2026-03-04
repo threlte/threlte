@@ -16,7 +16,7 @@
 
   const stage = useStage('<Billboard>', { before: renderStage })
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       // always face the follow object
       localRef.updateMatrix()
@@ -24,16 +24,8 @@
       localRef.getWorldQuaternion(q)
       followObject?.getWorldQuaternion(inner.quaternion).premultiply(q.invert())
     },
-    { autoStart: false, stage }
+    { stage, running: () => follow !== false }
   )
-
-  $effect.pre(() => {
-    if (follow) {
-      start()
-    } else {
-      stop()
-    }
-  })
 </script>
 
 <T

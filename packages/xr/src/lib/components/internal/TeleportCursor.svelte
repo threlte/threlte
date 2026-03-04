@@ -28,7 +28,7 @@
 
   const ref = new Group()
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       if (intersection === undefined) {
         return
@@ -44,7 +44,7 @@
       }
     },
     {
-      autoStart: false
+      running: () => intersection !== undefined
     }
   )
 
@@ -53,11 +53,9 @@
   $effect.pre(() => {
     if (intersection === undefined) {
       size.set(0.1)
-      stop()
     } else {
       size.set(1)
       ref.position.copy(intersection.point)
-      start()
     }
   })
 </script>

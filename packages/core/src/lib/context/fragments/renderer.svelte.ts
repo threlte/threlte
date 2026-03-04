@@ -9,7 +9,7 @@ import {
   type ToneMapping
 } from 'three'
 import type { Task } from '../../frame-scheduling/index.js'
-import { useTask } from '../../hooks/useTask.js'
+import { useTask } from '../../hooks/useTask.svelte.js'
 import { currentWritable, watch, type CurrentWritable } from '../../utilities/index.js'
 import { useCamera } from './camera.js'
 import { useDisposal } from './disposal.js'

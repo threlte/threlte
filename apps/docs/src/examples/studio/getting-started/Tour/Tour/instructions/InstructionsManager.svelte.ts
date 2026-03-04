@@ -1,7 +1,6 @@
 import type { Instructions } from './Instructions'
 import { computePosition, flip, shift, offset, arrow } from '@floating-ui/dom'
 import { useStage, useTask } from '@threlte/core'
-import { watch } from 'runed'
 import { tick } from 'svelte'
 
 export class InstructionsManager {
@@ -18,7 +17,9 @@ export class InstructionsManager {
   constructor() {
     const tourStage = useStage('tour')
 
-    const { start, stop } = useTask(
+    let running = $state(false)
+
+    useTask(
       () => {
         if (!this.referenceElement || !this.currentInstructions) return
         const hasMask = this.referenceElement.style.display !== 'none'
@@ -63,18 +64,19 @@ export class InstructionsManager {
             })
           })
         }
-        stop()
+        running = false
       },
       {
         stage: tourStage,
-        after: 'mask'
+        after: 'mask',
+        running: () => running
       }
     )
 
-    watch(
-      () => [this.referenceElement, this.tooltipElement, this.wrapper, this.currentInstructions],
-      start
-    )
+    $effect.pre(() => {
+      this.referenceElement, this.tooltipElement, this.wrapper, this.currentInstructions
+      running = true
+    })
   }
 
   setInstructions(instructions: Instructions) {

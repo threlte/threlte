@@ -42,28 +42,29 @@
     camera.update(ctx.renderer, scene)
   }
 
+  let running = $state(false)
+
   let count = 0
-  const { start, stop, started } = useTask(
+  useTask(
     () => {
       // if frames === Infinity, the task will run indefinitely
       if (count < frames) {
         update()
         count += 1
       } else {
-        stop()
+        running = false
         onupdatestop?.()
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
   export const restart = () => {
-    if ($started) {
-      stop()
+    if (running) {
       onupdatestop?.()
     }
     count = 0
-    start()
+    running = true
     onupdatestart?.()
   }
 

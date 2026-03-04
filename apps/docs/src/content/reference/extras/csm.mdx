@@ -8,18 +8,13 @@ componentSignature:
   {
     props:
       [
-        { name: 'enabled', type: 'boolean', required: false },
-        { name: 'camera', type: 'THREE.Camera | undefined', required: false },
-        { name: 'configure', type: '(csm: CSM) => void', required: false },
-        { name: 'args', type: 'CSMParameters', required: false },
-        { name: 'lightIntensity', type: 'number', required: false },
-        { name: 'lightColor', type: 'THREE.ColorRepresentation', required: false },
-        {
-          name: 'lightDirection',
-          type: 'THREE.Vector3Tuple',
-          required: false,
-          default: '[1, -1, 1]'
-        }
+        { name: 'enabled', type: 'boolean' },
+        { name: 'camera', type: 'THREE.Camera | undefined' },
+        { name: 'configure', type: '(csm: CSM) => void' },
+        { name: 'args', type: 'CSMParameters' },
+        { name: 'lightIntensity', type: 'number' },
+        { name: 'lightColor', type: 'THREE.ColorRepresentation' },
+        { name: 'lightDirection', type: 'THREE.Vector3Tuple', default: '[1, -1, 1]' }
       ]
   }
 ---

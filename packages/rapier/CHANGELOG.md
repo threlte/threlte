@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.3.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
 ## 3.2.0
 
 ### Minor Changes

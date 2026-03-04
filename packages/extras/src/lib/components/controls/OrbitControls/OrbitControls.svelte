@@ -19,23 +19,14 @@
 
   const { orbitControls } = useControlsContext()
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       controls.update()
     },
     {
-      autoStart: false,
-      autoInvalidate: false
+      running: () => props.autoRotate ?? props.enableDamping ?? false
     }
   )
-
-  $effect.pre(() => {
-    if (props.autoRotate || props.enableDamping) {
-      start()
-    } else {
-      stop()
-    }
-  })
 
   $effect.pre(() => {
     const handleChange = (event: Event<any, ThreeOrbitControls>) => {

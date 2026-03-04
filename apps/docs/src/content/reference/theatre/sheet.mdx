@@ -8,15 +8,15 @@ componentSignature:
   {
     props:
       [
-        { name: 'name', type: 'string', default: 'default', required: false },
-        { name: 'instance', type: 'string | undefined', default: 'undefined', required: false }
+        { name: 'name', type: 'string', default: 'default' },
+        { name: 'instance', type: 'string | undefined', default: 'undefined' }
       ],
     bindings: [{ name: project, type: 'IProject' }, { name: sheet, type: 'ISheet' }]
   }
 ---
 
 Theatre.js sheets contain one or more Theatre.js objects and optionally a [`<Sequence>`](/docs/reference/theatre/sequence) component that allows controlling the animation.
-The animated objects can adjusted in the [`<Studio>`](/docs/reference/theatre/studio) using the [`<Editable>`](/docs/reference/theatre/editable) component.
+The animated objects can adjusted in the [`<Studio>`](/docs/reference/theatre/studio).
 
 #### Theatre.js Docs
 

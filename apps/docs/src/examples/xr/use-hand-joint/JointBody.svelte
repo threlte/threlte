@@ -15,25 +15,17 @@
 
   const joint = useHandJoint(hand, handJoints[jointIndex]!)
 
-  const { start, stop } = useTask(
+  const radius = $derived($joint?.jointRadius)
+
+  useTask(
     () => {
       if (joint.current === undefined || body === undefined) return
 
       const { x, y, z } = joint.current.position
       body.setNextKinematicTranslation({ x, y, z })
     },
-    { autoStart: false }
+    { running: () => body !== undefined && $joint !== undefined && radius !== undefined }
   )
-
-  let radius = $derived($joint?.jointRadius)
-
-  $effect.pre(() => {
-    if (body && radius && $joint) {
-      start()
-    } else {
-      stop()
-    }
-  })
 </script>
 
 {#if radius}

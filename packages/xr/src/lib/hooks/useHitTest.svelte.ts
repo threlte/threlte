@@ -56,7 +56,7 @@ export const useHitTest = (
     })
   }
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       const referenceSpace = xr.getReferenceSpace()
 
@@ -74,21 +74,13 @@ export const useHitTest = (
       hitMatrix.fromArray(pose.transform.matrix)
       hitTestCallback(hitMatrix, hit)
     },
-    { autoStart: false }
+    { running: () => isPresenting.current && hitTestSource !== undefined }
   )
 
   $effect.pre(() => {
-    if (!isPresenting.current) {
-      stop()
-      return
-    }
-
     if (hitTestSource === undefined) {
-      stop()
       // Execute callback one last time to inform consumers of no hits.
       hitTestCallback(hitMatrix, undefined)
-    } else {
-      start()
     }
   })
 }

@@ -24,14 +24,12 @@ componentSignature:
           name: 'shape',
           type: "'none' | 'taper' | 'custom'",
           default: "'none'",
-          required: false,
           description: "The shape of the line. Use 'custom' to use your own function."
         },
         {
           name: 'shapeFunction',
           type: '(p:number) => number',
           default: 'p => 1',
-          required: false,
           description: 'A function to define the width of each point along the line. For example `p => 1 - p` will make the line taper.'
         }
       ]

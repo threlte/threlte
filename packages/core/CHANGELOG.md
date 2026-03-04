@@ -1,5 +1,17 @@
 # @threlte/core
 
+## 8.4.1
+
+### Patch Changes
+
+- 71eb24c: Minor type updates
+
+## 8.4.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
 ## 8.3.1
 
 ### Patch Changes

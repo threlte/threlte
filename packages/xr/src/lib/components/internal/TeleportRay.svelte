@@ -66,21 +66,12 @@
     lineGeometry.setPositions(positions)
   }
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       setCurvePoints()
     },
-    { autoStart: false }
+    { running: () => intersection !== undefined }
   )
-
-  $effect.pre(() => {
-    if (intersection === undefined) {
-      stop()
-    } else {
-      setCurvePoints(1)
-      start()
-    }
-  })
 </script>
 
 {#if children}

@@ -34,7 +34,7 @@
   const originalScissor = new Vector4()
   let originalScissorTest: boolean
 
-  const { start, stop } = useTask(
+  useTask(
     Symbol('<View>'),
     () => {
       if (offscreenObserver.isOffscreen) return
@@ -64,17 +64,9 @@
     },
     {
       stage: renderStage,
-      autoStart: false
+      running: () => offscreenObserver.isOffscreen === false
     }
   )
-
-  $effect(() => {
-    if (offscreenObserver.isOffscreen) {
-      stop()
-    } else {
-      start()
-    }
-  })
 </script>
 
 {@render children?.()}

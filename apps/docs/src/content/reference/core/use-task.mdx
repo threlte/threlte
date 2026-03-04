@@ -22,19 +22,15 @@ argument. By default, the created task is added to [Threlte's
 `mainStage`](#default-stages) in an arbitrary order (i.e. without dependencies).
 
 ```ts
-const { start, stop, started, task } = useTask((delta) => {
+const { task } = useTask((delta) => {
   // This function will be executed on every frame
 })
 ```
 
 It returns an object with the following properties:
 
-- `start`: A function that starts the task. It will be executed on the next
-  frame. Note that by default a task is started automatically.
-- `stop`: A function that stops the task. It will not be executed on the next
-  frame.
-- `started`: A boolean Svelte `Readable` store indicating whether the task is
-  started or not.
+- `started`: A boolean Svelte `Readable` store indicating whether the task has been
+  added to the scheduler and is started.
 - `task`: The task itself. You can use it to indicate a dependency to this task
   on another task.
 
@@ -45,12 +41,7 @@ makes referencing this task easier across your app. The key can be any `string`
 or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
-const {
-  start,
-  stop,
-  started,
-  task: someTask
-} = useTask('some-task', (delta) => {
+const { task, started } = useTask('some-task', (delta) => {
   // This function will be executed on every frame
 })
 ```
@@ -104,25 +95,24 @@ into account when they are created later on.
 ### Starting and stopping tasks
 
 By default, a task is started automatically. You can set it to not start
-automatically by passing `autoStart: false` as an option to `useTask`. You can
-then start and stop the task manually using the `start` and `stop` functions:
+automatically by passing a rune to the `running` option of `useTask`. You can
+then start and stop the task manually by updating that rune:
 
 ```ts
-const { start, stop, started } = useTask(
+let running = $state(false)
+
+useTask(
   (delta) => {
-    // do something
+    // Will not start by default
   },
-  { autoStart: false }
+  { running: () => running }
 )
 
 // start the task
-start()
+running = true
 
 // stop the task
-stop()
-
-// check if the task is started
-$inspect($started)
+running = false
 ```
 
 ### `useTask` and on-demand rendering
@@ -138,7 +128,7 @@ invalidate the frame manually using the `invalidate` function returned by
 ```ts
 const { invalidate } = useThrelte()
 
-const { start, stop, started } = useTask(
+useTask(
   (delta) => {
     // do something
     // invalidate the current frame
@@ -186,12 +176,11 @@ scene.
 ```svelte title="CustomRenderer.svelte"
 <script>
   import { useTask, useThrelte } from '@threlte/core'
-  import { onMount } from 'svelte'
 
   const { renderStage, autoRender } = useThrelte()
 
   // disable auto rendering
-  onMount(() => {
+  $effect(() => {
     let before = autoRender.current
     autoRender.set(false)
     return () => autoRender.set(before)
@@ -219,7 +208,6 @@ effects using the library
 ```svelte title="Renderer.svelte"
 <script>
   import { useThrelte, useTask } from '@threlte/core'
-  import { onMount } from 'svelte'
   import {
     EffectComposer,
     EffectPass,
@@ -275,7 +263,7 @@ effects using the library
 
   // We need to disable auto rendering as soon as this component is
   // mounted and restore the previous state when it is unmounted.
-  onMount(() => {
+  $effect(() => {
     let before = autoRender.current
     autoRender.set(false)
     return () => autoRender.set(before)

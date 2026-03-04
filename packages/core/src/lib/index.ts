@@ -14,7 +14,7 @@ export type { Plugin } from './plugins/types.js'
 // hooks
 export { useThrelte } from './context/compounds/useThrelte.js'
 export { useStage } from './hooks/useStage.js'
-export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask.js'
+export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask.svelte.js'
 export { useThrelteUserContext } from './hooks/useThrelteUserContext.js'
 
 // task scheduling system types

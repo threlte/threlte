@@ -1,41 +1,108 @@
-import { onDestroy } from 'svelte'
-import { readable, writable, type Readable } from 'svelte/store'
+import { readable, toStore, type Readable } from 'svelte/store'
 import { useScheduler } from '../context/fragments/scheduler.svelte.js'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling/index.js'
 import { browser } from '../utilities/index.js'
 
-export type ThrelteUseTask = {
+export interface ThrelteUseTask {
   task: Task
+
+  /**
+   * @deprecated pass the `running` option to `useTask` instead.
+   *
+   * To stop the task, set the options.running state variable to false
+   *
+   * ```ts
+   * let running = $state(true)
+   *
+   * useTask((delta) => {
+   *   // do something
+   * }, {
+   *   running: () => running
+   * })
+   *
+   * running = false
+   * ```
+   */
   stop: () => void
+
+  /**
+   * @deprecated pass the `running` option to `useTask` instead.
+   *
+   * To start the task, set the options.running state variable to true
+   *
+   * ```ts
+   * let running = $state(false)
+   *
+   * useTask((delta) => {
+   *   // do something
+   * }, {
+   *   running: () => running
+   * })
+   *
+   * running = true
+   * ```
+   */
   start: () => void
+
   started: Readable<boolean>
 }
 
-export type ThrelteUseTaskOptions = {
+export interface ThrelteUseTaskOptions {
   /**
+   * @deprecated pass the `running` option to `useTask` instead.
+   *
+   * ```ts
+   * let running = $state(true)
+   *
+   * useTask((delta) => {
+   *   // do something
+   * }, {
+   *   running: () => running
+   * })
+   * ```
+   *
    * If false, the task will not be started automatically and must be started
    * by invoking the `start` function. Defaults to true.
    */
   autoStart?: boolean
+
   /**
    * If false, the task handler will not automatically invalidate the task.
    * This is useful if you want to manually invalidate the task. Defaults to
    * true.
    */
   autoInvalidate?: boolean
+
   /**
    * The task will be added to the stage after the specified task.
    */
   after?: (Key | Task) | (Key | Task)[]
+
   /**
    * The task will be added to the stage before the specified task.
    */
   before?: (Key | Task) | (Key | Task)[]
+
   /**
    * The stage to add the task to. Defaults to the main stage. If a task object
    * is provided to `after` or `before`, the stage of that task will be used.
    */
   stage?: Key | Stage
+
+  /**
+   * Provide a function that returns a rune to toggle running this task.
+   *
+   * ```ts
+   * let running = $state(true)
+   *
+   * useTask((delta) => {
+   *   // do something
+   * }, {
+   *   running: () => running
+   * })
+   * ```
+   */
+  running?: () => boolean
 }
 
 /**
@@ -88,8 +155,11 @@ export function useTask(
   }
 
   const schedulerCtx = useScheduler()
+  const autoInvalidate = opts?.autoInvalidate ?? true
 
   let stage: Stage = schedulerCtx.mainStage
+
+  let running = $derived(opts?.running?.() ?? opts?.autoStart ?? true)
 
   if (opts) {
     if (opts.stage) {
@@ -129,43 +199,42 @@ export function useTask(
     }
   }
 
-  const started = writable(false)
-
   const task = stage.createTask(key, fn, opts)
 
-  const start = () => {
-    started.set(true)
-    if (opts?.autoInvalidate ?? true) {
+  $effect.pre(() => {
+    if (!running) {
+      return
+    }
+
+    task.start()
+
+    if (autoInvalidate) {
       schedulerCtx.autoInvalidations.add(fn)
     }
-    task.start()
-  }
 
-  const stop = () => {
-    started.set(false)
-    if (opts?.autoInvalidate ?? true) {
-      schedulerCtx.autoInvalidations.delete(fn)
+    return () => {
+      task.stop()
+
+      if (autoInvalidate) {
+        schedulerCtx.autoInvalidations.delete(fn)
+      }
     }
-    task.stop()
-  }
+  })
 
-  if (opts?.autoStart ?? true) {
-    start()
-  } else {
-    stop()
-  }
-
-  onDestroy(() => {
-    stop()
-    stage.removeTask(key)
+  $effect.pre(() => {
+    return () => {
+      stage.removeTask(key)
+    }
   })
 
   return {
     task,
-    start,
-    stop,
-    started: {
-      subscribe: started.subscribe
-    }
+    start: () => {
+      running = true
+    },
+    stop: () => {
+      running = false
+    },
+    started: toStore(() => running)
   }
 }

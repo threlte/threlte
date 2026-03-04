@@ -9,7 +9,7 @@ export const setupHeadset = () => {
   const { xr } = renderer
   const stage = scheduler.createStage(Symbol('xr-headset-stage'), { before: renderStage })
 
-  const immersiveFrame = useTask(
+  useTask(
     () => {
       const space = xr.getReferenceSpace()
 
@@ -27,31 +27,21 @@ export const setupHeadset = () => {
       headset.quaternion.copy(orientation)
     },
     {
-      autoStart: false,
       autoInvalidate: false,
-      stage
+      stage,
+      running: () => isPresenting.current
     }
   )
 
-  const nonImmersiveFrame = useTask(
+  useTask(
     () => {
       headset.position.copy(camera.current.position)
       headset.quaternion.copy(camera.current.quaternion)
     },
     {
-      autoStart: false,
       autoInvalidate: false,
-      stage
+      stage,
+      running: () => isPresenting.current === false
     }
   )
-
-  $effect.pre(() => {
-    if (isPresenting.current) {
-      immersiveFrame.start()
-      nonImmersiveFrame.stop()
-    } else {
-      immersiveFrame.stop()
-      nonImmersiveFrame.start()
-    }
-  })
 }
