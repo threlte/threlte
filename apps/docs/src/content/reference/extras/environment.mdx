@@ -8,44 +8,34 @@ componentSignature:
   {
     props:
       [
-        {
-          description: 'the url to a texture to load and use',
-          name: 'url',
-          required: false,
-          type: 'string'
-        },
+        { description: 'the url to a texture to load and use', name: 'url', type: 'string' },
         {
           description: 'a bindable of the loaded texture',
           name: 'texture',
-          required: false,
           type: 'THREE.DataTexture | THREE.Texture'
         },
         {
           default: 'false',
           description: 'whether to set `scene.background` to the loaded environment texture',
           name: 'isBackground',
-          required: false,
           type: 'boolean'
         },
         {
           default: 'useThrelte().scene',
           description: 'the scene that will have its environment and/or background set',
           name: 'scene',
-          required: false,
           type: 'THREE.Scene'
         },
         {
           default: 'false',
           description: 'creates a ground projected skybox',
           name: 'ground',
-          required: false,
           type: 'boolean | { height?: number, radius?: number, resolution?: number }'
         },
         {
           default: 'undefined',
           description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
           name: 'skybox',
-          required: false,
           type: 'undefined | THREE.GroundedSkybox'
         }
       ]
