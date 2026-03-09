@@ -23,9 +23,9 @@
   `
 
   class PointsMaterial extends ThreePointsMaterial {
-    override alphaToCoverage = true
+    alphaToCoverage = true
 
-    override onBeforeCompile(
+    onBeforeCompile(
       parameters: WebGLProgramParametersWithUniforms,
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       _renderer: WebGLRenderer
