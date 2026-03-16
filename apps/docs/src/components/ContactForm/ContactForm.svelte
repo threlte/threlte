@@ -83,7 +83,7 @@
   </Form>
   {#if sending}
     <div
-      class="absolute left-0 top-0 flex h-full w-full flex-col items-center gap-2 bg-[#0A0F19] pt-12 text-2xl"
+      class="absolute top-0 left-0 flex h-full w-full flex-col items-center gap-2 bg-[#0A0F19] pt-12 text-2xl"
     >
       <span class="loader"></span>
       <span>Please wait...</span>
@@ -91,7 +91,7 @@
   {/if}
   {#if sent}
     <div
-      class="absolute left-0 top-0 flex h-full w-full flex-col items-center gap-2 bg-[#0A0F19] pt-10 text-2xl"
+      class="absolute top-0 left-0 flex h-full w-full flex-col items-center gap-2 bg-[#0A0F19] pt-10 text-2xl"
     >
       <span>Message sent.</span>
       <span>Thank you for getting in touch!</span>

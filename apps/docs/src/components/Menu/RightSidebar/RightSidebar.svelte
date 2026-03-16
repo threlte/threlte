@@ -68,16 +68,16 @@
 </script>
 
 <div
-  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pb-12 pt-6 lg:px-0 lg:pl-6 lg:text-sm"
+  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pt-6 pb-12 lg:px-0 lg:pl-6 lg:text-sm"
 >
   {#if headings.length}
     <span
-      class="mb-3 ml-[calc(1rem+2px)] mt-3 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
+      class="mt-3 mb-3 ml-[calc(1rem+2px)] block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
       >On this page</span
     >
 
     <ul
-      class="duration-50 mb-8 w-full bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
+      class="mb-8 w-full bg-[#0c1421] text-left transition-all duration-50 lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
       ontransitionend={focusFirstDropdownLink}
     >
       {#each headings as heading}
@@ -116,7 +116,7 @@
   >
 
   <ul
-    class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
+    class="mb-8 bg-[#0c1421] text-left transition-all duration-50 lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
     ontransitionend={focusFirstDropdownLink}
   >
     <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">

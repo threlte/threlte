@@ -57,7 +57,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
       >
         {Astro.props.titleOverride ? Astro.props.titleOverride : `Component Signature`}
       </h2>
-      <div class="not-content [&_code]:p-0! my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl">
+      <div class="not-content my-5 rounded-md border border-white/20 bg-blue-900 p-4 text-sm shadow-xl [&_code]:p-0!">
         {Astro.props.signature.extends && (
           <p class:list={['text-faded', !hasAnySignature && 'mb-0!']}>
             <code>{Astro.props.componentName}</code> extends
@@ -99,7 +99,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                 <div
                   class:list={[
-                    'scrollbar-hide [&_code]:bg-transparent! mt-0 grid gap-x-3 overflow-x-auto',
+                    'scrollbar-hide mt-0 grid gap-x-3 overflow-x-auto [&_code]:bg-transparent!',
                     propsGridCols
                   ]}
                 >
@@ -188,7 +188,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                 <div
                   class:list={[
-                    'scrollbar-hide [&_code]:bg-transparent! grid items-start gap-x-3 overflow-x-auto',
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!',
                     anyEventHasDescription ? 'grid-cols-[auto_auto_auto]' : 'grid-cols-[auto_auto]'
                   ]}
                 >
@@ -250,7 +250,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
               <div>
                 <h3 class="text-xl font-semibold">Bindings</h3>
 
-                <div class="scrollbar-hide [&_code]:bg-transparent! grid grid-cols-[auto_auto] items-start gap-x-3 overflow-x-auto">
+                <div class="scrollbar-hide grid grid-cols-[auto_auto] items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!">
                   <div class="font-bold">name</div>
 
                   <div class="font-bold">type</div>
@@ -307,7 +307,7 @@ const id = Astro.props.idOverride ?? 'component-signature'
 
                 <div
                   class:list={[
-                    'scrollbar-hide [&_code]:bg-transparent! grid items-start gap-x-3 overflow-x-auto',
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!',
                     propsGridCols
                   ]}
                 >

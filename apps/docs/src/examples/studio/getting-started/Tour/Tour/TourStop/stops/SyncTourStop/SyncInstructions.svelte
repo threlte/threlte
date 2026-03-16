@@ -8,9 +8,9 @@
 </script>
 
 <div class="flex flex-col gap-3">
-  <h2 class="text-xl font-bold leading-snug text-neutral-800">Auto Sync</h2>
+  <h2 class="text-xl leading-snug font-bold text-neutral-800">Auto Sync</h2>
 
-  <div class="overflow-hidden whitespace-pre-wrap rounded-md text-sm">
+  <div class="overflow-hidden rounded-md text-sm whitespace-pre-wrap">
     {@html html}
   </div>
 

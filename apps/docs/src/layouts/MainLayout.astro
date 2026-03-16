@@ -18,11 +18,11 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
 <AppLayout {title}>
   <!-- Desktop Nav -->
   <div
-    class="z-5 fixed left-0 top-0 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]"
+    class="fixed top-0 left-0 z-5 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]"
   >
     <!-- bottom gradient -->
     <div
-      class="bg-linear-to-b pointer-events-none absolute left-0 top-full h-[10svh] w-full from-[#0A0F19] to-transparent"
+      class="pointer-events-none absolute top-full left-0 h-[10svh] w-full bg-linear-to-b from-[#0A0F19] to-transparent"
     >
     </div>
   </div>
@@ -80,7 +80,7 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
 
   <slot name="external" />
 
-  <main class="mx-auto max-w-7xl px-6 pb-12 pt-[10svh]">
+  <main class="mx-auto max-w-7xl px-6 pt-[10svh] pb-12">
     <slot />
   </main>
 

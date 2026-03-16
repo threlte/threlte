@@ -46,7 +46,7 @@
             {/snippet}
 
             {#each sidebarMenu[key].categories as category}
-              <li class="mb-0 ml-4 mt-2 text-sm">
+              <li class="mt-2 mb-0 ml-4 text-sm">
                 <LeftSidebarCategory
                   {category}
                   {activeUrlPathName}

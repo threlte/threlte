@@ -29,7 +29,7 @@
     {#each category.menuItems as item}
       {#if item.isDivider}
         <div
-          class="mb-2 flex flex-row items-end justify-start gap-1 py-1 pt-4 text-xs font-bold uppercase tracking-wide text-white"
+          class="mb-2 flex flex-row items-end justify-start gap-1 py-1 pt-4 text-xs font-bold tracking-wide text-white uppercase"
         >
           {item.title}
         </div>

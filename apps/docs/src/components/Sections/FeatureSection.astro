@@ -26,13 +26,13 @@ const textClasses: Record<NonNullable<Props['color']>, string> = {
 }
 ---
 
-<div class:list={['relative border-y border-white/20 pb-16 pt-10', Astro.props.class ?? '']}>
+<div class:list={['relative border-y border-white/20 pt-10 pb-16', Astro.props.class ?? '']}>
   <div
-    class="pointer-events-none absolute left-[00%] top-0 h-40 w-full select-none overflow-hidden"
+    class="pointer-events-none absolute top-0 left-[00%] h-40 w-full overflow-hidden select-none"
   >
     <div
       class:list={[
-        'absolute left-0 top-40 h-96 w-full -translate-y-full',
+        'absolute top-40 left-0 h-96 w-full -translate-y-full',
         underbarGlowClasses[color]
       ]}
     >
