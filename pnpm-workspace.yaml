@@ -5,7 +5,7 @@ packages:
 catalog:
   three: ^0.175.0
   '@types/three': ^0.175.0
-  svelte: '5.26.2'
+  svelte: '5.53.6'
   typescript: '5.9.2'
   vite: '^7.1.4'
   vitest: '^3.2.4'
@@ -19,9 +19,9 @@ catalog:
   '@sveltejs/vite-plugin-svelte': '^6.1.4'
   '@yushijinhun/three-minifier-rollup': '^0.4.0'
   'eslint-plugin-svelte': '^3.5.1'
-  'globals': '^16.1.0'
-  'prettier': '^3.2.5'
-  'prettier-plugin-svelte': '^3.2.2'
+  globals: '^16.1.0'
+  prettier: '^3.8.1'
+  'prettier-plugin-svelte': '^3.5.1'
   'publint': '^0.2.7'
   'rimraf': '^6.0.1'
   'svelte-check': '^4.3.1'

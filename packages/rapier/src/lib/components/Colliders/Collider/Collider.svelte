@@ -7,7 +7,7 @@
     CoefficientCombineRule,
     ColliderDesc
   } from '@dimforge/rapier3d-compat'
-  import { createParentObject3DContext, useParentObject3D, useTask, watch } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D, useTask } from '@threlte/core'
   import { onDestroy, onMount, tick } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
   import { useCollisionGroups } from '../../../hooks/useCollisionGroups.js'
@@ -190,10 +190,11 @@
 
   const parent3DObject = useParentObject3D()
   createParentObject3DContext(object)
-  watch(parent3DObject, (parent) => {
-    parent?.add(object)
+
+  $effect.pre(() => {
+    $parent3DObject?.add(object)
     return () => {
-      parent?.remove(object)
+      $parent3DObject?.remove(object)
     }
   })
 </script>

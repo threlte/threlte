@@ -1,7 +1,7 @@
-import { watch } from '@threlte/core'
 import type * as THREE from 'three'
 import { type InteractivityContext, useInteractivity } from './context.js'
 import type { DomEvent, Intersection, IntersectionEvent } from './types.js'
+import { fromStore } from 'svelte/store'
 
 function createIntersectionId(intersection: Intersection) {
   return `${(intersection.eventObject || intersection.object).uuid}|${intersection.index}|${intersection.instanceId}`
@@ -264,10 +264,16 @@ export const setupInteractivity = (context: InteractivityContext) => {
     }
   }
 
-  watch(context.target, (target) => {
-    if (target) connect(target)
+  const target = fromStore(context.target)
+
+  $effect.pre(() => {
+    const { current } = target
+
+    if (!current) return
+
+    connect(current)
     return () => {
-      if (target) disconnect(target)
+      disconnect(current)
     }
   })
 }

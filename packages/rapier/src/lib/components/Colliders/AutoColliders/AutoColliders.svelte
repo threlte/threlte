@@ -3,7 +3,7 @@
   generics="TMassDef extends MassDef"
 >
   import { ActiveCollisionTypes, CoefficientCombineRule } from '@dimforge/rapier3d-compat'
-  import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D } from '@threlte/core'
   import { onDestroy, onMount } from 'svelte'
   import { Group } from 'three'
   import { useCollisionGroups } from '../../../hooks/useCollisionGroups.js'
@@ -126,10 +126,11 @@
 
   const parent3DObject = useParentObject3D()
   createParentObject3DContext(group)
-  watch(parent3DObject, (parent) => {
-    parent?.add(group)
+
+  $effect.pre(() => {
+    $parent3DObject?.add(group)
     return () => {
-      parent?.remove(group)
+      $parent3DObject?.remove(group)
     }
   })
 </script>

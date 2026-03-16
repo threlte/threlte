@@ -20,7 +20,6 @@ componentSignature:
       [
         {
           name: 'autoStart',
-          required: false,
           type: 'boolean',
           default: 'true',
           description: 'whether to automatically start the render task.'
@@ -29,54 +28,46 @@ componentSignature:
           default: 'Infinity',
           description: 'controls how many frames the render task will run for',
           name: 'frames',
-          required: false,
           type: 'number'
         },
         {
           default: "'auto'",
           description: 'custom background to use when rendering to the render target',
           name: 'background',
-          required: false,
           type: "Three.Scene['background'] | 'auto'"
         },
         {
           default: "'auto'",
           description: 'custom fog to use when rendering to the render target',
           name: 'fog',
-          required: false,
           type: "Three.Scene['fog'] | 'auto'"
         },
         {
           default: '1000',
           description: 'passed along to the underlying cube camera',
           name: 'far',
-          required: false,
           type: 'number'
         },
         {
           default: '0.1',
           description: 'passed along to the underlying cube camera',
           name: 'near',
-          required: false,
           type: 'number'
         },
         {
           name: 'onupdatestart',
           description: 'a callback prop that is called anytime the render task is started',
-          required: false,
           type: '() => void'
         },
         {
           name: 'onupdatestop',
           description: 'a callback prop that is called anytime the render task is stopped',
-          required: false,
           type: '() => void'
         },
         {
           default: '256',
           description: 'size of the render target. more resolution means more detail',
           name: 'resolution',
-          required: false,
           type: 'number'
         }
       ]

@@ -13,26 +13,23 @@ componentSignature:
       },
     props:
       [
-        { name: 'id', type: 'string', default: 'default', required: false },
+        { name: 'id', type: 'string', default: 'default' },
         {
           name: 'limit',
           type: 'number',
           default: '1000',
-          required: false,
           description: 'Limits the amount of possible <Instance> components.'
         },
         {
           name: 'range',
           type: 'number',
           default: '1000',
-          required: false,
           description: 'Limits the amount of drawn <Instance> components.'
         },
         {
           name: 'update',
           type: 'boolean',
           default: 'true',
-          required: false,
           description: 'Whether the THREE.InstancedMesh should be updated.'
         }
       ]

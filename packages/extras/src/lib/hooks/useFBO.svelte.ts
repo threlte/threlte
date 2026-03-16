@@ -1,7 +1,7 @@
 import type { RenderTargetOptions } from 'three'
 import { DepthTexture, WebGLRenderTarget } from 'three'
-import { onDestroy } from 'svelte'
-import { isInstanceOf, useThrelte, watch } from '@threlte/core'
+import { isInstanceOf, useThrelte } from '@threlte/core'
+import { fromStore } from 'svelte/store'
 
 export type UseFBOOptions = RenderTargetOptions & {
   /**
@@ -23,9 +23,12 @@ export const useFBO = ({
 
   // first set the width and height because if a depth texture has to be created, it can only have its width and height set in its constructor
   if (size === undefined) {
-    const { dpr, size } = useThrelte()
-    watch([dpr, size], ([dpr, { width, height }]) => {
-      target.setSize(dpr * width, dpr * height)
+    const { dpr: dprStore, size: sizeStore } = useThrelte()
+    const dpr = fromStore(dprStore)
+    const size = fromStore(sizeStore)
+
+    $effect.pre(() => {
+      target.setSize(dpr.current * size.current.width, dpr.current * size.current.height)
     })
   } else {
     // handle when width and height are undefined or the user set them to negative numbers
@@ -44,8 +47,8 @@ export const useFBO = ({
     target.depthTexture = new DepthTexture(width, height)
   }
 
-  onDestroy(() => {
-    target.dispose()
+  $effect(() => {
+    return () => target.dispose()
   })
 
   return target

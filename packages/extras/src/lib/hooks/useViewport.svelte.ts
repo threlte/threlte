@@ -1,6 +1,6 @@
 import { Camera, Vector3, type Vector3Tuple } from 'three'
-import { currentWritable, isInstanceOf, useTask, useThrelte, watch } from '@threlte/core'
-import type { Readable } from 'svelte/store'
+import { currentWritable, isInstanceOf, useTask, useThrelte } from '@threlte/core'
+import { fromStore, type Readable } from 'svelte/store'
 
 export interface Viewport {
   /** Viewport width in Three.js units */
@@ -27,15 +27,15 @@ export const useViewport = (
     distance: 0
   })
 
-  const { camera, size, renderStage, scheduler } = useThrelte()
+  const { camera: cameraStore, size: sizeStore, renderStage, scheduler } = useThrelte()
 
   const updateViewport = (
-    $size: { width: number; height: number },
-    $camera: Camera,
+    size: { width: number; height: number },
+    camera: Camera,
     distance: number
   ) => {
     viewport.update(($viewport) => {
-      const { width, height } = $size
+      const { width, height } = size
 
       if (Array.isArray(target)) {
         origin.fromArray(target)
@@ -45,12 +45,12 @@ export const useViewport = (
 
       $viewport.distance = distance
 
-      if (isInstanceOf($camera, 'OrthographicCamera')) {
-        $viewport.width = width / $camera.zoom
-        $viewport.height = height / $camera.zoom
+      if (isInstanceOf(camera, 'OrthographicCamera')) {
+        $viewport.width = width / camera.zoom
+        $viewport.height = height / camera.zoom
         $viewport.factor = 1
-      } else if (isInstanceOf($camera, 'PerspectiveCamera')) {
-        const fov = ($camera.fov * Math.PI) / 180 // convert vertical fov to radians
+      } else if (isInstanceOf(camera, 'PerspectiveCamera')) {
+        const fov = (camera.fov * Math.PI) / 180 // convert vertical fov to radians
         const h = 2 * Math.tan(fov / 2) * distance // visible height
         const w = h * (width / height)
         $viewport.width = w
@@ -61,6 +61,9 @@ export const useViewport = (
       return $viewport
     })
   }
+
+  const camera = fromStore(cameraStore)
+  const size = fromStore(sizeStore)
 
   useTask(
     () => {
@@ -79,9 +82,9 @@ export const useViewport = (
     }
   )
 
-  watch([camera, size], ([$camera, $size]) => {
-    const distance = $camera.getWorldPosition(position).distanceTo(origin)
-    updateViewport($size, $camera, distance)
+  $effect.pre(() => {
+    const distance = camera.current.getWorldPosition(position).distanceTo(origin)
+    updateViewport(size.current, camera.current, distance)
   })
 
   return viewport

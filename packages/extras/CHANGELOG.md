@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.8.2
+
+### Patch Changes
+
+- 80496ce: Fix transitions plugin compatibility
+
 ## 9.8.1
 
 ### Patch Changes

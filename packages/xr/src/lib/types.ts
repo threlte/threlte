@@ -31,8 +31,10 @@ export interface XRControllerEvents {
 
 export type XRHandEventType = 'pinchstart' | 'pinchend' | 'connected' | 'disconnected'
 
-export interface XRControllerEvent<Type extends string = XRControllerEventType>
-  extends Event<Type, Group> {
+export interface XRControllerEvent<Type extends string = XRControllerEventType> extends Event<
+  Type,
+  Group
+> {
   data: XRInputSource
 }
 

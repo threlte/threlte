@@ -1,8 +1,7 @@
-import { currentWritable } from '@threlte/core'
 import { Spring } from 'svelte/motion'
-import { derived, toStore } from 'svelte/store'
+import { writable, derived, toStore } from 'svelte/store'
 
-export const scrollPos = currentWritable(0)
+export const scrollPos = writable(0)
 
 /**
  * do not use, may be negative!
@@ -18,6 +17,6 @@ export const springScrollPos = derived(
   (pos) => Math.max(0, pos)
 )
 
-export const mouseCoords = currentWritable({ x: 0, y: 0 })
+export const mouseCoords = writable({ x: 0, y: 0 })
 
 export const mouseCoordsSpring = new Spring({ x: 0, y: 0 })

@@ -61,7 +61,7 @@
     config={{ state }}
     studio={{ enabled: false }}
   >
-    <div class="fixed left-0 top-0 z-10 h-lvh w-screen">
+    <div class="fixed top-0 left-0 z-10 h-lvh w-screen">
       <Canvas
         toneMapping={NoToneMapping}
         createRenderer={(canvas: HTMLCanvasElement) => {
@@ -172,7 +172,7 @@
       out={4}
     >
       <h2
-        class="fixed left-0 top-[66svh] top-[66vh] flex w-screen flex-col items-center justify-center"
+        class="fixed top-[66svh] top-[66vh] left-0 flex w-screen flex-col items-center justify-center"
       >
         <TextEffect
           id="intro"

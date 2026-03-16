@@ -95,9 +95,9 @@
     positionChangedBy = 'code'
     position = value
   })
-  $: position,
+  $: (position,
     positionChangedBy === 'user' && ($positionStore = position),
-    (positionChangedBy = 'user')
+    (positionChangedBy = 'user'))
 
   // playing
   let playingChangedBy = 'user'
@@ -105,7 +105,9 @@
     playingChangedBy = 'code'
     playing = value
   })
-  $: playing, playingChangedBy === 'user' && ($playingStore = playing), (playingChangedBy = 'user')
+  $: (playing,
+    playingChangedBy === 'user' && ($playingStore = playing),
+    (playingChangedBy = 'user'))
 
   // pass sequence to children via context
   setContext('theatre-sequence', sequence)

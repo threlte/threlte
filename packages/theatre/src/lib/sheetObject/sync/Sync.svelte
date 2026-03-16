@@ -2,7 +2,7 @@
   lang="ts"
   generics="Type"
 >
-  import { resolvePropertyPath, useParent, watch } from '@threlte/core'
+  import { resolvePropertyPath, useParent, observe } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { useStudio } from '../../studio/useStudio.js'
   import type { Transformer } from '../transfomers/types.js'
@@ -75,34 +75,37 @@
     'aspect'
   ]
 
-  watch([parent, sheetObject], ([parent, sheetObject]) => {
-    if (!parent) return
+  observe.pre(
+    () => [parent, sheetObject],
+    ([parent, sheetObject]) => {
+      if (!parent) return
 
-    return sheetObject?.onValuesChange((values) => {
-      // Ensure that the parent is still mounted
+      return sheetObject?.onValuesChange((values) => {
+        // Ensure that the parent is still mounted
 
-      Object.keys(values).forEach((key) => {
-        // first, check if the prop is mapped in this component
-        const propMapping = propMappings[key]
+        Object.keys(values).forEach((key) => {
+          // first, check if the prop is mapped in this component
+          const propMapping = propMappings[key]
 
-        if (!propMapping) return
+          if (!propMapping) return
 
-        // we're using the addedProps map to infer the target property name from the property name on values
-        const { target, key: targetKey } = resolvePropertyPath(
-          parent as any,
-          propMapping.propertyPath
-        )
+          // we're using the addedProps map to infer the target property name from the property name on values
+          const { target, key: targetKey } = resolvePropertyPath(
+            parent as any,
+            propMapping.propertyPath
+          )
 
-        // use a transformer to apply value
-        const transformer = propMapping.transformer
-        transformer.apply(target, targetKey, values[key])
+          // use a transformer to apply value
+          const transformer = propMapping.transformer
+          transformer.apply(target, targetKey, values[key])
 
-        if (updateProjectionMatrixKeys.includes(targetKey)) {
-          target.updateProjectionMatrix?.()
-        }
+          if (updateProjectionMatrixKeys.includes(targetKey)) {
+            target.updateProjectionMatrix?.()
+          }
+        })
       })
-    })
-  })
+    }
+  )
 
   initProps()
 

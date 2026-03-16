@@ -18,36 +18,21 @@ componentSignature:
           name: 'bounces',
           type: 'number',
           default: '2',
-          required: false,
           description: 'Number of ray-cast bounces, it can be expensive to have too many'
         },
-        {
-          name: 'ior',
-          type: 'number',
-          default: '2.4',
-          required: false,
-          description: 'Refraction index'
-        },
-        {
-          name: 'fresnel',
-          type: 'number',
-          default: '0.0',
-          required: false,
-          description: 'Fresnel (strip light)'
-        },
+        { name: 'ior', type: 'number', default: '2.4', description: 'Refraction index' },
+        { name: 'fresnel', type: 'number', default: '0.0', description: 'Fresnel (strip light)' },
         {
           name: 'aberrationStrength',
           type: 'number',
           default: '0.0',
-          required: false,
           description: 'RGB shift intensity, can be expensive'
         },
-        { name: 'color', type: 'ColorRepresentation', default: 'white', required: false },
+        { name: 'color', type: 'ColorRepresentation', default: 'white' },
         {
           name: 'fastChrome',
           type: 'boolean',
           default: 'true',
-          required: false,
           description: 'If this is on it uses fewer ray casts for the RGB shift sacrificing physical accuracy'
         }
       ]

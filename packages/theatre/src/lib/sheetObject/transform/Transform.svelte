@@ -3,7 +3,7 @@
   generics="Label extends string | undefined"
 >
   import type { IScrub } from '@theatre/studio'
-  import { T, watch } from '@threlte/core'
+  import { T, observe } from '@threlte/core'
   import { TransformControls } from '@threlte/extras'
   import { onMount } from 'svelte'
   import { Group } from 'three'
@@ -83,25 +83,28 @@
     }
   }
 
-  watch([sheetObject], ([sheetObject]) => {
-    return sheetObject?.onValuesChange((values) => {
-      let object = values
+  observe.pre(
+    () => [sheetObject],
+    ([sheetObject]) => {
+      return sheetObject?.onValuesChange((values) => {
+        let object = values
 
-      if (key) {
-        if (!values[key]) return
-        object = values[key]
-      } else {
-        if (!values.position || !values.rotation || !values.scale) return
-      }
+        if (key) {
+          if (!values[key]) return
+          object = values[key]
+        } else {
+          if (!values.position || !values.rotation || !values.scale) return
+        }
 
-      // sanity check
-      if (!object) return
+        // sanity check
+        if (!object) return
 
-      positionTransformer.apply(group, 'position', object.position)
-      rotationTransformer.apply(group, 'rotation', object.rotation)
-      scaleTransformer.apply(group, 'scale', object.scale)
-    })
-  })
+        positionTransformer.apply(group, 'position', object.position)
+        rotationTransformer.apply(group, 'rotation', object.rotation)
+        scaleTransformer.apply(group, 'scale', object.scale)
+      })
+    }
+  )
 
   onMount(() => {
     initTransform()
@@ -114,12 +117,15 @@
   let scrub: IScrub | undefined
   let isSelected = $state(false)
 
-  watch([studio], ([studio]) => {
-    return studio?.onSelectionChange((selection) => {
-      if (!$sheetObject) return
-      isSelected = selection.includes($sheetObject)
-    })
-  })
+  observe.pre(
+    () => [studio],
+    ([studio]) => {
+      return studio?.onSelectionChange((selection) => {
+        if (!$sheetObject) return
+        isSelected = selection.includes($sheetObject)
+      })
+    }
+  )
 
   const onMouseDown = () => {
     if (!studio.current) return

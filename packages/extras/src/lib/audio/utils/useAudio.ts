@@ -1,4 +1,4 @@
-import { currentWritable, useLoader, watch } from '@threlte/core'
+import { currentWritable, useLoader, observe } from '@threlte/core'
 import { onDestroy } from 'svelte'
 import { AudioLoader, type Audio, type PositionalAudio } from 'three'
 
@@ -110,15 +110,18 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
     audio.setLoop(value ?? false)
   }
 
-  watch([loaded, autoplay, shouldPlay], ([loaded, autoplay, shouldPlay]) => {
-    if (!loaded) {
-      if (audio.isPlaying) stop()
-      return
+  observe.pre(
+    () => [loaded, autoplay, shouldPlay],
+    ([loaded, autoplay, shouldPlay]) => {
+      if (!loaded) {
+        if (audio.isPlaying) stop()
+        return
+      }
+      if (autoplay || shouldPlay) {
+        play()
+      }
     }
-    if (autoplay || shouldPlay) {
-      play()
-    }
-  })
+  )
 
   onDestroy(() => {
     try {

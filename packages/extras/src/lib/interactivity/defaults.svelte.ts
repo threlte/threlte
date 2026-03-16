@@ -1,24 +1,29 @@
-import { useThrelte, watch, type CurrentWritable } from '@threlte/core'
+import { useThrelte, type CurrentWritable } from '@threlte/core'
 import type { ComputeFunction } from './context.js'
+import { fromStore } from 'svelte/store'
 
 export const getDefaultComputeFunction = (
-  target: CurrentWritable<HTMLElement>
+  targetWritable: CurrentWritable<HTMLElement>
 ): ComputeFunction => {
   const { camera } = useThrelte()
 
-  let width = target.current.clientWidth
-  let height = target.current.clientHeight
+  let width = targetWritable.current.clientWidth
+  let height = targetWritable.current.clientHeight
 
   const resizeObserver = new ResizeObserver(([entry]) => {
     width = entry.contentRect.width
     height = entry.contentRect.height
   })
 
-  watch(target, (target) => {
-    if (target) resizeObserver.observe(target)
-    return () => {
-      if (target) resizeObserver.unobserve(target)
-    }
+  const target = fromStore(targetWritable)
+
+  $effect.pre(() => {
+    const { current } = target
+
+    if (!current) return
+
+    resizeObserver.observe(current)
+    return () => resizeObserver.unobserve(current)
   })
 
   return (event, state) => {

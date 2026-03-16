@@ -3,6 +3,8 @@
   import { OrbitControls } from '@threlte/extras'
   import { width, height } from './stores'
   import Random from './Random.svelte'
+
+  let { regen } = $props()
 </script>
 
 <T.PerspectiveCamera
@@ -30,4 +32,6 @@
   <T.MeshStandardMaterial color="green" />
 </T.Mesh>
 
-<Random />
+{#key regen}
+  <Random />
+{/key}

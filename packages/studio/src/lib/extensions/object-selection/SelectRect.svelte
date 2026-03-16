@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useThrelte, watch } from '@threlte/core'
+  import { useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Object3D } from 'three'
   import { SelectionBox } from 'three/examples/jsm/interactive/SelectionBox.js'
@@ -29,8 +29,8 @@
 
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
-  watch(camera, (camera) => {
-    selectionBox.camera = camera
+  $effect.pre(() => {
+    selectionBox.camera = $camera
   })
 
   const filter = (objects: Object3D[]): Object3D[] => {

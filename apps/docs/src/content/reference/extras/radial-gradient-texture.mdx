@@ -17,35 +17,30 @@ componentSignature:
           default: '1024',
           description: "width of the texture's canvas",
           name: 'width',
-          required: false,
           type: 'number'
         },
         {
           default: '1024',
           description: "height of the texture's canvas",
           name: 'height',
-          required: false,
           type: 'number'
         },
         {
           default: '0',
           description: 'inner radius of the gradient',
           name: 'innerRadius',
-          required: false,
           type: 'number'
         },
         {
           default: 'auto',
           description: "outer radius of the gradient. if set to 'auto', becomes the radius of the circle that circumscribes the canvas",
           name: 'outerRadius',
-          required: false,
           type: 'RadialGradientOuterRadius'
         },
         {
           default: "[{color: '#000000', offset: 0}, {color: '#ffffff', offset: 1}]",
           description: 'list of stops applied to the gradient. more info at https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient',
           name: 'stops',
-          required: false,
           type: 'ColorStop[]'
         }
       ]

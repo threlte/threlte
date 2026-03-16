@@ -41,13 +41,13 @@
   </div>
   {#if !$finishedOnce}
     <div
-      class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12 text-2xl text-white"
+      class="pointer-events-none absolute top-0 left-0 flex h-full w-full flex-row items-center justify-center p-12 text-2xl text-white"
     >
       {($progress * 100).toFixed()} %
     </div>
   {:else if game.state === 'off'}
     <div
-      class="pointer-events-none absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center p-12"
+      class="pointer-events-none absolute top-0 left-0 flex h-full w-full flex-row items-center justify-center p-12"
     >
       <button
         onclick={() => {
@@ -61,7 +61,7 @@
     </div>
   {/if}
 
-  <div class="absolute right-6 top-6">
+  <div class="absolute top-6 right-6">
     <button
       class="rounded-full bg-white p-2 *:h-7 *:w-7"
       onclick={() => (game.muted = !game.muted)}
