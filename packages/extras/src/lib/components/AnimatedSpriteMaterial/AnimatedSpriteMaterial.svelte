@@ -194,7 +194,7 @@
       direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
     }
 
-    currentFrame = direction === 'forward' ? frameTag?.from ?? 0 : frameTag?.to ?? numFrames - 1
+    currentFrame = direction === 'forward' ? (frameTag?.from ?? 0) : (frameTag?.to ?? numFrames - 1)
 
     setFrame(json.frames[frameNames[currentFrame]].frame)
 
@@ -238,12 +238,12 @@
       // start and end are the first and last frames of the animation respectively
       const start =
         direction === 'forward'
-          ? frameTag?.from ?? startFrame ?? 0
-          : frameTag?.to ?? endFrame ?? numFrames - 1
+          ? (frameTag?.from ?? startFrame ?? 0)
+          : (frameTag?.to ?? endFrame ?? numFrames - 1)
       const end =
         direction === 'forward'
-          ? frameTag?.to ?? endFrame ?? numFrames - 1
-          : frameTag?.from ?? startFrame ?? 0
+          ? (frameTag?.to ?? endFrame ?? numFrames - 1)
+          : (frameTag?.from ?? startFrame ?? 0)
 
       setFrame(frame)
 

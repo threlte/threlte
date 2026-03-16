@@ -55,9 +55,9 @@
   {#snippet text()}
     <div>
       <p>
-        Nesting one or multiple {'<Collider>'} components in a {'<RigidBody>'} component effectively
-        attaches the colliders to the rigid body and allow the rigid body to be affected by contact forces
-        and gravity.
+        Nesting one or multiple {'<Collider>'} components in a {'<RigidBody>'} component effectively attaches
+        the colliders to the rigid body and allow the rigid body to be affected by contact forces and
+        gravity.
       </p>
     </div>
   {/snippet}

@@ -18,7 +18,7 @@
 
 <div class="flex flex-col gap-3">
   {#if headline}
-    <h2 class="text-xl font-bold leading-snug text-neutral-800">
+    <h2 class="text-xl leading-snug font-bold text-neutral-800">
       {@html headline}
     </h2>
   {/if}
@@ -34,7 +34,7 @@
 
   {#if tip}
     <div
-      class="shadow-xs flex items-start gap-1.5 rounded-md border border-neutral-300 bg-neutral-100 px-2 py-1 text-sm leading-snug"
+      class="flex items-start gap-1.5 rounded-md border border-neutral-300 bg-neutral-100 px-2 py-1 text-sm leading-snug shadow-xs"
     >
       <div
         class="relative flex h-[1.375em] w-[1.375em] shrink-0 grow-0 items-center justify-center"
@@ -53,7 +53,7 @@
   {/if}
 
   {#if cta}
-    <div class="font-semibold leading-snug">
+    <div class="leading-snug font-semibold">
       → {@html cta}
     </div>
   {/if}

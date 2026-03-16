@@ -63,7 +63,7 @@
 
 <div
   class={[
-    'not-content rounded-b-md! relative flex w-full flex-col items-stretch overflow-hidden border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
+    'not-content relative flex w-full flex-col items-stretch overflow-hidden rounded-b-md! border-x border-b border-white/20 transition-all duration-700 ease-in-out will-change-[max-height] md:max-h-[80vh] md:flex-row',
     !expanded && 'max-h-[100px]! overflow-hidden',
     hidePreview && 'rounded-md! border-t'
   ]}
@@ -71,13 +71,13 @@
   {#if !expanded}
     <div
       transition:fade
-      class="bg-linear-to-t absolute left-0 top-0 z-10 h-full w-full from-blue-900 to-blue-900/50"
+      class="absolute top-0 left-0 z-10 h-full w-full bg-linear-to-t from-blue-900 to-blue-900/50"
     ></div>
   {/if}
   {#if !expanded}
-    <div class="absolute left-0 top-0 flex h-full w-full flex-row items-center justify-center">
+    <div class="absolute top-0 left-0 flex h-full w-full flex-row items-center justify-center">
       <button
-        class="rounded-xs border-orange/10 text-orange focus:outline-hidden z-10 flex flex-row items-center justify-center gap-3 border bg-orange-800/50 px-2 py-1 text-sm backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400"
+        class="border-orange/10 text-orange z-10 flex flex-row items-center justify-center gap-3 rounded-xs border bg-orange-800/50 px-2 py-1 text-sm backdrop-blur-md hover:bg-orange-800/70 hover:text-orange-400 focus:outline-hidden"
         onclick={() => (expanded = true)}
       >
         <svg

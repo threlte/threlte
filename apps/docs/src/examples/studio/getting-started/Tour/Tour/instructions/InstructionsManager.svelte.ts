@@ -74,7 +74,7 @@ export class InstructionsManager {
     )
 
     $effect.pre(() => {
-      this.referenceElement, this.tooltipElement, this.wrapper, this.currentInstructions
+      ;(this.referenceElement, this.tooltipElement, this.wrapper, this.currentInstructions)
       running = true
     })
   }

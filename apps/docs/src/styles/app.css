@@ -48,7 +48,8 @@ https://tailwindcss.com/docs/detecting-classes-in-source-files#dynamic-class-nam
 /* https://tailwindcss.com/docs/colors#customizing-your-colors */
 /* https://tailwindcss.com/docs/font-size */
 @theme {
-  --font-sans: 'Inter', 'sans-serif', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+  --font-sans:
+    'Inter', 'sans-serif', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --color-orange: oklch(0.6518 0.2339 34.08); /* #FE3D00 */
   --color-orange-50: oklch(0.8771 0.0673 37.87); /* #FFC8B7 */

@@ -37,7 +37,7 @@
   {id}
   class="block {_class}"
 >
-  <summary class="cursor-pointer select-none list-none font-bold">
+  <summary class="cursor-pointer list-none font-bold select-none">
     <div class="mb-0 flex flex-row items-center">
       {@render summary?.()}
       <div>

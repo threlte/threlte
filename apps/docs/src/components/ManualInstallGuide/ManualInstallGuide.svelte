@@ -215,7 +215,7 @@
 <p>Install the packages with npm, pnpm, yarn or any other package manager you prefer.</p>
 
 <div
-  class="not-content *:bg-transparent! group relative overflow-x-auto whitespace-pre-wrap rounded-md border border-white/20 bg-blue-900 p-3 text-sm shadow-xl"
+  class="not-content group relative overflow-x-auto rounded-md border border-white/20 bg-blue-900 p-3 text-sm whitespace-pre-wrap shadow-xl *:bg-transparent!"
 >
   <code class="p-0 text-[1em]">
     {installCode}
