@@ -2,7 +2,7 @@ import { currentWritable, type CurrentWritable, useDOM } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster, type Object3D, type Intersection } from 'three'
 import type { IntersectionEvent, DomEvent } from './types.js'
-import { getDefaultComputeFunction } from './defaults.js'
+import { getDefaultComputeFunction } from './defaults.svelte.js'
 
 export type FilterFunction = (
   items: Intersection[],

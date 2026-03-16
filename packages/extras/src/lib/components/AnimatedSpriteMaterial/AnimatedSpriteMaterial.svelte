@@ -7,7 +7,7 @@
     useLoader,
     useParent,
     useTask,
-    watch
+    observe
   } from '@threlte/core'
   import {
     DoubleSide,
@@ -275,32 +275,35 @@
     { running: () => running }
   )
 
-  watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
-    if (nextTexture === undefined || nextJson === undefined) return
+  observe.pre(
+    () => [textureStore, jsonStore],
+    ([nextTexture, nextJson]) => {
+      if (nextTexture === undefined || nextJson === undefined) return
 
-    texture = nextTexture.clone()
-    json = nextJson
-    frameNames = Object.keys(json.frames)
-    numFrames = frameNames.length
-    spritesheetSize = json.meta.size
+      texture = nextTexture.clone()
+      json = nextJson
+      frameNames = Object.keys(json.frames)
+      numFrames = frameNames.length
+      spritesheetSize = json.meta.size
 
-    const { sourceSize } = Object.values(json.frames)[0]
-    frameWidth = sourceSize.w
-    frameHeight = sourceSize.h
+      const { sourceSize } = Object.values(json.frames)[0]
+      frameWidth = sourceSize.w
+      frameHeight = sourceSize.h
 
-    texture.repeat.set(
-      (1 * flipOffset) / (spritesheetSize.w / frameWidth),
-      1 / (spritesheetSize.h / frameHeight)
-    )
+      texture.repeat.set(
+        (1 * flipOffset) / (spritesheetSize.w / frameWidth),
+        1 / (spritesheetSize.h / frameHeight)
+      )
 
-    setAnimation(animation)
+      setAnimation(animation)
 
-    onload?.()
+      onload?.()
 
-    if (autoplay) {
-      play()
+      if (autoplay) {
+        play()
+      }
     }
-  })
+  )
 
   $effect.pre(() => {
     setAnimation(animation)

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useParentObject3D, useThrelte, watch } from '@threlte/core'
+  import { T, useParentObject3D, useThrelte } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import { Group } from 'three'
   import { createSuspenseContext } from './context.js'
@@ -33,24 +33,24 @@
   const { invalidate } = useThrelte()
 
   const group = new Group()
-  const parentObject3D = useParentObject3D()
+  const parent = useParentObject3D()
 
-  watch([parentObject3D, suspended, errors], ([parent, suspended, errors]) => {
+  $effect.pre(() => {
     // we don't have a parent, so we can't add ourselves to it
-    if (!parent) return
+    if (!$parent) return
 
     // if the component is suspended or has errors, we remove ourselves from the parent
-    if (suspended || errors.length) {
-      parent.remove(group)
+    if ($suspended || $errors.length) {
+      $parent.remove(group)
       invalidate()
       return
     }
 
-    parent.add(group)
+    $parent.add(group)
     invalidate()
 
     return () => {
-      parent.remove(group)
+      $parent.remove(group)
       invalidate()
     }
   })

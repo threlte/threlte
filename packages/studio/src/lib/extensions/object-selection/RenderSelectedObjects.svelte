@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import { isInstanceOf, T, useTask, useThrelte, watch } from '@threlte/core'
+  import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import {
     Color,
@@ -26,8 +26,8 @@
     format: RGBAFormat
   })
 
-  watch(size, (size) => {
-    renderTarget.setSize(size.width, size.height)
+  $effect.pre(() => {
+    renderTarget.setSize($size.width, $size.height)
   })
 
   const numberSeedToHexColor = (seed: number) => {

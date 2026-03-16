@@ -1,5 +1,5 @@
 import { injectInteractivityPlugin } from './plugin.svelte.js'
-import { setupInteractivity } from './setupInteractivity.js'
+import { setupInteractivity } from './setupInteractivity.svelte.js'
 import { setInteractivityContext, type InteractivityOptions } from './context.js'
 
 const interactivity = (options?: InteractivityOptions) => {

@@ -1,7 +1,6 @@
-import { watch } from '@threlte/core'
-import { getContext, onMount } from 'svelte'
-import { writable } from 'svelte/store'
+import { getContext } from 'svelte'
 import { suspenseContextIdentifier, type SuspenseContext } from './context.js'
+import { fromStore } from 'svelte/store'
 
 /**
  * ### `onSuspend`
@@ -20,12 +19,11 @@ export const onSuspend = (callback: () => void): void => {
   // If there's no Suspense boundary, we can just return, the component will never suspend.
   if (!ctx) return
 
-  const mounted = writable(false)
-  onMount(() => {
-    mounted.set(true)
-  })
+  const suspended = fromStore(ctx.suspended)
 
-  watch([ctx.suspended, mounted], ([suspended, mounted]) => {
-    if (mounted && suspended) callback()
+  $effect.pre(() => {
+    if (suspended.current) {
+      callback()
+    }
   })
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { observe, T, useThrelte, watch } from '@threlte/core'
+  import { observe, T, useThrelte } from '@threlte/core'
   import type CC from 'camera-controls'
   import { onDestroy, type Snippet } from 'svelte'
   import { Checkbox, RadioGrid } from 'svelte-tweakpane-ui'
@@ -124,9 +124,9 @@
   )
   const defaultCameraObject = $derived(extension.state.defaultCamera.object)
 
-  watch(camera, (camera) => {
-    if (camera !== editorCameraPerspective && camera !== editorCameraOrthographic) {
-      extension.setDefaultCameraObject(camera)
+  $effect.pre(() => {
+    if ($camera !== editorCameraPerspective && $camera !== editorCameraOrthographic) {
+      extension.setDefaultCameraObject($camera)
     }
   })
 

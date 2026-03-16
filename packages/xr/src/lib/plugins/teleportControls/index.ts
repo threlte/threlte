@@ -1,4 +1,4 @@
-import { currentWritable, watch } from '@threlte/core'
+import { currentWritable, observe } from '@threlte/core'
 import {
   createTeleportContext,
   useTeleportControls,
@@ -60,14 +60,20 @@ export const teleportControls = (
 
   const handContext = getHandContext(handedness)
 
-  watch(handContext.enabled, (enabled) => {
-    controlsCounter += enabled ? 1 : -1
-    teleportState[handedness].enabled = controlsCounter > 0
-  })
+  observe.pre(
+    () => [handContext.enabled],
+    ([enabled]) => {
+      controlsCounter += enabled ? 1 : -1
+      teleportState[handedness].enabled = controlsCounter > 0
+    }
+  )
 
-  watch(handContext.active, (hovering) => {
-    teleportState[handedness].hovering = hovering
-  })
+  observe.pre(
+    () => [handContext.active],
+    ([hovering]) => {
+      teleportState[handedness].hovering = hovering
+    }
+  )
 
   return {
     enabled: handContext.enabled,

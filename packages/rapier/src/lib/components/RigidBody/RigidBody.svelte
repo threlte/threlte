@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D } from '@threlte/core'
   import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier.js'
@@ -178,10 +178,11 @@
 
   const parent3DObject = useParentObject3D()
   createParentObject3DContext(object)
-  watch(parent3DObject, (parent) => {
-    parent?.add(object)
+
+  $effect(() => {
+    $parent3DObject?.add(object)
     return () => {
-      parent?.remove(object)
+      $parent3DObject?.remove(object)
     }
   })
 </script>

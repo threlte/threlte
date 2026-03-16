@@ -1,5 +1,5 @@
 // Hooks
-export { useCursor } from './hooks/useCursor.js'
+export { useCursor } from './hooks/useCursor.svelte.js'
 export { useGltf } from './hooks/useGltf.js'
 export { useDraco } from './hooks/useDraco.js'
 export { useMeshopt } from './hooks/useMeshopt.js'
@@ -7,10 +7,10 @@ export { useKtx2 } from './hooks/useKtx2.js'
 export { useGltfAnimations } from './hooks/useGltfAnimations.js'
 export { useProgress } from './hooks/useProgress.js'
 export { useTexture } from './hooks/useTexture.js'
-export { useFBO } from './hooks/useFBO.js'
+export { useFBO } from './hooks/useFBO.svelte.js'
 export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad.svelte.js'
 export { useMask } from './hooks/useMask.js'
-export { useViewport } from './hooks/useViewport.js'
+export { useViewport } from './hooks/useViewport.svelte.js'
 export { meshBounds } from './utilities/meshBounds.js'
 
 // abstractions
@@ -78,8 +78,8 @@ export type { TransitionProps } from './transitions/types.js'
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
 export { useSuspense } from './suspense/useSuspense.js'
-export { onReveal } from './suspense/onReveal.js'
-export { onSuspend } from './suspense/onSuspend.js'
+export { onReveal } from './suspense/onReveal.svelte.js'
+export { onSuspend } from './suspense/onSuspend.svelte.js'
 
 // portals
 export { default as Portal } from './components/portals/Portal.svelte'
