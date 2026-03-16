@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.4.2
+
+### Patch Changes
+
+- 80496ce: Fix transitions plugin compatibility
+
 ## 8.4.1
 
 ### Patch Changes
