@@ -1,8 +1,8 @@
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-  import { useControlsContext } from '../useControlsContext'
-  import type { OrbitControlsProps } from './types'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { OrbitControlsProps } from './types.js'
   import type { Event } from 'three'
 
   let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
@@ -19,23 +19,14 @@
 
   const { orbitControls } = useControlsContext()
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       controls.update()
     },
     {
-      autoStart: false,
-      autoInvalidate: false
+      running: () => props.autoRotate ?? props.enableDamping ?? false
     }
   )
-
-  $effect.pre(() => {
-    if (props.autoRotate || props.enableDamping) {
-      start()
-    } else {
-      stop()
-    }
-  })
 
   $effect.pre(() => {
     const handleChange = (event: Event<any, ThreeOrbitControls>) => {

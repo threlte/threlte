@@ -5,24 +5,30 @@
   import { Instance, InstancedMesh, interactivity } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
 
-  let { paused = false }: { paused?: boolean } = $props()
+  let { size }: { size: number } = $props()
 
-  const width = 10
-  const limit = width * width
   const gap = 2.5
-  const offset = (width * gap) / 2
+
+  const limit = $derived(size * size)
+  const offset = $derived((size * gap) / 2)
 
   const startColor = new Color('blue')
   const endColor = new Color('yellow')
-  const instances: BallInstance[] = []
-  for (let i = 0; i < limit; i += 1) {
-    const x = (i % width) * gap - offset
-    const z = Math.floor(i / width) * gap - offset
-    instances.push(new BallInstance(startColor, endColor, x, z))
-  }
 
-  const { size } = useThrelte()
-  const zoom = $derived($size.width / (1.5 * gap * width))
+  const instances = $derived.by(() => {
+    const results: BallInstance[] = []
+
+    for (let i = 0; i < limit; i += 1) {
+      const x = (i % size) * gap - offset
+      const z = Math.floor(i / size) * gap - offset
+      results.push(new BallInstance(startColor, endColor, x, z))
+    }
+
+    return results
+  })
+
+  const { size: viewportSize } = useThrelte()
+  const zoom = $derived($viewportSize.width / (1.5 * gap * size))
 
   interactivity({
     filter(items) {
@@ -36,29 +42,17 @@
   const lightHeight = 5
 
   let time = 0
-  const { start, stop } = useTask(
-    (delta) => {
-      time += delta
-      const x = lightRadius * Math.cos(time)
-      const z = lightRadius * Math.sin(time)
-      light.position.set(x, lightHeight, z)
-      light.lookAt(0, 0, 0)
-    },
-    { autoStart: false }
-  )
-
-  $effect(() => {
-    if (!paused) {
-      start()
-    }
-    return () => {
-      stop()
-    }
+  useTask((delta) => {
+    time += delta
+    const x = lightRadius * Math.cos(time)
+    const z = lightRadius * Math.sin(time)
+    light.position.set(x, lightHeight, z)
+    light.lookAt(0, 0, 0)
   })
 </script>
 
 <T.OrthographicCamera
-  position={[width, width, width]}
+  position={[size, size, size]}
   {zoom}
   makeDefault
   oncreate={(ref) => {
@@ -67,7 +61,7 @@
 />
 
 <InstancedMesh
-  {limit}
+  limit={50 * 50}
   range={limit}
 >
   <T.SphereGeometry />

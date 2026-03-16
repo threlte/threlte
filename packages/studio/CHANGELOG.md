@@ -1,5 +1,23 @@
 # @threlte/studio
 
+## 0.3.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 0.2.1
+
+### Patch Changes
+
+- c1623a9: Update camera-controls and remove patch
+
+## 0.2.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
 ## 0.1.11
 
 ### Patch Changes

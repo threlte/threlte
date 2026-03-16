@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { Mesh } from 'three/webgpu'
+  import SliceMaterial from './SliceMaterial.svelte'
+  import type { ColorRepresentation, Mesh } from 'three/webgpu'
+  import { ACESFilmicToneMapping, DoubleSide, Group } from 'three/webgpu'
   import { Environment, OrbitControls, useDraco, useGltf } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { ACESFilmicToneMapping, Color, DoubleSide, Vector3 } from 'three/webgpu'
-  import SliceMaterial from './SliceMaterial.svelte'
 
   type SceneProps = {
     arcAngle: number
     rotate: boolean
-    sliceColor: Color
+    sliceColor: ColorRepresentation
     startAngle: number
   }
 
@@ -19,8 +19,6 @@
     '/models/gears.glb',
     { dracoLoader }
   )
-
-  const gearsPosition = new Vector3()
 
   const { scene, toneMapping } = useThrelte()
 
@@ -39,25 +37,19 @@
 
   let rotation = $state(0)
 
-  const { start, stop } = useTask(
+  useTask(
     (delta) => {
       rotation += 0.1 * delta
     },
-    { autoStart: false }
+    { running: () => rotate }
   )
-
-  $effect(() => {
-    if (rotate) {
-      start()
-    } else {
-      stop()
-    }
-  })
 
   const metalness = 0.5
   const roughness = 0.25
   const envMapIntensity = 0.5
   const color = '#858080'
+
+  const group = new Group()
 </script>
 
 <Environment
@@ -106,10 +98,8 @@
   </T>
 {/snippet}
 
-<T.Group
-  position.x={gearsPosition.x}
-  position.y={gearsPosition.y}
-  position.z={gearsPosition.z}
+<T
+  is={group}
   rotation.y={rotation}
 >
   {#await gltf then { nodes }}
@@ -132,14 +122,14 @@
       />
     </T>
   {/await}
-</T.Group>
+</T>
 
 <T.Mesh
   position.x={-4}
   position.y={-3}
   position.z={-4}
   oncreate={(ref) => {
-    ref.lookAt(gearsPosition)
+    ref.lookAt(group.position)
   }}
   scale={10}
   receiveShadow

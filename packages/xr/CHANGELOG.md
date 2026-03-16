@@ -1,5 +1,17 @@
 # @threlte/xr
 
+## 1.3.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 1.2.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
 ## 1.1.1
 
 ### Patch Changes

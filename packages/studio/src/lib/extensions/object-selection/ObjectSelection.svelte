@@ -3,7 +3,7 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
-  import { useStudio } from '../../internal/extensions'
+  import { useStudio } from '../../internal/extensions.js'
   import RenderSelectedObjects from './RenderSelectedObjects.svelte'
   import SelectRect from './SelectRect.svelte'
   import SelectTweak from './SelectTweak.svelte'
@@ -11,9 +11,9 @@
     objectSelectionScope,
     type ObjectSelectionActions,
     type ObjectSelectionState
-  } from './types'
-  import { useOnRemove } from '../../internal/useOnRemove'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
+  } from './types.js'
+  import { useOnRemove } from '../../internal/useOnRemove.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
   import { tick, type Snippet } from 'svelte'
 
   let { children }: { children?: Snippet } = $props()

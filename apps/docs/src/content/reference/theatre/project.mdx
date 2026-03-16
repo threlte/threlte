@@ -2,19 +2,19 @@
 order: 1.2
 category: '@threlte/theatre'
 sourcePath: 'packages/theatre/src/lib/project/Project.svelte'
-name: '<Project>'
+title: '<Project>'
 type: 'component'
 componentSignature:
   {
     props:
       [
-        {name: 'name', type: 'string', default: 'default', required: false},
-        {name: 'config', type: 'IProjectConfig', required: false},
+        { name: 'name', type: 'string', default: "'default'" },
+        { name: 'config', type: 'IProjectConfig' }
       ],
 	bindings:
 	  [
-	    {name: 'project', type: 'IProject'},
-		{name: 'isReady', type: 'boolean'},
+	    { name: 'project', type: 'IProject' },
+			{ name: 'isReady', type: 'boolean' }
 	  ]
   }
 ---

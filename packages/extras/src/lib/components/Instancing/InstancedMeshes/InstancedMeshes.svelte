@@ -2,11 +2,11 @@
   lang="ts"
   generics="Type extends Meshes"
 >
-  import { createInstanceIdContext } from '../useInstanceId'
+  import { createInstanceIdContext } from '../useInstanceId.js'
   import type { Mesh } from 'three'
   import Instance from '../Instance.svelte'
   import InnerInstancedMeshes from './InnerInstancedMeshes.svelte'
-  import type { InstancedMeshesProps, Meshes } from './types'
+  import type { InstancedMeshesProps, Meshes } from './types.js'
 
   let { meshes, children, ...props }: InstancedMeshesProps<Type> = $props()
 

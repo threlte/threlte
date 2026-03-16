@@ -1,7 +1,6 @@
-import { watch } from '@threlte/core'
-import { getContext, onDestroy, onMount } from 'svelte'
-import { writable } from 'svelte/store'
-import { suspenseContextIdentifier, type SuspenseContext } from './context'
+import { getContext } from 'svelte'
+import { fromStore } from 'svelte/store'
+import { suspenseContextIdentifier, type SuspenseContext } from './context.js'
 
 /**
  * ### `onReveal`
@@ -24,23 +23,16 @@ import { suspenseContextIdentifier, type SuspenseContext } from './context'
 export const onReveal = (callback: () => (() => void) | void): void => {
   const ctx = getContext<SuspenseContext | undefined>(suspenseContextIdentifier)
 
-  let cleanup: (() => void) | void
-
-  const mounted = writable(false)
-  onMount(() => {
-    // If there is no context, we are not in a suspense context, so we can just call the callback.
-    if (!ctx) cleanup = callback()
-    mounted.set(true)
-  })
-
   // Return if there is no context.
   if (!ctx) {
-    onDestroy(() => cleanup?.())
     return
   }
 
-  watch([ctx.suspended, mounted], ([suspended, mounted]) => {
-    if (mounted && !suspended) cleanup = callback()
-    return () => cleanup?.()
+  const suspended = fromStore(ctx?.suspended)
+
+  $effect.pre(() => {
+    if (!suspended.current) {
+      return callback()
+    }
   })
 }

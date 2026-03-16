@@ -1,5 +1,5 @@
 import type { EventDispatcher } from 'three'
-import type { MaybeInstance } from '../types'
+import type { MaybeInstance } from '../types.js'
 
 /**
  * Typeguard to check if a value is extending THREE.EventDispatcher

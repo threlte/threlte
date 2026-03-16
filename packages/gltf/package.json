@@ -23,12 +23,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/threlte/threlte.git"
+    "url": "https://github.com/threlte/threlte",
+    "directory": "packages/gltf"
   },
   "bugs": {
-    "url": "https://github.com/threlte/threlte.git/issues"
+    "url": "https://github.com/threlte/threlte/issues"
   },
-  "homepage": "https://github.com/threlte/threlte.git#readme",
+  "homepage": "https://threlte.xyz",
   "bin": "./cli.js",
   "main": "./src/utils/exports.js",
   "dependencies": {

@@ -4,7 +4,7 @@
   import type { Camera, ColorRepresentation, Vector3Tuple } from 'three'
   import type { CSMParameters } from 'three/examples/jsm/csm/CSM.js'
   import { CSM } from 'three/examples/jsm/csm/CSM.js'
-  import { useMaterials } from './useMaterials.svelte'
+  import { useMaterials } from './useMaterials.svelte.js'
 
   interface Props {
     /**

@@ -1,4 +1,4 @@
-import type { AnyClass, MaybeInstance } from '../types'
+import type { AnyClass, MaybeInstance } from '../types.js'
 
 /**
  * Short cicruits if the input is not a function, then calls toString on Function with guaranteed safe behavior

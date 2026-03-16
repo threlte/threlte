@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 
 import type { Color, Euler, Vector3 } from 'three'
-import { clientRpc } from '../../../rpc/clientRpc'
+import { clientRpc } from '../../../rpc/clientRpc.js'
 
 export type SyncRequest = {
   /** The name of the component attribute, e.g. `"position"` or `"position.x"` */

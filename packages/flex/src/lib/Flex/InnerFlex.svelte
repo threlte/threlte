@@ -3,15 +3,15 @@
   import { onDestroy } from 'svelte'
   import { Box3, Group, Vector3 } from 'three'
   import { Direction } from 'yoga-layout'
-  import { createUseDimensionsContext } from '../hooks/useDimensions'
-  import { getDepthAxis } from '../lib/getDepthAxis'
-  import { getOrientedBoundingBoxSize } from '../lib/getOrientedBoundingBoxSize'
-  import { getRootShift } from '../lib/getRootShift'
-  import { applyNodeProps, type Axis, type NodeProps } from '../lib/props'
-  import { propsChanged } from '../lib/propsChanged'
-  import { createNodeContext } from '../nodes/context'
-  import { createFlexContext } from './context'
-  import type { InnerFlexProps } from './types'
+  import { createUseDimensionsContext } from '../hooks/useDimensions.js'
+  import { getDepthAxis } from '../lib/getDepthAxis.js'
+  import { getOrientedBoundingBoxSize } from '../lib/getOrientedBoundingBoxSize.js'
+  import { getRootShift } from '../lib/getRootShift.js'
+  import { applyNodeProps, type Axis, type NodeProps } from '../lib/props.js'
+  import { propsChanged } from '../lib/propsChanged.js'
+  import { createNodeContext } from '../nodes/context.js'
+  import { createFlexContext } from './context.js'
+  import type { InnerFlexProps } from './types.js'
 
   let {
     yoga,
@@ -40,10 +40,13 @@
    */
   const { width: computedWidth, height: computedHeight } = createUseDimensionsContext()
 
+  let shouldReflow = $state(false)
+  const reflow = () => (shouldReflow = true)
+
   /**
    * Reflowing inside useTask automatically batches reflows to 1 per frame.
    */
-  const { start: reflow, stop } = useTask(
+  useTask(
     Symbol('threlte-flex-reflow'),
     () => {
       flexContext.emit('reflow:before')
@@ -107,11 +110,11 @@
         height: computedHeight.current
       })
 
-      stop()
+      shouldReflow = false
     },
     {
       stage: reflowStage,
-      autoStart: false
+      running: () => shouldReflow
     }
   )
 

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Group } from 'three'
   import { T, useThrelte, useTask } from '@threlte/core'
-  import type { XRHandEvents } from '../types'
-  import { isHandTracking, handEvents } from '../internal/state.svelte'
-  import { hands } from '../hooks/useHand.svelte'
+  import type { XRHandEvents } from '../types.js'
+  import { isHandTracking, handEvents } from '../internal/state.svelte.js'
+  import { hands } from '../hooks/useHand.svelte.js'
   import type { Snippet } from 'svelte'
 
   type Props = {
@@ -72,7 +72,7 @@
    * @todo(mp) investigate why this is happening and see if there's
    * a way to just parent to the hand to avoid this.
    */
-  const { start, stop } = useTask(
+  useTask(
     () => {
       const frame = renderer.xr.getFrame()
       const space = renderer.xr.getReferenceSpace()
@@ -90,18 +90,13 @@
       group.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
     },
     {
-      autoStart: false,
-      stage: scheduler.createStage(Symbol('xr-hand-stage'), { before: renderStage })
+      stage: scheduler.createStage(Symbol('xr-hand-stage'), { before: renderStage }),
+      running: () =>
+        isHandTracking.current &&
+        (wrist !== undefined || children !== undefined) &&
+        inputSource !== undefined
     }
   )
-
-  $effect.pre(() => {
-    if (isHandTracking.current && (wrist !== undefined || children !== undefined) && inputSource) {
-      start()
-    } else {
-      stop()
-    }
-  })
 
   const xrHand = $derived(hands[handedness])
   const inputSource = $derived(xrHand?.inputSource)

@@ -1,5 +1,5 @@
-import type { XRController } from '../types'
-import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
+import type { XRController } from '../types.js'
+import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte.js'
 
 class Controllers {
   left = $state.raw<XRController>()

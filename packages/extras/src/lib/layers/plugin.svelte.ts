@@ -1,7 +1,7 @@
 import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import type { Object3D } from 'three'
-import type { ThrelteLayers, ThrelteLayersContext } from './types'
+import type { ThrelteLayers, ThrelteLayersContext } from './types.js'
 
 export const injectLayersPlugin = () => {
   injectPlugin<{ layers?: ThrelteLayers }>('layers', (args) => {

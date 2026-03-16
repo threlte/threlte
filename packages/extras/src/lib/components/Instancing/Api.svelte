@@ -3,7 +3,7 @@
   import type { Snippet } from 'svelte'
   import type { InstancedMesh } from 'three'
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
-  import { createApi } from './api'
+  import { createApi } from './api.js'
 
   interface Props {
     instancedMesh: InstancedMesh

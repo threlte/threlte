@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 3.1.2
+
+### Patch Changes
+
+- a43cd0e: patch @theatre/studio and remove workarounds
+
+## 3.1.1
+
+### Patch Changes
+
+- d84a789: Fix default import for @threlte/theatre
+
+## 3.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
 ## 3.0.7
 
 ### Patch Changes

@@ -2,17 +2,17 @@
 order: 6
 category: '@threlte/rapier'
 sourcePath: 'packages/rapier/src/lib/components/Attractor/Attractor.svelte'
-name: '<Attractor>'
+title: '<Attractor>'
 type: 'component'
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
     props:
       [
-        { name: 'strength', type: 'number', default: '1', required: false },
-        { name: 'range', type: 'number', default: '10', required: false },
-        { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'", required: false },
-        { name: 'gravitationalConstant', type: 'number', default: '6.673e-11', required: false }
+        { name: 'strength', type: 'number', default: '1' },
+        { name: 'range', type: 'number', default: '10' },
+        { name: 'gravityType', type: "'static' | 'linear' | 'newtonian'" },
+        { name: 'gravitationalConstant', type: 'number', default: '6.673e-11' }
       ]
   }
 ---

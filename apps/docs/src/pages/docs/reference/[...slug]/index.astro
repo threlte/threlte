@@ -20,19 +20,19 @@ interface Props {
 }
 
 const { entry } = Astro.props
-const { name, category, componentSignature } = entry.data
+const { title, category, componentSignature } = entry.data
 const { Content } = await render(entry)
 ---
 
 <DocsLayout
   {entry}
-  title={`${name} | ${category}`}
+  title={`${title} | ${category}`}
 >
   <h6>
     {category}
   </h6>
   <h1>
-    {name}
+    {title}
   </h1>
 
   <Content components={{ pre: MdxCode }} />
@@ -41,7 +41,7 @@ const { Content } = await render(entry)
     componentSignature && (
       <div class="mt-12">
         <ComponentSignature
-          componentName={name}
+          componentName={title}
           signature={componentSignature}
         />
       </div>

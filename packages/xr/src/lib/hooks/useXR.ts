@@ -1,6 +1,6 @@
 import type { WebXRManager } from 'three'
-import { isPresenting, isHandTracking, session, xr } from '../internal/state.svelte'
-import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte'
+import { isPresenting, isHandTracking, session, xr } from '../internal/state.svelte.js'
+import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte.js'
 
 /**
  * Provides access to context related to `<XR />`.

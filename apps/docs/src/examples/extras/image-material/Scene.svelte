@@ -103,7 +103,7 @@
     if (texture) texture.name = names[i] ?? ''
   }
 
-  const { start, stop } = useTask(
+  useTask(
     (delta) => {
       uTime.value += delta
       const lastRenderTarget = renderer.getRenderTarget()
@@ -112,18 +112,10 @@
       renderer.setRenderTarget(lastRenderTarget)
     },
     {
-      autoStart: false,
+      running: () => textureOverrideEnabled,
       before: autoRenderTask
     }
   )
-
-  $effect(() => {
-    if (!textureOverrideEnabled) return
-    start()
-    return () => {
-      stop()
-    }
-  })
 
   const camera = new PerspectiveCamera()
 </script>

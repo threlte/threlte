@@ -4,15 +4,15 @@ category: Basics
 order: -700
 ---
 
-Events come in three different flavours in Threlte: The DOM events you know from
+Most events work the same as any other svelte application. Theres the DOM events you know from
 HTML, some Svelte [component props](https://svelte.dev/docs/svelte/basic-markup#Component-props)
-and raycasting.
+but also raycasting which is specific to 3D applications.
 
 ## DOM events
 
-To get started, you'll need an HTML element. The [`useThrelte`](/docs/reference/core/use-threlte)
-hook provides you with direct access to Threltes HTML div wrapper - the `dom`.
-The `canvas` is also available if that is more appropriate for your events.
+The [`useThrelte`](/docs/reference/core/use-threlte) hook provides you with
+direct access to Threltes wrapper div called the `dom`. The `canvas` element is
+also available if needed.
 
 ## Prop events
 
@@ -21,12 +21,14 @@ on events coming from the [underlying Three.js objects](/docs/reference/core/t#o
 
 ## Raycasting events
 
-Casting rays can end up being a big part of your 3D application. They're required for
-creating [`interactivity`](/docs/reference/extras/interactivity) (click, pointer
-and wheel events) on your scene's meshes. Raycasting can struggle with complex shapes
-or a high number of objects but this can be mitigated by either:
+Casting rays may end up being a big part of your 3D application. They're
+required for creating [`interactivity`](/docs/reference/extras/interactivity)
+(click, pointer, mouseover etc...) on your scene's meshes.
 
-- Raycasting against an simplier, invisible object (as is done by the [mesh bounds](/docs/reference/extras/mesh-bounds) extra).
-- Or introducing a better raycasting algorithm such as Bounding Volume Hirerchies ([BVH](/docs/learn/advanced/plugins#bvh-raycast-plugin)).
+Raycasting can become expensive on complex shapes or if you have a high number
+of objects. This can be mitigated by either:
 
-For simple use cases, Three.js's default raycaster works well enough.
+- Raycasting against a simplier, invisible object (as is done by [mesh bounds](/docs/reference/extras/mesh-bounds)).
+- And/or introducing a better raycasting algorithm such as Bounding Volume Hirerchies ([BVH](/docs/reference/extras/bvh)).
+
+For simple use cases, Three.js's default raycaster works well.

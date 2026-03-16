@@ -27,11 +27,11 @@ This should be placed within a Threlte `<Canvas />`.
     referenceSpaceType,
     session,
     xr
-  } from '../internal/state.svelte'
-  import { setupRaf } from '../internal/setupRaf.svelte'
-  import { setupHeadset } from '../internal/setupHeadset.svelte'
-  import { setupControllers } from '../internal/setupControllers'
-  import { setupHands } from '../internal/setupHands'
+  } from '../internal/state.svelte.js'
+  import { setupRaf } from '../internal/setupRaf.svelte.js'
+  import { setupHeadset } from '../internal/setupHeadset.svelte.js'
+  import { setupControllers } from '../internal/setupControllers.js'
+  import { setupHands } from '../internal/setupHands.js'
 
   interface Props {
     /**

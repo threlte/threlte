@@ -1,5 +1,23 @@
 # @threlte/flex
 
+## 2.2.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 2.1.1
+
+### Patch Changes
+
+- 0c6bc84: patch mitt and remove workarounds
+
+## 2.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
 ## 2.0.6
 
 ### Patch Changes

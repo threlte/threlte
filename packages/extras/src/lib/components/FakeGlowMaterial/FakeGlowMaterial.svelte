@@ -1,9 +1,9 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { Color, AdditiveBlending, ShaderMaterial } from 'three'
-  import type { FakeGlowMaterialProps } from './types'
-  import { fragmentShader } from './fragment'
-  import { vertexShader } from './vertex'
+  import type { FakeGlowMaterialProps } from './types.js'
+  import { fragmentShader } from './fragment.js'
+  import { vertexShader } from './vertex.js'
 
   let {
     falloff = 0.1,

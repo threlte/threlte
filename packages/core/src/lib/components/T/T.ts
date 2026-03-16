@@ -3,8 +3,8 @@
 import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
-import type { Props } from './types'
-import { setIs } from './utils/useIs'
+import type { Props } from './types.js'
+import { setIs } from './utils/useIs.js'
 
 type Extensions = Record<string, unknown>
 
@@ -59,9 +59,12 @@ export const extend = (extensions: Extensions) => {
  */
 export const T = new Proxy(TComp, {
   get(_target, is: keyof typeof THREE) {
-    // Handle snippets
+    // Forward non-string keys (Symbols) to the underlying component.
+    // Returning TComp directly (what we previously did) for symbols
+    // caused Svelte 5.53+ DEV mode to accidentally call TComp via
+    // internal symbol lookups (PROXY_PATH_SYMBOL).
     if (typeof is !== 'string') {
-      return TComp
+      return Reflect.get(_target, is)
     }
 
     const module = catalogue[is] || THREE[is]

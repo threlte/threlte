@@ -1,7 +1,7 @@
 import { Group, Mesh, MeshBasicMaterial } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { T } from '../T'
+import { T } from '../T.js'
 import Scene from './__fixtures__/Scene.svelte'
 import Attach from './__fixtures__/Attach.svelte'
 

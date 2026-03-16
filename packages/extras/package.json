@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "9.6.0",
+  "version": "9.8.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Utilities, abstractions and plugins for your Threlte apps",
@@ -59,7 +59,7 @@
   "homepage": "https://threlte.xyz",
   "repository": {
     "type": "git",
-    "url": "https://github.com/threlte/threlte.git",
+    "url": "https://github.com/threlte/threlte",
     "directory": "packages/extras"
   },
   "bugs": {
@@ -88,7 +88,7 @@
   },
   "dependencies": {
     "@threejs-kit/instanced-sprite-mesh": "^2.5.1",
-    "camera-controls": "^2.10.1",
+    "camera-controls": "^3.1.2",
     "three-mesh-bvh": "^0.9.1",
     "three-perf": "^1.0.11",
     "three-viewport-gizmo": "^2.2.0",

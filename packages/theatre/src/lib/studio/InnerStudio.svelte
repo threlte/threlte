@@ -3,14 +3,14 @@
   module
 >
   import Studio from '@theatre/studio'
-  import { studio } from '../consts'
+  import { studio } from '../consts.js'
 
   Studio.initialize()
   studio.set(Studio)
 </script>
 
 <script lang="ts">
-  import { watch } from '@threlte/core'
+  import { observe } from '@threlte/core'
   import { writable } from 'svelte/store'
 
   interface Props {
@@ -25,17 +25,20 @@
     hideStore.set(hide)
   })
 
-  watch([studio, hideStore], ([studio, hide]) => {
-    if (hide) {
-      studio?.ui.hide()
-    } else {
-      studio?.ui.restore()
-    }
+  observe.pre(
+    () => [studio, hideStore],
+    ([studio, hide]) => {
+      if (hide) {
+        studio?.ui.hide()
+      } else {
+        studio?.ui.restore()
+      }
 
-    return () => {
-      studio?.ui.hide()
+      return () => {
+        studio?.ui.hide()
+      }
     }
-  })
+  )
 </script>
 
 {@render children?.()}

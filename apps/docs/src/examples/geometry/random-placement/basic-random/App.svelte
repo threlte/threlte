@@ -2,7 +2,9 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { Pane, Button, Slider } from 'svelte-tweakpane-ui'
-  import { regen, numberOfObjects } from './stores'
+  import { numberOfObjects } from './stores'
+
+  let regen = $state(0)
 </script>
 
 <Pane
@@ -12,7 +14,7 @@
   <Button
     title="regenerate"
     on:click={() => {
-      $regen = !$regen
+      regen += 1
     }}
   />
   <Slider
@@ -26,7 +28,7 @@
 
 <div>
   <Canvas>
-    <Scene />
+    <Scene {regen} />
   </Canvas>
 </div>
 

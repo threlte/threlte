@@ -1,4 +1,4 @@
-import { scopeId } from './scopeUtils'
+import { scopeId } from './scopeUtils.js'
 
 // Persistance
 const persist = {

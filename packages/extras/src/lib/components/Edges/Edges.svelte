@@ -2,7 +2,7 @@
   import { T, isInstanceOf, useParent } from '@threlte/core'
   import { fromStore } from 'svelte/store'
   import { LineSegments } from 'three'
-  import type { EdgesProps } from './types'
+  import type { EdgesProps } from './types.js'
 
   let {
     thresholdAngle = 1,

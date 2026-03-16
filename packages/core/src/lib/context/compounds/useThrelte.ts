@@ -6,13 +6,13 @@ import {
   type ToneMapping,
   type WebGLRenderer
 } from 'three'
-import type { Scheduler, Stage, Task } from '../../frame-scheduling'
-import type { CurrentReadable, CurrentWritable } from '../../utilities'
-import { useCamera } from '../fragments/camera'
-import { useDOM } from '../fragments/dom'
-import { useRenderer, type Renderer } from '../fragments/renderer.svelte'
-import { useScene } from '../fragments/scene'
-import { useScheduler } from '../fragments/scheduler.svelte'
+import type { Scheduler, Stage, Task } from '../../frame-scheduling/index.js'
+import type { CurrentReadable, CurrentWritable } from '../../utilities/index.js'
+import { useCamera } from '../fragments/camera.js'
+import { useDOM } from '../fragments/dom.js'
+import { useRenderer, type Renderer } from '../fragments/renderer.svelte.js'
+import { useScene } from '../fragments/scene.js'
+import { useScheduler } from '../fragments/scheduler.svelte.js'
 
 /**
  * ### `ThrelteContext`

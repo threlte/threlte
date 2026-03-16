@@ -83,8 +83,7 @@
   >
 
   <p class="my-0 self-center text-sm md:text-base">
-    Compose Three.js scenes in a declarative and state-driven way. Three.js is required as a peer
-    dependency.
+    Simple, transparent Three.js bindings. <code>three</code> is required as a peer dependency.
   </p>
 
   <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
@@ -102,7 +101,7 @@
       href="/docs/reference/extras/getting-started"
       target="_blank">Components, helpers, hooks</a
     >
-    and more that extend the core functionality.
+    and more that add functionality.
   </p>
 
   <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
@@ -120,7 +119,7 @@
       target="_blank">command-line tool</a
     >
     that turns GLTF assets into declarative and re-usable Threlte components. The generated Threlte components
-    make use of the package <code>@threlte/extras</code>.
+    need <code>@threlte/extras</code> to work.
   </p>
 
   <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
@@ -137,7 +136,7 @@
       href="https://rapier.rs/"
       target="_blank"
       rel="noreferrer">Rapier physics engine</a
-    > in Threlte.
+    >.
   </p>
 
   <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
@@ -154,7 +153,7 @@
       href="https://www.theatrejs.com/"
       target="_blank"
       rel="noreferrer">Theatre.js</a
-    > in Threlte.
+    >.
   </p>
 
   <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />
@@ -182,7 +181,7 @@
       href="https://yogalayout.com/"
       target="_blank"
       rel="noreferrer">Yoga</a
-    > in Threlte.
+    >.
   </p>
 
   <hr class="mt-0 border-t border-gray-700 max-md:my-3 md:col-span-2" />

@@ -28,8 +28,8 @@
   import { resolvePropertyPath, useTask } from '@threlte/core'
   import { onMount, tick } from 'svelte'
   import { Binding, type BindingRef, type Plugin } from 'svelte-tweakpane-ui'
-  import { useTransactions } from '../../transactions/useTransactions'
-  import { buildTransaction } from '../../transactions/TransactionQueue/buildTransaction'
+  import { useTransactions } from '../../transactions/useTransactions.js'
+  import { buildTransaction } from '../../transactions/TransactionQueue/buildTransaction.js'
 
   const { commit, onTransaction } = useTransactions()
 
@@ -50,7 +50,7 @@
     options?: any
   }
 
-  let { objects, key, label, autoUpdate, ref = $bindable(), transform, ...rest }: Props = $props()
+  let { objects, key, label, autoUpdate = false, ref = $bindable(), transform, ...rest }: Props = $props()
 
   const firstObject = $derived(objects[0])
 
@@ -71,7 +71,9 @@
 
   let ignoreChangeEvent = false
 
-  const { start, stop } = useTask(
+  let running = $derived(autoUpdate)
+
+  useTask(
     async () => {
       if (!ref) return
       if (typeof carrier[targetKey] === 'object' && carrier[targetKey] !== null) {
@@ -90,20 +92,12 @@
       ignoreChangeEvent = false
     },
     {
-      autoStart: autoUpdate,
-      autoInvalidate: false
+      autoInvalidate: false,
+      running: () => running
     }
   )
 
-  $effect(() => {
-    if (autoUpdate) {
-      start()
-    } else {
-      stop()
-    }
-  })
-
-  onMount(() => onTransaction(start))
+  onMount(() => onTransaction(() => (running = true)))
 
   let isFirst = true
   // Because properties can be mutated continouosly but should only record

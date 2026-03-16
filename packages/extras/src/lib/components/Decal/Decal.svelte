@@ -25,8 +25,8 @@
   import { asyncWritable, T, useParent, type Props as ThrelteProps } from '@threlte/core'
 
   import type { Snippet } from 'svelte'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import { useTexture } from '../../hooks/useTexture'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useTexture } from '../../hooks/useTexture.js'
 
   interface Props extends ThrelteProps<Mesh> {
     src?: Texture | string

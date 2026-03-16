@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { pointerIntersection, pointerState } from '../../internal/state.svelte'
+  import { pointerIntersection, pointerState } from '../../internal/state.svelte.js'
   import Cursor from './Cursor.svelte'
   import type { Snippet } from 'svelte'
 
@@ -28,7 +28,7 @@
 
   const ref = new Group()
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       if (intersection === undefined) {
         return
@@ -46,16 +46,13 @@
       ref.lookAt(vec3.addVectors(point, worldNormal))
     },
     {
-      autoStart: false
+      running: () => hovering && intersection !== undefined
     }
   )
 
   $effect.pre(() => {
     if (hovering && intersection) {
       ref.position.copy(intersection.point)
-      start()
-    } else {
-      stop()
     }
   })
 </script>

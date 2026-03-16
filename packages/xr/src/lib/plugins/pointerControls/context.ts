@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte'
 import type { Object3D } from 'three'
-import type { ControlsContext, HandContext } from './types'
+import type { ControlsContext, HandContext } from './types.js'
 
 const handContextKeys = {
   left: Symbol('pointer-controls-context-left'),

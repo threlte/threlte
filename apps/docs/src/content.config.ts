@@ -1,4 +1,3 @@
-// 1. Import utilities from `astro:content`
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
 
@@ -20,7 +19,7 @@ export const componentSignature = z.object({
             url: z.string()
           })
         ),
-        required: z.boolean(),
+        required: z.boolean().optional().default(false),
         default: z.string().optional(),
         description: z.string().optional()
       })
@@ -82,7 +81,7 @@ export const referenceCollection = defineCollection({
   schema: z.object({
     schemaType: z.string().default('reference'),
     type: z.enum(['component', 'hook', 'plugin']).optional(),
-    name: z.string(),
+    title: z.string(),
     /**
      * Path to the source file or directory, relative to the root of the repository.
      */

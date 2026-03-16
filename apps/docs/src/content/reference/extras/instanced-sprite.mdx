@@ -2,7 +2,7 @@
 order: 7.4
 category: '@threlte/extras'
 sourcePath: 'packages/extras/src/lib/components/InstancedSprite/InstancedSprite.svelte'
-name: <InstancedSprite>
+title: <InstancedSprite>
 type: 'component'
 componentSignature:
   {
@@ -11,28 +11,24 @@ componentSignature:
         {
           name: 'alphaTest',
           type: 'number',
-          required: false,
           default: '0.1',
           description: 'Sets the alpha value to be used when running an alpha test.'
         },
         {
           name: 'autoUpdate',
           type: 'boolean',
-          required: false,
           default: 'true',
           description: 'Update animations automatically every frame'
         },
         {
           name: 'baseMaterial',
           type: 'typeof MeshBasicMaterial | typeof MeshStandardMaterial | typeof MeshLambertMaterial | typeof MeshPhongMaterial',
-          required: false,
           default: 'typeof MeshBasicMaterial',
           description: 'Base material used to construct the sprite material.'
         },
         {
           name: 'billboarding',
           type: 'boolean',
-          required: false,
           default: 'typeof MeshBasicMaterial',
           description: 'Sets the default global billboarding state that is used unless the setAt was called on the instance.'
         },
@@ -40,28 +36,24 @@ componentSignature:
         {
           name: 'fps',
           type: 'boolean',
-          required: false,
           default: '10',
           description: 'The desired frames per second of the animation.'
         },
         {
           name: 'playmode',
           type: '"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"',
-          required: false,
           default: '"FORWARD"',
           description: 'Sets playmode for all instances'
         },
         {
           name: 'transparent',
           type: 'boolean',
-          required: false,
           default: 'true',
           description: 'Whether or not the material should be transparent.'
         },
         {
           name: 'randomPlaybackOffset',
           type: 'boolean | number',
-          required: false,
           default: 'true',
           description: 'Offset sprite animation time by a random number of milliseconds.'
         }

@@ -4,15 +4,14 @@ title: Your First Scene
 ---
 
 <Tip type="info">
-  You should get familiar with both Svelte and Three.js before using Threlte. If you are new to
-  Svelte, consult its [Tutorial](https://svelte.dev/tutorial) for a quick introduction. As for
-  Three.js, its [official documentation](https://threejs.org) has many resources for getting
-  started.
+  Understanding Svelte and Three.js is important when using Threlte. If you're new to Svelte, start
+  with the [official tutorial](https://svelte.dev/tutorial). If you're new to Three.js, check the
+  [official documentation](https://threejs.org) and guides.
 </Tip>
 
 ## Structuring your app
 
-As a first step we create a new Svelte file called `App.svelte` where we import the [`<Canvas>` component](/docs/reference/core/canvas).
+First we create a new Svelte file, `App.svelte`, where we import [`<Canvas>`](/docs/reference/core/canvas).
 
 ```svelte title="App.svelte"
 <script>
@@ -25,24 +24,23 @@ As a first step we create a new Svelte file called `App.svelte` where we import 
 </Canvas>
 ```
 
-The `<Canvas>` component is the root component of your Threlte application. It creates a
-renderer and sets up some sensible defaults for you like antialiasing and color management.
-It also creates a default camera and provides the context in which your Threlte application
-will run. For improving access to this runtime context, it's <a href="/docs/learn/basics/app-structure">best practice</a>
-to create a separate component called `Scene.svelte` and including it in our `App.svelte` file.
+The `<Canvas>` component is the root of a Threlte app: it creates a renderer and a default camera,
+sets sensible defaults (like antialiasing and color management),
+and provides Threlte's runtime context. To access this runtime context, we'll need to <a href="/docs/learn/basics/app-structure">create a separate component</a>
+called `Scene.svelte` and including it in our `App.svelte` file.
 
 ## Creating objects
 
 At this point we're just looking at a blank screen. Let's add a simple cube to it.
 
 In `Scene.svelte`, we import the [`<T>` component](/docs/reference/core/t), which is
-the **main building block** of your Threlte application. It's a **generic
-component** that we use to render **any Three.js object**. In this case we're creating a
-[`THREE.Mesh`](https://threejs.org/docs/index.html#api/en/objects/Mesh) which is made up from
+the **main building block** of your Threlte application. It's **a thin, generic wrapper for any Three.js class**.
+Here we'll create a
+[`THREE.Mesh`](https://threejs.org/docs/index.html#api/en/objects/Mesh) with
 a [`THREE.BoxGeometry`](https://threejs.org/docs/index.html#api/en/geometries/BoxGeometry) and
 a [`THREE.MeshBasicMaterial`](https://threejs.org/docs/index.html#api/en/materials/MeshBasicMaterial).
 
-We should now be looking at a white cube on a transparent background.
+We should now see a white cube on a transparent background.
 
 ```svelte title="Scene.svelte" {1-8}+
 <script>
@@ -114,8 +112,9 @@ mesh.material = material
 
 ## Modifying objects
 
-That cube is still a bit boring. Let's add some color to it, and make it a bit bigger! We also want to move it up a little to highlight it. We can do this by passing props to the
-`<T>` component.
+That cube is still a bit boring. Let's give it some color,
+scale it up, and move it slightly upward. We can do this by
+passing props to `<T>`.
 
 ```svelte title="Scene.svelte" {5-7}m
 <script>
@@ -266,11 +265,11 @@ event to get a reference to the underlying Three.js object as soon as it's creat
 ## Enabling interactivity
 
 Let's say we want to scale our cube as soon as we hover over it. We first have to import the
-[plugin](/docs/learn/advanced/plugins) [`interactivity`](/docs/reference/extras/interactivity) from
+[`interactivity`](/docs/reference/extras/interactivity) [plugin](/docs/learn/advanced/plugins) from
 [`@threlte/extras`](/docs/reference/extras/getting-started) and invoke it in our `Scene.svelte` file.
 
-The `interactivity` plugin allows us to add interaction event listeners to our `<T>` components. We will add `pointerenter` and
-`pointerleave` event listeners to our cube. In the event handlers we'll update the value of a `Spring` from `svelte/motion`
+The `interactivity` plugin lets us add interaction event listeners like `pointerenter` and
+`pointerleave` to our `<T>` components. In these event handlers we'll update the value of a `Spring` from `svelte/motion`
 and use its `.current` value to set the `scale` property of the `<T.Mesh>` component.
 
 ```svelte title="Scene.svelte" {3-4,6-7,20-26}+

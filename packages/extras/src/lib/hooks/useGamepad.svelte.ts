@@ -1,5 +1,4 @@
 import type { EventListener, XRTargetRaySpace } from 'three'
-import { onDestroy } from 'svelte'
 import { currentWritable, useTask, useThrelte } from '@threlte/core'
 
 type UseGamepadOptions =
@@ -368,9 +367,9 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       })
     }
 
-    // useTask automatically stops whenever the host component unmounts, so we
-    // don't need to clean up here.
-    const { start, stop } = useTask(processSnapshot, { autoStart: false, autoInvalidate: false })
+    let running = $state(false)
+
+    useTask(processSnapshot, { autoInvalidate: false, running: () => running })
 
     const handleConnected: EventListener<
       {
@@ -386,7 +385,7 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       if (pad) {
         gamepad.raw = pad
         gamepad.connected.set(true)
-        start()
+        running = true
       }
     }
 
@@ -401,7 +400,7 @@ export function useGamepad(options: UseGamepadOptions = {}) {
 
       gamepad.raw = null
       gamepad.connected.set(false)
-      stop()
+      running = false
     }
 
     // Check if gamepads are already connected. Since XR controllers do not show
@@ -419,22 +418,24 @@ export function useGamepad(options: UseGamepadOptions = {}) {
         if (pad) {
           gamepad.raw = pad
           gamepad.connected.set(true)
-          start()
+          running = true
         }
       })
     }
 
-    for (const index of [0, 1]) {
-      const controller = xr.getController(index)
-      controller.addEventListener('connected', handleConnected)
-      controller.addEventListener('disconnected', handleDisconnected)
-    }
-
-    onDestroy(() => {
+    $effect.pre(() => {
       for (const index of [0, 1]) {
         const controller = xr.getController(index)
-        controller.removeEventListener('connected', handleConnected)
-        controller.removeEventListener('disconnected', handleDisconnected)
+        controller.addEventListener('connected', handleConnected)
+        controller.addEventListener('disconnected', handleDisconnected)
+      }
+
+      return () => {
+        for (const index of [0, 1]) {
+          const controller = xr.getController(index)
+          controller.removeEventListener('connected', handleConnected)
+          controller.removeEventListener('disconnected', handleDisconnected)
+        }
       }
     })
 
@@ -481,9 +482,9 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       )
     }
 
-    // useTask automatically stops whenever the host component unmounts, so we
-    // don't need to clean up here.
-    const { start, stop } = useTask(processSnapshot, { autoStart: false, autoInvalidate: false })
+    let running = $state(false)
+
+    useTask(processSnapshot, { autoInvalidate: false, running: () => running })
 
     const handleGamepadDisconnected = (event: GamepadEvent): void => {
       const { id } = event.gamepad
@@ -491,7 +492,7 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       if (id === gamepad.raw?.id) {
         gamepad.raw = null
         gamepad.connected.set(false)
-        stop()
+        running = false
       }
     }
 
@@ -501,19 +502,21 @@ export function useGamepad(options: UseGamepadOptions = {}) {
       if (pad) {
         gamepad.raw = pad
         gamepad.connected.set(true)
-        start()
+        running = true
       }
     }
 
     // Check if gamepads are already connected.
     handleGamepadConnected()
 
-    window.addEventListener('gamepadconnected', handleGamepadConnected)
-    window.addEventListener('gamepaddisconnected', handleGamepadDisconnected)
+    $effect.pre(() => {
+      window.addEventListener('gamepadconnected', handleGamepadConnected)
+      window.addEventListener('gamepaddisconnected', handleGamepadDisconnected)
 
-    onDestroy(() => {
-      window.removeEventListener('gamepadconnected', handleGamepadConnected)
-      window.removeEventListener('gamepaddisconnected', handleGamepadDisconnected)
+      return () => {
+        window.removeEventListener('gamepadconnected', handleGamepadConnected)
+        window.removeEventListener('gamepaddisconnected', handleGamepadDisconnected)
+      }
     })
 
     return gamepad

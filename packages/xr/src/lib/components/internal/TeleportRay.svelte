@@ -18,7 +18,7 @@
   import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js'
   import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { teleportIntersection } from '../../internal/state.svelte'
+  import { teleportIntersection } from '../../internal/state.svelte.js'
 
   interface Props {
     handedness: 'left' | 'right'
@@ -66,21 +66,12 @@
     lineGeometry.setPositions(positions)
   }
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       setCurvePoints()
     },
-    { autoStart: false }
+    { running: () => intersection !== undefined }
   )
-
-  $effect.pre(() => {
-    if (intersection === undefined) {
-      stop()
-    } else {
-      setCurvePoints(1)
-      start()
-    }
-  })
 </script>
 
 {#if children}

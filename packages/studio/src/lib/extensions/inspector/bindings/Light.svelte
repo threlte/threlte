@@ -10,7 +10,7 @@
   } from 'three'
   import Shadow from './Shadow.svelte'
   import TransactionalBinding from './TransactionalBinding.svelte'
-  import { haveProperty } from './utils'
+  import { haveProperty } from './utils.js'
 
   type Props = {
     lights: (

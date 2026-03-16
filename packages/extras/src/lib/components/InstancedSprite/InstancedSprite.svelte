@@ -10,7 +10,7 @@
   } from 'three'
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
-  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types'
+  import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types.js'
   import SpriteInstance from './SpriteInstance.svelte'
 
   let {

@@ -1,5 +1,5 @@
 import type { DataTexture, Texture } from 'three'
-import type { CommonEnvironmentProps } from '../types'
+import type { CommonEnvironmentProps } from '../types.js'
 import type { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js'
 
 type GroundedSkyboxOptions = Partial<{ height: number; radius: number; resolution: number }>

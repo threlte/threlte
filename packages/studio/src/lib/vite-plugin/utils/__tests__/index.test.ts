@@ -5,9 +5,9 @@ import {
   readAttribute,
   removeAttribute,
   upsertAttribute
-} from '../componentParser'
-import { disassembleComponent } from '../componentUtils'
-import { recreateMagicString } from '../magicStringUtils'
+} from '../componentParser.js'
+import { disassembleComponent } from '../componentUtils.js'
+import { recreateMagicString } from '../magicStringUtils.js'
 import {
   buildTestComponent,
   expectedInsertPropsMarkup,
@@ -22,7 +22,7 @@ import {
   scriptModule,
   style,
   updatePropsMarkup
-} from './testComponent'
+} from './testComponent.js'
 
 describe('sync utilities', () => {
   test('disassemble and reassemble component', async () => {

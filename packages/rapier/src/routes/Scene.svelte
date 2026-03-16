@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { RigidBody, AutoColliders, useRapier } from '$lib'
+  import { RigidBody, AutoColliders, useRapier } from '$lib/index.js'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const { renderer } = useThrelte()

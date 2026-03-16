@@ -1,21 +1,23 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import { Canvas } from '@threlte/core'
-  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import { Slider, Pane } from 'svelte-tweakpane-ui'
 
-  let paused = $state(false)
+  let size = $state(10)
 </script>
 
 <Pane
   position="fixed"
   title="Instanced Colors"
 >
-  <Checkbox
-    bind:value={paused}
-    label="paused"
+  <Slider
+    min={10}
+    max={50}
+    step={10}
+    bind:value={size}
   />
 </Pane>
 
 <Canvas>
-  <Scene {paused} />
+  <Scene {size} />
 </Canvas>

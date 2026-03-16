@@ -2,8 +2,8 @@
   import { observe, T, useThrelte } from '@threlte/core'
   import { tick } from 'svelte'
   import { preloadFont, Text as TroikaText } from 'troika-three-text'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { TextProps } from './types'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import type { TextProps } from './types.js'
 
   let {
     font = null,

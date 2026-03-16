@@ -1,6 +1,6 @@
 import { setContext } from 'svelte'
-import { injectLayersPlugin } from './plugin.svelte'
-import type { ThrelteLayers, ThrelteLayersContext } from './types'
+import { injectLayersPlugin } from './plugin.svelte.js'
+import type { ThrelteLayers, ThrelteLayersContext } from './types.js'
 
 type LayersOptions = {
   defaultLayers?: ThrelteLayers

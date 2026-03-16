@@ -1,5 +1,5 @@
 import { onDestroy } from 'svelte'
-import type { CreateEvent } from '../types/types'
+import type { CreateEvent } from '../types/types.js'
 
 export const useCreateEvent = <T>(oncreate?: CreateEvent<T>['oncreate']) => {
   const cleanupFunctions: (() => void)[] = []

@@ -1,0 +1,66 @@
+This example demonstrates a well-known technique for doing simple postprocessing utilizing a "screen-quad".
+
+<Example path="postprocessing/screen-quad" />
+
+## Overview
+
+The basic idea of postprocessing is to draw the scene to a frame-buffer that can then be sent into another shader. The output of this shader is used as the texture or as part of a material for a mesh that covers the screen. To do this we need two things:
+
+1. a WebGL render target.
+2. a mesh that covers the screen
+
+### Render Target
+
+Threlte's `useFBO` gives us a [WebGLRenderTarget](https://threejs.org/docs/index.html?q=webgl#api/en/renderers/WebGLRenderTarget) that automatically resizes when the size of the canvas updates.
+
+### FullScreenQuad
+
+Three provides a FullScreenQuad class that both covers the screen and provides all the necessary buffer attributes for use in shaders.
+
+<Tip type="note">
+  **FullScreenQuad** itself isn't a mesh but uses one under the hood when rendering.
+</Tip>
+
+## Rendering
+
+There is a specific order to how the scene and the quad should be rendered.
+
+1. save the current render target of the renderer
+
+```ts
+const lastRenderTarget = renderer.getRenderTarget()
+```
+
+2. set the render target of the renderer to the fbo
+
+```ts
+renderer.setRenderTarget(target)
+```
+
+3. render the main scene using the main camera
+
+```ts
+const { camera } = useThrelte()
+
+renderer.render(scene, camera.current)
+```
+
+Threlte's camera is a [currentWritable](/reference/core/utilities#currentwritable) so we can use its **.current** property to get the instance. Its important to use the **current** property to avoid having to read from the store every frame.
+
+4. restore the last render target
+
+```ts
+renderer.setRenderTarget(last)
+```
+
+5. Render the quad
+
+```ts
+quad.render(renderer)
+```
+
+**FullScreenQuad.render** accepts a renderer and renders to whatever its current render target is. It uses a private camera when renderering.
+
+## Resources
+
+- [three.js's Pass class](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/postprocessing/Pass.js) includes the implementation for **FullScreenQuad**

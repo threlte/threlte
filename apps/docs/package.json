@@ -67,7 +67,6 @@
     "@types/webxr": "catalog:",
     "animejs": "^3.2.1",
     "astro-auto-import": "^0.4.4",
-    "chalk": "^4.1.1",
     "github-slugger": "^2.0.0",
     "launch-editor": "^2.6.1",
     "node-html-parser": "^6.1.4",

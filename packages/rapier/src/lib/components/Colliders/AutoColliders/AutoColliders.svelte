@@ -3,18 +3,18 @@
   generics="TMassDef extends MassDef"
 >
   import { ActiveCollisionTypes, CoefficientCombineRule } from '@dimforge/rapier3d-compat'
-  import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D } from '@threlte/core'
   import { onDestroy, onMount } from 'svelte'
   import { Group } from 'three'
-  import { useCollisionGroups } from '../../../hooks/useCollisionGroups'
-  import { useRapier } from '../../../hooks/useRapier'
-  import { useRigidBody } from '../../../hooks/useRigidBody'
-  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents'
-  import { createCollidersFromChildren } from '../../../lib/createCollidersFromChildren'
-  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion'
-  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext'
-  import { useCreateEvent } from '../../../lib/useCreateEvent'
-  import type { AutoCollidersProps, MassDef } from './types'
+  import { useCollisionGroups } from '../../../hooks/useCollisionGroups.js'
+  import { useRapier } from '../../../hooks/useRapier.js'
+  import { useRigidBody } from '../../../hooks/useRigidBody.js'
+  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents.js'
+  import { createCollidersFromChildren } from '../../../lib/createCollidersFromChildren.js'
+  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion.js'
+  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext.js'
+  import { useCreateEvent } from '../../../lib/useCreateEvent.js'
+  import type { AutoCollidersProps, MassDef } from './types.js'
 
   let {
     shape = 'convexHull',
@@ -126,10 +126,11 @@
 
   const parent3DObject = useParentObject3D()
   createParentObject3DContext(group)
-  watch(parent3DObject, (parent) => {
-    parent?.add(group)
+
+  $effect.pre(() => {
+    $parent3DObject?.add(group)
     return () => {
-      parent?.remove(group)
+      $parent3DObject?.remove(group)
     }
   })
 </script>

@@ -3,8 +3,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import type { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import type { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js'
-import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
-import type { ThrelteGltf } from '../types/types'
+import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph.js'
+import type { ThrelteGltf } from '../types/types.js'
 
 type UseGltfOptions = {
   dracoLoader?: DRACOLoader | undefined

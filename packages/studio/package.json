@@ -1,8 +1,17 @@
 {
   "name": "@threlte/studio",
-  "version": "0.1.11",
+  "version": "0.3.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte",
+    "directory": "packages/studio"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
+  "homepage": "https://threlte.xyz",
   "scripts": {
     "dev": "vite dev",
     "build:vite-plugin": "tsup",
@@ -13,7 +22,8 @@
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "cleanup": "rimraf node_modules .svelte-kit dist",
-    "test": "vitest"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@eslint/js": "catalog:",
@@ -113,7 +123,7 @@
     "@floating-ui/dom": "^1.6.4",
     "@mdi/js": "^7.4.47",
     "@tweakpane/plugin-camerakit": "^0.3.0",
-    "camera-controls": "^2.10.1",
+    "camera-controls": "^3.1.2",
     "estree-walker": "^3.0.3",
     "flexible-tree": "^0.1.6",
     "index-to-position": "^1.0.0",

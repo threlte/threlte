@@ -1,6 +1,5 @@
 <script lang="ts">
-  import { watch } from '@threlte/core'
-  import { regen, numberOfObjects } from './stores'
+  import { numberOfObjects } from './stores'
   // The following components started as copies from https://fun-bit.vercel.app/
   import BirchTrees from './assets/birch.svelte'
   import Trees from './assets/tree.svelte'
@@ -9,47 +8,6 @@
 
   const distinctObjects = 4
   const commonRatio = 0.5
-
-  let randomBushes: [number, number, number, number][] = []
-  let randomTrees: [number, number, number, number][] = []
-  let randomBirchTrees: [number, number, number, number][] = []
-  let randomRocks: [number, number, number, number][] = []
-
-  watch([regen, numberOfObjects], () => {
-    generateRandomNumbers()
-  })
-
-  generateRandomNumbers()
-
-  function generateRandomNumbers() {
-    const exponentialSumValues = calculateExponentialSumValues(
-      $numberOfObjects,
-      distinctObjects,
-      commonRatio
-    )
-    const totalBushes = exponentialSumValues[0] ?? 0
-    const totalTrees = exponentialSumValues[1] ?? 0
-    const totalBirchTrees = exponentialSumValues[2] ?? 0
-    const totalRocks = exponentialSumValues[3] ?? 0
-
-    randomBushes = []
-    randomTrees = []
-    randomBirchTrees = []
-    randomRocks = []
-
-    for (let i = 0; i < totalBushes; i++) {
-      randomBushes.push([Math.random(), Math.random(), Math.random(), Math.random()])
-      if (i < totalTrees) {
-        randomTrees.push([Math.random(), Math.random(), Math.random(), Math.random()])
-      }
-      if (i < totalBirchTrees) {
-        randomBirchTrees.push([Math.random(), Math.random(), Math.random(), Math.random()])
-      }
-      if (i < totalRocks) {
-        randomRocks.push([Math.random(), Math.random(), Math.random(), Math.random()])
-      }
-    }
-  }
 
   function calculateExponentialSumValues(
     total: number,
@@ -70,12 +28,46 @@
 
     return result
   }
+
+  const data = $derived.by(() => {
+    const exponentialSumValues = calculateExponentialSumValues(
+      $numberOfObjects,
+      distinctObjects,
+      commonRatio
+    )
+    const totalBushes = exponentialSumValues[0] ?? 0
+    const totalTrees = exponentialSumValues[1] ?? 0
+    const totalBirchTrees = exponentialSumValues[2] ?? 0
+    const totalRocks = exponentialSumValues[3] ?? 0
+
+    const randomBushes = []
+    const randomTrees = []
+    const randomBirchTrees = []
+    const randomRocks = []
+
+    for (let i = 0; i < totalBushes; i++) {
+      randomBushes.push([Math.random(), Math.random(), Math.random(), Math.random()])
+      if (i < totalTrees) {
+        randomTrees.push([Math.random(), Math.random(), Math.random(), Math.random()])
+      }
+      if (i < totalBirchTrees) {
+        randomBirchTrees.push([Math.random(), Math.random(), Math.random(), Math.random()])
+      }
+      if (i < totalRocks) {
+        randomRocks.push([Math.random(), Math.random(), Math.random(), Math.random()])
+      }
+    }
+
+    return {
+      randomBushes,
+      randomTrees,
+      randomBirchTrees,
+      randomRocks
+    }
+  })
 </script>
 
-<Bushes transformData={randomBushes} />
-
-<BirchTrees transformData={randomBirchTrees} />
-
-<Trees transformData={randomTrees} />
-
-<Rocks transformData={randomRocks} />
+<Bushes transformData={data.randomBushes as [number, number, number, number][]} />
+<BirchTrees transformData={data.randomBirchTrees as [number, number, number, number][]} />
+<Trees transformData={data.randomTrees as [number, number, number, number][]} />
+<Rocks transformData={data.randomRocks as [number, number, number, number][]} />

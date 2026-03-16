@@ -1,5 +1,5 @@
-import { useStudio } from '../../internal/extensions'
-import { spaceScope, type SpaceActions, type SpaceState } from './types'
+import { useStudio } from '../../internal/extensions.js'
+import { spaceScope, type SpaceActions, type SpaceState } from './types.js'
 
 export const useSpace = () => {
   const { useExtension } = useStudio()

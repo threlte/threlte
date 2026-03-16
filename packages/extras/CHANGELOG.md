@@ -1,5 +1,47 @@
 # @threlte/extras
 
+## 9.8.2
+
+### Patch Changes
+
+- 80496ce: Fix transitions plugin compatibility
+
+## 9.8.1
+
+### Patch Changes
+
+- c0518f2: npm publish via OIDC test
+
+## 9.8.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 9.7.1
+
+### Patch Changes
+
+- c1623a9: Update camera-controls and remove patch
+
+## 9.7.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 9.6.2
+
+### Patch Changes
+
+- 339742c: Improve interactivity performance
+
+## 9.6.1
+
+### Patch Changes
+
+- 642343b: [core] Fix: adjust type export
+
 ## 9.6.0
 
 ### Minor Changes

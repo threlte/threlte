@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { observe, T, useThrelte, watch } from '@threlte/core'
+  import { observe, T, useThrelte } from '@threlte/core'
   import type CC from 'camera-controls'
   import { onDestroy, type Snippet } from 'svelte'
   import { Checkbox, RadioGrid } from 'svelte-tweakpane-ui'
@@ -8,12 +8,12 @@
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
   import CameraControls from './CameraControls.svelte'
   import DefaultCamera from './DefaultCamera.svelte'
-  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
+  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types.js'
 
   let { children }: { children?: Snippet } = $props()
 
@@ -124,9 +124,9 @@
   )
   const defaultCameraObject = $derived(extension.state.defaultCamera.object)
 
-  watch(camera, (camera) => {
-    if (camera !== editorCameraPerspective && camera !== editorCameraOrthographic) {
-      extension.setDefaultCameraObject(camera)
+  $effect.pre(() => {
+    if ($camera !== editorCameraPerspective && $camera !== editorCameraOrthographic) {
+      extension.setDefaultCameraObject($camera)
     }
   })
 

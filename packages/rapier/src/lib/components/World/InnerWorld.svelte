@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onDestroy, setContext, tick } from 'svelte'
-  import { createRapierContext } from '../../lib/createRapierContext'
-  import type { RapierContext } from '../../types/types'
-  import type { WorldProps } from './types'
+  import { createRapierContext } from '../../lib/createRapierContext.js'
+  import type { RapierContext } from '../../types/types.js'
+  import type { WorldProps } from './types.js'
 
   let {
     gravity = [0, -9.81, 0],

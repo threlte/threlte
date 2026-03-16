@@ -36,8 +36,8 @@ by demand invalidate the frame loop.
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
-  import { useControlsContext } from '../useControlsContext'
-  import type { TrackballControlsProps } from './types'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { TrackballControlsProps } from './types.js'
   import type { Event } from 'three'
 
   let { onchange, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()

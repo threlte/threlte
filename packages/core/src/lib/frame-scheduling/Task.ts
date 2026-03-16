@@ -1,5 +1,5 @@
-import type { Key } from './DAG'
-import type { Stage } from './Stage'
+import type { Key } from './DAG.js'
+import type { Stage } from './Stage.js'
 
 export type TaskCallback = (delta: number) => void
 

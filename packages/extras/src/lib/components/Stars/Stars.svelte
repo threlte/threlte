@@ -10,9 +10,9 @@
     Vector3
   } from 'three'
   import { T, useTask } from '@threlte/core'
-  import type { StarsProps } from './types'
-  import { fragmentShader } from './fragment'
-  import { vertexShader } from './vertex'
+  import type { StarsProps } from './types.js'
+  import { fragmentShader } from './fragment.js'
+  import { vertexShader } from './vertex.js'
 
   let {
     count = 5000,
@@ -69,14 +69,12 @@
     }
   })
 
-  const { stop, start } = useTask(
+  useTask(
     (dt) => {
       uniforms.time.value += dt * speed
     },
-    { autoStart: false }
+    { running: () => speed > 0 }
   )
-
-  $effect.pre(() => (speed === 0 ? stop() : start()))
 
   const uniforms = {
     time: { value: 0 },

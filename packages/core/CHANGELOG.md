@@ -1,5 +1,53 @@
 # @threlte/core
 
+## 8.4.2
+
+### Patch Changes
+
+- 80496ce: Fix transitions plugin compatibility
+
+## 8.4.1
+
+### Patch Changes
+
+- 71eb24c: Minor type updates
+
+## 8.4.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 8.3.1
+
+### Patch Changes
+
+- 0c6bc84: patch mitt and remove workarounds
+
+## 8.3.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 8.2.1
+
+### Patch Changes
+
+- 642343b: [core] Fix: adjust type export
+
+## 8.2.0
+
+### Minor Changes
+
+- db6a716: Add support for the Light abstract class to isInstanceOf function.
+
+## 8.1.9
+
+### Patch Changes
+
+- f5e182e: Fix: disallow calling .set on primitive values within createSetter internal
+
 ## 8.1.8
 
 ### Patch Changes

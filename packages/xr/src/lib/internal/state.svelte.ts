@@ -1,5 +1,5 @@
 import type { WebXRManager, Intersection } from 'three'
-import type { XRControllerEvents, XRHandEvents } from '../types'
+import type { XRControllerEvents, XRHandEvents } from '../types.js'
 
 interface ControllerEvents {
   left?: XRControllerEvents

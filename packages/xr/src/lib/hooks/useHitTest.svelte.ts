@@ -1,7 +1,7 @@
 import { Matrix4 } from 'three'
 import { useThrelte, useTask } from '@threlte/core'
-import { controllers } from './useController.svelte'
-import { isPresenting, session } from '../internal/state.svelte'
+import { controllers } from './useController.svelte.js'
+import { isPresenting, session } from '../internal/state.svelte.js'
 
 export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
 
@@ -56,7 +56,7 @@ export const useHitTest = (
     })
   }
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       const referenceSpace = xr.getReferenceSpace()
 
@@ -74,21 +74,13 @@ export const useHitTest = (
       hitMatrix.fromArray(pose.transform.matrix)
       hitTestCallback(hitMatrix, hit)
     },
-    { autoStart: false }
+    { running: () => isPresenting.current && hitTestSource !== undefined }
   )
 
   $effect.pre(() => {
-    if (!isPresenting.current) {
-      stop()
-      return
-    }
-
     if (hitTestSource === undefined) {
-      stop()
       // Execute callback one last time to inform consumers of no hits.
       hitTestCallback(hitMatrix, undefined)
-    } else {
-      start()
     }
   })
 }

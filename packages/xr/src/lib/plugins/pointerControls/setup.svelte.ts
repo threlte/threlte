@@ -1,11 +1,17 @@
 import { Vector3, type Event, type Object3D } from 'three'
-import { observe, watch } from '@threlte/core'
-import type { ControlsContext, HandContext, Intersection, IntersectionEvent, events } from './types'
-import { getInternalContext } from './context'
-import { controllers } from '../../hooks/useController.svelte'
-import { useHand } from '../../hooks/useHand.svelte'
-import { useFixed } from '../../internal/useFixed'
-import { isPresenting, pointerIntersection } from '../../internal/state.svelte'
+import { observe } from '@threlte/core'
+import type {
+  ControlsContext,
+  HandContext,
+  Intersection,
+  IntersectionEvent,
+  events
+} from './types.js'
+import { getInternalContext } from './context.js'
+import { controllers } from '../../hooks/useController.svelte.js'
+import { useHand } from '../../hooks/useHand.svelte.js'
+import { useFixed } from '../../internal/useFixed.js'
+import { isPresenting, pointerIntersection } from '../../internal/state.svelte.js'
 
 type PointerEventName = (typeof events)[number]
 
@@ -257,26 +263,29 @@ export const setupPointerControls = (
     }
   )
 
-  watch([hand, handContext.enabled], ([input, enabled]) => {
-    if (input === undefined) return
+  observe.pre(
+    () => [hand, handContext.enabled],
+    ([input, enabled]) => {
+      if (input === undefined) return
 
-    const removeHandlers = () => {
-      input.hand.removeEventListener('pinchstart', handlePointerDown)
-      input.hand.removeEventListener('pinchend', handlePointerUp)
-      input.hand.removeEventListener('pinchend', handleClick)
+      const removeHandlers = () => {
+        input.hand.removeEventListener('pinchstart', handlePointerDown)
+        input.hand.removeEventListener('pinchend', handlePointerUp)
+        input.hand.removeEventListener('pinchend', handleClick)
+      }
+
+      if (enabled) {
+        input.hand.addEventListener('pinchstart', handlePointerDown)
+        input.hand.addEventListener('pinchend', handlePointerUp)
+        input.hand.addEventListener('pinchend', handleClick)
+
+        return removeHandlers
+      } else {
+        removeHandlers()
+        return
+      }
     }
-
-    if (enabled) {
-      input.hand.addEventListener('pinchstart', handlePointerDown)
-      input.hand.addEventListener('pinchend', handlePointerUp)
-      input.hand.addEventListener('pinchend', handleClick)
-
-      return removeHandlers
-    } else {
-      removeHandlers()
-      return
-    }
-  })
+  )
 
   observe.pre(
     () => [isPresenting.current, handContext.enabled],

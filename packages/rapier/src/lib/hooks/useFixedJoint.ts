@@ -1,7 +1,7 @@
 import type { FixedImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Euler, Quaternion, Vector3 } from 'three'
-import { useJoint } from './useJoint'
-import { isEuler, isVector3 } from './utils'
+import { useJoint } from './useJoint.js'
+import { isEuler, isVector3 } from './utils.js'
 
 export const useFixedJoint = (
   anchorA: Parameters<Vector3['set']>,

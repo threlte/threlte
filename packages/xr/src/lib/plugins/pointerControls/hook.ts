@@ -1,4 +1,4 @@
-import { getControlsContext, getInternalContext } from './context'
+import { getControlsContext, getInternalContext } from './context.js'
 import type { Object3D } from 'three'
 
 export const usePointerControls = () => {

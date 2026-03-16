@@ -7,7 +7,7 @@ import type {
   Event
 } from 'three'
 import type { CurrentWritable } from '@threlte/core'
-import type { ComputeFunction } from './compute'
+import type { ComputeFunction } from './compute.js'
 
 export type Properties<T> = Pick<
   T,

@@ -2,10 +2,10 @@ import type { XRTargetRaySpace, Event } from 'three'
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
-import { useHandTrackingState } from './useHandTrackingState'
-import type { XRControllerEvent, XRControllerEvents } from '../types'
-import { controllers } from '../hooks/useController.svelte'
-import { controllerEvents } from './state.svelte'
+import { useHandTrackingState } from './useHandTrackingState.js'
+import type { XRControllerEvent, XRControllerEvents } from '../types.js'
+import { controllers } from '../hooks/useController.svelte.js'
+import { controllerEvents } from './state.svelte.js'
 
 export const setupControllers = () => {
   const factory = new XRControllerModelFactory()

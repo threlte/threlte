@@ -1,6 +1,6 @@
 import { fromStore } from 'svelte/store'
-import { useThrelte } from '../../../context/compounds/useThrelte'
-import { isInstanceOf } from '../../../utilities'
+import { useThrelte } from '../../../context/compounds/useThrelte.js'
+import { isInstanceOf } from '../../../utilities/index.js'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 
 const defaultCameras = new Set()

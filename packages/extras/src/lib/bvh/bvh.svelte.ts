@@ -1,7 +1,7 @@
 import { injectPlugin, isInstanceOf } from '@threlte/core'
 import { SAH } from 'three-mesh-bvh'
-import type { BVHOptions } from './types'
-import { createBatchedMeshBVH, createMeshBVH, createPointsBVH } from './raycast'
+import type { BVHOptions } from './types.js'
+import { createBatchedMeshBVH, createMeshBVH, createPointsBVH } from './raycast.js'
 
 export const bvh = (options?: () => BVHOptions) => {
   const bvhOptions = $derived<BVHOptions>({

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { VirtualEnvironmentProps } from './types'
+  import type { VirtualEnvironmentProps } from './types.js'
   import { createSceneContext, observe, T, useTask, useThrelte } from '@threlte/core'
-  import { useCubeCamera } from '../../../hooks/useCubeCamera.svelte'
-  import { useEnvironment } from '../utils/useEnvironment.svelte'
+  import { useCubeCamera } from '../../../hooks/useCubeCamera.svelte.js'
+  import { useEnvironment } from '../utils/useEnvironment.svelte.js'
 
   const ctx = useThrelte()
 
@@ -42,28 +42,29 @@
     camera.update(ctx.renderer, scene)
   }
 
+  let running = $state(false)
+
   let count = 0
-  const { start, stop, started } = useTask(
+  useTask(
     () => {
       // if frames === Infinity, the task will run indefinitely
       if (count < frames) {
         update()
         count += 1
       } else {
-        stop()
+        running = false
         onupdatestop?.()
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
   export const restart = () => {
-    if ($started) {
-      stop()
+    if (running) {
       onupdatestop?.()
     }
     count = 0
-    start()
+    running = true
     onupdatestart?.()
   }
 

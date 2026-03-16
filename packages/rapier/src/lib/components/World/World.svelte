@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { initRapier } from '../../lib/initRapier.svelte'
+  import { initRapier } from '../../lib/initRapier.svelte.js'
   import InnerWorld from './InnerWorld.svelte'
-  import type { WorldProps } from './types'
+  import type { WorldProps } from './types.js'
 
   let { fallback, children, ...rest }: WorldProps = $props()
 </script>

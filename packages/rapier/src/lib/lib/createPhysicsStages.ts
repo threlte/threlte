@@ -1,6 +1,6 @@
 import { useStage, useThrelte, type CurrentWritable, type Key, type Stage } from '@threlte/core'
-import type { Framerate } from '../types/types'
-import { simulationKey, synchronizationKey } from './keys'
+import type { Framerate } from '../types/types.js'
+import { simulationKey, synchronizationKey } from './keys.js'
 
 export const createPhysicsStages = (
   framerate: CurrentWritable<Framerate>,
