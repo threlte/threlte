@@ -28,6 +28,8 @@
     "eslint-plugin-svelte": "catalog:",
     "globals": "catalog:",
     "postcss": "^8.4.38",
+    "prettier": "catalog:",
+    "prettier-plugin-svelte": "catalog:",
     "publint": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",

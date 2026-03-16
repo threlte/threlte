@@ -47,7 +47,7 @@
 
   const { scene, renderer, scheduler, renderStage } = useThrelte()
 
-  const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : hand ?? 'left')
+  const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
 
   $effect.pre(() => {
     handEvents[handedness] = {

@@ -56,7 +56,7 @@
 </script>
 
 <div
-  class="scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 text-sm max-md:shrink-0 md:border-b-0 md:border-r"
+  class="scrollbar-hide overflow-y-auto border-b border-white/20 px-4 py-3 text-sm max-md:shrink-0 md:border-r md:border-b-0"
 >
   <DirectoryComponent
     showDirectoryName={false}

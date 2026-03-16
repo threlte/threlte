@@ -47,7 +47,7 @@
   {/if}
 
   {#if !hideStackblitz}
-    <div class="absolute bottom-4 right-4">
+    <div class="absolute right-4 bottom-4">
       <OpenInStackblitz {files} />
     </div>
   {/if}
