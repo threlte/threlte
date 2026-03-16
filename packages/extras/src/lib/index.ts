@@ -70,7 +70,7 @@ export { default as View } from './components/View/View.svelte'
 export { default as Wireframe } from './components/Wireframe/Wireframe.svelte'
 
 // Transitions
-export { transitions } from './transitions/transltions.svelte.js'
+export { transitions } from './transitions/transitions.svelte.js'
 export { createTransition } from './transitions/createTransition.js'
 export { global } from './transitions/global.js'
 export type { TransitionProps } from './transitions/types.js'
