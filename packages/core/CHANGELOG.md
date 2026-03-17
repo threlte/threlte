@@ -1,5 +1,15 @@
 # @threlte/core
 
+## 8.5.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
+### Patch Changes
+
+- 57018bc: Fix stale ref issue and improve useProps internals
+
 ## 8.4.2
 
 ### Patch Changes

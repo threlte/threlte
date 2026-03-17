@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.4.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
 ## 1.3.0
 
 ### Minor Changes
@@ -291,7 +297,7 @@
 
 - 3df22efc: - Stop duplicate events from firing for XR controllers.
   - Remove `useControllerEvent` and `useHandEvent` hooks.
-- 38f95de5: Fix `<Headset>`` position when teleporting and sync `<Headset>` with current camera when not presenting.
+- 38f95de5: Fix ` <Headset>`` position when teleporting and sync  `<Headset>` with current camera when not presenting.
 
 ## 0.0.4
 
