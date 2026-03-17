@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.2.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
 ## 3.1.2
 
 ### Patch Changes
