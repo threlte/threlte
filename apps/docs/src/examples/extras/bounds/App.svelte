@@ -1,23 +1,40 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
+  import { Pane, Checkbox, Slider } from 'svelte-tweakpane-ui'
 
-  let showScene = true
+  let margin = $state(1.5)
+  let fit = $state(true)
+  let clip = $state(false)
 </script>
 
 <Pane
   title=""
   position="fixed"
 >
-  <Checkbox bind:value={showScene} />
+  <Slider
+    bind:value={margin}
+    label="Margin"
+    min={1}
+    max={10}
+  />
+  <Checkbox
+    bind:value={fit}
+    label="Fit"
+  />
+  <Checkbox
+    bind:value={clip}
+    label="Clip"
+  />
 </Pane>
 
 <div>
   <Canvas>
-    {#if showScene}
-      <Scene />
-    {/if}
+    <Scene
+      {margin}
+      {fit}
+      {clip}
+    />
   </Canvas>
 </div>
 

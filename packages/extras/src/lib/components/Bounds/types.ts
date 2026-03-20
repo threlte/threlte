@@ -1,5 +1,5 @@
-import type { Props } from '@threlte/core'
 import type { Box3, Group, Vector3 } from 'three'
+import type { Props } from '@threlte/core'
 
 export type SizeProps = {
   box: Box3
@@ -9,25 +9,25 @@ export type SizeProps = {
 }
 
 export type BoundsProps = Props<Group> & {
-	/**
-	 * @default 1
-	 */
-	maxDuration?: number
-	/**
-	 * @default 1.2
-	 */
+  /**
+   * @default 1
+   */
+  maxDuration?: number
+  /**
+   * @default 1.2
+   */
   margin?: number
-	/**
-	 * @default false
-	 */
+  /**
+   * @default false
+   */
   observe?: boolean
-	/**
-	 * @default false
-	 */
+  /**
+   * @default false
+   */
   fit?: boolean
-	/**
-	 * @default false
-	 */
+  /**
+   * @default false
+   */
   clip?: boolean
   interpolateFunc?: (t: number) => number
   onFit?: (data: SizeProps) => void
