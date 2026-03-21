@@ -45,11 +45,11 @@
 
     const contentEl = pane.element.querySelector('.tp-rotv_c') as HTMLElement
     if (!contentEl) return
-    contentEl.style.maxHeight = '50vh'
+    contentEl.style.maxHeight = '51vh'
     contentEl.style.overflow = 'auto'
     contentEl.style.minWidth = 'max-content'
 
-    pane.element.style.width = '13.4vw'
+    pane.element.style.width = 'max(256px, 13.4vw)'
     pane.element.style.overflow = 'auto'
   })
 </script>
