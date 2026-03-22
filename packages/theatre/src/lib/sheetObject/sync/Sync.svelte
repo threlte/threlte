@@ -76,7 +76,7 @@
   ]
 
   observe.pre(
-    () => [parent, sheetObject],
+    () => [parent.current, sheetObject],
     ([parent, sheetObject]) => {
       if (!parent) return
 

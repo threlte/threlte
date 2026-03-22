@@ -24,25 +24,27 @@ export type SchedulerContext = {
 
   /** A flag to indicate whether the current frame has been invalidated */
   frameInvalidated: boolean
-  /** Advance one frame when renderMode === 'manual' */
-  advance: () => void
-  /** A flag to indicate whether the frame should be advanced in the manual renderMode */
-  shouldAdvance: boolean
+
   /** If anything is in this set, the frame will be considered invalidated */
   autoInvalidations: Set<unknown>
+
   /** A function to be called at the end of the frame loop that resets the invalidation flags */
   resetFrameInvalidation: () => void
+
   /**
    * Function to determine if a rendering should happen according to on-demand
    * rendering. The value of this function is valid for the duration of the
    * current frame.
    */
   shouldRender: () => boolean
+
   /**
    * Invalidates the current frame when renderMode === 'on-demand'
    */
   invalidate: () => void
+
   mainStage: Stage
+
   renderStage: Stage
 }
 
@@ -60,13 +62,23 @@ export const createSchedulerContext = (
   let autoRender = $state(options.autoRender ?? true)
   let renderMode = $state(options.renderMode ?? 'on-demand')
 
+  const autoInvalidations = new Set()
+
+  let frameInvalidated = true
+
+  const shouldRender = () => {
+    return (
+      renderMode === 'always' ||
+      (renderMode === 'on-demand' && (frameInvalidated || autoInvalidations.size > 0)) ||
+      (renderMode === 'manual' && frameInvalidated)
+    )
+  }
+
   const context: SchedulerContext = {
     scheduler,
-    frameInvalidated: true,
-    autoInvalidations: new Set(),
-    shouldAdvance: false,
-    advance: () => {
-      context.shouldAdvance = true
+    autoInvalidations,
+    get frameInvalidated() {
+      return frameInvalidated
     },
     autoRender: {
       get current() {
@@ -85,32 +97,26 @@ export const createSchedulerContext = (
       }
     },
     invalidate() {
-      context.frameInvalidated = true
+      frameInvalidated = true
     },
     mainStage,
-    shouldRender: () => {
-      return (
-        renderMode === 'always' ||
-        (renderMode === 'on-demand' &&
-          (context.frameInvalidated || context.autoInvalidations.size > 0)) ||
-        (renderMode === 'manual' && context.shouldAdvance)
-      )
-    },
+    shouldRender,
     renderStage: scheduler.createStage(Symbol('threlte-render-stage'), {
       after: mainStage,
       callback(_, runTasks) {
-        if (context.shouldRender()) runTasks()
+        if (shouldRender()) {
+          runTasks()
+        }
       }
     }),
     resetFrameInvalidation() {
-      context.frameInvalidated = false
-      context.shouldAdvance = false
+      frameInvalidated = false
     }
   }
 
   $effect(() => {
     return () => {
-      context.scheduler.dispose()
+      scheduler.dispose()
     }
   })
 

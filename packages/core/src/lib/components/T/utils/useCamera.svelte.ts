@@ -19,22 +19,19 @@ const updateProjectionMatrixKeys = new Set([
 const defaultCameras = new Set()
 
 export const useCamera = (
-  getCamera: () => PerspectiveCamera | OrthographicCamera,
-  getManual: () => boolean,
-  getMakeDefault: () => boolean,
+  camera: () => PerspectiveCamera | OrthographicCamera,
+  manual: () => boolean,
+  makeDefault: () => boolean,
   props: () => Record<string, unknown>
 ) => {
   const { invalidate, size, camera: defaultCamera } = useThrelte()
 
-  const camera = $derived(getCamera())
-  const manual = $derived(getManual())
-
   $effect.pre(() => {
-    if (!getMakeDefault()) {
+    if (!makeDefault()) {
       return
     }
 
-    const current = camera
+    const current = camera()
 
     defaultCameras.add(current)
     defaultCamera.current = current
@@ -50,13 +47,15 @@ export const useCamera = (
   })
 
   $effect.pre(() => {
-    if (manual) {
+    if (manual()) {
       return
     }
 
+    const current = camera()
+
     for (const key in props()) {
       if (updateProjectionMatrixKeys.has(key)) {
-        camera.updateProjectionMatrix()
+        current.updateProjectionMatrix()
         invalidate()
         break
       }
@@ -64,23 +63,24 @@ export const useCamera = (
   })
 
   $effect.pre(() => {
-    if (getManual()) {
+    if (manual()) {
       return
     }
 
+    const current = camera()
     const { width, height } = size.current
 
-    if (isInstanceOf(camera, 'PerspectiveCamera')) {
-      camera.aspect = width / height
-    } else if (isInstanceOf(camera, 'OrthographicCamera')) {
-      camera.left = width / -2
-      camera.right = width / 2
-      camera.top = height / 2
-      camera.bottom = height / -2
+    if (isInstanceOf(current, 'PerspectiveCamera')) {
+      current.aspect = width / height
+    } else if (isInstanceOf(current, 'OrthographicCamera')) {
+      current.left = width / -2
+      current.right = width / 2
+      current.top = height / 2
+      current.bottom = height / -2
     }
 
-    camera.updateProjectionMatrix()
-    camera.updateMatrixWorld()
+    current.updateProjectionMatrix()
+    current.updateMatrixWorld()
     invalidate()
   })
 }

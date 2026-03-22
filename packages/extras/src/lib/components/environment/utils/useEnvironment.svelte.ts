@@ -1,4 +1,4 @@
-import { observe, useThrelte } from '@threlte/core'
+import { useThrelte } from '@threlte/core'
 import type { Scene, Texture } from 'three'
 
 type EnvironmentOptions = {
@@ -7,62 +7,29 @@ type EnvironmentOptions = {
   isBackground?: boolean
 }
 
-export const useEnvironment = (options: EnvironmentOptions) => {
+export const useEnvironment = (options: () => EnvironmentOptions) => {
+  const { scene, texture, isBackground } = $derived(options())
   const { invalidate } = useThrelte()
 
   // save lastScene and restore when scene changes and on unmount
-  observe(
-    () => [options.scene],
-    ([scene]) => {
-      const { background, environment } = scene
+  $effect.pre(() => {
+    const previousBackground = scene.background
+    const previousEnvironment = scene.environment
 
-      return () => {
-        scene.background = background
-        scene.environment = environment
+    if (texture) {
+      scene.environment = texture
+
+      if (isBackground) {
+        scene.background = texture
       }
-    }
-  )
 
-  let background = $state<Scene['background']>()
-  let environment = $state<Scene['environment']>()
-
-  observe(
-    () => [options.scene],
-    ([scene]) => {
-      background = scene.background
-      environment = scene.environment
-    }
-  )
-
-  $effect(() => {
-    if (options.texture === undefined || !options.isBackground) {
-      return
+      invalidate()
     }
 
-    options.scene.background = options.texture
-    invalidate()
     return () => {
-      // background is allowed to be `null`
-      if (background !== undefined) {
-        options.scene.background = background
-        invalidate()
-      }
-    }
-  })
-
-  $effect(() => {
-    if (options.texture === undefined) {
-      return
-    }
-
-    options.scene.environment = options.texture
-    invalidate()
-    return () => {
-      // environment is allowed to be `null`
-      if (environment !== undefined) {
-        options.scene.environment = environment
-        invalidate()
-      }
+      scene.background = previousBackground
+      scene.environment = previousEnvironment
+      invalidate()
     }
   })
 }

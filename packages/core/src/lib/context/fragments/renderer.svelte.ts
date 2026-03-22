@@ -2,6 +2,7 @@ import { getContext, setContext } from 'svelte'
 import {
   AgXToneMapping,
   PCFSoftShadowMap,
+  SRGBColorSpace,
   WebGLRenderer,
   type ColorSpace,
   type ShadowMapType,
@@ -10,7 +11,7 @@ import {
 import type { Task } from '../../frame-scheduling/index.js'
 import { useTask } from '../../hooks/useTask.svelte.js'
 import { useCamera } from './camera.svelte.js'
-import { useDisposal } from './disposal.js'
+import { useDisposal } from './disposal.svelte.js'
 import { useDOM } from './dom.svelte.js'
 import { useScene } from './scene.js'
 import { useScheduler } from './scheduler.svelte.js'
@@ -82,9 +83,7 @@ export const createRendererContext = <T extends Renderer>(
     renderer.render(scene, camera.current)
   })
 
-  const colorSpace = $derived<ColorSpace>(
-    options.colorSpace ?? (renderer.outputColorSpace as ColorSpace)
-  )
+  const colorSpace = $derived<ColorSpace>(options.colorSpace ?? SRGBColorSpace)
   const dpr = $derived(options.dpr ?? window.devicePixelRatio)
   const shadows = $derived(options.shadows ?? PCFSoftShadowMap)
   const toneMapping = $derived(options.toneMapping ?? AgXToneMapping)
@@ -116,11 +115,11 @@ export const createRendererContext = <T extends Renderer>(
 
   setContext<RendererContext<T>>('threlte-renderer-context', context)
 
-  $effect(() => {
+  $effect.pre(() => {
     renderer.outputColorSpace = colorSpace
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     renderer.setPixelRatio(dpr)
   })
 
@@ -128,7 +127,10 @@ export const createRendererContext = <T extends Renderer>(
   let running = $state(false)
   useTask(
     () => {
-      if (!('xr' in renderer) || renderer.xr?.isPresenting) return
+      if (!('xr' in renderer) || renderer.xr?.isPresenting) {
+        return
+      }
+
       renderer.setSize(size.current.width, size.current.height)
       invalidate()
       running = false
@@ -139,13 +141,14 @@ export const createRendererContext = <T extends Renderer>(
       running: () => running
     }
   )
-  $effect(() => {
+
+  $effect.pre(() => {
     if (size.current.width && size.current.height) {
       running = true
     }
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     renderer.shadowMap.enabled = shadows !== false
 
     if (shadows && shadows !== true) {
@@ -155,11 +158,11 @@ export const createRendererContext = <T extends Renderer>(
     }
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     renderer.toneMapping = toneMapping
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     if (autoRender.current) {
       context.autoRenderTask.start()
     } else {

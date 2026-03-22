@@ -15,7 +15,6 @@
 <CameraControls
   bind:ref={controls}
   oncreate={(ref) => {
-    console.log(ref)
     ref.setPosition(5, 5, 5)
   }}
 />

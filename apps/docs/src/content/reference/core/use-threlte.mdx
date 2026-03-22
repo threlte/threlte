@@ -46,13 +46,11 @@ const {
   renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
   autoRender, // CurrentWritable<boolean>
   invalidate, // () => void
-  advance, // () => void
   scheduler, // Scheduler
   mainStage, // Stage
   renderStage, // Stage
   autoRenderTask, // Task
   shouldRender, // () => boolean
-  colorManagementEnabled, // CurrentWritable<boolean>
   colorSpace, // CurrentWritable<ColorSpace>
   toneMapping, // CurrentWritable<ToneMapping>
   shadows // CurrentWritable<boolean | ShadowMapType>
@@ -69,12 +67,12 @@ const { invalidate } = useThrelte()
 invalidate()
 ```
 
-If the [renderMode is set to `'manual'`](/docs/reference/core/canvas) you must manually trigger a re-render:
+If the [renderMode is set to `'manual'`](/docs/reference/core/canvas) you must manually trigger a re-render using `invalidate()`:
 
 ```ts
-const { advance } = useThrelte()
+const { invalidate } = useThrelte()
 
-advance()
+invalidate()
 ```
 
 The property can be changed at any time, but it will only take effect on the next frame.

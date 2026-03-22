@@ -1,10 +1,10 @@
 <script lang="ts">
   import { Environment, OrbitControls } from '@threlte/extras'
   import { EquirectangularReflectionMapping } from 'three'
-  import { RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { HDRLoader } from 'three/examples/jsm/Addons.js'
   import { T, useLoader } from '@threlte/core'
 
-  const { load } = useLoader(RGBELoader)
+  const { load } = useLoader(HDRLoader)
   const map = load('/textures/equirectangular/hdr/industrial_sunset_puresky_1k.hdr', {
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping

@@ -30,10 +30,6 @@
    * When "is" or "args" change, we need to create a new ref.
    */
   const internalRef = $derived(determineRef<Type>(is, args))
-  $effect.pre(() => {
-    if (ref === internalRef) return
-    ref = internalRef
-  })
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update

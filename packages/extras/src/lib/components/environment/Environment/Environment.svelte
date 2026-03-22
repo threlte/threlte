@@ -32,21 +32,16 @@
 
   const suspend = useSuspense()
 
-  useEnvironment({
-    get scene() {
-      return scene
-    },
-    get isBackground() {
-      return isBackground
-    },
-    get texture() {
-      return texture
-    }
-  })
+  useEnvironment(() => ({
+    scene,
+    isBackground,
+    texture
+  }))
 
   // defaults to `TextureLoader` if `url` is not provided
   const loader = $derived.by(() => {
     if (url === undefined) return
+
     if (url?.endsWith('exr')) {
       loaders.exr ??= new EXRLoader()
       return loaders.exr
@@ -54,6 +49,7 @@
       loaders.hdr ??= new HDRLoader()
       return loaders.hdr
     }
+
     loaders.tex ??= new TextureLoader()
     return loaders.tex
   })

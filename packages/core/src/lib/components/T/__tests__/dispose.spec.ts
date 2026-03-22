@@ -37,7 +37,7 @@ describe('<T> dispose', () => {
 
   it('does not dispose if "dispose" is set to false later in the component lifecycle', async () => {
     const onDispose = vi.fn()
-    const { unmount, advance, rerender, scene } = render(Scene, { dispose: true })
+    const { unmount, invalidate, rerender, scene } = render(Scene, { dispose: true })
 
     const mesh = scene.getObjectByName('child') as Mesh
     mesh.geometry.addEventListener('dispose', onDispose)
@@ -46,7 +46,7 @@ describe('<T> dispose', () => {
     material.map?.addEventListener('dispose', onDispose)
 
     await rerender({ dispose: false })
-    advance()
+    invalidate()
 
     expect(onDispose).toHaveBeenCalledTimes(0)
 
@@ -86,13 +86,13 @@ describe('<T> dispose', () => {
     const material1 = new MeshBasicMaterial()
     material1.addEventListener('dispose', onDispose)
 
-    const { rerender, advance, unmount } = render(T, { is: material1 })
+    const { rerender, invalidate, unmount } = render(T, { is: material1 })
 
     const material2 = new MeshBasicMaterial()
     material2.addEventListener('dispose', onDispose)
 
     await rerender({ is: material2 })
-    advance()
+    invalidate()
 
     expect(onDispose).toHaveBeenCalledTimes(0)
 
@@ -105,14 +105,14 @@ describe('<T> dispose', () => {
   it('disposes properly if "is" switches between disposable and non-disposable objects', async () => {
     const mesh = new Mesh()
 
-    const { rerender, unmount, advance } = render(Dispose, { is: mesh })
+    const { rerender, unmount, invalidate } = render(Dispose, { is: mesh })
 
     const onDispose = vi.fn()
     const material = new MeshBasicMaterial()
     material.addEventListener('dispose', onDispose)
 
     await rerender({ is: material })
-    advance()
+    invalidate()
 
     expect(onDispose).toHaveBeenCalledTimes(0)
 
@@ -123,7 +123,7 @@ describe('<T> dispose', () => {
   })
 
   it('does not dispose until the mount count becomes zero', async () => {
-    const { scene, rerender, unmount, advance } = render(DisposeN, { props: { count: 4 } })
+    const { scene, rerender, unmount, invalidate } = render(DisposeN, { props: { count: 4 } })
 
     const onDispose = vi.fn()
     const meshes = scene.getObjectsByProperty('type', 'Mesh') as Mesh[]
@@ -132,15 +132,15 @@ describe('<T> dispose', () => {
     }
 
     await rerender()
-    advance()
+    invalidate()
     expect(onDispose).toHaveBeenCalledTimes(0)
 
     await rerender({ count: 3 })
-    advance()
+    invalidate()
     expect(onDispose).toHaveBeenCalledTimes(1)
 
     await rerender({ count: 2 })
-    advance()
+    invalidate()
     expect(onDispose).toHaveBeenCalledTimes(2)
 
     unmount()

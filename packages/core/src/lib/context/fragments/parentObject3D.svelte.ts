@@ -24,11 +24,13 @@ export const createParentObject3DContext = (object?: () => Object3D | undefined)
   const parentObject3D = getContext<ParentObject3DContext>(parentObject3DContextKey)
   const object3D = $derived(object?.())
   const resolved = $derived(object3D ?? parentObject3D.current)
+
   setContext<ParentObject3DContext>(parentObject3DContextKey, {
     get current() {
       return resolved
     }
   })
+
   return object3D
 }
 

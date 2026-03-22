@@ -1,4 +1,4 @@
-import { getContext, onDestroy, setContext, tick } from 'svelte'
+import { getContext, setContext, tick } from 'svelte'
 
 export type DisposableObject = {
   dispose: () => void
@@ -10,58 +10,73 @@ export type DisposalContext = {
    * @param force - Force disposal
    */
   dispose: (force?: boolean) => void
-  /** Register an object that should be disposed at the end of its lifecycle,
-   * effectivly incrementing the mount count. */
+
+  /**
+   * Register an object that should be disposed at the end of its lifecycle,
+   * effectivly incrementing the mount count.
+   */
   disposableObjectMounted: (object: DisposableObject) => void
-  /** Mark an object as unmounted, effectivly decrementing the mount count. If
-   * the mount count is 0, the object will be disposed. */
+
+  /**
+   * Mark an object as unmounted, effectivly decrementing the mount count. If
+   * the mount count is 0, the object will be disposed.
+   */
   disposableObjectUnmounted: (object: DisposableObject) => void
+
   /** Remove an object from the disposal context */
   removeObjectFromDisposal: (object: DisposableObject) => void
+
   /** Objects that *can* be disposed */
   disposableObjects: Map<DisposableObject, number>
   shouldDispose: boolean
 }
 
 export const createDisposalContext = (): DisposalContext => {
+  const disposableObjects = new Map()
+
+  let shouldDispose = false
+
   const context: DisposalContext = {
+    disposableObjects,
+    get shouldDispose() {
+      return shouldDispose
+    },
     removeObjectFromDisposal: (object) => {
-      context.disposableObjects.delete(object)
+      disposableObjects.delete(object)
     },
     disposableObjectMounted: (object) => {
-      const currentValue = context.disposableObjects.get(object)
-      if (currentValue) {
-        context.disposableObjects.set(object, currentValue + 1)
-      } else {
-        context.disposableObjects.set(object, 1)
-      }
+      const currentValue = disposableObjects.get(object)
+      disposableObjects.set(object, currentValue ? currentValue + 1 : 1)
     },
     disposableObjectUnmounted: (object) => {
-      const currentValue = context.disposableObjects.get(object)
+      const currentValue = disposableObjects.get(object)
+
       if (currentValue && currentValue > 0) {
-        context.disposableObjects.set(object, currentValue - 1)
+        disposableObjects.set(object, currentValue - 1)
         if (currentValue - 1 <= 0) {
-          context.shouldDispose = true
+          shouldDispose = true
         }
       }
     },
-    disposableObjects: new Map(),
-    shouldDispose: false,
+
     dispose: async (force = false) => {
       await tick()
-      if (!context.shouldDispose && !force) return
-      context.disposableObjects.forEach((mounted, object) => {
+      if (!shouldDispose && !force) return
+
+      disposableObjects.forEach((mounted, object) => {
         if (mounted === 0 || force) {
           object?.dispose?.()
-          context.disposableObjects.delete(object)
+          disposableObjects.delete(object)
         }
       })
-      context.shouldDispose = false
+      shouldDispose = false
     }
   }
 
-  onDestroy(() => {
-    context.dispose(true)
+  $effect(() => {
+    return () => {
+      context.dispose(true)
+    }
   })
 
   setContext<DisposalContext>('threlte-disposal-context', context)

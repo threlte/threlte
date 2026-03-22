@@ -28,15 +28,11 @@
     () => resolution
   )
 
-  useEnvironment({
+  useEnvironment(() => ({
     texture: renderTarget.texture,
-    get scene() {
-      return parentScene
-    },
-    get isBackground() {
-      return isBackground
-    }
-  })
+    scene: parentScene,
+    isBackground
+  }))
 
   export const update = () => {
     camera.update(ctx.renderer, scene)

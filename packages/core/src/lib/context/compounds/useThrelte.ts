@@ -53,13 +53,10 @@ export type ThrelteContext<T extends Renderer> = {
     set(value: boolean): void
   }
   /**
-   * Invalidates the current frame when renderMode === 'on-demand'
+   * Invalidates the current frame when renderMode is 'on-demand' or 'manual'
    */
   invalidate: () => void
-  /**
-   * Advance one frame when renderMode === 'manual'
-   */
-  advance: () => void
+
   /** The scheduler used by this Threlte app */
   scheduler: Scheduler
   /** The stage which useTask defaults to */
@@ -111,7 +108,6 @@ export const useThrelte = <T extends Renderer = WebGLRenderer>(): ThrelteContext
   const domCtx = useDOM()
 
   const context: ThrelteContext<T> = {
-    advance: schedulerCtx.advance,
     autoRender: schedulerCtx.autoRender,
     autoRenderTask: rendererCtx.autoRenderTask,
     camera: cameraCtx.camera,
