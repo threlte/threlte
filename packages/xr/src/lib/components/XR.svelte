@@ -86,7 +86,7 @@ This should be placed within a Threlte `<Canvas />`.
 
   const { renderer, renderMode } = useThrelte()
 
-  let originalRenderMode = $renderMode
+  let originalRenderMode = renderMode.current
 
   setupRaf()
   setupHeadset()

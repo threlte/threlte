@@ -4,7 +4,6 @@
 >
   import { ActiveCollisionTypes, CoefficientCombineRule } from '@dimforge/rapier3d-compat'
   import { createParentObject3DContext, useParentObject3D } from '@threlte/core'
-  import { onDestroy, onMount } from 'svelte'
   import { Group } from 'three'
   import { useCollisionGroups } from '../../../hooks/useCollisionGroups.js'
   import { useRapier } from '../../../hooks/useRapier.js'
@@ -13,8 +12,8 @@
   import { createCollidersFromChildren } from '../../../lib/createCollidersFromChildren.js'
   import { eulerToQuaternion } from '../../../lib/eulerToQuaternion.js'
   import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext.js'
-  import { useCreateEvent } from '../../../lib/useCreateEvent.js'
   import type { AutoCollidersProps, MassDef } from './types.js'
+  import { untrack } from 'svelte'
 
   let {
     shape = 'convexHull',
@@ -41,7 +40,6 @@
 
   const group = new Group()
 
-  const { updateRef } = useCreateEvent(oncreate)
   const rigidBody = useRigidBody()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
@@ -53,10 +51,12 @@
     if (colliders === undefined) return
 
     collisionGroups.removeColliders(colliders)
+
     colliders.forEach((c) => {
       removeColliderFromContext(c)
       world.removeCollider(c, true)
     })
+
     colliders.length = 0
   }
 
@@ -69,7 +69,6 @@
   }
 
   const create = () => {
-    cleanup()
     colliders = createCollidersFromChildren(
       group,
       shape ?? 'convexHull',
@@ -106,8 +105,6 @@
         else collider.setMass(mass)
       }
     })
-
-    updateRef(colliders)
   }
 
   /**
@@ -115,14 +112,15 @@
    */
   export const refresh = () => create()
 
-  onMount(() => {
-    create()
-  })
+  $effect(() => {
+    return untrack(() => {
+      create()
 
-  /**
-   * Cleanup
-   */
-  onDestroy(cleanup)
+      return () => {
+        cleanup()
+      }
+    })
+  })
 
   const parent3DObject = useParentObject3D()
   createParentObject3DContext(() => group)
@@ -132,6 +130,14 @@
     return () => {
       parent3DObject.current.remove(group)
     }
+  })
+
+  $effect.pre(() => {
+    return untrack(() => {
+      if (colliders) {
+        return oncreate?.(colliders)
+      }
+    })
   })
 </script>
 

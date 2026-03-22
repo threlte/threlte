@@ -15,7 +15,7 @@
 
   let { startAtPosX }: Props = $props()
 
-  let posX = $derived(startAtPosX)
+  let posX = startAtPosX
   let rigidBody = $state.raw<RapierRigidBody>()
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {

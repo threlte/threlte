@@ -23,12 +23,12 @@
   )
 </script>
 
-{#if $gltf}
+{#await gltf then { nodes }}
   <InstancedMesh
     castShadow
     receiveShadow
   >
-    <T is={$gltf.nodes.Rock_2.geometry} />
+    <T is={nodes.Rock_2.geometry} />
     <T.MeshStandardMaterial color="grey" />
     {#each transformData as randomValues}
       {@const x = randomValues[0] - 10}
@@ -43,4 +43,4 @@
       />
     {/each}
   </InstancedMesh>
-{/if}
+{/await}
