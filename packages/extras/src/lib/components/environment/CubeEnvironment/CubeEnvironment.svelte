@@ -9,10 +9,10 @@
 </script>
 
 <script lang="ts">
-  import { useCache, useThrelte } from '@threlte/core'
+  import { useThrelte } from '@threlte/core'
   import { CubeTextureLoader } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
-  import { useSuspense } from '../../../suspense/useSuspense.js'
+  import { useSuspense } from '../../../suspense/useSuspense.svelte.js'
   import { useEnvironment } from '../utils/useEnvironment.svelte.js'
   import type { CubeEnvironmentProps } from './types.js'
 
@@ -25,7 +25,6 @@
     urls
   }: CubeEnvironmentProps = $props()
 
-  const cache = useCache()
   const suspend = useSuspense()
 
   useEnvironment({
@@ -58,11 +57,7 @@
       return
     }
 
-    const suspendedTexture = suspend(
-      cache.remember(() => {
-        return loader.loadAsync(urls)
-      }, urls)
-    )
+    const suspendedTexture = suspend(loader.loadAsync(urls))
 
     suspendedTexture.then((t) => {
       texture = t

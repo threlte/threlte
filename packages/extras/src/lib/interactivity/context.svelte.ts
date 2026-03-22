@@ -1,4 +1,4 @@
-import { currentWritable, type CurrentWritable, useDOM } from '@threlte/core'
+import { useDOM } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
 import { Vector2, Raycaster, type Object3D, type Intersection } from 'three'
 import type { IntersectionEvent, DomEvent } from './types.js'
@@ -31,10 +31,10 @@ export type InteractivityOptions = {
 type Events = Record<string, (arg: unknown) => void>
 
 export type InteractivityContext = {
-  enabled: CurrentWritable<boolean>
-  target: CurrentWritable<HTMLElement | undefined>
-  pointer: CurrentWritable<Vector2>
-  pointerOverTarget: CurrentWritable<boolean>
+  enabled: { current: boolean }
+  target: { current: HTMLElement | undefined }
+  pointer: { current: Vector2 }
+  pointerOverTarget: { current: boolean }
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
   initialClick: [x: number, y: number]
@@ -55,21 +55,47 @@ export const getInteractivityContext = () => {
 }
 
 export const setInteractivityContext = (options?: InteractivityOptions) => {
-  const target = currentWritable(options?.target ?? useDOM().dom)
+  const target = $derived(options?.target ?? useDOM().dom)
+
+  let enabled = $derived(options?.enabled ?? true)
+  let pointer = $state.raw(new Vector2())
+  let pointerOverTarget = $state(false)
 
   const context: InteractivityContext = {
-    enabled: currentWritable(options?.enabled ?? true),
-    pointer: currentWritable(new Vector2()),
-    pointerOverTarget: currentWritable(false),
+    enabled: {
+      get current() {
+        return enabled
+      }
+    },
+    pointer: {
+      get current() {
+        return pointer
+      },
+      set current(value: Vector2) {
+        pointer = value
+      }
+    },
+    pointerOverTarget: {
+      get current() {
+        return pointerOverTarget
+      },
+      set current(value: boolean) {
+        pointerOverTarget = value
+      }
+    },
+    target: {
+      get current() {
+        return target
+      }
+    },
     lastEvent: undefined,
     raycaster: new Raycaster(),
     initialClick: [0, 0] as [number, number],
     initialHits: [],
     hovered: new Map(),
     interactiveObjects: [],
-    target,
     handlers: new WeakMap(),
-    compute: options?.compute ?? getDefaultComputeFunction(target),
+    compute: options?.compute ?? getDefaultComputeFunction(() => target),
     filter: options?.filter,
     addInteractiveObject: (object: Object3D, events: Events) => {
       // check if the object is already in the list

@@ -155,7 +155,7 @@ as set the raycaster up for raycasting.
       })
 
       // Update the raycaster
-      state.raycaster.setFromCamera(state.pointer.current, $camera)
+      state.raycaster.setFromCamera(state.pointer.current, camera.current)
     }
   })
 </script>
@@ -188,7 +188,7 @@ To access the interactivity state, you can use the `useInteractivity` hook in an
 
   const { pointer, pointerOverTarget } = useInteractivity()
 
-  $inspect($pointer, $pointerOverTarget)
+  $inspect(pointer.current, pointerOverTarget.current)
 </script>
 ```
 

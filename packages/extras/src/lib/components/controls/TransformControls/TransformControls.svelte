@@ -59,7 +59,7 @@
   const attachGroup = new Group()
 
   $effect.pre(() => {
-    transformControls.camera = $camera
+    transformControls.camera = camera.current
   })
 
   $effect.pre(() => {

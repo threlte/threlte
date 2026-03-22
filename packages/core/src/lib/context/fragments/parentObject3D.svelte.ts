@@ -1,12 +1,15 @@
 import { getContext, setContext } from 'svelte'
-import { derived, readable, writable, type Readable } from 'svelte/store'
 import type { Object3D } from 'three'
 
 const parentObject3DContextKey = Symbol('threlte-parent-object3d-context')
-type ParentObject3DContext = Readable<Object3D>
+type ParentObject3DContext = { current: Object3D }
 
-export const createRootParentObject3DContext = (object: Object3D) => {
-  const ctx: ParentObject3DContext = readable<Object3D>(object)
+export const createRootParentObject3DContext = (object: () => Object3D) => {
+  const ctx: ParentObject3DContext = {
+    get current() {
+      return object()
+    }
+  }
   setContext(parentObject3DContextKey, ctx)
   return ctx
 }
@@ -17,13 +20,15 @@ export const createRootParentObject3DContext = (object: Object3D) => {
  * parentObject3D context of the parent component when the local context store
  * is `undefined`.
  */
-export const createParentObject3DContext = (object?: Object3D) => {
+export const createParentObject3DContext = (object?: () => Object3D | undefined) => {
   const parentObject3D = getContext<ParentObject3DContext>(parentObject3DContextKey)
-  const object3D = writable<Object3D | undefined>(object)
-  const ctx = derived([object3D, parentObject3D], ([object3D, parentObject3D]) => {
-    return object3D ?? parentObject3D
+  const object3D = $derived(object?.())
+  const resolved = $derived(object3D ?? parentObject3D.current)
+  setContext<ParentObject3DContext>(parentObject3DContextKey, {
+    get current() {
+      return resolved
+    }
   })
-  setContext(parentObject3DContextKey, ctx)
   return object3D
 }
 

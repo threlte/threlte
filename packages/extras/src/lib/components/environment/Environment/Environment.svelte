@@ -4,20 +4,20 @@
 >
   const loaders: {
     exr?: EXRLoader
-    hdr?: RGBELoader
+    hdr?: HDRLoader
     tex?: TextureLoader
   } = {}
 </script>
 
 <script lang="ts">
-  import { T, useCache, useThrelte } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
   import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js'
-  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
   import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js'
-  import { useSuspense } from '../../../suspense/useSuspense.js'
+  import { useSuspense } from '../../../suspense/useSuspense.svelte.js'
   import { useEnvironment } from '../utils/useEnvironment.svelte.js'
   import type { EquirectangularEnvironmentProps } from './types.js'
+  import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js'
 
   const ctx = useThrelte()
 
@@ -31,7 +31,6 @@
   }: EquirectangularEnvironmentProps = $props()
 
   const suspend = useSuspense()
-  const cache = useCache()
 
   useEnvironment({
     get scene() {
@@ -45,17 +44,14 @@
     }
   })
 
-  const isEXR = $derived(url?.endsWith('exr') ?? false)
-  const isHDR = $derived(url?.endsWith('hdr') ?? false)
-
   // defaults to `TextureLoader` if `url` is not provided
   const loader = $derived.by(() => {
     if (url === undefined) return
-    if (isEXR) {
+    if (url?.endsWith('exr')) {
       loaders.exr ??= new EXRLoader()
       return loaders.exr
-    } else if (isHDR) {
-      loaders.hdr ??= new RGBELoader()
+    } else if (url?.endsWith('hdr')) {
+      loaders.hdr ??= new HDRLoader()
       return loaders.hdr
     }
     loaders.tex ??= new TextureLoader()
@@ -67,11 +63,7 @@
       return
     }
 
-    const suspendedTexture = suspend(
-      cache.remember(() => {
-        return loader.loadAsync(url)
-      }, [url])
-    )
+    const suspendedTexture = suspend(loader.loadAsync(url))
 
     suspendedTexture.then((t) => {
       t.mapping = EquirectangularReflectionMapping

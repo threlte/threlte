@@ -1,6 +1,6 @@
 <script lang="ts">
   import { LumaSplatsThree } from '@lumaai/luma-web'
-  import { T, asyncWritable, useCache, useTask, useThrelte } from '@threlte/core'
+  import { T, asyncWritable, useTask, useThrelte } from '@threlte/core'
   import { useSuspense } from '@threlte/extras'
   import type { CubeTexture } from 'three'
   import type { LumaSplatsThreeProps } from './types'
@@ -17,14 +17,13 @@
 
   const { invalidate, renderer, scene } = useThrelte()
 
-  const { remember } = useCache()
   const suspend = useSuspense()
 
   const captureCubemap = mode === 'env' || mode === 'object-env'
 
   const splats = suspend(
     asyncWritable(
-      remember(() => {
+      (() => {
         return new Promise<[LumaSplatsThree, CubeTexture | undefined]>((resolve) => {
           const splats = new LumaSplatsThree({
             source,
@@ -43,7 +42,7 @@
             }
           }
         })
-      }, [source])
+      })()
     )
   )
 

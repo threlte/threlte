@@ -1,6 +1,5 @@
-import { getContext, onDestroy } from 'svelte'
-import { derived, readable, type Writable } from 'svelte/store'
-import { suspenseContextIdentifier, type SuspenseContext } from './context.js'
+import { getContext } from 'svelte'
+import { suspenseContextIdentifier, type SuspenseContext } from './context.svelte.js'
 
 type Suspend = <T extends Promise<unknown>>(promise: T) => T
 
@@ -21,19 +20,25 @@ export const useSuspense = () => {
     return promise
   }
 
-  const state = {
-    suspended: derived(ctx?.suspended ?? readable(false), (suspended) => suspended)
-  }
+  const suspended = $derived(ctx?.suspended.current ?? false)
 
-  onDestroy(() => {
-    if (!ctx) return
-    for (const promise of promises) {
-      ctx.onComponentDestroy(promise)
+  $effect(() => {
+    return () => {
+      if (!ctx) return
+      for (const promise of promises) {
+        ctx.onComponentDestroy(promise)
+      }
+      promises.clear()
     }
-    promises.clear()
   })
 
-  return Object.assign(suspend, state) as unknown as Suspend & {
-    suspended: Writable<boolean>
+  Object.defineProperty(suspend, 'suspended', {
+    get() {
+      return suspended
+    }
+  })
+
+  return suspend as Suspend & {
+    suspended: { readonly current: boolean }
   }
 }

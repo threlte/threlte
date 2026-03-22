@@ -83,7 +83,7 @@
   {onkeyup}
 />
 
-{#if $gltf?.nodes.Player}
+{#if gltf.current?.nodes.Player}
   <T.Group>
     <AutoColliders
       shape="convexHull"
@@ -97,7 +97,7 @@
         scale.x={0.5}
         scale.y={0.3}
       >
-        <T is={$gltf.nodes.Player.geometry} />
+        <T is={gltf.current.nodes.Player.geometry} />
         <T.MeshStandardMaterial color="blue" />
 
         <Edges

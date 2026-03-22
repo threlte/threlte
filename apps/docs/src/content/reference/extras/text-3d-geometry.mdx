@@ -108,10 +108,10 @@ You can also load the font yourself and pass it to the component, like so:
   let font = useLoader(FontLoader).load('path-to-your-font')
 </script>
 
-{#if $font}
+{#if font.current}
   <T.Mesh>
     <Text3DGeometry
-      font={$font}
+      font={font.current}
       text={'Hello World'}
     />
     <T.MeshStandardMaterial />

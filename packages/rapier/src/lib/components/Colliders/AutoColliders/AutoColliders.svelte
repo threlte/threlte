@@ -125,12 +125,12 @@
   onDestroy(cleanup)
 
   const parent3DObject = useParentObject3D()
-  createParentObject3DContext(group)
+  createParentObject3DContext(() => group)
 
   $effect.pre(() => {
-    $parent3DObject?.add(group)
+    parent3DObject.current.add(group)
     return () => {
-      $parent3DObject?.remove(group)
+      parent3DObject.current.remove(group)
     }
   })
 </script>

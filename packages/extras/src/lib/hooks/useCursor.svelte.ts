@@ -1,4 +1,3 @@
-import { fromStore, toStore, writable, type Readable, type Writable } from 'svelte/store'
 import type { LiteralUnion } from 'type-fest'
 
 type Cursor = LiteralUnion<
@@ -41,13 +40,13 @@ type Cursor = LiteralUnion<
 >
 
 export const useCursor = (
-  onPointerOver: Cursor | Writable<Cursor> = 'pointer',
-  onPointerOut: Cursor | Writable<Cursor> = 'auto',
+  onPointerOver: Cursor | (() => Cursor) = 'pointer',
+  onPointerOut: Cursor | (() => Cursor) = 'auto',
   target: HTMLElement | undefined = undefined
 ): {
   onPointerEnter: () => void
   onPointerLeave: () => void
-  hovering: Readable<boolean>
+  hovering: { readonly current: boolean }
 } => {
   let hovering = $state(false)
 
@@ -61,28 +60,26 @@ export const useCursor = (
   // Account for SSR use
   if (typeof window === 'undefined') {
     return {
-      hovering: toStore(() => hovering),
+      hovering: {
+        get current() {
+          return hovering
+        }
+      },
       onPointerEnter,
       onPointerLeave
     }
   }
 
-  const pointerOver = fromStore(
-    typeof onPointerOver === 'string' ? writable(onPointerOver) : onPointerOver
+  const pointerOver = $derived(
+    typeof onPointerOver === 'function' ? onPointerOver() : onPointerOver
   )
-  const pointerOut = fromStore(
-    typeof onPointerOut === 'string' ? writable(onPointerOut) : onPointerOut
-  )
+  const pointerOut = $derived(typeof onPointerOut === 'function' ? onPointerOut() : onPointerOut)
 
   const el: HTMLElement = target ?? document.body
   const originalCursor = el.style.cursor
 
-  $effect.pre(() => {
-    if (hovering) {
-      el.style.cursor = pointerOver.current
-    } else {
-      el.style.cursor = pointerOut.current
-    }
+  $effect(() => {
+    el.style.cursor = hovering ? pointerOver : pointerOut
   })
 
   // Reset the cursor style
@@ -93,7 +90,11 @@ export const useCursor = (
   })
 
   return {
-    hovering: toStore(() => hovering),
+    hovering: {
+      get current() {
+        return hovering
+      }
+    },
     onPointerEnter,
     onPointerLeave
   }

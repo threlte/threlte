@@ -125,8 +125,8 @@
   const defaultCameraObject = $derived(extension.state.defaultCamera.object)
 
   $effect.pre(() => {
-    if ($camera !== editorCameraPerspective && $camera !== editorCameraOrthographic) {
-      extension.setDefaultCameraObject($camera)
+    if (camera.current !== editorCameraPerspective && camera.current !== editorCameraOrthographic) {
+      extension.setDefaultCameraObject(camera.current)
     }
   })
 

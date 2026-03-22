@@ -15,7 +15,7 @@
   const cssRenderer = new CSS2DRenderer({ element })
 
   $effect(() => {
-    cssRenderer.setSize($size.width, $size.height)
+    cssRenderer.setSize(size.current.width, size.current.height)
   })
 
   // We are running two renderers, and don't want to run

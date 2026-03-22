@@ -12,7 +12,7 @@
 
   $effect(() => {
     // This effect acts like an init default pose
-    $actions?.['idle']?.play()
+    actions.current.idle?.play()
   })
 
   $effect(() => {
@@ -20,8 +20,8 @@
   })
 
   function transitionTo(actionKey: CharacterActions, duration = 1) {
-    const currentAction = $actions[currentActionKey]
-    const nextAction = $actions[actionKey]
+    const currentAction = actions.current[currentActionKey]
+    const nextAction = actions.current[actionKey]
     if (!nextAction || currentAction === nextAction) return
     // Function inspired by: https://github.com/mrdoob/three.js/blob/master/examples/webgl_animation_skinning_blending.html
     nextAction.enabled = true
@@ -35,7 +35,7 @@
 </script>
 
 <GLTF
-  bind:gltf={$gltf}
+  bind:gltf={gltf.current}
   url="https://threejs.org/examples/models/gltf/Xbot.glb"
   oncreate={(scene) => {
     scene.traverse((child) => {

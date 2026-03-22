@@ -1,5 +1,5 @@
-import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
-import { useInteractivity } from './context.js'
+import { injectPlugin, isInstanceOf } from '@threlte/core'
+import { useInteractivity } from './context.svelte.js'
 import type { ThrelteEvents } from './types.js'
 
 export const interactivityEventNames: (keyof ThrelteEvents)[] = [
@@ -29,15 +29,13 @@ export const injectInteractivityPlugin = (): void => {
 
     const { addInteractiveObject, removeInteractiveObject } = useInteractivity()
 
-    observe.pre(
-      () => [args.ref],
-      ([ref]) => {
-        addInteractiveObject(ref, args.props)
-        return () => {
-          removeInteractiveObject(ref)
-        }
+    $effect.pre(() => {
+      const { ref, props } = args
+      addInteractiveObject(ref, props)
+      return () => {
+        removeInteractiveObject(ref)
       }
-    )
+    })
 
     return {
       pluginProps: interactivityEventNames

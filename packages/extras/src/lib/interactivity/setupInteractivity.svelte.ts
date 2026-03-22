@@ -1,7 +1,6 @@
 import type * as THREE from 'three'
-import { type InteractivityContext, useInteractivity } from './context.js'
+import { type InteractivityContext, useInteractivity } from './context.svelte.js'
 import type { DomEvent, Intersection, IntersectionEvent } from './types.js'
-import { fromStore } from 'svelte/store'
 
 function createIntersectionId(intersection: Intersection) {
   return `${(intersection.eventObject || intersection.object).uuid}|${intersection.index}|${intersection.instanceId}`
@@ -83,12 +82,12 @@ export const setupInteractivity = (context: InteractivityContext) => {
   }
 
   const handlePointerLeaveOrCancel = () => {
-    context.pointerOverTarget.set(false)
+    context.pointerOverTarget.current = false
     cancelPointer([])
   }
 
   const handlePointerEnter = () => {
-    context.pointerOverTarget.set(true)
+    context.pointerOverTarget.current = true
   }
 
   const handleEvent = (event: DomEvent) => {
@@ -264,10 +263,8 @@ export const setupInteractivity = (context: InteractivityContext) => {
     }
   }
 
-  const target = fromStore(context.target)
-
   $effect.pre(() => {
-    const { current } = target
+    const { current } = context.target
 
     if (!current) return
 

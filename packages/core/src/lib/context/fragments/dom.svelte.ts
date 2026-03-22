@@ -1,11 +1,12 @@
-import { getContext, onMount, setContext } from 'svelte'
-import { currentWritable, toCurrentReadable, type CurrentReadable } from '../../utilities/index.js'
+import { getContext, setContext } from 'svelte'
 
 type DOMContext = {
   /** The canvas wrapper element */
   dom: HTMLElement
   canvas: HTMLCanvasElement
-  size: CurrentReadable<{ width: number; height: number }>
+  size: {
+    readonly current: { width: number; height: number }
+  }
 }
 
 export type CreateDOMContextOptions = {
@@ -16,16 +17,16 @@ export type CreateDOMContextOptions = {
 export const createDOMContext = (options: CreateDOMContextOptions) => {
   const { dom, canvas } = options
 
-  const size = currentWritable({ width: dom.offsetWidth, height: dom.offsetHeight })
+  let size = $state.raw({ width: dom.offsetWidth, height: dom.offsetHeight })
 
-  onMount(() => {
-    const resizeObserver = new ResizeObserver(() => {
-      const { offsetWidth, offsetHeight } = dom
-      if (size.current.width !== offsetWidth || size.current.height !== offsetHeight) {
-        size.set({ width: offsetWidth, height: offsetHeight })
-      }
-    })
+  const resizeObserver = new ResizeObserver(() => {
+    const { offsetWidth, offsetHeight } = dom
+    if (size.width !== offsetWidth || size.height !== offsetHeight) {
+      size = { width: offsetWidth, height: offsetHeight }
+    }
+  })
 
+  $effect(() => {
     resizeObserver.observe(dom)
 
     return () => {
@@ -36,7 +37,11 @@ export const createDOMContext = (options: CreateDOMContextOptions) => {
   const context: DOMContext = {
     dom,
     canvas,
-    size: toCurrentReadable(size)
+    size: {
+      get current() {
+        return size
+      }
+    }
   }
 
   setContext<DOMContext>('threlte-dom-context', context)

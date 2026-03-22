@@ -119,7 +119,7 @@
   })
 
   $effect.pre(() => {
-    const parentMesh = $parent as Mesh
+    const parentMesh = parent.current as Mesh
 
     if (!isInstanceOf(parentMesh, 'Mesh')) {
       return

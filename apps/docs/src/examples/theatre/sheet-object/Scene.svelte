@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { RoundedBoxGeometry, interactivity, useCursor } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   interactivity()
 
@@ -72,7 +72,7 @@
 <T.Mesh
   receiveShadow
   position.y={-1}
-  rotation.x={-90 * DEG2RAD}
+  rotation.x={-90 * MathUtils.DEG2RAD}
 >
   <T.CircleGeometry args={[1.4, 48]} />
   <T.MeshStandardMaterial />

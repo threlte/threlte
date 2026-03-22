@@ -58,12 +58,17 @@
       return userCamera
     }
 
-    if (isInstanceOf($parent, 'PerspectiveCamera') || isInstanceOf($parent, 'OrthographicCamera')) {
-      return $parent
+    if (
+      isInstanceOf(parent.current, 'PerspectiveCamera') ||
+      isInstanceOf(parent.current, 'OrthographicCamera')
+    ) {
+      return parent.current
     }
 
-    return $defaultCamera as PerspectiveCamera
+    return defaultCamera.current as PerspectiveCamera
   })
+  $inspect(camera)
+
   // svelte-ignore state_referenced_locally
   const controls = new CameraControls(camera, dom)
   $effect.pre(() => {

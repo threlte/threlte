@@ -16,8 +16,6 @@
       Material_MR: MeshStandardMaterial
     }
   }>('/models/helmet/DamagedHelmet.gltf')
-
-  const helmetGeometry = $derived($gltf?.nodes['node_damagedHelmet_-6514'].geometry)
 </script>
 
 <T.PerspectiveCamera
@@ -27,10 +25,10 @@
 />
 
 <T.Group rotation.y={rotation}>
-  {#if helmetGeometry}
+  {#await gltf then { nodes }}
     <T.Mesh
       rotation.x={90 * MathUtils.DEG2RAD}
-      geometry={helmetGeometry}
+      geometry={nodes['node_damagedHelmet_-6514'].geometry}
     >
       <T.MeshBasicMaterial
         color={new Color(0xff3e00)}
@@ -42,5 +40,5 @@
         scale={1.01}
       />
     </T.Mesh>
-  {/if}
+  {/await}
 </T.Group>

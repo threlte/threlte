@@ -7,7 +7,7 @@
 
   const suspend = useSuspense()
 
-  let gltf = $derived(suspend(useGltf(`/models/spaceships/${name}.gltf`)))
+  let gltf = suspend(useGltf(`/models/spaceships/${name}.gltf`))
 </script>
 
 {#await gltf then { scene }}
@@ -15,10 +15,10 @@
     <T
       is={scene}
       oncreate={(ref) => {
-        for (const child of ref.children) {
+        ref.traverse((child) => {
           child.castShadow = true
           child.receiveShadow = true
-        }
+        })
       }}
     />
   </T.Group>

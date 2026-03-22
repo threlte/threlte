@@ -6,3 +6,5 @@ export * from './revision.js'
 export * from './watch.js'
 export * from './currentWritable.js'
 export * from './resolvePropertyPath.js'
+
+export { asyncState, type AsyncState } from './asyncState.svelte.js'

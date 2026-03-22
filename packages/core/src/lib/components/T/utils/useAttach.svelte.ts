@@ -1,10 +1,9 @@
-import { fromStore } from 'svelte/store'
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
 import { createParentContext, useParent } from '../../../context/fragments/parent.js'
 import {
   createParentObject3DContext,
   useParentObject3D
-} from '../../../context/fragments/parentObject3D.js'
+} from '../../../context/fragments/parentObject3D.svelte.js'
 import { isInstanceOf, resolvePropertyPath } from '../../../utilities/index.js'
 import type { BaseProps, MaybeInstance } from '../types.js'
 
@@ -19,20 +18,11 @@ export const useAttach = <T extends MaybeInstance<any>>(
   const { invalidate } = useThrelte()
   const ref = $derived(getRef())
   const attach = $derived(getAttach())
-  const parent = fromStore(useParent())
-  const parentObject3D = fromStore(useParentObject3D())
-  const currentRef = createParentContext<T>()
-  const object3D = createParentObject3DContext()
+  const parent = useParent()
+  const parentObject3D = useParentObject3D()
 
-  $effect.pre(() => {
-    currentRef.set(ref)
-
-    if (isInstanceOf(ref, 'Object3D')) {
-      object3D.set(ref)
-    }
-
-    invalidate()
-  })
+  createParentContext<T>(() => ref)
+  createParentObject3DContext(() => (isInstanceOf(ref, 'Object3D') ? ref : undefined))
 
   $effect.pre(() => {
     invalidate()

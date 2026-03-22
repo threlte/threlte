@@ -8,7 +8,7 @@
     background = 'auto',
     far = 1000,
     fog = 'auto',
-    frames = Infinity,
+    frames = Number.POSITIVE_INFINITY,
     near = 0.1,
     onupdatestart,
     onupdatestop,

@@ -18,14 +18,14 @@ invalidate()
 
 ```ts
 const { renderer, camera } = useThrelte()
-console.log(renderer, $camera)
+console.log(renderer, camera.current)
 ```
 
-… or update render properties:
+… or read render properties:
 
 ```ts
 const { toneMapping } = useThrelte()
-toneMapping.set(THREE.LinearToneMapping)
+console.log(toneMapping.current)
 ```
 
 ### Usage

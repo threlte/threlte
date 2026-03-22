@@ -41,7 +41,7 @@
     Raycaster,
     Vector3
   } from 'three'
-  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import { logFragment, logVertex, spriteVertex } from './shaders.js'
   import type { HTMLProps } from './types.js'
   import {
@@ -90,8 +90,8 @@
   let element = document.createElement(as)
   let oldZoom = 0
   let oldPosition = [0, 0]
-  let transformOuterRef: HTMLDivElement | undefined = $state()
-  let transformInnerRef: HTMLDivElement | undefined = $state()
+  let transformOuterRef = $state.raw<HTMLDivElement>()
+  let transformInnerRef = $state.raw<HTMLDivElement>()
   let isMeshSizeSet = false
 
   const occlusionMesh = new Mesh()
@@ -102,12 +102,12 @@
   )
 
   let matrix = new Matrix4()
-  let width = $derived($size.width)
-  let height = $derived($size.height)
+  let width = $derived(size.current.width)
+  let height = $derived(size.current.height)
   let halfWidth = $derived(width / 2)
   let halfHeight = $derived(height / 2)
-  let fov = $derived($camera.projectionMatrix.elements[5] * halfHeight)
-  let viewportFactor = $derived(getViewportFactor($camera, new Vector3(), $size))
+  let fov = $derived(camera.current.projectionMatrix.elements[5] * halfHeight)
+  let viewportFactor = $derived(getViewportFactor(camera.current, new Vector3(), size.current))
 
   $effect.pre(() => {
     if (wrapperClass) element.className = wrapperClass
@@ -128,7 +128,7 @@
   export const render = () => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
-    const vec = transform ? oldPosition : calculatePosition(group, camera.current, $size)
+    const vec = transform ? oldPosition : calculatePosition(group, camera.current, size.current)
 
     if (
       transform ||
@@ -264,7 +264,7 @@
 
   let pos = $derived.by(() => {
     scene.updateMatrixWorld()
-    return calculatePosition(group, $camera, $size)
+    return calculatePosition(group, camera.current, size.current)
   })
 
   const portalAction = (el: HTMLElement) => {
@@ -329,7 +329,7 @@
   style:overflow={transform ? 'hidden' : undefined}
   style:transform={transform ? undefined : `translate3d(${pos[0]}px,${pos[1]}px,0)`}
   style:transform-origin={transform ? undefined : '0 0'}
-  style:display={$suspended ? 'none' : undefined}
+  style:display={suspended.current ? 'none' : undefined}
 >
   {#if transform}
     <div

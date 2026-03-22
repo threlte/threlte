@@ -252,11 +252,11 @@ effects using the library
 
   // We need to set up the passes according to the camera in use
   $effect(() => {
-    setupEffectComposer($camera)
+    setupEffectComposer(camera.current)
   })
 
   $effect(() => {
-    composer.setSize($size.width, $size.height)
+    composer.setSize(size.current.width, size.current.height)
   })
 
   const { renderStage, autoRender } = useThrelte()

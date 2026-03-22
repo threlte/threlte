@@ -40,7 +40,7 @@
     is={Splat}
     args={[
       splat,
-      $camera,
+      camera.current,
       {
         alphaHash,
         alphaTest,

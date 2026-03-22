@@ -1,5 +1,5 @@
-import { useCache } from '../context/fragments/cache.js'
-import { asyncWritable, type AsyncWritable } from '../utilities/index.js'
+import { Cache } from 'three'
+import { asyncState, type AsyncState } from '../utilities/index.js'
 
 type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
@@ -36,10 +36,10 @@ export type UseLoaderLoadResult<
   Input extends UseLoaderLoadInput,
   ResultType = LoaderResultType<TLoader>
 > = Input extends string
-  ? AsyncWritable<ResultType>
+  ? AsyncState<ResultType>
   : Input extends string[]
-    ? AsyncWritable<ResultType[]>
-    : AsyncWritable<Record<keyof Input, ResultType>>
+    ? AsyncState<ResultType[]>
+    : AsyncState<Record<keyof Input, ResultType>>
 
 type UseLoaderLoadTransform<TLoader extends Loader> = (result: LoaderResultType<TLoader>) => any
 
@@ -108,8 +108,6 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   Proto: Proto,
   options?: UseLoaderOptions<Proto>
 ): ThrelteUseLoader<InstanceType<Proto>> {
-  const { remember, clear: clearCacheItem } = useCache()
-
   let loader: InstanceType<Proto> | undefined
 
   const initializeLoader = (): InstanceType<Proto> => {
@@ -143,26 +141,24 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
 
     if (Array.isArray(input)) {
       // map over the input array and return an array of promises
-      const promises = input.map((url) => {
-        return remember(() => loadResource(url), [Proto, url])
-      })
+      const promises = input.map((url) => loadResource(url))
 
-      // return an AsyncWritable that resolves to the array of promises
-      const store = asyncWritable(Promise.all(promises))
+      // return an AsyncState that resolves to the array of promises
+      const store = asyncState(Promise.all(promises))
       return store as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
-      const promise = remember(() => loadResource(input), [Proto, input])
+      const promise = loadResource(input)
 
-      // return an AsyncWritable that resolves to the promise
-      const store = asyncWritable(promise)
+      // return an AsyncState that resolves to the promise
+      const store = asyncState(promise)
       return store as any // TODO: Dirty escape hatch
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
-        return remember(() => loadResource(url), [Proto, url])
+        return loadResource(url)
       })
-      // return an AsyncWritable that resolves to the object of promises
-      const store = asyncWritable(
+      // return an AsyncState that resolves to the object of promises
+      const store = asyncState(
         Promise.all(promises).then((results) => {
           return Object.fromEntries(Object.entries(input).map(([key], i) => [key, results[i]]))
         })
@@ -174,13 +170,13 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   const clear = (input: string | string[] | Record<string, string>) => {
     if (Array.isArray(input)) {
       input.forEach((url) => {
-        clearCacheItem([Proto, url])
+        Cache.remove(url)
       })
     } else if (typeof input === 'string') {
-      clearCacheItem([Proto, input])
+      Cache.remove(input)
     } else {
-      Object.entries(input).forEach(([key, url]) => {
-        clearCacheItem([Proto, key, url])
+      Object.entries(input).forEach(([, url]) => {
+        Cache.remove(url)
       })
     }
   }

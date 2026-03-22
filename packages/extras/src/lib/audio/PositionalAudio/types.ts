@@ -7,7 +7,7 @@ export type PositionalAudioProps = Props<ThreePositionalAudio> &
     id?: string
     refDistance?: number
     rolloffFactor?: number
-    distanceModel?: string
+    distanceModel?: 'linear' | 'inverse' | 'exponential'
     maxDistance?: number
     directionalCone?: {
       coneInnerAngle: number

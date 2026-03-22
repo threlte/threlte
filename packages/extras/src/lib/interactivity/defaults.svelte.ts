@@ -1,25 +1,20 @@
-import { useThrelte, type CurrentWritable } from '@threlte/core'
-import type { ComputeFunction } from './context.js'
-import { fromStore } from 'svelte/store'
+import { useThrelte } from '@threlte/core'
+import type { ComputeFunction } from './context.svelte.js'
+import { Vector2 } from 'three'
 
-export const getDefaultComputeFunction = (
-  targetWritable: CurrentWritable<HTMLElement>
-): ComputeFunction => {
+export const getDefaultComputeFunction = (target: () => HTMLElement): ComputeFunction => {
+  const current = $derived(target())
   const { camera } = useThrelte()
 
-  let width = targetWritable.current.clientWidth
-  let height = targetWritable.current.clientHeight
+  let width = current.clientWidth
+  let height = current.clientHeight
 
   const resizeObserver = new ResizeObserver(([entry]) => {
     width = entry.contentRect.width
     height = entry.contentRect.height
   })
 
-  const target = fromStore(targetWritable)
-
   $effect.pre(() => {
-    const { current } = target
-
     if (!current) return
 
     resizeObserver.observe(current)
@@ -27,10 +22,11 @@ export const getDefaultComputeFunction = (
   })
 
   return (event, state) => {
-    state.pointer.update((pointer) => {
-      pointer.set((event.offsetX / width) * 2 - 1, -(event.offsetY / height) * 2 + 1)
-      return pointer
-    })
+    state.pointer.current = new Vector2(
+      (event.offsetX / width) * 2 - 1,
+      -(event.offsetY / height) * 2 + 1
+    )
+
     state.raycaster.setFromCamera(state.pointer.current, camera.current)
   }
 }

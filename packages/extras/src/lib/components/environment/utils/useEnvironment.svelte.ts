@@ -23,8 +23,8 @@ export const useEnvironment = (options: EnvironmentOptions) => {
     }
   )
 
-  let background: Scene['background'] | undefined = $state()
-  let environment: Scene['environment'] | undefined = $state()
+  let background = $state<Scene['background']>()
+  let environment = $state<Scene['environment']>()
 
   observe(
     () => [options.scene],

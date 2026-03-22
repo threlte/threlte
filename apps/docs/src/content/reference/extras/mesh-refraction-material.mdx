@@ -69,7 +69,7 @@ You can either pass in a texture to use as the environment:
   const env = useLoader(RGBELoader).load('/hdr/aerodynamics_workshop_1k.hdr')
 </script>
 
-{#await env then texture}
+{#await env.current then texture}
   <T.Mesh>
     <MeshRefractionMaterial envMap={texture} />
     <T.IcosahedronGeometry args={[4, 0]} />

@@ -1,13 +1,12 @@
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
   import { useSuspense } from '@threlte/extras'
-  import { fromStore } from 'svelte/store'
 
-  const suspended = fromStore(useSuspense().suspended)
+  const { suspended } = useSuspense()
 
   const { renderer } = useThrelte()
 
-  $effect.pre(() => {
+  $effect(() => {
     if (suspended.current) {
       return
     }

@@ -12,7 +12,7 @@
     materials: {}
   }>('/models/phone/phone.glb')
 
-  const phoneGeometry = $derived($gltf?.nodes.phone.geometry)
+  const phoneGeometry = $derived(gltf.current?.nodes.phone.geometry)
 
   const url = window.origin
 </script>

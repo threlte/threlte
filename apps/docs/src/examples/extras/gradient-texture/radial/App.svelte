@@ -170,14 +170,13 @@
 </Pane>
 
 <div>
-  <Canvas>
+  <Canvas toneMapping={sceneToneMapping}>
     <Scene
       {gradientEndColor}
       {gradientInnerRadius}
       {gradientOuterRadius}
       {gradientStartColor}
       {sceneClearColor}
-      {sceneToneMapping}
       {textureCenterX}
       {textureCenterY}
       {textureOffsetX}

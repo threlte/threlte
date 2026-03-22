@@ -1,0 +1,46 @@
+import { getContext, setContext } from 'svelte'
+import { OrthographicCamera, PerspectiveCamera } from 'three'
+
+type CameraContext = {
+  camera: { current: PerspectiveCamera | OrthographicCamera }
+}
+
+export const createCameraContext = (): CameraContext => {
+  // Create a default camera to use when no camera is defined by the user
+  const defaultCamera = new PerspectiveCamera(75, 0, 0.1, 1000)
+  defaultCamera.position.z = 5
+  defaultCamera.lookAt(0, 0, 0)
+
+  let camera = $state.raw<PerspectiveCamera | OrthographicCamera>(defaultCamera)
+
+  $effect(() => {
+    if (camera === undefined) {
+      camera = defaultCamera
+    }
+  })
+
+  const context: CameraContext = {
+    camera: {
+      get current() {
+        return camera
+      },
+      set current(value: OrthographicCamera | PerspectiveCamera) {
+        camera = value
+      }
+    }
+  }
+
+  setContext<CameraContext>('threlte-camera-context', context)
+
+  return context
+}
+
+export const useCamera = (): CameraContext => {
+  const context = getContext<CameraContext>('threlte-camera-context')
+
+  if (!context) {
+    throw new Error('useCamera can only be used in a child component to <Canvas>.')
+  }
+
+  return context
+}

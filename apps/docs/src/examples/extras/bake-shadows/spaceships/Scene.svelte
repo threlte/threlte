@@ -8,7 +8,7 @@
   const { size, scene } = useThrelte()
   scene.background = new Color('black')
 
-  let zoom = $derived($size.width / 50)
+  let zoom = $derived(size.current.width / 50)
 
   type Ship = Required<Pick<SpaceshipProps, 'name' | 'position'>>
 
@@ -46,10 +46,10 @@
 />
 
 <Suspense final>
-  {#each ships as { name, position }}
+  {#each ships as ship (ship)}
     <Spaceship
-      {name}
-      {position}
+      name={ship.name}
+      position={ship.position}
     />
   {/each}
   <BakeShadows />

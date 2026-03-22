@@ -45,7 +45,7 @@
     screenClicked
   }: Props = $props()
 
-  const { onPointerEnter, onPointerLeave } = useCursor('pointer')
+  const { onPointerEnter, onPointerLeave } = useCursor()
 
   const gltf = useGltf<GLTFResult>('/models/ball-game/archade-machine/arcade_machine_own.glb').then(
     (gltf) => {

@@ -21,7 +21,7 @@
 <div class="absolute h-full w-full overflow-hidden">
   <div
     class="absolute h-full w-full transition-all delay-500 duration-1000"
-    class:opacity-0={!$finishedOnce}
+    class:opacity-0={!finishedOnce.current}
   >
     <Canvas
       createRenderer={(canvas: HTMLCanvasElement) => {
@@ -39,11 +39,11 @@
       </World>
     </Canvas>
   </div>
-  {#if !$finishedOnce}
+  {#if !finishedOnce.current}
     <div
       class="pointer-events-none absolute top-0 left-0 flex h-full w-full flex-row items-center justify-center p-12 text-2xl text-white"
     >
-      {($progress * 100).toFixed()} %
+      {(progress.current * 100).toFixed()} %
     </div>
   {:else if game.state === 'off'}
     <div

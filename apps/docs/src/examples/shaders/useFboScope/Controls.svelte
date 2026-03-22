@@ -3,11 +3,11 @@
   module
 >
   import { writable } from 'svelte/store'
-  import { tweened } from 'svelte/motion'
+  import { Tween } from 'svelte/motion'
 
   export const baseFov = 60
   export const scoping = writable(false)
-  export const zoomedFov = tweened(18, {
+  export const zoomedFov = new Tween(18, {
     duration: 200
   })
 </script>
@@ -51,7 +51,7 @@
         e.preventDefault()
         e.stopPropagation()
         e.stopImmediatePropagation()
-        zoomedFov.set(clamp($zoomedFov + e.deltaY * 0.05, 0.5, baseFov * 0.5))
+        zoomedFov.set(clamp(zoomedFov.current + e.deltaY * 0.05, 0.5, baseFov * 0.5))
       }
     },
     {
@@ -59,7 +59,7 @@
     }
   )
 
-  let mouseSensitivity = $derived(0.00008 * clamp($zoomedFov * 0.5, 1, 20))
+  let mouseSensitivity = $derived(0.00008 * clamp(zoomedFov.current * 0.5, 1, 20))
 
   let phi = $state(0)
   let theta = $state(-0.16)
@@ -75,7 +75,7 @@
     cameraQuaternion.multiply(qx)
     cameraQuaternion.multiply(qz)
 
-    $camera.quaternion.copy(cameraQuaternion)
+    camera.current.quaternion.copy(cameraQuaternion)
   })
 
   onDestroy(() => {
@@ -95,8 +95,8 @@
 <svelte:document
   onkeydown={(e) => {
     if (e.key === 's') scoping.set(!$scoping)
-    if (e.key === 'a') zoomedFov.set(Math.min($zoomedFov + 2, baseFov * 0.5))
-    if (e.key === 'd') zoomedFov.set(Math.max(0.5, $zoomedFov - 2))
+    if (e.key === 'a') zoomedFov.set(Math.min(zoomedFov.current + 2, baseFov * 0.5))
+    if (e.key === 'd') zoomedFov.set(Math.max(0.5, zoomedFov.current - 2))
   }}
   onclick={() => {
     if (!pointerLocked) {

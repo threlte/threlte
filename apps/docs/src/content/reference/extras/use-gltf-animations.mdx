@@ -29,13 +29,13 @@ Without any arguments, `useGltfAnimations` returns a store which can be bound to
   mixer.timeScale = 0.5
 
   export const triggerAnimation = () => {
-    $actions['All Animations']?.play()
+    actions.current['All Animations']?.play()
   }
 </script>
 
 <GLTF
   url="/path/to/model.glb"
-  bind:gltf={$gltf}
+  bind:gltf={gltf.current}
 />
 ```
 
@@ -52,7 +52,7 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
   const { actions, mixer } = useGltfAnimations<'All Animations'>(gltf)
 
   $effect(() => {
-    $actions['All Animations']?.play()
+    actions.current['All Animations']?.play()
   })
 </script>
 

@@ -98,19 +98,13 @@
     }
   })
 
-  /**
-   * oncreate needs to be called after all other hooks
-   * so that props will have been set once ref is passed
-   * to this callback
-   */
-  $effect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    internalRef
-    let cleanup: void | (() => void) = undefined
-    untrack(() => {
-      cleanup = oncreate?.(internalRef)
-    })
-    return cleanup
+  $effect.pre(() => {
+    if (internalRef) {
+      return untrack(() => {
+        ref = internalRef
+        return oncreate?.(internalRef)
+      })
+    }
   })
 </script>
 

@@ -296,7 +296,7 @@ If you want to play an animation you can do so at any time:
 
 ```ts
 const onEvent = () => {
-  $actions.jump.play()
+  actions.current.jump?.play()
 }
 ```
 

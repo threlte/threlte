@@ -1,4 +1,4 @@
-export const VERSION = 8
+export const VERSION = 9
 
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
@@ -39,15 +39,14 @@ export {
 // contexts
 export type { ThrelteContext } from './context/compounds/useThrelte.js'
 export { createThrelteContext } from './context/createThrelteContext.svelte.js'
-export { createCacheContext, useCache } from './context/fragments/cache.js'
-export { createCameraContext, useCamera } from './context/fragments/camera.js'
-export { createDOMContext, useDOM } from './context/fragments/dom.js'
+export { createCameraContext, useCamera } from './context/fragments/camera.svelte.js'
+export { createDOMContext, useDOM } from './context/fragments/dom.svelte.js'
 export { createDisposalContext, useDisposal } from './context/fragments/disposal.js'
 export { createParentContext, useParent } from './context/fragments/parent.js'
 export {
   createParentObject3DContext,
   useParentObject3D
-} from './context/fragments/parentObject3D.js'
+} from './context/fragments/parentObject3D.svelte.js'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte.js'
 export { createSceneContext, useScene } from './context/fragments/scene.js'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte.js'

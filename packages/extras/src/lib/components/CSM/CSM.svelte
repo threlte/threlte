@@ -65,7 +65,7 @@
     ([enabled]) => {
       if (enabled) {
         const nextCSM = new CSM({
-          camera: camera ?? $defaultCamera,
+          camera: camera ?? defaultCamera.current,
           parent: scene,
           ...args
         })
@@ -94,7 +94,7 @@
     () => [defaultCamera, camera, csm],
     ([defaultCamera, camera, csm]) => {
       if (!csm) return
-      csm.camera = camera ?? defaultCamera
+      csm.camera = camera ?? defaultCamera.current
       if (args.maxFar !== undefined) csm.maxFar = args.maxFar
       if (args.mode !== undefined) csm.mode = args.mode
       csm.updateFrustums()

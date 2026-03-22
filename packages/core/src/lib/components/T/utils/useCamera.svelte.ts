@@ -1,4 +1,3 @@
-import { fromStore } from 'svelte/store'
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
 import { isInstanceOf } from '../../../utilities/index.js'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
@@ -25,11 +24,10 @@ export const useCamera = (
   getMakeDefault: () => boolean,
   props: () => Record<string, unknown>
 ) => {
-  const { invalidate, size: sizeStore, camera: defaultCamera } = useThrelte()
+  const { invalidate, size, camera: defaultCamera } = useThrelte()
 
   const camera = $derived(getCamera())
   const manual = $derived(getManual())
-  const size = fromStore(sizeStore)
 
   $effect.pre(() => {
     if (!getMakeDefault()) {
@@ -39,13 +37,13 @@ export const useCamera = (
     const current = camera
 
     defaultCameras.add(current)
-    defaultCamera.set(current)
+    defaultCamera.current = current
     invalidate()
 
     return () => {
       defaultCameras.delete(current)
       if (defaultCameras.size === 0) {
-        defaultCamera.set(undefined!)
+        defaultCamera.current = defaultCamera.current
         invalidate()
       }
     }

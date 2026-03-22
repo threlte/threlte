@@ -34,16 +34,6 @@ export type AsciiRendererProps = {
   options?: AsciiEffectOptions
 
   /**
-   * callback that is ran anytime the renderer is started
-   */
-  onstart?: () => void
-
-  /**
-   * callback that is ran anytime the renderer is stopped
-   */
-  onstop?: () => void
-
-  /**
    * scene for the ascii effect to render
    * @default useThrelte().scene
    */

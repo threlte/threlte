@@ -1,15 +1,15 @@
 import {
+  OrthographicCamera,
+  PerspectiveCamera,
   Scene,
-  type Camera,
   type ColorSpace,
   type ShadowMapType,
   type ToneMapping,
   type WebGLRenderer
 } from 'three'
 import type { Scheduler, Stage, Task } from '../../frame-scheduling/index.js'
-import type { CurrentReadable, CurrentWritable } from '../../utilities/index.js'
-import { useCamera } from '../fragments/camera.js'
-import { useDOM } from '../fragments/dom.js'
+import { useCamera } from '../fragments/camera.svelte.js'
+import { useDOM } from '../fragments/dom.svelte.js'
 import { useRenderer, type Renderer } from '../fragments/renderer.svelte.js'
 import { useScene } from '../fragments/scene.js'
 import { useScheduler } from '../fragments/scheduler.svelte.js'
@@ -23,23 +23,35 @@ import { useScheduler } from '../fragments/scheduler.svelte.js'
 export type ThrelteContext<T extends Renderer> = {
   dom: HTMLElement
   canvas: HTMLCanvasElement
-  size: CurrentReadable<{ width: number; height: number }>
-  camera: CurrentWritable<Camera>
+  size: {
+    readonly current: { width: number; height: number }
+  }
+  camera: {
+    current: PerspectiveCamera | OrthographicCamera
+  }
   scene: Scene
-  dpr: CurrentWritable<number>
+  dpr: {
+    readonly current: number
+  }
   renderer: T
   /**
    * If set to 'on-demand', the scene will only be rendered when the current frame is invalidated
    * If set to 'manual', the scene will only be rendered when advance() is called
    * If set to 'always', the scene will be rendered every frame
    */
-  renderMode: CurrentWritable<'always' | 'on-demand' | 'manual'>
+  renderMode: {
+    readonly current: 'always' | 'on-demand' | 'manual'
+    set(value: 'always' | 'on-demand' | 'manual'): void
+  }
   /**
    * By default, Threlte will automatically render the scene when necessary.
    * If you want to implement a custom render pipeline, you can set this to
    * false.
    */
-  autoRender: CurrentWritable<boolean>
+  autoRender: {
+    readonly current: boolean
+    set(value: boolean): void
+  }
   /**
    * Invalidates the current frame when renderMode === 'on-demand'
    */
@@ -64,10 +76,16 @@ export type ThrelteContext<T extends Renderer> = {
    * current frame.
    */
   shouldRender: () => boolean
-  colorManagementEnabled: CurrentWritable<boolean>
-  colorSpace: CurrentWritable<ColorSpace>
-  toneMapping: CurrentWritable<ToneMapping>
-  shadows: CurrentWritable<boolean | ShadowMapType>
+
+  colorSpace: {
+    readonly current: ColorSpace
+  }
+  toneMapping: {
+    readonly current: ToneMapping
+  }
+  shadows: {
+    readonly current: boolean | ShadowMapType
+  }
 }
 
 /**
@@ -97,7 +115,6 @@ export const useThrelte = <T extends Renderer = WebGLRenderer>(): ThrelteContext
     autoRender: schedulerCtx.autoRender,
     autoRenderTask: rendererCtx.autoRenderTask,
     camera: cameraCtx.camera,
-    colorManagementEnabled: rendererCtx.colorManagementEnabled,
     colorSpace: rendererCtx.colorSpace,
     dpr: rendererCtx.dpr,
     invalidate: schedulerCtx.invalidate,

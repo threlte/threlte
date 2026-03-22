@@ -50,7 +50,7 @@
 
   const viewport = new Vector4()
 
-  const cameraControls = $derived(controls ?? ($parent as Controls))
+  const cameraControls = $derived(controls ?? (parent.current as Controls))
 
   useTask(
     renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
@@ -74,7 +74,7 @@
   )
 
   $effect.pre(() => {
-    gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
+    gizmo.camera = camera.current
   })
 
   $effect.pre(() => {

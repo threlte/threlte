@@ -7,7 +7,7 @@
   let animating = $state(false)
 
   const actions = $derived(scene?.actions)
-  const action = $derived($actions?.['Take 001'])
+  const action = $derived(actions?.current['Take 001'])
 
   // start animating as soon as the action is ready
   $effect(() => {

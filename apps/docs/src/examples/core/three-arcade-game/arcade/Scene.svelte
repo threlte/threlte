@@ -51,7 +51,7 @@
 
   const cameraTargetPos = new Spring(
     {
-      x: $pointer.x * 0.1,
+      x: pointer.current.x * 0.1,
       y: 1.23,
       z: 0
     },
@@ -62,7 +62,7 @@
 
   const cameraPos = new Spring(
     {
-      x: $pointer.x * 0.1, //(machineIsOff ? 2 : 0.1),
+      x: pointer.current.x * 0.1, //(machineIsOff ? 2 : 0.1),
       y: 1.48,
       z: cameraTweenZ.current
     },
@@ -122,7 +122,7 @@
             z: -screenPos.z
           }
         : {
-            x: $pointer.x * 0.1,
+            x: pointer.current.x * 0.1,
             y: 1.23,
             z: 0
           }
@@ -138,7 +138,7 @@
             z: screenPos.z + 0.5
           }
         : {
-            x: $pointer.x * (machineIsOff ? 0.1 : 0.1),
+            x: pointer.current.x * (machineIsOff ? 0.1 : 0.1),
             y: 1.48,
             z: cameraTweenZ.current
           }
@@ -156,8 +156,8 @@
 </script>
 
 <svelte:window
-  on:keydown={onKeyDown}
-  on:keyup={onKeyUp}
+  onkeydown={onKeyDown}
+  onkeyup={onKeyUp}
 />
 
 <T.Scene

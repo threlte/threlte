@@ -2,7 +2,7 @@
   import { observe, T, useThrelte } from '@threlte/core'
   import { tick } from 'svelte'
   import { preloadFont, Text as TroikaText } from 'troika-three-text'
-  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import type { TextProps } from './types.js'
 
   let {
@@ -72,7 +72,7 @@
   const suspend = useSuspense()
 
   $effect.pre(() => {
-    suspend(new Promise<any>((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
+    suspend(new Promise((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
   })
 </script>
 

@@ -19,7 +19,7 @@
   const outerGroup = new Group()
   const group = new Group()
 
-  let t = seed
+  let t = $derived(seed)
 
   const map = MathUtils.mapLinear
 

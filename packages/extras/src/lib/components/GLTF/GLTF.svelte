@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { useGltf } from '../../hooks/useGltf.js'
-  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import type { ThrelteGltf } from '../../types/types.js'
   import type { GltfProps } from './types.js'
 
@@ -70,7 +70,6 @@
 
   const loadGltf = async (url: string) => {
     try {
-      // eslint-disable-next-line svelte/require-store-reactive-access
       const model = await suspend(loader.load(url))
       onLoad(model)
     } catch (error) {

@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { T, asyncWritable, useLoader, type AsyncWritable } from '@threlte/core'
+  import { T, asyncState, useLoader, type AsyncState } from '@threlte/core'
   import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
   import { FontLoader, type Font } from 'three/examples/jsm/loaders/FontLoader.js'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import type { Text3DProps } from './types.js'
 
   let {
@@ -29,19 +29,15 @@
   const suspend = useSuspense()
   const loader = useLoader(FontLoader)
 
-  let loadedFont = $derived(
-    suspend<AsyncWritable<Font>>(
-      typeof font === 'string'
-        ? loader.load(font)
-        : asyncWritable<Font>(new Promise((resolve) => resolve(font as Font)))
-    )
+  let loadedFont = suspend<AsyncState<Font>>(
+    typeof font === 'string' ? loader.load(font) : asyncState<Font>(Promise.resolve(font))
   )
 
   let baseGeometry = $derived.by(() => {
-    if (!$loadedFont) return
+    if (!loadedFont.current) return
 
     return new TextGeometry(text, {
-      font: $loadedFont,
+      font: loadedFont.current,
       size,
       depth,
       curveSegments,

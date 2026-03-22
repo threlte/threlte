@@ -21,15 +21,16 @@
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping
       texture.colorSpace = SRGBColorSpace
+
+      scene.environment = texture
+      scene.environmentIntensity = 10
     }
   })
 
-  cube.then((gltf) => {
-    cubeGeometry.set(gltf.nodes.Cube.geometry)
-  })
-  env.then((texture) => {
-    scene.environment = texture
-    scene.environmentIntensity = 10
+  $effect(() => {
+    if (cube.current) {
+      cubeGeometry.set(cube.current.nodes.Cube.geometry)
+    }
   })
 </script>
 
@@ -56,6 +57,6 @@
   />
 </ScrollSheet>
 
-{#if $cubeGeometry && $env}
+{#if cube.current && env.current}
   <Scene />
 {/if}

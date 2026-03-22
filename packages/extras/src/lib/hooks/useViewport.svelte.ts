@@ -1,6 +1,6 @@
 import { Camera, Vector3, type Vector3Tuple } from 'three'
 import { currentWritable, isInstanceOf, useTask, useThrelte } from '@threlte/core'
-import { fromStore, type Readable } from 'svelte/store'
+import { type Readable } from 'svelte/store'
 
 export interface Viewport {
   /** Viewport width in Three.js units */
@@ -27,7 +27,7 @@ export const useViewport = (
     distance: 0
   })
 
-  const { camera: cameraStore, size: sizeStore, renderStage, scheduler } = useThrelte()
+  const { camera, size, renderStage, scheduler } = useThrelte()
 
   const updateViewport = (
     size: { width: number; height: number },
@@ -61,9 +61,6 @@ export const useViewport = (
       return $viewport
     })
   }
-
-  const camera = fromStore(cameraStore)
-  const size = fromStore(sizeStore)
 
   useTask(
     () => {

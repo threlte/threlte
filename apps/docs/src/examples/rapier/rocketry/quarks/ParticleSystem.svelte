@@ -22,12 +22,12 @@
   const parent = useParent()
 
   $effect(() => {
-    if (isInstanceOf($parent, 'Object3D')) {
-      $parent.add(system.emitter)
+    if (isInstanceOf(parent.current, 'Object3D')) {
+      parent.current.add(system.emitter)
     }
     return () => {
-      if (isInstanceOf($parent, 'Object3D')) {
-        $parent.remove(system.emitter)
+      if (isInstanceOf(parent.current, 'Object3D')) {
+        parent.current.remove(system.emitter)
       }
     }
   })

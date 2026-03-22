@@ -43,7 +43,7 @@
       const key = customKey ?? makeAlphanumeric(propertyPath)
 
       // get the initial value as well as the correct transformer for the property
-      const { value, transformer } = getInitialValue(propertyPath, propertyValue, $parent)
+      const { value, transformer } = getInitialValue(propertyPath, propertyValue, parent.current)
       const label = parsePropLabel(key, propertyValue)
 
       // apply the label to the value
@@ -125,7 +125,10 @@
       if (!propMapping) return
 
       // we're using the addedProps map to infer the target property name from the property name on values
-      const { target, key: targetKey } = resolvePropertyPath($parent, propMapping.propertyPath)
+      const { target, key: targetKey } = resolvePropertyPath(
+        parent.current,
+        propMapping.propertyPath
+      )
 
       const value = propMapping.transformer.transform(target[targetKey]).default
 

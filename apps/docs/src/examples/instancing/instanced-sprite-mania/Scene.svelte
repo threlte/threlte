@@ -17,7 +17,7 @@
 
   let { billboarding = false, fps, children }: Props = $props()
 
-  const grass = useTexture('/textures/sprites/pixel-grass.png', {
+  const grassTexture = useTexture('/textures/sprites/pixel-grass.png', {
     transform: (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping
       texture.repeat.set(500, 500)
@@ -28,7 +28,7 @@
     }
   })
 
-  const sky = useTexture('/textures/sprites/pixel-sky.png', {
+  const skyTexture = useTexture('/textures/sprites/pixel-sky.png', {
     transform: (texture) => {
       texture.wrapS = texture.wrapT = RepeatWrapping
       texture.repeat.set(10, 2)
@@ -92,26 +92,26 @@
 
   <!-- SCENE SETUP: grass, sky, lights -->
 
-  {#if $sky}
+  {#if skyTexture.current}
     <T.Mesh
       position.y={-10}
       scale.y={0.5}
     >
       <T.SphereGeometry args={[300, 8, 8]} />
       <T.MeshBasicMaterial
-        map={$sky}
+        map={skyTexture.current}
         side={BackSide}
       />
     </T.Mesh>
   {/if}
 
-  {#if $grass}
+  {#if grassTexture.current}
     <T.Mesh
       rotation.x={-MathUtils.DEG2RAD * 90}
       receiveShadow
     >
       <T.CircleGeometry args={[300]} />
-      <T.MeshLambertMaterial map={$grass} />
+      <T.MeshLambertMaterial map={grassTexture.current} />
     </T.Mesh>
   {/if}
 </CSM>

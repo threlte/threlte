@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Cache } from 'three'
   import type { Snippet } from 'svelte'
   import Context from './components/Context/Context.svelte'
   import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte.js'
@@ -10,8 +11,12 @@
 
   let { children, ...rest }: Props = $props()
 
-  let canvas = $state<HTMLCanvasElement>()
-  let dom = $state<HTMLDivElement>()
+  $effect.pre(() => {
+    Cache.enabled = rest.cache ?? true
+  })
+
+  let canvas = $state.raw<HTMLCanvasElement>()
+  let dom = $state.raw<HTMLDivElement>()
 </script>
 
 <div bind:this={dom}>

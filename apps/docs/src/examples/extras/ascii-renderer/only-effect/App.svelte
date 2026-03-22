@@ -7,7 +7,7 @@
 
   let color = $state(false)
 
-  const options: AsciiEffectOptions = $derived({ color })
+  const options = $derived<AsciiEffectOptions>({ color })
 </script>
 
 <Pane

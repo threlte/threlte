@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { T, asyncWritable, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
+  import { T, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
   import { Color, ShaderMaterial, Vector2, Vector3, type Mesh, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture.js'
-  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import { fragmentShader, vertexShader } from './shaders.js'
   import type { ImageMaterialProps } from './types.js'
 
@@ -40,9 +40,8 @@
 
   const suspend = useSuspense()
 
-  const textureStore = $derived(
-    suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
-  )
+  const texturePromise = suspend(useTexture(url ?? ''))
+  const resolvedTexture = $derived(texture ?? texturePromise?.current)
 
   let { size } = useThrelte()
   const parent = useParent()
@@ -74,12 +73,12 @@
   })
   $effect.pre(() => {
     uniforms.imageBounds.value.set(
-      $textureStore?.image.width ?? 0,
-      $textureStore?.image.height ?? 0
+      resolvedTexture?.image.width ?? 0,
+      resolvedTexture?.image.height ?? 0
     )
   })
   $effect.pre(() => {
-    uniforms.resolution.value = Math.max($size.width, $size.height)
+    uniforms.resolution.value = Math.max(size.current.width, size.current.height)
   })
   $effect.pre(() => {
     uniforms.zoom.value = zoom
@@ -112,7 +111,7 @@
     uniforms.negative.value = negative ? 1 : 0
   })
   $effect.pre(() => {
-    uniforms.map.value = $textureStore ?? null
+    uniforms.map.value = resolvedTexture ?? null
   })
   $effect.pre(() => {
     uniforms.colorProccessingTexture.value = colorProcessingTexture ?? null

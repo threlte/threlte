@@ -1,6 +1,5 @@
 <script lang="ts">
   import { T, isInstanceOf, useParent } from '@threlte/core'
-  import { fromStore } from 'svelte/store'
   import { LineSegments } from 'three'
   import type { EdgesProps } from './types.js'
 
@@ -12,7 +11,7 @@
     ...props
   }: EdgesProps = $props()
 
-  const parent = fromStore(useParent())
+  const parent = useParent()
 
   const geometry = $derived.by(() => {
     if (!isInstanceOf(parent.current, 'Mesh')) {

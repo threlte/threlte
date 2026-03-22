@@ -22,10 +22,10 @@
 
 <script lang="ts">
   import { DecalGeometry } from 'three/examples/jsm/geometries/DecalGeometry.js'
-  import { asyncWritable, T, useParent, type Props as ThrelteProps } from '@threlte/core'
+  import { asyncState, T, useParent, type Props as ThrelteProps } from '@threlte/core'
 
   import type { Snippet } from 'svelte'
-  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import { useTexture } from '../../hooks/useTexture.js'
 
   interface Props extends ThrelteProps<Mesh> {
@@ -57,7 +57,7 @@
   }: Props = $props()
 
   const parent = useParent()
-  const parentNode = $derived(parentMesh ?? ($parent as Mesh))
+  const parentNode = $derived(parentMesh ?? (parent.current as Mesh))
   const mesh = new Mesh()
   const projectorPosition = new Vector3()
   const projectorRotation = new Euler()
@@ -70,7 +70,7 @@
     typeof src === 'string'
       ? suspend(useTexture(src))
       : src
-        ? asyncWritable<Texture>(Promise.resolve(src))
+        ? asyncState<Texture>(Promise.resolve(src))
         : undefined
   )
 
@@ -79,7 +79,7 @@
       throw new Error('Decal must have a Mesh as parent or specify its "mesh" prop')
     }
 
-    if (!$map && !children) return
+    if (!map?.current && !children) return
 
     if (position !== undefined) {
       projectorPosition.fromArray(position)
@@ -156,7 +156,7 @@
   })
 </script>
 
-{#if $map || children}
+{#if map?.current || children}
   <T
     is={mesh}
     bind:ref
@@ -164,7 +164,7 @@
     material.polygonOffset={true}
     material.polygonOffsetFactor={polygonOffsetFactor}
     material.depthTest={depthTest}
-    material.map={$map}
+    material.map={map?.current}
     {...rest}
   >
     {@render children?.({ ref: mesh })}

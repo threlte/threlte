@@ -8,15 +8,10 @@
   import { clamp } from 'three/src/math/MathUtils.js'
   import { game } from '../Game.svelte'
 
-  type Props = {
-    position: BlockData['position']
-    size: BlockData['size']
-    hit: BlockData['hit']
-    freeze: BlockData['freeze']
-    staticColors: BlockData['staticColors']
-    blinkingColors: BlockData['blinkingColors']
+  interface Props extends BlockData {
     onHit: () => void
   }
+
   let { position, size, hit, freeze, staticColors, blinkingColors, onHit }: Props = $props()
 
   const scale = new Tween(0)

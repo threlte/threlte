@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { Color, AdditiveBlending, ShaderMaterial } from 'three'
+  import { Color, AdditiveBlending, ShaderMaterial, Uniform } from 'three'
   import type { FakeGlowMaterialProps } from './types.js'
   import { fragmentShader } from './fragment.js'
   import { vertexShader } from './vertex.js'
@@ -16,10 +16,10 @@
   }: FakeGlowMaterialProps = $props()
 
   const uniforms = {
-    falloff: { value: falloff },
-    glowInternalRadius: { value: glowInternalRadius },
-    glowColor: { value: new Color(glowColor) },
-    glowSharpness: { value: glowSharpness }
+    falloff: new Uniform(0),
+    glowInternalRadius: new Uniform(0),
+    glowColor: new Uniform(new Color()),
+    glowSharpness: new Uniform(0)
   }
 
   const material = new ShaderMaterial({

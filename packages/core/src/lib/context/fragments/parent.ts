@@ -1,17 +1,22 @@
 import { getContext, setContext } from 'svelte'
-import { currentWritable, type CurrentWritable } from '../../utilities/index.js'
 
 const parentContextKey = Symbol('threlte-parent-context')
 
-type ParentContext = CurrentWritable<unknown>
+type ParentContext = { current: unknown }
 
 /**
  * The parent context is used to access the parent object created by a `<T>`
  * component.
  */
-export const createParentContext = <T>(parent?: T) => {
-  const ctx: ParentContext = currentWritable(parent)
+export const createParentContext = <T>(parent?: () => T) => {
+  const ctx: ParentContext = {
+    get current() {
+      return parent?.()
+    }
+  }
+
   setContext(parentContextKey, ctx)
+
   return ctx
 }
 

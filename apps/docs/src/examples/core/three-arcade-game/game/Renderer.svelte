@@ -10,14 +10,14 @@
   const textureWidth = 300
   const textureHeight = Math.round((textureWidth * 3) / 4)
 
-  const gameRenderTarget = useFBO({
+  const gameRenderTarget = useFBO(() => ({
     size: {
       width: textureWidth,
       height: textureHeight
     },
     minFilter: NearestFilter,
     magFilter: NearestFilter
-  })
+  }))
 
   game.gameTexture = gameRenderTarget.texture
 

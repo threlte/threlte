@@ -3,19 +3,34 @@
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext.js'
   import type { OrbitControlsProps } from './types.js'
-  import type { Event } from 'three'
+  import type { Event, OrthographicCamera, PerspectiveCamera } from 'three'
 
-  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
+  let { ref = $bindable(), camera: userCamera, children, ...props }: OrbitControlsProps = $props()
 
+  const { dom, invalidate, camera: defaultCamera } = useThrelte()
   const parent = useParent()
-  const { dom, invalidate } = useThrelte()
 
-  if (!isInstanceOf($parent, 'Camera')) {
-    throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
-  }
+  const camera = $derived.by(() => {
+    if (userCamera) {
+      return userCamera
+    }
+
+    if (
+      isInstanceOf(parent.current, 'PerspectiveCamera') ||
+      isInstanceOf(parent.current, 'OrthographicCamera')
+    ) {
+      return parent.current
+    }
+
+    return defaultCamera.current as PerspectiveCamera | OrthographicCamera
+  })
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeOrbitControls($parent, dom)
+  // svelte-ignore state_referenced_locally
+  const controls = new ThreeOrbitControls(camera, dom)
+  $effect.pre(() => {
+    controls.object = camera
+  })
 
   const { orbitControls } = useControlsContext()
 

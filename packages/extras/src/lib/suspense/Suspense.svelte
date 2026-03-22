@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { T, useParentObject3D, useThrelte } from '@threlte/core'
+  import { T } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import { Group } from 'three'
-  import { createSuspenseContext } from './context.js'
+  import { createSuspenseContext } from './context.svelte.js'
 
   interface Props {
     final?: boolean
@@ -18,54 +18,35 @@
 
   let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
-  const { suspended, errors, setFinal } = createSuspenseContext({ final })
-  $effect(() => setFinal(final))
+  const { suspended, errors } = createSuspenseContext(() => ({ final }))
+
   $effect(() => {
-    if (!$suspended) onload?.()
-  })
-  $effect(() => {
-    if ($suspended) onsuspend?.()
-  })
-  $effect(() => {
-    if ($errors.length > 0) onerror?.($errors)
+    if (suspended.current) {
+      onsuspend?.()
+    } else {
+      onload?.()
+    }
   })
 
-  const { invalidate } = useThrelte()
+  $effect(() => {
+    if (errors.current.length > 0) {
+      onerror?.(errors.current)
+    }
+  })
 
   const group = new Group()
-  const parent = useParentObject3D()
-
-  $effect.pre(() => {
-    // we don't have a parent, so we can't add ourselves to it
-    if (!$parent) return
-
-    // if the component is suspended or has errors, we remove ourselves from the parent
-    if ($suspended || $errors.length) {
-      $parent.remove(group)
-      invalidate()
-      return
-    }
-
-    $parent.add(group)
-    invalidate()
-
-    return () => {
-      $parent.remove(group)
-      invalidate()
-    }
-  })
 </script>
 
 <!-- Block the graph from mounting to the parent -->
 <T
   is={group}
-  attach={false}
+  attach={suspended.current || errors.current.length > 0 ? false : undefined}
 >
-  {@render children?.({ suspended: $suspended, errors: $errors })}
+  {@render children?.({ suspended: suspended.current, errors: errors.current })}
 </T>
 
-{#if $errors.length}
-  {@render error?.({ errors: $errors })}
-{:else if $suspended}
+{#if errors.current.length}
+  {@render error?.({ errors: errors.current })}
+{:else if suspended.current}
   {@render fallback?.()}
 {/if}

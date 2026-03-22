@@ -1,5 +1,4 @@
-import { getContext, onDestroy, setContext } from 'svelte'
-import { type CurrentWritable, currentWritable } from '../../utilities/index.js'
+import { getContext, setContext } from 'svelte'
 import { Scheduler, type Stage } from '../../frame-scheduling/index.js'
 
 export type SchedulerContext = {
@@ -7,14 +6,22 @@ export type SchedulerContext = {
   /**
    * @default 'on-demand'
    */
-  renderMode: CurrentWritable<'always' | 'on-demand' | 'manual'>
+  renderMode: {
+    readonly current: 'always' | 'on-demand' | 'manual'
+    set: (value: 'always' | 'on-demand' | 'manual') => void
+  }
+
   /**
    * By default, Threlte will automatically render the scene. To implement
    * custom render pipelines, set this to `false`.
    *
    * @default true
    */
-  autoRender: CurrentWritable<boolean>
+  autoRender: {
+    readonly current: boolean
+    set: (value: boolean) => void
+  }
+
   /** A flag to indicate whether the current frame has been invalidated */
   frameInvalidated: boolean
   /** Advance one frame when renderMode === 'manual' */
@@ -50,6 +57,9 @@ export const createSchedulerContext = (
   const scheduler = new Scheduler()
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
 
+  let autoRender = $state(options.autoRender ?? true)
+  let renderMode = $state(options.renderMode ?? 'on-demand')
+
   const context: SchedulerContext = {
     scheduler,
     frameInvalidated: true,
@@ -58,18 +68,32 @@ export const createSchedulerContext = (
     advance: () => {
       context.shouldAdvance = true
     },
-    autoRender: currentWritable(options.autoRender ?? true),
-    renderMode: currentWritable(options.renderMode ?? 'on-demand'),
+    autoRender: {
+      get current() {
+        return autoRender
+      },
+      set(value: boolean) {
+        autoRender = value
+      }
+    },
+    renderMode: {
+      get current() {
+        return renderMode
+      },
+      set(value: 'always' | 'on-demand' | 'manual') {
+        renderMode = value
+      }
+    },
     invalidate() {
       context.frameInvalidated = true
     },
     mainStage,
     shouldRender: () => {
       return (
-        context.renderMode.current === 'always' ||
-        (context.renderMode.current === 'on-demand' &&
+        renderMode === 'always' ||
+        (renderMode === 'on-demand' &&
           (context.frameInvalidated || context.autoInvalidations.size > 0)) ||
-        (context.renderMode.current === 'manual' && context.shouldAdvance)
+        (renderMode === 'manual' && context.shouldAdvance)
       )
     },
     renderStage: scheduler.createStage(Symbol('threlte-render-stage'), {
@@ -85,14 +109,9 @@ export const createSchedulerContext = (
   }
 
   $effect(() => {
-    context.autoRender.set(options.autoRender ?? true)
-  })
-  $effect(() => {
-    context.renderMode.set(options.renderMode ?? 'on-demand')
-  })
-
-  onDestroy(() => {
-    context.scheduler.dispose()
+    return () => {
+      context.scheduler.dispose()
+    }
   })
 
   setContext<SchedulerContext>('threlte-scheduler-context', context)

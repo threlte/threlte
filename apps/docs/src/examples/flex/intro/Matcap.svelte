@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { asyncWritable, isInstanceOf, T, useCache } from '@threlte/core'
+  import { asyncWritable, isInstanceOf, T } from '@threlte/core'
   import {
     createTransition,
     global,
@@ -10,15 +10,13 @@
   import { cubicIn, cubicOut } from 'svelte/easing'
   import { Spring } from 'svelte/motion'
 
-  const cache = useCache()
-
   const matcapsList = asyncWritable(
-    cache.remember(async () => {
+    (async () => {
       const matcapListResponse = await fetch(
         'https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/matcaps.json'
       )
       return (await matcapListResponse.json()) as Record<string, string>
-    }, ['matcaps'])
+    })()
   )
 
   interface Props {
@@ -35,7 +33,7 @@
   const scale = new Spring(0.9)
 
   $effect(() => {
-    scale.set($hovering ? 1 : 0.9)
+    scale.set(hovering.current ? 1 : 0.9)
   })
 
   const matcapRoot =

@@ -17,7 +17,7 @@
     }
   }>('/models/helmet/DamagedHelmet.gltf')
 
-  const helmetGeometry = $derived($helmetGltf?.nodes['node_damagedHelmet_-6514'].geometry)
+  const helmetGeometry = $derived(helmetGltf.current?.nodes['node_damagedHelmet_-6514'].geometry)
 
   const dracoLoader = useDraco()
   const suziGltf = useGltf<{
@@ -83,14 +83,14 @@
   {/if}
 </T.Group>
 
-{#if $suziGltf}
+{#await suziGltf then { nodes }}
   <T.Group
     rotation.y={rotation}
     position.x={3}
     position.y={-1}
   >
     <T.Mesh
-      geometry={$suziGltf.nodes['Suzanne'].geometry}
+      geometry={nodes['Suzanne'].geometry}
       scale={1.2}
     >
       <T.MeshStandardMaterial color="turquoise" />
@@ -102,4 +102,4 @@
       />
     </T.Mesh>
   </T.Group>
-{/if}
+{/await}

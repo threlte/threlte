@@ -8,15 +8,15 @@
   import { arenaHeight, playerHeight, playerToBorderDistance } from '../../config'
   import { game } from '../../Game.svelte'
   import { ballGeometry, ballMaterial } from './common'
-  import { onMount } from 'svelte'
 
-  type Props = {
+  interface Props {
     startAtPosX: number
   }
+
   let { startAtPosX }: Props = $props()
 
-  let posX = $state(0)
-  let rigidBody: RapierRigidBody | undefined = $state()
+  let posX = $derived(startAtPosX)
+  let rigidBody = $state.raw<RapierRigidBody>()
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
@@ -54,18 +54,18 @@
       z: rbTranslation?.z ?? 0
     }
   })
+
   $effect(() => {
-    if (rigidBody) game.ballRigidBody = rigidBody
-  })
-  onMount(() => {
-    posX = startAtPosX
+    if (rigidBody) {
+      game.ballRigidBody = rigidBody
+    }
   })
 </script>
 
 <T.Group position={[posX, 0, startAtPosZ]}>
   <RigidBody
     bind:rigidBody
-    type={'dynamic'}
+    type="dynamic"
     onsensorenter={onSensorEnter}
     enabledTranslations={[true, false, true]}
   >

@@ -33,8 +33,13 @@
   let angleZ = $state(0)
 
   const composer = new EffectComposer(renderer)
-  const renderPass = new RenderPass(scene, $camera)
-  const bloomPass = new UnrealBloomPass(new Vector2($size.width, $size.height), 0.275, 1, 0)
+  const renderPass = new RenderPass(scene, camera.current)
+  const bloomPass = new UnrealBloomPass(
+    new Vector2(size.current.width, size.current.height),
+    0.275,
+    1,
+    0
+  )
   const outputPass = new OutputPass()
 
   composer.addPass(renderPass)
@@ -42,12 +47,13 @@
   composer.addPass(outputPass)
 
   $effect(() => {
-    composer.setSize($size.width, $size.height)
-    bloomPass.resolution.set($size.width, $size.height)
+    composer.setSize(size.current.width, size.current.height)
+    composer.setPixelRatio(window.devicePixelRatio)
+    bloomPass.resolution.set(size.current.width, size.current.height)
   })
 
   $effect(() => {
-    renderPass.camera = $camera
+    renderPass.camera = camera.current
   })
 
   // Replaces the default render task, which does not execute because autoRender=false
@@ -112,7 +118,7 @@
     pointer.x = (event.clientX / window.innerWidth) * 2 - 1
     pointer.y = -(event.clientY / window.innerHeight) * 2 + 1
 
-    raycaster.setFromCamera(pointer, $camera)
+    raycaster.setFromCamera(pointer, camera.current)
     const intersects = raycaster.intersectObject(mesh)
     intersectionPoint = intersects[0]?.point
 

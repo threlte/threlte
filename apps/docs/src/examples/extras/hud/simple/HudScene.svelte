@@ -14,9 +14,9 @@
 
   let meshes: [Mesh, Mesh, Mesh] = [null!, null!, null!]
 
-  const boxCursor = useCursor('pointer')
-  const torusCursor = useCursor('pointer')
-  const torusKnotCursor = useCursor('pointer')
+  const boxCursor = useCursor()
+  const torusCursor = useCursor()
+  const torusKnotCursor = useCursor()
 
   interactivity()
 
@@ -53,10 +53,10 @@
   onpointerenter={boxCursor.onPointerEnter}
   onpointerleave={boxCursor.onPointerLeave}
   onclick={() => onselect('box')}
-  scale={$boxHovering ? 1.1 : 1}
+  scale={boxHovering.current ? 1.1 : 1}
 >
   <T.BoxGeometry args={[0.5, 0.5, 0.5]} />
-  <T.MeshToonMaterial color={$boxHovering ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={boxHovering.current ? 'hotpink' : 'gray'} />
 </T.Mesh>
 
 <T.Mesh
@@ -65,10 +65,10 @@
   onpointerenter={torusCursor.onPointerEnter}
   onpointerleave={torusCursor.onPointerLeave}
   onclick={() => onselect('torus')}
-  scale={$torusHovering ? 1.1 : 1}
+  scale={torusHovering.current ? 1.1 : 1}
 >
   <T.TorusGeometry args={[0.25, 0.1]} />
-  <T.MeshToonMaterial color={$torusHovering ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={torusHovering.current ? 'hotpink' : 'gray'} />
 </T.Mesh>
 
 <T.Mesh
@@ -77,8 +77,8 @@
   onpointerover={torusKnotCursor.onPointerEnter}
   onpointerleave={torusKnotCursor.onPointerLeave}
   onclick={() => onselect('torusknot')}
-  scale={$torusKnotHovering ? 1.1 : 1}
+  scale={torusKnotHovering.current ? 1.1 : 1}
 >
   <T.TorusKnotGeometry args={[0.215, 0.08, 256]} />
-  <T.MeshToonMaterial color={$torusKnotHovering ? 'hotpink' : 'gray'} />
+  <T.MeshToonMaterial color={torusKnotHovering.current ? 'hotpink' : 'gray'} />
 </T.Mesh>

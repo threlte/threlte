@@ -9,8 +9,8 @@
 
   const { size } = useThrelte()
 
-  const color = $derived($hovering ? '#dddddd' : '#FE3D00')
-  const zoom = $derived($size.width / 7)
+  const color = $derived(hovering.current ? '#dddddd' : '#FE3D00')
+  const zoom = $derived(size.current.width / 7)
 </script>
 
 <T.OrthographicCamera

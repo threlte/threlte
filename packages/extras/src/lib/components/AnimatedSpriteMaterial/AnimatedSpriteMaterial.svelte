@@ -1,13 +1,13 @@
 <script lang="ts">
   import {
-    asyncWritable,
-    type AsyncWritable,
     isInstanceOf,
     T,
     useLoader,
     useParent,
     useTask,
-    observe
+    observe,
+    type AsyncState,
+    asyncState
   } from '@threlte/core'
   import {
     DoubleSide,
@@ -21,7 +21,7 @@
     type Texture
   } from 'three'
   import { useTexture } from '../../hooks/useTexture.js'
-  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types.js'
 
   let {
@@ -81,7 +81,7 @@
   let spritesheetSize = { w: 0, h: 0 }
 
   let fpsInterval = $derived(1000 / fps)
-  let isMesh = $derived($parent !== undefined && isInstanceOf($parent, 'Mesh'))
+  let isMesh = $derived(parent.current !== undefined && isInstanceOf(parent.current, 'Mesh'))
 
   $effect.pre(() => {
     is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
@@ -102,7 +102,7 @@
     })
   )
 
-  const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = suspend(
+  const jsonStore: AsyncState<SpriteJsonHashData | undefined> = suspend(
     dataUrl
       ? useLoader(FileLoader).load(dataUrl, {
           transform: (file) => {
@@ -114,11 +114,9 @@
             }
           }
         })
-      : asyncWritable<SpriteJsonHashData>(
+      : asyncState<SpriteJsonHashData>(
           new Promise((resolve) => {
-            const unsub = textureStore.subscribe((value) => {
-              if (!value) return
-              unsub()
+            textureStore.then((value) => {
               resolve(createData(value))
             })
           })
@@ -276,7 +274,7 @@
   )
 
   observe.pre(
-    () => [textureStore, jsonStore],
+    () => [textureStore.current, jsonStore.current],
     ([nextTexture, nextJson]) => {
       if (nextTexture === undefined || nextJson === undefined) return
 

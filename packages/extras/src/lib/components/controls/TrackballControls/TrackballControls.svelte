@@ -38,19 +38,40 @@ by demand invalidate the frame loop.
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { useControlsContext } from '../useControlsContext.js'
   import type { TrackballControlsProps } from './types.js'
-  import type { Event } from 'three'
+  import type { Event, OrthographicCamera, PerspectiveCamera } from 'three'
 
-  let { onchange, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
+  let {
+    onchange,
+    ref = $bindable(),
+    camera: userCamera,
+    children,
+    ...props
+  }: TrackballControlsProps = $props()
 
+  const { dom, invalidate, size, camera: defaultCamera } = useThrelte()
   const parent = useParent()
-  const { dom, invalidate, size } = useThrelte()
 
-  if (!isInstanceOf($parent, 'Camera')) {
-    throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
-  }
+  const camera = $derived.by(() => {
+    if (userCamera) {
+      return userCamera
+    }
+
+    if (
+      isInstanceOf(parent.current, 'PerspectiveCamera') ||
+      isInstanceOf(parent.current, 'OrthographicCamera')
+    ) {
+      return parent.current
+    }
+
+    return defaultCamera.current as PerspectiveCamera | OrthographicCamera
+  })
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = $derived(new ThreeTrackballControls($parent))
+  // svelte-ignore state_referenced_locally
+  const controls = new ThreeTrackballControls(camera)
+  $effect.pre(() => {
+    controls.object = camera
+  })
 
   useTask(
     () => {
@@ -67,9 +88,9 @@ by demand invalidate the frame loop.
   })
 
   $effect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $size
-    controls.handleResize()
+    if (size.current.width && size.current.height) {
+      controls.handleResize()
+    }
   })
 
   const { trackballControls } = useControlsContext()

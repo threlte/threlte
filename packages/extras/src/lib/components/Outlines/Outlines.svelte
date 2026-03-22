@@ -8,12 +8,12 @@
     Mesh,
     ShaderMaterial,
     SkinnedMesh,
-    Vector2
+    Vector2,
+    Uniform
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
   import { fragmentShader, vertexShader } from './shaders.js'
   import type { OutlinesProps } from './types.js'
-  import { fromStore } from 'svelte/store'
 
   let {
     color = 'black',
@@ -34,11 +34,11 @@
   const { renderer } = useThrelte()
 
   const uniforms = {
-    screenspace: { value: screenspace },
-    color: { value: new Color(color) },
-    opacity: { value: opacity },
-    thickness: { value: thickness },
-    size: { value: new Vector2() }
+    screenspace: new Uniform(false),
+    color: new Uniform(new Color()),
+    opacity: new Uniform(1),
+    thickness: new Uniform(0.05),
+    size: new Uniform(new Vector2())
   }
 
   const group = new Group()
@@ -53,24 +53,24 @@
 
   const parent = useParent()
 
-  let parentMesh = fromStore(parent)
-
   let geometry = $derived.by(() => {
-    if (!isInstanceOf(parentMesh.current, 'Mesh')) return undefined
-    return toCreasedNormals(parentMesh.current.geometry, angle)
+    if (!isInstanceOf(parent.current, 'Mesh')) return undefined
+    return toCreasedNormals(parent.current.geometry, angle)
   })
 
-  let mesh: undefined | Mesh | SkinnedMesh | InstancedMesh = $derived.by(() => {
-    if (!isInstanceOf(parentMesh.current, 'Mesh')) return
-    if (isInstanceOf(parentMesh.current, 'SkinnedMesh')) {
+  let mesh = $derived.by<Mesh | SkinnedMesh | InstancedMesh | undefined>(() => {
+    if (!isInstanceOf(parent.current, 'Mesh')) return
+
+    if (isInstanceOf(parent.current, 'SkinnedMesh')) {
       const nextMesh = new SkinnedMesh()
-      nextMesh.bind(parentMesh.current.skeleton, parentMesh.current.bindMatrix)
+      nextMesh.bind(parent.current.skeleton, parent.current.bindMatrix)
       return nextMesh
-    } else if (isInstanceOf(parentMesh.current, 'InstancedMesh')) {
-      const nextMesh = new InstancedMesh(undefined, undefined, parentMesh.current.count)
-      nextMesh.instanceMatrix = parentMesh.current.instanceMatrix
+    } else if (isInstanceOf(parent.current, 'InstancedMesh')) {
+      const nextMesh = new InstancedMesh(undefined, undefined, parent.current.count)
+      nextMesh.instanceMatrix = parent.current.instanceMatrix
       return nextMesh
     }
+
     return new Mesh()
   })
 
