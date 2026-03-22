@@ -1,4 +1,3 @@
-import { currentWritable, observe } from '@threlte/core'
 import {
   createTeleportContext,
   useTeleportControls,
@@ -10,6 +9,7 @@ import { injectTeleportControlsPlugin } from './plugin.svelte.js'
 import { setHandContext } from './context.js'
 import { setupTeleportControls } from './setup.svelte.js'
 import { teleportState } from '../../internal/state.svelte.js'
+import type { Intersection } from 'three'
 
 let controlsCounter = 0
 
@@ -42,16 +42,48 @@ export const teleportControls = (
   const context = useTeleportControls()
 
   if (getHandContext(handedness) === undefined) {
-    const enabled = options?.enabled ?? true
+    let active = $state(false)
+    let enabled = $state(options?.enabled ?? true)
+    let hovered = $state<Intersection>()
 
     controlsCounter += enabled ? 1 : -1
 
     const ctx: HandContext = {
       hand: handedness,
-      active: currentWritable(false),
-      enabled: currentWritable(enabled),
-      hovered: currentWritable(undefined)
+      active: {
+        get current() {
+          return active
+        },
+        set current(value) {
+          active = value
+        }
+      },
+      enabled: {
+        get current() {
+          return enabled
+        },
+        set current(value) {
+          enabled = value
+        }
+      },
+      hovered: {
+        get current() {
+          return hovered
+        },
+        set current(value) {
+          hovered = value
+        }
+      }
     }
+
+    $effect.pre(() => {
+      controlsCounter += enabled ? 1 : -1
+      teleportState[handedness].enabled = controlsCounter > 0
+    })
+
+    $effect.pre(() => {
+      teleportState[handedness].hovering = active
+    })
 
     setHandContext(handedness, ctx)
 
@@ -59,21 +91,6 @@ export const teleportControls = (
   }
 
   const handContext = getHandContext(handedness)
-
-  observe.pre(
-    () => [handContext.enabled],
-    ([enabled]) => {
-      controlsCounter += enabled ? 1 : -1
-      teleportState[handedness].enabled = controlsCounter > 0
-    }
-  )
-
-  observe.pre(
-    () => [handContext.active],
-    ([hovering]) => {
-      teleportState[handedness].hovering = hovering
-    }
-  )
 
   return {
     enabled: handContext.enabled,

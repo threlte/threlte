@@ -1,8 +1,8 @@
+import { createParent } from '../components/T/utils/useParent.svelte.js'
+import { createParentObject3D } from '../components/T/utils/useParentObject3D.svelte.js'
 import { createCameraContext } from './fragments/camera.svelte.js'
 import { createDisposalContext } from './fragments/disposal.svelte.js'
 import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom.svelte.js'
-import { createParentContext } from './fragments/parent.js'
-import { createRootParentObject3DContext } from './fragments/parentObject3D.svelte.js'
 import {
   createRendererContext,
   type CreateRendererContextOptions,
@@ -24,11 +24,12 @@ export const createThrelteContext = <T extends Renderer>(
 ) => {
   const { scene } = createSceneContext()
 
+  createParent(() => scene)
+  createParentObject3D(() => scene)
+
   return {
     scene,
     ...createDOMContext(options),
-    ...createParentContext(() => scene),
-    ...createRootParentObject3DContext(() => scene),
     ...createDisposalContext(),
     ...createSchedulerContext(options),
     ...createCameraContext(),

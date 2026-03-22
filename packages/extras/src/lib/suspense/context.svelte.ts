@@ -22,13 +22,7 @@ export const createSuspenseContext = (options?: () => { final?: boolean }) => {
    */
   const errors = new SvelteMap<Promise<unknown>, Error>()
 
-  let finalized = $state(false)
-
-  const checkFinalized = () => {
-    if (promises.size === 0 && errors.size === 0) {
-      finalized = true
-    }
-  }
+  let finalized = $derived(promises.size === 0 && errors.size === 0)
 
   /**
    * A Suspense component is suspending its children if it has any pending
@@ -61,13 +55,11 @@ export const createSuspenseContext = (options?: () => { final?: boolean }) => {
         })
         .finally(() => {
           promises.delete(promise)
-          checkFinalized()
         })
     },
     onComponentDestroy(promise: Promise<unknown>) {
       promises.delete(promise)
       errors.delete(promise)
-      checkFinalized()
     },
     suspended: {
       get current() {

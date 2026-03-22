@@ -1,6 +1,6 @@
 <script lang="ts">
   import Surfaces from './Surfaces.svelte'
-  import { OrbitControls, Sky, useDraco, useGltf } from '@threlte/extras'
+  import { OrbitControls, Sky, Stars, useDraco, useGltf } from '@threlte/extras'
   import { PointLight } from 'three'
   import { SimplexNoise } from 'three/examples/jsm/Addons.js'
   import { T, useTask } from '@threlte/core'
@@ -28,7 +28,12 @@
     gltf.scene.traverse((node) => {
       node.castShadow = true
       node.receiveShadow = true
+
+      if (node.name.includes('teleport')) {
+        node.visible = false
+      }
     })
+
     torchX = gltf.nodes.Torch1.position.x
     torchZ = gltf.nodes.Torch1.position.z
 
@@ -89,12 +94,6 @@
   />
 {/await}
 
-<Sky
-  elevation={-3}
-  rayleigh={8}
-  azimuth={-90}
-/>
-
 <Surfaces
   {showSurfaces}
   {showBlockers}
@@ -113,4 +112,15 @@
   shadow.mapSize.width={1024}
   shadow.mapSize.height={1024}
   shadow.camera.far={10}
+/>
+
+<Sky
+  elevation={-1}
+  rayleigh={8}
+  azimuth={-90}
+/>
+
+<Stars
+  depth={100}
+  radius={100}
 />

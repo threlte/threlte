@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { BufferGeometry, Vector3, type Mesh } from 'three'
+  import { BufferGeometry, Vector3, Mesh } from 'three'
   import { T, useTask } from '@threlte/core'
   import { Text, interactivity } from '@threlte/extras'
   import { Spring } from 'svelte/motion'
@@ -14,7 +14,8 @@
   let text = $state('')
   let debug = $state(false)
   let happy = $state(false)
-  let ref = $state.raw<Mesh>()
+
+  const mesh = new Mesh()
 
   let lookAt = new Vector3()
   let point = new Vector3()
@@ -59,7 +60,7 @@
 
   useTask(() => {
     lookAt.lerp(point, happy ? 0.5 : 0.2)
-    ref?.lookAt(lookAt.x, lookAt.y, 1)
+    mesh.lookAt(lookAt.x, lookAt.y, 1)
   })
 
   interactivity()
@@ -112,10 +113,10 @@
 <T.Group
   position.y={1.5}
   position.z={-0.5}
-  scale={$isPresenting ? 0.1 : 1}
+  scale={isPresenting.current ? 0.1 : 1}
 >
-  <T.Mesh
-    bind:ref
+  <T
+    is={mesh}
     onclick={handleEvent('click')}
     onpointerdown={handleEvent('pointerdown')}
     onpointerup={handleEvent('pointerup')}
@@ -169,5 +170,5 @@
       <T.MeshStandardMaterial color="#444" />
       <T.CylinderGeometry args={[0.15, 0.15, 0.1]} />
     </T.Mesh>
-  </T.Mesh>
+  </T>
 </T.Group>

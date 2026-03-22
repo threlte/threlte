@@ -14,7 +14,7 @@
   let volume = $state(0)
 
   $effect.pre(() => {
-    if ($isPresenting) turntable?.toggle()
+    if (isPresenting.current) turntable?.toggle()
   })
 </script>
 

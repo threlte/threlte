@@ -49,6 +49,7 @@ export function useGltf<
       ) => AsyncState<ThrelteGltf<Graph>>
     } {
   const opts = typeof urlOrOptions === 'string' ? options : urlOrOptions
+
   const loader = useLoader(GLTFLoader, {
     extend(loader) {
       if (opts?.dracoLoader) {

@@ -25,7 +25,7 @@
 
 <div>
   <Canvas>
-    <World>
+    <World gravity={[0, 0, 0]}>
       <Suspense>
         <Scene
           {controls}

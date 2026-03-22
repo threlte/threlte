@@ -42,11 +42,11 @@ export { createThrelteContext } from './context/createThrelteContext.svelte.js'
 export { createCameraContext, useCamera } from './context/fragments/camera.svelte.js'
 export { createDOMContext, useDOM } from './context/fragments/dom.svelte.js'
 export { createDisposalContext, useDisposal } from './context/fragments/disposal.svelte.js'
-export { createParentContext, useParent } from './context/fragments/parent.js'
+export { createParent, useParent } from './components/T/utils/useParent.svelte.js'
 export {
-  createParentObject3DContext,
+  createParentObject3D,
   useParentObject3D
-} from './context/fragments/parentObject3D.svelte.js'
+} from './components/T/utils/useParentObject3D.svelte.js'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte.js'
 export { createSceneContext, useScene } from './context/fragments/scene.js'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte.js'

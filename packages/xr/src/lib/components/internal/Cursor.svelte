@@ -1,5 +1,12 @@
+<script
+  module
+  lang="ts"
+>
+  const DEFAULT_COLOR = new Color('white')
+</script>
+
 <script lang="ts">
-  import { Color, DoubleSide, RawShaderMaterial, type ColorRepresentation } from 'three'
+  import { Color, DoubleSide, RawShaderMaterial, Uniform, type ColorRepresentation } from 'three'
   import { T } from '@threlte/core'
 
   interface Props {
@@ -8,7 +15,14 @@
     thickness?: number
   }
 
-  const { color = new Color('white'), size = 0.03, thickness = 0.035 }: Props = $props()
+  const DEFAULT_SIZE = 0.03
+  const DEFAULT_THICKNESS = 0.035
+
+  const {
+    color = DEFAULT_COLOR,
+    size = DEFAULT_SIZE,
+    thickness = DEFAULT_THICKNESS
+  }: Props = $props()
 
   const vertexShader = `
     uniform mat4 projectionMatrix;
@@ -36,8 +50,8 @@
   `
 
   const uniforms = {
-    thickness: { value: thickness },
-    color: { value: color }
+    thickness: new Uniform(DEFAULT_THICKNESS),
+    color: new Uniform(DEFAULT_COLOR)
   }
 
   const shaderMaterial = new RawShaderMaterial({
@@ -54,7 +68,7 @@
   })
 
   $effect.pre(() => {
-    uniforms.color.value = color
+    uniforms.color.value.set(color)
   })
 </script>
 

@@ -19,24 +19,23 @@
   import type { EquirectangularEnvironmentProps } from './types.js'
   import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js'
 
-  const ctx = useThrelte()
-
   let {
     skybox = $bindable(),
     texture = $bindable(),
     ground = false,
     isBackground = false,
-    scene = ctx.scene,
+    scene,
     url
   }: EquirectangularEnvironmentProps = $props()
 
+  const { scene: defaultScene } = useThrelte()
   const suspend = useSuspense()
 
-  useEnvironment(() => ({
-    scene,
-    isBackground,
-    texture
-  }))
+  useEnvironment(
+    () => scene ?? defaultScene,
+    () => texture,
+    () => isBackground
+  )
 
   // defaults to `TextureLoader` if `url` is not provided
   const loader = $derived.by(() => {
@@ -54,7 +53,7 @@
     return loaders.tex
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     if (url === undefined || loader === undefined) {
       return
     }

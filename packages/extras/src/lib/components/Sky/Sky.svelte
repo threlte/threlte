@@ -1,5 +1,6 @@
 <script lang="ts">
   import { observe, T, useTask, useThrelte } from '@threlte/core'
+  import { CubeEnvironment } from '../../index.js'
   import {
     CubeCamera,
     HalfFloatType,
@@ -33,32 +34,19 @@
 
   const { uniforms } = sky.material
 
-  const { renderer, scene, invalidate } = useThrelte()
+  const { renderer, invalidate } = useThrelte()
 
-  let renderTarget = $state.raw<WebGLCubeRenderTarget>()
-  let cubeCamera: CubeCamera | undefined
-
-  const init = () => {
-    renderTarget = new WebGLCubeRenderTarget(cubeMapSize, {
-      type: HalfFloatType,
-      generateMipmaps: true,
-      minFilter: LinearMipmapLinearFilter,
-      ...webGLRenderTargetOptions
-    })
-    cubeCamera = new CubeCamera(1, 1.1, renderTarget)
-  }
-
-  const originalEnvironment = scene.environment
-
-  $effect.pre(() => {
-    if (setEnvironment && renderTarget) {
-      scene.environment = renderTarget.texture
-      invalidate()
-    } else if (!setEnvironment) {
-      scene.environment = originalEnvironment
-      invalidate()
-    }
-  })
+  let renderTarget = $derived(
+    setEnvironment
+      ? new WebGLCubeRenderTarget(cubeMapSize, {
+          type: HalfFloatType,
+          generateMipmaps: true,
+          minFilter: LinearMipmapLinearFilter,
+          ...webGLRenderTargetOptions
+        })
+      : undefined
+  )
+  let cubeCamera = $derived(renderTarget ? new CubeCamera(1, 1.1, renderTarget) : undefined)
 
   let running = $state(false)
 
@@ -78,7 +66,6 @@
       uniforms.sunPosition.value.copy(sunPosition)
 
       if (setEnvironment) {
-        if (!renderTarget || !cubeCamera) init()
         cubeCamera?.update(renderer, sky)
       }
 
@@ -92,7 +79,18 @@
   )
 
   observe.pre(
-    () => [scale, turbidity, rayleigh, mieCoefficient, mieDirectionalG, elevation, azimuth],
+    () => [
+      scale,
+      turbidity,
+      rayleigh,
+      mieCoefficient,
+      mieDirectionalG,
+      elevation,
+      azimuth,
+      setEnvironment,
+      cubeMapSize,
+      webGLRenderTargetOptions
+    ],
     () => {
       running = true
     }
@@ -101,7 +99,6 @@
   $effect(() => {
     return () => {
       sky.material.dispose()
-      scene.environment = originalEnvironment
 
       try {
         renderTarget?.dispose()
@@ -119,3 +116,7 @@
 >
   {@render children?.({ ref: sky, sunPosition, renderTarget })}
 </T>
+
+{#if setEnvironment}
+  <CubeEnvironment texture={renderTarget?.texture} />
+{/if}

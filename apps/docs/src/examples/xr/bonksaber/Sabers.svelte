@@ -10,27 +10,24 @@
 
   let rigidBodyLeft = $state.raw<RapierRigidBody>()
   let rigidBodyRight = $state.raw<RapierRigidBody>()
-  let leftSaber = $state.raw<Group>()
-  let rightSaber = $state.raw<Group>()
-  let leftHandSaber = $state.raw<Group>()
-  let rightHandSaber = $state.raw<Group>()
 
-  const left = $derived($isHandTracking ? leftHandSaber : leftSaber)
-  const right = $derived($isHandTracking ? rightHandSaber : rightSaber)
+  const leftSaber = new Group()
+  const rightSaber = new Group()
+  const leftHandSaber = new Group()
+  const rightHandSaber = new Group()
+
+  const left = $derived(isHandTracking.current ? leftHandSaber : leftSaber)
+  const right = $derived(isHandTracking.current ? rightHandSaber : rightSaber)
 
   const vec3 = new Vector3()
   const quaternion = new Quaternion()
 
   useTask(() => {
-    if (left) {
-      rigidBodyLeft?.setTranslation(left.getWorldPosition(vec3), true)
-      rigidBodyLeft?.setRotation(left.getWorldQuaternion(quaternion), true)
-    }
+    rigidBodyLeft?.setTranslation(left.getWorldPosition(vec3), true)
+    rigidBodyLeft?.setRotation(left.getWorldQuaternion(quaternion), true)
 
-    if (right) {
-      rigidBodyRight?.setTranslation(right.getWorldPosition(vec3), true)
-      rigidBodyRight?.setRotation(right.getWorldQuaternion(quaternion), true)
-    }
+    rigidBodyRight?.setTranslation(right.getWorldPosition(vec3), true)
+    rigidBodyRight?.setRotation(right.getWorldQuaternion(quaternion), true)
   })
 
   const saberRadius = 0.02
@@ -64,46 +61,46 @@
 {/snippet}
 
 <Controller left>
-  <T.Group
+  <T
+    is={leftSaber}
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    bind:ref={leftSaber}
   >
     {@render saber()}
-  </T.Group>
+  </T>
 </Controller>
 
 <Controller right>
-  <T.Group
+  <T
+    is={rightSaber}
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    bind:ref={rightSaber}
   >
     {@render saber()}
-  </T.Group>
+  </T>
 </Controller>
 
 <Hand left>
   {#snippet wrist()}
-    <T.Group
+    <T
+      is={leftHandSaber}
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      bind:ref={leftHandSaber}
     >
       {@render saber()}
-    </T.Group>
+    </T>
   {/snippet}
 </Hand>
 
 <Hand right>
   {#snippet wrist()}
-    <T.Group
+    <T
+      is={rightHandSaber}
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      bind:ref={rightHandSaber}
     >
       {@render saber()}
-    </T.Group>
+    </T>
   {/snippet}
 </Hand>
 

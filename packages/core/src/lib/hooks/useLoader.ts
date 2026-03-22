@@ -108,22 +108,12 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   Proto: Proto,
   options?: UseLoaderOptions<Proto>
 ): ThrelteUseLoader<InstanceType<Proto>> {
-  let loader: InstanceType<Proto> | undefined
-
-  const initializeLoader = (): InstanceType<Proto> => {
-    // Type-wrestling galore
-    const lazyLoader = new Proto(...(((options as any)?.args as []) ?? [])) as InstanceType<Proto>
-    // extend the loader if necessary
-    options?.extend?.(lazyLoader)
-    return lazyLoader
-  }
+  const loader = new Proto(...(options?.args ?? [])) as InstanceType<Proto>
+  options?.extend?.(loader)
 
   const load: ThrelteUseLoader<InstanceType<Proto>>['load'] = (input, options) => {
     // Allow Async and Sync loaders
     const loadResource = async (url: string) => {
-      if (!loader) {
-        loader = initializeLoader()
-      }
       if ('loadAsync' in loader) {
         const result = await loader.loadAsync(url, options?.onProgress)
         return options?.transform?.(result) ?? result
@@ -132,7 +122,7 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
           ;(loader as SyncLoader).load(
             url,
             (data) => resolve(options?.transform?.(data) ?? data),
-            (event) => options?.onProgress?.(event),
+            options?.onProgress,
             reject
           )
         })
@@ -144,26 +134,24 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
       const promises = input.map((url) => loadResource(url))
 
       // return an AsyncState that resolves to the array of promises
-      const store = asyncState(Promise.all(promises))
-      return store as any // TODO: Dirty escape hatch
+      return asyncState(Promise.all(promises)) as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
       const promise = loadResource(input)
 
       // return an AsyncState that resolves to the promise
-      const store = asyncState(promise)
-      return store as any // TODO: Dirty escape hatch
+      return asyncState(promise) as any // TODO: Dirty escape hatch
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
         return loadResource(url)
       })
       // return an AsyncState that resolves to the object of promises
-      const store = asyncState(
+
+      return asyncState(
         Promise.all(promises).then((results) => {
           return Object.fromEntries(Object.entries(input).map(([key], i) => [key, results[i]]))
         })
-      )
-      return store as any // TODO: Dirty escape hatch
+      ) as any // TODO: Dirty escape hatch
     }
   }
 

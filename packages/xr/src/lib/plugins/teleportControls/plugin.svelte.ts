@@ -1,45 +1,28 @@
 import { injectPlugin, isInstanceOf } from '@threlte/core'
 import { useTeleportControls } from './context.js'
-import type { Mesh } from 'three'
 
 /**
  * Registers T components with "teleportSurface" or "teleportBlocker" attributes.
  */
 export const injectTeleportControlsPlugin = (): void => {
-  injectPlugin('threlte-teleport-controls-surfaces', (args) => {
+  injectPlugin('threlte-teleport-controls', (args) => {
     if (!isInstanceOf(args.ref, 'Mesh')) return
     if (!('teleportSurface' in args.props)) return
-
-    let ref = $state<Mesh | undefined>(args.ref)
-    let isSurface = $state<boolean>(args.props.teleportSurface)
 
     const { addSurface, removeSurface } = useTeleportControls()
 
     $effect(() => {
-      if (!ref) return
+      const { ref } = args
 
-      const mesh = ref
-
-      if (isSurface) {
-        addSurface(mesh, args.props)
-      } else {
-        removeSurface(mesh)
+      if (args.props.isSurface) {
+        addSurface(ref, args.props)
       }
 
-      return () => removeSurface(mesh)
+      return () => removeSurface(ref)
     })
 
     return {
-      pluginProps: ['teleportSurface'],
-      onRefChange: (nextRef: Mesh) => {
-        ref = nextRef
-        return () => {
-          ref = undefined
-        }
-      },
-      onPropsChange: (props: { teleportSurface: boolean }) => {
-        isSurface = props.teleportSurface
-      }
+      pluginProps: ['teleportSurface']
     }
   })
 
@@ -47,36 +30,20 @@ export const injectTeleportControlsPlugin = (): void => {
     if (!isInstanceOf(args.ref, 'Mesh')) return
     if (!('teleportBlocker' in args.props)) return
 
-    let ref = $state<Mesh | undefined>(args.ref)
-    let isBlocker = $state<boolean>(args.props.teleportBlocker)
-
     const { addBlocker, removeBlocker } = useTeleportControls()
 
     $effect(() => {
-      if (!ref) return
+      const { ref } = args
 
-      const mesh = ref
-
-      if (isBlocker) {
-        addBlocker(mesh)
-      } else {
-        removeBlocker(mesh)
+      if (args.props.isBlocker) {
+        addBlocker(ref)
       }
 
-      return () => removeBlocker(mesh)
+      return () => removeBlocker(ref)
     })
 
     return {
-      pluginProps: ['teleportBlocker'],
-      onRefChange: (nextRef: Mesh) => {
-        ref = nextRef
-        return () => {
-          ref = undefined
-        }
-      },
-      onPropsChange: (props: { teleportBlocker: boolean }) => {
-        isBlocker = props.teleportBlocker
-      }
+      pluginProps: ['teleportBlocker']
     }
   })
 }

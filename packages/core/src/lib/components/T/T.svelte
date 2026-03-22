@@ -12,6 +12,8 @@
   import { determineRef } from './utils/utils.js'
   import { isInstanceOf } from '../../utilities/index.js'
   import { untrack } from 'svelte'
+  import { createParent } from './utils/useParent.svelte.js'
+  import { createParentObject3D } from './utils/useParentObject3D.svelte.js'
 
   let {
     is = useIs<Type>(),
@@ -30,6 +32,15 @@
    * When "is" or "args" change, we need to create a new ref.
    */
   const internalRef = $derived(determineRef<Type>(is, args))
+
+  // Attachment
+  useAttach<Type>(
+    () => internalRef,
+    () => attach
+  )
+
+  createParent(() => internalRef)
+  createParentObject3D(() => (isInstanceOf(internalRef, 'Object3D') ? internalRef : undefined))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
@@ -62,12 +73,6 @@
     () => internalRef,
     () => props,
     () => plugins?.pluginsProps
-  )
-
-  // Attachment
-  useAttach<Type>(
-    () => internalRef,
-    () => attach
   )
 
   // Camera management

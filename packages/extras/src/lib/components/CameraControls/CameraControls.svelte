@@ -67,13 +67,8 @@
 
     return defaultCamera.current as PerspectiveCamera
   })
-  $inspect(camera)
 
-  // svelte-ignore state_referenced_locally
-  const controls = new CameraControls(camera, dom)
-  $effect.pre(() => {
-    controls.camera = camera
-  })
+  const controls = $derived(new CameraControls(camera, dom))
 
   useTask(
     (delta) => {

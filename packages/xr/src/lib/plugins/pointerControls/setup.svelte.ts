@@ -7,7 +7,7 @@ import type {
   IntersectionEvent,
   events
 } from './types.js'
-import { getInternalContext } from './context.js'
+import { getInternalContext } from './context.svelte.js'
 import { controllers } from '../../hooks/useController.svelte.js'
 import { useHand } from '../../hooks/useHand.svelte.js'
 import { useFixed } from '../../internal/useFixed.js'
@@ -87,7 +87,7 @@ export const setupPointerControls = (
           events.onpointerleave?.(data)
 
           // Deal with cancelation
-          handContext.pointerOverTarget.set(false)
+          handContext.pointerOverTarget.current = false
           cancelPointer([])
         }
       }
@@ -171,7 +171,7 @@ export const setupPointerControls = (
 
       if (isPointerMove) {
         // Move event ...
-        handContext.pointer.update((value) => value.copy(intersectionEvent.point))
+        handContext.pointer.current = intersectionEvent.point
 
         if (
           events.onpointerover ||
@@ -187,7 +187,7 @@ export const setupPointerControls = (
             events.onpointerover?.(intersectionEvent)
 
             events.onpointerenter?.(intersectionEvent)
-            handContext.pointerOverTarget.set(true)
+            handContext.pointerOverTarget.current = true
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
             intersectionEvent.stopPropagation()
@@ -219,7 +219,7 @@ export const setupPointerControls = (
     }
   }
 
-  const { start, stop } = useFixed(
+  useFixed(
     () => {
       hits = processHits()
 
@@ -235,7 +235,7 @@ export const setupPointerControls = (
     },
     {
       fixedStep,
-      autoStart: false
+      running: () => isPresenting.current && handContext.enabled.current
     }
   )
 
@@ -263,38 +263,20 @@ export const setupPointerControls = (
     }
   )
 
-  observe.pre(
-    () => [hand, handContext.enabled],
-    ([input, enabled]) => {
-      if (input === undefined) return
+  $effect(() => {
+    const currentHand = hand.current
+    if (currentHand === undefined) return
 
-      const removeHandlers = () => {
-        input.hand.removeEventListener('pinchstart', handlePointerDown)
-        input.hand.removeEventListener('pinchend', handlePointerUp)
-        input.hand.removeEventListener('pinchend', handleClick)
-      }
-
-      if (enabled) {
-        input.hand.addEventListener('pinchstart', handlePointerDown)
-        input.hand.addEventListener('pinchend', handlePointerUp)
-        input.hand.addEventListener('pinchend', handleClick)
-
-        return removeHandlers
-      } else {
-        removeHandlers()
-        return
-      }
+    if (handContext.enabled.current) {
+      currentHand.hand.addEventListener('pinchstart', handlePointerDown)
+      currentHand.hand.addEventListener('pinchend', handlePointerUp)
+      currentHand.hand.addEventListener('pinchend', handleClick)
     }
-  )
 
-  observe.pre(
-    () => [isPresenting.current, handContext.enabled],
-    ([isPresenting, $enabled]) => {
-      if (isPresenting && $enabled) {
-        start()
-      } else {
-        stop()
-      }
+    return () => {
+      currentHand.hand.removeEventListener('pinchstart', handlePointerDown)
+      currentHand.hand.removeEventListener('pinchend', handlePointerUp)
+      currentHand.hand.removeEventListener('pinchend', handleClick)
     }
-  )
+  })
 }

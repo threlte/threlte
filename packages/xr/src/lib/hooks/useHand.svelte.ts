@@ -1,5 +1,4 @@
 import type { XRHandObject } from '../types.js'
-import { toCurrentReadable, type CurrentReadable } from './currentReadable.svelte.js'
 
 class Hands {
   left = $state.raw<XRHandObject>()
@@ -13,12 +12,20 @@ export const hands = new Hands()
  */
 export const useHand = (
   handedness: 'left' | 'right'
-): CurrentReadable<undefined | XRHandObject> => {
+): { readonly current: XRHandObject | undefined } => {
   switch (handedness) {
     case 'left':
-      return toCurrentReadable(() => hands.left)
+      return {
+        get current() {
+          return hands.left
+        }
+      }
     case 'right':
-      return toCurrentReadable(() => hands.right)
+      return {
+        get current() {
+          return hands.right
+        }
+      }
     default:
       throw new Error('useHand handedness must be left or right.')
   }

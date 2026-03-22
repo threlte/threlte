@@ -1,5 +1,4 @@
-import { Raycaster, Vector3 } from 'three'
-import { currentWritable, observe } from '@threlte/core'
+import { Raycaster } from 'three'
 import { defaultComputeFunction, type ComputeFunction } from './compute.js'
 import { injectPointerControlsPlugin } from './plugin.svelte.js'
 import { setupPointerControls } from './setup.svelte.js'
@@ -9,11 +8,8 @@ import {
   setControlsContext,
   setHandContext,
   setInternalContext
-} from './context.js'
-import type { FilterFunction, HandContext } from './types.js'
-import { pointerState } from '../../internal/state.svelte.js'
-
-let controlsCounter = 0
+} from './context.svelte.js'
+import type { FilterFunction } from './types.js'
 
 export type PointerControlsOptions = {
   enabled?: boolean
@@ -55,40 +51,12 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
   const context = getControlsContext()
 
   if (getHandContext(handedness) === undefined) {
-    const enabled = options?.enabled ?? true
+    const handContext = setHandContext(handedness, () => options?.enabled ?? true)
 
-    const ctx: HandContext = {
-      hand: handedness,
-      enabled: currentWritable(enabled),
-      pointer: currentWritable(new Vector3()),
-      pointerOverTarget: currentWritable(false),
-      lastEvent: undefined,
-      initialClick: [0, 0, 0],
-      initialHits: [],
-      hovered: new Map()
-    }
-
-    setHandContext(handedness, ctx)
-
-    setupPointerControls(context, ctx, options?.fixedStep)
+    setupPointerControls(context, handContext, options?.fixedStep)
   }
 
   const handContext = getHandContext(handedness)
-
-  observe.pre(
-    () => [handContext.enabled],
-    ([enabled]) => {
-      controlsCounter += enabled ? 1 : -1
-      pointerState[handedness].enabled = controlsCounter > 0
-    }
-  )
-
-  observe.pre(
-    () => [handContext.pointerOverTarget],
-    ([hovering]) => {
-      pointerState[handedness].hovering = hovering
-    }
-  )
 
   return {
     enabled: handContext.enabled,

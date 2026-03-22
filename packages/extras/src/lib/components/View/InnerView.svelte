@@ -2,8 +2,8 @@
   import {
     createCameraContext,
     createDOMContext,
-    createParentContext,
-    createParentObject3DContext,
+    createParent,
+    createParentObject3D,
     createSceneContext,
     createUserContext,
     useTask,
@@ -19,10 +19,12 @@
 
   const parentContext = useThrelte()
 
+  createParent(() => scene)
+  createParentObject3D(() => scene)
+
   createDOMContext({ dom, canvas: parentContext.canvas })
   const { scene } = createSceneContext()
-  createParentContext(() => scene)
-  createParentObject3DContext(() => scene)
+
   const { camera } = createCameraContext()
   createUserContext()
 
@@ -35,8 +37,6 @@
   useTask(
     Symbol('<View>'),
     () => {
-      if (offscreenObserver.isOffscreen) return
-
       const { left: trackLeft, bottom: trackBottom, width, height } = dom.getBoundingClientRect()
       const { bottom: canvasBottom, left: canvasLeft } = canvas.getBoundingClientRect()
       const bottom = canvasBottom - trackBottom

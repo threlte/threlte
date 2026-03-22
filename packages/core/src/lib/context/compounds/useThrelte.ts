@@ -28,6 +28,7 @@ export type ThrelteContext<T extends Renderer> = {
   }
   camera: {
     current: PerspectiveCamera | OrthographicCamera
+    set(value: PerspectiveCamera | OrthographicCamera): void
   }
   scene: Scene
   dpr: {

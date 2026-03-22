@@ -16,32 +16,27 @@
   import { useEnvironment } from '../utils/useEnvironment.svelte.js'
   import type { CubeEnvironmentProps } from './types.js'
 
-  const ctx = useThrelte()
+  let { isBackground = false, scene, texture = $bindable(), urls }: CubeEnvironmentProps = $props()
 
-  let {
-    isBackground = false,
-    scene = ctx.scene,
-    texture = $bindable(),
-    urls
-  }: CubeEnvironmentProps = $props()
-
+  const { scene: defaultScene } = useThrelte()
   const suspend = useSuspense()
 
-  useEnvironment(() => ({
-    scene,
-    isBackground,
-    texture
-  }))
+  useEnvironment(
+    () => scene ?? defaultScene,
+    () => texture,
+    () => isBackground
+  )
 
-  const first = $derived(urls?.[0])
-  const firstIsHDR = $derived(first?.endsWith('hdr') ?? false)
+  const isHDR = $derived(urls?.[0]?.endsWith('hdr') ?? false)
 
   const loader = $derived.by(() => {
     if (urls === undefined) return
-    if (firstIsHDR) {
+
+    if (isHDR) {
       loaders.hdr ??= new HDRCubeTextureLoader()
       return loaders.hdr
     }
+
     loaders.tex ??= new CubeTextureLoader()
     return loaders.tex
   })

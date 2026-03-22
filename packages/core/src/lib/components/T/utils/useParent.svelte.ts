@@ -2,22 +2,24 @@ import { getContext, setContext } from 'svelte'
 
 const parentContextKey = Symbol('threlte-parent-context')
 
-type ParentContext = { current: unknown }
+interface Context {
+  current: unknown
+}
 
 /**
  * The parent context is used to access the parent object created by a `<T>`
  * component.
  */
-export const createParentContext = <T>(parent?: () => T) => {
-  const ctx: ParentContext = {
+export const createParent = <T>(parent: () => T) => {
+  const context: Context = {
     get current() {
-      return parent?.()
+      return parent()
     }
   }
 
-  setContext(parentContextKey, ctx)
+  setContext(parentContextKey, context)
 
-  return ctx
+  return context
 }
 
 /**
@@ -35,6 +37,6 @@ export const createParentContext = <T>(parent?: () => T) => {
  * will be the mesh created by the `<T.Mesh>` component.
  */
 export const useParent = () => {
-  const parent = getContext<ParentContext>(parentContextKey)
+  const parent = getContext<Context>(parentContextKey)
   return parent
 }

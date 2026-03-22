@@ -34,13 +34,13 @@ export const useCamera = (
     const current = camera()
 
     defaultCameras.add(current)
-    defaultCamera.current = current
+    defaultCamera.set(current)
     invalidate()
 
     return () => {
       defaultCameras.delete(current)
       if (defaultCameras.size === 0) {
-        defaultCamera.current = defaultCamera.current
+        defaultCamera.set(undefined!)
         invalidate()
       }
     }

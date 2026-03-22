@@ -14,9 +14,7 @@
 
 <script lang="ts">
   import { useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
-  import { Quaternion, Vector3 } from 'three'
-  import { clamp } from 'three/src/math/MathUtils.js'
+  import { Quaternion, Vector3, MathUtils } from 'three'
 
   const { dom, camera } = useThrelte()
 
@@ -51,7 +49,7 @@
         e.preventDefault()
         e.stopPropagation()
         e.stopImmediatePropagation()
-        zoomedFov.set(clamp(zoomedFov.current + e.deltaY * 0.05, 0.5, baseFov * 0.5))
+        zoomedFov.set(MathUtils.clamp(zoomedFov.current + e.deltaY * 0.05, 0.5, baseFov * 0.5))
       }
     },
     {
@@ -59,7 +57,7 @@
     }
   )
 
-  let mouseSensitivity = $derived(0.00008 * clamp(zoomedFov.current * 0.5, 1, 20))
+  let mouseSensitivity = $derived(0.00008 * MathUtils.clamp(zoomedFov.current * 0.5, 1, 20))
 
   let phi = $state(0)
   let theta = $state(-0.16)
@@ -78,8 +76,10 @@
     camera.current.quaternion.copy(cameraQuaternion)
   })
 
-  onDestroy(() => {
-    document.exitPointerLock()
+  $effect(() => {
+    return () => {
+      document.exitPointerLock()
+    }
   })
 
   $effect(() => {

@@ -3,7 +3,7 @@
   import { useInteractivity, OrbitControls } from '@threlte/extras'
   import { cubicInOut } from 'svelte/easing'
   import { Spring, Tween } from 'svelte/motion'
-  import { Color, Object3D, PerspectiveCamera, Scene } from 'three'
+  import { Color, Object3D, PerspectiveCamera } from 'three'
   import { game } from '../game/Game.svelte'
   import Lights from './Lights.svelte'
   import Machine from './Machine.svelte'
@@ -161,7 +161,7 @@
 />
 
 <T.Scene
-  oncreate={(ref: Scene) => {
+  oncreate={(ref) => {
     game.arcadeMachineScene = ref
   }}
   background={new Color(0x020203)}

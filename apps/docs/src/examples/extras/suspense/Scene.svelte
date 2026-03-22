@@ -1,13 +1,10 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { Suspense, Text } from '@threlte/extras'
-  import { Color } from 'three'
   import Spaceship from './Spaceship.svelte'
   import StarsEmitter from './StarsEmitter.svelte'
 
-  const { size, scene } = useThrelte()
-
-  scene.background = new Color('black')
+  const { size } = useThrelte()
 
   let zoom = $derived(size.current.width / 50)
 </script>

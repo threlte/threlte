@@ -7,7 +7,8 @@
     Points,
     ShaderMaterial,
     Spherical,
-    Vector3
+    Vector3,
+    Uniform
   } from 'three'
   import { T, useTask } from '@threlte/core'
   import type { StarsProps } from './types.js'
@@ -77,9 +78,9 @@
   )
 
   const uniforms = {
-    time: { value: 0 },
-    fade: { value: 1 },
-    opacity: { value: 1 }
+    time: new Uniform(0),
+    fade: new Uniform(1),
+    opacity: new Uniform(1)
   }
 
   const material = new ShaderMaterial({

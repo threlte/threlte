@@ -15,8 +15,10 @@
 
   const geometry = $derived.by(() => {
     if (!isInstanceOf(parent.current, 'Mesh')) {
-      throw new Error('Edges: component must be a child of a Mesh')
+      console.error('Edges: component must be a child of a Mesh')
+      return
     }
+
     return parent.current.geometry
   })
 

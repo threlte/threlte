@@ -4,8 +4,6 @@
   import { useCubeCamera } from '../../../hooks/useCubeCamera.svelte.js'
   import { useEnvironment } from '../utils/useEnvironment.svelte.js'
 
-  const ctx = useThrelte()
-
   let {
     far = 1000,
     frames = Infinity,
@@ -14,10 +12,12 @@
     onupdatestart,
     onupdatestop,
     resolution = 256,
-    scene: parentScene = ctx.scene,
+    scene: parentScene,
     visible,
     children
   }: VirtualEnvironmentProps = $props()
+
+  const { renderer, scene: defaultParentScene } = useThrelte()
 
   // Create a parent scene to render the virtual environment into
   const { scene } = createSceneContext()
@@ -28,14 +28,14 @@
     () => resolution
   )
 
-  useEnvironment(() => ({
-    texture: renderTarget.texture,
-    scene: parentScene,
-    isBackground
-  }))
+  useEnvironment(
+    () => parentScene ?? defaultParentScene,
+    () => renderTarget.texture,
+    () => isBackground
+  )
 
   export const update = () => {
-    camera.update(ctx.renderer, scene)
+    camera.update(renderer, scene)
   }
 
   let running = $state(false)

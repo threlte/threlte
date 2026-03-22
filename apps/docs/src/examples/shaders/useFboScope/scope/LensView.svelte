@@ -66,7 +66,7 @@
         value: 1
       }
     }}
-    uniforms.reticleTexture.value={$reticleTexture}
+    uniforms.reticleTexture.value={reticleTexture.current}
     uniforms.aspect.value={aspect}
   />
 </T.Mesh>

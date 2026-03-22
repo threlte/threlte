@@ -14,7 +14,7 @@ export { handJoints } from './lib/handJoints.js'
 
 // Plugins
 export { pointerControls } from './plugins/pointerControls/index.js'
-export { teleportControls } from './plugins/teleportControls/index.js'
+export { teleportControls } from './plugins/teleportControls/index.svelte.js'
 
 // Hooks
 export { useController } from './hooks/useController.svelte.js'

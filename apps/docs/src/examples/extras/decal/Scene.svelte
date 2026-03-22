@@ -1,16 +1,14 @@
 <script lang="ts">
-  import { type Vector3Tuple, DoubleSide } from 'three'
+  import { type Vector3Tuple, DoubleSide, Quaternion, Vector3 } from 'three'
   import { T } from '@threlte/core'
   import {
     Decal,
     TransformControls,
     useTexture,
-    OrbitControls,
     VirtualEnvironment,
     useSuspense
   } from '@threlte/extras'
-  import { RigidBody as RigidBodyRef } from '@dimforge/rapier3d-compat'
-  import { Collider, RigidBody } from '@threlte/rapier'
+  import { Attractor, Collider, RigidBody } from '@threlte/rapier'
 
   let { controls = false, debug = false } = $props()
 
@@ -18,40 +16,23 @@
   const svelteIcon = suspend(useTexture('/icons/svelte.png'))
   const threlteIcon = suspend(useTexture('/icons/mstile-150x150.png'))
 
-  let bodies = $state<RigidBodyRef[]>([])
   let position = $state<Vector3Tuple>([0.5, 0, 0.5])
 
-  let current = 0
-  setInterval(() => {
-    current += 1
-    current %= bodies.length
-    const body = bodies[current]
-
-    body?.setLinvel({ x: 0, y: 0, z: 0 }, true)
-    body?.setAngvel({ x: 0, y: 0, z: 0 }, true)
-    body?.setTranslation(
-      { x: (Math.random() - 0.5) * 0.1, y: 5, z: (Math.random() - 0.5) * 0.1 },
-      true
-    )
-  }, 400)
+  const vec3 = new Vector3()
+  const quat = new Quaternion()
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[5, 1, 4]}
-  oncreate={(ref) => ref.lookAt(0, 1, 0)}
->
-  <OrbitControls
-    enablePan={false}
-    enableZoom={false}
-    enableDamping
-    target={[0, 1, 0]}
-  />
-</T.PerspectiveCamera>
+  oncreate={(ref) => ref.lookAt(0, 0, 0)}
+/>
 
 <T.DirectionalLight
   castShadow
   position={[5, 5, 5]}
+  shadow.mapSize.width={2 ** 11}
+  shadow.mapSize.height={2 ** 11}
   intensity={1.25}
 />
 
@@ -63,14 +44,14 @@
   <T.SphereGeometry args={[1, 256, 128]} />
   <T.MeshStandardMaterial roughness={0.1} />
 
-  {#if $svelteIcon}
+  {#if svelteIcon.current}
     <Decal
       {position}
       {debug}
     >
       {#snippet children()}
         <T.MeshStandardMaterial
-          map={$svelteIcon}
+          map={svelteIcon.current}
           transparent
           roughness={0.2}
           polygonOffset
@@ -82,7 +63,9 @@
               ref.position.fromArray(position)
             }}
             onchange={(event) => {
-              if (event.target.object) event.target.object.position.toArray(position)
+              if (event.target.object) {
+                event.target.object.position.toArray(position)
+              }
             }}
           />
         {/if}
@@ -91,40 +74,43 @@
   {/if}
 </T.Mesh>
 
-{#each { length: 20 } as _, index (index)}
-  <RigidBody
-    bind:rigidBody={bodies[index]}
-    oncreate={(ref) => {
-      ref.setTranslation({ x: 0, y: -10 + index, z: 0 }, true)
-    }}
-  >
-    <T.Mesh castShadow>
-      <Collider
-        shape="ball"
-        args={[0.3]}
-        restitution={0.2}
-      />
-      <T.SphereGeometry args={[0.3, 256, 128]} />
-      <T.MeshStandardMaterial roughness={0.2} />
-
-      <Decal
-        position={[0.35, 0.35, 0.35]}
-        rotation={Math.PI / 4}
-        scale={1}
-        depthTest
-        {debug}
+{#if threlteIcon.current}
+  {#each { length: 20 } as _, index (index)}
+    <RigidBody>
+      <T.Mesh
+        castShadow
+        position={vec3.randomDirection().toArray()}
+        quaternion={quat.random().toArray()}
       >
-        <T.MeshStandardMaterial
-          map={$threlteIcon}
-          transparent
-          roughness={0.2}
-          polygonOffset
-          polygonOffsetFactor={-10}
+        <Collider
+          shape="ball"
+          args={[0.3]}
+          restitution={0.2}
         />
-      </Decal>
-    </T.Mesh>
-  </RigidBody>
-{/each}
+        <T.SphereGeometry args={[0.3, 256, 128]} />
+        <T.MeshStandardMaterial roughness={0.2} />
+
+        <Decal
+          position={[0.35, 0.35, 0.35]}
+          rotation={Math.PI / 4}
+          scale={0.8}
+          depthTest
+          {debug}
+        >
+          <T.MeshStandardMaterial
+            map={threlteIcon.current}
+            transparent
+            roughness={0.2}
+            polygonOffset
+            polygonOffsetFactor={-10}
+          />
+        </Decal>
+      </T.Mesh>
+    </RigidBody>
+  {/each}
+{/if}
+
+<Attractor strength={0.1} />
 
 {#snippet lightformer(
   color: string,

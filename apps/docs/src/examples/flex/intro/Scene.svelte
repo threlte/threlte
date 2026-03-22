@@ -5,7 +5,7 @@
   import { tick } from 'svelte'
   import Button from './Button.svelte'
   import Label from './Label.svelte'
-  import Matcap from './Matcap.svelte'
+  import Matcaps from './Matcaps.svelte'
   import Window from './Window.svelte'
 
   interface Props {
@@ -49,7 +49,7 @@
           {@const index = rowIndex * columns + columnIndex}
           <Box class="h-full w-full flex-1">
             {#snippet children({ width, height })}
-              <Matcap
+              <Matcaps
                 {width}
                 {height}
                 matcapIndex={offset + index}

@@ -76,7 +76,7 @@
 
   $effect.pre(() => {
     if (!('geometry' in parentNode)) {
-      throw new Error('Decal must have a Mesh as parent or specify its "mesh" prop')
+      console.error('Decal must have a Mesh as parent or specify its "mesh" prop')
     }
 
     if (!map?.current && !children) return
@@ -152,7 +152,9 @@
       helper.scale.copy(projectorSize)
     }
 
-    return () => mesh.geometry.dispose()
+    return () => {
+      mesh.geometry.dispose()
+    }
   })
 </script>
 

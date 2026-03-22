@@ -28,7 +28,7 @@
 
 <!-- World setup -->
 <Sky
-  elevation={0.5}
+  elevation={1}
   azimuth={130}
 />
 

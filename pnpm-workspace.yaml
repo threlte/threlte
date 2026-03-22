@@ -3,9 +3,9 @@ packages:
   - 'apps/*'
 
 catalog:
-  three: ^0.175.0
-  '@types/three': ^0.175.0
-  svelte: '5.53.6'
+  three: ^0.183.2
+  '@types/three': ^0.183.1
+  svelte: '5.54.1'
   typescript: '5.9.2'
   vite: '^7.1.4'
   vitest: '^3.2.4'

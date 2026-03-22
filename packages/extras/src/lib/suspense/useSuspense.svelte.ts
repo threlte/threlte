@@ -1,4 +1,4 @@
-import { getContext } from 'svelte'
+import { getContext, untrack } from 'svelte'
 import { suspenseContextIdentifier, type SuspenseContext } from './context.svelte.js'
 
 type Suspend = <T extends Promise<unknown>>(promise: T) => T
@@ -8,28 +8,28 @@ type Suspend = <T extends Promise<unknown>>(promise: T) => T
  * It also works outside the boundaries of the <Suspense> component.
  */
 export const useSuspense = () => {
-  const ctx = getContext<SuspenseContext | undefined>(suspenseContextIdentifier)
+  const context = getContext<SuspenseContext | undefined>(suspenseContextIdentifier)
 
   const promises = new Set<Promise<unknown>>()
 
   const suspend = <T extends Promise<unknown>>(promise: T): T => {
-    if (ctx) {
-      ctx.suspend(promise)
+    if (context) {
+      context.suspend(promise)
       promises.add(promise)
     }
     return promise
   }
 
-  const suspended = $derived(ctx?.suspended.current ?? false)
+  const suspended = $derived(context?.suspended.current ?? false)
 
   $effect(() => {
-    return () => {
-      if (!ctx) return
+    return untrack(() => {
+      if (!context) return
       for (const promise of promises) {
-        ctx.onComponentDestroy(promise)
+        context.onComponentDestroy(promise)
       }
       promises.clear()
-    }
+    })
   })
 
   Object.defineProperty(suspend, 'suspended', {

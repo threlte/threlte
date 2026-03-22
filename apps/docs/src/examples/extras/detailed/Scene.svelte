@@ -26,7 +26,7 @@
 
 <Detailed bind:ref={detailed}>
   {#each items as { color, distance }, i}
-    {@const detail = items.length - i - 1}
+    {@const detail = items.length - i + 1}
     <T.Mesh
       {distance}
       geometry={new IcosahedronGeometry(1, detail)}

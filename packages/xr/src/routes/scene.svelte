@@ -7,13 +7,15 @@
   const { isPresenting } = useXR()
   const teleport = useTeleport()
 
-  $: if ($isPresenting) teleport([0, 0, 5])
+  $effect.pre(() => {
+    if (isPresenting.current) teleport([0, 0, 5])
+  })
 
-  let listenToGamepad = false
+  let listenToGamepad = $state(false)
 </script>
 
 <svelte:window
-  on:keydown={(e) => {
+  onkeydown={(e) => {
     if (e.key === 'g') {
       listenToGamepad = !listenToGamepad
     }

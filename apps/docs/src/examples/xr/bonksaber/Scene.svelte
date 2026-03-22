@@ -17,7 +17,7 @@
   const spring = new Spring(1, { stiffness: 0.1, damping: 0.5 })
 
   $effect.pre(() => {
-    spring.set($isPresenting ? 0 : 1)
+    spring.set(isPresenting.current ? 0 : 1)
   })
 </script>
 
