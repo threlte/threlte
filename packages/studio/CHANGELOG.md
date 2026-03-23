@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.4.1
+
+### Patch Changes
+
+- 35e4303: fix(studio): constrain scene hierarchy pane width and enable horizontal scroll for deeply nested tree items
+
 ## 0.4.0
 
 ### Minor Changes
