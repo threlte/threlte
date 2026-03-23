@@ -56,7 +56,7 @@
   const blurPlane = $derived(new Mesh(planeGeometry))
 
   const depthMaterial = $derived.by(() => {
-		color;
+    color
     const dm = new MeshDepthMaterial({
       depthTest: false,
       depthWrite: false
