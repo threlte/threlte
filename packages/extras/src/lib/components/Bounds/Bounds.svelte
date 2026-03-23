@@ -1,7 +1,15 @@
 <script lang="ts">
-  import { get } from 'svelte/store'
-  import { Box3, Group, Matrix4, Quaternion, Vector3, type Camera, type Object3D } from 'three'
-  import { T, observe, useTask, useThrelte } from '@threlte/core'
+  import {
+    Box3,
+    Group,
+    Matrix4,
+    OrthographicCamera,
+    PerspectiveCamera,
+    Quaternion,
+    Vector3,
+    type Object3D
+  } from 'three'
+  import { T, isInstanceOf, observe, useTask, useThrelte } from '@threlte/core'
   import { useControlsContext } from '../controls/useControlsContext.js'
   import type { BoundsProps, SizeProps } from './types.js'
 
@@ -12,9 +20,6 @@
     addEventListener: (event: string, callback: (event: any) => void) => void
     removeEventListener: (event: string, callback: (event: any) => void) => void
   }
-
-  const isOrthographic = (def: Camera): def is Camera & { isOrthographicCamera: true } =>
-    def && (def as any).isOrthographicCamera
 
   const isBox3 = (def: any): def is Box3 => def && (def as any).isBox3
 
@@ -63,9 +68,9 @@
   let animationState = $state<AnimationState>(AnimationStateValues.NONE)
   let t = 0 // represents animation state from 0 to 1
 
-  const getActiveControls = (): ControlsProto | undefined => {
-    return (get(orbitControls) ?? get(trackballControls)) as unknown as ControlsProto | undefined
-  }
+  const controls = $derived<ControlsProto | undefined>(
+    ($orbitControls ?? $trackballControls) as ControlsProto | undefined
+  )
 
   const getSize = (): SizeProps => {
     const cam = camera.current
@@ -74,13 +79,14 @@
     const center = box.getCenter(new Vector3())
     const maxSize = Math.max(boxSize.x, boxSize.y, boxSize.z)
 
-    const fitHeightDistance = isOrthographic(cam)
-      ? maxSize * 4
-      : maxSize / (2 * Math.atan((Math.PI * (cam as any).fov) / 360))
+    const fitHeightDistance = isInstanceOf(cam, 'PerspectiveCamera')
+      ? maxSize / (2 * Math.atan((Math.PI * cam.fov) / 360))
+      : maxSize * 4
 
-    const fitWidthDistance = isOrthographic(cam)
-      ? maxSize * 4
-      : fitHeightDistance / (cam as any).aspect
+    const fitWidthDistance = isInstanceOf(cam, 'PerspectiveCamera')
+      ? fitHeightDistance / cam.aspect
+      : maxSize * 4
+
     const distance = margin * Math.max(fitHeightDistance, fitWidthDistance)
 
     return { box, size: boxSize, center, distance }
@@ -104,8 +110,9 @@
 
     origin.camPos.copy(cam.position)
     origin.camRot.copy(cam.quaternion)
-    if (isOrthographic(cam)) {
-      origin.camZoom = (cam as any).zoom
+
+    if (isInstanceOf(cam, 'OrthographicCamera')) {
+      origin.camZoom = cam.zoom
     }
 
     goal.camPos = undefined
@@ -136,9 +143,8 @@
 
   const fitBounds = () => {
     const cam = camera.current
-    const controls = getActiveControls()
 
-    if (!isOrthographic(cam)) {
+    if (!isInstanceOf(cam, 'OrthographicCamera')) {
       // For non-orthographic cameras, fit should behave exactly like reset
       return reset()
     }
@@ -176,8 +182,8 @@
     maxHeight *= 2
     maxWidth *= 2
 
-    const zoomForHeight = ((cam as any).top - (cam as any).bottom) / maxHeight
-    const zoomForWidth = ((cam as any).right - (cam as any).left) / maxWidth
+    const zoomForHeight = (cam.top - cam.bottom) / maxHeight
+    const zoomForWidth = (cam.right - cam.left) / maxWidth
 
     goal.camZoom = Math.min(zoomForHeight, zoomForWidth) / margin
 
@@ -188,14 +194,13 @@
   }
 
   const clipBounds = () => {
-    const cam = camera.current
+    const cam = camera.current as PerspectiveCamera | OrthographicCamera
     const { distance } = getSize()
 
-    ;(cam as any).near = distance / 100
-    ;(cam as any).far = distance * 100
-    ;(cam as any).updateProjectionMatrix()
+    cam.near = distance / 100
+    cam.far = distance * 100
+    cam.updateProjectionMatrix()
 
-    const controls = getActiveControls()
     if (controls) {
       controls.maxDistance = distance * 10
       controls.update()
@@ -246,12 +251,14 @@
   // Refresh bounds when viewport changes.
   observe(
     () => [size, clip, fit, margin, camera, orbitControls, trackballControls],
-    ([, , , , , ,]) => {
+    () => {
       refresh()
+
       if (fit) {
         reset()
         fitBounds()
       }
+
       if (clip) {
         clipBounds()
       }
@@ -269,27 +276,28 @@
         return
       }
 
+      const cam = camera.current as PerspectiveCamera | OrthographicCamera
+
       if (animationState === AnimationStateValues.ACTIVE) {
         t += delta / maxDuration
 
         if (t >= 1) {
           if (goal.camPos) {
-            camera.current.position.copy(goal.camPos)
+            cam.position.copy(goal.camPos)
           }
           if (goal.camRot) {
-            camera.current.quaternion.copy(goal.camRot)
+            cam.quaternion.copy(goal.camRot)
           }
           if (goal.camUp) {
-            camera.current.up.copy(goal.camUp)
+            cam.up.copy(goal.camUp)
           }
-          if (goal.camZoom !== undefined && isOrthographic(camera.current)) {
-            ;(camera.current as any).zoom = goal.camZoom
+          if (goal.camZoom !== undefined && isInstanceOf(cam, 'OrthographicCamera')) {
+            cam.zoom = goal.camZoom
           }
 
-          camera.current.updateMatrixWorld()
-          ;(camera.current as any).updateProjectionMatrix()
+          cam.updateMatrixWorld()
+          cam.updateProjectionMatrix()
 
-          const controls = getActiveControls()
           if (controls && goal.target) {
             controls.target.copy(goal.target)
             controls.update()
@@ -302,20 +310,20 @@
           const k = interpolateFunc(t)
 
           if (goal.camPos) {
-            camera.current.position.lerpVectors(origin.camPos, goal.camPos, k)
+            cam.position.lerpVectors(origin.camPos, goal.camPos, k)
           }
           if (goal.camRot) {
-            camera.current.quaternion.slerpQuaternions(origin.camRot, goal.camRot, k)
+            cam.quaternion.slerpQuaternions(origin.camRot, goal.camRot, k)
           }
           if (goal.camUp) {
-            camera.current.up.set(0, 1, 0).applyQuaternion(camera.current.quaternion)
+            cam.up.set(0, 1, 0).applyQuaternion(cam.quaternion)
           }
-          if (goal.camZoom !== undefined && isOrthographic(camera.current)) {
-            ;(camera.current as any).zoom = (1 - k) * origin.camZoom + k * goal.camZoom
+          if (goal.camZoom !== undefined && isInstanceOf(cam, 'OrthographicCamera')) {
+            cam.zoom = (1 - k) * origin.camZoom + k * goal.camZoom
           }
 
-          camera.current.updateMatrixWorld()
-          ;(camera.current as any).updateProjectionMatrix()
+          cam.updateMatrixWorld()
+          cam.updateProjectionMatrix()
         }
 
         invalidate()

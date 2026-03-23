@@ -1,7 +1,23 @@
 <script lang="ts">
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
-  import { T } from '@threlte/core'
-  import { Bounds, OrbitControls } from '@threlte/extras'
+  import { isInstanceOf, T, useTask } from '@threlte/core'
+  import {
+    Bounds,
+    OrbitControls,
+    Sparkles,
+    useGltf,
+    useSuspense,
+    useTexture
+  } from '@threlte/extras'
+  import {
+    Color,
+    DoubleSide,
+    MeshBasicMaterial,
+    MeshPhongMaterial,
+    ShaderMaterial,
+    Uniform
+  } from 'three'
+  import vertexShader from './vertex'
+  import fragmentShader from './fragment'
 
   interface Props {
     margin: number
@@ -10,14 +26,52 @@
   }
 
   let { margin, fit, clip }: Props = $props()
+
+  const suspend = useSuspense()
+  const gltf = suspend(useGltf('/models/portal/portal.glb'))
+  const texture = suspend(
+    useTexture('/models/portal/portal_baked.jpg', {
+      transform(result) {
+        result.flipY = false
+        return result
+      }
+    })
+  )
+
+  const poleLightMaterial = new MeshBasicMaterial({ color: 0xff_ff_e5 })
+  const bakedMaterial = new MeshPhongMaterial()
+
+  const portalLightMaterial = new ShaderMaterial({
+    uniforms: {
+      uTime: new Uniform(0),
+      uColorStart: new Uniform(new Color('#1E88E5')),
+      uColorEnd: new Uniform(new Color('#5E35B1'))
+    },
+    side: DoubleSide,
+    vertexShader,
+    fragmentShader
+  })
+
+  $effect(() => {
+    if ($texture) {
+      bakedMaterial.map = $texture
+    }
+  })
+
+  useTask((dt) => {
+    portalLightMaterial.uniforms.uTime.value += dt
+  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position.x={20}
-  position.y={20}
+  position.y={10}
   position.z={-20}
   fov={50}
+  oncreate={(ref) => {
+    ref.lookAt(0, 0, 0)
+  }}
 >
   <OrbitControls
     enableDamping
@@ -31,16 +85,37 @@
   position.z={10}
 />
 
-<Bounds
-  {margin}
-  {fit}
-  {clip}
->
-  <T.Mesh
-    position.x={1}
-    position.y={1}
-    position.z={1}
-    geometry={new BoxGeometry(1, 1, 1)}
-    material={new MeshStandardMaterial()}
-  />
-</Bounds>
+<T.AmbientLight />
+
+{#if $gltf}
+  <Bounds
+    {margin}
+    {fit}
+    {clip}
+  >
+    <T
+      is={$gltf.scene}
+      oncreate={(ref) => {
+        ref.traverse((child) => {
+          if (!isInstanceOf(child, 'Mesh')) {
+            return
+          }
+
+          if (child.name === 'Portal') {
+            child.material = portalLightMaterial
+          } else if (child.name === 'LampLight1' || child.name === 'LampLight2') {
+            child.material = poleLightMaterial
+          } else {
+            child.material = bakedMaterial
+          }
+        })
+      }}
+    >
+      <Sparkles
+        position={[0, 0.8, 0]}
+        size={4}
+        scale={[4, 1.5, 4]}
+      />
+    </T>
+  </Bounds>
+{/if}

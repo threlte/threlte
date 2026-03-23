@@ -2,6 +2,7 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { Pane, Checkbox, Slider } from 'svelte-tweakpane-ui'
+  import { Suspense } from '@threlte/extras'
 
   let margin = $state(1.5)
   let fit = $state(true)
@@ -30,11 +31,13 @@
 
 <div>
   <Canvas>
-    <Scene
-      {margin}
-      {fit}
-      {clip}
-    />
+    <Suspense>
+      <Scene
+        {margin}
+        {fit}
+        {clip}
+      />
+    </Suspense>
   </Canvas>
 </div>
 
