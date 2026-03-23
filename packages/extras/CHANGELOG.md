@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 9.11.0
+
+### Minor Changes
+
+- 1305cab: `<Sparkles>` component ported from drei
+
+## 9.10.0
+
+### Minor Changes
+
+- d2e9cd6: Fix Contact Shadows color reactivity
+
 ## 9.9.0
 
 ### Minor Changes
