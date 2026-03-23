@@ -17,7 +17,10 @@
   makeDefault
   position.z={5}
 >
-  <OrbitControls />
+  <OrbitControls
+    enableDamping
+    enableZoom={false}
+  />
 </T.PerspectiveCamera>
 
 <T.Mesh>

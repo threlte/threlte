@@ -34,6 +34,8 @@
     <OrbitControls
       maxDistance={20}
       maxPolarAngle={0.5 * Math.PI}
+      enableDamping
+      enableZoom={false}
     />
   </T.PerspectiveCamera>
 

@@ -57,9 +57,9 @@ export const asyncState = <T>(promise: Promise<T>): AsyncState<T> => {
     .then((result) => {
       current = result
     })
-    .catch((resultError) => {
-      console.error('Error in asyncState:', resultError.message)
-      error = resultError
+    .catch((promiseError) => {
+      console.error('Error in asyncState:', promiseError)
+      error = promiseError
     })
 
   Object.defineProperty(promise, 'current', {
