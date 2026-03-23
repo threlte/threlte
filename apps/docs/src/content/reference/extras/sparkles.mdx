@@ -40,20 +40,18 @@ componentSignature:
           name: 'size',
           type: 'number | Float32Array',
           default: 'randomized (between 0 and 1)',
-          description: 'Size of the particles.',
+          description: 'The space the particles occupy.',
           required: false
         },
         {
           name: 'scale',
-          type: 'number | [number, number, number] | Vector3',
-          default: '100',
+          type: 'number | [number, number, number]',
           description: 'Number of particles.',
           required: false
         },
         {
           name: 'noise',
-          type: 'number | [number, number, number] | Vector3 | Float32Array',
-          default: '100',
+          type: 'number | [number, number, number] | Float32Array',
           description: 'Movement factor',
           required: false
         }
@@ -63,7 +61,7 @@ componentSignature:
 
 This component is a port of the component [`<Sparkles>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/Sparkles.tsx).
 
-Adds a blinking shader-based starfield to your scene.
+Adds shader-based particles to your scene.
 
 <Example
   path="extras/sparkles"
