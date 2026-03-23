@@ -28,15 +28,6 @@ componentSignature:
             },
           default: 'srgb'
         },
-        {
-          name: 'colorManagementEnabled',
-          type:
-            {
-              name: 'boolean',
-              url: 'https://threejs.org/docs/#manual/en/introduction/Color-management'
-            },
-          default: 'true'
-        },
         { name: 'renderMode', type: "'always' | 'on-demand' | 'manual'", default: "'on-demand'" },
         {
           name: 'autoRender',
@@ -44,11 +35,7 @@ componentSignature:
           default: 'true',
           description: 'Whether to automatically render the scene every frame. Set to `false` to implement custom render pipelines.'
         },
-        {
-          name: 'shadows',
-          type: 'boolean | THREE.ShadowMapType',
-          default: 'THREE.PCFSoftShadowMap'
-        },
+        { name: 'shadows', type: 'boolean | THREE.ShadowMapType', default: 'THREE.PCFShadowMap' },
         {
           name: 'createRenderer',
           type: '(canvas: HTMLCanvasElement) => THREE.Renderer',

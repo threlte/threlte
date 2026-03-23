@@ -3,9 +3,9 @@ import { OrthographicCamera, PerspectiveCamera } from 'three'
 import { useDOM } from './dom.svelte.js'
 import { useScheduler } from './scheduler.svelte.js'
 
-type CameraContext = {
+export interface CameraContext {
   camera: {
-    current: PerspectiveCamera | OrthographicCamera
+    readonly current: PerspectiveCamera | OrthographicCamera
     set(value: PerspectiveCamera | OrthographicCamera): void
   }
 }
@@ -41,7 +41,7 @@ export const createCameraContext = (): CameraContext => {
       get current() {
         return camera
       },
-      set(value: OrthographicCamera | PerspectiveCamera) {
+      set(value) {
         camera = value
       }
     }

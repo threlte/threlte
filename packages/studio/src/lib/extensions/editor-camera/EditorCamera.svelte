@@ -136,13 +136,15 @@
       if (editorCameraEnabled) {
         camera.set(editorCamera)
       } else if (defaultCameraObject) {
-        camera.set(defaultCameraObject)
+        camera.set(defaultCameraObject as PerspectiveCamera) 
       }
     }
   )
 
   onDestroy(() => {
-    if (defaultCameraObject) camera.set(defaultCameraObject)
+    if (defaultCameraObject) {
+      camera.set(defaultCameraObject as PerspectiveCamera) 
+    }
   })
 
   let modes = ['Perspective', 'Orthographic']

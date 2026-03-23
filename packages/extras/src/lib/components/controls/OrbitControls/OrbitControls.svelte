@@ -39,7 +39,8 @@
       controls.update()
     },
     {
-      running: () => props.autoRotate ?? props.enableDamping ?? false
+      autoInvalidate: false,
+      running: () => props.autoRotate || props.enableDamping || false
     }
   )
 

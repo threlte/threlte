@@ -1,7 +1,7 @@
 import { getContext, setContext } from 'svelte'
 import {
   AgXToneMapping,
-  PCFSoftShadowMap,
+  PCFShadowMap,
   SRGBColorSpace,
   WebGLRenderer,
   type ColorSpace,
@@ -11,7 +11,6 @@ import {
 import type { Task } from '../../frame-scheduling/index.js'
 import { useTask } from '../../hooks/useTask.svelte.js'
 import { useCamera } from './camera.svelte.js'
-import { useDisposal } from './disposal.svelte.js'
 import { useDOM } from './dom.svelte.js'
 import { useScene } from './scene.js'
 import { useScheduler } from './scheduler.svelte.js'
@@ -21,12 +20,25 @@ export type Renderer = WebGLRenderer | WebGPURenderer
 
 type CreateRenderer<T extends Renderer> = (canvas: HTMLCanvasElement) => T
 
-type RendererContext<T extends Renderer> = {
+export interface RendererContext<T extends Renderer> {
   renderer: T
-  colorSpace: { readonly current: ColorSpace }
-  toneMapping: { readonly current: ToneMapping }
-  shadows: { readonly current: boolean | ShadowMapType }
-  dpr: { readonly current: number }
+
+  colorSpace: {
+    readonly current: ColorSpace
+  }
+
+  toneMapping: {
+    readonly current: ToneMapping
+  }
+
+  shadows: {
+    readonly current: boolean | ShadowMapType
+  }
+
+  dpr: {
+    readonly current: number
+  }
+
   autoRenderTask: Task
 }
 
@@ -62,16 +74,16 @@ export type CreateRendererContextOptions<T extends Renderer> = {
 }
 
 export const createRendererContext = <T extends Renderer>(
-  options: CreateRendererContextOptions<T>
+  options: () => CreateRendererContextOptions<T>
 ): RendererContext<T> => {
-  const { dispose } = useDisposal()
   const { camera } = useCamera()
   const { scene } = useScene()
-  const { invalidate, renderStage, autoRender, scheduler, resetFrameInvalidation } = useScheduler()
+  const { invalidate, renderStage, autoRender, scheduler, frameInvalidated } = useScheduler()
   const { size, canvas } = useDOM()
 
-  const renderer = options.createRenderer
-    ? options.createRenderer(canvas)
+  const opts = $derived(options())
+  const renderer = opts.createRenderer
+    ? opts.createRenderer(canvas)
     : new WebGLRenderer({
         canvas,
         powerPreference: 'high-performance',
@@ -83,10 +95,10 @@ export const createRendererContext = <T extends Renderer>(
     renderer.render(scene, camera.current)
   })
 
-  const colorSpace = $derived<ColorSpace>(options.colorSpace ?? SRGBColorSpace)
-  const dpr = $derived(options.dpr ?? window.devicePixelRatio)
-  const shadows = $derived(options.shadows ?? PCFSoftShadowMap)
-  const toneMapping = $derived(options.toneMapping ?? AgXToneMapping)
+  const colorSpace = $derived<ColorSpace>(opts.colorSpace ?? SRGBColorSpace)
+  const dpr = $derived(opts.dpr ?? window.devicePixelRatio)
+  const shadows = $derived(opts.shadows ?? PCFShadowMap)
+  const toneMapping = $derived(opts.toneMapping ?? AgXToneMapping)
 
   const context: RendererContext<T> = {
     renderer: renderer as T,
@@ -154,7 +166,7 @@ export const createRendererContext = <T extends Renderer>(
     if (shadows && shadows !== true) {
       renderer.shadowMap.type = shadows
     } else if (shadows === true) {
-      renderer.shadowMap.type = PCFSoftShadowMap
+      renderer.shadowMap.type = PCFShadowMap
     }
   })
 
@@ -174,9 +186,8 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   renderer.setAnimationLoop((time) => {
-    dispose()
     scheduler.run(time)
-    resetFrameInvalidation()
+    frameInvalidated.current = false
   })
 
   $effect(() => {

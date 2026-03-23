@@ -1,16 +1,10 @@
-import { getContext, setContext, tick } from 'svelte'
+import { getContext, setContext } from 'svelte'
 
 export type DisposableObject = {
   dispose: () => void
 }
 
-export type DisposalContext = {
-  /**
-   * Dispose objects, happens automatically as part of a task.
-   * @param force - Force disposal
-   */
-  dispose: (force?: boolean) => void
-
+export interface DisposalContext {
   /**
    * Register an object that should be disposed at the end of its lifecycle,
    * effectivly incrementing the mount count.
@@ -28,19 +22,13 @@ export type DisposalContext = {
 
   /** Objects that *can* be disposed */
   disposableObjects: Map<DisposableObject, number>
-  shouldDispose: boolean
 }
 
 export const createDisposalContext = (): DisposalContext => {
-  const disposableObjects = new Map()
-
-  let shouldDispose = false
+  const disposableObjects = new Map<DisposableObject, number>()
 
   const context: DisposalContext = {
     disposableObjects,
-    get shouldDispose() {
-      return shouldDispose
-    },
     removeObjectFromDisposal: (object) => {
       disposableObjects.delete(object)
     },
@@ -49,35 +37,16 @@ export const createDisposalContext = (): DisposalContext => {
       disposableObjects.set(object, currentValue ? currentValue + 1 : 1)
     },
     disposableObjectUnmounted: (object) => {
-      const currentValue = disposableObjects.get(object)
+      const currentValue = disposableObjects.get(object) ?? 0
 
-      if (currentValue && currentValue > 0) {
+      if (currentValue - 1 <= 0) {
+        object?.dispose?.()
+        disposableObjects.delete(object)
+      } else {
         disposableObjects.set(object, currentValue - 1)
-        if (currentValue - 1 <= 0) {
-          shouldDispose = true
-        }
       }
-    },
-
-    dispose: async (force = false) => {
-      await tick()
-      if (!shouldDispose && !force) return
-
-      disposableObjects.forEach((mounted, object) => {
-        if (mounted === 0 || force) {
-          object?.dispose?.()
-          disposableObjects.delete(object)
-        }
-      })
-      shouldDispose = false
     }
   }
-
-  $effect(() => {
-    return () => {
-      context.dispose(true)
-    }
-  })
 
   setContext<DisposalContext>('threlte-disposal-context', context)
 

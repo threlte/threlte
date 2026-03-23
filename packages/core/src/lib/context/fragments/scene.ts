@@ -1,13 +1,17 @@
 import { getContext, setContext } from 'svelte'
 import { Scene } from 'three'
 
-export type SceneContext = {
+export interface SceneContext {
   scene: Scene
 }
 
 export const createSceneContext = (scene?: Scene): SceneContext => {
-  const context: SceneContext = { scene: scene || new Scene() }
+  const context: SceneContext = {
+    scene: scene ?? new Scene()
+  }
+
   setContext<SceneContext>('threlte-scene-context', context)
+
   return context
 }
 

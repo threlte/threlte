@@ -69,7 +69,11 @@
     () => {
       asciiEffect.render(scene ?? defaultScene, camera ?? defaultCamera.current)
     },
-    { autoInvalidate: false, stage: renderStage, running: () => autoRender }
+    {
+      autoInvalidate: false,
+      stage: renderStage,
+      running: () => autoRender
+    }
   )
 
   $effect(() => {

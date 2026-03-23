@@ -2,13 +2,19 @@ import { getContext, setContext } from 'svelte'
 import { Scheduler, type Stage } from '../../frame-scheduling/index.js'
 
 export type SchedulerContext = {
+  /** The scheduler used by this Threlte app */
   scheduler: Scheduler
+
   /**
+   * If set to 'on-demand', the scene will only be rendered when the current frame is invalidated
+   * If set to 'manual', the scene will only be rendered when advance() is called
+   * If set to 'always', the scene will be rendered every frame
+   *
    * @default 'on-demand'
    */
   renderMode: {
     readonly current: 'always' | 'on-demand' | 'manual'
-    set: (value: 'always' | 'on-demand' | 'manual') => void
+    set(value: 'always' | 'on-demand' | 'manual'): void
   }
 
   /**
@@ -19,17 +25,14 @@ export type SchedulerContext = {
    */
   autoRender: {
     readonly current: boolean
-    set: (value: boolean) => void
+    set(value: boolean): void
   }
 
   /** A flag to indicate whether the current frame has been invalidated */
-  frameInvalidated: boolean
+  frameInvalidated: { current: boolean }
 
   /** If anything is in this set, the frame will be considered invalidated */
   autoInvalidations: Set<unknown>
-
-  /** A function to be called at the end of the frame loop that resets the invalidation flags */
-  resetFrameInvalidation: () => void
 
   /**
    * Function to determine if a rendering should happen according to on-demand
@@ -43,8 +46,13 @@ export type SchedulerContext = {
    */
   invalidate: () => void
 
+  /** The stage which useTask defaults to */
   mainStage: Stage
 
+  /**
+   * The default render stage. Tasks in this stage are ran according to
+   * on-demand rendering.
+   */
   renderStage: Stage
 }
 
@@ -54,13 +62,14 @@ export type CreateSchedulerContextOptions = {
 }
 
 export const createSchedulerContext = (
-  options: CreateSchedulerContextOptions
+  options: () => CreateSchedulerContextOptions
 ): SchedulerContext => {
   const scheduler = new Scheduler()
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
 
-  let autoRender = $state(options.autoRender ?? true)
-  let renderMode = $state(options.renderMode ?? 'on-demand')
+  let opts = $derived(options())
+  let autoRender = $derived(opts.autoRender ?? true)
+  let renderMode = $derived(opts.renderMode ?? 'on-demand')
 
   const autoInvalidations = new Set()
 
@@ -77,8 +86,13 @@ export const createSchedulerContext = (
   const context: SchedulerContext = {
     scheduler,
     autoInvalidations,
-    get frameInvalidated() {
-      return frameInvalidated
+    frameInvalidated: {
+      get current() {
+        return frameInvalidated
+      },
+      set current(value) {
+        frameInvalidated = value
+      }
     },
     autoRender: {
       get current() {
@@ -108,10 +122,7 @@ export const createSchedulerContext = (
           runTasks()
         }
       }
-    }),
-    resetFrameInvalidation() {
-      frameInvalidated = false
-    }
+    })
   }
 
   $effect(() => {

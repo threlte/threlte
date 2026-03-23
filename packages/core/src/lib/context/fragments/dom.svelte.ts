@@ -1,9 +1,11 @@
 import { getContext, setContext } from 'svelte'
 
-type DOMContext = {
+export interface DOMContext {
   /** The canvas wrapper element */
   dom: HTMLElement
+
   canvas: HTMLCanvasElement
+
   size: {
     readonly current: { width: number; height: number }
   }
@@ -17,7 +19,10 @@ export type CreateDOMContextOptions = {
 export const createDOMContext = (options: CreateDOMContextOptions) => {
   const { dom, canvas } = options
 
-  let size = $state.raw({ width: dom.offsetWidth, height: dom.offsetHeight })
+  let size = $state.raw({
+    width: dom.offsetWidth,
+    height: dom.offsetHeight
+  })
 
   const resizeObserver = new ResizeObserver(() => {
     const { offsetWidth, offsetHeight } = dom

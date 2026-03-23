@@ -10,15 +10,15 @@ interface Context {
 export const createParentObject3D = (object: () => Object3D | undefined) => {
   const parent = useParentObject3D()
 
-  const ctx: Context = {
+  const context: Context = {
     get current() {
       return object() ?? parent.current
     }
   }
 
-  setContext(key, ctx)
+  setContext(key, context)
 
-  return ctx
+  return context
 }
 
 /**

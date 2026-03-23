@@ -11,6 +11,7 @@
   let jumpOffsetY = new Tween(0)
   let jumpRotationX = new Tween(0)
   let jumpRotationZ = new Tween(0)
+
   let isJumping = $state(false)
 
   const randomSign = () => Math.round(Math.random()) * 2 - 1
