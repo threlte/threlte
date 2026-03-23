@@ -47,6 +47,9 @@
     if (!contentEl) return
     contentEl.style.maxHeight = '50vh'
     contentEl.style.overflow = 'auto'
+    contentEl.style.minWidth = 'max-content'
+
+    pane.element.style.overflow = 'auto'
   })
 </script>
 
