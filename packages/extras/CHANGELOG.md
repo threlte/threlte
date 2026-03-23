@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.11.0
+
+### Minor Changes
+
+- 1305cab: `<Sparkles>` component ported from drei
+
 ## 9.10.0
 
 ### Minor Changes
