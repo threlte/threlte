@@ -1,5 +1,6 @@
 import { createParent } from '../components/T/utils/useParent.svelte.js'
 import { createParentObject3D } from '../components/T/utils/useParentObject3D.svelte.js'
+import { createCacheContext } from './fragments/cache.js'
 import { createCameraContext } from './fragments/camera.svelte.js'
 import { createDisposalContext } from './fragments/disposal.svelte.js'
 import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom.svelte.js'
@@ -24,6 +25,7 @@ export const createThrelteContext = <T extends Renderer>(
 ) => {
   const { scene } = createSceneContext()
 
+  createCacheContext()
   createParent(() => scene)
   createParentObject3D(() => scene)
 

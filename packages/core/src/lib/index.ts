@@ -51,6 +51,7 @@ export { createRendererContext, useRenderer } from './context/fragments/renderer
 export { createSceneContext, useScene } from './context/fragments/scene.js'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte.js'
 export { createUserContext } from './context/fragments/user.js'
+export { createCacheContext, useCache } from './context/fragments/cache.js'
 
 // utils
 export * from './utilities/index.js'

@@ -18,7 +18,7 @@
 
   let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
-  const { suspended, errors } = createSuspenseContext(() => ({ final }))
+  const { suspended, errors } = createSuspenseContext(() => final)
 
   $effect(() => {
     if (suspended.current) {
@@ -40,12 +40,12 @@
 <!-- Block the graph from mounting to the parent -->
 <T
   is={group}
-  attach={suspended.current || errors.current.length > 0 ? false : undefined}
+  attach={suspended.current ? false : undefined}
 >
   {@render children?.({ suspended: suspended.current, errors: errors.current })}
 </T>
 
-{#if errors.current.length}
+{#if errors.current.length > 0}
   {@render error?.({ errors: errors.current })}
 {:else if suspended.current}
   {@render fallback?.()}

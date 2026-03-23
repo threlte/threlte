@@ -1,14 +1,15 @@
 <script lang="ts">
-  import { asyncState } from '@threlte/core'
+  import { asyncState, useCache } from '@threlte/core'
   import Matcap from './Matcap.svelte'
 
-  const matcapsList = asyncState(
-    (async () => {
-      const matcapListResponse = await fetch(
-        'https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/matcaps.json'
+  const { remember } = useCache()
+
+  const matcapsList = asyncState<Record<string, string>>(
+    remember('matcaps', () =>
+      fetch('https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/matcaps.json').then((response) =>
+        response.json()
       )
-      return (await matcapListResponse.json()) as Record<string, string>
-    })()
+    )
   )
 
   interface Props {

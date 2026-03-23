@@ -14,17 +14,17 @@
   const m = (2 * Math.PI) / colors.length
 </script>
 
-{#each colors as color, i}
-  {@const a = m * i}
+{#each colors as color, index (color)}
+  {@const a = m * index}
   <CursorLine
     {color}
     cursorPosition={cursorPosition.current}
-    position.x={0.5 * Math.cos(a)}
-    position.y={0.5 * Math.sin(a)}
+    position.x={0.2 * Math.cos(a)}
+    position.y={0.2 * Math.sin(a)}
   >
-    {#snippet children({ getPoints })}
+    {#snippet children(points)}
       <MeshLineGeometry
-        points={getPoints()}
+        {points}
         shape="taper"
       />
       <MeshLineMaterial
@@ -47,7 +47,6 @@
     cursorPosition.set(event.point.toArray())
   }}
   position.z={-10}
-  scale={100}
 >
-  <T.PlaneGeometry />
+  <T.PlaneGeometry args={[100, 100]} />
 </T.Mesh>

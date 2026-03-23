@@ -16,7 +16,7 @@
 
   let { mesh }: Props = $props()
 
-  const { scene, renderer, camera, size, autoRender, renderStage } = useThrelte()
+  const { scene, renderer, camera, size, autoRender, renderStage, shouldRender } = useThrelte()
 
   const composer = new EffectComposer(renderer)
   $effect(() => {
@@ -26,7 +26,7 @@
   const renderPass = new RenderPass(scene)
   composer.addPass(renderPass)
 
-  export const outlineEffectOptions: ConstructorParameters<typeof OutlineEffect>[2] = {
+  const outlineEffectOptions: ConstructorParameters<typeof OutlineEffect>[2] = {
     blendFunction: BlendFunction.ALPHA,
     edgeStrength: 100,
     pulseSpeed: 0.0,
@@ -70,7 +70,9 @@
 
   useTask(
     (delta) => {
-      composer.render(delta)
+      if (shouldRender()) {
+        composer.render(delta)
+      }
     },
     { stage: renderStage, autoInvalidate: false }
   )

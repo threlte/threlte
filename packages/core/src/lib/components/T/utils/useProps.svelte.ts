@@ -9,7 +9,7 @@ const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'i
  * Only scalar values are memoized. Objects/functions/arrays are treated as dynamic
  * so Svelte-style reactivity remains intuitive.
  */
-const memoizeProp = (value: unknown): boolean => {
+const canMemoizeProp = (value: unknown): boolean => {
   return (
     typeof value === 'string' ||
     typeof value === 'number' ||
@@ -17,39 +17,6 @@ const memoizeProp = (value: unknown): boolean => {
     typeof value === 'undefined' ||
     value === null
   )
-}
-
-const setter = (target: any, key: any, value: any) => {
-  if (
-    !Array.isArray(value) &&
-    typeof value === 'number' &&
-    typeof target[key] === 'object' &&
-    target[key] !== null &&
-    typeof target[key]?.setScalar === 'function' &&
-    // colors do have a setScalar function, but we don't want to use it, because
-    // the hex notation (i.e. 0xff0000) is very popular and matches the number
-    // type. So we exclude colors here.
-    !target[key]?.isColor
-  ) {
-    // edge case of setScalar setters
-    target[key].setScalar(value)
-  } else {
-    if (
-      typeof target[key]?.set === 'function' &&
-      typeof target[key] === 'object' &&
-      target[key] !== null
-    ) {
-      // if the property has a "set" function, we can use it
-      if (Array.isArray(value)) {
-        target[key].set(...value)
-      } else {
-        target[key].set(value)
-      }
-    } else {
-      // otherwise, we just set the value
-      target[key] = value
-    }
-  }
 }
 
 export const useProps = <Type>(
@@ -71,7 +38,7 @@ export const useProps = <Type>(
   >()
 
   const setProp = <T>(instance: T, propertyPath: string, value: any) => {
-    if (memoizeProp(value)) {
+    if (canMemoizeProp(value)) {
       const memoizedProp = memoizedProps.get(propertyPath)
       if (memoizedProp && memoizedProp.instance === instance && memoizedProp.value === value) {
         return
@@ -90,15 +57,18 @@ export const useProps = <Type>(
 
     const { key, target } = resolvePropertyPath(instance, propertyPath)
 
+    const prop = target[key]
+    const valueIsArray = Array.isArray(value)
+
     /**
      * If we can determine that this is an event listener prop,
      * attach it.
      */
     if (
+      prop === undefined &&
       typeof value === 'function' &&
       key.startsWith('on') &&
-      !propertyPath.includes('.') &&
-      'addEventListener' in (target as EventDispatcher)
+      'addEventListener' in target
     ) {
       const dispatcher = target as EventDispatcher<Record<string, any>>
       const eventName = key.slice(2)
@@ -110,14 +80,40 @@ export const useProps = <Type>(
       }
     }
 
-    if (value !== undefined && value !== null) {
-      setter(target, key, value)
+    if (
+      !valueIsArray &&
+      typeof value === 'number' &&
+      typeof prop === 'object' &&
+      prop !== null &&
+      typeof prop?.setScalar === 'function' &&
+      // colors do have a setScalar function, but we don't want to use it, because
+      // the hex notation (i.e. 0xff0000) is very popular and matches the number
+      // type. So we exclude colors here.
+      !prop?.isColor
+    ) {
+      // edge case of setScalar setters
+      prop.setScalar(value)
+    } else if (typeof prop?.set === 'function' && typeof prop === 'object' && prop !== null) {
+      // if the property has a "set" function, we can use it
+      if (valueIsArray) {
+        prop.set(...value)
+      } else {
+        prop.set(value)
+      }
+    } else if (typeof prop === 'function') {
+      if (typeof value === 'function') {
+        target[key] = value
+      } else if (valueIsArray) {
+        prop.call(target, ...value)
+      } else {
+        prop.call(target, value)
+      }
     } else {
+      // otherwise, we just set the value
       target[key] = value
     }
 
-    invalidate()
-    return
+    return invalidate()
   }
 
   $effect.pre(() => {

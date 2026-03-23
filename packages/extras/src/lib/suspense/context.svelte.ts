@@ -9,9 +9,7 @@ export type SuspenseContext = {
 
 export const suspenseContextIdentifier = Symbol('THRELTE_SUSPENSE_CONTEXT_IDENTIFIER')
 
-export const createSuspenseContext = (options?: () => { final?: boolean }) => {
-  const { final = false } = $derived(options?.() ?? {})
-
+export const createSuspenseContext = (final: () => boolean) => {
   /**
    * This set contains all the promises that are currently being suspended.
    */
@@ -33,7 +31,7 @@ export const createSuspenseContext = (options?: () => { final?: boolean }) => {
    * handled.
    */
   const suspended = $derived.by(() => {
-    if (final && finalized) {
+    if (final() && finalized) {
       // if the suspense settled *once*, it will never suspend again.
       return false
     } else if (errors.size > 0) {

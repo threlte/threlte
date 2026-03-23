@@ -15,7 +15,7 @@
 
   useTask((delta) => {
     const f = 1 / 60 / delta
-    positionZ -= 5 * f
+    positionZ -= 15 * f
 
     if (positionZ < -100) {
       positionZ = 100

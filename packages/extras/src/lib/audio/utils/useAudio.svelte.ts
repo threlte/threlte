@@ -55,6 +55,7 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
       }
     }
 
+    console.log(src())
     return currentAudio.play(delay)
   }
 

@@ -62,16 +62,20 @@ export const asyncState = <T>(promise: Promise<T>): AsyncState<T> => {
       error = promiseError
     })
 
+  //delete promise.current
   Object.defineProperty(promise, 'current', {
     get() {
       return current
-    }
+    },
+    configurable: true
   })
 
+  // delete promise.error
   Object.defineProperty(promise, 'error', {
     get() {
       return error
-    }
+    },
+    configurable: true
   })
 
   return promise as AsyncState<T>

@@ -41,7 +41,10 @@
   position.y={10}
   position.z={10}
 >
-  <OrbitControls />
+  <OrbitControls
+    enableDamping
+    enableZoom={false}
+  />
 </T.PerspectiveCamera>
 
 <Suspense>

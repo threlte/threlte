@@ -1,5 +1,6 @@
 import { Cache } from 'three'
 import { asyncState, type AsyncState } from '../utilities/index.js'
+import { useCache } from '../context/fragments/cache.js'
 
 type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
@@ -108,6 +109,7 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   Proto: Proto,
   options?: UseLoaderOptions<Proto>
 ): ThrelteUseLoader<InstanceType<Proto>> {
+  const { remember, clear: clearCacheItem } = useCache()
   const loader = new Proto(...(options?.args ?? [])) as InstanceType<Proto>
   options?.extend?.(loader)
 
@@ -131,19 +133,19 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
 
     if (Array.isArray(input)) {
       // map over the input array and return an array of promises
-      const promises = input.map((url) => loadResource(url))
+      const promises = input.map((url) => remember(url, () => loadResource(url)))
 
       // return an AsyncState that resolves to the array of promises
       return asyncState(Promise.all(promises)) as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
-      const promise = loadResource(input)
+      const promise = remember(input, () => loadResource(input))
 
       // return an AsyncState that resolves to the promise
       return asyncState(promise) as any // TODO: Dirty escape hatch
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
-        return loadResource(url)
+        return remember(url, () => loadResource(url))
       })
       // return an AsyncState that resolves to the object of promises
 
@@ -158,12 +160,15 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   const clear = (input: string | string[] | Record<string, string>) => {
     if (Array.isArray(input)) {
       input.forEach((url) => {
+        clearCacheItem(url)
         Cache.remove(url)
       })
     } else if (typeof input === 'string') {
+      clearCacheItem(input)
       Cache.remove(input)
     } else {
       Object.entries(input).forEach(([, url]) => {
+        clearCacheItem(url)
         Cache.remove(url)
       })
     }

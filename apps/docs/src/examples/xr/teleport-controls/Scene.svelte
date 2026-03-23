@@ -28,10 +28,6 @@
     gltf.scene.traverse((node) => {
       node.castShadow = true
       node.receiveShadow = true
-
-      if (node.name.includes('teleport')) {
-        node.visible = false
-      }
     })
 
     torchX = gltf.nodes.Torch1.position.x

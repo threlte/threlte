@@ -10,7 +10,6 @@
   const mesh = new Mesh()
 
   let paused = $state(false)
-  let autoRotate = $state(false)
 
   const walls: Wall[] = [
     {
@@ -64,16 +63,11 @@
     bind:value={paused}
     label="paused"
   />
-  <Checkbox
-    bind:value={autoRotate}
-    label="auto rotate camera"
-  />
 </Pane>
 
 <Canvas>
   <Scene
     play={!paused}
-    {autoRotate}
     {mesh}
     {walls}
     {positions}

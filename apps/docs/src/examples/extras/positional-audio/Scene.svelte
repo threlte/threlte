@@ -41,6 +41,7 @@
     autoRotate={isPlaying}
     autoRotateSpeed={0.5}
     enableDamping
+    enableZoom={false}
     maxPolarAngle={MathUtils.DEG2RAD * 80}
     target.y={1.5}
   />

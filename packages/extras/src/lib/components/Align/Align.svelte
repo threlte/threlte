@@ -87,7 +87,7 @@
   /** Manually trigger aligning */
   export const align = () => (scheduleAligning = true)
 
-  observe(
+  observe.pre(
     () => [x, y, z, precise],
     () => {
       scheduleAligning = true

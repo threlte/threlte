@@ -12,10 +12,15 @@ export const buildSceneGraph = <Graph extends SceneGraph = any>(object: Object3D
   const data: Graph = { nodes: {}, materials: {} } as Graph
   if (object) {
     object.traverse((obj: any) => {
-      if (obj.name) data.nodes[obj.name as any] = obj
-      if (obj.material && !data.materials[obj.material.name])
+      if (obj.name) {
+        data.nodes[obj.name as any] = obj
+      }
+
+      if (obj.material && !data.materials[obj.material.name]) {
         data.materials[obj.material.name as any] = obj.material
+      }
     })
   }
+
   return data as Graph
 }

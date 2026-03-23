@@ -2,8 +2,9 @@
   import Scene from './Scene.svelte'
   import { Button, Folder, Pane } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
+  import { Suspense, Text } from '@threlte/extras'
 
-  let scene = $state<Scene>()
+  let scene = $state.raw<Scene>()
   let animating = $state(false)
 
   const actions = $derived(scene?.actions)
@@ -49,7 +50,23 @@
 
 <div>
   <Canvas>
-    <Scene bind:this={scene} />
+    <Suspense final>
+      <Scene bind:this={scene} />
+
+      {#snippet fallback()}
+        <Text
+          position.z={-8}
+          text="Loading..."
+          fontSize={1}
+          color="white"
+          anchorX="50%"
+          anchorY="50%"
+          oncreate={(ref) => {
+            ref.lookAt(-40, 25, 40)
+          }}
+        />
+      {/snippet}
+    </Suspense>
   </Canvas>
 </div>
 

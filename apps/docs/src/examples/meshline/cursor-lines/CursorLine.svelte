@@ -2,7 +2,7 @@
   module
   lang="ts"
 >
-  const createPoints = (count = 50) => {
+  const createPoints = (count: number) => {
     const points: Vector3[] = []
     for (let i = 0; i < count; i += 1) {
       points.push(new Vector3())
@@ -14,40 +14,41 @@
 <script lang="ts">
   import type { Props } from '@threlte/core'
   import type { Vector3Tuple } from 'three'
-  import { Mesh, Vector3 } from 'three'
-  import { T, useTask } from '@threlte/core'
+  import { type Mesh, Vector3 } from 'three'
+  import { T, useStage, useTask, useThrelte } from '@threlte/core'
 
-  type CursorLineProps = Props<typeof Mesh, [{ getPoints(): Vector3[] }]> & {
+  type CursorLineProps = Props<Mesh, [Vector3[]]> & {
     cursorPosition: Vector3Tuple
   }
 
   let { cursorPosition, children, ...props }: CursorLineProps = $props()
 
-  const count = 50
+  const { renderStage } = useThrelte()
+
+  const stage = useStage('cursor', {
+    after: renderStage
+  })
+
+  const count = 20
   let front = $state.raw(createPoints(count))
   let back = createPoints(count)
 
-  useTask((delta) => {
-    back[0]?.fromArray(cursorPosition)
-    const alpha = 1e-6 ** delta
-    for (let i = 1; i < count; i += 1) {
-      const first = back[i - 1]
-      const second = back[i]
+  useTask(
+    () => {
+      back[0]?.fromArray(cursorPosition)
 
-      if (first) {
-        second?.lerp(first, alpha)
+      for (let i = 1; i < count; i += 1) {
+        back[i]?.copy(front[i - 1]!)
       }
-    }
-    const temp = front
-    front = back
-    back = temp
-  })
+
+      const temp = front
+      front = back
+      back = temp
+    },
+    { stage }
+  )
 </script>
 
 <T.Mesh {...props}>
-  {@render children?.({
-    getPoints() {
-      return front
-    }
-  })}
+  {@render children?.(front)}
 </T.Mesh>

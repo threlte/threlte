@@ -1,9 +1,17 @@
 <script lang="ts">
-  import { Environment, OrbitControls, useDraco, useGltf, useGltfAnimations } from '@threlte/extras'
+  import {
+    Environment,
+    OrbitControls,
+    useDraco,
+    useGltf,
+    useGltfAnimations,
+    useSuspense
+  } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
 
+  const suspend = useSuspense()
   const dracoLoader = useDraco()
-  const gltf = useGltf('/models/LittlestTokyo.glb', { dracoLoader })
+  const gltf = suspend(useGltf('/models/LittlestTokyo.glb', { dracoLoader }))
 
   const { scene } = useThrelte()
 

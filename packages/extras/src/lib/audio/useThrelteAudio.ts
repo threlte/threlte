@@ -1,4 +1,5 @@
 import { useThrelteUserContext } from '@threlte/core'
+import { untrack } from 'svelte'
 import { SvelteMap } from 'svelte/reactivity'
 import type { AudioListener } from 'three'
 
@@ -14,20 +15,24 @@ const audioListeners = new SvelteMap<string, AudioListener>()
 const audioCtx: ThrelteAudioContext = {
   audioListeners,
   addAudioListener: (listener, id = 'default') => {
-    if (audioListeners.has(id)) {
-      console.warn(`An AudioListener with the id "${id}" has already been added, aborting.`)
-      return
-    }
+    untrack(() => {
+      if (audioListeners.has(id)) {
+        console.warn(`An AudioListener with the id "${id}" has already been added, aborting.`)
+        return
+      }
 
-    audioListeners.set(id, listener)
+      audioListeners.set(id, listener)
+    })
   },
   removeAudioListener: (id = 'default') => {
-    if (!audioListeners.has(id)) {
-      console.warn(`No AudioListener with the id "${id}" found, aborting.`)
-      return
-    }
+    untrack(() => {
+      if (!audioListeners.has(id)) {
+        console.warn(`No AudioListener with the id "${id}" found, aborting.`)
+        return
+      }
 
-    audioListeners.delete(id)
+      audioListeners.delete(id)
+    })
   },
   getAudioListener: (id = 'default') => {
     if (!audioListeners.has(id)) {

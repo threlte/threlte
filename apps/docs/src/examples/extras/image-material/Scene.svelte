@@ -10,6 +10,7 @@
     'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Antoine_Vollon_-_Mound_of_Butter_-_National_Gallery_of_Art.jpg/935px-Antoine_Vollon_-_Mound_of_Butter_-_National_Gallery_of_Art.jpg',
     'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/De_bedreigde_zwaan_Rijksmuseum_SK-A-4.jpeg/911px-De_bedreigde_zwaan_Rijksmuseum_SK-A-4.jpeg'
   ]
+
   const count = 5 // 4 for each channel + 1 for the texture of all channels
   const names: string[] = ['Hue(R)', 'Saturation(G)', 'Lightness(B)', 'Alpha(A)']
 </script>
