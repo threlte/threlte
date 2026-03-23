@@ -1,17 +1,28 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Align, OrbitControls, RoundedBoxGeometry, TransformControls } from '@threlte/extras'
-  import type { Box3, Vector3 } from 'three'
+  import { Box3, type Vector3 } from 'three'
 
-  export let x: number = 0
-  export let y: number = 0
-  export let z: number = 0
-  export let precise: boolean = false
-  export let showSphere: boolean = false
-  export let autoAlign: boolean = false
+  interface Props {
+    x?: number
+    y?: number
+    z?: number
+    precise?: boolean
+    showSphere?: boolean
+    autoAlign?: boolean
+  }
 
-  let boundingBox: Box3 | undefined
-  let center: Vector3 | undefined
+  let {
+    x = 0,
+    y = 0,
+    z = 0,
+    precise = false,
+    showSphere = false,
+    autoAlign = false
+  }: Props = $props()
+
+  let box = new Box3()
+  let center = $state<Vector3>()
 </script>
 
 <T.PerspectiveCamera
@@ -29,51 +40,52 @@
     {z}
     {precise}
     auto={autoAlign}
-    on:align={({ boundingBox: newBoundingBox, center: newCenter }) => {
+    onalign={({ boundingBox, center: newCenter }) => {
+      box.copy(boundingBox)
       center = newCenter
-      boundingBox = newBoundingBox
     }}
-    let:align
   >
-    <T.Mesh
-      position.x={-1}
-      let:ref
-    >
-      <TransformControls
-        object={ref}
-        on:objectChange={align}
-      />
-      <RoundedBoxGeometry args={[1, 2, 1]} />
-      <T.MeshStandardMaterial color="white" />
-    </T.Mesh>
+    {#snippet children({ align })}
+      <TransformControls onobjectChange={align}>
+        <T.Mesh>
+          <RoundedBoxGeometry args={[1, 2, 1]} />
+          <T.MeshStandardMaterial color="white" />
+        </T.Mesh>
+      </TransformControls>
 
-    <T.Mesh
-      position.x={-4}
-      position.y={1}
-    >
-      <RoundedBoxGeometry args={[1, 2, 3]} />
-      <T.MeshStandardMaterial color="white" />
-    </T.Mesh>
-
-    {#if showSphere}
       <T.Mesh
-        position.x={-2}
-        position.y={3}
+        position.x={-4}
+        position.y={1}
       >
-        <T.SphereGeometry />
+        <RoundedBoxGeometry args={[1, 2, 3]} />
         <T.MeshStandardMaterial color="white" />
       </T.Mesh>
-    {/if}
+
+      {#if showSphere}
+        <T.Mesh
+          position.x={-2}
+          position.y={3}
+        >
+          <T.SphereGeometry />
+          <T.MeshStandardMaterial color="white" />
+        </T.Mesh>
+      {/if}
+    {/snippet}
   </Align>
 {/key}
 
-{#if boundingBox && center}
+{#if box && center}
   <T.Group
     position.x={center.x}
     position.y={center.y}
     position.z={center.z}
   >
-    <T.Box3Helper args={[boundingBox, 'white']} />
+    <T.Box3Helper
+      args={[box, 'white']}
+      oncreate={() => {
+        console.log('CREATE!')
+      }}
+    />
   </T.Group>
 {/if}
 

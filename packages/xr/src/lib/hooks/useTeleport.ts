@@ -21,13 +21,12 @@ const offset = { x: 0, y: 0, z: 0 }
  */
 export const useTeleport = () => {
   const { xr } = useThrelte().renderer
-  let space = xr.getReferenceSpace()
 
   /**
    * Teleports a player from the world origin to a position and optional orientation.
    */
   return (position: Vector3 | Vector3Tuple, orientation = quaternion) => {
-    space ??= xr.getReferenceSpace()
+    const space = xr.getReferenceSpace()
 
     if (space === null) return
 

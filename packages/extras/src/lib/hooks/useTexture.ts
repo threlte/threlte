@@ -19,13 +19,7 @@ export const useTexture = <Input extends UseLoaderLoadInput>(
   return loader.load(input, {
     ...options,
     transform: (res) => {
-      if ('colorSpace' in res) {
-        // >= r152
-        res.colorSpace = renderer.outputColorSpace
-      } else {
-        // < r152
-        ;(res as any).encoding = (renderer as any).outputEncoding
-      }
+      res.colorSpace = renderer.outputColorSpace
       res.needsUpdate = true
       return options?.transform?.(res) ?? res
     }

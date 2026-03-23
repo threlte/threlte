@@ -1,7 +1,6 @@
 import { setContext } from 'svelte'
-import { writable } from 'svelte/store'
-import { injectLayersPlugin } from './plugin'
-import type { ThrelteLayers, ThrelteLayersContext } from './types'
+import { injectLayersPlugin } from './plugin.svelte.js'
+import type { ThrelteLayers, ThrelteLayersContext } from './types.js'
 
 type LayersOptions = {
   defaultLayers?: ThrelteLayers
@@ -31,8 +30,9 @@ type LayersOptions = {
  * @param options
  */
 const layers = (options?: LayersOptions) => {
-  const local = writable<ThrelteLayers>(options?.defaultLayers ?? 0)
-  setContext<ThrelteLayersContext>('threlte-layers-context', local)
+  setContext<ThrelteLayersContext>('threlte-layers-context', {
+    layers: options?.defaultLayers ?? 0
+  })
 
   injectLayersPlugin()
 }

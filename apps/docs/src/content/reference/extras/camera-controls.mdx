@@ -1,0 +1,71 @@
+---
+order: 2.1
+category: '@threlte/extras'
+title: '<CameraControls>'
+sourcePath: 'packages/extras/src/lib/components/CameraControls/CameraControls.svelte'
+type: 'component'
+componentSignature: {}
+---
+
+This component is a declarative implementation of the popular [camera-controls](https://github.com/yomotsu/camera-controls) library.
+
+<Example path="extras/camera-controls" />
+
+If the controls are set as a child component of a camera, they will attach to that camera.
+
+```svelte
+<T.PerspectiveCamera makeDefault>
+  <CameraControls />
+</T.PerspectiveCamera>
+```
+
+A camera can also optionally be passed to the controls as a prop.
+
+```svelte
+<CameraControls camera={myPerspectiveCamera} />
+```
+
+Finally, if the component is created without an attached camera
+it will use the scene's default camera as provided by `useThrelte`.
+
+## Examples
+
+### Basic Example
+
+```svelte title="CameraControls.svelte"
+<script lang="ts">
+  import { CameraControls, type CameraControlsRef } from '@threlte/extras'
+
+  let controls = $state<CameraControlsRef>()
+
+  $effect.pre(() => {
+    controls?.truck(1, 0, true)
+  })
+</script>
+
+<CameraControls
+  bind:ref={controls}
+  oncreate={(ref) => ref.setPosition(5, 5, 5)}
+/>
+```
+
+### Prevent SSR Externalization
+
+If you are using SvelteKit or Vite for building your app, you may need to externalize the `camera-controls` library.
+
+To externalize the `camera-controls` library put the following in your `vite.config.js` or `vite.config.ts`.
+
+```typescript {4-6}+
+// vite.config.ts
+export default defineConfig({
+  plugins: [sveltekit()],
+  ssr: {
+    noExternal: ['camera-controls']
+  }
+})
+```
+
+<Tip type="info">
+  The camera-controls package features include first-person, third-person, pointer-lock,
+  fit-to-bounding-sphere and much more!
+</Tip>

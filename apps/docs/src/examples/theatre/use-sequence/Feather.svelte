@@ -7,32 +7,33 @@
 
   const { play, pause, position, length } = useSequence()
 
-  let baseline: number | undefined = undefined
+  let baseline = $state<number>()
 </script>
 
 <T.Group
-  on:pointerenter={pause}
-  on:pointerleave={play}
-  on:pointerdown={(event) => {
-    baseline = event.intersections[0].point.y
+  onpointerenter={pause}
+  onpointerleave={() => {
+    play()
+    baseline = undefined
   }}
-  on:pointermove={(event) => {
+  onpointerdown={(event) => {
+    baseline = event.intersections[0]?.point.y
+  }}
+  onpointermove={(event) => {
     if (baseline) {
-      const current = event.intersections[0].point.y
+      const current = event.intersections[0]?.point.y ?? 0
       const progress = (baseline - current) / 2
       $position = $position + progress * $length
       baseline = current
     }
   }}
-  on:pointerup={() => (baseline = undefined)}
-  on:pointerleave={() => (baseline = undefined)}
+  onpointerup={() => (baseline = undefined)}
 >
-  <SheetObject
-    key="Feather"
-    let:Transform
-  >
-    <Transform>
-      <GLTF url="/models/feather.glb" />
-    </Transform>
+  <SheetObject key="Feather">
+    {#snippet children({ Transform })}
+      <Transform>
+        <GLTF url="/models/feather.glb" />
+      </Transform>
+    {/snippet}
   </SheetObject>
 </T.Group>

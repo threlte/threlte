@@ -6,30 +6,37 @@
     "build": "turbo run build",
     "build:docs": "turbo run build --filter='@threlte/docs'",
     "preview": "turbo run preview",
-    "lint": "turbo run lint",
     "install:all": "pnpm install --filter='!@threlte/gltf'",
     "install:packages": "pnpm install --filter='!./apps/*'",
     "package": "turbo run package --filter='./packages/*'",
     "package:graph": "turbo run package --filter='./packages/*' --graph",
-    "format": "prettier --write \"**/*.{ts,svelte,md}\"",
-    "prettier": "prettier --check \"**/*.{ts,svelte,md}\"",
+    "format": "pnpm -r --aggregate-output format",
+    "lint": "pnpm -r --aggregate-output lint",
+    "check": "pnpm -r --aggregate-output check",
     "release": "changeset publish",
-    "cleanup": "turbo run cleanup && rimraf node_modules"
+    "cleanup": "turbo run cleanup && rimraf node_modules",
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
     "eslint-config-custom": "*",
-    "prettier": "^3.2.4",
-    "prettier-plugin-astro": "^0.13.0",
-    "prettier-plugin-svelte": "^3.1.2",
-    "prettier-plugin-tailwindcss": "^0.5.11",
-    "rimraf": "^5.0.5",
-    "turbo": "latest"
+    "rimraf": "catalog:",
+    "turbo": "^2.3.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "vite": "catalog:"
+    },
+    "patchedDependencies": {
+      "@theatre/studio": "patches/@theatre__studio.patch",
+      "mitt": "patches/mitt.patch"
+    }
   },
   "engines": {
-    "pnpm": "^8.0.0",
-    "node": ">=16.0.0"
+    "pnpm": ">=9",
+    "node": ">=20.19.4"
   },
+  "packageManager": "pnpm@10.11.1",
   "type": "module"
 }

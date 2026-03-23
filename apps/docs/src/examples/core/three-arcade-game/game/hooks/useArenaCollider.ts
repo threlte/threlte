@@ -1,21 +1,15 @@
 import type { CollisionEnterEvent } from '@threlte/rapier'
-import { tweened } from 'svelte/motion'
+import { Tween } from 'svelte/motion'
 import { cubicOut } from 'svelte/easing'
-import { gameState } from '../state'
-import { get } from 'svelte/store'
+import { game } from '../Game.svelte'
 
 export const useArenaCollisionEnterEvent = () => {
-  const { ballRigidBody } = gameState
-
-  const opacity = tweened(0.05, {
+  const opacity = new Tween(0.05, {
     easing: cubicOut
   })
 
-  const onCollision = (event: CollisionEnterEvent) => {
-    if (
-      !event.detail.targetRigidBody ||
-      event.detail.targetRigidBody?.handle !== get(ballRigidBody)?.handle
-    ) {
+  const onCollision: CollisionEnterEvent = (event) => {
+    if (!event.targetRigidBody || event.targetRigidBody?.handle !== game.ballRigidBody?.handle) {
       return
     }
     opacity.set(0.7, {

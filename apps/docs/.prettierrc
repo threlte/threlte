@@ -1,0 +1,11 @@
+{
+  "useTabs": false,
+  "singleQuote": true,
+  "trailingComma": "none",
+  "printWidth": 100,
+  "semi": false,
+  "singleAttributePerLine": true,
+  "astroAllowShorthand": true,
+  "astroSkipFrontmatter": false,
+  "plugins": ["prettier-plugin-astro", "prettier-plugin-svelte", "prettier-plugin-tailwindcss"]
+}

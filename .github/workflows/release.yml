@@ -6,27 +6,31 @@ on:
       - main
       - next
 
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v2
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
 
-      - uses: pnpm/action-setup@v2.2.2
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
         with:
-          version: 8.3.1
+          run_install: true
 
-      - name: Install deps
-        run: pnpm run install:packages
-
-      - name: Build packages
+      - name: Build packages 🔧
         run: pnpm run package
 
       - name: Create Release Pull Request or Publish to npm
@@ -36,5 +40,4 @@ jobs:
           # This expects you to have a script called release which does a build for your packages and calls changeset publish
           publish: pnpm release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}

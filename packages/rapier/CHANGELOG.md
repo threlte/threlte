@@ -1,5 +1,229 @@
 # @threlte/extras
 
+## 3.4.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
+## 3.3.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 3.2.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 3.1.5
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 3.1.4
+
+### Patch Changes
+
+- 3affb11: Fix await initRapier block syntax
+
+## 3.1.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 3.1.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+- a162c3d: Stronger typechecking
+- 6440c33: Update rapier dependency
+
+## 3.1.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 3.1.0
+
+### Minor Changes
+
+- 738918d: Fix TriMesh & ConvexHull auto colliders
+
+## 3.0.0
+
+### Major Changes
+
+- 05dc480: Refactor component types
+- d4f0639: Remove BasicPlayerController recipe
+- da6742c: Fixed Frame Physics, two-Stage system to manage simulation and synchronization)
+- f25685a: Experimental Svelte 5 compatibility
+- b476c89: Dependency updates
+
+### Minor Changes
+
+- b903698: Add usePhysicsTask hook
+- 5331021: Add useRopeJoint hook
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+- b7045f5: Svelte dependency update
+- 98a9bec: Fix rigidbody syncing for varying framerates
+- 9ebc43d: Enable scaled meshes for autocolliders
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 995e592: Implement type guard utility, clean up
+- c53d7a9: Replace fallback slots with snippets
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+- 42ee4c9: Fix svelte compiler warnings
+
+## 3.0.0-next.20
+
+### Patch Changes
+
+- 9ebc43d: Enable scaled meshes for autocolliders
+
+## 3.0.0-next.19
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 3.0.0-next.18
+
+### Minor Changes
+
+- b903698: Add usePhysicsTask hook
+- 5331021: Add useRopeJoint hook
+
+## 3.0.0-next.17
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 3.0.0-next.16
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
+## 3.0.0-next.15
+
+### Major Changes
+
+- 05dc480: Refactor component types
+- d4f0639: Remove BasicPlayerController recipe
+
+## 3.0.0-next.14
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 3.0.0-next.13
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 3.0.0-next.12
+
+### Patch Changes
+
+- 995e592: Implement type guard utility, clean up
+
+## 3.0.0-next.11
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
+## 3.0.0-next.10
+
+### Major Changes
+
+- b476c89: Dependency updates
+
+## 3.0.0-next.9
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+
+## 3.0.0-next.8
+
+### Patch Changes
+
+- 98a9bec: Fix rigidbody syncing for varying framerates
+
+## 3.0.0-next.7
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 3.0.0-next.6
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 3.0.0-next.5
+
+### Major Changes
+
+- da6742c: Fixed Frame Physics, two-Stage system to manage simulation and synchronization)
+
+## 3.0.0-next.4
+
+### Patch Changes
+
+- 42ee4c9: Fix svelte compiler warnings
+
+## 3.0.0-next.3
+
+### Patch Changes
+
+- c53d7a9: Replace fallback slots with snippets
+
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 3.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 3.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+## 2.0.1
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
+
 ## 2.0.0
 
 ### Major Changes

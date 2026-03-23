@@ -1,29 +1,22 @@
 ---
-{
-  order: 5,
-  category: '@threlte/extras',
-  name: <CSM>,
-  sourcePath: 'packages/extras/src/lib/components/CSM/CSM.svelte',
-  type: 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          { name: 'enabled', type: 'boolean', required: false },
-          { name: 'camera', type: 'THREE.Camera | undefined', required: false },
-          { name: 'configure', type: '(csm: CSM) => void', required: false },
-          { name: 'args', type: 'CSMParameters', required: false },
-          { name: 'lightIntensity', type: 'number', required: false },
-          { name: 'lightColor', type: 'THREE.ColorRepresentation', required: false },
-          {
-            name: 'lightDirection',
-            type: 'THREE.Vector3Tuple',
-            required: false,
-            default: '[1, -1, 1]'
-          }
-        ]
-    }
-}
+order: 4.14
+category: '@threlte/extras'
+title: <CSM>
+sourcePath: 'packages/extras/src/lib/components/CSM/CSM.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'enabled', type: 'boolean' },
+        { name: 'camera', type: 'THREE.Camera | undefined' },
+        { name: 'configure', type: '(csm: CSM) => void' },
+        { name: 'args', type: 'CSMParameters' },
+        { name: 'lightIntensity', type: 'number' },
+        { name: 'lightColor', type: 'THREE.ColorRepresentation' },
+        { name: 'lightDirection', type: 'THREE.Vector3Tuple', default: '[1, -1, 1]' }
+      ]
+  }
 ---
 
 The `<CSM/>` component offers a streamlined convenience integration of the Cascaded Shadow Maps technique, sourced from the Three.js addon.
@@ -116,15 +109,15 @@ This callback facilitates advanced configurations, such as enabling the fade fea
 You may want to use a regular `<T.DirectionalLight>` when CSM is not enabled,
 for instance if you are developing a game and want to support low-end devices by
 disabling shadows altogehter. You can do this by using the `enabled` prop and
-the `disabled` slot:
+the `fallback` snippet:
 
 ```svelte title="Scene.svelte"
 <CSM enabled={settings.shadows}>
   <!-- Your scene goes here -->
 
-  <slot name="disabled">
+  {#snippet fallback()}
     <!-- Will be mounted if settings.shadows is false -->
     <T.DirectionalLight castShadow={false} />
-  </slot>
+  {/snippet}
 </CSM>
 ```

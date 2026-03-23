@@ -1,15 +1,19 @@
 <script lang="ts">
-  import { LumaSplatsThree, type LumaSplatsSource } from '@lumaai/luma-web'
+  import { LumaSplatsThree } from '@lumaai/luma-web'
   import { T, asyncWritable, useCache, useTask, useThrelte } from '@threlte/core'
   import { useSuspense } from '@threlte/extras'
-  import { onDestroy } from 'svelte'
-  import type { CubeTexture, Scene } from 'three'
+  import type { CubeTexture } from 'three'
+  import type { LumaSplatsThreeProps } from './types'
 
-  export let source: LumaSplatsSource
-  export let mode: 'object' | 'object-env' | 'env' = 'object'
-  export let loadingAnimationEnabled = false
-  export let particleRevealEnabled = false
-  export let enableThreeShaderIntegration = true
+  let {
+    source,
+    mode = 'object',
+    loadingAnimationEnabled = false,
+    particleRevealEnabled = false,
+    enableThreeShaderIntegration = true,
+    children,
+    ...rest
+  }: LumaSplatsThreeProps = $props()
 
   const { invalidate, renderer, scene } = useThrelte()
 
@@ -46,35 +50,38 @@
   let preheat =
     particleRevealEnabled && loadingAnimationEnabled ? 400 : loadingAnimationEnabled ? 100 : 10
   let frame = 0
-  const { start, stop } = useTask(
+
+  let running = $state(false)
+  useTask(
     () => {
       frame++
       if (frame >= preheat) {
-        stop()
+        running = false
         frame = 0
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
-  let previousEnvironment: Scene['environment']
-  let previousBackground: Scene['background']
-  let previousBackgroundBluriness: Scene['backgroundBlurriness']
-  $: if ($splats && $splats[1]) {
-    previousEnvironment = scene.environment
-    previousBackground = scene.background
-    previousBackgroundBluriness = scene.backgroundBlurriness
+  $effect(() => {
+    if (!$splats?.[1]) {
+      return
+    }
+
+    const previousEnvironment = scene.environment
+    const previousBackground = scene.background
+    const previousBackgroundBluriness = scene.backgroundBlurriness
+
     scene.environment = $splats[1]
     scene.background = $splats[1]
     scene.backgroundBlurriness = 0.5
-    invalidate()
-  }
 
-  onDestroy(() => {
-    if (captureCubemap) {
+    invalidate()
+
+    return () => {
       scene.environment = previousEnvironment
       scene.background = previousBackground
-      scene.backgroundBlurriness = previousBackgroundBluriness
+      scene.backgroundBlurriness = previousBackgroundBluriness ?? 0
       invalidate()
     }
   })
@@ -82,13 +89,13 @@
 
 {#if (mode === 'object' || mode === 'object-env') && $splats && $splats[0]}
   <T
-    dispose={false}
     is={$splats[0]}
-    on:create={() => {
-      start()
+    oncreate={() => {
+      running = true
     }}
-    {...$$restProps}
+    {...rest}
+    dispose={false}
   >
-    <slot ref={$splats[0]} />
+    {@render children?.({ ref: $splats[0] })}
   </T>
 {/if}

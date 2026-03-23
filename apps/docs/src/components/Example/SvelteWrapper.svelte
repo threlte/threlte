@@ -1,20 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { c } from '../../lib/classes'
   import OpenInStackblitz from './OpenInStackblitz.svelte'
+  import { getAllAppModules } from './globLoader'
 
-  export let path: string
-  export let files: Record<string, string>
-  export let hideCode: boolean
-  export let hideStackblitz: boolean = false
-  export let iframe: boolean
+  interface Props {
+    path: string
+    files: Record<string, string>
+    hideCode: boolean
+    hideStackblitz?: boolean
+    iframe: boolean
+    class?: string
+  }
 
-  const allAppModules = import.meta.glob('../../examples/**/App.svelte') as Record<
-    string,
-    () => Promise<any>
-  >
+  let { path, files, hideCode, hideStackblitz = false, iframe, class: cls = '' }: Props = $props()
 
-  let mounted = false
+  const allAppModules = getAllAppModules()
+
+  let mounted = $state(false)
 
   const AppModule = Object.entries(allAppModules).find(
     ([key]) => key.includes(path) && key.endsWith('App.svelte')
@@ -23,24 +25,21 @@
   onMount(() => {
     mounted = true
   })
-
-  let _class = ''
-  export { _class as class }
 </script>
 
 <div
-  class={c(
-    'relative h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20 bg-blue-900',
-    hideCode && '!rounded-md',
-    _class
-  )}
+  class={[
+    'relative mt-4 h-[80vh] w-full overflow-hidden rounded-t-md border border-white/20 bg-blue-900',
+    hideCode && 'rounded-md!',
+    cls
+  ]}
 >
   {#if iframe}
     <iframe
       src="/examples/{path}"
       title={path}
       class="h-full w-full border-none"
-    />
+    ></iframe>
   {:else if mounted && AppModule}
     {#await AppModule() then Mod}
       <Mod.default />
@@ -48,7 +47,7 @@
   {/if}
 
   {#if !hideStackblitz}
-    <div class="absolute bottom-4 right-4">
+    <div class="absolute right-4 bottom-4">
       <OpenInStackblitz {files} />
     </div>
   {/if}

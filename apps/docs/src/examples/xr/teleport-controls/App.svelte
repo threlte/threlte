@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
-  import { VRButton } from '@threlte/xr'
   import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
   import { Pane, Checkbox } from 'svelte-tweakpane-ui'
+  import { VRButton } from '@threlte/xr'
 
-  let showSurfaces = false
-  let showBlockers = false
+  let showSurfaces = $state(false)
+  let showBlockers = $state(false)
 </script>
 
 <Pane

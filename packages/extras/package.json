@@ -1,57 +1,70 @@
 {
   "name": "@threlte/extras",
-  "version": "8.7.5",
+  "version": "9.10.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
+  "description": "Utilities, abstractions and plugins for your Threlte apps",
   "scripts": {
     "dev": "vite dev",
     "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
     "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
-    "lint": "prettier --check --plugin-search-dir=. . && eslint .",
-    "format": "prettier --write --plugin-search-dir=. .",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
     "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^3.1.1",
-    "@sveltejs/kit": "^2.4.3",
-    "@sveltejs/package": "^2.2.6",
-    "@sveltejs/vite-plugin-svelte": "^3.0.0",
+    "@eslint/js": "catalog:",
+    "@sveltejs/adapter-auto": "catalog:",
+    "@sveltejs/kit": "catalog:",
+    "@sveltejs/package": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
     "@threlte/core": "workspace:*",
-    "@types/lodash": "^4.14.202",
-    "@types/node": "^20.11.6",
-    "@types/three": "^0.160.0",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "@typescript-eslint/parser": "^6.19.1",
-    "@yushijinhun/three-minifier-rollup": "^0.4.0",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-svelte": "^2.35.1",
-    "prettier": "^3.2.4",
-    "prettier-plugin-svelte": "^3.1.2",
-    "publint": "^0.2.7",
-    "rimraf": "^5.0.5",
-    "svelte": "^4.2.9",
-    "svelte-check": "^3.6.3",
-    "svelte-preprocess": "^5.1.3",
-    "svelte2tsx": "^0.7.0",
-    "three": "^0.160.1",
-    "tslib": "^2.6.2",
-    "type-fest": "^4.10.1",
-    "typescript": "^5.3.3",
-    "vite": "^5.0.12"
+    "@types/node": "catalog:",
+    "@types/three": "catalog:",
+    "@yushijinhun/three-minifier-rollup": "catalog:",
+    "eslint": "catalog:",
+    "eslint-plugin-svelte": "catalog:",
+    "globals": "catalog:",
+    "prettier": "catalog:",
+    "prettier-plugin-svelte": "catalog:",
+    "publint": "catalog:",
+    "rimraf": "catalog:",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "svelte2tsx": "catalog:",
+    "three": "catalog:",
+    "tslib": "catalog:",
+    "type-fest": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vite": "catalog:"
   },
   "peerDependencies": {
-    "svelte": ">=4",
-    "three": ">=0.133"
-  },
-  "peerDependenciesMeta": {
-    "three-mesh-bvh": {
-      "optional": true
-    }
+    "svelte": ">=5",
+    "three": ">=0.160"
   },
   "type": "module",
+  "keywords": [
+    "threlte",
+    "svelte",
+    "three",
+    "three.js",
+    "webgl",
+    "webgpu",
+    "webxr",
+    "3d"
+  ],
+  "homepage": "https://threlte.xyz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte",
+    "directory": "packages/extras"
+  },
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
   "exports": {
     ".": {
       "types": "./src/lib/index.ts",
@@ -74,7 +87,11 @@
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
-    "troika-three-text": "^0.49.0",
-    "three-mesh-bvh": "^0.7.1"
+    "@threejs-kit/instanced-sprite-mesh": "^2.5.1",
+    "camera-controls": "^3.1.2",
+    "three-mesh-bvh": "^0.9.1",
+    "three-perf": "^1.0.11",
+    "three-viewport-gizmo": "^2.2.0",
+    "troika-three-text": "^0.52.4"
   }
 }

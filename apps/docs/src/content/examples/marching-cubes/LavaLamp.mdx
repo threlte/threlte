@@ -1,0 +1,64 @@
+---
+title: Marching cubes
+---
+
+A small [MarchingCubes](https://en.wikipedia.org/wiki/Marching_cubes) example using [Three.js' marching cubes addon](https://threejs.org/examples/webgl_marchingcubes.html).
+
+<Example path="marching-cubes/lava-lamp" />
+
+The addon is a little too limited to be ported into a component but this example shows how it might be incorporated into Threlte.
+
+## Placement
+
+`MarchingCubes` defines a space from -1 to 1 for all 3 axes.
+
+### MarchingPlane
+
+The original example only allows for planes positioned at x = -1, y = -1, and z = -1.
+
+### MarchingCube
+
+`<MarchingCube>`s can be placed anywhere in the `MarchingCubes` space. If they are placed outside this range they may be cutoff or not show altogether.
+
+<Tip type="info">
+  Even though `MarchingCube` appears as a ball, it is called __Cube__ to be inline with [drei's
+  MarchingCubes abstration](https://drei.docs.pmnd.rs/abstractions/marching-cubes).
+</Tip>
+
+## Materials
+
+The example above utilizes vertex coloring but the original Three.js example has
+support for any kind of material. Vertex coloring requires a little more memory
+since each vertex now carries a color with it. If you're not using vertex colors,
+you can leave `enableColors` turned off. The `<MarchingCubes>` component has the
+same default material that a `Mesh` has. Setting different materials is the same
+process as setting different materials for `<T.Mesh>`.
+
+```svelte
+<MarchingCubes>
+  <T.MeshNormalMaterial />
+  <T is={cube} />
+</MarchingCubes>
+```
+
+If you're using a material with a texture, you will need to set `enableUvs` to true.
+
+```svelte
+<MarchingCubes enableUvs>
+  <T.MeshNormalMaterial map={texture} />
+  <MarchingCube />
+</MarchingCubes>
+```
+
+Note that the example above enables both uvs and vertex coloring for demonstration purposes. You can set these to false in the constructor to save on space.
+
+```svelte title="MarchingCubes.svelte" {5}
+<script>
+  // ...
+
+  // don't allocate space for vertex colors nor uvs
+  const marchingCubes = new MarchingCubes(resolution, material, false, false, 20_000)
+
+  // ...
+</script>
+```

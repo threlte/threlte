@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { Theatre } from '$lib'
+  import { Theatre } from '$lib/index.js'
   import Scene from './scene.svelte'
 </script>
 

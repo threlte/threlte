@@ -1,10 +1,16 @@
 <script lang="ts">
   import { Splat, SplatLoader } from '@pmndrs/vanilla'
   import { T, useLoader, useTask, useThrelte } from '@threlte/core'
-  export let src: string
-  export let alphaHash = false
-  export let alphaTest: number | undefined = undefined
-  export let toneMapped: boolean | undefined = undefined
+  import type { SplatProps } from './types'
+
+  let {
+    src,
+    alphaHash = false,
+    alphaTest = undefined,
+    toneMapped = undefined,
+    children,
+    ...rest
+  }: SplatProps = $props()
 
   const { renderer, camera } = useThrelte()
 
@@ -13,22 +19,23 @@
   })
 
   let framesRendered = 0
-  const { start, stop } = useTask(
+  let running = $state(false)
+
+  useTask(
     () => {
       framesRendered++
       // render for 10 frames
       if (framesRendered >= 10) {
-        stop()
-        framesRendered = 0
+        running = false
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 </script>
 
 {#await loader.load(src) then splat}
   <T
-    {...$$restProps}
+    {...rest}
     dispose={false}
     is={Splat}
     args={[
@@ -40,9 +47,10 @@
         toneMapped
       }
     ]}
-    on:create={start}
-    let:ref
+    oncreate={() => {
+      running = true
+    }}
   >
-    <slot {ref} />
+    {@render children?.({ ref: Splat })}
   </T>
 {/await}

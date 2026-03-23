@@ -1,8 +1,13 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Grid } from '@threlte/extras'
+  import { BufferAttribute } from 'three'
 
-  export let center: [number, number, number]
+  type Props = {
+    center: [number, number, number]
+  }
+
+  let { center }: Props = $props()
 
   const red = [1, 0, 0]
   const green = [0, 1, 0]
@@ -47,13 +52,10 @@
 />
 
 <T.Mesh position={center}>
-  <T.BoxGeometry>
-    <T.BufferAttribute
-      args={[colors, 3]}
-      attach={(parent, self) => {
-        parent.setAttribute('color', self)
-      }}
-    />
-  </T.BoxGeometry>
+  <T.BoxGeometry
+    oncreate={(ref) => {
+      ref.setAttribute('color', new BufferAttribute(colors, 3))
+    }}
+  />
   <T.MeshBasicMaterial vertexColors />
 </T.Mesh>

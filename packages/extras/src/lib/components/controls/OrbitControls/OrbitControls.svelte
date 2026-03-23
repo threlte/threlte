@@ -1,59 +1,52 @@
 <script lang="ts">
-  import { forwardEventHandlers, T, useTask, useParent, useThrelte } from '@threlte/core'
+  import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
+  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { OrbitControlsProps } from './types.js'
+  import type { Event } from 'three'
 
-  import type { Camera } from 'three'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-
-  import { onDestroy } from 'svelte'
-
-  import { useControlsContext } from '../useControlsContext'
-  import type {
-    OrbitControlsEvents,
-    OrbitControlsProps,
-    OrbitControlsSlots
-  } from './OrbitControls.svelte'
-
-  type $$Props = OrbitControlsProps
-  type $$Events = OrbitControlsEvents
-  type $$Slots = OrbitControlsSlots
+  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
   const parent = useParent()
+  const { dom, invalidate } = useThrelte()
 
-  const isCamera = (p: any): p is Camera => {
-    return p.isCamera
-  }
-
-  const { renderer, invalidate } = useThrelte()
-
-  if (!isCamera($parent)) {
+  if (!isInstanceOf($parent, 'Camera')) {
     throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
   }
 
-  export const ref = new ThreeOrbitControls($parent, renderer.domElement)
-
-  const { start, stop } = useTask(ref.update, {
-    autoStart: false,
-    autoInvalidate: false
-  })
-
-  $: {
-    if ($$restProps.autoRotate || $$restProps.enableDamping) start()
-    else stop()
-  }
-
-  const component = forwardEventHandlers()
+  // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  const controls = new ThreeOrbitControls($parent, dom)
 
   const { orbitControls } = useControlsContext()
-  orbitControls.set(ref)
-  onDestroy(() => orbitControls.set(undefined))
+
+  useTask(
+    () => {
+      controls.update()
+    },
+    {
+      running: () => props.autoRotate ?? props.enableDamping ?? false
+    }
+  )
+
+  $effect.pre(() => {
+    const handleChange = (event: Event<any, ThreeOrbitControls>) => {
+      invalidate()
+      props.onchange?.(event)
+    }
+
+    orbitControls.set(controls)
+    controls.addEventListener('change', handleChange)
+    return () => {
+      orbitControls.set(undefined)
+      controls.removeEventListener('change', handleChange)
+    }
+  })
 </script>
 
 <T
-  is={ref}
-  let:ref
-  {...$$restProps}
-  bind:this={$component}
-  on:change={invalidate}
+  is={controls}
+  bind:ref
+  {...props}
 >
-  <slot {ref} />
+  {@render children?.({ ref: controls })}
 </T>

@@ -1,24 +1,22 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { interactivity, Text, useCursor } from '@threlte/extras'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 
-  $: color = $hovering ? '#dddddd' : '#FE3D00'
+  interactivity()
 
   const { size } = useThrelte()
 
-  let zoom = $size.width / 7
-  $: zoom = $size.width / 7
-
-  interactivity()
+  const color = $derived($hovering ? '#dddddd' : '#FE3D00')
+  const zoom = $derived($size.width / 7)
 </script>
 
 <T.OrthographicCamera
   {zoom}
   position={[5, 5, 5]}
-  on:create={({ ref }) => {
+  oncreate={(ref) => {
     ref.lookAt(0, 0, 0)
   }}
   makeDefault
@@ -33,8 +31,8 @@
 <Text
   text="HOVER"
   interactive
-  on:pointerenter={onPointerEnter}
-  on:pointerleave={onPointerLeave}
+  onpointerenter={onPointerEnter}
+  onpointerleave={onPointerLeave}
   fontSize={0.5}
   anchorY="100%"
   anchorX="50%"
@@ -45,8 +43,8 @@
 />
 
 <T.Mesh
-  on:pointerenter={onPointerEnter}
-  on:pointerleave={onPointerLeave}
+  onpointerenter={onPointerEnter}
+  onpointerleave={onPointerLeave}
 >
   <T.MeshStandardMaterial {color} />
   <T.BoxGeometry args={[2, 2, 2]} />

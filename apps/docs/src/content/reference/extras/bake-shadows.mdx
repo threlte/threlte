@@ -1,0 +1,17 @@
+---
+order: 7.7
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/BakeShadows/BakeShadows.svelte'
+title: '<BakeShadows>'
+type: 'component'
+---
+
+`<BakeShadows>` instantly freezes all shadow maps upon mounting and unfreezes them upon unmounting. This improves performance by making all shadows static. Use `<BakeShadows` if you have a complex but static scene as the shadows will only be calculated once.
+
+<Example path="extras/bake-shadows/basic" />
+
+When `<BakeShadows>` is used within a `<Suspense>`, shadows will be frozen after the boundary is no longer in a suspended state. It will unfreeze if the boundary is re-suspended.
+
+<Example path="extras/bake-shadows/spaceships" />
+
+The example above is an ideal scene for `<BakeShadows>` because all objects are stationary and the shadows will never change.

@@ -2,6 +2,7 @@
   import { useTask, useThrelte } from '@threlte/core'
   import {
     BlendFunction,
+    BloomEffect,
     BrightnessContrastEffect,
     ChromaticAberrationEffect,
     EffectComposer,
@@ -11,8 +12,24 @@
     ToneMappingEffect,
     ToneMappingMode
   } from 'postprocessing'
-  import { onMount } from 'svelte'
+  import { HalfFloatType } from 'three'
   import { StaticNoiseEffect } from './StaticNoise/StaticNoise'
+
+  let {
+    bloomIntensity = 2,
+    bloomRadius = 0.6,
+    bloomLuminanceSmoothing = 0.025,
+    brightness = 0,
+    contrast = 0,
+    noiseIntensity = 0.03
+  }: {
+    bloomIntensity: number
+    bloomRadius: number
+    bloomLuminanceSmoothing: number
+    brightness: number
+    contrast: number
+    noiseIntensity: number
+  } = $props()
 
   /**
    * Chromatic Aberration
@@ -34,7 +51,10 @@
   const noiseEffect = new StaticNoiseEffect({
     blendFunction: BlendFunction.COLOR_DODGE
   })
-  noiseEffect.blendMode.opacity.value = 0.03
+
+  $effect(() => {
+    noiseEffect.blendMode.opacity.value = noiseIntensity
+  })
 
   /**
    * Anti-aliasing
@@ -42,26 +62,52 @@
   const fxaaEffect = new FXAAEffect()
 
   /**
+   * Bloom
+   */
+  const bloomEffect = new BloomEffect({
+    mipmapBlur: true,
+    luminanceThreshold: 0.5,
+    radius: 0.6,
+    intensity: 2
+  })
+
+  $effect.pre(() => {
+    bloomEffect.intensity = bloomIntensity
+    bloomEffect.mipmapBlurPass.radius = bloomRadius
+    bloomEffect.luminanceMaterial.smoothing = bloomLuminanceSmoothing
+  })
+
+  /**
    * Brightness/Contrast
    */
   const bcEffect = new BrightnessContrastEffect()
-  bcEffect.contrast = 0.1
+
+  $effect.pre(() => {
+    bcEffect.contrast = contrast
+    bcEffect.brightness = brightness
+  })
 
   const { renderer, scene, camera, autoRender, renderStage } = useThrelte()
 
-  const composer = new EffectComposer(renderer)
+  const composer = new EffectComposer(renderer, {
+    alpha: true,
+    frameBufferType: HalfFloatType
+  })
 
-  const setup = () => {
-    composer.removeAllPasses()
-    composer.addPass(new RenderPass(scene, camera.current))
+  $effect(() => {
+    composer.addPass(new RenderPass(scene, $camera))
     composer.addPass(new EffectPass(camera.current, fxaaEffect))
-    composer.addPass(new EffectPass(camera.current, noiseEffect, toneMappingEffect, bcEffect))
-  }
+    composer.addPass(
+      new EffectPass(camera.current, noiseEffect, bcEffect, bloomEffect, toneMappingEffect)
+    )
 
-  $: $camera && setup()
+    return () => {
+      composer.removeAllPasses()
+    }
+  })
 
   // When using PostProcessing, we need to disable autoRender
-  onMount(() => {
+  $effect(() => {
     let before = autoRender.current
     autoRender.set(false)
     return () => {
@@ -77,5 +123,8 @@
   )
 
   const { size } = useThrelte()
-  $: composer.setSize($size.width, $size.height)
+
+  $effect(() => {
+    composer.setSize($size.width, $size.height)
+  })
 </script>

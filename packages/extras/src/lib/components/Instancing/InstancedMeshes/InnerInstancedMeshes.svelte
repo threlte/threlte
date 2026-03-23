@@ -1,28 +1,34 @@
 <script lang="ts">
-  import { forwardEventHandlers } from '@threlte/core'
-  import type { Mesh } from 'three'
   import InstancedMesh from '../InstancedMesh.svelte'
+  import Self from './InnerInstancedMeshes.svelte'
+  import type { Mesh } from 'three'
+  import type { Snippet } from 'svelte'
 
-  export let meshes: Mesh[]
+  interface Props {
+    meshes: Mesh[]
+    index?: number
+    children?: Snippet
+  }
 
-  const copiedArray = [...meshes]
-  const mesh = copiedArray.pop()
-
-  const dispatchingComponent = forwardEventHandlers()
+  let { meshes, index = meshes.length - 1, children, ...props }: Props = $props()
+  const mesh = meshes[index]
 </script>
 
-{#if mesh}
+{#if index > -1}
   <InstancedMesh
     geometry={mesh.geometry}
     material={mesh.material}
     id={mesh.uuid}
-    bind:this={$dispatchingComponent}
-    {...$$restProps}
+    {...props}
   >
-    <svelte:self meshes={copiedArray}>
-      <slot />
-    </svelte:self>
+    <Self
+      {meshes}
+      index={index - 1}
+      {...props}
+    >
+      {@render children?.()}
+    </Self>
   </InstancedMesh>
 {:else}
-  <slot />
+  {@render children?.()}
 {/if}

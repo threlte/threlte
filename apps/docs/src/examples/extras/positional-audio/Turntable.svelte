@@ -1,27 +1,28 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
-  import { spring, tweened } from 'svelte/motion'
+  import { Spring, Tween } from 'svelte/motion'
   import {
-    BufferGeometry,
     CylinderGeometry,
     DoubleSide,
     Mesh,
     MeshStandardMaterial,
-    PositionalAudio as ThreePositionalAudio
+    PositionalAudio as ThreePositionalAudio,
+    MathUtils
   } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
   import Button from './Button.svelte'
   import Disc from './Disc.svelte'
+  import type { TurntableProps } from './types'
 
-  let discSpeed = tweened(0, {
+  let { isPlaying = $bindable(false), volume = $bindable(0), ...rest }: TurntableProps = $props()
+
+  let discSpeed = new Tween(0, {
     duration: 1e3
   })
 
-  let armPos = spring(0)
+  let armPos = new Spring(0)
 
-  let started = false
-  export let isPlaying = false
+  let started = $state(false)
 
   export const toggle = async () => {
     if (!started) {
@@ -39,12 +40,14 @@
     }
   }
 
-  let audio: ThreePositionalAudio
+  let audio = $state.raw<ThreePositionalAudio>()
+
   const { context } = useAudioListener()
   const analyser = context.createAnalyser()
-  $: if (audio) audio.getOutput().connect(analyser)
+  $effect(() => {
+    if (audio) audio.getOutput().connect(analyser)
+  })
   const pcmData = new Float32Array(analyser.fftSize)
-  export let volume = 0
   useTask(() => {
     if (!audio) return
     analyser.getFloatTimeDomainData(pcmData)
@@ -57,17 +60,17 @@
 
   let sideA = '/audio/side_a.mp3'
   let sideB = '/audio/side_b.mp3'
-  let source = sideA
+  let source = $state(sideA)
   const changeSide = () => {
     source = source === sideA ? sideB : sideA
   }
 
-  let coverOpen = false
-  const coverAngle = spring(0)
-  $: {
+  let coverOpen = $state(false)
+  const coverAngle = new Spring(0)
+  $effect(() => {
     if (coverOpen) coverAngle.set(80)
     else coverAngle.set(0)
-  }
+  })
 
   const { onPointerEnter, onPointerLeave } = useCursor()
 
@@ -77,19 +80,16 @@
     }
     materials: {}
   }>('/models/turntable/cover.glb')
-  let coverGeometry: BufferGeometry | undefined
-  $: if ($gltf) {
-    const coverMesh = $gltf.nodes.Cover as Mesh
-    coverGeometry = coverMesh.geometry
-  }
+
+  const coverGeometry = $derived($gltf?.nodes.Cover.geometry)
 </script>
 
-<T.Group {...$$restProps}>
+<T.Group {...rest}>
   <!-- DISC -->
   <Disc
     position.x={0.5}
     position.y={1.01}
-    discSpeed={$discSpeed}
+    discSpeed={discSpeed.current}
   />
 
   <!-- CASE -->
@@ -110,7 +110,7 @@
   <T.Group
     position.y={1}
     position.z={-2.2}
-    rotation.x={-$coverAngle * DEG2RAD}
+    rotation.x={-coverAngle.current * MathUtils.DEG2RAD}
   >
     {#if coverGeometry}
       <T.Mesh
@@ -118,9 +118,9 @@
         scale={[3, 0.5, 2.2]}
         position.y={0.5}
         position.z={2.2}
-        on:click={() => (coverOpen = !coverOpen)}
-        on:pointerenter={onPointerEnter}
-        on:pointerleave={onPointerLeave}
+        onclick={() => (coverOpen = !coverOpen)}
+        onpointerenter={onPointerEnter}
+        onpointerleave={onPointerLeave}
       >
         <T.MeshStandardMaterial
           color="#ffffff"
@@ -139,22 +139,22 @@
   <!-- SIDE BUTTON -->
   <Button
     position={[-2.3, 1.01, 0.8]}
-    on:click={changeSide}
+    onClick={changeSide}
     text={source === sideA ? 'SIDE B' : 'SIDE A'}
   />
 
   <!-- PLAY/PAUSE BUTTON -->
   <Button
     position={[-2.3, 1.01, 1.7]}
-    on:click={toggle}
+    onClick={toggle}
     text={isPlaying ? 'PAUSE' : 'PLAY'}
   />
 
   <!-- ARM -->
   <T.Group
     position={[2.5, 1.55, -1.8]}
-    rotation.z={DEG2RAD * 90}
-    rotation.y={DEG2RAD * 90 - $armPos * 0.3}
+    rotation.z={MathUtils.DEG2RAD * 90}
+    rotation.y={MathUtils.DEG2RAD * 90 - armPos.current * 0.3}
   >
     <T.Mesh
       castShadow
@@ -179,7 +179,7 @@
       bind:ref={audio}
       refDistance={15}
       loop
-      playbackRate={$discSpeed}
+      playbackRate={discSpeed.current}
       src={source}
       directionalCone={{
         coneInnerAngle: 90,

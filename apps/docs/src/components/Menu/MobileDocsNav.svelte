@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import Details from './Details.svelte'
   import type { getLeftSidebarMenu } from './LeftSidebar/getLeftSidebarMenu'
   import LeftSidebarCategory from './LeftSidebar/LeftSidebarCategory.svelte'
@@ -26,7 +25,7 @@
     slot="content"
     class="flex flex-col gap-4 text-lg"
   >
-    <ul class={c('flex flex-col gap-2 overflow-y-auto')}>
+    <ul class="flex flex-col gap-2 overflow-y-auto">
       {#each keys as key}
         <li>
           <!-- The container for "learn" and "reference" categories -->
@@ -34,20 +33,20 @@
             id={key}
             open={activeSidebarTab === key}
           >
-            <div
-              class="font-normal"
-              slot="summary"
-            >
-              {#if key === 'learn'}
-                Learn
-              {:else if key === 'reference'}
-                Reference
-              {:else if key === 'examples'}
-                Examples
-              {/if}
-            </div>
+            {#snippet summary()}
+              <div class="font-normal">
+                {#if key === 'learn'}
+                  Learn
+                {:else if key === 'reference'}
+                  Reference
+                {:else if key === 'examples'}
+                  Examples
+                {/if}
+              </div>
+            {/snippet}
+
             {#each sidebarMenu[key].categories as category}
-              <li class="mb-0 ml-4 mt-2 text-sm">
+              <li class="mt-2 mb-0 ml-4 text-sm">
                 <LeftSidebarCategory
                   {category}
                   {activeUrlPathName}
@@ -66,6 +65,6 @@
       <a href="/showcase"> Showcase </a>
     </div> -->
 
-    <slot name="after-navigation" />
+    <slot name="socials" />
   </div>
 </MobileNav>

@@ -1,5 +1,194 @@
 # @threlte/flex
 
+## 2.2.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 2.1.1
+
+### Patch Changes
+
+- 0c6bc84: patch mitt and remove workarounds
+
+## 2.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 2.0.6
+
+### Patch Changes
+
+- 6ef7086: Improve internal types
+
+## 2.0.5
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 2.0.4
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
+## 2.0.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 2.0.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 2.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 2.0.0
+
+### Major Changes
+
+- f25685a: Experimental Svelte 5 compatibility
+- 0e3a020: Migrate to generated component types
+
+### Minor Changes
+
+- 811ce98: bump Yoga 2.0 > Yoga 3.1
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+- b7045f5: Svelte dependency update
+- f7c501d: Remove legacy useFrame and useRender hooks
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+- 37d3cdc: Remove inspect
+
+## 2.0.0-next.15
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 2.0.0-next.14
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 2.0.0-next.13
+
+### Patch Changes
+
+- 37d3cdc: Remove inspect
+
+## 2.0.0-next.12
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
+## 2.0.0-next.11
+
+### Major Changes
+
+- 0e3a020: Migrate to generated component types
+
+## 2.0.0-next.10
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 2.0.0-next.9
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 2.0.0-next.8
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
+## 2.0.0-next.7
+
+### Patch Changes
+
+- b7e6927: Adapt new core Attachment API
+
+## 2.0.0-next.6
+
+### Minor Changes
+
+- 811ce98: bump Yoga 2.0 > Yoga 3.1
+
+## 2.0.0-next.5
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 2.0.0-next.4
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 2.0.0-next.3
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 2.0.0-next.2
+
+### Patch Changes
+
+- f7c501d: Remove legacy useFrame and useRender hooks
+
+## 2.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 2.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+## 1.0.3
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
+
+## 1.0.2
+
+### Patch Changes
+
+- 761fc37: Removed font-family property
+
 ## 1.0.1
 
 ### Patch Changes

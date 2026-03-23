@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Flex, Box } from '$lib'
+  import { Flex, Box } from '$lib/index.js'
   import Plane from '../../Plane.svelte'
 </script>
 
@@ -22,13 +22,9 @@
     />
   </Box>
 
-  <Box
-    flex={1}
-    let:width
-  >
+  <Box flex={1}>
     <Plane
       color="blue"
-      {width}
       height={100}
       depth={1}
     />

@@ -1,48 +1,36 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import type { Snippet } from 'svelte'
   import { Float } from '@threlte/extras'
-  import { onDestroy } from 'svelte'
-  import { spring } from 'svelte/motion'
-  import { Color, MeshPhysicalMaterial, type BufferGeometry } from 'three'
+  import { Spring } from 'svelte/motion'
 
-  export let geometry: BufferGeometry
+  type Props = {
+    children?: Snippet<[{ hovering: boolean }]>
+  }
 
-  const red = new Color(0xfe3d00)
-  const blue = new Color(0x0000ff)
+  let { children }: Props = $props()
 
-  let material = new MeshPhysicalMaterial({
-    color: red,
-    reflectivity: 1,
-    metalness: 0.9,
-    roughness: 0.2
-  })
-  onDestroy(() => {
-    material.dispose()
-  })
+  const scale = new Spring(1)
 
-  const scale = spring(1)
+  let hovering = $state(false)
 
   const onPointerEnter = () => {
-    material.color = blue
+    hovering = true
     scale.set(1.1)
   }
 
   const onPointerLeave = () => {
-    material.color = red
+    hovering = false
     scale.set(1)
   }
 </script>
 
 <Float
   floatIntensity={5}
-  scale={$scale}
+  scale={scale.current}
   rotationIntensity={2}
   rotationSpeed={[1, 0.5, 0.2]}
+  onpointerenter={onPointerEnter}
+  onpointerleave={onPointerLeave}
 >
-  <T.Mesh
-    {geometry}
-    {material}
-    on:pointerenter={onPointerEnter}
-    on:pointerleave={onPointerLeave}
-  />
+  {@render children?.({ hovering })}
 </Float>

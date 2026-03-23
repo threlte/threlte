@@ -1,0 +1,39 @@
+---
+order: 5.85
+category: '@threlte/extras'
+title: '<PointsMaterial>'
+sourcePath: 'packages/extras/src/lib/components/PointsMaterial/PointsMaterial.svelte'
+type: 'component'
+componentSignature:
+  {
+    extends:
+      {
+        type: 'PointsMaterial',
+        url: 'https://threejs.org/docs/index.html#api/en/materials/PointsMaterial'
+      },
+    props: []
+  }
+---
+
+An extended `THREE.PointsMaterial` that renders antialiased round dots.
+
+<Example path="extras/points-material" />
+
+<small>
+  Potted plant by [Federica
+  Girola](https://sketchfab.com/3d-models/luminous-pointcloud-plant-in-a-pot-34cf80b0bdb7425d85426e90eace3fc4).
+</small>
+
+## Usage
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { PointsMaterial } from '@threlte/extras'
+</script>
+
+<T.Points>
+  <T.BufferGeometry />
+  <PointsMaterial />
+</T.Points>
+```

@@ -1,41 +1,40 @@
 // hooks
-export { useRapier } from './hooks/useRapier'
-export { useCollisionGroups } from './hooks/useCollisionGroups'
-export { useRigidBody } from './hooks/useRigidBody'
+export { useRapier } from './hooks/useRapier.js'
+export { useCollisionGroups } from './hooks/useCollisionGroups.js'
+export { useRigidBody } from './hooks/useRigidBody.js'
+export { usePhysicsTask } from './hooks/usePhysicsTask.js'
 
 // Joints
-export { useRevoluteJoint } from './hooks/useRevoluteJoint'
-export { usePrismaticJoint } from './hooks/usePrismaticJoint'
-export { useFixedJoint } from './hooks/useFixedJoint'
-export { useSphericalJoint } from './hooks/useSphericalJoint'
-export { useJoint } from './hooks/useJoint'
+export { useRevoluteJoint } from './hooks/useRevoluteJoint.js'
+export { usePrismaticJoint } from './hooks/usePrismaticJoint.js'
+export { useFixedJoint } from './hooks/useFixedJoint.js'
+export { useSphericalJoint } from './hooks/useSphericalJoint.js'
+export { useJoint } from './hooks/useJoint.js'
+export { useRopeJoint } from './hooks/useRopeJoint.js'
 
 // components
 export { default as World } from './components/World/World.svelte'
 export { default as RigidBody } from './components/RigidBody/RigidBody.svelte'
 export { default as Debug } from './components/Debug/Debug.svelte'
-export { default as Collider } from './components/Colliders/Collider.svelte'
-export { default as AutoColliders } from './components/Colliders/AutoColliders.svelte'
+export { default as Collider } from './components/Colliders/Collider/Collider.svelte'
+export { default as AutoColliders } from './components/Colliders/AutoColliders/AutoColliders.svelte'
 export { default as CollisionGroups } from './components/CollisionGroups/CollisionGroups.svelte'
 export { default as Attractor } from './components/Attractor/Attractor.svelte'
 
 // lib
-export { computeBitMask } from './lib/computeBitMask'
-
-// recipes
-export { default as BasicPlayerController } from './recipes/BasicPlayerController.svelte'
+export { computeBitMask } from './lib/computeBitMask.js'
 
 export type {
   CollisionGroupsBitMask,
   AutoCollidersShapes,
-  ColliderEventDispatcher,
   ColliderShapes,
   RapierContext,
-  RigidBodyEventDispatcher,
   CollisionEnterEvent,
   CollisionExitEvent,
   SensorEnterEvent,
   SensorExitEvent,
   ContactEvent,
-  GravityType
-} from './types/types'
+  GravityType,
+  CreateEvent,
+  Framerate
+} from './types/types.js'

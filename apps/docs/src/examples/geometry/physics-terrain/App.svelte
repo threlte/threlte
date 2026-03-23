@@ -1,11 +1,11 @@
 <script lang="ts">
+  import Scene from './Scene.svelte'
+  import { Button, Pane } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import { World } from '@threlte/rapier'
-  import Scene from './Scene.svelte'
-  import { Pane, Button } from 'svelte-tweakpane-ui'
 
-  let reset: () => any | undefined
-  let toggleDebug: () => any | undefined
+  let resetCounter = $state(0)
+  let showDebug = $state(false)
 </script>
 
 <Pane
@@ -14,11 +14,15 @@
 >
   <Button
     title="Reset"
-    on:click={reset}
+    on:click={() => {
+      resetCounter += 1
+    }}
   />
   <Button
     title="Toggle Debug"
-    on:click={toggleDebug}
+    on:click={() => {
+      showDebug = !showDebug
+    }}
   />
 </Pane>
 
@@ -26,8 +30,8 @@
   <Canvas>
     <World>
       <Scene
-        bind:reset
-        bind:toggleDebug
+        {resetCounter}
+        {showDebug}
       />
     </World>
   </Canvas>

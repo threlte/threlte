@@ -1,28 +1,25 @@
 ---
-{
-  'order': 4.1,
-  'category': '@threlte/theatre',
-  sourcePath: 'packages/theatre/src/lib/sheetObject/SheetObject.svelte',
-  'name': '<SheetObject>',
-  'type': 'component',
-  'componentSignature':
-    {
-      'props':
-        [
-          { 'name': 'key', 'type': 'string', 'required': true },
-          {
-            'name': 'props',
-            'type':
-              {
-                'name': 'UnknownShorthandCompoundProps',
-                'url': 'https://www.theatrejs.com/docs/latest/manual/prop-types'
-              },
-            'required': false
-          },
-          { 'name': 'detach', 'type': 'boolean', 'required': false, default: 'false' }
-        ]
-    }
-}
+order: 4.1
+category: '@threlte/theatre'
+sourcePath: 'packages/theatre/src/lib/sheetObject/SheetObject.svelte'
+title: '<SheetObject>'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'key', type: 'string', required: true },
+        {
+          name: props,
+          type:
+            {
+              name: 'UnknownShorthandCompoundProps',
+              url: 'https://www.theatrejs.com/docs/latest/manual/prop-types'
+            }
+        },
+        { name: 'detach', type: 'boolean', default: 'false' }
+      ]
+  }
 ---
 
 The `<SheetObject>` component allows you to pool the properties of a **logical entity** which can be a anything from a single material, multiple meshes or a complete scene. The component `<SheetObject>` and
@@ -31,9 +28,7 @@ you want to make editable in the Theatre.js studio.
 
 #### Theatre.js Docs
 
-| &nbsp;           | &nbsp;                                                                      | &nbsp;                                                                              |
-| ---------------- | --------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| **Sheet Object** | [Sheet Object Manual](https://www.theatrejs.com/docs/latest/manual/objects) | [Sheet Object API Reference](https://www.theatrejs.com/docs/latest/api/core#object) |
+**Sheet Object** | [Sheet Object Manual](https://www.theatrejs.com/docs/latest/manual/objects) | [Sheet Object API Reference](https://www.theatrejs.com/docs/latest/api/core#object)
 
 ## Overview
 
@@ -54,13 +49,10 @@ specific props. We can achieve this using _manual prop declaration_. Provide the
 `<SheetObject>` for a manual property declaration.
 
 ```svelte
-<SheetObject
-  props={{
-    x: 0
-  }}
-  let:values
->
-  <T.Mesh position.x={values.x} />
+<SheetObject props={{ x: 0 }}>
+  {#snippet children({ values })}
+    <T.Mesh position.x={values.x} />
+  {/snippet}
 </SheetObject>
 ```
 

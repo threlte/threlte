@@ -1,5 +1,5 @@
-import { asyncWritable, type AsyncWritable } from '../lib/asyncWritable'
-import { useCache } from '../lib/cache'
+import { useCache } from '../context/fragments/cache.js'
+import { asyncWritable, type AsyncWritable } from '../utilities/index.js'
 
 type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
@@ -43,7 +43,7 @@ export type UseLoaderLoadResult<
 
 type UseLoaderLoadTransform<TLoader extends Loader> = (result: LoaderResultType<TLoader>) => any
 
-type UseLoaderLoadOptions<TLoader extends Loader> = {
+export type UseLoaderLoadOptions<TLoader extends Loader> = {
   onProgress?: (event: ProgressEvent) => void
   transform?: UseLoaderLoadTransform<TLoader>
 }

@@ -35,7 +35,7 @@ This helps with performance optimization for asset-heavy Threlte apps. It also a
 
 #### The GLTF workflow on the web is not ideal ...
 
-- GLTF is thrown wholesale into the scene which prevents re-use, in threejs objects can only be mounted once
+- GLTF is thrown wholesale into the scene which prevents re-use, in Three.js objects can only be mounted once
 - Contents can only be found by traversal which is cumbersome and slow
 - Changes to queried nodes are made by mutation, which alters the source data and prevents re-use
 - Re-structuring content, making nodes conditional or adding/removing is cumbersome
@@ -116,9 +116,16 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
 </script>
 
 {#if $gltf}
-  <T is={ref} {...$$restProps}>
+  <T
+    is={ref}
+    {...$$restProps}
+  >
     <T.Group name="Scene">
-      <T.Group name="Stacy" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+      <T.Group
+        name="Stacy"
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={0.01}
+      >
         <T is={$gltf.nodes.mixamorigHips} />
         <T.SkinnedMesh
           name="stacy"
@@ -166,7 +173,11 @@ You can re-use it, it will re-use geometries and materials out of the box:
 Or make the model dynamic. Change its colors for example:
 
 ```svelte
-<T.Mesh geometry={$gltf.nodes.robot.geometry} material={$gltf.materials.metal} material.color="green" />
+<T.Mesh
+  geometry={$gltf.nodes.robot.geometry}
+  material={$gltf.materials.metal}
+  material.color="green"
+/>
 ```
 
 Or exchange materials:
@@ -181,7 +192,10 @@ Make contents conditional:
 
 ```svelte
 {#if condition}
-  <T.Mesh geometry={$gltf.nodes.robot.geometry} material={$gltf.materials.metal} />}
+  <T.Mesh
+    geometry={$gltf.nodes.robot.geometry}
+    material={$gltf.materials.metal}
+  />}
 {/if}
 ```
 
@@ -193,7 +207,7 @@ You don't need to do anything if your models are draco compressed, since `useGlt
 
 #### ⚡️ Auto-transform (compression, resize)
 
-With the `--transform` flag it creates a binary-packed, draco-compressed, texture-resized (1024x1024), webp compressed, deduped, instanced and pruned *.glb ready to be consumed on a web site. It uses [glTF-Transform](https://github.com/donmccurdy/glTF-Transform). This can reduce the size of an asset by 70%-90%.
+With the `--transform` flag it creates a binary-packed, draco-compressed, texture-resized (1024x1024), webp compressed, deduped, instanced and pruned \*.glb ready to be consumed on a web site. It uses [glTF-Transform](https://github.com/donmccurdy/glTF-Transform). This can reduce the size of an asset by 70%-90%.
 
 It will not alter the original but create a copy and append `[modelname]-transformed.glb`.
 
@@ -218,7 +232,16 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 
   export const ref = new Group()
 
-  type ActionName = 'pockets' | 'rope' | 'swingdance' | 'jump' | 'react' | 'shrug' | 'wave' | 'golf' | 'idle'
+  type ActionName =
+    | 'pockets'
+    | 'rope'
+    | 'swingdance'
+    | 'jump'
+    | 'react'
+    | 'shrug'
+    | 'wave'
+    | 'golf'
+    | 'idle'
   type GLTFResult = {
     nodes: {
       stacy: THREE.SkinnedMesh
@@ -232,9 +255,16 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 </script>
 
 {#if $gltf}
-  <T is={ref} {...$$restProps}>
+  <T
+    is={ref}
+    {...$$restProps}
+  >
     <T.Group name="Scene">
-      <T.Group name="Stacy" rotation={[Math.PI / 2, 0, 0]} scale={0.01}>
+      <T.Group
+        name="Stacy"
+        rotation={[Math.PI / 2, 0, 0]}
+        scale={0.01}
+      >
         <T is={$gltf.nodes.mixamorigHips} />
         <T.SkinnedMesh
           name="stacy"
@@ -256,9 +286,10 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
 
 If your GLTF contains animations it will add [@threlte/extras's `useGltfAnimations`](https://threlte.xyz/extras/use-gltf-animations) hook, which extracts all clips and prepares them as actions:
 
-```svelte
+```ts
 const gltf = useGltf('/stacy.glb')
-export const { actions, mixer } = useGltfAnimations(gltf, ref)
+
+export const {(actions, mixer)} = useGltfAnimations(gltf, ref)
 ```
 
 If you want to play an animation you can do so at any time:
@@ -285,17 +316,12 @@ gltfLoader.load(url, (gltf) => {
 })
 ```
 
-
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 - **Filing Issues** - if you have feature requestions or you think you spotted a bug, [submit an issue](https://github.com/threlte/threlte/issues/new).
 - **Contributing Code** - if you would like to drop us a PR, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) first.
-
-## Sponsors
-
-[![Powered by Vercel](./assets/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
 
 ---
 

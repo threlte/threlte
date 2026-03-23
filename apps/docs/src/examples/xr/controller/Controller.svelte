@@ -1,27 +1,36 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import {
+    Vector3,
+    Matrix4,
+    Color,
+    InstancedMesh,
+    IcosahedronGeometry,
+    MeshPhongMaterial
+  } from 'three'
   import { T, useTask } from '@threlte/core'
   import { Text } from '@threlte/extras'
   import { Controller, type XRControllerEvent, useController } from '@threlte/xr'
 
-  type $$Props = { left: true } | { right: true }
+  type Props = { left: true } | { right: true }
 
-  let state = 'disconnected'
+  let { ...props }: Props = $props()
+
+  let controllerState: keyof typeof colorMap = 'disconnected'
   let cursor = 0
-  let text = ''
+  let text = $state('')
 
   const count = 100
   const positions = new Float32Array(count * 3)
   const velocities = new Float32Array(count * 3)
-  const vec3 = new THREE.Vector3()
-  const matrix = new THREE.Matrix4()
-  const color = new THREE.Color()
+  const vec3 = new Vector3()
+  const matrix = new Matrix4()
+  const color = new Color()
 
-  const controller = useController($$restProps.left ? 'left' : 'right')
+  const controller = useController('left' in props ? 'left' : 'right')
 
-  const instancedMesh = new THREE.InstancedMesh(
-    new THREE.IcosahedronGeometry(0.01),
-    new THREE.MeshPhongMaterial(),
+  const instancedMesh = new InstancedMesh(
+    new IcosahedronGeometry(0.01),
+    new MeshPhongMaterial(),
     count
   )
 
@@ -40,11 +49,11 @@
 
   const handleEvent = (event: XRControllerEvent) => {
     text = `${event.data.handedness} ${event.type}`
-    state = event.type
+    controllerState = event.type
   }
 
   const fireParticle = () => {
-    instancedMesh.setColorAt(cursor, color.setStyle(colorMap[state]))
+    instancedMesh.setColorAt(cursor, color.setStyle(colorMap[controllerState]))
     instancedMesh.instanceColor!.needsUpdate = true
 
     let i = cursor * 3
@@ -70,9 +79,9 @@
     cursor %= count
   }
 
-  const updateParticles = () => {
+  useTask(() => {
     for (let i = 0, j = 0; i < count; i += 1, j += 3) {
-      positions[j] += velocities[j]!
+      positions[j + 0] += velocities[j]!
       positions[j + 1] += velocities[j + 1]!
       positions[j + 2] += velocities[j + 2]!
       matrix.setPosition(positions[j]!, positions[j + 1], positions[j + 2])
@@ -80,12 +89,8 @@
     }
 
     instancedMesh.instanceMatrix.needsUpdate = true
-  }
 
-  useTask(() => {
-    updateParticles()
-
-    switch (state) {
+    switch (controllerState) {
       case 'squeezestart':
       case 'selectstart':
         return fireParticle()
@@ -94,23 +99,24 @@
 </script>
 
 <Controller
-  left={$$props.left}
-  right={$$props.right}
-  on:connected={handleEvent}
-  on:disconnected={handleEvent}
-  on:selectstart={handleEvent}
-  on:selectend={handleEvent}
-  on:select={handleEvent}
-  on:squeezestart={handleEvent}
-  on:squeezeend={handleEvent}
-  on:squeeze={handleEvent}
+  onconnected={handleEvent}
+  ondisconnected={handleEvent}
+  onselectstart={handleEvent}
+  onselectend={handleEvent}
+  onselect={handleEvent}
+  onsqueezestart={handleEvent}
+  onsqueezeend={handleEvent}
+  onsqueeze={handleEvent}
+  {...props}
 >
-  <Text
-    slot="target-ray"
-    fontSize={0.05}
-    {text}
-    position.x={0.1}
-  />
+  {#snippet targetRay()}
+    <Text
+      anchorX="center"
+      fontSize={0.05}
+      {text}
+      position.y={0.2}
+    />
+  {/snippet}
 </Controller>
 
 <T

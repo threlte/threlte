@@ -1,5 +1,181 @@
 # @threlte/extras
 
+## 3.2.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
+## 3.1.2
+
+### Patch Changes
+
+- a43cd0e: patch @theatre/studio and remove workarounds
+
+## 3.1.1
+
+### Patch Changes
+
+- d84a789: Fix default import for @threlte/theatre
+
+## 3.1.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 3.0.7
+
+### Patch Changes
+
+- 1243af8: [chore] type imports adjustments
+
+## 3.0.6
+
+### Patch Changes
+
+- 9d3de86: Make sheet bindable
+
+## 3.0.5
+
+### Patch Changes
+
+- 9d8c56c: Migrate components to runes mode
+
+## 3.0.4
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
+## 3.0.3
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 3.0.2
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 3.0.1
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 3.0.0
+
+### Major Changes
+
+- 1fb46bd: Refactor theatre types to auto generated component type definitions
+- f25685a: Experimental Svelte 5 compatibility
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+
+## 3.0.0-next.11
+
+### Patch Changes
+
+- a257643: Update Svelte + Three.js deps
+
+## 3.0.0-next.10
+
+### Patch Changes
+
+- c9a65a3: Bump core dependency version
+
+## 3.0.0-next.9
+
+### Patch Changes
+
+- 60fcc29: Bump dev dependencies
+
+## 3.0.0-next.8
+
+### Major Changes
+
+- 1fb46bd: Refactor theatre types to auto generated component type definitions
+
+## 3.0.0-next.7
+
+### Patch Changes
+
+- cec4b57: update deps
+
+## 3.0.0-next.6
+
+### Patch Changes
+
+- b7045f5: Svelte dependency update
+
+## 3.0.0-next.5
+
+### Patch Changes
+
+- 2ac3d48: Dependency updates
+
+## 3.0.0-next.4
+
+### Patch Changes
+
+- cc4ccf2: Update Three.js
+
+## 3.0.0-next.3
+
+### Patch Changes
+
+- fa8a61c: Bump Svelte compiler version
+
+## 3.0.0-next.2
+
+### Patch Changes
+
+- 36128d5: Replace events with callback props and slots with snippets
+
+## 3.0.0-next.1
+
+### Patch Changes
+
+- f76d1e4: Migrate additional components to runes mode
+
+## 3.0.0-next.0
+
+### Major Changes
+
+- Experimental Svelte 5 compatibility
+
+### Patch Changes
+
+- Updated dependencies
+  - @threlte/extras@9.0.0-next.0
+  - @threlte/core@8.0.0-next.0
+
+## 2.1.8
+
+### Patch Changes
+
+- 79b002b: Add missing package.json fields to improve npmjs.com pages
+
+## 2.1.7
+
+### Patch Changes
+
+- d0fbeb5: Import paths rewrote to include file extensions for Three.js imports that are outside of the main 'three' export.
+
 ## 2.1.6
 
 ### Patch Changes

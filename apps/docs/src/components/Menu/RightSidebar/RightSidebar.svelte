@@ -1,20 +1,22 @@
 <script lang="ts">
-  import { c } from '$lib/classes'
   import type { MarkdownHeading } from 'astro'
   import { onMount } from 'svelte'
   import { onDestroy } from 'svelte'
-  import type { CollectionEntry } from 'astro:content'
 
-  export let entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
-  export let editUrl: string | undefined = undefined
-  export let sourceUrl: string | undefined = undefined
-  export let headings: MarkdownHeading[]
+  interface Props {
+    editUrl?: string | undefined
+    sourceUrl?: string | undefined
+    headings: MarkdownHeading[]
+    children?: import('svelte').Snippet
+  }
+
+  let { editUrl = undefined, sourceUrl = undefined, headings, children }: Props = $props()
 
   const lowestHeadingDepth = Math.min(...headings.map((heading) => heading.depth))
 
   let intersectionObserver: IntersectionObserver | undefined = undefined
 
-  let currentHeadingSlug: string | undefined = undefined
+  let currentHeadingSlug: string | undefined = $state(undefined)
   let currentHeading: MarkdownHeading | undefined = headings[0]
 
   const setCurrentHeading = (id: string) => {
@@ -66,38 +68,38 @@
 </script>
 
 <div
-  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pb-12 pt-6 lg:px-0 lg:pl-6 lg:text-sm"
+  class="scrollbar-hide relative h-full w-full overflow-auto px-6 pt-6 pb-12 lg:px-0 lg:pl-6 lg:text-sm"
 >
   {#if headings.length}
     <span
-      class="mb-3 ml-[calc(1rem+2px)] mt-3 block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
+      class="mt-3 mb-3 ml-[calc(1rem+2px)] block px-0 py-0 text-xs text-white/80 lg:relative lg:top-0 lg:w-full lg:text-sm lg:font-bold lg:text-white"
       >On this page</span
     >
 
     <ul
-      class="duration-50 mb-8 w-full bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
-      on:transitionend={focusFirstDropdownLink}
+      class="mb-8 w-full bg-[#0c1421] text-left transition-all duration-50 lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
+      ontransitionend={focusFirstDropdownLink}
     >
       {#each headings as heading}
         <li
-          class={c(
-            'nav-list-item',
-            !!currentHeadingSlug &&
-              heading.slug === currentHeadingSlug &&
-              '!border-orange !text-orange font-bold'
-          )}
-          on:keypress={() => {
-            headingClicked(heading.slug)
-          }}
-          on:click={() => {
-            headingClicked(heading.slug)
-          }}
+          class={[
+            'sidebar-list-item',
+            heading.slug === currentHeadingSlug
+              ? 'border-orange! text-orange font-bold'
+              : 'text-faded'
+          ]}
         >
           <a
             data-depth={heading.depth}
-            class={c('block py-2 pr-4 no-underline hover:underline lg:py-0 ')}
+            class="block py-2 pr-4 no-underline hover:underline lg:py-0"
             style="margin-left: {(heading.depth - lowestHeadingDepth) * 10}px;"
             href={`#${heading.slug}`}
+            onkeypress={() => {
+              headingClicked(heading.slug)
+            }}
+            onclick={() => {
+              headingClicked(heading.slug)
+            }}
           >
             {heading.text}
           </a>
@@ -114,19 +116,18 @@
   >
 
   <ul
-    class="duration-50 mb-8 bg-[#0c1421] text-left transition-all lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
-    on:transitionend={focusFirstDropdownLink}
+    class="mb-8 bg-[#0c1421] text-left transition-all duration-50 lg:pointer-events-auto lg:bg-transparent lg:opacity-100"
+    ontransitionend={focusFirstDropdownLink}
   >
-    <li class={c('list-item')}>
+    <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
       <a
-        class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+        class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
         href="https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md"
         referrerpolicy="no-referrer"
         rel="noopener noreferrer"
         target="_blank"
       >
         <svg
-          class="icon"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -144,16 +145,15 @@
     </li>
 
     {#if sourceUrl}
-      <li class={c('list-item')}>
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
-          class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+          class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={sourceUrl}
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
           target="_blank"
         >
           <svg
-            class="icon"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -172,16 +172,15 @@
     {/if}
 
     {#if editUrl}
-      <li class={c('list-item')}>
+      <li class="text-faded relative ml-[-9px] py-1 text-sm hover:text-white">
         <a
-          class={c('flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0')}
+          class="flex items-center gap-2 py-2 pr-4 no-underline hover:underline lg:py-0"
           href={editUrl}
           referrerpolicy="no-referrer"
           rel="noopener noreferrer"
           target="_blank"
         >
           <svg
-            class="icon"
             xmlns="http://www.w3.org/2000/svg"
             width="20"
             height="20"
@@ -201,20 +200,6 @@
   </ul>
 
   <div class="ml-[-9px]">
-    <slot />
+    {@render children?.()}
   </div>
 </div>
-
-<style lang="postcss">
-  .nav-list-item {
-    @apply text-faded border-l-2 border-white/20 py-1 pl-4 text-sm hover:border-white/60 hover:text-white;
-  }
-
-  .list-item {
-    @apply text-faded relative ml-[calc(1rem+2px)] py-1 text-sm hover:text-white;
-  }
-
-  .list-item .icon {
-    @apply absolute right-full top-1/2 mr-3 h-[16px] w-[16px] -translate-y-1/2;
-  }
-</style>

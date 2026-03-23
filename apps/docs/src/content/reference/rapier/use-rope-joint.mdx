@@ -1,0 +1,48 @@
+---
+order: 14
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/hooks/useRopeJoint.ts'
+title: 'useRopeJoint'
+type: 'hook'
+---
+
+<Example path="rapier/joints/rope/basic" />
+
+Use this hook to initialize a `RopeImpulseJoint`. A rope joint limits the max
+distance between two bodies.
+
+```svelte
+<script>
+  import { useRopeJoint, RigidBody, Collider } from '@threlte/rapier'
+
+  const { joint, rigidBodyA, rigidBodyB } = useRopeJoint({ x: 1 }, { y: 1 }, 2)
+</script>
+
+<RigidBody bind:rigidBody={$rigidBodyA}>
+  <Collider
+    shape="cuboid"
+    args={[1, 1, 1]}
+  />
+</RigidBody>
+
+<RigidBody bind:rigidBody={$rigidBodyB}>
+  <Collider
+    shape="cuboid"
+    args={[1, 1, 1]}
+  />
+</RigidBody>
+```
+
+### Signature
+
+```ts
+const {
+	joint: Writable<RopeImpulseJoint>
+	rigidBodyA: Writable<RAPIER.RigidBody>
+	rigidBodyB: Writable<RAPIER.RigidBody>
+} = useRopeJoint(
+	anchorA,  // Position
+  anchorB,  // Position
+	length    // Length of the rope
+)
+```

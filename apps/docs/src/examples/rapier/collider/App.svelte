@@ -5,7 +5,7 @@
   import Scene from './Scene.svelte'
   import { Pane, Button } from 'svelte-tweakpane-ui'
 
-  let testIndex = 0
+  let testIndex = $state(0)
 </script>
 
 <Pane
@@ -40,16 +40,15 @@
     <World>
       <Scene {testIndex} />
 
-      <HTML
-        slot="fallback"
-        transform
-      >
-        <p class="text-xs">
-          It seems your browser<br />
-          doesn't support WASM.<br />
-          I'm sorry.
-        </p>
-      </HTML>
+      {#snippet fallback()}
+        <HTML transform>
+          <p class="text-xs">
+            It seems your browser<br />
+            doesn't support WASM.<br />
+            I'm sorry.
+          </p>
+        </HTML>
+      {/snippet}
     </World>
   </Canvas>
 </div>

@@ -11,7 +11,8 @@ type UseFixedOptions = ThrelteUseTaskOptions & {
  */
 export const useFixed = (fn: (delta: number) => void, options: UseFixedOptions) => {
   let fixedStepTimeAccumulator = 0
-  let fixedStep = options.fixedStep ?? 1 / 60
+
+  const fixedStep = options.fixedStep ?? 1 / 60
 
   return useTask((delta) => {
     fixedStepTimeAccumulator += delta

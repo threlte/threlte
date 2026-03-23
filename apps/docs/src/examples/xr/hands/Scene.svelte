@@ -1,30 +1,31 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import { Mesh } from 'three'
   import { T } from '@threlte/core'
   import { XR, Hand, Controller, type XRHandEvent, type XRControllerEvent } from '@threlte/xr'
 
-  let boxes: THREE.Object3D[] = []
+  const boxes = $state<Mesh[]>([])
 
   const handleEvent = (event: XRHandEvent) => {
     console.log('Hand', event)
+    if (event.type === 'pinchend') {
+      createBox(event)
+    }
   }
 
   const handleControllerEvent = (event: XRControllerEvent) => {
     console.log('Controller', event)
   }
 
-  const handlePinchStart = (event: XRHandEvent) => {
+  const createBox = (event: XRHandEvent) => {
     const controller = event.target
-    const size = 0.05
-    const geometry = new THREE.BoxGeometry(size, size, size)
-    const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff })
-    const spawn = new THREE.Mesh(geometry, material)
+    const indexTip = controller?.joints['index-finger-tip']
 
-    const indexTip = controller.joints['index-finger-tip']
-    spawn.position.copy(indexTip.position)
-    spawn.quaternion.copy(indexTip.quaternion)
-    boxes.push(spawn)
-    boxes = boxes
+    if (!indexTip) return
+
+    const box = new Mesh()
+    box.position.copy(indexTip.position)
+    box.quaternion.copy(indexTip.quaternion)
+    boxes.push(box)
   }
 
   const hands = ['left', 'right'] as const
@@ -34,25 +35,32 @@
   {#each hands as hand (hand)}
     <Hand
       {hand}
-      on:pinchstart={handlePinchStart}
-      on:connected={handleEvent}
-      on:disconnected={handleEvent}
-      on:pinchstart={handleEvent}
-      on:pinchend={handleEvent}
+      onconnected={handleEvent}
+      ondisconnected={handleEvent}
+      onpinchstart={handleEvent}
+      onpinchend={handleEvent}
     />
 
     <Controller
       {hand}
-      on:connected={handleControllerEvent}
-      on:disconnected={handleControllerEvent}
-      on:select={handleControllerEvent}
-      on:squeeze={handleControllerEvent}
-      on:selectstart={handleControllerEvent}
-      on:selectend={handleControllerEvent}
-      on:squeezestart={handleControllerEvent}
-      on:squeezeend={handleControllerEvent}
+      onconnected={handleControllerEvent}
+      ondisconnected={handleControllerEvent}
+      onselect={handleControllerEvent}
+      onsqueeze={handleControllerEvent}
+      onselectstart={handleControllerEvent}
+      onselectend={handleControllerEvent}
+      onsqueezestart={handleControllerEvent}
+      onsqueezeend={handleControllerEvent}
     />
   {/each}
+
+  {#snippet fallback()}
+    <T.PerspectiveCamera
+      makeDefault
+      position={[0, 1.8, 1]}
+      oncreate={(ref) => ref.lookAt(0, 1.8, 0)}
+    />
+  {/snippet}
 </XR>
 
 <T.Mesh rotation={[-Math.PI / 2, 0, 0]}>
@@ -60,15 +68,12 @@
   <T.MeshBasicMaterial />
 </T.Mesh>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[0, 1.8, 1]}
-  on:create={({ ref }) => ref.lookAt(0, 1.8, 0)}
-/>
-
 <T.AmbientLight />
 <T.DirectionalLight />
 
 {#each boxes as box (box.uuid)}
-  <T is={box} />
+  <T is={box}>
+    <T.BoxGeometry args={[0.05, 0.05, 0.05]} />
+    <T.MeshStandardMaterial color={Math.random() * 0xffffff} />
+  </T>
 {/each}

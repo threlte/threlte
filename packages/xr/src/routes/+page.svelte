@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { ARButton } from '$lib'
+  import { ARButton } from '$lib/index.js'
   import Scene from './scene.svelte'
 </script>
 

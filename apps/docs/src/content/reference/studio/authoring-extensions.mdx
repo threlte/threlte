@@ -1,0 +1,239 @@
+---
+order: 101
+category: '@threlte/studio'
+title: 'Authoring Extensions'
+---
+
+_All_ Studio functionality is provided by **Studio Extensions**. To make the
+Studio suit your workflow, you may add your own Studio Extensions which may add
+toolbar items, custom panes, have access to the scene and may access the state
+of other extensions and run their actions.
+
+<Tip type="warning">
+  While it's technically possible to access and extend the Studio from anywhere within your app,
+  it's highly recommended to follow this pattern to easily remove the Studio **including all
+  extensions** from your app in production.
+</Tip>
+
+## Example
+
+Let's create a simple extension that increments and decrements a counter.
+
+### Extension Directory Structure
+
+In its simplest form, an extension consists of a single Svelte file. If you're
+using TypeScript, you can define the types for the extension state and actions
+in a separate file. Additionally, you can create a hook to interact with the
+extension from outside and define the public API.
+
+```plaintext
+extensions/
+  my-extension/
+    MyExtension.svelte
+    (types.ts)
+    (useMyExtension.ts)
+```
+
+### (Optional) Type Definitions
+
+This file provides type definitions for the extension state and actions.
+
+```ts title="types.ts"
+export const extensionScope = 'my-extension'
+
+export type ExtensionState = {
+  enabled: boolean
+  count: number
+}
+
+export type ExtensionActions = {
+  setEnabled: (enabled: boolean) => void
+  toggleEnabled: () => void
+  increment: () => void
+  decrement: () => void
+}
+```
+
+### Svelte Extension File
+
+This file implements the extension. Furthermore, it has full access to the Threlte app.
+
+```svelte title="MyExtension.svelte"
+<script lang="ts">
+  import {
+    useStudio,
+    ToolbarItem,
+    HorizontalButtonGroup,
+    ToolbarButton
+  } from '@threlte/studio/extend'
+  import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
+
+  const { createExtension } = useStudio()
+
+  const extension = createExtension<ExtensionState, ExtensionActions>({
+    scope: extensionScope,
+    state({ persist }) {
+      return {
+        enabled: persist(true),
+        count: persist(0)
+      }
+    },
+    actions: {
+      toggleEnabled({ state }) {
+        state.enabled = !state.enabled
+      },
+      setEnabled({ state }, enabled) {
+        state.enabled = enabled
+      },
+      increment({ state }) {
+        state.count++
+      },
+      decrement({ state }) {
+        state.count--
+      }
+    },
+    keyMap({ shift }) {
+      return {
+        increment: shift('+'),
+        decrement: shift('-')
+      }
+    }
+  })
+</script>
+
+<!-- Extension UI -->
+<ToolbarItem position="left">
+  <HorizontalButtonGroup>
+    <ToolbarButton
+      label="Decrement"
+      icon="mdiMinus"
+      on:click={extension.decrement}
+      tooltip="Decrement (-)"
+    />
+    <ToolbarButton
+      label="Increment"
+      icon="mdiPlus"
+      on:click={extension.increment}
+      tooltip="Increment (+)"
+    />
+  </HorizontalButtonGroup>
+</ToolbarItem>
+
+<slot />
+```
+
+<Tip type="warning">Extensions must include a slot element to render the scene.</Tip>
+
+Let's look at creating the extension step by step:
+
+1. Every extension is created using the `createExtension` function. If you're
+   using TypeScript, you should provide the types for the extension state and
+   actions.
+
+```ts
+createExtension<ExtensionState, ExtensionActions>({
+```
+
+2. An extension is registered with a unique scope (i.e. a string). This scope is
+   used to identify the extensions state and actions.
+
+```ts
+  scope: extensionScope,
+```
+
+3. The `state` function is used to define the initial state of the extension.
+   The `persist` function is used to automatically persist the state of the
+   extension across sessions.
+
+```ts
+  state({ persist }) {
+    return {
+      enabled: persist(true),
+      count: persist(0)
+    }
+  },
+```
+
+4. To mutate the state of the extension, you must define actions. Actions are
+   functions that receive the extension state and can mutate it.
+
+```ts
+  actions: {
+    toggleEnabled({ state }) {
+      state.enabled = !state.enabled
+    },
+    setEnabled({ state }, enabled) {
+      state.enabled = enabled
+    },
+    increment({ state }) {
+      state.count++
+    },
+    decrement({ state }) {
+      state.count--
+    }
+  },
+```
+
+5. You can define key mappings for the extension. Key mappings are used to
+   trigger actions when a key combination is pressed. Key modifiers (`shift`,
+   `alt`, `ctrl`, `meta`) are provided as arguments to the `keyMap` function,
+   and they can be combined. The key mappings are defined as an object where the
+   keys are the action names and the values are the key combinations.
+
+```ts
+  keyMap({ shift }) {
+    return {
+      increment: shift('+')
+      decrement: shift('-')
+    }
+  }
+```
+
+### (Optional) Hook
+
+This file exposes a hook to interact with the extension. It should be the only
+way to interact with the extension and defines the public API that can be used
+by other extensions.
+
+```ts title="useMyExtension.ts"
+import { useStudio } from '@threlte/studio/extend'
+import { extensionScope, type ExtensionState, type ExtensionActions } from './types'
+
+export const useMyExtension = () => {
+  const { useExtension } = useStudio()
+
+  const extension = useExtension<ExtensionState, ExtensionActions>(extensionScope)
+
+  return {
+    get enabled() {
+      return extension.state.enabled
+    },
+    get count() {
+      return extension.state.count
+    },
+    setEnabled: extension.setEnabled,
+    toggleEnabled: extension.toggleEnabled,
+    increment: extension.increment,
+    decrement: extension.decrement
+  }
+}
+```
+
+### Usage
+
+Adding the extension to the Studio is as simple as importing the extension file
+and passing it to the `Studio` component.
+
+```svelte
+<script lang="ts">
+  import { Canvas } from '@threlte/core'
+  import { Studio } from '@threlte/studio'
+  import MyExtension from './MyExtension.svelte'
+</script>
+
+<Canvas>
+  <Studio extensions={[MyExtension]}>
+    <Scene />
+  </Studio>
+</Canvas>
+```

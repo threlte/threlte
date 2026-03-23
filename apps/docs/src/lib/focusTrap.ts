@@ -28,8 +28,8 @@ export function focusTrap(node: HTMLElement, enabled: boolean) {
     const focusableElems: HTMLElement[] = Array.from(node.querySelectorAll(elemWhitelist))
     if (focusableElems.length) {
       // Set first/last focusable elements
-      elemFirst = focusableElems[0]
-      elemLast = focusableElems[focusableElems.length - 1]
+      elemFirst = focusableElems[0]!
+      elemLast = focusableElems[focusableElems.length - 1]!
       // Auto-focus first focusable element only when not called from observer
       if (!fromObserver) elemFirst.focus()
       // Listen for keydown on first & last element

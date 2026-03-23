@@ -7,14 +7,14 @@ import type {
   Event
 } from 'three'
 import type { CurrentWritable } from '@threlte/core'
-import type { ComputeFunction } from './compute'
+import type { ComputeFunction } from './compute.js'
 
 export type Properties<T> = Pick<
   T,
   { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
 >
 
-export interface Intersection extends ThreeIntersection {
+export interface Intersection<T extends Object3D = Object3D> extends ThreeIntersection<T> {
   /** The event source (the object which registered the handler) */
   eventObject: Object3D
 }
@@ -70,26 +70,26 @@ export interface PointerCaptureTarget {
 }
 
 export type ThrelteXREvents = {
-  click: IntersectionEvent
-  contextmenu: IntersectionEvent
-  pointerup: IntersectionEvent
-  pointerdown: IntersectionEvent
-  pointerover: IntersectionEvent
-  pointerout: IntersectionEvent
-  pointerenter: IntersectionEvent
-  pointerleave: IntersectionEvent
-  pointermove: IntersectionEvent
-  pointermissed: IntersectionEvent
+  onclick: IntersectionEvent
+  oncontextmenu: IntersectionEvent
+  onpointerup: IntersectionEvent
+  onpointerdown: IntersectionEvent
+  onpointerover: IntersectionEvent
+  onpointerout: IntersectionEvent
+  onpointerenter: IntersectionEvent
+  onpointerleave: IntersectionEvent
+  onpointermove: IntersectionEvent
+  onpointermissed: IntersectionEvent
 }
 
 export const events: (keyof ThrelteXREvents)[] = [
-  'click',
-  'contextmenu',
-  'pointerup',
-  'pointerdown',
-  'pointerover',
-  'pointerout',
-  'pointerenter',
-  'pointerleave',
-  'pointermove'
+  'onclick',
+  'oncontextmenu',
+  'onpointerup',
+  'onpointerdown',
+  'onpointerover',
+  'onpointerout',
+  'onpointerenter',
+  'onpointerleave',
+  'onpointermove'
 ]

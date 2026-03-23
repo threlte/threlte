@@ -3,14 +3,16 @@
   import Scene from './Scene.svelte'
 </script>
 
-<div>
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div>
+<p>Move mouse around the canvas</p>
+
+<Canvas>
+  <Scene />
+</Canvas>
 
 <style>
-  div {
-    height: 100%;
+  p {
+    color: white;
+    position: fixed;
+    padding: 0.5rem;
   }
 </style>

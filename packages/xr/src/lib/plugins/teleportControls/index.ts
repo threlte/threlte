@@ -1,17 +1,15 @@
-import { Raycaster } from 'three'
-import { currentWritable, watch } from '@threlte/core'
+import { currentWritable, observe } from '@threlte/core'
 import {
-  setTeleportContext,
-  getTeleportContext,
+  createTeleportContext,
+  useTeleportControls,
   type ComputeFunction,
   getHandContext,
   type HandContext
-} from './context'
-import { injectTeleportControlsPlugin } from './plugin'
-import { defaultComputeFunction } from './compute'
-import { setHandContext } from './context'
-import { setupTeleportControls } from './setup'
-import { teleportState } from '../../internal/stores'
+} from './context.js'
+import { injectTeleportControlsPlugin } from './plugin.svelte.js'
+import { setHandContext } from './context.js'
+import { setupTeleportControls } from './setup.svelte.js'
+import { teleportState } from '../../internal/state.svelte.js'
 
 let controlsCounter = 0
 
@@ -35,20 +33,13 @@ export const teleportControls = (
   handedness: 'left' | 'right',
   options?: TeleportControlsOptions
 ) => {
-  if (getTeleportContext() === undefined) {
+  if (useTeleportControls() === undefined) {
     injectTeleportControlsPlugin()
 
-    setTeleportContext({
-      interactiveObjects: [],
-      surfaces: new Map(),
-      blockers: new Map(),
-      dispatchers: new WeakMap(),
-      raycaster: new Raycaster(),
-      compute: options?.compute ?? defaultComputeFunction
-    })
+    createTeleportContext(options?.compute)
   }
 
-  const context = getTeleportContext()
+  const context = useTeleportControls()
 
   if (getHandContext(handedness) === undefined) {
     const enabled = options?.enabled ?? true
@@ -69,20 +60,20 @@ export const teleportControls = (
 
   const handContext = getHandContext(handedness)
 
-  watch(handContext.enabled, (enabled) => {
-    controlsCounter += enabled ? 1 : -1
-    teleportState.update((value) => {
-      value[handedness].enabled = controlsCounter > 0
-      return value
-    })
-  })
+  observe.pre(
+    () => [handContext.enabled],
+    ([enabled]) => {
+      controlsCounter += enabled ? 1 : -1
+      teleportState[handedness].enabled = controlsCounter > 0
+    }
+  )
 
-  watch(handContext.active, (hovering) => {
-    teleportState.update((value) => {
-      value[handedness].hovering = hovering
-      return value
-    })
-  })
+  observe.pre(
+    () => [handContext.active],
+    ([hovering]) => {
+      teleportState[handedness].hovering = hovering
+    }
+  )
 
   return {
     enabled: handContext.enabled,

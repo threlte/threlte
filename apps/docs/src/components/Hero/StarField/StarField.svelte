@@ -5,8 +5,7 @@
     Float32BufferAttribute,
     PointsMaterial,
     Vector3,
-    type Shader,
-    type WebGLRenderer
+    type WebGLProgramParametersWithUniforms
   } from 'three'
 
   export let amount = 100
@@ -39,7 +38,7 @@
     direction: new Vector3(direction[0], direction[1], direction[2]).normalize()
   }
 
-  const onBeforeCompile = (shader: Shader, renderer: WebGLRenderer) => {
+  const onBeforeCompile = (shader: WebGLProgramParametersWithUniforms) => {
     shader.uniforms.elapsedTime = {
       get value() {
         return settings.elapsedTime

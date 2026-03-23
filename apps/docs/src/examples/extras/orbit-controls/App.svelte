@@ -4,14 +4,14 @@
   import Scene from './Scene.svelte'
   import Settings from './Settings.svelte'
 
-  let autoRotate: boolean = false
-  let enableDamping: boolean = true
-  let rotateSpeed: number = 1
-  let zoomToCursor: boolean = false
-  let zoomSpeed: number = 1
-  let minPolarAngle: number = 0
-  let maxPolarAngle: number = Math.PI
-  let enableZoom: boolean = true
+  let autoRotate = $state(false)
+  let enableDamping = $state(true)
+  let rotateSpeed = $state(1)
+  let zoomToCursor = $state(false)
+  let zoomSpeed = $state(1)
+  let minPolarAngle = $state(0)
+  let maxPolarAngle = $state(Math.PI)
+  let enableZoom = $state(true)
 </script>
 
 <div>

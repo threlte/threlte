@@ -1,0 +1,40 @@
+---
+order: 202
+category: '@threlte/studio'
+sourcePath: 'packages/studio/src/lib/extensions/studio-objects-registry/useStudioObjectsRegistry.svelte.ts'
+title: 'useStudioObjectsRegistry'
+type: 'hook'
+---
+
+## Examples
+
+```ts
+import { useStudioObjectsRegistry } from '@threlte/studio/extensions'
+
+const registry = useStudioObjectsRegistry()
+
+// get all currently registered studio objects
+console.log(registry.objects)
+
+// add a studio object to the registry
+registry.addObject(object)
+
+// remove a studio object from the registry
+registry.removeObject(object)
+
+// check if an object is or is a child of a studio object
+console.log(registry.isOrIsChildOfStudioObject(object)) // true | false
+```
+
+### Creating a studio object reference
+
+```svelte
+<script lang="ts">
+  import { useStudioObjectsRegistry } from '@threlte/studio/extensions'
+
+  const registry = useStudioObjectsRegistry()
+  const studioObject = registry.studioObjectRef()
+</script>
+
+<T.Mesh bind:ref={studioObject.ref} />
+```

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Grid, OrbitControls, Portal, PortalTarget } from '@threlte/extras'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { MathUtils } from 'three'
 
-  let posX = Math.sin(Date.now() / 1000) * 4
+  let posX = $state(Math.sin(Date.now() / 1000) * 4)
 
   useTask(() => {
     posX = Math.sin(Date.now() / 1000) * 4
@@ -16,10 +16,10 @@
   fov={30}
 >
   <OrbitControls
-    maxPolarAngle={85 * DEG2RAD}
-    minPolarAngle={20 * DEG2RAD}
-    maxAzimuthAngle={45 * DEG2RAD}
-    minAzimuthAngle={-45 * DEG2RAD}
+    maxPolarAngle={85 * MathUtils.DEG2RAD}
+    minPolarAngle={20 * MathUtils.DEG2RAD}
+    maxAzimuthAngle={45 * MathUtils.DEG2RAD}
+    minAzimuthAngle={-45 * MathUtils.DEG2RAD}
     enableZoom={false}
   />
 </T.PerspectiveCamera>

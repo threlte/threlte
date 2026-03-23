@@ -4,7 +4,7 @@
 </script>
 
 <div>
-  <Canvas>
+  <Canvas autoRender={false}>
     <Scene />
   </Canvas>
 </div>

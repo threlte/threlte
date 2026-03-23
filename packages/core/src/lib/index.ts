@@ -1,66 +1,57 @@
+export const VERSION = 8
+
 // canvas component
 export { default as Canvas } from './Canvas.svelte'
 
-// trait components
-export { default as HierarchicalObject } from './internal/HierarchicalObject.svelte'
-export { default as SceneGraphObject } from './internal/SceneGraphObject.svelte'
-export { default as DisposableObject } from './internal/DisposableObject.svelte'
-
 // components (v6)
-export { T, extend } from './components/T/T'
-export type { Props, Events, Slots } from './components/T/types'
+export { T, extend } from './components/T/T.js'
+export type { Props } from './components/T/types.js'
 
 // plugins
-export { injectPlugin } from './plugins/injectPlugin'
-export { createPlugin } from './plugins/createPlugin'
-export type { Plugin, NamedPlugin, PluginProps } from './plugins/types'
+export { injectPlugin } from './plugins/injectPlugin.js'
+export type { Plugin } from './plugins/types.js'
 
 // hooks
-export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask'
-export { useStage } from './hooks/useStage'
-export { useThrelte } from './hooks/useThrelte'
-export { useThrelteUserContext } from './hooks/useThrelteUserContext'
+export { useThrelte } from './context/compounds/useThrelte.js'
+export { useStage } from './hooks/useStage.js'
+export { useTask, type ThrelteUseTask, type ThrelteUseTaskOptions } from './hooks/useTask.svelte.js'
+export { useThrelteUserContext } from './hooks/useThrelteUserContext.js'
 
 // task scheduling system types
-export type { Key, Stage, Task, Scheduler, Schedule, TaskCallback } from './frame-scheduling'
-
-// legacy hooks
-// TODO: remove in Threlte 7
-export { useFrame, type ThrelteUseFrameOptions } from './hooks/legacy/useFrame'
-export { useRender } from './hooks/legacy/useRender'
+export type {
+  Key,
+  Schedule,
+  Scheduler,
+  Stage,
+  Task,
+  TaskCallback
+} from './frame-scheduling/index.js'
 
 // useLoader
 export {
   useLoader,
-  type UseLoaderOptions,
+  type UseLoaderLoadOptions,
   type UseLoaderLoadInput,
-  type UseLoaderLoadResult
-} from './hooks/useLoader'
-
-// useParent
-export { useParent } from './hooks/useParent'
-
-// AsyncWritable
-export { type AsyncWritable, asyncWritable } from './lib/asyncWritable'
+  type UseLoaderLoadResult,
+  type UseLoaderOptions
+} from './hooks/useLoader.js'
 
 // contexts
-export type { ThrelteContext } from './lib/contexts'
-
-// types
-export type { Size } from './types'
+export type { ThrelteContext } from './context/compounds/useThrelte.js'
+export { createThrelteContext } from './context/createThrelteContext.svelte.js'
+export { createCacheContext, useCache } from './context/fragments/cache.js'
+export { createCameraContext, useCamera } from './context/fragments/camera.js'
+export { createDOMContext, useDOM } from './context/fragments/dom.js'
+export { createDisposalContext, useDisposal } from './context/fragments/disposal.js'
+export { createParentContext, useParent } from './context/fragments/parent.js'
+export {
+  createParentObject3DContext,
+  useParentObject3D
+} from './context/fragments/parentObject3D.js'
+export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte.js'
+export { createSceneContext, useScene } from './context/fragments/scene.js'
+export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte.js'
+export { createUserContext } from './context/fragments/user.js'
 
 // utils
-export { createObjectStore } from './lib/createObjectStore'
-export { createRawEventDispatcher } from './lib/createRawEventDispatcher'
-export { watch, memoize, type CurrentWritable, currentWritable } from './lib/storeUtils'
-export { forwardEventHandlers } from './lib/forwardEventHandlers'
-export { useCache } from './lib/cache'
-export { resolvePropertyPath } from './components/T/utils/resolvePropertyPath'
-export { revision } from './lib/revision'
-
-// internal components
-// NOTE: for some reason TS seems to be confusing the types exposed from the .svelte and .svelte.d.ts files
-// but it works if we're explicit about it with the .d suffix
-export type { DisposableObjectProperties } from './internal/DisposableObject.svelte.d'
-export type { HierarchicalObjectProperties } from './internal/HierarchicalObject.svelte'
-export type { SceneGraphObjectProperties } from './internal/SceneGraphObject.svelte'
+export * from './utilities/index.js'

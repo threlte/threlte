@@ -3,19 +3,18 @@ import { defineConfig } from 'astro/config'
 import { resolve } from 'path'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeSlug from 'rehype-slug'
-import preprocess from 'svelte-preprocess'
 import mkcert from 'vite-plugin-mkcert'
-
-// https://astro.build/config
-import tailwind from '@astrojs/tailwind'
-
-// https://astro.build/config
+import { threlteStudio } from '@threlte/studio/vite'
+import type { Plugin } from 'vite'
+import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
-
-// https://astro.build/config
 import mdx from '@astrojs/mdx'
+import { cpus } from 'os'
 
+const CPU_COUNT = cpus().length
+
+// "@theatre/core" needs to be externalized in development mode but not in production!
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
 if (process.env.NODE_ENV === 'production') {
   noExternal.push('@theatre/core')
@@ -23,25 +22,21 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
-  prefetch: true,
-  build: {
-    inlineStylesheets: 'never'
+  compressHTML: false,
+  markdown: {
+    syntaxHighlight: false
+  },
+  prefetch: {
+    prefetchAll: true
+  },
+  experimental: {
+    clientPrerender: true
   },
   integrations: [
     AutoImport({
-      imports: [
-        '$components/Example/Example.astro',
-        '$components/Tip/Tip.astro',
-        '$components/ManualInstallGuide/ManualInstallGuide.svelte',
-        '$components/Card/Card.astro'
-      ]
+      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     }),
-    tailwind(),
-    svelte({
-      preprocess: preprocess({
-        postcss: true
-      })
-    }),
+    svelte(),
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
@@ -63,21 +58,35 @@ export default defineConfig({
     },
     // Use https and generate a cert to allow XR debugging.
     server: {
-      https: process.argv.includes('--https')
+      ...(process.argv.includes('--https') ? { https: {} } : {})
     },
-    plugins: process.argv.includes('--https') ? [mkcert()] : [],
+    plugins: process.argv.includes('--https')
+      ? [threlteStudio() as unknown as Plugin, mkcert(), tailwindcss()]
+      : [threlteStudio() as unknown as Plugin, tailwindcss()],
     ssr: {
-      // "@theatre/core" needs to be externalized in development mode but not in production!
       noExternal: noExternal
     },
-    legacy: {
-      // vite 5 changed how externalized modules work - need to use this flag to keep old behaviour
-      // https://vitejs.dev/guide/migration#ssr-externalized-modules-value-now-matches-production
-      proxySsrExternalModules: true
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
+    build: {
+      target: 'esnext',
+      minify: 'esbuild',
+      terserOptions: {
+        keep_classnames: true
+      },
+      rollupOptions: {
+        external: ['sharp'],
+        maxParallelFileOps: CPU_COUNT * 3,
+        output: {
+          manualChunks: undefined
+        }
+      }
     }
   },
-  markdown: {
-    syntaxHighlight: false
-    // rehypePlugins: [[rehypePrettyCode, prettyCodeOptions]]
+  build: {
+    concurrency: 4
   }
 })

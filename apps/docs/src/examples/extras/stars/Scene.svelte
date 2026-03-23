@@ -10,9 +10,6 @@
   position.y={1}
   position.z={8}
   fov={90}
-  on:create={({ ref }) => {
-    ref.lookAt(0, 0, 0)
-  }}
 >
   <OrbitControls
     enableDamping

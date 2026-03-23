@@ -1,0 +1,6 @@
+README.md
+node_modules/**
+dist
+.svelte-kit
+.changeset
+CHANGELOG.md

@@ -1,7 +1,7 @@
 import type { Collider, ColliderHandle } from '@dimforge/rapier3d-compat'
 import { getContext, onDestroy } from 'svelte'
 import { get } from 'svelte/store'
-import type { CollisionGroupsContext } from '../types/types'
+import type { CollisionGroupsContext } from '../types/types.js'
 
 type ColliderMap = Map<
   ColliderHandle,
@@ -25,10 +25,8 @@ export const useCollisionGroups = () => {
   const bitMaskStore = getContext<CollisionGroupsContext>('threlte-rapier-collision-group')
   if (!bitMaskStore)
     return {
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      registerColliders: (colliders: Collider[]) => {},
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      removeColliders: (colliders: Collider[]) => {}
+      registerColliders: () => {},
+      removeColliders: () => {}
     }
 
   let bitMask = get(bitMaskStore)

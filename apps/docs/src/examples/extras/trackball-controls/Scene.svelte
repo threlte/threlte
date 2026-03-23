@@ -26,14 +26,10 @@
     {zoomSpeed}
     {noPan}
     {panSpeed}
-  />
+  >
+    <Gizmo />
+  </TrackballControls>
 </T.PerspectiveCamera>
-
-<Gizmo
-  horizontalPlacement="left"
-  paddingX={20}
-  paddingY={20}
-/>
 
 <T.DirectionalLight
   position.y={10}

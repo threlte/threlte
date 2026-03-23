@@ -1,0 +1,310 @@
+---
+category: Advanced
+title: WebGPU and TSL
+order: 1
+---
+
+<Tip type="experimental">
+  The WebGPU specification is still in active development. WebGPU support in Three.js is in an early
+  stage and is subject to frequent breaking changes. As of now, we do not recommend using WebGPU in
+  production.
+</Tip>
+
+<Tip type="warning">
+  We highly recommend targeting [version r171](https://github.com/mrdoob/three.js/releases/tag/r171)
+  onwards because of potential [duplication and configuration
+  issues](https://github.com/mrdoob/three.js/pull/29404).
+</Tip>
+
+## WebGPU
+
+To use the WebGPU renderer, import it and then initialize it within your
+`<Canvas>`'s `createRenderer` prop. This will replace the default WebGL
+renderer.
+
+```svelte title="App.svelte" {4}+ {8-14}+
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
+  import { WebGPURenderer } from 'three/webgpu'
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+<Tip type="note">
+  WebGPU is still young and has [limited availability across major
+  browsers](https://caniuse.com/?search=webgpu). For this reason, Three.js's WebGPU renderer
+  fallbacks to WebGL when WebGPU is not available.
+</Tip>
+
+<Tip type="tip">
+  This same approach can be used to swap out the default renderer for any other custom renderer.
+</Tip>
+
+The WebGPU renderer doesn't immediately render. If the renderer you provide
+needs to delay rendering, you can defer rendering by initially setting the
+renderMode to `manual`.
+
+```svelte title="App.svelte"
+<script>
+  import { Canvas, T } from '@threlte/core'
+  import { WebGPURenderer } from 'three/webgpu'
+  let renderMode = $state('manual')
+</script>
+
+<Canvas
+  {renderMode}
+  createRenderer={(canvas) => {
+    const renderer = new WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+
+    renderer.init().then(() => {
+      renderMode = 'on-demand'
+    })
+
+    return renderer
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+### Vite
+
+WebGPU uses top-level async to determine WebGPU compatibility. Vite will often
+throw an error when it detects this.
+
+To circumvent this issue, the following can be added to your Vite config.
+
+```js title=vite.config.js
+optimizeDeps: {
+  esbuildOptions: {
+    target: 'esnext'
+  }
+},
+build: {
+  target: 'esnext'
+}
+```
+
+Alternatively,
+[`vite-plugin-top-level-await`](https://github.com/Menci/vite-plugin-top-level-await)
+can be used, although less success has been reported with this method.
+
+<Example path="renderers/WebGPU" />
+
+<small>
+  Adapted from [this Three.js
+  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle).
+</small>
+
+## TSL
+
+A question that comes up often in Three.js development is "How do I extend
+Three.js materials?". External libraries such as
+[three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
+use a find and replace solution to get this job done. Three.js has identified
+that it's not an ideal solution and recommends using the [Three.js Shading
+Language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) or
+TSL for short.
+
+The example below is an adaptation of
+[this](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing) Three.js
+example. There are many more [TSL
+examples](https://threejs.org/examples/?q=tsl) within Three.js that you can use
+or adapt for your project.
+
+<Example path="shaders/webgpu/slice/" />
+
+### Using the `<T>` catalogue
+
+The `<T>` component defaults to all the exports from `three` and will error on
+webgpu things like `<T.MeshPhysicalNodeMaterial />`. This is because the
+`MeshPhysicalNodeMaterial` class is an export of `three/webgpu` and not
+`three`. Here are a few options to resolve this.
+
+#### Option 1
+
+Extend `<T>` with all the definitions from `three/webgpu` by using the
+[`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+function. Adding all of the definitions will increase the bundle size of
+your application because both `three` and `three/webgpu` will be imported in
+a non-tree-shakeable way.
+
+```svelte title="App.svelte" {3-4}+ {6}+
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas, extend } from '@threlte/core'
+  import * as THREE from 'three/webgpu'
+
+  extend(THREE)
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new THREE.WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+#### Option 2
+
+Use explicit imports for the objects, functions, and other classes that you
+use from `three/webgpu`. You can then use `<T>`'s
+[`is`](/docs/reference/core/t#property-is) prop with those imports from
+`three/webgpu`.
+
+```svelte title="Scene.svelte" {3}+ {5}+ {10}+
+<script>
+  import { T } from '@threlte/core'
+  import { MeshPhysicalNodeMaterial } from 'three/webgpu'
+
+	const material = new MeshPhysicalNodeMaterial()
+</script>
+
+<T.Mesh>
+	<T.BoxGeometry>
+	<T is={material}>
+</T.Mesh>
+```
+
+#### Option 3
+
+Same as option #2 but using
+[`extend`](/docs/reference/core/t#extending-the-default-component-catalogue)
+with the imports so that you can have `<T.MeshPhysicalNodeMaterial />`
+etc...
+
+```svelte title="App.svelte" {3-4}+ {6}+
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas, extend } from '@threlte/core'
+  import { WebGPURenderer, MeshPhysicalNodeMaterial } from 'three/webgpu'
+
+  extend({ MeshPhysicalNodeMaterial })
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+```svelte title=Scene.svelte
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshPhysicalNodeMaterial />
+</T.Mesh>
+```
+
+Options 2 and 3 will keep the bundle size of your application small but you'll
+have to keep it updated as you go.
+
+#### Careful! `three` and `three/webgpu` don't mix well
+
+You will need to overwrite some of the default catalogue if you use
+`three/webgpu`. For example, if you're using a `MeshPhysicalNodeMaterial`, you
+need to update any lighing classes you use like so:
+
+```svelte title="App.svelte"
+<script>
+  import { DirectionalLight, MeshPhysicalNodeMaterial } from 'three/webgpu'
+
+  // tell <T.DirectionalLight> to use the definition from `three/webgpu`
+  extend({ MeshPhysicalNodeMaterial, DirectionalLight })
+</script>
+
+<Canvas>
+  <Scene />
+</Canvas>
+```
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.DirectionalLight />
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshPhysicalNodeMaterial />
+</T.Mesh>
+```
+
+This is because the exports from `three/webgpu` are different than those in
+`three` and make use of the additional features that node materials have.
+
+<Tip type="tip">
+  An easy option for projects is to start with option #1 and then transition to the other options
+  when bundle size becomes an issue or you need to ship to production.
+</Tip>
+
+### Nodes
+
+The material's
+[nodes](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language#nodematerial)
+can be directly assigned like any other prop on the `<T>` component.
+
+```svelte
+<T.MeshPhysicalNodeMaterial
+  {outputNode}
+  castShadowNode={Fn(() => {
+    /* ... */
+  })()}
+/>
+```
+
+Or can create the material in the script tag and use `<T>`'s `is` prop to
+attach the material.
+
+```svelte
+<script>
+	const material = new MeshPhysicalNodeMaterial();
+	material.outputNode = outputNode;
+	material.castShadowNode = Fn(() => { /* ... */ }();
+</script>
+
+<T is={material} />
+```
+
+Node materials give you the ability to modify three's builtin materials. In the
+sliced gear example, two nodes are modified; the `outputNode` and the
+`castShadowNode`. The `outputNode` is set up in such a way that it discards any
+fragments that are outside the permitted `startAngle` and `arcAngle`. If a
+fragment is not discarded and it is not front-facing, it is assigned the color
+in the `uColor` uniform. The material needs its `side` set to
+`THREE.DoubleSide` otherwise three.js will cull them out if they are facing
+away from the camera. Any fragment that is discarded in the shadowNode will not
+cast shadows.

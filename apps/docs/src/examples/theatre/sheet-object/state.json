@@ -97,12 +97,7 @@
                     "id": "iGoSxeB7Tg",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   }
@@ -116,12 +111,7 @@
                     "id": "RmM1HUOqZm",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.455,
-                      0.03
-                    ],
+                    "handles": [0.5, 1, 0.455, 0.03],
                     "type": "bezier",
                     "value": 0
                   },
@@ -129,12 +119,7 @@
                     "id": "5MNKDVNvWP",
                     "position": 2,
                     "connectedRight": true,
-                    "handles": [
-                      0.515,
-                      0.955,
-                      0.455,
-                      0.03
-                    ],
+                    "handles": [0.515, 0.955, 0.455, 0.03],
                     "type": "bezier",
                     "value": -0.2
                   },
@@ -142,12 +127,7 @@
                     "id": "h_vCrfvuFs",
                     "position": 4,
                     "connectedRight": true,
-                    "handles": [
-                      0.515,
-                      0.955,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.515, 0.955, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   }
@@ -161,12 +141,7 @@
                     "id": "2FKQERGrJH",
                     "position": 0,
                     "connectedRight": true,
-                    "handles": [
-                      0.5,
-                      1,
-                      0.5,
-                      0
-                    ],
+                    "handles": [0.5, 1, 0.5, 0],
                     "type": "bezier",
                     "value": 0
                   }

@@ -1,0 +1,27 @@
+---
+order: 204
+category: '@threlte/studio'
+sourcePath: 'packages/studio/src/lib/extensions/space/useSpace.ts'
+title: 'useSpace'
+type: 'hook'
+---
+
+## Examples
+
+```ts
+import { useSpace } from '@threlte/studio/extensions'
+
+const space = useSpace()
+
+// toggle the working space
+space.toggleSpace()
+
+// set the working space to local
+space.setSpace('local')
+
+// set the working space to world
+space.setSpace('world')
+
+// get the working space
+console.log(space.space) // 'world'
+```

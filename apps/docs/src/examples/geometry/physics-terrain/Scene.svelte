@@ -1,28 +1,30 @@
 <script lang="ts">
-  import { PlaneGeometry, MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
-  import { createNoise2D } from 'simplex-noise'
-  import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
+  import FallingShapes from './FallingShapes.svelte'
   import RAPIER from '@dimforge/rapier3d-compat'
   import { Collider, Debug, RigidBody } from '@threlte/rapier'
-  import FallingShapes from './FallingShapes.svelte'
+  import { DoubleSide, PlaneGeometry, MathUtils } from 'three'
+  import { Environment, OrbitControls, Suspense } from '@threlte/extras'
+  import { SimplexNoise } from 'three/examples/jsm/math/SimplexNoise.js'
+  import { T } from '@threlte/core'
 
-  let nsubdivs = 10
-  let heights = []
+  let { resetCounter = 0, showDebug = false }: { resetCounter?: number; showDebug?: boolean } =
+    $props()
 
-  const geometry = new PlaneGeometry(10, 10, nsubdivs, nsubdivs)
+  const nsubdivs = 10
+  const size = 10
 
-  const noise = createNoise2D()
-  const vertices = geometry.getAttribute('position').array
+  const heights: number[] = []
+
+  const geometry = new PlaneGeometry(size, size, nsubdivs, nsubdivs)
+
+  const noise = new SimplexNoise()
+  const positions = geometry.getAttribute('position').array
 
   for (let x = 0; x <= nsubdivs; x++) {
     for (let y = 0; y <= nsubdivs; y++) {
-      let height = noise(x, y)
+      const height = noise.noise(x / 4, y / 4)
       const vertIndex = (x + (nsubdivs + 1) * y) * 3
-
-      //@ts-ignore
-      vertices[vertIndex + 2] = height
+      positions[vertIndex + 2] = height
       const heightIndex = y + (nsubdivs + 1) * x
       heights[heightIndex] = height
     }
@@ -31,54 +33,59 @@
   // needed for lighting
   geometry.computeVertexNormals()
 
-  const scale = new RAPIER.Vector3(10.0, 1, 10)
-
-  let resetCounter = 0
-  export const reset = () => {
-    resetCounter += 1
-  }
-
-  let debugEnabled = false
-  export const toggleDebug = () => {
-    debugEnabled = !debugEnabled
-  }
+  const scale = new RAPIER.Vector3(size, 1, size)
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position.y={10}
   position.z={10}
-  lookAt.y={0}
 >
-  <OrbitControls enableZoom={true} />
+  <OrbitControls />
 </T.PerspectiveCamera>
 
-<T.DirectionalLight position={[3, 10, 10]} />
-<T.HemisphereLight intensity={0.2} />
+<Suspense>
+  {#key resetCounter}
+    <FallingShapes>
+      {#snippet children({ shape })}
+        <T.Mesh
+          castShadow
+          receiveShadow
+          geometry={shape.geometry}
+        >
+          <T.MeshStandardMaterial color={shape.color} />
+        </T.Mesh>
+      {/snippet}
+    </FallingShapes>
+  {/key}
 
-{#key resetCounter}
-  <FallingShapes />
-{/key}
+  <Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
-<T.Mesh
-  receiveShadow
-  {geometry}
-  rotation.x={DEG2RAD * -90}
-  rotation.z={DEG2RAD * 0}
->
-  <T.MeshStandardMaterial
-    color="teal"
-    opacity="0.8"
-    transparent
+  <T.DirectionalLight
+    castShadow
+    position={[5, 5, 5]}
   />
-</T.Mesh>
-<RigidBody type={'fixed'}>
-  <Collider
-    shape={'heightfield'}
-    args={[nsubdivs, nsubdivs, heights, scale]}
-  />
-</RigidBody>
 
-{#if debugEnabled === true}
-  <Debug />
-{/if}
+  <T.Mesh
+    receiveShadow
+    {geometry}
+    rotation.x={MathUtils.DEG2RAD * -90}
+  >
+    <T.MeshStandardMaterial
+      color="teal"
+      opacity={0.8}
+      transparent
+      side={DoubleSide}
+    />
+  </T.Mesh>
+  <RigidBody type="fixed">
+    <Collider
+      shape="heightfield"
+      args={[nsubdivs, nsubdivs, new Float32Array(heights), scale]}
+    />
+  </RigidBody>
+
+  {#if showDebug}
+    <Debug />
+  {/if}
+</Suspense>

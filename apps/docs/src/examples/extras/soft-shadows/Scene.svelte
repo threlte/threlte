@@ -1,14 +1,13 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import { T, useThrelte } from '@threlte/core'
-  import { Environment, OrbitControls, Portal, SoftShadows } from '@threlte/extras'
+  import { Environment, OrbitControls, SoftShadows } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
   import type { DirectionalLightHelper } from 'three'
   import Suzanne from './Suzanne.svelte'
 
   const { scene } = useThrelte()
 
-  let lightHelper: DirectionalLightHelper
+  let lightHelper = $state<DirectionalLightHelper>()
 </script>
 
 <T.PerspectiveCamera
@@ -23,60 +22,52 @@
 
 <SheetObject
   key="Light"
-  let:Transform
   props={{}}
-  on:change={() => {
+  onchange={() => {
     lightHelper?.update()
   }}
-  let:selected
 >
-  <Transform>
-    <T.DirectionalLight
-      position={[0, 0, 0]}
-      castShadow
-      let:ref
-      shadow.mapSize.width={1024}
-      shadow.mapSize.height={1024}
-      shadow.bias={0.0001}
-    >
-      {#if selected}
-        <Portal object={scene}>
-          <T.DirectionalLightHelper
-            bind:ref={lightHelper}
-            args={[ref]}
-          />
-        </Portal>
-      {/if}
-    </T.DirectionalLight>
-  </Transform>
+  {#snippet children({ Transform, selected })}
+    <Transform>
+      <T.DirectionalLight
+        position={[0, 0, 0]}
+        castShadow
+        shadow.mapSize.width={1024}
+        shadow.mapSize.height={1024}
+        shadow.bias={0.0001}
+      >
+        {#snippet children({ ref })}
+          {#if selected}
+            <T.DirectionalLightHelper
+              bind:ref={lightHelper}
+              attach={scene}
+              args={[ref]}
+            />
+          {/if}
+        {/snippet}
+      </T.DirectionalLight>
+    </Transform>
+  {/snippet}
 </SheetObject>
 
 <SheetObject
   key="Shadows"
   props={{
     soft: true,
-    size: types.number(25, {
-      range: [0, 100]
-    }),
-    focus: types.number(0, {
-      range: [0, 10]
-    }),
-    samples: types.number(10, {
-      range: [0, 100]
-    })
+    size: 25,
+    focus: 0,
+    samples: 10
   }}
-  let:values
 >
-  {#if values.soft}
-    <SoftShadows
-      focus={values.focus}
-      size={values.size}
-      samples={values.samples}
-    />
-  {/if}
+  {#snippet children({ values })}
+    {#if values.soft}
+      <SoftShadows
+        focus={values.focus}
+        size={values.size}
+        samples={values.samples}
+      />
+    {/if}
+  {/snippet}
 </SheetObject>
 
-<Environment
-  path="/hdr/"
-  files="mpumalanga_veld_puresky_1k.hdr"
-/>
+<Environment url="/textures/equirectangular/hdr/mpumalanga_veld_puresky_1k.hdr" />

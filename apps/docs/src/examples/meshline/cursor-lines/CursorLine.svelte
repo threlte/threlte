@@ -1,60 +1,53 @@
+<script
+  module
+  lang="ts"
+>
+  const createPoints = (count = 50) => {
+    const points: Vector3[] = []
+    for (let i = 0; i < count; i += 1) {
+      points.push(new Vector3())
+    }
+    return points
+  }
+</script>
+
 <script lang="ts">
+  import type { Props } from '@threlte/core'
+  import type { Vector3Tuple } from 'three'
+  import { Mesh, Vector3 } from 'three'
   import { T, useTask } from '@threlte/core'
-  import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras'
-  import { Vector3 } from 'three'
-  import { spring } from 'svelte/motion'
 
-  export let cursorPosition: { x: number; z: number }
-  export let color: string
-  export let width: number
-  export let stiffness: number
-  export let damping: number
-
-  let sprungCursor = spring(
-    { x: 0, z: 0 },
-    {
-      stiffness,
-      damping
-    }
-  )
-
-  let points: Vector3[] = []
-
-  for (let j = 0; j < 50; j++) {
-    points.push(new Vector3(0, 0, 0))
+  type CursorLineProps = Props<typeof Mesh, [{ getPoints(): Vector3[] }]> & {
+    cursorPosition: Vector3Tuple
   }
 
-  $: sprungCursor.set(cursorPosition)
+  let { cursorPosition, children, ...props }: CursorLineProps = $props()
 
-  $: {
-    if (points[0]) {
-      points[0].x = $sprungCursor.x
-      points[0].z = $sprungCursor.z
-      points = points
-    }
-  }
+  const count = 50
+  let front = $state.raw(createPoints(count))
+  let back = createPoints(count)
 
   useTask((delta) => {
-    let previousPoint = points[0]
-    points.forEach((point, i) => {
-      if (previousPoint && i > 0) {
-        point.lerp(previousPoint, Math.pow(0.000001, delta))
-        previousPoint = point
+    back[0]?.fromArray(cursorPosition)
+    const alpha = 1e-6 ** delta
+    for (let i = 1; i < count; i += 1) {
+      const first = back[i - 1]
+      const second = back[i]
+
+      if (first) {
+        second?.lerp(first, alpha)
       }
-    })
-    points = points
+    }
+    const temp = front
+    front = back
+    back = temp
   })
 </script>
 
-<T.Mesh {...$$restProps}>
-  <MeshLineGeometry
-    {points}
-    shape={'taper'}
-  />
-  <MeshLineMaterial
-    {width}
-    {color}
-    scaleDown={0.1}
-    attenuate={false}
-  />
+<T.Mesh {...props}>
+  {@render children?.({
+    getPoints() {
+      return front
+    }
+  })}
 </T.Mesh>

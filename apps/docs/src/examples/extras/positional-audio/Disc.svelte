@@ -1,24 +1,21 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
-  import { derived } from 'svelte/store'
-  import { Color, type Mesh } from 'three'
+  import type { Mesh } from 'three'
+  import type { DiscProps } from './types'
 
-  export let discSpeed = 0
+  let { discSpeed = 0, ...rest }: DiscProps = $props()
 
-  let discRotation = 0
-  const { start, stop, started } = useTask(
+  let discRotation = $state(0)
+
+  useTask(
     (delta) => {
       discRotation += delta * discSpeed
     },
     {
-      autoStart: false
+      running: () => discSpeed > 0
     }
   )
-  $: {
-    if (discSpeed <= 0 && $started) stop()
-    else if (discSpeed > 0 && !$started) start()
-  }
 
   const gltf = useGltf<{
     nodes: {
@@ -26,14 +23,11 @@
     }
     materials: {}
   }>('/models/turntable/disc-logo.glb')
-  const logoGeometry = derived(gltf, (gltf) => {
-    if (!gltf) return undefined
-    const mesh = gltf.nodes.Logo as Mesh
-    return mesh.geometry
-  })
+
+  const logoGeometry = $derived($gltf?.nodes.Logo.geometry)
 </script>
 
-<T.Group {...$$restProps}>
+<T.Group {...rest}>
   <T.Group rotation.y={-discRotation}>
     <!-- DISH (?) -->
     <T.Mesh
@@ -80,13 +74,13 @@
     </T.Mesh>
 
     <!-- LOGO -->
-    {#if $logoGeometry}
+    {#if logoGeometry}
       <T.Mesh
-        geometry={$logoGeometry}
+        geometry={logoGeometry}
         position.y={0.2 + 0.05 + 0.025 + 0.01}
       >
         <T.MeshBasicMaterial
-          color={new Color('#ff3e00')}
+          color="#ff3e00"
           toneMapped={false}
         />
       </T.Mesh>

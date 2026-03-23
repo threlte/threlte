@@ -1,0 +1,36 @@
+---
+order: 4.3
+category: '@threlte/extras'
+title: useViewport
+sourcePath: 'packages/extras/src/lib/hooks/useViewport.ts'
+type: 'hook'
+---
+
+The `useViewport` hook returns a `viewport` which provides information related to the screen.
+
+<Example path="extras/use-viewport" />
+
+The `width` and `height` properties provide the screen size in Three.js units. For example, the following mesh would fill the entire screen:
+
+```svelte
+<script>
+  import { T } from '@threlte/core'
+  import { useViewport } from '@threlte/extras'
+
+  const viewport = useViewport() // currentWritable<Viewport>
+</script>
+
+<T.Mesh scale={[$viewport.width, $viewport.height, 1]}>
+  <T.PlaneGeometry />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+The `factor` property is the canvas width divided by the viewport width.
+
+The `distance` property is the camera distance from an origin point. The default origin is `0,0,0`, but
+a custom origin can be passed into the hook.
+
+```ts
+const viewport = useViewport([1, 0, 1])
+```

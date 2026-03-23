@@ -7,14 +7,15 @@
   import AdvancedScene from './AdvancedScene.svelte'
   import { Pane, Slider, TabGroup, TabPage, Checkbox, Button } from 'svelte-tweakpane-ui'
 
-  let reset: (() => void) | undefined
-  let showHelper = false
-  const gravityTypes: GravityType[] = ['static', 'linear', 'newtonian']
-  let gravityType: GravityType = gravityTypes[0]
-  let strengthLeft = 1
-  let strengthCenter = 1
-  let strengthRight = 1
-  let tabIndex = 0
+  const gravityTypes = ['static', 'linear', 'newtonian'] as const
+
+  let scene = $state<BasicScene | AdvancedScene>()
+  let showHelper = $state(false)
+  let gravityType = $state<GravityType>(gravityTypes[0])
+  let strengthLeft = $state(1)
+  let strengthCenter = $state(1)
+  let strengthRight = $state(1)
+  let tabIndex = $state(0)
 </script>
 
 <Pane
@@ -23,7 +24,7 @@
 >
   <Button
     title="Reset the scene"
-    on:click={reset}
+    on:click={() => scene?.reset()}
   />
   <Checkbox
     bind:value={showHelper}
@@ -82,29 +83,30 @@
       {#if showHelper}
         <Debug />
       {/if}
+
       {#if tabIndex == 1}
         <AdvancedScene
+          bind:this={scene}
           type={gravityType}
-          bind:reset
         />
       {:else}
         <BasicScene
-          bind:reset
+          bind:this={scene}
           {strengthLeft}
           {strengthCenter}
           {strengthRight}
         />
       {/if}
-      <HTML
-        slot="fallback"
-        transform
-      >
-        <p>
-          It seems your browser<br />
-          doesn't support WASM.<br />
-          I'm sorry.
-        </p>
-      </HTML>
+
+      {#snippet fallback()}
+        <HTML transform>
+          <p>
+            It seems your browser<br />
+            doesn't support WASM.<br />
+            I'm sorry.
+          </p>
+        </HTML>
+      {/snippet}
     </World>
   </Canvas>
 </div>

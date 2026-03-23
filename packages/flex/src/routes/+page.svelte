@@ -1,15 +1,15 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import { NoToneMapping } from 'three'
-  import { onMount } from 'svelte'
+  import { onMount, type ComponentType, type SvelteComponent } from 'svelte'
   import { browser } from '$app/environment'
   import Common from './examples/Common.svelte'
 
   type Example = {
     name: string
-    dom: ConstructorOfATypedSvelteComponent
+    dom: ComponentType<SvelteComponent>
     domRaw: string
-    threlte: ConstructorOfATypedSvelteComponent
+    threlte: ComponentType<SvelteComponent>
     threlteRaw: string
   }
 
@@ -69,7 +69,7 @@
 
 <nav>
   <select bind:value={selected}>
-    {#each components as { name }}
+    {#each components as { name } (name)}
       <option value={name}>{name}</option>
     {/each}
   </select>
@@ -107,18 +107,6 @@
   :global(body) {
     background: #333333;
     margin: 0;
-    font-family:
-      system-ui,
-      -apple-system,
-      BlinkMacSystemFont,
-      'Segoe UI',
-      Roboto,
-      Oxygen,
-      Ubuntu,
-      Cantarell,
-      'Open Sans',
-      'Helvetica Neue',
-      sans-serif;
   }
 
   nav {

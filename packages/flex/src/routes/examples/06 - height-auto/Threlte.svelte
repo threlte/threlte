@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Flex, Box } from '$lib'
+  import { Flex, Box } from '$lib/index.js'
   import Plane from '../../Plane.svelte'
 </script>
 
@@ -19,28 +19,28 @@
   <Box
     width={100}
     height="auto"
-    let:width
-    let:height
   >
-    <Plane
-      color="yellow"
-      {width}
-      {height}
-      depth={1}
-    />
+    {#snippet children({ width, height })}
+      <Plane
+        color="yellow"
+        {width}
+        {height}
+        depth={1}
+      />
+    {/snippet}
   </Box>
 
   <Box
     width={100}
     height="auto"
-    let:width
-    let:height
   >
-    <Plane
-      color="blue"
-      {width}
-      {height}
-      depth={1}
-    />
+    {#snippet children({ width, height })}
+      <Plane
+        color="blue"
+        {width}
+        {height}
+        depth={1}
+      />
+    {/snippet}
   </Box>
 </Flex>

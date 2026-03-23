@@ -1,7 +1,18 @@
-import THREE from 'three'
-import isVarName from './isVarName.js'
+import * as THREE from 'three'
+import { isVarName } from './isVarName.js'
 
-function parse(fileName, gltf, options = {}) {
+/**
+ * @param {string} fileName
+ * @param {import('three/examples/jsm/loaders/GLTFLoader').GLTF} gltf
+ * @param {import('./Options.d.ts').Options} options
+ * @returns {string}
+ */
+export function parse(fileName, gltf, options = {}) {
+  if (gltf.isObject3D) {
+    // Wrap scene in a GLTF Structure
+    gltf = { scene: gltf, animations: [], parser: { json: {} } }
+  }
+
   const url = fileName
   const animations = gltf.animations
   const hasAnimations = animations.length > 0
@@ -19,38 +30,40 @@ function parse(fileName, gltf, options = {}) {
 
   function uniqueName(attempt, index = 0) {
     const newAttempt = index > 0 ? attempt + index : attempt
-    if (Object.values(duplicates.geometries).find(({ name }) => name === newAttempt) === undefined)
+    if (
+      Object.values(duplicates.geometries).find(({ name }) => name === newAttempt) === undefined
+    ) {
       return newAttempt
-    else return uniqueName(attempt, index + 1)
+    } else {
+      return uniqueName(attempt, index + 1)
+    }
   }
 
   gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-      if (child.material) {
-        if (!duplicates.materials[child.material.name]) {
-          duplicates.materials[child.material.name] = 1
-        } else {
-          duplicates.materials[child.material.name]++
-        }
+    if (!child.isMesh) {
+      return
+    }
+
+    if (child.material) {
+      if (!duplicates.materials[child.material.name]) {
+        duplicates.materials[child.material.name] = 1
+      } else {
+        duplicates.materials[child.material.name]++
       }
     }
-  })
 
-  gltf.scene.traverse((child) => {
-    if (child.isMesh) {
-      if (child.geometry) {
-        const key = child.geometry.uuid + child.material?.name ?? ''
-        if (!duplicates.geometries[key]) {
-          let name = (child.name || 'Part').replace(/[^a-zA-Z]/g, '')
-          name = name.charAt(0).toUpperCase() + name.slice(1)
-          duplicates.geometries[key] = {
-            count: 1,
-            name: uniqueName(name),
-            node: 'nodes' + sanitizeName(child.name)
-          }
-        } else {
-          duplicates.geometries[key].count++
+    if (child.geometry) {
+      const key = child.geometry.uuid + child.material?.name ?? ''
+      if (!duplicates.geometries[key]) {
+        let name = (child.name || 'Part').replace(/[^a-zA-Z]/g, '')
+        name = name.charAt(0).toUpperCase() + name.slice(1)
+        duplicates.geometries[key] = {
+          count: 1,
+          name: uniqueName(name),
+          node: 'nodes' + sanitizeName(child.name)
         }
+      } else {
+        duplicates.geometries[key].count++
       }
     }
   })
@@ -58,7 +71,9 @@ function parse(fileName, gltf, options = {}) {
   // Prune duplicate geometries
   for (let key of Object.keys(duplicates.geometries)) {
     const duplicate = duplicates.geometries[key]
-    if (duplicate.count === 1) delete duplicates.geometries[key]
+    if (duplicate.count === 1) {
+      delete duplicates.geometries[key]
+    }
   }
 
   function sanitizeName(name) {
@@ -66,17 +81,17 @@ function parse(fileName, gltf, options = {}) {
   }
 
   const rNbr = (number) => {
-    return parseFloat(number.toFixed(Math.round(options.precision || 2)))
+    return Number.parseFloat(number.toFixed(Math.round(options.precision || 2)))
   }
 
   const rDeg = (number) => {
-    const abs = Math.abs(Math.round(parseFloat(number) * 100000))
+    const abs = Math.abs(Math.round(Number.parseFloat(number) * 100000))
     for (let i = 1; i <= 10; i++) {
-      if (abs === Math.round(parseFloat(Math.PI / i) * 100000))
+      if (abs === Math.round(Number.parseFloat(Math.PI / i) * 100000))
         return `${number < 0 ? '-' : ''}Math.PI${i > 1 ? ' / ' + i : ''}`
     }
     for (let i = 1; i <= 10; i++) {
-      if (abs === Math.round(parseFloat(Math.PI * i) * 100000))
+      if (abs === Math.round(Number.parseFloat(Math.PI * i) * 100000))
         return `${number < 0 ? '-' : ''}Math.PI${i > 1 ? ' * ' + i : ''}`
     }
     return rNbr(number)
@@ -119,10 +134,20 @@ function parse(fileName, gltf, options = {}) {
 
   function getType(obj) {
     let type = obj.type.charAt(0).toLowerCase() + obj.type.slice(1)
+
     // Turn object3d's into groups, it should be faster according to the threejs docs
-    if (type === 'object3D') type = 'group'
-    if (type === 'perspectiveCamera') type = 'PerspectiveCamera'
-    if (type === 'orthographicCamera') type = 'OrthographicCamera'
+    if (type === 'object3D') {
+      return 'group'
+    }
+
+    if (type === 'perspectiveCamera') {
+      return 'PerspectiveCamera'
+    }
+
+    if (type === 'orthographicCamera') {
+      return 'OrthographicCamera'
+    }
+
     return type
   }
 
@@ -255,7 +280,6 @@ function parse(fileName, gltf, options = {}) {
       const firstProps = handleThrelteProps(first)
       const regex = /([a-z-A-Z]*)={([a-zA-Z0-9\.\[\]\-\,\ \/]*)}/g
       const keys1 = [...result.matchAll(regex)].map(([, match]) => match)
-      const values1 = [...result.matchAll(regex)].map(([, , match]) => match)
       const keys2 = [...firstProps.matchAll(regex)].map(([, match]) => match)
 
       /** Double negative rotations
@@ -460,31 +484,22 @@ function parse(fileName, gltf, options = {}) {
   // 2nd pass to eliminate hard to swat left-overs
   const scene = printThrelte(gltf.scene)
 
-  const useGltfOptions =
-    options.transform && options.draco
-      ? {
-          useDraco: options.draco
-        }
-      : options.transform
-      ? {
-          useDraco: true
-        }
-      : undefined
+  const useGltfOptions = {
+    draco: options.transform || options.draco
+  }
 
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
-        import { Group } from 'three'
-        import { ${[
-          'T',
-          options.types && !options.isolated ? 'type Props, type Events, type Slots' : '',
-          !options.isolated && 'forwardEventHandlers'
-        ]
+	${hasAnimations ? `import { Group } from 'three'` : ''}
+  ${options.types ? `import type { Snippet } from 'svelte'` : ''}
+        import { ${['T', options.types && !options.isolated ? 'type Props' : '']
           .filter(Boolean)
           .join(', ')} } from '@threlte/core'
         import { ${[
           'useGltf',
           hasAnimations ? 'useGltfAnimations' : '',
-          options.suspense ? 'useSuspense' : ''
+          options.suspense ? 'useSuspense' : '',
+          useGltfOptions.draco ? 'useDraco' : ''
         ]
           .filter(Boolean)
           .join(', ')} } from '@threlte/extras'
@@ -492,7 +507,7 @@ function parse(fileName, gltf, options = {}) {
 
   const useGltf = `${options.suspense ? 'suspend(' : ''}useGltf${
     options.types ? '<GLTFResult>' : ''
-  }('${url}'${useGltfOptions ? `, ${JSON.stringify(useGltfOptions)}` : ''})${
+  }('${url}'${useGltfOptions.draco ? `, { dracoLoader: useDraco(${typeof options.draco === 'string' ? `'${useGltfOptions.draco}'` : ''}) }` : ''})${
     options.suspense ? ')' : ''
   }`
 
@@ -509,7 +524,6 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 ${
   options.preload
     ? `
-
 <script context="module"${options.types ? ' lang="ts"' : ''}>
 	${imports}
 
@@ -530,24 +544,33 @@ ${
 
 
     <script${options.types ? ' lang="ts"' : ''}>
-
 				${!options.preload ? imports : ''}
 
-        ${options.types && !options.isolated ? 'type $$Props = Props<THREE.Group>' : ''}
-        ${options.types && !options.isolated ? 'type $$Events = Events<THREE.Group>' : ''}
-        ${
-          options.types && !options.isolated
-            ? 'type $$Slots = Slots<THREE.Group> & { fallback: {}; error: { error: any } }'
+        let {
+					fallback,
+          error,
+          children,
+          ${options.isolated ? '' : 'ref = $bindable(),'}
+          ${options.isolated ? '' : '...props'}
+        }${
+          options.types
+            ? `: ${options.isolated ? '' : 'Props<THREE.Group> & '} {
+          ${options.isolated ? '' : 'ref?: THREE.Group'}
+          children?: ${options.isolated ? 'Snippet' : 'Snippet<[{ ref: THREE.Group }]>'}
+          fallback?: Snippet
+          error?: Snippet<[{ error: Error }]>
+        }`
             : ''
-        }
-
-        export const ref = new Group()
+        } = $props()
 
 				${!options.preload && options.suspense ? 'const suspend = useSuspense()' : ''}
+
+				${hasAnimations && options.isolated ? 'const ref = new Group()' : hasAnimations ? 'ref = new Group()' : ''}
 
         ${options.types && !options.preload ? printThrelteTypes(objects, animations) : ''}
 
         ${!options.preload ? `const gltf = ${useGltf}` : 'const gltf = load()'}
+
     ${
       hasAnimations
         ? `export const { actions, mixer } = useGltfAnimations${
@@ -555,22 +578,18 @@ ${
           }(gltf, ref)`
         : ''
     }
-
-			${!options.isolated ? 'const component = forwardEventHandlers()' : ''}
     </script>
 
-		<T is={ref} dispose={false} ${!options.isolated ? '{...$$restProps} bind:this={$component}' : ''}>
+		<${hasAnimations ? 'T is={ref}' : 'T.Group'} ${!hasAnimations && !options.isolated ? 'bind:ref' : ''} dispose={false} ${!options.isolated ? '{...props}' : ''}>
 			{#await gltf}
-				<slot name="fallback" />
+        {@render fallback?.()}
 			{:then gltf}
 				${scene}
-			{:catch error}
-				<slot name="error" {error} />
+			{:catch err}
+        {@render error?.({ error: err })}
 			{/await}
 
-			<slot {ref} />
-		</T>
+      {@render children?.(${options.isolated ? '' : '{ ref }'})}
+		</${hasAnimations ? 'T' : 'T.Group'}>
 	`
 }
-
-export default parse

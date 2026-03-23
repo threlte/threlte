@@ -5,8 +5,8 @@ type Vertex<T> = { value: T | undefined; previous: Set<Key>; next: Set<Key> }
 export type Key = string | symbol
 
 export type AddNodeOptions<T> = {
-  before?: (Key | T) | (Key | T)[]
-  after?: (Key | T) | (Key | T)[]
+  before?: (Key | T) | (Key | T)[] | undefined
+  after?: (Key | T) | (Key | T)[] | undefined
 }
 
 type Events<T> = {

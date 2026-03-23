@@ -2,27 +2,27 @@
   import type { RigidBody } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { Group, Vector3 } from 'three'
-  import { useRapier } from '../../hooks/useRapier'
-  import type { AttractorProps, AttractorSlots, AttractorEvents } from './Attractor.svelte'
+  import { useRapier } from '../../hooks/useRapier.js'
+  import type { AttractorProps } from './types.js'
 
-  type $$Props = AttractorProps
-  type DefaultProps = Required<$$Props>
-  type $$Events = AttractorEvents
-  type $$Slots = AttractorSlots
-
-  export let strength: DefaultProps['strength'] = 1
-  export let range: DefaultProps['range'] = 50
-  export let gravityType: DefaultProps['gravityType'] = 'static'
-  export let gravitationalConstant: DefaultProps['gravitationalConstant'] = 6.673e-11
+  let {
+    strength = 1,
+    range = 50,
+    gravityType = 'static',
+    gravitationalConstant = 6.673e-11,
+    ref = $bindable(),
+    children,
+    ...props
+  }: AttractorProps = $props()
 
   const { world, debug } = useRapier()
   const gravitySource = new Vector3()
-  let obj = new Group()
+  const group = new Group()
 
   const calcForceByType = {
-    static: (s: number, m2: number, r: number, d: number, G: number): number => s,
-    linear: (s: number, m2: number, r: number, d: number, G: number) => s * (d / r),
-    newtonian: (s: number, m2: number, r: number, d: number, G: number) =>
+    static: (s: number, _m2: number, _r: number, _d: number, _G: number): number => s,
+    linear: (s: number, _m2: number, r: number, d: number, _G: number) => s * (d / r),
+    newtonian: (s: number, m2: number, _r: number, d: number, G: number) =>
       (G * s * m2) / Math.pow(d, 2)
   }
 
@@ -30,7 +30,7 @@
   const bodyV3 = new Vector3()
 
   function applyImpulseToBodiesInRange() {
-    obj.getWorldPosition(gravitySource)
+    group.getWorldPosition(gravitySource)
 
     world.forEachRigidBody((body: RigidBody) => {
       const { x, y, z } = body.translation()
@@ -59,11 +59,11 @@
 </script>
 
 <T
-  let:ref
-  is={obj}
-  {...$$restProps}
+  is={group}
+  bind:ref
+  {...props}
 >
-  <slot {ref} />
+  {@render children?.({ ref: group })}
 
   {#if $debug}
     <T.Mesh>

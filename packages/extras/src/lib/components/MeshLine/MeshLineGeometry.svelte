@@ -1,138 +1,140 @@
+<!--
+@component
+A stripped down version of THREE.MeshLine:
+
+https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
+
+With performance improvements inspired by:
+
+https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
+ -->
 <script lang="ts">
-  /*
-    A stripped down version of THREE.MeshLine:
-    https://github.com/spite/THREE.MeshLine/blob/master/src/THREE.MeshLine.js
-    With peformance improvements inspired by:
-    https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
-	*/
-  import type {
-    MeshLineGeometryEvents,
-    MeshLineGeometryProps,
-    MeshLineGeometrySlots
-  } from './MeshLineGeometry.svelte'
-  import { T, useThrelte, forwardEventHandlers } from '@threlte/core'
-  import { BufferGeometry, Vector3, BufferAttribute } from 'three'
-  import { setXY, setXYZ, setXYZW, setXYZXYZ } from './utils'
+  import type { MeshLineGeometryProps } from './types.js'
+  import { T, useThrelte } from '@threlte/core'
+  import { BufferGeometry, BufferAttribute } from 'three'
 
-  type $$Props = Required<MeshLineGeometryProps>
-  type $$Events = MeshLineGeometryEvents
-  type $$Slots = MeshLineGeometrySlots
+  let {
+    points = [],
+    shape = 'none',
+    shapeFunction: shapeFn = () => 1,
+    ref = $bindable(),
+    children,
+    ...props
+  }: MeshLineGeometryProps = $props()
 
-  export let points: $$Props['points'] = []
-  export let shape: $$Props['none'] = 'none'
-  export let shapeFunction: $$Props['selectFunction'] = (p: number) => 1
-
-  let pointCount: number
+  const pointCount = $derived(points.length)
 
   const { invalidate } = useThrelte()
 
-  const initializeGeometry = () => {
-    // When the component first runs we create the buffer geometry and allocate the buffer attributes
-    pointCount = points.length
-    let counters: number[] = []
-    let counterIndex = 0
-    let side: number[] = []
-    let widthArray: number[] = []
-    let doubleIndex = 0
-    let uvArray: number[] = []
-    let uvIndex = 0
-    let indices: number[] = []
-    let indicesIndex = 0
+  const positions = $derived(new BufferAttribute(new Float32Array(pointCount * 6), 3))
+  const previous = $derived(new BufferAttribute(new Float32Array(pointCount * 6), 3))
+  const next = $derived(new BufferAttribute(new Float32Array(pointCount * 6), 3))
 
-    if (shape === 'taper') {
-      shapeFunction = (p: number) => 1 * Math.pow(4 * p * (1 - p), 1)
-    }
+  const counters = $derived(new BufferAttribute(new Float32Array(pointCount * 2), 1))
+  const side = $derived(new BufferAttribute(new Float32Array(pointCount * 2), 1))
+  const width = $derived(new BufferAttribute(new Float32Array(pointCount * 2), 1))
+  const uv = $derived(new BufferAttribute(new Float32Array(pointCount * 4), 2))
+  const indices = $derived(new BufferAttribute(new Uint16Array(pointCount * 6), 1))
 
-    for (let j = 0; j < pointCount; j++) {
-      const c = j / points.length
-      counters[counterIndex + 0] = c
-      counters[counterIndex + 1] = c
-      counterIndex += 2
+  const shapeFunction = $derived(
+    shape === 'taper' ? (p: number) => 1 * Math.pow(4 * p * (1 - p), 1) : shapeFn
+  )
 
-      setXY(side, doubleIndex, 1, -1)
-      let width = shape === 'none' ? 1 : shapeFunction(j / (pointCount - 1))
-      setXY(widthArray, doubleIndex, width, width)
-      doubleIndex += 2
+  const geometry = new BufferGeometry()
 
-      setXYZW(uvArray, uvIndex, j / (pointCount - 1), 0, j / (pointCount - 1), 1)
-      uvIndex += 4
+  $effect.pre(() => {
+    for (let i = 0, i2 = 0, i3 = 0; i < pointCount; i += 1, i2 += 2, i3 += 6) {
+      counters.setX(i2, i / points.length)
+      counters.setX(i2 + 1, i / points.length)
 
-      if (j < pointCount - 1) {
-        const n = j * 2
-        setXYZ(indices, indicesIndex, n + 0, n + 1, n + 2)
-        setXYZ(indices, indicesIndex + 3, n + 2, n + 1, n + 3)
-        indicesIndex += 6
+      side.setX(i2, 1)
+      side.setX(i2 + 1, -1)
+
+      const w = shape === 'none' ? 1 : shapeFunction(i / (pointCount - 1))
+      width.setX(i2, w)
+      width.setX(i2 + 1, w)
+
+      uv.setXYZW(i2, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
+
+      if (i < pointCount - 1) {
+        const n = i * 2
+        indices.setX(i3 + 0, n + 0)
+        indices.setX(i3 + 1, n + 1)
+        indices.setX(i3 + 2, n + 2)
+        indices.setX(i3 + 3, n + 2)
+        indices.setX(i3 + 4, n + 1)
+        indices.setX(i3 + 5, n + 3)
       }
     }
 
-    const bg = new BufferGeometry()
-    // create these buffer attributes at the correct length but leave them empty for now
-    bg.setAttribute('position', new BufferAttribute(new Float32Array(pointCount * 6), 3))
-    bg.setAttribute('previous', new BufferAttribute(new Float32Array(pointCount * 6), 3))
-    bg.setAttribute('next', new BufferAttribute(new Float32Array(pointCount * 6), 3))
-    // create and populate these buffer attributes
-    bg.setAttribute('counters', new BufferAttribute(new Float32Array(counters), 1))
-    bg.setAttribute('side', new BufferAttribute(new Float32Array(side), 1))
-    bg.setAttribute('width', new BufferAttribute(new Float32Array(widthArray), 1))
-    bg.setAttribute('uv', new BufferAttribute(new Float32Array(uvArray), 2))
-    bg.setIndex(new BufferAttribute(new Uint16Array(indices), 1))
-    return bg
-  }
+    geometry.setAttribute('position', positions)
+    geometry.setAttribute('previous', previous)
+    geometry.setAttribute('next', next)
+    geometry.setAttribute('counters', counters)
+    geometry.setAttribute('side', side)
+    geometry.setAttribute('width', width)
+    geometry.setAttribute('uv', uv)
+    geometry.setIndex(indices)
+  })
 
-  const geometry = initializeGeometry()
+  $effect.pre(() => {
+    if (points.length === 0) return
 
-  const setPoints = (points: Vector3[]) => {
-    if (!points[0]) return
-    // The size of the buffer atributes cannot change, so return if the number of points has changed
-    if (points.length != pointCount) return
-
-    let positions: number[] = []
-    let previous: number[] = []
-    let next: number[] = []
     let positionIndex = 0
     let previousIndex = 0
     let nextIndex = 0
-    setXYZXYZ(previous, previousIndex, points[0].x, points[0].y, points[0].z)
-    previousIndex += 6
-    for (let j = 0; j < pointCount; j++) {
-      const p = points[j]
-      setXYZXYZ(positions, positionIndex, p.x, p.y, p.z)
-      positionIndex += 6
-      if (j < pointCount - 1) {
-        setXYZXYZ(previous, previousIndex, p.x, p.y, p.z)
-        previousIndex += 6
+
+    const p1 = points[0]
+    previous.setXYZ(previousIndex, p1.x, p1.y, p1.z)
+    previousIndex += 1
+
+    previous.setXYZ(previousIndex, p1.x, p1.y, p1.z)
+    previousIndex += 1
+
+    for (let i = 0; i < pointCount; i++) {
+      const p = points[i]
+
+      positions.setXYZ(positionIndex, p.x, p.y, p.z)
+      positionIndex += 1
+      positions.setXYZ(positionIndex, p.x, p.y, p.z)
+      positionIndex += 1
+
+      if (i < pointCount - 1) {
+        previous.setXYZ(previousIndex, p.x, p.y, p.z)
+        previousIndex += 1
+
+        previous.setXYZ(previousIndex, p.x, p.y, p.z)
+        previousIndex += 1
       }
-      if (j > 0 && j + 1 <= pointCount) {
-        setXYZXYZ(next, nextIndex, p.x, p.y, p.z)
-        nextIndex += 6
+
+      if (i > 0 && i + 1 <= pointCount) {
+        next.setXYZ(nextIndex, p.x, p.y, p.z)
+        nextIndex += 1
+
+        next.setXYZ(nextIndex, p.x, p.y, p.z)
+        nextIndex += 1
       }
     }
-    setXYZXYZ(
-      next,
-      nextIndex,
-      points[pointCount - 1].x,
-      points[pointCount - 1].y,
-      points[pointCount - 1].z
-    )
-    const positionAttribute = (geometry.getAttribute('position') as BufferAttribute).set(positions)
-    const previousAttribute = (geometry.getAttribute('previous') as BufferAttribute).set(previous)
-    const nextAttribute = (geometry.getAttribute('next') as BufferAttribute).set(next)
-    positionAttribute.needsUpdate = true
-    previousAttribute.needsUpdate = true
-    nextAttribute.needsUpdate = true
+
+    const p2 = points[pointCount - 1]
+    next.setXYZ(nextIndex, p2.x, p2.y, p2.z)
+    nextIndex += 1
+
+    next.setXYZ(nextIndex, p2.x, p2.y, p2.z)
+    nextIndex += 1
+
+    positions.needsUpdate = true
+    previous.needsUpdate = true
+    next.needsUpdate = true
     geometry.computeBoundingSphere()
     invalidate()
-  }
-
-  $: setPoints(points)
-
-  const component = forwardEventHandlers()
+  })
 </script>
 
 <T
   is={geometry}
-  bind:this={$component}
-  {...$$restProps}
+  bind:ref
+  {...props}
 >
-  <slot ref={geometry} />
+  {@render children?.({ ref: geometry })}
 </T>

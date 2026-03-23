@@ -1,5 +1,3 @@
-import type { Readable } from 'svelte/store'
-
 export type ThrelteLayers =
   | 0
   | 1
@@ -70,4 +68,9 @@ export type ThrelteLayers =
   | 'all'
   | 'none'
 
-export type ThrelteLayersContext = Readable<ThrelteLayers>
+export type ThrelteLayersContext =
+  | {
+      /** @reactive */
+      layers: ThrelteLayers
+    }
+  | undefined

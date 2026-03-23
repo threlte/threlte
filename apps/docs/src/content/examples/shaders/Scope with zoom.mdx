@@ -1,0 +1,80 @@
+---
+title: Scope with zoom
+---
+
+This example shows how to utilize the [`useFBO`](/docs/reference/extras/use-fbo) hook to create a sniper scope zoom effect, complete
+with lens distortion and crosshairs.
+
+<Example path="shaders/useFboScope" />
+
+## How does it work?
+
+The hook is used to render a scene onto a texture, using
+it in a shader. The [WebGLRenderTarget](https://threejs.org/docs/#api/en/renderers/WebGLRenderTarget) texture
+from [`useFBO`](/docs/reference/extras/use-fbo) hook is used in the scope where a
+vignette and lens distortion effects are applied and a reticle is added.
+
+### Scene setup
+
+The scene is constructed using two free models sourced from Sketchfab:
+a piece of terrain and a scope model. These models are converted into Svelte components using the
+[Threlte gltf CLI tool](/docs/reference/gltf/getting-started) tool.
+
+The scope model is attached directly to the `<PerspectiveCamera>` so that both move in sync with
+the user's mouse movements. A circular mesh is positioned as a child of the scope and serves as an eyepiece -
+this is where the custom ShaderMaterial is used for simulating the view through the scope.
+
+Control over the scope - activation, movement and pointer-lock toggling — is managed within a `Controls.svelte` file.
+
+### Rendering the scene to a texture
+
+The [useFBO](/docs/reference/extras/use-fbo) hook is used to prepare a render target for the scope's view texture.
+Given that the scope's viewport occupies only a fraction of the full screen,
+the texture's resolution is appropriately downscaled to conserve resources.
+
+A `useTask` hook is used to render the scene onto this target:
+
+```ts
+const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
+  samples: 8
+})
+
+let scope: Group
+
+useTask(() => {
+  if (!scope || !$scoping) return
+  const cam = $camera as PerspectiveCamera
+
+  scope.visible = false
+  cam.fov = $zoomedFov
+  cam.updateProjectionMatrix()
+  cam.matrixWorldNeedsUpdate = true
+  renderer.setRenderTarget(renderTarget)
+  renderer.render(scene, cam)
+
+  renderer.setRenderTarget(null)
+  cam.fov = baseFov
+  cam.updateProjectionMatrix()
+  scope.visible = true
+})
+```
+
+Here's what happens step by step:
+
+1. The scope's visibility is set to `false` to prevent it from appearing in the texture capture.
+2. The camera's field of view (`fov`) is adjusted, and its projection matrix is updated to apply current zoom level.
+3. The renderer's target is switched to the one created by the useFBO hook.
+4. The scene is rendered from the perspective of the adjusted camera.
+5. The renderer's target is reset to `null` for rendering to the screen again, and the camera's FOV is restored to its
+   original setting, with the scope becoming visible again.
+
+### Scope shader
+
+The shader for the scope's view employs two textures: the rendered scene texture and a reticle image.
+
+Inside the shader:
+
+- **UV adjustment**: To accommodate different screen sizes and the circular shape of the scope, UV coordinates are adjusted for proper mapping of the view texture onto the scope.
+- **Cubic lens distortion**: The scene texture is distorted using a cubic lens effect to simulate the optical characteristics of a real scope.
+- **Vignetting**: A vignette effect is applied to the distorted scene texture, darkening the edges around the scope.
+- **Crosshair overlay**: The reticle texture is blended with the modified scene texture, adding the crosshair overlay to the scope's view.

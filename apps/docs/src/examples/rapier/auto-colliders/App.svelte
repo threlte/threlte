@@ -5,7 +5,7 @@
   import { Debug, World } from '@threlte/rapier'
   import Scene from './Scene.svelte'
 
-  let debug = true
+  let debug = $state(true)
 </script>
 
 <Pane
@@ -27,16 +27,15 @@
 
       <Scene />
 
-      <HTML
-        slot="fallback"
-        transform
-      >
-        <p class="text-xs">
-          It seems your browser<br />
-          doesn't support WASM.<br />
-          I'm sorry.
-        </p>
-      </HTML>
+      {#snippet fallback()}
+        <HTML transform>
+          <p class="text-xs">
+            It seems your browser<br />
+            doesn't support WASM.<br />
+            I'm sorry.
+          </p>
+        </HTML>
+      {/snippet}
     </World>
   </Canvas>
 </div>

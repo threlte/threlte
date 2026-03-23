@@ -1,0 +1,110 @@
+---
+order: 7.8
+category: '@threlte/extras'
+title: 'meshBounds'
+sourcePath: 'packages/extras/src/lib/utilities/meshBounds.ts'
+---
+
+A raycast function that will first check for collision with the object's
+bounding sphere, then it will check against the object's bounding box but
+**only** if the bounding box has been previously computed. You can use this
+function if you want to trade pointer precision for an increase in performance.
+
+## Usage
+
+### Basic Usage
+
+`meshBounds` can simply be passed to an object's
+[`raycast`](https://threejs.org/docs/index.html?q=mesh#api/en/objects/Mesh.raycast)
+prop.
+
+```svelte
+<script>
+  import { meshBounds } from '@threlte/extras'
+</script>
+
+<T.Mesh raycast={meshBounds}>
+  <T.BoxGeometry />
+</T.Mesh>
+```
+
+<Tip type="tip">
+  If your meshes or models aren't very complex in terms of geometry, `meshBounds` won't provide much
+  of a performance boost.
+</Tip>
+
+<Example
+  path="extras/mesh-bounds"
+  showFile="Scene.svelte"
+/>
+
+### Creating a plugin
+
+Instead of manually applying the `meshBounds` raycast function to each mesh, you
+can use a [Threlte plugin](/docs/learn/advanced/plugins) to automatically
+apply the `meshBounds` raycast function to all meshes in your scene.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T, injectPlugin, isInstanceOf } from '@threlte/core'
+  import { meshBounds } from '@threlte/extras'
+
+  injectPlugin('mesh-bounds-plugin', (args) => {
+    if (isInstanceOf(args.ref, 'Mesh')) {
+      args.ref.raycast = meshBounds
+    }
+  })
+</script>
+
+<!-- No need to manually apply the meshBounds raycast function -->
+<T.Mesh>
+  <T.MeshBasicMaterial color="hotpink" />
+  <T.BoxGeometry />
+</T.Mesh>
+```
+
+To selectively apply the `meshBounds` raycast function to only certain meshes,
+you can listen to a prop (e.g. `raycastMeshBounds`) and conditionally apply the
+function.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T, injectPlugin, isInstanceOf } from '@threlte/core'
+  import { meshBounds } from '@threlte/extras'
+  import { onDestroy } from 'svelte'
+
+  injectPlugin('mesh-bounds-plugin', (args) => {
+    if (!isInstanceOf(args.ref, 'Mesh')) return
+
+    const originalRaycast = args.ref.raycast
+
+    $effect(() => {
+      if (!!args.props.raycastMeshBounds) {
+        args.ref.raycast = meshBounds
+      } else {
+        args.ref.raycast = originalRaycast
+      }
+    })
+
+    onDestroy(() => {
+      args.ref.raycast = originalRaycast
+    })
+
+    return {
+      pluginProps: ['raycastMeshBounds']
+    }
+  })
+</script>
+
+<!-- Regular raycasting -->
+<T.Mesh>
+  <T.MeshBasicMaterial color="hotpink" />
+  <T.BoxGeometry />
+</T.Mesh>
+
+<!-- meshBounds raycasting -->
+<T.Mesh raycastMeshBounds>
+  <T.MeshBasicMaterial color="hotpink" />
+  <T.BoxGeometry />
+</T.Mesh>
+```

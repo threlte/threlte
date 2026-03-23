@@ -1,21 +1,22 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { AudioListener, Environment, interactivity, OrbitControls } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils'
+  import { Spring } from 'svelte/motion'
+  import { MathUtils } from 'three'
   import Speaker from './Speaker.svelte'
   import Turntable from './Turntable.svelte'
 
-  let volume = 0
-  let isPlaying = false
+  let volume = $state(0)
+  let isPlaying = $state(false)
 
-  const smoothVolume = spring(0)
-  $: smoothVolume.set(volume)
+  const smoothVolume = new Spring(0)
+  $effect(() => {
+    smoothVolume.set(volume)
+  })
 
   const { size } = useThrelte()
 
-  let zoom = $size.width / 18
-  $: zoom = $size.width / 18
+  let zoom = $derived($size.width / 18)
 
   interactivity({
     filter: (hits) => {
@@ -26,15 +27,12 @@
   })
 </script>
 
-<Environment
-  path="/hdr/"
-  files="shanghai_riverside_1k.hdr"
-/>
+<Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <T.OrthographicCamera
   {zoom}
   makeDefault
-  on:create={({ ref }) => {
+  oncreate={(ref) => {
     ref.position.set(6, 9, 9)
     ref.lookAt(0, 1.5, 0)
   }}
@@ -43,7 +41,7 @@
     autoRotate={isPlaying}
     autoRotateSpeed={0.5}
     enableDamping
-    maxPolarAngle={DEG2RAD * 80}
+    maxPolarAngle={MathUtils.DEG2RAD * 80}
     target.y={1.5}
   />
   <AudioListener />
@@ -52,7 +50,7 @@
 <!-- FLOOR -->
 <T.Mesh
   receiveShadow
-  rotation.x={DEG2RAD * -90}
+  rotation.x={MathUtils.DEG2RAD * -90}
 >
   <T.CircleGeometry args={[10, 64]} />
   <T.MeshStandardMaterial color="#333333" />
@@ -65,12 +63,12 @@
 
 <Speaker
   position.x={6}
-  rotation.y={DEG2RAD * -7}
+  rotation.y={MathUtils.DEG2RAD * -7}
   {volume}
 />
 <Speaker
   position.x={-6}
-  rotation.y={DEG2RAD * 7}
+  rotation.y={MathUtils.DEG2RAD * 7}
   {volume}
 />
 

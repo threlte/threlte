@@ -1,48 +1,31 @@
 <script lang="ts">
-  import {
-    forwardEventHandlers,
-    HierarchicalObject,
-    T,
-    useThrelte,
-    watch,
-    type Props
-  } from '@threlte/core'
-
+  import { T, observe, useThrelte, type Props } from '@threlte/core'
   import { Group } from 'three'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls'
+  import {
+    TransformControls,
+    type TransformControlsEventMap
+  } from 'three/examples/jsm/controls/TransformControls.js'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { TransformControlsProps } from './types.js'
 
-  import { derived, writable } from 'svelte/store'
+  let {
+    autoPauseOrbitControls = true,
+    autoPauseTrackballControls = true,
+    object,
+    controls = $bindable(),
+    group = $bindable(),
+    children,
+    ...props
+  }: TransformControlsProps = $props()
 
-  import { useControlsContext } from '../useControlsContext'
-  import type {
-    TransformControlsEvents,
-    TransformControlsProps,
-    TransformControlsSlots
-  } from './TransformControls.svelte'
-
-  type $$Props = TransformControlsProps
-  type $$Events = TransformControlsEvents
-  type $$Slots = TransformControlsSlots
-
-  export let autoPauseOrbitControls: $$Props['autoPauseOrbitControls'] = true
-  export let autoPauseTrackballControls: $$Props['autoPauseTrackballControls'] = true
-  export let object: $$Props['object'] = undefined
-
-  const { camera, renderer, invalidate, scene } = useThrelte()
+  const { camera, dom, invalidate, scene } = useThrelte()
 
   const { orbitControls, trackballControls } = useControlsContext()
-  const isDragging = writable(false)
-  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls ?? true)
-  $: useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true)
-  const useAutoPauseTrackballControls = writable(autoPauseTrackballControls ?? true)
-  $: useAutoPauseTrackballControls.set(autoPauseTrackballControls ?? true)
 
-  const onDraggingChanged = (e: { value: boolean }) => {
-    isDragging.set(e.value)
-  }
+  let isDragging = $state(false)
 
-  watch(
-    [orbitControls, isDragging, useAutoPauseOrbitControls],
+  observe(
+    () => [orbitControls, isDragging, autoPauseOrbitControls],
     ([orbitControls, isDragging, useAutoPauseOrbitControls]) => {
       // if there are no orbitcontrols or we're not even
       // dragging, or the orbitcontrols are disabled, return
@@ -56,8 +39,8 @@
     }
   )
 
-  watch(
-    [trackballControls, isDragging, useAutoPauseTrackballControls],
+  observe(
+    () => [trackballControls, isDragging, autoPauseTrackballControls],
     ([trackballControls, isDragging, useAutoPausetrackballControls]) => {
       // if there are no trackballcontrols or we're not even
       // dragging, or the trackballcontrols are disabled, return
@@ -71,22 +54,17 @@
     }
   )
 
-  export const group = new Group()
+  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  const transformControls = new TransformControls(camera.current, dom)
+  const attachGroup = new Group()
 
-  const controlsStore = derived(camera, (camera) => {
-    return new TransformControls(camera, renderer.domElement)
+  $effect.pre(() => {
+    transformControls.camera = $camera
   })
 
-  export let controls = $controlsStore
-  $: controls = $controlsStore
-
-  const attachTo = writable(object ?? group)
-
-  watch([controlsStore, attachTo], ([controls, attachTo]) => {
-    controls.attach(attachTo)
-    return () => {
-      controls.detach()
-    }
+  $effect.pre(() => {
+    transformControls?.attach(object ?? attachGroup)
+    return () => transformControls?.detach()
   })
 
   // This component is receiving the props for the controls as well as the props
@@ -103,50 +81,65 @@
     'showX',
     'showY',
     'showZ',
-    'visible'
+    'visible',
+    'onmouseDown',
+    'onmouseUp',
+    'onobjectChange'
   ]
 
-  let transformProps: Props<TransformControls> = {}
-  let objectProps: Props<Group> = {}
+  let transformProps = $state<Props<TransformControls>>({})
+  let objectProps = $state<Props<Group>>({})
 
-  $: {
+  $effect.pre(() => {
     transformProps = {}
     objectProps = {}
 
-    for (let [key, value] of Object.entries($$restProps)) {
-      if (transformOnlyPropNames.includes(key)) {
-        transformProps[key] = value
-      } else {
-        objectProps[key] = value
-      }
-    }
-  }
+    Object.keys(props).forEach((key) => {
+      $effect.pre(() => {
+        if (transformOnlyPropNames.includes(key)) {
+          transformProps[key] = props[key]
+        } else {
+          objectProps[key] = props[key]
+        }
+      })
+    })
+  })
 
-  const component = forwardEventHandlers()
+  const onchange = (event: TransformControlsEventMap['change']) => {
+    invalidate()
+    if (transformControls.dragging && !isDragging) {
+      isDragging = true
+    } else if (!transformControls.dragging && isDragging) {
+      isDragging = false
+    }
+    // TODO: unfortunately the type of the event prop is not correct *yet*
+    props.onchange?.(event as any)
+  }
 </script>
 
 <!-- TransformControls need to be added to the scene -->
-<HierarchicalObject
-  onChildMount={(child) => {
-    scene.add(child)
+<T
+  is={transformControls}
+  bind:ref={controls}
+  {onchange}
+  {...transformProps}
+  attach={({ ref }) => {
+    const helper = ref.getHelper()
+    scene.add(helper)
+    return () => {
+      scene.remove(helper)
+    }
   }}
-  onChildDestroy={(child) => {
-    scene.remove(child)
+  dispose={false}
+  oncreate={(ref) => {
+    return () => ref.dispose()
   }}
->
-  <T
-    is={$controlsStore}
-    on:dragging-changed={onDraggingChanged}
-    on:change={invalidate}
-    {...transformProps}
-    bind:this={$component}
-  />
-</HierarchicalObject>
+/>
 
 <T
-  is={group}
-  let:ref
+  is={attachGroup}
+  bind:ref={group}
   {...objectProps}
 >
-  <slot {ref} />
+  {@render children?.({ ref: attachGroup })}
 </T>

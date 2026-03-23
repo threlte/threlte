@@ -1,0 +1,46 @@
+---
+order: 8.1
+category: '@threlte/rapier'
+sourcePath: 'packages/rapier/src/lib/hooks/usePhysicsTask.ts'
+title: 'usePhysicsTask'
+type: 'hook'
+---
+
+This hook acts just like the `useTask` hook, but automatically adds the handler
+to the `simulation` stage and always runs _before_ the `simulationTask`, so
+before the physics world is stepped.
+
+Depending on your [choice of framerate](/docs/reference/rapier/framerate) the
+provided callback will be called differently:
+
+### Varying Framerate
+
+When you're using a varying framerate for your physics simulation, the hook
+essentially behaves like a regular `useTask` with the benefit that it's added to
+the physics stage automatically and is guaranteed to run _before_ the physics
+world is stepped.
+
+```svelte
+<World framerate="varying">
+```
+
+```ts
+usePhysicsTask((delta) => {
+  console.log(delta) // ~0.016
+})
+```
+
+### Fixed Framerate
+
+When you're using a fixed framerate for your physics simulation, the callback
+will be called with the fixed delta time between frames.
+
+```svelte
+<World framerate={200}>
+```
+
+```ts
+usePhysicsTask((delta) => {
+  console.log(delta) // 0.005
+})
+```

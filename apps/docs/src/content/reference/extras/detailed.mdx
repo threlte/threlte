@@ -1,0 +1,47 @@
+---
+order: 7.6
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/components/Detailed/Detailed.svelte'
+title: '<Detailed>'
+type: 'component'
+componentSignature:
+  { extends: { type: 'LOD', url: 'https://threejs.org/docs/#api/en/objects/LOD' }, props: [] }
+---
+
+`<Detailed>` is an abstraction around Three.js' [LOD](https://threejs.org/docs/#api/en/objects/LOD). A common technique to improve performance is to swap out high-detail models or meshes for low-detail ones at large distances.
+
+<Example path="extras/detailed" />
+
+Notice that as the mesh's distance from the camera increases, geometries with fewer vertices are swapped.
+
+<Tip type="warning">
+The distance between the camera and the `<Detailed>` component itself is what determines which level-of-detail to use. You can set positions for children but they will not be used in the distance calculation.
+</Tip>
+
+Children of `<Detailed>` accept a distance prop. This prop determines the visibility of each child based on its distance from the camera. If not specified, distance defaults to 0.
+
+```svelte
+<Detailed>
+  <T.Mesh>
+    <T.BoxGeometry />
+  </T.Mesh>
+  <T.Mesh distance={10}>
+    <T.BoxGeometry />
+  </T.Mesh>
+</Detailed>
+```
+
+Children of `<Detailed>` accept a hysteresis prop which can be used to prevent flickering at LOD boundaries. If not specified, hysteresis defaults to 0.
+
+```svelte
+<Detailed>
+  <T.Mesh hysteresis={0.5}>
+    <T.BoxGeometry />
+  </T.Mesh>
+</Detailed>
+```
+
+<Tip type="tip">
+  It is fairly common to export a high-detail, medium-detail, and low-detail model from 3D asset
+  creation tools.
+</Tip>

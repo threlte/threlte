@@ -1,17 +1,16 @@
-<script>
-  import { T } from '@threlte/core'
+<script lang="ts">
+  let { label = '' }: { label?: string } = $props()
 
-  // A normal html svelte component, no relation the Threlte
-  export let label = ''
-  let count = 0
-
-  function click() {
-    count++
-  }
+  let count = $state(0)
+  const text = $derived(`${label} - ${count}`)
 </script>
 
-<button on:click={click}>
-  {label} - {count}
+<button
+  onclick={() => {
+    count += 1
+  }}
+>
+  {text}
 </button>
 
 <style>

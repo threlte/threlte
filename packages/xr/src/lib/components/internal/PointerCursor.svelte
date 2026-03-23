@@ -1,49 +1,70 @@
-<script lang="ts">
+<script
+  module
+  lang="ts"
+>
   import { Group, Vector3, Matrix3 } from 'three'
-  import { T, useTask } from '@threlte/core'
-  import { pointerIntersection, pointerState } from '../../internal/stores'
-  import Cursor from './Cursor.svelte'
 
-  export let handedness: 'left' | 'right'
-
-  const ref = new Group()
   const vec3 = new Vector3()
   const normalMatrix = new Matrix3()
   const worldNormal = new Vector3()
+</script>
 
-  $: hovering = $pointerState[handedness].hovering
-  $: intersection = pointerIntersection[handedness]
+<script lang="ts">
+  import { T, useTask, useThrelte } from '@threlte/core'
+  import { pointerIntersection, pointerState } from '../../internal/state.svelte.js'
+  import Cursor from './Cursor.svelte'
+  import type { Snippet } from 'svelte'
 
-  const { start, stop } = useTask(
+  interface Props {
+    handedness: 'left' | 'right'
+    children?: Snippet
+  }
+
+  const { handedness, children }: Props = $props()
+
+  const { scene } = useThrelte()
+  const hovering = $derived(pointerState[handedness].hovering)
+  const intersection = $derived(pointerIntersection[handedness])
+
+  const ref = new Group()
+
+  useTask(
     () => {
-      if (intersection.current === undefined) return
-      const { point, face, object } = intersection.current
+      if (intersection === undefined) {
+        return
+      }
+
+      const { point, face, object } = intersection
       ref.position.lerp(point, 0.4)
 
-      if (face) {
-        normalMatrix.getNormalMatrix(object.matrixWorld)
-        worldNormal.copy(face.normal).applyMatrix3(normalMatrix).normalize()
-        ref.lookAt(vec3.addVectors(point, worldNormal))
+      if (face === null || face === undefined) {
+        return
       }
+
+      normalMatrix.getNormalMatrix(object.matrixWorld)
+      worldNormal.copy(face.normal).applyMatrix3(normalMatrix).normalize()
+      ref.lookAt(vec3.addVectors(point, worldNormal))
     },
     {
-      autoStart: false
+      running: () => hovering && intersection !== undefined
     }
   )
 
-  $: if (hovering) {
-    ref.position.copy(intersection.current!.point)
-    start()
-  } else {
-    stop()
-  }
+  $effect.pre(() => {
+    if (hovering && intersection) {
+      ref.position.copy(intersection.point)
+    }
+  })
 </script>
 
 <T
   is={ref}
+  attach={scene}
   visible={hovering}
 >
-  <slot>
+  {#if children}
+    {@render children()}
+  {:else}
     <Cursor />
-  </slot>
+  {/if}
 </T>

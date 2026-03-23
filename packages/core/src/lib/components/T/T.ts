@@ -1,9 +1,20 @@
-import type { ComponentConstructorOptions, ComponentProps, SvelteComponent } from 'svelte'
+/* eslint-disable @typescript-eslint/no-empty-object-type */
+
+import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
-import type { Events, Props, Slots } from './types'
+import type { Props } from './types.js'
+import { setIs } from './utils/useIs.js'
 
-type Extensions = Record<string, any>
+type Extensions = Record<string, unknown>
+
+type ThreeCatalogue = {
+  [K in keyof typeof THREE]: (typeof THREE)[K]
+}
+
+type TComponentProxy = {
+  [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
+}
 
 const catalogue: Extensions = {}
 
@@ -14,7 +25,7 @@ const catalogue: Extensions = {}
  * ```svelte
  * <script>
  * 	import { extend, T } from 'threlte'
- * 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+ * 	import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
  *
  * 	extend({ OrbitControls })
  * </script>
@@ -24,32 +35,6 @@ const catalogue: Extensions = {}
  */
 export const extend = (extensions: Extensions) => {
   Object.assign(catalogue, extensions)
-}
-
-const augmentConstructorArgs = (
-  args: ComponentConstructorOptions<ComponentProps<TComp<any>>>,
-  is: keyof typeof THREE
-) => {
-  const module = catalogue[is] || THREE[is]
-  if (!module) {
-    throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
-  }
-  return {
-    ...args,
-    props: {
-      ...args.props,
-      is: module
-    }
-  }
-}
-
-const proxyTConstructor = (is: keyof typeof THREE) => {
-  return new Proxy(class {}, {
-    construct(_, [args]) {
-      const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<any>>>
-      return new TComp(augmentConstructorArgs(castedArgs, is))
-    }
-  })
 }
 
 /**
@@ -72,18 +57,27 @@ const proxyTConstructor = (is: keyof typeof THREE) => {
  * </T.Mesh>
  * ```
  */
-export const T = new Proxy(class {}, {
-  construct(_, [args]) {
-    const castedArgs = args as ComponentConstructorOptions<ComponentProps<TComp<any>>>
-    return new TComp(castedArgs)
-  },
-  get(_, is: keyof typeof THREE) {
-    return proxyTConstructor(is)
+export const T = new Proxy(TComp, {
+  get(_target, is: keyof typeof THREE) {
+    // Forward non-string keys (Symbols) to the underlying component.
+    // Returning TComp directly (what we previously did) for symbols
+    // caused Svelte 5.53+ DEV mode to accidentally call TComp via
+    // internal symbol lookups (PROXY_PATH_SYMBOL).
+    if (typeof is !== 'string') {
+      return Reflect.get(_target, is)
+    }
+
+    const module = catalogue[is] || THREE[is]
+
+    if (module === undefined) {
+      throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
+    }
+
+    setIs<typeof module>(module)
+
+    return TComp
   }
-}) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: typeof SvelteComponent<
-    Props<(typeof THREE)[Key]>,
-    Events<(typeof THREE)[Key]>,
-    Slots<(typeof THREE)[Key]>
-  >
-} & Record<string, typeof SvelteComponent>
+}) as typeof TComp &
+  TComponentProxy & {
+    [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
+  } & Record<string, Component>

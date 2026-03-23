@@ -1,5 +1,5 @@
 import type { AudioListener } from 'three'
-import { useThrelteAudio } from './useThrelteAudio'
+import { useThrelteAudio } from './useThrelteAudio.js'
 
 /**
  * Convenience Hook to get a THREE.AudioListener
@@ -27,26 +27,20 @@ export function useAudioListener<T>(
   id?: string
 ): T | { listener: AudioListener; context: AudioContext } {
   const { getAudioListener } = useThrelteAudio()
-  if (callbackOrId && typeof callbackOrId === 'string') {
-    const listener = getAudioListener(callbackOrId)
-    if (!listener) throw new Error('No AudioListener found.')
-    return {
-      listener,
-      context: listener.context
-    }
-  } else if (callbackOrId && typeof callbackOrId === 'function') {
+
+  if (typeof callbackOrId === 'function') {
     const listener = getAudioListener(id)
     if (!listener) throw new Error('No AudioListener found.')
     return callbackOrId({
       listener,
       context: listener.context
     })
-  } else {
-    const listener = getAudioListener()
-    if (!listener) throw new Error('No AudioListener found.')
-    return {
-      listener,
-      context: listener.context
-    }
+  }
+
+  const listener = getAudioListener(callbackOrId)
+  if (!listener) throw new Error('No AudioListener found.')
+  return {
+    listener,
+    context: listener.context
   }
 }

@@ -1,32 +1,43 @@
-<script lang="ts">
+<script
+  module
+  lang="ts"
+>
   import { Vector3, QuadraticBezierCurve3, type XRTargetRaySpace, Vector2 } from 'three'
-  import { Line2 } from 'three/examples/jsm/lines/Line2'
-  import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry'
-  import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial'
-  import { T, useTask } from '@threlte/core'
-  import { teleportIntersection } from '../../internal/stores'
-
-  export let handedness: 'left' | 'right'
-  export let targetRay: XRTargetRaySpace
-
-  let lineGeometry = new LineGeometry()
 
   const rayStart = new Vector3()
   const rayMidpoint = new Vector3()
   const curve = new QuadraticBezierCurve3()
-  const rayDivisions = 40
-  const positions = new Float32Array(rayDivisions * 3)
   const vec3 = new Vector3()
-
   const v2_1 = new Vector2()
   const v2_2 = new Vector2()
+</script>
 
-  $: intersection = teleportIntersection[handedness]
+<script lang="ts">
+  import type { Snippet } from 'svelte'
+  import { Line2 } from 'three/examples/jsm/lines/Line2.js'
+  import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js'
+  import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js'
+  import { T, useTask, useThrelte } from '@threlte/core'
+  import { teleportIntersection } from '../../internal/state.svelte.js'
+
+  interface Props {
+    handedness: 'left' | 'right'
+    targetRay: XRTargetRaySpace
+    children?: Snippet
+  }
+
+  const { handedness, targetRay, children }: Props = $props()
+
+  const { scene } = useThrelte()
+  const rayDivisions = 40
+  const positions = new Float32Array(rayDivisions * 3)
+  const lineGeometry = new LineGeometry()
+  const intersection = $derived(teleportIntersection[handedness])
 
   const setCurvePoints = (alpha = 0.3) => {
-    if (intersection.current === undefined) return
+    if (intersection === undefined) return
 
-    const rayEnd = intersection.current.point
+    const rayEnd = intersection.point
     targetRay.getWorldPosition(rayStart)
 
     rayMidpoint.x = (rayStart.x + rayEnd.x) / 2
@@ -55,31 +66,27 @@
     lineGeometry.setPositions(positions)
   }
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       setCurvePoints()
     },
-    { autoStart: false }
+    { running: () => intersection !== undefined }
   )
-
-  $: if ($intersection === undefined) {
-    stop()
-  } else {
-    setCurvePoints(1)
-    start()
-  }
 </script>
 
-<slot>
+{#if children}
+  {@render children()}
+{:else}
   <T
     is={Line2}
-    visible={$intersection !== undefined}
+    attach={scene}
+    visible={intersection !== undefined}
     position.z={-0.01}
   >
     <T is={lineGeometry} />
     <T
       is={LineMaterial}
-      linewidth={0.004}
+      linewidth={3}
     />
   </T>
-</slot>
+{/if}

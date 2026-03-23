@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { types } from '@theatre/core'
   import type { ISheet } from '@theatre/core'
   import { T, useThrelte } from '@threlte/core'
-  import { Float, Grid, OrbitControls, Portal, useTexture } from '@threlte/extras'
+  import { Float, Grid, OrbitControls, RadialGradientTexture } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
+  import { onMount } from 'svelte'
   import AnimatableCube from './AnimatableCube.svelte'
   import AnimatableStarField from './AnimatableStarField.svelte'
   import KeyboardControls from './KeyboardControls.svelte'
@@ -11,15 +11,18 @@
   import ScrollSheet from './ScrollSheet.svelte'
   import { mouseCoordsSpring, springScrollPos } from './scrollPos'
   import { debug } from './state'
-  import { onMount } from 'svelte'
 
-  let sheet: ISheet | undefined
+  let sheet = $state<ISheet>()
 
-  $: sheet && (sheet.sequence.position = $springScrollPos * 10)
+  $effect(() => {
+    if (sheet) {
+      sheet.sequence.position = $springScrollPos * 10
+    }
+  })
 
   const { scene } = useThrelte()
 
-  let fov = 40
+  let fov = $state(40)
   onMount(() => {
     if (window.innerWidth > 640) {
       fov = 35
@@ -28,7 +31,7 @@
 </script>
 
 <svelte:window
-  on:resize={() => {
+  onresize={() => {
     if (window.innerWidth > 640) {
       fov = 35
     } else {
@@ -37,9 +40,7 @@
   }}
 />
 
-<PostProcessing />
-
-<T.Group position.x={-$mouseCoordsSpring.x * 0.6}>
+<T.Group position.x={-mouseCoordsSpring.current.x * 0.6}>
   <ScrollSheet
     name="Star Fields"
     startAtScrollPosition={4}
@@ -52,7 +53,7 @@
 
 <T.PerspectiveCamera
   makeDefault={$debug}
-  on:create={({ ref }) => {
+  oncreate={(ref) => {
     ref.position.set(10, 10, 10)
     ref.lookAt(0, 0, 0)
   }}
@@ -67,25 +68,28 @@
   startAtScrollPosition={0}
   endAtScrollPosition={3}
 >
-  <SheetObject
-    key="Camera"
-    let:Transform
-  >
-    <KeyboardControls let:transform>
-      <Transform {...transform}>
-        <T.PerspectiveCamera
-          {fov}
-          makeDefault={!$debug}
-          let:ref={camera}
-        >
-          {#if $debug}
-            <Portal object={scene}>
-              <T.CameraHelper args={[camera]} />
-            </Portal>
-          {/if}
-        </T.PerspectiveCamera>
-      </Transform>
-    </KeyboardControls>
+  <SheetObject key="Camera">
+    {#snippet children({ Transform })}
+      <KeyboardControls>
+        {#snippet children({ transform })}
+          <Transform {...transform}>
+            <T.PerspectiveCamera
+              {fov}
+              makeDefault={!$debug}
+            >
+              {#snippet children({ ref: camera })}
+                {#if $debug}
+                  <T.CameraHelper
+                    args={[camera]}
+                    attach={scene}
+                  />
+                {/if}
+              {/snippet}
+            </T.PerspectiveCamera>
+          </Transform>
+        {/snippet}
+      </KeyboardControls>
+    {/snippet}
   </SheetObject>
 </ScrollSheet>
 
@@ -99,114 +103,136 @@
   startAtScrollPosition={3.5}
   endAtScrollPosition={5}
 >
-  <SheetObject
-    key="composite"
-    let:Transform
-  >
-    <Transform>
-      <T.Group
-        position.x={-$mouseCoordsSpring.x * 0.2}
-        position.y={$mouseCoordsSpring.y * 0.1}
-      >
-        <ScrollSheet
-          name="Threlte-Composite"
-          startAtScrollPosition={0}
-          endAtScrollPosition={3}
+  <SheetObject key="composite">
+    {#snippet children({ Transform })}
+      <Transform>
+        <T.Group
+          position.x={-mouseCoordsSpring.current.x * 0.2}
+          position.y={mouseCoordsSpring.current.y * 0.1}
         >
-          <SheetObject
-            key="Glow"
-            let:Transform
-            let:Sync
+          <ScrollSheet
+            name="Threlte-Composite"
+            startAtScrollPosition={0}
+            endAtScrollPosition={3}
           >
-            <KeyboardControls let:transform>
-              <Transform {...transform}>
-                {#await useTexture('/glow.png') then map}
-                  <T.Mesh>
-                    <T.PlaneGeometry args={[10, 10]} />
-                    <T.MeshBasicMaterial
-                      transparent
-                      {map}
-                    >
-                      <Sync
-                        opacity
-                        color
-                      />
-                    </T.MeshBasicMaterial>
-                  </T.Mesh>
-                {/await}
-
-                {#await useTexture('/glow2.png') then map}
-                  <T.Mesh
-                    position.z={0.1}
-                    scale={0.8}
-                  >
-                    <T.PlaneGeometry args={[10, 10]} />
-                    <T.MeshBasicMaterial
-                      transparent
-                      {map}
-                    >
-                      <Sync
-                        opacity="opacity2"
-                        color="color2"
-                      />
-                    </T.MeshBasicMaterial>
-                  </T.Mesh>
-                {/await}
-              </Transform>
-            </KeyboardControls>
-          </SheetObject>
-
-          <SheetObject
-            key="Composite"
-            let:Transform
-            let:Sync
-            props={{
-              floatIntensity: types.number(1, {
-                range: [0, 10]
-              }),
-              rotationIntensity: types.number(1, {
-                range: [0, 10]
-              }),
-              rotationSpeed: types.number(1, {
-                range: [0, 10]
-              }),
-              floatSpeed: types.number(1, {
-                range: [0, 10]
-              })
-            }}
-            let:values
-          >
-            <Float
-              floatIntensity={values.floatIntensity}
-              rotationIntensity={values.rotationIntensity}
-              rotationSpeed={values.rotationSpeed}
-              speed={values.floatSpeed}
+            <SheetObject
+              key="Post Processing"
+              props={{
+                bloomIntensity: 2,
+                bloomRadius: 0.6,
+                bloomLuminanceSmoothing: 0.025,
+                brightness: 0,
+                contrast: 0,
+                noiseIntensity: 0.03
+              }}
             >
-              <KeyboardControls let:transform>
-                <Transform {...transform}>
-                  <!-- TOP -->
-                  <AnimatableCube key="Box Top" />
+              {#snippet children({ values })}
+                <PostProcessing
+                  bloomIntensity={values.bloomIntensity}
+                  bloomLuminanceSmoothing={values.bloomLuminanceSmoothing}
+                  bloomRadius={values.bloomRadius}
+                  brightness={values.brightness}
+                  contrast={values.contrast}
+                  noiseIntensity={values.noiseIntensity}
+                />
+              {/snippet}
+            </SheetObject>
 
-                  <!-- MIDDLE -->
-                  <AnimatableCube key="Box Middle" />
+            <SheetObject key="Glow">
+              {#snippet children({ Transform, Sync })}
+                <KeyboardControls>
+                  {#snippet children({ transform })}
+                    <Transform {...transform}>
+                      <RadialGradientTexture
+                        attach={false}
+                        outerRadius={512}
+                        stops={[
+                          { color: '#ffffff', offset: 0 },
+                          { color: '#000000', offset: 1 }
+                        ]}
+                      >
+                        {#snippet children({ ref })}
+                          <T.Mesh
+                            position.z={0.1}
+                            scale={0.8}
+                          >
+                            <T.PlaneGeometry args={[10, 10]} />
+                            <T.MeshBasicMaterial
+                              transparent
+                              alphaMap={ref}
+                            >
+                              <Sync
+                                opacity="opacity2"
+                                color="color2"
+                              />
+                            </T.MeshBasicMaterial>
+                          </T.Mesh>
 
-                  <!-- BOTTOM X+ -->
-                  <AnimatableCube key="Box Bottom X+" />
+                          <T.Mesh>
+                            <T.PlaneGeometry args={[10, 10]} />
+                            <T.MeshBasicMaterial
+                              transparent
+                              alphaMap={ref}
+                            >
+                              <Sync
+                                opacity
+                                color
+                              />
+                            </T.MeshBasicMaterial>
+                          </T.Mesh>
+                        {/snippet}
+                      </RadialGradientTexture>
+                    </Transform>
+                  {/snippet}
+                </KeyboardControls>
+              {/snippet}
+            </SheetObject>
 
-                  <!-- BOTTOM X- -->
-                  <AnimatableCube key="Box Bottom X-" />
+            <SheetObject
+              key="Composite"
+              props={{
+                floatIntensity: 1,
+                rotationIntensity: 1,
+                rotationSpeed: 1,
+                floatSpeed: 1
+              }}
+            >
+              {#snippet children({ Transform, values })}
+                <Float
+                  floatIntensity={values.floatIntensity}
+                  rotationIntensity={values.rotationIntensity}
+                  rotationSpeed={values.rotationSpeed}
+                  speed={values.floatSpeed}
+                >
+                  <KeyboardControls>
+                    {#snippet children({ transform })}
+                      <Transform {...transform}>
+                        <!-- TOP -->
+                        <AnimatableCube key="Box Top" />
 
-                  <!-- BOTTOM Z+ -->
-                  <AnimatableCube key="Box Bottom Z+" />
+                        <!-- MIDDLE -->
+                        <AnimatableCube key="Box Middle" />
 
-                  <!-- BOTTOM Z- -->
-                  <AnimatableCube key="Box Bottom Z-" />
-                </Transform>
-              </KeyboardControls>
-            </Float>
-          </SheetObject>
-        </ScrollSheet>
-      </T.Group>
-    </Transform>
+                        <!-- BOTTOM X+ -->
+                        <AnimatableCube key="Box Bottom X+" />
+
+                        <!-- BOTTOM X- -->
+                        <AnimatableCube key="Box Bottom X-" />
+
+                        <!-- BOTTOM Z+ -->
+                        <AnimatableCube key="Box Bottom Z+" />
+
+                        <!-- BOTTOM Z- -->
+                        <AnimatableCube key="Box Bottom Z-" />
+                      </Transform>
+                    {/snippet}
+                  </KeyboardControls>
+                </Float>
+              {/snippet}
+            </SheetObject>
+          </ScrollSheet>
+        </T.Group>
+      </Transform>
+    {/snippet}
   </SheetObject>
 </ScrollSheet>

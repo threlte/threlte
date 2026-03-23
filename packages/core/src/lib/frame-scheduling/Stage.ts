@@ -1,6 +1,6 @@
-import { DAG, type AddNodeOptions, type Key } from './DAG'
-import type { Scheduler } from './Scheduler'
-import { Task, type TaskCallback } from './Task'
+import { DAG, type AddNodeOptions, type Key } from './DAG.js'
+import type { Scheduler } from './Scheduler.js'
+import { Task, type TaskCallback } from './Task.js'
 
 /**
  * A Stage is a collection of steps. The steps are run in a topological sort
@@ -9,6 +9,16 @@ import { Task, type TaskCallback } from './Task'
 export class Stage extends DAG<Task> {
   public readonly key: Key
   public readonly scheduler: Scheduler
+
+  private runTask = true
+
+  public stop() {
+    this.runTask = false
+  }
+
+  public start() {
+    this.runTask = true
+  }
 
   public get tasks() {
     return this.sortedVertices
@@ -24,6 +34,8 @@ export class Stage extends DAG<Task> {
     super()
     this.scheduler = scheduler
     this.key = key
+    this.start = this.start.bind(this)
+    this.stop = this.stop.bind(this)
     if (callback) this.callback = callback.bind(this)
   }
 
@@ -40,6 +52,7 @@ export class Stage extends DAG<Task> {
   public removeTask = this.remove.bind(this)
 
   public run(delta: number) {
+    if (!this.runTask) return
     this.callback(delta, (deltaOverride) => {
       this.forEachNode((task) => {
         task.run(deltaOverride ?? delta)
@@ -48,6 +61,7 @@ export class Stage extends DAG<Task> {
   }
 
   runWithTiming(delta: number) {
+    if (!this.runTask) return {}
     const taskTimings: Record<Key, number> = {}
     this.callback(delta, (deltaOverride) => {
       this.forEachNode((task) => {
