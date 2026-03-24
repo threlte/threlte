@@ -33,6 +33,7 @@ export { default as Environment } from './components/environment/Environment/Env
 export { default as VirtualEnvironment } from './components/environment/VirtualEnvironment/VirtualEnvironment.svelte'
 export { default as ImageMaterial } from './components/ImageMaterial/ImageMaterial.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
+export { default as Bounds } from './components/Bounds/Bounds.svelte'
 export { default as RoundedBoxGeometry } from './components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
 export { default as TransformControls } from './components/controls/TransformControls/TransformControls.svelte'
 export { default as OrbitControls } from './components/controls/OrbitControls/OrbitControls.svelte'
