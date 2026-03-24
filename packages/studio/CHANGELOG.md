@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.4.2
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
 ## 0.4.1
 
 ### Patch Changes

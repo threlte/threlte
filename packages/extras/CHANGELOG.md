@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.12.1
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
 ## 9.12.0
 
 ### Minor Changes
