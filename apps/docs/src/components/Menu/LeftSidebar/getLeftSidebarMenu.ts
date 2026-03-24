@@ -30,13 +30,21 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
       const ungrouped = items
         .filter((item) => !item.data.group && !item.data.isDivider)
         .sort((a, b) => a.data.title.localeCompare(b.data.title))
-        .map((item): LeftSidebarMenuItem => ({ title: item.data.title, slug: item.id, isDivider: false }))
+        .map(
+          (item): LeftSidebarMenuItem => ({
+            title: item.data.title,
+            slug: item.id,
+            isDivider: false
+          })
+        )
 
       const groupMap = new Map<string, LeftSidebarMenuItem[]>()
       for (const item of items) {
         if (!item.data.group) continue
         if (!groupMap.has(item.data.group)) groupMap.set(item.data.group, [])
-        groupMap.get(item.data.group)!.push({ title: item.data.title, slug: item.id, isDivider: false })
+        groupMap
+          .get(item.data.group)!
+          .push({ title: item.data.title, slug: item.id, isDivider: false })
       }
 
       for (const groupItems of groupMap.values()) {
@@ -55,11 +63,13 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
     } else {
       menuItems = items
         .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-        .map((item): LeftSidebarMenuItem => ({
-          title: item.data.title,
-          slug: item.id,
-          isDivider: item.data.isDivider ?? false
-        }))
+        .map(
+          (item): LeftSidebarMenuItem => ({
+            title: item.data.title,
+            slug: item.id,
+            isDivider: item.data.isDivider ?? false
+          })
+        )
     }
 
     return {
