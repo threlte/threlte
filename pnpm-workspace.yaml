@@ -25,7 +25,6 @@ catalog:
   'publint': '^0.2.7'
   'rimraf': '^6.0.1'
   'svelte-check': '^4.3.1'
-  'svelte2tsx': '^0.7.6'
   'svelte-tweakpane-ui': '^1.5.9'
   'tslib': '^2.6.2'
   'type-fest': '^4.15.0'

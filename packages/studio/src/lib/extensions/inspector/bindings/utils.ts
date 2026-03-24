@@ -1,4 +1,3 @@
-import { resolvePropertyPath } from '@threlte/core'
 import type {
   AmbientLight,
   DirectionalLight,
@@ -18,11 +17,6 @@ export const haveProperty = <T = any>(objects: any[], property: string): objects
 
 export const areOfType = <T = any>(objects: any[], isType: string): objects is T[] => {
   return objects.every((object) => isType in object)
-}
-
-export const readFromFirstObject = (objects: any[], propertyPath: string) => {
-  const { target, key } = resolvePropertyPath(objects[0], propertyPath)
-  return target[key]
 }
 
 export const areCamera = (

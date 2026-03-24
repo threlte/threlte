@@ -7,7 +7,6 @@ export const playerToBorderDistance = 0.5
 
 export const playerHeight = 0.2
 export const playerWidth = 2
-export const playerDepth = 1
 
 export const playerSpeed = 0.34
 
