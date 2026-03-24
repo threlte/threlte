@@ -113,7 +113,7 @@
 
   // Context for user facing components and hooks
   // svelte-ignore state_referenced_locally
-  setContext<InstancedSpriteUserCtx<unknown>>('instanced-sprite-ctx', {
+  setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
     sprite: mesh,
     count,
     animationMap,
