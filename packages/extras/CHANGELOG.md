@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.13.0
+
+### Minor Changes
+
+- 5f4d2b0: Add `<BackdropGeometry>` component
+
 ## 9.12.1
 
 ### Patch Changes
