@@ -1,13 +1,16 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Checkbox, Slider, List } from 'svelte-tweakpane-ui'
+  import { Pane, Checkbox, Slider, List, Button } from 'svelte-tweakpane-ui'
   import { Suspense } from '@threlte/extras'
 
+  let animate = $state(true)
   let margin = $state(1.5)
   let fit = $state(true)
   let clip = $state(false)
   let camera = $state<'perspective' | 'orthographic'>('perspective')
+
+  let version = $state(0)
 </script>
 
 <Pane
@@ -29,6 +32,10 @@
     max={10}
   />
   <Checkbox
+    bind:value={animate}
+    label="animate"
+  />
+  <Checkbox
     bind:value={fit}
     label="fit"
   />
@@ -36,17 +43,24 @@
     bind:value={clip}
     label="clip"
   />
+  <Button
+    title="Reset scene"
+    on:click={() => (version += 1)}
+  />
 </Pane>
 
 <div>
   <Canvas>
     <Suspense>
-      <Scene
-        {camera}
-        {margin}
-        {fit}
-        {clip}
-      />
+      {#key version}
+        <Scene
+          {camera}
+          {margin}
+          {animate}
+          {fit}
+          {clip}
+        />
+      {/key}
     </Suspense>
   </Canvas>
 </div>

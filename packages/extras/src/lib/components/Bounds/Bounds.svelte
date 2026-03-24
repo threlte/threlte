@@ -29,6 +29,7 @@
   let {
     maxDuration = 1,
     margin = 1.2,
+    animate = true,
     fit = false,
     clip = false,
     interpolateFunc = interpolateFuncDefault,
@@ -134,6 +135,29 @@
   const cameraRotationMatrix = new Matrix4()
   const cameraRotation = new Quaternion()
 
+  const applyGoalImmediate = () => {
+    const cam = camera.current as PerspectiveCamera | OrthographicCamera
+
+    if (goal.camPos) cam.position.copy(goal.camPos)
+    if (goal.camRot) cam.quaternion.copy(goal.camRot)
+    if (goal.camUp) cam.up.copy(goal.camUp)
+    if (goal.camZoom !== undefined && isInstanceOf(cam, 'OrthographicCamera')) {
+      cam.zoom = goal.camZoom
+    }
+
+    cam.updateMatrixWorld()
+    cam.updateProjectionMatrix()
+
+    if (controls && goal.target) {
+      controls.target.copy(goal.target)
+      controls.update()
+    }
+
+    animationState = AnimationStateValues.NONE
+    t = 1
+    invalidate()
+  }
+
   const reset = () => {
     const cam = camera.current
     const { center, distance } = getSize()
@@ -148,6 +172,11 @@
 
     cameraRotationMatrix.lookAt(goal.camPos, goal.target, cam.up)
     goal.camRot = cameraRotation.setFromRotationMatrix(cameraRotationMatrix)
+
+    if (!animate) {
+      applyGoalImmediate()
+      return
+    }
 
     animationState = AnimationStateValues.START
     t = 0
@@ -201,8 +230,12 @@
 
     goal.camZoom = Math.min(zoomForHeight, zoomForWidth) / margin
 
-    animationState = AnimationStateValues.START
-    t = 0
+    if (!animate) {
+      applyGoalImmediate()
+    } else {
+      animationState = AnimationStateValues.START
+      t = 0
+    }
 
     onFit?.(getSize())
   }

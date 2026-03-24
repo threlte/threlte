@@ -22,11 +22,12 @@
   interface Props {
     camera: 'orthographic' | 'perspective'
     margin: number
+    animate: boolean
     fit: boolean
     clip: boolean
   }
 
-  let { camera, margin, fit, clip }: Props = $props()
+  let { camera, margin, animate, fit, clip }: Props = $props()
 
   const suspend = useSuspense()
   const gltf = suspend(useGltf('/models/portal/portal.glb'))
@@ -110,6 +111,7 @@
 {#if $gltf}
   <Bounds
     {margin}
+    {animate}
     {fit}
     {clip}
   >
