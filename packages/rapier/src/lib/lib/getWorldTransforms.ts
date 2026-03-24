@@ -32,22 +32,6 @@ export const getWorldQuaternion = (object: Object3D, target?: Quaternion): Quate
 }
 
 /**
- * Get the world rotation of an object.
- * If no target is provided, a globally used
- * temporary Euler is used.
- *
- * @param object
- * @param target
- * @returns
- */
-export const getWorldRotation = (object: Object3D, target?: Euler): Euler => {
-  object.getWorldQuaternion(tempQuaternion)
-  return target
-    ? target.setFromQuaternion(tempQuaternion)
-    : tempRotation.setFromQuaternion(tempQuaternion)
-}
-
-/**
  * Get the world scale of an object.
  * If no target is provided, a globally used
  * temporary Vector3 is used.

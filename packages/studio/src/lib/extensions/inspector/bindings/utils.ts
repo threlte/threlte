@@ -20,11 +20,6 @@ export const areOfType = <T = any>(objects: any[], isType: string): objects is T
   return objects.every((object) => isType in object)
 }
 
-export const readFromFirstObject = (objects: any[], propertyPath: string) => {
-  const { target, key } = resolvePropertyPath(objects[0], propertyPath)
-  return target[key]
-}
-
 export const areCamera = (
   objects: any[]
 ): objects is PerspectiveCamera[] | OrthographicCamera[] => {

@@ -1,3 +1,3 @@
-export * from './fade'
-export * from './fly'
-export * from './scale'
+export { fade } from './fade'
+export { fly } from './fly'
+export { scale } from './scale'
