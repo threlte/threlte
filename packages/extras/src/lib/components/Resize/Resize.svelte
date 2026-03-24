@@ -64,6 +64,7 @@
     running = true
   }
 
+  // svelte-ignore state_referenced_locally
   useTask(
     () => {
       doResize()

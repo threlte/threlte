@@ -22,6 +22,8 @@ catalog:
   globals: '^16.1.0'
   prettier: '^3.8.1'
   'prettier-plugin-svelte': '^3.5.1'
+  'prettier-plugin-astro': '^0.14.1'
+  'prettier-plugin-tailwindcss': '^0.7.2'
   'publint': '^0.2.7'
   'rimraf': '^6.0.1'
   'svelte-check': '^4.3.1'

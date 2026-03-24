@@ -68,8 +68,10 @@
   }
 
   let timerOffset = 0
+  // svelte-ignore state_referenced_locally
   let currentFrame = startFrame
   let numFrames = 0
+  // svelte-ignore state_referenced_locally
   let flipOffset = flipX ? -1 : 1
   let frameWidth = 0
   let frameHeight = 0
@@ -89,6 +91,7 @@
 
   const suspend = useSuspense()
 
+  // svelte-ignore state_referenced_locally
   const textureStore = suspend(
     useTexture(textureUrl, {
       transform: (value: Texture) => {
@@ -102,6 +105,7 @@
     })
   )
 
+  // svelte-ignore state_referenced_locally
   const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = suspend(
     dataUrl
       ? useLoader(FileLoader).load(dataUrl, {

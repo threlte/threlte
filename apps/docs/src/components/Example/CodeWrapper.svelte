@@ -23,7 +23,7 @@
   }: Props = $props()
 
   let childrenElements: HTMLElement[] = $state([])
-
+  // svelte-ignore state_referenced_locally
   const initialFilePath = showFile
     ? filePaths.includes(showFile)
       ? showFile

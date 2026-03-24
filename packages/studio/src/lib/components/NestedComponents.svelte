@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Component, Snippet } from 'svelte'
-  import NestedComponents from './NestedComponents.svelte'
+  import Self from './NestedComponents.svelte'
 
   type Props = {
     extensions: Component[]
@@ -9,15 +9,18 @@
 
   let { extensions, children }: Props = $props()
 
+	// svelte-ignore state_referenced_locally
   const Extension = extensions[0]
+
+	// svelte-ignore state_referenced_locally
   const nextExtensions = extensions.slice(1)
 </script>
 
 <Extension>
   {#if nextExtensions.length > 0}
-    <NestedComponents extensions={nextExtensions}>
+    <Self extensions={nextExtensions}>
       {@render children()}
-    </NestedComponents>
+    </Self>
   {:else}
     {@render children()}
   {/if}

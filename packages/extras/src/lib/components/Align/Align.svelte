@@ -76,6 +76,7 @@
    */
   let scheduleAligning = $state(false)
 
+  // svelte-ignore state_referenced_locally
   useTask(
     () => {
       calculate()

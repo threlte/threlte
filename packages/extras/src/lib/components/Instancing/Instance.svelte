@@ -7,7 +7,7 @@
   import { useInstanceId } from './useInstanceId.js'
 
   let { id = useInstanceId(), ref = $bindable(), children, ...props }: InstanceProps = $props()
-
+  // svelte-ignore state_referenced_locally
   const { addInstance, removeInstance, instancedMesh, instances } = useApi(id)
 
   const mesh = new PositionMesh(instancedMesh, instances)

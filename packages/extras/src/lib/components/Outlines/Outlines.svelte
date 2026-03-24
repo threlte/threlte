@@ -33,6 +33,7 @@
 
   const { renderer } = useThrelte()
 
+  // svelte-ignore state_referenced_locally
   const uniforms = {
     screenspace: { value: screenspace },
     color: { value: new Color(color) },

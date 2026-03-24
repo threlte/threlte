@@ -18,6 +18,7 @@
 
   let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
+  // svelte-ignore state_referenced_locally
   const { suspended, errors, setFinal } = createSuspenseContext({ final })
   $effect(() => setFinal(final))
   $effect(() => {

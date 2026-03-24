@@ -6,7 +6,7 @@ import type { ThrelteLayers, ThrelteLayersContext } from './types.js'
 export const injectLayersPlugin = () => {
   injectPlugin<{ layers?: ThrelteLayers }>('layers', (args) => {
     if (!isInstanceOf(args.ref, 'Object3D')) return
-
+    // svelte-ignore state_referenced_locally
     const ctx = getContext<ThrelteLayersContext>('threlte-layers-context')
     const mergedLayers = $derived(args.props.layers ?? ctx?.layers)
     const mergedCtx = $derived(mergedLayers ? { layers: mergedLayers } : undefined)

@@ -18,6 +18,7 @@
   const firstObject = $derived(objects[0])
 
   const carrier: Record<string, any> = {}
+  // svelte-ignore state_referenced_locally
   const { target, key: targetKey } = resolvePropertyPath(firstObject, key)
 
   if (

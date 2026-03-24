@@ -87,6 +87,7 @@
 
   const group = new Group()
 
+  // svelte-ignore state_referenced_locally
   let element = document.createElement(as)
   let oldZoom = 0
   let oldPosition = [0, 0]

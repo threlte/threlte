@@ -9,6 +9,7 @@
   let { files }: Props = $props()
 
   const projectFiles: Record<string, string> = {}
+  // svelte-ignore state_referenced_locally
   for (const path in files) {
     const newPath = `src/example/${path}`
     projectFiles[newPath] = files[path] as string

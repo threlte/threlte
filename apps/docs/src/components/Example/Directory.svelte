@@ -10,7 +10,7 @@
   }
 
   let { directory, showDirectoryName = true, expanded = $bindable(true) }: Props = $props()
-
+  // svelte-ignore state_referenced_locally
   const sortedFiles = directory.files.sort((a, b) => {
     if (a.type === 'directory' && b.type === 'file') {
       return -1

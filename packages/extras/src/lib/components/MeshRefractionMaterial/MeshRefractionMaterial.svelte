@@ -94,7 +94,9 @@
     { autoInvalidate: false }
   )
 
+  // svelte-ignore state_referenced_locally
   const colorObj = new Color(color)
+
   $effect.pre(() => {
     colorObj.set(color)
     invalidate()

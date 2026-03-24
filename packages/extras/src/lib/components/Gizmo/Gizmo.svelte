@@ -52,6 +52,7 @@
 
   const cameraControls = $derived(controls ?? ($parent as Controls))
 
+  // svelte-ignore state_referenced_locally
   useTask(
     renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {

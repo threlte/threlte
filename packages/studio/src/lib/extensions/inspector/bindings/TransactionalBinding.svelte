@@ -60,11 +60,13 @@
   // bind. Example: firstObject is an object with a property 'position' that is a
   // Vector3. The result is target = firstObject and targetKey = 'position'. We
   // use this to clone the object.
+  // svelte-ignore state_referenced_locally
   const { target, key: targetKey } = resolvePropertyPath(firstObject, key)
 
   carrier[targetKey] = getClonedValue(target, targetKey)
 
   // Maybe transform, e.g. radian to degree
+  // svelte-ignore state_referenced_locally
   if (transform) {
     carrier[targetKey] = transform.read(carrier[targetKey])
   }

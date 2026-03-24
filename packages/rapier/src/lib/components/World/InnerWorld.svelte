@@ -25,7 +25,7 @@
     synchronizationStageOptions,
     children
   }: WorldProps = $props()
-
+  // svelte-ignore state_referenced_locally
   const rapierContext = createRapierContext(
     [
       { x: gravity[0], y: gravity[1], z: gravity[2] },
