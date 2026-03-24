@@ -17,6 +17,7 @@
   } from 'three'
   import type { CameraControlsProps } from './types.js'
   import CameraControls from 'camera-controls'
+  import { useControlsContext } from '../controls/useControlsContext.js'
 
   export { default as CameraControlsRef } from 'camera-controls'
 
@@ -51,6 +52,7 @@
   let { ref = $bindable(), camera: userCamera, children, ...rest }: CameraControlsProps = $props()
 
   const { dom, camera: defaultCamera, invalidate } = useThrelte()
+  const { cameraControls } = useControlsContext()
   const parent = useParent()
 
   const camera = $derived.by(() => {
@@ -68,6 +70,13 @@
   const controls = new CameraControls(camera, dom)
   $effect.pre(() => {
     controls.camera = camera
+  })
+
+  $effect.pre(() => {
+    cameraControls.set(controls)
+    return () => {
+      cameraControls.set(undefined)
+    }
   })
 
   useTask(

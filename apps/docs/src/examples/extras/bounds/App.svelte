@@ -1,31 +1,40 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Checkbox, Slider } from 'svelte-tweakpane-ui'
+  import { Pane, Checkbox, Slider, List } from 'svelte-tweakpane-ui'
   import { Suspense } from '@threlte/extras'
 
   let margin = $state(1.5)
   let fit = $state(true)
   let clip = $state(false)
+  let camera = $state<'perspective' | 'orthographic'>('perspective')
 </script>
 
 <Pane
   title=""
   position="fixed"
 >
+  <List
+    label="camera"
+    bind:value={camera}
+    options={{
+      orthographic: 'orthographic',
+      perspective: 'perspective'
+    }}
+  />
   <Slider
     bind:value={margin}
-    label="Margin"
+    label="margin"
     min={1}
     max={10}
   />
   <Checkbox
     bind:value={fit}
-    label="Fit"
+    label="fit"
   />
   <Checkbox
     bind:value={clip}
-    label="Clip"
+    label="clip"
   />
 </Pane>
 
@@ -33,6 +42,7 @@
   <Canvas>
     <Suspense>
       <Scene
+        {camera}
         {margin}
         {fit}
         {clip}

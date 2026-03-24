@@ -20,12 +20,13 @@
   import fragmentShader from './fragment'
 
   interface Props {
+    camera: 'orthographic' | 'perspective'
     margin: number
     fit: boolean
     clip: boolean
   }
 
-  let { margin, fit, clip }: Props = $props()
+  let { camera, margin, fit, clip }: Props = $props()
 
   const suspend = useSuspense()
   const gltf = suspend(useGltf('/models/portal/portal.glb'))
@@ -63,22 +64,41 @@
   })
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position.x={20}
-  position.y={10}
-  position.z={-20}
-  fov={50}
-  oncreate={(ref) => {
-    ref.lookAt(0, 0, 0)
-  }}
->
-  <OrbitControls
-    enableDamping
-    enableZoom={false}
-    enablePan={false}
-  />
-</T.PerspectiveCamera>
+{#if camera === 'perspective'}
+  <T.PerspectiveCamera
+    makeDefault
+    position.x={20}
+    position.y={10}
+    position.z={-20}
+    fov={50}
+    oncreate={(ref) => {
+      ref.lookAt(0, 0, 0)
+    }}
+  >
+    <OrbitControls
+      enableDamping
+      enableZoom={false}
+      enablePan={false}
+    />
+  </T.PerspectiveCamera>
+{:else if camera === 'orthographic'}
+  <T.OrthographicCamera
+    makeDefault
+    position.x={20}
+    position.y={10}
+    position.z={-20}
+    zoom={50}
+    oncreate={(ref) => {
+      ref.lookAt(0, 0, 0)
+    }}
+  >
+    <OrbitControls
+      enableDamping
+      enableZoom={false}
+      enablePan={false}
+    />
+  </T.OrthographicCamera>
+{/if}
 
 <T.DirectionalLight
   position.y={10}

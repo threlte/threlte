@@ -13,15 +13,13 @@
   import { useControlsContext } from '../controls/useControlsContext.js'
   import type { BoundsProps, SizeProps } from './types.js'
 
-  type ControlsProto = {
+  interface ControlsProto {
     update(): void
     target: Vector3
     maxDistance: number
-    addEventListener: (event: string, callback: (event: any) => void) => void
-    removeEventListener: (event: string, callback: (event: any) => void) => void
+    addEventListener: (event: string, callback: (event: unknown) => void) => void
+    removeEventListener: (event: string, callback: (event: unknown) => void) => void
   }
-
-  const isBox3 = (def: any): def is Box3 => def && (def as any).isBox3
 
   const interpolateFuncDefault = (t: number) => {
     // Imitates the previously used THREE.MathUtils.damp
@@ -34,21 +32,25 @@
     fit = false,
     clip = false,
     interpolateFunc = interpolateFuncDefault,
-    onFit = () => {},
+    onFit,
     ref = $bindable(),
     children,
     ...props
   }: BoundsProps = $props()
 
-  const group = new Group()
-
   const { camera, size, invalidate } = useThrelte()
-  const { orbitControls, trackballControls } = useControlsContext()
+  const { orbitControls, trackballControls, cameraControls } = useControlsContext()
 
+  const group = new Group()
   const box = new Box3()
 
   // Animation state machine.
-  const AnimationStateValues = { NONE: 0, START: 1, ACTIVE: 2 } as const
+  const AnimationStateValues = {
+    NONE: 0,
+    START: 1,
+    ACTIVE: 2
+  } as const
+
   type AnimationState = (typeof AnimationStateValues)[keyof typeof AnimationStateValues]
 
   const origin = {
@@ -69,14 +71,17 @@
   let t = 0 // represents animation state from 0 to 1
 
   const controls = $derived<ControlsProto | undefined>(
-    ($orbitControls ?? $trackballControls) as ControlsProto | undefined
+    ($cameraControls ?? $orbitControls ?? $trackballControls) as ControlsProto | undefined
   )
+
+  const boxSize = new Vector3()
+  const boxCenter = new Vector3()
 
   const getSize = (): SizeProps => {
     const cam = camera.current
 
-    const boxSize = box.getSize(new Vector3())
-    const center = box.getCenter(new Vector3())
+    box.getSize(boxSize)
+    box.getCenter(boxCenter)
     const maxSize = Math.max(boxSize.x, boxSize.y, boxSize.z)
 
     const fitHeightDistance = isInstanceOf(cam, 'PerspectiveCamera')
@@ -89,14 +94,18 @@
 
     const distance = margin * Math.max(fitHeightDistance, fitWidthDistance)
 
-    return { box, size: boxSize, center, distance }
+    return { box, size: boxSize, center: boxCenter, distance }
   }
+
+  const center = new Vector3()
+  const maxVec3 = new Vector3()
 
   const refresh = (object?: Object3D | Box3) => {
     const cam = camera.current
 
-    if (isBox3(object)) box.copy(object)
-    else {
+    if (isInstanceOf(object, 'Box3')) {
+      box.copy(object)
+    } else {
       const target = object ?? group
       if (!target) return
       target.updateWorldMatrix(true, true)
@@ -104,8 +113,8 @@
     }
 
     if (box.isEmpty()) {
-      const max = cam.position.length() || 10
-      box.setFromCenterAndSize(new Vector3(), new Vector3(max, max, max))
+      const max = cam.position.length()
+      box.setFromCenterAndSize(center, maxVec3.set(max, max, max))
     }
 
     origin.camPos.copy(cam.position)
@@ -122,6 +131,9 @@
     goal.target = undefined
   }
 
+  const cameraRotationMatrix = new Matrix4()
+  const cameraRotation = new Quaternion()
+
   const reset = () => {
     const cam = camera.current
     const { center, distance } = getSize()
@@ -134,12 +146,14 @@
     goal.camPos = center.clone().addScaledVector(direction, distance)
     goal.target = center.clone()
 
-    const mCamRot = new Matrix4().lookAt(goal.camPos, goal.target, cam.up)
-    goal.camRot = new Quaternion().setFromRotationMatrix(mCamRot)
+    cameraRotationMatrix.lookAt(goal.camPos, goal.target, cam.up)
+    goal.camRot = cameraRotation.setFromRotationMatrix(cameraRotationMatrix)
 
     animationState = AnimationStateValues.START
     t = 0
   }
+
+  const cameraRotationMatrixInverse = new Matrix4()
 
   const fitBounds = () => {
     const cam = camera.current
@@ -170,13 +184,13 @@
     const up = goal.camUp ?? cam.up
 
     const mCamWInv = target
-      ? new Matrix4().lookAt(pos, target, up).setPosition(pos).invert()
+      ? cameraRotationMatrixInverse.lookAt(pos, target, up).setPosition(pos).invert()
       : cam.matrixWorldInverse
 
-    for (const v of vertices) {
-      v.applyMatrix4(mCamWInv)
-      maxHeight = Math.max(maxHeight, Math.abs(v.y))
-      maxWidth = Math.max(maxWidth, Math.abs(v.x))
+    for (const vertex of vertices) {
+      vertex.applyMatrix4(mCamWInv)
+      maxHeight = Math.max(maxHeight, Math.abs(vertex.y))
+      maxWidth = Math.max(maxWidth, Math.abs(vertex.x))
     }
 
     maxHeight *= 2
@@ -210,10 +224,7 @@
   }
 
   // Ensure we don't let user drag hijack ongoing bounds animations.
-  // (Copied from the React implementation's `controls.addEventListener('start', ...)`.)
-  let controlsForDragHijack: ControlsProto | undefined
   const handleControlsStart = () => {
-    const controls = controlsForDragHijack
     const cam = camera.current
     if (!controls || !goal.target || animationState === AnimationStateValues.NONE) {
       return
@@ -231,38 +242,31 @@
     animationState = AnimationStateValues.NONE
   }
 
-  observe(
-    () => [orbitControls, trackballControls],
-    ([orbit, trackball]) => {
-      const next = (orbit ?? trackball) as unknown as ControlsProto | undefined
-      if (next === controlsForDragHijack) return
+  $effect(() => {
+    controls?.addEventListener('start', handleControlsStart)
 
-      if (controlsForDragHijack) {
-        controlsForDragHijack.removeEventListener('start', handleControlsStart)
-      }
-
-      controlsForDragHijack = next
-      if (controlsForDragHijack) {
-        controlsForDragHijack.addEventListener('start', handleControlsStart)
-      }
+    return () => {
+      controls?.removeEventListener('start', handleControlsStart)
     }
-  )
+  })
+
+  export const update = () => {
+    refresh()
+
+    if (fit) {
+      reset()
+      fitBounds()
+    }
+
+    if (clip) {
+      clipBounds()
+    }
+  }
 
   // Refresh bounds when viewport changes.
   observe(
-    () => [size, clip, fit, margin, camera, orbitControls, trackballControls],
-    () => {
-      refresh()
-
-      if (fit) {
-        reset()
-        fitBounds()
-      }
-
-      if (clip) {
-        clipBounds()
-      }
-    }
+    () => [size, clip, fit, margin, camera, controls, children],
+    () => update()
   )
 
   // Camera animation loop.
@@ -285,12 +289,15 @@
           if (goal.camPos) {
             cam.position.copy(goal.camPos)
           }
+
           if (goal.camRot) {
             cam.quaternion.copy(goal.camRot)
           }
+
           if (goal.camUp) {
             cam.up.copy(goal.camUp)
           }
+
           if (goal.camZoom !== undefined && isInstanceOf(cam, 'OrthographicCamera')) {
             cam.zoom = goal.camZoom
           }
@@ -312,12 +319,15 @@
           if (goal.camPos) {
             cam.position.lerpVectors(origin.camPos, goal.camPos, k)
           }
+
           if (goal.camRot) {
             cam.quaternion.slerpQuaternions(origin.camRot, goal.camRot, k)
           }
+
           if (goal.camUp) {
             cam.up.set(0, 1, 0).applyQuaternion(cam.quaternion)
           }
+
           if (goal.camZoom !== undefined && isInstanceOf(cam, 'OrthographicCamera')) {
             cam.zoom = (1 - k) * origin.camZoom + k * goal.camZoom
           }
