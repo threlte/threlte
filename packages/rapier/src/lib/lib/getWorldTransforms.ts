@@ -2,7 +2,6 @@ import { Euler, Object3D, Quaternion, Vector3 } from 'three'
 
 const tempPosition = new Vector3()
 const tempQuaternion = new Quaternion()
-const tempRotation = new Euler()
 const tempScale = new Vector3()
 
 /**
