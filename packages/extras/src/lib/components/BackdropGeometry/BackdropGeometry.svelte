@@ -3,7 +3,7 @@
   import { PlaneGeometry } from 'three'
   import type { BackdropGeometryProps } from './types.js'
 
-  let { length = 1, segments = 20, ...rest }: BackdropGeometryProps = $props()
+  let { length = 1, segments = 20, ref = $bindable(), ...rest }: BackdropGeometryProps = $props()
 
   const easeInExpo = (x: number): number => {
     return +(x !== 0) * 2 ** (10 * x - 10)
@@ -42,5 +42,6 @@
 
 <T
   is={geometry}
+  bind:ref
   {...rest}
 />
