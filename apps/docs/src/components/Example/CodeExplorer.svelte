@@ -9,7 +9,7 @@
   let { filePaths }: Props = $props()
 
   const tree: Directory['files'] = []
-
+  // svelte-ignore state_referenced_locally
   filePaths.forEach((path) => {
     const parts = path.split('/')
 

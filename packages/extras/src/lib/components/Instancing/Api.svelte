@@ -16,13 +16,15 @@
 
   let { instancedMesh, id, limit, range, update, children }: Props = $props()
 
+  // svelte-ignore state_referenced_locally
   const { instances } = createApi(instancedMesh, id)
 
   const tempMatrix = new Matrix4()
-
+  // svelte-ignore state_referenced_locally
   const matrices = new Float32Array(limit * 16)
+  // svelte-ignore state_referenced_locally
   for (let i = 0; i < limit; i++) tempMatrix.identity().toArray(matrices, i * 16)
-
+  // svelte-ignore state_referenced_locally
   const colors = new Float32Array(limit * 3).fill(1)
 
   const parentMatrix = new Matrix4()

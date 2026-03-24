@@ -29,7 +29,7 @@
     children,
     ...props
   }: InstancedSpriteProps = $props()
-
+  // svelte-ignore state_referenced_locally
   const spriteBaseMaterial = new baseMaterial({
     transparent: transparent,
     alphaTest: alphaTest,
@@ -38,7 +38,7 @@
   })
 
   const { renderer } = useThrelte()
-
+  // svelte-ignore state_referenced_locally
   const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
 
   const animationMap = writable<Map<string, number>>(new Map())
@@ -46,7 +46,7 @@
   $effect.pre(() => {
     if (spritesheet) {
       mesh.spritesheet = spritesheet.spritesheet
-      animationMap.set(mesh.animationMap as any)
+      animationMap.set(mesh.animationMap)
       mesh.material.map = spritesheet.texture
       mesh.material.needsUpdate = true
     }
@@ -112,6 +112,7 @@
   }
 
   // Context for user facing components and hooks
+  // svelte-ignore state_referenced_locally
   setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
     sprite: mesh,
     count,

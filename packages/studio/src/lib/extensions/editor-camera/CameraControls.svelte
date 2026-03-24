@@ -57,7 +57,7 @@
   const { camera, initialPosition, initialTarget, cc, rest }: Props = $props()
 
   const { dom, invalidate } = useThrelte()
-
+  // svelte-ignore state_referenced_locally
   const cameraControls = new CameraControls(camera, dom)
   cameraControls.smoothTime = 0.05
   cameraControls.draggingSmoothTime = 0.05

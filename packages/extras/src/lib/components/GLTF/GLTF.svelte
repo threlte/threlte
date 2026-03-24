@@ -29,6 +29,7 @@
     ...props
   }: Props = $props()
 
+  // svelte-ignore state_referenced_locally
   const loader = useGltf({
     dracoLoader,
     meshoptDecoder,

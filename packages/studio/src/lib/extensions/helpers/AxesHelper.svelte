@@ -26,6 +26,7 @@
   }: Props = $props()
 
   const lineGeometry = new LineGeometry()
+  // svelte-ignore state_referenced_locally
   const lineMaterial = $state(
     new LineMaterial({
       linewidth: width / 100,

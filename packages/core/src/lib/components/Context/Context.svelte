@@ -9,6 +9,7 @@
   let { children, ...rest }: CreateThrelteContextOptions<Renderer> & { children: Snippet } =
     $props()
 
+  // svelte-ignore state_referenced_locally
   createThrelteContext(rest)
 </script>
 

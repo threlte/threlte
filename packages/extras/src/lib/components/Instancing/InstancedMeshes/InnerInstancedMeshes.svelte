@@ -11,6 +11,7 @@
   }
 
   let { meshes, index = meshes.length - 1, children, ...props }: Props = $props()
+  // svelte-ignore state_referenced_locally
   const mesh = meshes[index]
 </script>
 

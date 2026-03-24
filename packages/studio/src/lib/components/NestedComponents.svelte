@@ -9,7 +9,10 @@
 
   let { extensions, children }: Props = $props()
 
+	// svelte-ignore state_referenced_locally
   const Extension = extensions[0]
+
+	// svelte-ignore state_referenced_locally
   const nextExtensions = extensions.slice(1)
 </script>
 

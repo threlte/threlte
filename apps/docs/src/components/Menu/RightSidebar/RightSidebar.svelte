@@ -12,11 +12,13 @@
 
   let { editUrl = undefined, sourceUrl = undefined, headings, children }: Props = $props()
 
+  // svelte-ignore state_referenced_locally
   const lowestHeadingDepth = Math.min(...headings.map((heading) => heading.depth))
 
   let intersectionObserver: IntersectionObserver | undefined = undefined
 
   let currentHeadingSlug: string | undefined = $state(undefined)
+  // svelte-ignore state_referenced_locally
   let currentHeading: MarkdownHeading | undefined = headings[0]
 
   const setCurrentHeading = (id: string) => {

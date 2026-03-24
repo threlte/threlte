@@ -20,14 +20,15 @@
 
   const { getAudioListener } = useThrelteAudio()
 
+  // svelte-ignore state_referenced_locally
   const listener = getAudioListener(id)
-
+  // svelte-ignore state_referenced_locally
   if (!listener) {
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
 
   const audio = new ThreeAudio<GainNode>(listener)
-
+  // svelte-ignore state_referenced_locally
   const { setAutoPlay, setDetune, setLoop, setPlaybackRate, setSrc, setVolume, ...useAudioProps } =
     useAudio(audio, props)
 

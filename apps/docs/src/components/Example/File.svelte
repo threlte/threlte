@@ -10,7 +10,7 @@
 
   let context = getCodeExampleContext()
   let isSelected = $derived(file.path === context.currentFilePath)
-
+  // svelte-ignore state_referenced_locally
   const fileExtension = file.name.split('.').pop()
 </script>
 

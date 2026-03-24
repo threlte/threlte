@@ -24,9 +24,9 @@
   }: PositionalAudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
-
+  // svelte-ignore state_referenced_locally
   const listener = getAudioListener(id)
-
+  // svelte-ignore state_referenced_locally
   if (!listener) {
     throw new Error(`No Audiolistener with id ${id} found.`)
   }
@@ -46,7 +46,7 @@
       )
     }
   })
-
+  // svelte-ignore state_referenced_locally
   const {
     setAutoPlay,
     setDetune,

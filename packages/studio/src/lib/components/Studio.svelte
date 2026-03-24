@@ -27,6 +27,7 @@
 
   let { extensions, children, namespace = 'default', transient = false }: Props = $props()
 
+	// svelte-ignore state_referenced_locally
   createRootContext(namespace, transient)
 
   const { createExtension } = useStudio()
@@ -47,6 +48,7 @@
     StaticState
   ]
 
+	// svelte-ignore state_referenced_locally
   const allExtensions = [...defaultExtensions, ...(extensions ?? [])] as Component[]
 
   // TODO: this is a bit of a hack, but it works for now

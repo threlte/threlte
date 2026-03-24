@@ -15,6 +15,7 @@
     ...props
   }: FakeGlowMaterialProps = $props()
 
+  // svelte-ignore state_referenced_locally
   const uniforms = {
     falloff: { value: falloff },
     glowInternalRadius: { value: glowInternalRadius },

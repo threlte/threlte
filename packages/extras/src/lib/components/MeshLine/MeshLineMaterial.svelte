@@ -22,6 +22,7 @@
 
   let { invalidate, size } = useThrelte()
 
+  // svelte-ignore state_referenced_locally
   const uniforms = {
     lineWidth: { value: width },
     color: { value: new Color(color) },

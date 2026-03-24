@@ -19,6 +19,7 @@
   const outerGroup = new Group()
   const group = new Group()
 
+  // svelte-ignore state_referenced_locally
   let t = seed
 
   const map = MathUtils.mapLinear

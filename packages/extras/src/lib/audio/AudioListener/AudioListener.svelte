@@ -20,6 +20,7 @@
 
   const { addAudioListener, removeAudioListener } = useThrelteAudio()
 
+  // svelte-ignore state_referenced_locally
   addAudioListener(listener, id)
 
   onDestroy(() => {

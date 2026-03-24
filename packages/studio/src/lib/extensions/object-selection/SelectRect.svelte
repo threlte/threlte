@@ -132,8 +132,8 @@
       dom.removeEventListener('pointerup', onPointerUp)
       try {
         // this sometimes throws an error, but we fail silently
-        const h = selectionHelper as any
-        if (h.element && h.element.parentElement) h.onSelectOver()
+        const h = selectionHelper
+        if (h.element && h.element.parentElement) h.onSelectOver(lastEvent)
       } catch (error) {
         console.warn(error)
       }

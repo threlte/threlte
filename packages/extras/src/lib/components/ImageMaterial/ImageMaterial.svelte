@@ -47,6 +47,7 @@
   let { size } = useThrelte()
   const parent = useParent()
 
+  // svelte-ignore state_referenced_locally
   const uniforms = {
     color: { value: new Color(color) },
     scale: { value: new Vector2() },

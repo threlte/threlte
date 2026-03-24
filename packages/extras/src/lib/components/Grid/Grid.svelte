@@ -59,6 +59,7 @@
     polar: 3
   } as const
 
+  // svelte-ignore state_referenced_locally
   const uniforms = {
     cellSize: {
       value: cellSize

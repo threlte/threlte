@@ -15,7 +15,7 @@ function that injects a plugin.
   import type { Snippet } from 'svelte'
 
   let { name, plugin, children }: { name: string; plugin: Plugin; children?: Snippet } = $props()
-
+  // svelte-ignore state_referenced_locally
   injectPlugin(name, plugin)
 </script>
 

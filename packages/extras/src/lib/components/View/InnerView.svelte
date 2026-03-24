@@ -19,7 +19,7 @@
   const offscreenObserver = new OffscreenObserver(() => dom)
 
   const parentContext = useThrelte()
-
+  // svelte-ignore state_referenced_locally
   createDOMContext({ dom, canvas: parentContext.canvas })
   createCacheContext()
   const { scene } = createSceneContext()
