@@ -3,7 +3,7 @@ import type { Scene, Texture } from 'three'
 
 type EnvironmentOptions = {
   scene: Scene
-  texture?: Texture
+  texture?: Texture | undefined
   isBackground?: boolean
 }
 
@@ -14,8 +14,8 @@ export const useEnvironment = (options: EnvironmentOptions) => {
   observe(
     () => [options.scene],
     ([scene]) => {
-      const background = scene.background
-      const environment = scene.environment
+      const { background, environment } = scene
+
       return () => {
         scene.background = background
         scene.environment = environment
@@ -35,29 +35,33 @@ export const useEnvironment = (options: EnvironmentOptions) => {
   )
 
   $effect(() => {
-    if (options.isBackground && options.texture !== undefined) {
-      options.scene.background = options.texture
-      invalidate()
-      return () => {
-        // background is allowed to be `null`
-        if (background !== undefined) {
-          options.scene.background = background
-          invalidate()
-        }
+    if (options.texture === undefined || !options.isBackground) {
+      return
+    }
+
+    options.scene.background = options.texture
+    invalidate()
+    return () => {
+      // background is allowed to be `null`
+      if (background !== undefined) {
+        options.scene.background = background
+        invalidate()
       }
     }
   })
 
   $effect(() => {
-    if (options.texture !== undefined) {
-      options.scene.environment = options.texture
-      invalidate()
-      return () => {
-        // environment is allowed to be `null`
-        if (environment !== undefined) {
-          options.scene.environment = environment
-          invalidate()
-        }
+    if (options.texture === undefined) {
+      return
+    }
+
+    options.scene.environment = options.texture
+    invalidate()
+    return () => {
+      // environment is allowed to be `null`
+      if (environment !== undefined) {
+        options.scene.environment = environment
+        invalidate()
       }
     }
   })

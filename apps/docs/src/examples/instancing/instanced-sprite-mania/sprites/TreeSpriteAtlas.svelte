@@ -71,7 +71,7 @@
   const sampler = new Sampler(4, [REGION_W, REGION_Z], undefined, Math.random)
 
   const points = sampler.GeneratePoints().filter((v) => {
-    return Math.sqrt((v[0] - REGION_W / 2) ** 2 + (v[1] - REGION_Z / 2) ** 2) < maxRadius
+    return Math.sqrt((v[0] ?? 0 - REGION_W / 2) ** 2 + (v[1] ?? 0 - REGION_Z / 2) ** 2) < maxRadius
   })
 
   const pickRandomTreeType = () => {
@@ -110,7 +110,7 @@
     castShadow
   >
     {#snippet children({ Instance })}
-      {#each points as [x, z], i}
+      {#each points as [x = 0, z = 0], i}
         {#if i < points.length / 2}
           <!-- Pick a random tree from atlas via animation name -->
           <Instance

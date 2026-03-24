@@ -3,7 +3,7 @@
   import { Button, Folder, Pane } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
 
-  let scene = $state()
+  let scene = $state<Scene>()
   let animating = $state(false)
 
   const actions = $derived(scene?.actions)

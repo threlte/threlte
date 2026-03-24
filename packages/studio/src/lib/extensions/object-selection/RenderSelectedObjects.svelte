@@ -1,8 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import { isInstanceOf, T, useTask, useThrelte, watch } from '@threlte/core'
-  import { Portal } from '@threlte/extras'
+  import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import {
     Color,
@@ -12,10 +11,10 @@
     WebGLRenderTarget,
     type Material
   } from 'three'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { fragmentShader } from './shader/fragment'
-  import { vertexShader } from './shader/vertex'
-  import { useObjectSelection } from './useObjectSelection.svelte'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { fragmentShader } from './shader/fragment.js'
+  import { vertexShader } from './shader/vertex.js'
+  import { useObjectSelection } from './useObjectSelection.svelte.js'
 
   const { invalidate } = useThrelte()
   const objectSelection = useObjectSelection()
@@ -27,8 +26,8 @@
     format: RGBAFormat
   })
 
-  watch(size, (size) => {
-    renderTarget.setSize(size.width, size.height)
+  $effect.pre(() => {
+    renderTarget.setSize($size.width, $size.height)
   })
 
   const numberSeedToHexColor = (seed: number) => {
@@ -152,31 +151,29 @@
 </script>
 
 {#key $camera.uuid}
-  <Portal object={$camera}>
-    <T is={selectionMesh}>
-      <T.PlaneGeometry />
+  <T is={selectionMesh} attach={$camera}>
+    <T.PlaneGeometry />
 
-      <T.ShaderMaterial
-        {fragmentShader}
-        {vertexShader}
-        uniforms={{
-          outlinedObjectsTexture: {
-            value: renderTarget.texture
-          },
-          lineWidth: {
-            value: 1.5
-          },
-          outlineColor: {
-            value: new Color('#FFFF00')
-          },
-          edgeFactor: {
-            value: 0.0001
-          }
-        }}
-        depthWrite={false}
-        depthTest={false}
-        transparent
-      />
-    </T>
-  </Portal>
+    <T.ShaderMaterial
+      {fragmentShader}
+      {vertexShader}
+      uniforms={{
+        outlinedObjectsTexture: {
+          value: renderTarget.texture
+        },
+        lineWidth: {
+          value: 1.5
+        },
+        outlineColor: {
+          value: new Color('#FFFF00')
+        },
+        edgeFactor: {
+          value: 0.0001
+        }
+      }}
+      depthWrite={false}
+      depthTest={false}
+      transparent
+    />
+  </T>
 {/key}

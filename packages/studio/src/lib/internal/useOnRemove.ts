@@ -1,10 +1,8 @@
 import { onDestroy } from 'svelte'
 import * as THREE from 'three'
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 export const remove = THREE.Object3D.prototype.remove
 
-// eslint-disable-next-line @typescript-eslint/unbound-method
 export const clear = THREE.Object3D.prototype.clear
 
 type Callback = (object: THREE.Object3D) => void

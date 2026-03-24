@@ -7,14 +7,14 @@ import type {
   Event
 } from 'three'
 import type { CurrentWritable } from '@threlte/core'
-import type { ComputeFunction } from './compute'
+import type { ComputeFunction } from './compute.js'
 
 export type Properties<T> = Pick<
   T,
   { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
 >
 
-export interface Intersection extends ThreeIntersection {
+export interface Intersection<T extends Object3D = Object3D> extends ThreeIntersection<T> {
   /** The event source (the object which registered the handler) */
   eventObject: Object3D
 }

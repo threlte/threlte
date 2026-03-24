@@ -7,7 +7,7 @@
     useLoader,
     useParent,
     useTask,
-    watch
+    observe
   } from '@threlte/core'
   import {
     DoubleSide,
@@ -20,9 +20,9 @@
     SpriteMaterial,
     type Texture
   } from 'three'
-  import { useTexture } from '../../hooks/useTexture'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types'
+  import { useTexture } from '../../hooks/useTexture.js'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types.js'
 
   let {
     textureUrl,
@@ -41,7 +41,7 @@
     rows = 1,
     columns = undefined,
     totalFrames = 0,
-    is = $bindable(),
+    is,
     ref = $bindable(),
 
     onload,
@@ -60,7 +60,9 @@
   ): value is (typeof supportedDirections)[number] => {
     const isSupported = supportedDirections.includes(value as (typeof supportedDirections)[number])
     if (!isSupported) {
-      console.warn(`Unsupported sprite animation direction "${value}"`)
+      console.warn(
+        `frame tag direction: "${value}" is not supported.${dataUrl != '' ? `\nsource dataURL: ${dataUrl}` : `\ntexture URL: ${textureUrl}`}`
+      )
     }
     return isSupported
   }
@@ -78,17 +80,12 @@
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
 
-  let fpsInterval = 0
-  let isMesh = $state(false)
+  let fpsInterval = $derived(1000 / fps)
+  let isMesh = $derived($parent !== undefined && isInstanceOf($parent, 'Mesh'))
 
   $effect.pre(() => {
-    isMesh = $parent !== undefined && isInstanceOf($parent, 'Mesh')
+    is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
   })
-  $effect.pre(() => {
-    fpsInterval = 1000 / fps
-  })
-
-  is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
 
   const suspend = useSuspense()
 
@@ -191,9 +188,13 @@
     if (!json) return
 
     frameTag = json?.meta.frameTags.find((tag) => tag.name === name)
-    direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
 
-    currentFrame = direction === 'forward' ? frameTag?.from ?? 0 : frameTag?.to ?? numFrames - 1
+    direction = 'forward'
+    if (frameTag?.direction) {
+      direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
+    }
+
+    currentFrame = direction === 'forward' ? (frameTag?.from ?? 0) : (frameTag?.to ?? numFrames - 1)
 
     setFrame(json.frames[frameNames[currentFrame]].frame)
 
@@ -201,6 +202,7 @@
   }
 
   let playQueued = false
+  let running = $state(false)
 
   /**
    * Plays the animation.
@@ -210,7 +212,7 @@
     await Promise.all([textureStore, jsonStore])
     if (!playQueued) return
     timerOffset = performance.now() - delay
-    start()
+    running = true
   }
 
   /**
@@ -218,10 +220,10 @@
    */
   export const pause = () => {
     playQueued = false
-    stop()
+    running = false
   }
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       if (!json) return
       const now = performance.now()
@@ -236,12 +238,12 @@
       // start and end are the first and last frames of the animation respectively
       const start =
         direction === 'forward'
-          ? frameTag?.from ?? startFrame ?? 0
-          : frameTag?.to ?? endFrame ?? numFrames - 1
+          ? (frameTag?.from ?? startFrame ?? 0)
+          : (frameTag?.to ?? endFrame ?? numFrames - 1)
       const end =
         direction === 'forward'
-          ? frameTag?.to ?? endFrame ?? numFrames - 1
-          : frameTag?.from ?? startFrame ?? 0
+          ? (frameTag?.to ?? endFrame ?? numFrames - 1)
+          : (frameTag?.from ?? startFrame ?? 0)
 
       setFrame(frame)
 
@@ -270,35 +272,38 @@
         }
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
-  watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
-    if (nextTexture === undefined || nextJson === undefined) return
+  observe.pre(
+    () => [textureStore, jsonStore],
+    ([nextTexture, nextJson]) => {
+      if (nextTexture === undefined || nextJson === undefined) return
 
-    texture = nextTexture.clone()
-    json = nextJson
-    frameNames = Object.keys(json.frames)
-    numFrames = frameNames.length
-    spritesheetSize = json.meta.size
+      texture = nextTexture.clone()
+      json = nextJson
+      frameNames = Object.keys(json.frames)
+      numFrames = frameNames.length
+      spritesheetSize = json.meta.size
 
-    const { sourceSize } = Object.values(json.frames)[0]
-    frameWidth = sourceSize.w
-    frameHeight = sourceSize.h
+      const { sourceSize } = Object.values(json.frames)[0]
+      frameWidth = sourceSize.w
+      frameHeight = sourceSize.h
 
-    texture.repeat.set(
-      (1 * flipOffset) / (spritesheetSize.w / frameWidth),
-      1 / (spritesheetSize.h / frameHeight)
-    )
+      texture.repeat.set(
+        (1 * flipOffset) / (spritesheetSize.w / frameWidth),
+        1 / (spritesheetSize.h / frameHeight)
+      )
 
-    setAnimation(animation)
+      setAnimation(animation)
 
-    onload?.()
+      onload?.()
 
-    if (autoplay) {
-      play()
+      if (autoplay) {
+        play()
+      }
     }
-  })
+  )
 
   $effect.pre(() => {
     setAnimation(animation)

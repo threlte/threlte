@@ -1,8 +1,8 @@
 import type { ColliderDesc } from '@dimforge/rapier3d-compat'
 import type { Vector3 } from 'three'
-import type { ColliderShapes } from '../types/types'
+import type { ColliderShapes } from '../types/types.js'
 
-export const scaleVertices = (vertices: ArrayLike<number>, scale: Vector3): number[] => {
+const scaleVertices = (vertices: ArrayLike<number>, scale: Vector3): number[] => {
   const scaledVerts = Array.from(vertices)
 
   for (let i = 0; i < vertices.length / 3; i++) {

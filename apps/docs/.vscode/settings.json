@@ -1,0 +1,13 @@
+{
+  "eslint.validate": ["javascript", "svelte"],
+  "prettier.documentSelectors": ["**/*.svelte"],
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "[svelte]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "search.exclude": {
+    "**/.svelte-kit": true,
+    "**/build": true,
+    "**/dist": true
+  }
+}

@@ -1,6 +1,6 @@
 import type { Snippet } from 'svelte'
 import type { ConditionalKeys, Primitive } from 'type-fest'
-import type { Transformer } from '../transfomers/types'
+import type { Transformer } from '../transfomers/types.js'
 
 /* COPIED FROM @threlte/core START */
 type OmittedPropKeys =
@@ -17,8 +17,8 @@ type OmittedPropKeys =
   | 'name'
 type AnyClass = new (...args: any) => any
 type AnyFn = (...args: any) => any
-type MaybeInstance<Type extends any> = Type extends AnyClass ? InstanceType<Type> : Type
-type InstanceProps<Type extends any> = Partial<
+type MaybeInstance<Type> = Type extends AnyClass ? InstanceType<Type> : Type
+type InstanceProps<Type> = Partial<
   Omit<
     MaybeInstance<Type> extends Primitive
       ? Record<string, unknown>

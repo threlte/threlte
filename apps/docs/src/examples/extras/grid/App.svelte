@@ -2,8 +2,8 @@
   import Scene from './Scene.svelte'
   import { Canvas, T } from '@threlte/core'
   import { Checkbox, Color, Folder, Pane, List, Slider } from 'svelte-tweakpane-ui'
-  import { Grid } from '@threlte/extras'
-  import { PlaneGeometry } from 'three'
+  import { Grid, TransformControls } from '@threlte/extras'
+  import { PlaneGeometry, Vector3 } from 'three'
   import { SimplexNoise } from 'three/examples/jsm/Addons.js'
 
   let cellSize = $state(1)
@@ -13,7 +13,7 @@
   let sectionColor = $state('#ff3e00')
   let sectionThickness = $state(2)
 
-  let gridSize = $state([20, 20])
+  let gridSize = $state<[number, number]>([20, 20])
   const planeOptions = {
     xz: 'xz',
     xy: 'xy',
@@ -23,6 +23,8 @@
 
   let followCamera = $state(false)
   let infiniteGrid = $state(false)
+  let useFadeOrigin = $state(false)
+  let fadeOrigin = $state(new Vector3())
   let fadeDistance = $state(100)
   let backgroundColor = $state('#003eff')
   let backgroundOpacity = $state(0)
@@ -140,6 +142,10 @@
       bind:value={infiniteGrid}
       label="infinite Grid"
     />
+    <Checkbox
+      bind:value={useFadeOrigin}
+      label="use fade origin"
+    />
     <Slider
       bind:value={fadeDistance}
       label="fade distance"
@@ -214,6 +220,13 @@
 
 <div>
   <Canvas>
+    {#if useFadeOrigin}
+      <TransformControls
+        onobjectChange={(e) => {
+          fadeOrigin = e.target.object.position.clone()
+        }}
+      />
+    {/if}
     {#if gridGeometryIsTerrain}
       <Grid
         position.y={-2}
@@ -228,6 +241,7 @@
         {infiniteGrid}
         {fadeDistance}
         {fadeStrength}
+        fadeOrigin={useFadeOrigin ? fadeOrigin : undefined}
         {gridSize}
         {backgroundColor}
         {backgroundOpacity}
@@ -252,6 +266,7 @@
         {infiniteGrid}
         {fadeDistance}
         {fadeStrength}
+        fadeOrigin={useFadeOrigin ? fadeOrigin : undefined}
         {gridSize}
         {backgroundColor}
         {backgroundOpacity}

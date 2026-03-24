@@ -15,7 +15,8 @@ type MaybePromise<T> = T | Promise<T>
 type CleanupFn = () => MaybePromise<void>
 type CallbackFn<T> = (values: T) => MaybePromise<void | CleanupFn>
 /**
- * ### `watch`
+ * @deprecated Use `observe`/`observe.pre` from `@threlte/core` instead for mixed store and runes usage,
+ * or $effect/$effect.pre when working entirely with runes.
  *
  * Watch a single store or multiple stores and call a callback when they change to trigger side effects.
  * The callback can return a cleanup function that will be called when the stores change again or when the component is destroyed.
@@ -54,6 +55,7 @@ type CallbackFn<T> = (values: T) => MaybePromise<void | CleanupFn>
  *
  * @param stores
  * @param callback
+ *
  */
 export const watch = <S extends Stores>(stores: S, callback: CallbackFn<StoresValues<S>>): void => {
   const d = derived(stores, (values) => {

@@ -1,13 +1,18 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { T } from '@threlte/core'
   import { Sky, useTexture } from '@threlte/extras'
-  import { BackSide, NearestFilter, RepeatWrapping } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BackSide, NearestFilter, RepeatWrapping, MathUtils } from 'three'
   import TreeSpriteAtlas from './TreeSpriteAtlas.svelte'
   import DudeSprites from './DudeSprites.svelte'
 
-  export let billboarding = false
-  export let fps: number
+  interface Props {
+    billboarding?: boolean
+    fps: number
+    children?: Snippet
+  }
+
+  let { billboarding = false, fps, children }: Props = $props()
 
   const grass = useTexture('/textures/sprites/pixel-grass.png', {
     transform: (texture) => {
@@ -32,7 +37,7 @@
   })
 </script>
 
-<slot />
+{@render children?.()}
 
 <!--
 	Dudes:
@@ -64,7 +69,7 @@
 
 {#if $grass}
   <T.Mesh
-    rotation.x={-DEG2RAD * 90}
+    rotation.x={MathUtils.DEG2RAD * -90}
     receiveShadow
   >
     <T.CircleGeometry args={[110]} />

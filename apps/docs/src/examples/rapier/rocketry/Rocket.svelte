@@ -14,7 +14,7 @@
 
   let currentSide = $state<'left' | 'right'>('left')
 
-  type Player = {
+  type PlayerState = {
     side: 'left' | 'right'
     key: string
     active: boolean
@@ -22,7 +22,7 @@
 
   const getPlayer = (key: string) => players.find((p) => p.key === key)
 
-  let players = $state<Player[]>([])
+  let players = $state<PlayerState[]>([])
 </script>
 
 <svelte:window

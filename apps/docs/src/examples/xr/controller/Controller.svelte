@@ -11,11 +11,13 @@
   import { Text } from '@threlte/extras'
   import { Controller, type XRControllerEvent, useController } from '@threlte/xr'
 
-  type $$Props = { left: true } | { right: true }
+  type Props = { left: true } | { right: true }
 
-  let state = 'disconnected'
+  let { ...props }: Props = $props()
+
+  let controllerState: keyof typeof colorMap = 'disconnected'
   let cursor = 0
-  let text = ''
+  let text = $state('')
 
   const count = 100
   const positions = new Float32Array(count * 3)
@@ -24,7 +26,7 @@
   const matrix = new Matrix4()
   const color = new Color()
 
-  const controller = useController($$restProps.left ? 'left' : 'right')
+  const controller = useController('left' in props ? 'left' : 'right')
 
   const instancedMesh = new InstancedMesh(
     new IcosahedronGeometry(0.01),
@@ -47,11 +49,11 @@
 
   const handleEvent = (event: XRControllerEvent) => {
     text = `${event.data.handedness} ${event.type}`
-    state = event.type
+    controllerState = event.type
   }
 
   const fireParticle = () => {
-    instancedMesh.setColorAt(cursor, color.setStyle(colorMap[state]))
+    instancedMesh.setColorAt(cursor, color.setStyle(colorMap[controllerState]))
     instancedMesh.instanceColor!.needsUpdate = true
 
     let i = cursor * 3
@@ -77,9 +79,9 @@
     cursor %= count
   }
 
-  const updateParticles = () => {
+  useTask(() => {
     for (let i = 0, j = 0; i < count; i += 1, j += 3) {
-      positions[j] += velocities[j]!
+      positions[j + 0] += velocities[j]!
       positions[j + 1] += velocities[j + 1]!
       positions[j + 2] += velocities[j + 2]!
       matrix.setPosition(positions[j]!, positions[j + 1], positions[j + 2])
@@ -87,12 +89,8 @@
     }
 
     instancedMesh.instanceMatrix.needsUpdate = true
-  }
 
-  useTask(() => {
-    updateParticles()
-
-    switch (state) {
+    switch (controllerState) {
       case 'squeezestart':
       case 'selectstart':
         return fireParticle()
@@ -101,8 +99,6 @@
 </script>
 
 <Controller
-  left={$$props.left}
-  right={$$props.right}
   onconnected={handleEvent}
   ondisconnected={handleEvent}
   onselectstart={handleEvent}
@@ -111,12 +107,14 @@
   onsqueezestart={handleEvent}
   onsqueezeend={handleEvent}
   onsqueeze={handleEvent}
+  {...props}
 >
   {#snippet targetRay()}
     <Text
+      anchorX="center"
       fontSize={0.05}
       {text}
-      position.x={0.1}
+      position.y={0.2}
     />
   {/snippet}
 </Controller>

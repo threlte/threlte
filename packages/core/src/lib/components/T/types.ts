@@ -1,5 +1,5 @@
 import type { Snippet } from 'svelte'
-import type { Object3D } from 'three'
+import type { Camera, Object3D } from 'three'
 
 /** Inlined from type-fest */
 type ConditionalKeys<Base, Condition> = {
@@ -63,12 +63,17 @@ export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstan
   attach?:
     | string
     | Object3D
-    | ((args: { ref: Type; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
+    | ((args: {
+        ref: MaybeInstance<Type>
+        parent: unknown
+        parentObject3D: Object3D
+      }) => void | (() => void))
     | false
+    | undefined
 
   children?: Snippet<ChildrenArgs>
 
-  oncreate?: CreateEvent<Type>
+  oncreate?: CreateEvent<MaybeInstance<Type>>
 }
 
 /**
@@ -91,7 +96,7 @@ export type RefProps<Type> = {
  * ### Camera Props
  */
 export type CameraProps<Type> =
-  MaybeInstance<Type> extends { isCamera: true }
+  MaybeInstance<Type> extends Camera
     ? {
         /**
          * By default, Threlte will update the cameras aspect ratio or frustum
@@ -161,7 +166,7 @@ type ExtractPayload<
   ? EventData
   : never
 
-export type CreateEvent<Type> = (ref: MaybeInstance<Type>) => void | (() => void)
+type CreateEvent<Type> = (ref: Type) => void | (() => void)
 
 // –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
 
@@ -182,7 +187,7 @@ export type Props<
   ClassProps<Type> &
   CameraProps<Type> &
   InstanceProps<Type> &
-  EventProps<Type> &
+  EventProps<MaybeInstance<Type>> &
   Threlte.UserProps
 
 /**

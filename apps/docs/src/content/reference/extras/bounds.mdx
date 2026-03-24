@@ -1,0 +1,24 @@
+---
+category: '@threlte/extras'
+group: 'Staging'
+sourcePath: 'packages/extras/src/lib/examples/extras/Bounds/Bounds.svelte'
+title: '<Bounds>'
+type: 'component'
+componentSignature:
+  {
+    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    props:
+      [
+        { name: 'margin', type: 'number', default: '1' },
+        { name: 'animate', type: 'boolean', default: 'true' },
+        { name: 'enabled', type: 'boolean', default: 'true' }
+      ]
+  }
+---
+
+`<Bounds>` is a component that will automatically center the camera to its children.
+
+<Example
+  path="extras/bounds"
+  showFile="Scene.svelte"
+/>

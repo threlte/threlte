@@ -1,10 +1,10 @@
 <script lang="ts">
   import { T, asyncWritable, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
   import { Color, ShaderMaterial, Vector2, Vector3, type Mesh, type Texture } from 'three'
-  import { useTexture } from '../../hooks/useTexture'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import { fragmentShader, vertexShader } from './shaders'
-  import type { ImageMaterialProps } from './types'
+  import { useTexture } from '../../hooks/useTexture.js'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import { fragmentShader, vertexShader } from './shaders.js'
+  import type { ImageMaterialProps } from './types.js'
 
   let {
     color = 'white',
@@ -34,12 +34,15 @@
 
   const material = new ShaderMaterial()
 
+  $effect.pre(() => {
+    if (side) material.side = side
+  })
+
   const suspend = useSuspense()
 
-  let textureStore = asyncWritable<Texture | undefined>(Promise.resolve(undefined))
-  $effect.pre(() => {
-    textureStore = suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
-  })
+  const textureStore = $derived(
+    suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
+  )
 
   let { size } = useThrelte()
   const parent = useParent()
@@ -150,7 +153,8 @@
   })
 
   useTask(() => {
-    const mesh = $parent
+    const mesh = parent.current
+
     if (!isInstanceOf(mesh, 'Mesh')) return
 
     uniforms.scale.value.set(mesh.scale.x, mesh.scale.y)
@@ -171,7 +175,6 @@
   {uniforms}
   {toneMapped}
   {transparent}
-  {side}
   {vertexShader}
   {fragmentShader}
   {...props}

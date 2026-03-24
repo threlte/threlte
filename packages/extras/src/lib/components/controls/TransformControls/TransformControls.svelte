@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
-  import { writable } from 'svelte/store'
+  import { T, observe, useThrelte, type Props } from '@threlte/core'
   import { Group } from 'three'
-  import type { TransformControlsEventMap } from 'three/examples/jsm/Addons.js'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
-  import { useControlsContext } from '../useControlsContext'
-  import type { TransformControlsProps } from './types'
+  import {
+    TransformControls,
+    type TransformControlsEventMap
+  } from 'three/examples/jsm/controls/TransformControls.js'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { TransformControlsProps } from './types.js'
 
   let {
     autoPauseOrbitControls = true,
@@ -20,15 +21,11 @@
   const { camera, dom, invalidate, scene } = useThrelte()
 
   const { orbitControls, trackballControls } = useControlsContext()
-  const isDragging = currentWritable(false)
-  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls ?? true)
-  $effect.pre(() => useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true))
 
-  const useAutoPauseTrackballControls = writable(autoPauseTrackballControls ?? true)
-  $effect.pre(() => useAutoPauseTrackballControls.set(autoPauseTrackballControls ?? true))
+  let isDragging = $state(false)
 
-  watch(
-    [orbitControls, isDragging, useAutoPauseOrbitControls],
+  observe(
+    () => [orbitControls, isDragging, autoPauseOrbitControls],
     ([orbitControls, isDragging, useAutoPauseOrbitControls]) => {
       // if there are no orbitcontrols or we're not even
       // dragging, or the orbitcontrols are disabled, return
@@ -42,8 +39,8 @@
     }
   )
 
-  watch(
-    [trackballControls, isDragging, useAutoPauseTrackballControls],
+  observe(
+    () => [trackballControls, isDragging, autoPauseTrackballControls],
     ([trackballControls, isDragging, useAutoPausetrackballControls]) => {
       // if there are no trackballcontrols or we're not even
       // dragging, or the trackballcontrols are disabled, return
@@ -57,10 +54,13 @@
     }
   )
 
+  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
+  const transformControls = new TransformControls(camera.current, dom)
   const attachGroup = new Group()
 
-  // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  let transformControls = $derived(new TransformControls($camera, dom))
+  $effect.pre(() => {
+    transformControls.camera = $camera
+  })
 
   $effect.pre(() => {
     transformControls?.attach(object ?? attachGroup)
@@ -87,8 +87,8 @@
     'onobjectChange'
   ]
 
-  let transformProps: Props<TransformControls> = $state({})
-  let objectProps: Props<Group> = $state({})
+  let transformProps = $state<Props<TransformControls>>({})
+  let objectProps = $state<Props<Group>>({})
 
   $effect.pre(() => {
     transformProps = {}
@@ -107,10 +107,10 @@
 
   const onchange = (event: TransformControlsEventMap['change']) => {
     invalidate()
-    if (transformControls.dragging && !isDragging.current) {
-      isDragging.set(true)
-    } else if (!transformControls.dragging && isDragging.current) {
-      isDragging.set(false)
+    if (transformControls.dragging && !isDragging) {
+      isDragging = true
+    } else if (!transformControls.dragging && isDragging) {
+      isDragging = false
     }
     // TODO: unfortunately the type of the event prop is not correct *yet*
     props.onchange?.(event as any)
@@ -141,7 +141,5 @@
   bind:ref={group}
   {...objectProps}
 >
-  {#if children}
-    {@render children({ ref: attachGroup })}
-  {/if}
+  {@render children?.({ ref: attachGroup })}
 </T>

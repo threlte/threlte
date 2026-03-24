@@ -1,9 +1,8 @@
 import type { PrismaticImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Vector3 } from 'three'
-import { useJoint } from './useJoint'
-import { isVector3 } from './utils'
+import { useJoint } from './useJoint.js'
+import { isVector3 } from './utils.js'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const usePrismaticJoint = (
   anchorA: Parameters<Vector3['set']> | Vector3,
   anchorB: Parameters<Vector3['set']> | Vector3,

@@ -32,7 +32,7 @@
 >
   <div
     id="content"
-    class="relative z-[1] h-full overflow-y-scroll"
+    class="relative z-1 h-full overflow-y-scroll"
   >
     {#each items as item, i}
       <div

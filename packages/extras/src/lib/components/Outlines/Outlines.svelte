@@ -11,8 +11,8 @@
     Vector2
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
-  import { fragmentShader, vertexShader } from './shaders'
-  import type { OutlinesProps } from './types'
+  import { fragmentShader, vertexShader } from './shaders.js'
+  import type { OutlinesProps } from './types.js'
   import { fromStore } from 'svelte/store'
 
   let {
@@ -42,6 +42,7 @@
   }
 
   const group = new Group()
+  ref = group
 
   const material = new ShaderMaterial({
     side: BackSide,
@@ -107,7 +108,6 @@
 
 <T
   is={group}
-  bind:ref
   {...props}
 >
   <T is={mesh}>

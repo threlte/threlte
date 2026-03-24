@@ -9,7 +9,7 @@
     <div
       class="fuchsia"
       style="height: auto; width: auto; flex: 1;"
-    />
+    ></div>
 
     <div
       class="orange"
@@ -18,7 +18,7 @@
       <div
         class="red"
         style="height: 100px; width: 100px;"
-      />
+      ></div>
     </div>
   </div>
 
@@ -29,11 +29,11 @@
     <div
       class="pink"
       style="height: 100px; width: auto; flex: 1;"
-    />
+    ></div>
     <div
       class="hotpink"
       style="height: 100px; width: auto; flex: 1; align-self: flex-end;"
-    />
+    ></div>
   </div>
 </div>
 

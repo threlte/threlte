@@ -1,8 +1,12 @@
 <script lang="ts">
   import { Checkbox, Pane, Slider, ThemeUtils } from 'svelte-tweakpane-ui'
 
-  export let billboarding: boolean
-  export let fps: number
+  interface Props {
+    billboarding: boolean
+    fps: number
+  }
+
+  let { billboarding = $bindable(), fps = $bindable() }: Props = $props()
 </script>
 
 <Pane

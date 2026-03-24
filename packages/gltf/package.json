@@ -1,6 +1,6 @@
 {
   "name": "@threlte/gltf",
-  "version": "3.0.0-next.11",
+  "version": "3.0.3",
   "description": "GLTF to Threlte converter",
   "scripts": {
     "cleanup": "rimraf node_modules",
@@ -23,42 +23,36 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/threlte/threlte.git"
+    "url": "https://github.com/threlte/threlte",
+    "directory": "packages/gltf"
   },
   "bugs": {
-    "url": "https://github.com/threlte/threlte.git/issues"
+    "url": "https://github.com/threlte/threlte/issues"
   },
-  "homepage": "https://github.com/threlte/threlte.git#readme",
+  "homepage": "https://threlte.xyz",
   "bin": "./cli.js",
   "main": "./src/utils/exports.js",
-  "engines": {
-    "node": ">=16"
-  },
   "dependencies": {
-    "@gltf-transform/core": "^3.2.1",
-    "@gltf-transform/extensions": "^3.2.1",
-    "@gltf-transform/functions": "^3.2.1",
-    "@node-loader/babel": "^2.0.1",
-    "draco3dgltf": "^1.5.6",
-    "jsdom": "^20.0.3",
+    "@gltf-transform/core": "^4.2.1",
+    "@gltf-transform/extensions": "^4.2.1",
+    "@gltf-transform/functions": "^4.2.1",
+    "draco3dgltf": "^1.5.7",
+    "jsdom": "^27.1.0",
     "jsdom-global": "^3.0.2",
-    "meow": "^11.0.0",
-    "meshoptimizer": "^0.18.1",
-    "prettier": "^3.2.5",
-    "prettier-plugin-svelte": "^3.2.2",
-    "sharp": "^0.32.0",
-    "svelte": "^5.14.4",
-    "three": "0.122.0",
-    "three-stdlib": "^2.21.8"
+    "keyframe-resample": "^0.1.0",
+    "meow": "^14.0.0",
+    "meshoptimizer": "^0.25.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-svelte": "^3.4.0",
+    "read-pkg-up": "^11.0.0",
+    "sharp": "^0.34.5",
+    "svelte": "catalog:",
+    "three": "0.159.0"
   },
   "devDependencies": {
-    "chalk": "^4.1.1",
-    "fast-glob": "^3.2.7",
-    "fs-extra": "^9.0.1",
-    "husky": "^4.3.0",
-    "lint-staged": "^10.4.0",
-    "read-pkg-up": "^9.1.0",
-    "rimraf": "^5.0.1"
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "rimraf": "^6.1.0"
   },
   "husky": {
     "hooks": {

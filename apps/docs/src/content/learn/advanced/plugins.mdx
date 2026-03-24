@@ -15,20 +15,17 @@ The [interactivity plugin in
 `@threlte/extras`](/docs/reference/extras/interactivity) is an example of what a
 plugins can do and there are a couple of other examples below.
 
-## When to use a Plugin
+## When to use a plugin
 
 A plugin has access to all props and the lifecycle of the `<T>` component.
 
 Use it to:
 
 - add custom props to the `<T>` component such as [`lookAt`](#lookat).
-
 - add custom logic to the `<T>` component, such as automatically add helpers for
-  certain objects in DEV mode.
-
+  certain objects in development mode.
 - collect object references from child components for app-wide systems such as
   an ECS.
-
 - build custom integrations for external libraries.
 
 <Tip type="tip" title="When to use oncreate">
@@ -39,12 +36,12 @@ similarities to a plugin but only has access to the object referenced by the
 individually.
 
 You can think of `oncreate` as a [Svelte
-Action](https://svelte.dev/docs/svelte/use) for `<T>` components. Use it for
+Attachment](https://svelte.dev/docs/svelte/@attach) for `<T>` components. Use it for
 one-time setup logic that does not need access to the component's props.
 
 </Tip>
 
-## Injecting a Plugin
+## Injecting a plugin
 
 Plugins are _injected_ to a plugin context and are **accessible to all child
 `<T>` components**.
@@ -70,7 +67,7 @@ also affected by the plugin 'my-plugin'
 <OtherComponent />
 ```
 
-### What it looks like
+### Plugin internals
 
 Plugins open up the component `<T>` to external code that will be injected via
 context into every child instance of a `<T>` component. The callback function
@@ -154,7 +151,7 @@ import { injectPlugin } from '@threlte/core'
 injectPlugin('plugin-name', () => {})
 ```
 
-### Creating a Plugin
+### Creating a plugin
 
 Plugins can also be _created_ for external consumption. This creates a _named plugin_. The name is used to identify the plugin and to override it.
 
@@ -183,9 +180,11 @@ This is en example implementation that adds the property `lookAt` to all `<T>` c
 
 <Example path="plugins/lookAt" />
 
-### BVH Raycast Plugin
+### BVH raycast plugin
 
 A Plugin that implements [BVH raycasting](https://github.com/gkjohnson/three-mesh-bvh) on all child meshes and geometries.
+
+This plugin outlines the basic setup of the extras [bvh plugin](/docs/reference/extras/bvh).
 
 ```ts title="bvhRaycasting.svelte.ts"
 import { injectPlugin, isInstanceOf } from '@threlte/core'
@@ -213,7 +212,7 @@ const bvhRaycasting = () => {
 }
 ```
 
-Implementing this plugin in your Scene:
+Implementing this plugin in your scene looks like this.
 
 ```svelte title="Scene.svelte"
 <script lang="ts">
@@ -237,7 +236,7 @@ shows how to type the props of the [`lookAt` plugin](#lookat) so that the prop
 `lookAt` is strictly typed on the `<T>` component as well as in the plugin
 implementation.
 
-### Typing a Plugin
+### Typing a plugin
 
 The function `injectPlugin` accepts a type argument that you may use to type the
 props passed to a plugin.
@@ -248,7 +247,7 @@ injectPlugin<{ lookAt?: [number, number, number] }>('lookAt', (args) => {
 })
 ```
 
-### Typing the `<T>` Component Props
+### Typing the `<T>` component props
 
 By default, the custom props of plugins are not present on the types of the
 `<T>` component. You can however extend the types of the `<T>` component by
@@ -292,7 +291,7 @@ The prop `lookAt` is now available on the `<T>` component and is typed as
 ```
 
 <Tip type="tip">
-  As soon as your app grows in size, you should consider moving these type these type definitions to
-  a separate file and merge all available props to a single type definition. This type may then be
+  As your app grows in size, you should consider moving these type these type definitions to a
+  separate file and merge all available props to a single type definition. This type may then be
   used by `injectPlugin` as well as your ambient type defintions.
 </Tip>

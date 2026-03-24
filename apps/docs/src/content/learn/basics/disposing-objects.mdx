@@ -5,12 +5,12 @@ order: -400
 ---
 
 Freeing resources is a [manual chore in
-three.js](https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects),
+Three.js](https://threejs.org/docs/index.html#manual/en/introduction/How-to-dispose-of-objects),
 but Svelte is aware of component lifecycles, hence Threlte will attempt to free
 resources for you by calling `dispose`, if present, on all unmounted objects
 that are not being used anywhere else in your scene.
 
-## Automatic Disposal
+## Automatic disposal
 
 ```svelte
 <script>
@@ -29,15 +29,15 @@ that are not being used anywhere else in your scene.
 ```
 
 <Tip>
-  Be aware that calling `dispose` on a three.js buffer, material or geometry is merely deallocating
+  Be aware that calling `dispose` on a Three.js buffer, material or geometry is merely deallocating
   it from the GPU memory. If an object is used after it's disposed it will be allocated again,
   resulting in a performance drop for a single frame. It will **not produce a runtime error**.
 </Tip>
 
-## Manual Disposal
+## Manual disposal
 
-You can switch off automatic disposal by placing `dispose={false}` onto
-components. This disables disposal for the entire subtree.
+You can switch off automatic disposal by setting `dispose={false}` on
+components. This disables disposal for the **entire subtree**.
 
 ```svelte
 <script>
@@ -47,14 +47,12 @@ components. This disables disposal for the entire subtree.
   const material = new MeshStandardMaterial({ map })
 </script>
 
-<!-- will not be disposed -->
 <T.Mesh dispose={false}>
   <!-- will not be disposed -->
   <T.BoxGeometry />
   <!-- will not be disposed -->
   <T.MeshStandardMaterial map={$map} />
 
-  <!-- will be disposed -->
   <T.Mesh dispose>
     <!-- will be disposed -->
     <T.BoxGeometry />
@@ -64,7 +62,7 @@ components. This disables disposal for the entire subtree.
 </T.Mesh>
 ```
 
-## Custom Disposal
+## Custom disposal
 
 You can use the return function of the `oncreate` prop to dispose of objects manually.
 
@@ -74,6 +72,7 @@ You can use the return function of the `oncreate` prop to dispose of objects man
 </script>
 
 <T.MeshBasicMaterial
+  dispose={false}
   oncreate={(ref) => {
     return () => {
       // Do your disposal here

@@ -22,30 +22,21 @@
 
   // Pointer lock with unadjusted movement: https://github.com/slightlyoff/unadjusted_pointer_lock_explainer
   const requestPointerLock = (myTargetElement: HTMLElement) => {
-    //@ts-ignore
     const promise = myTargetElement.requestPointerLock({
       unadjustedMovement: true
     })
-    //@ts-ignore
+
     if (!promise) {
       console.log('disabling mouse acceleration is not supported, locking pointer without it')
       return
     }
 
-    return (
-      promise
-        //@ts-ignore
-        .then()
-        //@ts-ignore
-        .catch((error) => {
-          if (error.name === 'NotSupportedError') {
-            return myTargetElement.requestPointerLock()
-          }
-        })
-    )
+    return promise.then().catch((error) => {
+      console.log(error)
+    })
   }
 
-  let pointerLocked = false
+  let pointerLocked = $state(false)
 
   /*
 		Zoom in and out with mousewheel.
@@ -68,10 +59,10 @@
     }
   )
 
-  $: mouseSensitivity = 0.00008 * clamp($zoomedFov * 0.5, 1, 20)
+  let mouseSensitivity = $derived(0.00008 * clamp($zoomedFov * 0.5, 1, 20))
 
-  let phi = 0
-  let theta = -0.16
+  let phi = $state(0)
+  let theta = $state(-0.16)
 
   const qx = new Quaternion()
   const qz = new Quaternion()
@@ -90,23 +81,29 @@
   onDestroy(() => {
     document.exitPointerLock()
   })
+
+  $effect(() => {
+    const onchange = () => {
+      pointerLocked = document.pointerLockElement ? true : false
+    }
+
+    document.addEventListener('pointerlockchange', onchange)
+    return () => document.removeEventListener('pointerlockchange', onchange)
+  })
 </script>
 
 <svelte:document
-  on:keydown={(e) => {
+  onkeydown={(e) => {
     if (e.key === 's') scoping.set(!$scoping)
     if (e.key === 'a') zoomedFov.set(Math.min($zoomedFov + 2, baseFov * 0.5))
     if (e.key === 'd') zoomedFov.set(Math.max(0.5, $zoomedFov - 2))
   }}
-  on:pointerlockchange={() => {
-    pointerLocked = document.pointerLockElement ? true : false
-  }}
-  on:click={async () => {
+  onclick={() => {
     if (!pointerLocked) {
       requestPointerLock(dom)
     }
   }}
-  on:mousemove={({ movementX, movementY }) => {
+  onmousemove={({ movementX, movementY }) => {
     if (!pointerLocked) return
     phi += movementX * mouseSensitivity
     theta -= movementY * mouseSensitivity * 1.5

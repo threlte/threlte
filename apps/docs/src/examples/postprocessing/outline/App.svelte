@@ -1,70 +1,64 @@
 <script lang="ts">
   import CustomRenderer from './CustomRenderer.svelte'
   import Scene from './Scene.svelte'
-  import { Canvas } from '@threlte/core'
-  import { Mesh } from 'three'
-  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import type { Vector3Tuple } from 'three'
   import type { Wall } from './types'
+  import { Canvas } from '@threlte/core'
+  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
+  import { Mesh, Shape } from 'three'
 
   const mesh = new Mesh()
 
   let paused = $state(false)
-  let autoRotate = $state(true)
+  let autoRotate = $state(false)
 
   const walls: Wall[] = [
     {
-      position: [6, 2, 4],
-      rotation: [0, 0.5 * Math.PI, 0],
-      size: [7, 4, 1]
+      height: 3,
+      shape: new Shape()
+        .moveTo(3.5, -4.5)
+        .lineTo(3.5, -3.5)
+        .lineTo(5.5, -3.5)
+        .lineTo(5.5, -0.5)
+        .lineTo(-2.5, -0.5)
+        .lineTo(-2.5, 0.5)
+        .lineTo(5.5, 0.5)
+        .lineTo(5.5, 3.5)
+        .lineTo(-0.5, 3.5)
+        .lineTo(-0.5, 4.5)
+        .lineTo(6.5, 4.5)
+        .lineTo(6.5, -4.5)
     },
     {
-      position: [-6, 2, 4],
-      rotation: [0, 0.5 * Math.PI, 0],
-      size: [7, 4, 1]
-    },
-    {
-      position: [-4, 2, 0],
-      rotation: [0, 0, 0],
-      size: [5, 4, 1]
-    },
-    {
-      position: [4, 2, 0],
-      rotation: [0, 0, 0],
-      size: [5, 4, 1]
-    },
-    {
-      position: [-3, 2, 7],
-      rotation: [0, 0, 0],
-      size: [7, 4, 1]
-    },
-    {
-      position: [5, 2, 7],
-      rotation: [0, 0, 0],
-      size: [3, 4, 1]
-    },
-    {
-      position: [-1, 2, 3.5],
-      rotation: [0, 0, 0],
-      size: [10, 4, 1]
+      height: 3,
+      shape: new Shape()
+        .moveTo(-6.5, -4.5)
+        .lineTo(-6.5, 4.5)
+        .lineTo(-3.5, 4.5)
+        .lineTo(-3.5, 3.5)
+        .lineTo(-5.5, 3.5)
+        .lineTo(-5.5, -3.5)
+        .lineTo(0.5, -3.5)
+        .lineTo(0.5, -4.5)
     }
   ]
 
   // where is the mesh going?
   const positions: Vector3Tuple[] = [
-    [0, 1, -3],
-    [0, 1, 1.5],
-    [4.7, 1, 1.5],
-    [4.7, 1, 5],
-    [2, 1, 5],
-    [2, 1, 9],
-    [8, 1, 9],
-    [8, 1, -3]
+    [2, -2, 0],
+    [-4, -2, 0],
+    [-4, 2, 0],
+    [-2, 2, 0],
+    [-2, 6, 0],
+    [-8, 6, 0],
+    [-8, -6, 0],
+    [2, -6, 0]
   ]
 </script>
 
 <Pane
   position="fixed"
-  name="outline effect"
+  title="outline effect"
 >
   <Checkbox
     bind:value={paused}

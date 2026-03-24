@@ -3,9 +3,9 @@
   import { onMount } from 'svelte'
   import { Color, type CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
   import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
-  import type { MeshRefractionMaterialProps } from './types'
-  import { fragmentShader } from './fragment'
-  import { vertexShader } from './vertex'
+  import type { MeshRefractionMaterialProps } from './types.js'
+  import { fragmentShader } from './fragment.js'
+  import { vertexShader } from './vertex.js'
 
   let {
     envMap,
@@ -38,6 +38,7 @@
     vertexShader,
     uniforms
   })
+  ref = material
 
   const { size, invalidate, camera } = useThrelte()
   const parent = useParent()
@@ -102,7 +103,6 @@
 
 <T
   is={material}
-  bind:ref
   uniforms.envMap.value={envMap}
   uniforms.bounces.value={bounces}
   uniforms.ior.value={ior}

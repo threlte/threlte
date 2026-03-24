@@ -43,7 +43,7 @@
     rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
-      <AutoColliders shape={'convexHull'}>
+      <AutoColliders shape="convexHull">
         <T.Mesh
           castShadow
           geometry={$helmet.geometry}
@@ -58,7 +58,7 @@
     rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
-      <AutoColliders shape={'ball'}>
+      <AutoColliders shape="ball">
         <T.Mesh
           castShadow
           geometry={$helmet.geometry}
@@ -73,7 +73,7 @@
     rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
-      <AutoColliders shape={'cuboid'}>
+      <AutoColliders shape="cuboid">
         <T.Mesh
           castShadow
           geometry={$helmet.geometry}
@@ -88,7 +88,7 @@
     rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
-      <AutoColliders shape={'trimesh'}>
+      <AutoColliders shape="trimesh">
         <T.Mesh
           castShadow
           geometry={$helmet.geometry}
@@ -103,7 +103,7 @@
     rotation={[90 * MathUtils.DEG2RAD, 0, 0]}
   >
     <RigidBody>
-      <AutoColliders shape={'capsule'}>
+      <AutoColliders shape="capsule">
         <T.Mesh
           castShadow
           geometry={$helmet.geometry}

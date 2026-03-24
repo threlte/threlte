@@ -1,6 +1,6 @@
 import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
-import { useInteractivity } from './context'
-import type { ThrelteEvents } from './types'
+import { useInteractivity } from './context.js'
+import type { ThrelteEvents } from './types.js'
 
 export const interactivityEventNames: (keyof ThrelteEvents)[] = [
   'onclick',

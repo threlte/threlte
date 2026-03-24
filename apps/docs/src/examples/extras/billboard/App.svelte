@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
-  import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
+  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
 
-  let follow = true
+  let follow = $state(true)
 </script>
 
 <Pane
@@ -16,14 +16,6 @@
   />
 </Pane>
 
-<div>
-  <Canvas>
-    <Scene {follow} />
-  </Canvas>
-</div>
-
-<style>
-  div {
-    height: 100%;
-  }
-</style>
+<Canvas>
+  <Scene {follow} />
+</Canvas>

@@ -1,5 +1,5 @@
-import { expect, test } from 'bun:test'
-import { Scheduler } from './Scheduler'
+import { expect, test } from 'vitest'
+import { Scheduler } from './Scheduler.js'
 
 test('can run a task', () => {
   const scheduler = new Scheduler()
@@ -247,14 +247,14 @@ test('stress test', () => {
 
   const defaultStage = scheduler.createStage('default stage')
 
-  defaultStage.createTask('move object', (delta) => {
+  defaultStage.createTask('move object', () => {
     expect(i).toBe(2)
     i++
   })
 
   defaultStage.createTask(
     'move camera',
-    (delta) => {
+    () => {
       expect(i).toBe(3)
       i++
     },
@@ -278,12 +278,12 @@ test('stress test', () => {
     after: 'default stage'
   })
 
-  renderStage.createTask('render', (delta) => {
+  renderStage.createTask('render', () => {
     expect(i).toBe(6)
     i++
   })
 
-  const afterDefaultAndOtherStep = defaultStage.createTask(
+  defaultStage.createTask(
     'after other tasks',
     () => {
       expect(i).toBe(5)
@@ -298,7 +298,7 @@ test('stress test', () => {
     before: 'default stage'
   })
 
-  simulationStage.createTask('physics', (delta) => {
+  simulationStage.createTask('physics', () => {
     expect(i).toBe(1)
     i++
   })
@@ -309,11 +309,11 @@ test('stress test', () => {
   const frameAnalyticsEndStage = scheduler.createStage('frame analytics end', {
     after: 'render stage'
   })
-  frameAnalyticsStartStage.createTask('frame-analytics-start', (delta) => {
+  frameAnalyticsStartStage.createTask('frame-analytics-start', () => {
     expect(i).toBe(0)
     i++
   })
-  frameAnalyticsEndStage.createTask('frame-analytics-end', (delta) => {
+  frameAnalyticsEndStage.createTask('frame-analytics-end', () => {
     expect(i).toBe(7)
     i++
   })

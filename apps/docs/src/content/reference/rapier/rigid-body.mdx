@@ -2,7 +2,7 @@
 order: 2
 category: '@threlte/rapier'
 sourcePath: 'packages/rapier/src/lib/components/RigidBody/RigidBody.svelte'
-name: '<RigidBody>'
+title: '<RigidBody>'
 type: 'component'
 componentSignature:
   {
@@ -11,32 +11,21 @@ componentSignature:
         {
           name: type,
           type: "'fixed' | 'dynamic' | 'kinematicPosition' | 'kinematicVelocity'",
-          default: "'dynamic'",
-          required: false
+          default: "'dynamic'"
         },
-        { name: 'canSleep', type: 'boolean', default: 'true', required: false },
-        { name: 'linearVelocity', type: 'Position', default: '{}', required: false },
-        { name: 'angularVelocity', type: 'Rotation', default: '{}', required: false },
-        { name: 'gravityScale', type: 'number', default: '1', required: false },
-        { name: 'ccd', type: 'boolean', default: 'false', required: false },
-        { name: 'lockRotations', type: 'boolean', default: 'false', required: false },
-        { name: 'lockTranslations', type: 'boolean', default: 'false', required: false },
-        {
-          name: 'enabledRotations',
-          type: 'Boolean3Array',
-          default: '[true, true, true]',
-          required: false
-        },
-        {
-          name: 'enabledTranslations',
-          type: 'Boolean3Array',
-          default: '[true, true, true]',
-          required: false
-        },
-        { name: 'dominance', type: 'number', default: '0', required: false },
-        { name: 'linearDamping', type: 'number', default: '0', required: false },
-        { name: 'angularDamping', type: 'number', default: '0', required: false },
-        { name: 'userData', type: 'Record<string, any>', default: '{}', required: false }
+        { name: 'canSleep', type: 'boolean', default: 'true' },
+        { name: 'linearVelocity', type: 'Position', default: '{}' },
+        { name: 'angularVelocity', type: 'Rotation', default: '{}' },
+        { name: 'gravityScale', type: 'number', default: '1' },
+        { name: 'ccd', type: 'boolean', default: 'false' },
+        { name: 'lockRotations', type: 'boolean', default: 'false' },
+        { name: 'lockTranslations', type: 'boolean', default: 'false' },
+        { name: 'enabledRotations', type: 'Boolean3Array', default: '[true, true, true]' },
+        { name: 'enabledTranslations', type: 'Boolean3Array', default: '[true, true, true]' },
+        { name: 'dominance', type: 'number', default: '0' },
+        { name: 'linearDamping', type: 'number', default: '0' },
+        { name: 'angularDamping', type: 'number', default: '0' },
+        { name: 'userData', type: 'Record<string, any>', default: '{}' }
       ],
     events:
       [

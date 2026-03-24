@@ -3,7 +3,7 @@ import { createTransition } from '@threlte/extras'
 import { cubicOut } from 'svelte/easing'
 
 export const fade = (opacity = 0) => {
-  return createTransition((ref: any) => {
+  return createTransition((ref) => {
     if (!isInstanceOf(ref, 'Material')) return
 
     if (!ref.transparent) {

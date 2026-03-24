@@ -4,7 +4,7 @@
 </script>
 
 <RigidBody>
-  <AutoColliders shape={'ball'}>
+  <AutoColliders shape="ball">
     <T.Mesh receiveShadow castShadow>
       <T.SphereGeometry args={[0.25]} />
       <T.MeshStandardMaterial />

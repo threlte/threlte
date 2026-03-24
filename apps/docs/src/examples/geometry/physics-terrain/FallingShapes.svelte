@@ -35,7 +35,7 @@
 
 <script lang="ts">
   import type { AutoCollidersShapes } from '@threlte/rapier'
-  import type { BufferGeometry, ColorRepresentation } from 'three'
+  import { Quaternion, type BufferGeometry, type ColorRepresentation } from 'three'
   import type { Snippet } from 'svelte'
   import { AutoColliders, RigidBody } from '@threlte/rapier'
   import { BoxGeometry, ConeGeometry, CylinderGeometry, SphereGeometry, Vector3 } from 'three'
@@ -50,28 +50,18 @@
   let { children }: { children?: Snippet<[{ shape: Shape }]> } = $props()
 
   const offset = new Vector3(-2.5, 2.5, -2.5)
-  const createPosition = (scalar = 5): Vector3 => {
-    return new Vector3().random().multiplyScalar(scalar).add(offset)
-  }
-
-  const createRotation = (scalar = 10): Vector3 => {
-    return new Vector3().random().multiplyScalar(scalar)
-  }
 
   type Body = {
     position: Vector3
-    rotation: Vector3
+    quaternion: Quaternion
   }
 
   const bodies: Body[] = []
   const count = 50
   for (let i = 0; i < count; i += 1) {
-    const position = createPosition()
-    const rotation = createRotation()
-
     bodies.push({
-      position,
-      rotation
+      position: new Vector3().random().multiplyScalar(5).add(offset),
+      quaternion: new Quaternion().random()
     })
   }
 </script>
@@ -80,7 +70,7 @@
   {@const shape = getRandomShape()}
   <T.Group
     position={body.position.toArray()}
-    rotation={body.rotation.toArray()}
+    quaternion={body.quaternion.toArray()}
   >
     <RigidBody type="dynamic">
       <AutoColliders shape={shape.autoCollider}>

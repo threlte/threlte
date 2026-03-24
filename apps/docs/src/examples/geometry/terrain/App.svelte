@@ -1,10 +1,10 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import { Canvas } from '@threlte/core'
-  import { Checkbox, Pane } from 'svelte-tweakpane-ui'
-  import { World } from '@threlte/rapier'
+  import { Checkbox, Pane, Slider } from 'svelte-tweakpane-ui'
 
   let autoRotate = $state(true)
+  let flatness = $state(4)
 </script>
 
 <Pane
@@ -12,16 +12,24 @@
   position="fixed"
 >
   <Checkbox
-    label="Auto Rotate Camera"
+    label="Auto-rotate Camera"
     bind:value={autoRotate}
+  />
+  <Slider
+    bind:value={flatness}
+    label="flatness"
+    min={1}
+    max={10}
+    step={1}
   />
 </Pane>
 
 <div>
   <Canvas>
-    <World>
-      <Scene {autoRotate} />
-    </World>
+    <Scene
+      {autoRotate}
+      {flatness}
+    />
   </Canvas>
 </div>
 

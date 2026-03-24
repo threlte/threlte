@@ -1,6 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Align, OrbitControls } from '@threlte/extras'
+  import { Align, OrbitControls, PointsMaterial } from '@threlte/extras'
+  import { BufferGeometry } from 'three'
 
   const size = 30
   const count = size ** 3
@@ -52,7 +53,7 @@
       <T.BufferAttribute
         args={[positions, 3]}
         attach={({ parent, ref }) => {
-          parent.setAttribute('position', ref)
+          ;(parent as BufferGeometry).setAttribute('position', ref)
           return () => {
             // cleanup function called when ref changes or the component unmounts
             // https://threlte.xyz/docs/reference/core/t#attach
@@ -60,6 +61,6 @@
         }}
       />
     </T.BufferGeometry>
-    <T.PointsMaterial size={0.25} />
+    <PointsMaterial size={0.25} />
   </T.Points>
 </Align>

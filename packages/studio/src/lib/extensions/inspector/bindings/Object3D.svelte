@@ -1,9 +1,9 @@
 <script lang="ts">
   import { Object3D } from 'three'
   import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils.js'
-  import { useSnapping } from '../../snapping/useSnapping.svelte'
+  import { useSnapping } from '../../snapping/useSnapping.svelte.js'
   import TransactionalBinding from './TransactionalBinding.svelte'
-  import { haveProperty } from './utils'
+  import { haveProperty } from './utils.js'
 
   type Props = {
     objects: Object3D[]
@@ -46,7 +46,7 @@
     }
   }}
   options={{
-    format: (n) => `${n}°`,
+    format: (n: number) => `${n}°`,
     step: snapping.enabled ? snapping.rotate : undefined
   }}
 />

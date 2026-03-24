@@ -1,6 +1,6 @@
 import { resolvePropertyPath } from '@threlte/core'
-import { getThrelteStudioUserData } from '../vite-plugin/runtimeUtils'
-import type { Transaction } from './TransactionQueue.svelte'
+import type { Transaction } from './TransactionQueue.svelte.js'
+import { getThrelteStudioUserData } from '../../../internal/getThrelteStudioUserData.js'
 
 type BuildTransactionOptions<T> = {
   object: any
@@ -70,8 +70,7 @@ export const buildTransaction = <T>({
         ? {
             attributeName: [...(userData.pathItems ?? []), propertyPath].join('.'),
             componentIndex: userData.index,
-            moduleId: userData.moduleId,
-            signature: userData.signature
+            moduleId: userData.moduleId
           }
         : undefined
   }

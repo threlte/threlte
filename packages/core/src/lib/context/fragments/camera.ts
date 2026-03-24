@@ -1,8 +1,8 @@
 import { getContext, setContext } from 'svelte'
 import { PerspectiveCamera, type Camera } from 'three'
-import { currentWritable, watch, type CurrentWritable } from '../../utilities'
-import { useDOM } from './dom'
-import { useScheduler } from './scheduler.svelte'
+import { currentWritable, watch, type CurrentWritable } from '../../utilities/index.js'
+import { useDOM } from './dom.js'
+import { useScheduler } from './scheduler.svelte.js'
 
 type CameraContext = {
   camera: CurrentWritable<Camera>
@@ -25,6 +25,12 @@ export const createCameraContext = (): CameraContext => {
       cam.aspect = size.width / size.height
       cam.updateProjectionMatrix()
       invalidate()
+    }
+  })
+
+  watch(camera, ($camera) => {
+    if ($camera === undefined) {
+      camera.set(defaultCamera)
     }
   })
 

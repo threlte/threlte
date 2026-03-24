@@ -14,11 +14,11 @@
 </script>
 
 <script lang="ts">
-  import { T, useLoader, useTask } from '@threlte/core'
+  import type { Group } from 'three'
   import { CubeCamera, Environment, Grid, OrbitControls } from '@threlte/extras'
-  import type { Vector3Tuple } from 'three'
   import { EquirectangularReflectionMapping } from 'three'
   import { RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { T, useLoader, useTask } from '@threlte/core'
 
   type SceneProps = {
     frames?: number
@@ -43,9 +43,15 @@
   const increment = (2 * Math.PI) / colors.length
   const radius = 3
 
-  let time = $state(0)
+  let time = 0
+  const groups: Group[] = []
   useTask((delta) => {
     time += delta
+    let i = 0
+    for (const group of groups) {
+      group.position.setY(2 * Math.sin(time + i))
+      i += 1
+    }
   })
 
   const hdrPath = '/textures/equirectangular/hdr/'
@@ -103,25 +109,30 @@
 
   {#each Array(colors.length) as _, i}
     {@const r = Math.PI + increment * i}
-    <CubeCamera
+    <T.Group
       position.x={radius * Math.cos(r)}
-      position.y={2 * Math.sin(time + i)}
       position.z={radius * Math.sin(r)}
-      {background}
-      {frames}
-      {near}
-      {resolution}
+      oncreate={(ref) => {
+        groups.push(ref)
+      }}
     >
-      {#snippet children({ renderTarget })}
-        <T.Mesh>
-          <T.SphereGeometry />
-          <T.MeshStandardMaterial
-            {roughness}
-            {metalness}
-            envMap={renderTarget.texture}
-          />
-        </T.Mesh>
-      {/snippet}
-    </CubeCamera>
+      <CubeCamera
+        {background}
+        {frames}
+        {near}
+        {resolution}
+      >
+        {#snippet children({ renderTarget })}
+          <T.Mesh>
+            <T.SphereGeometry />
+            <T.MeshStandardMaterial
+              {roughness}
+              {metalness}
+              envMap={renderTarget.texture}
+            />
+          </T.Mesh>
+        {/snippet}
+      </CubeCamera>
+    </T.Group>
   {/each}
 {/await}

@@ -1,19 +1,23 @@
 <script lang="ts">
-  import { createParentObject3DContext, useParentObject3D, watch } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D } from '@threlte/core'
   import { onDestroy, setContext, tick } from 'svelte'
   import { Object3D, Vector3 } from 'three'
-  import { useRapier } from '../../hooks/useRapier'
+  import { useRapier } from '../../hooks/useRapier.js'
   import {
     initializeRigidBodyUserData,
     setInitialRigidBodyState
-  } from '../../lib/createPhysicsTasks'
-  import { getWorldPosition, getWorldQuaternion, getWorldScale } from '../../lib/getWorldTransforms'
-  import { parseRigidBodyType } from '../../lib/parseRigidBodyType'
-  import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext'
-  import { useCreateEvent } from '../../lib/useCreateEvent'
-  import type { RigidBodyContext, ThrelteRigidBody } from '../../types/types'
-  import { overrideTeleportMethods } from './overrideTeleportMethods'
-  import type { RigidBodyProps } from './types'
+  } from '../../lib/createPhysicsTasks.js'
+  import {
+    getWorldPosition,
+    getWorldQuaternion,
+    getWorldScale
+  } from '../../lib/getWorldTransforms.js'
+  import { parseRigidBodyType } from '../../lib/parseRigidBodyType.js'
+  import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext.js'
+  import { useCreateEvent } from '../../lib/useCreateEvent.js'
+  import type { RigidBodyContext, ThrelteRigidBody } from '../../types/types.js'
+  import { overrideTeleportMethods } from './overrideTeleportMethods.js'
+  import type { RigidBodyProps } from './types.js'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -174,10 +178,11 @@
 
   const parent3DObject = useParentObject3D()
   createParentObject3DContext(object)
-  watch(parent3DObject, (parent) => {
-    parent?.add(object)
+
+  $effect(() => {
+    $parent3DObject?.add(object)
     return () => {
-      parent?.remove(object)
+      $parent3DObject?.remove(object)
     }
   })
 </script>

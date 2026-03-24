@@ -1,7 +1,7 @@
 import { ActiveEvents, Collider, ColliderDesc, RigidBody, World } from '@dimforge/rapier3d-compat'
 import { isInstanceOf } from '@threlte/core'
 import { Mesh, Quaternion, Vector3, type Object3D } from 'three'
-import type { AutoCollidersShapes } from '../types/types'
+import type { AutoCollidersShapes } from '../types/types.js'
 
 const offset = new Vector3()
 const worldPosition = new Vector3()
@@ -91,9 +91,20 @@ export const createCollidersFromChildren = (
 
         case 'trimesh':
           {
+            const { x: scaleX, y: scaleY, z: scaleZ } = scale
+            const vertices = new Float32Array(geometry.attributes.position.array)
+            if (scaleX !== 1 || scaleY !== 1 || scaleZ !== 1) {
+              for (let i = 0; i < vertices.length; i += 3) {
+                vertices[i] *= scaleX
+                vertices[i + 1] *= scaleY
+                vertices[i + 2] *= scaleZ
+              }
+            }
             description = ColliderDesc.trimesh(
-              new Float32Array(geometry.attributes.position.array),
-              new Uint32Array(geometry.index?.array ?? [])
+              vertices,
+              new Uint32Array(
+                geometry.index?.array ?? Uint32Array.from(Array(vertices.length / 3).keys())
+              )
             )
           }
           break
@@ -114,9 +125,16 @@ export const createCollidersFromChildren = (
 
         case 'convexHull':
           {
-            description = ColliderDesc.convexHull(
-              new Float32Array(geometry.attributes.position.array)
-            ) as ColliderDesc
+            const { x: scaleX, y: scaleY, z: scaleZ } = scale
+            const vertices = new Float32Array(geometry.attributes.position.array)
+            if (scaleX !== 1 || scaleY !== 1 || scaleZ !== 1) {
+              for (let i = 0; i < vertices.length; i += 3) {
+                vertices[i] *= scaleX
+                vertices[i + 1] *= scaleY
+                vertices[i + 2] *= scaleZ
+              }
+            }
+            description = ColliderDesc.convexHull(vertices) as ColliderDesc
           }
           break
       }

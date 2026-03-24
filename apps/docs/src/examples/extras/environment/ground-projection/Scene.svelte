@@ -9,7 +9,7 @@
 
   let { useGround = true }: Props = $props()
 
-  let skybox: GroundedSkybox | undefined = $state()
+  let skybox = $state.raw<GroundedSkybox>()
 
   const groundOptions = { height: 15, radius: 100 }
 

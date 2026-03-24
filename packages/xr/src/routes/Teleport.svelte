@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { teleportControls } from '$lib'
+  import { teleportControls } from '$lib/index.js'
 
   teleportControls('left')
   teleportControls('right')

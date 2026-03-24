@@ -8,14 +8,18 @@
   import Matcap from './Matcap.svelte'
   import Window from './Window.svelte'
 
-  export let windowWidth: number
-  export let windowHeight: number
-  export let rows = 5
-  export let columns = 5
-  export let size: any
+  interface Props {
+    windowWidth: number
+    windowHeight: number
+    rows?: number
+    columns?: number
+    size: any
+  }
 
-  let page = 1
-  $: offset = (page - 1) * rows * columns
+  let { windowWidth, windowHeight, rows = 5, columns = 5, size }: Props = $props()
+
+  let page = $state(1)
+  let offset = $derived((page - 1) * rows * columns)
 
   interactivity()
   transitions()

@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
   import { OrbitControls, Grid, Billboard } from '@threlte/extras'
+  import { T } from '@threlte/core'
 
-  export let follow = true
+  let { follow = true }: { follow?: boolean } = $props()
 </script>
 
 <Billboard

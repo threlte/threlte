@@ -19,35 +19,45 @@
 
   const composer = new EffectComposer(renderer)
 
-  const renderPass = $derived(new RenderPass(scene, $camera))
-  const outlineEffectOptions: ConstructorParameters<typeof OutlineEffect>[2] = {
+  const renderPass = new RenderPass(scene)
+  composer.addPass(renderPass)
+
+  $effect(() => {
+    composer.setSize($size.width, $size.height)
+  })
+
+  export const outlineEffectOptions: ConstructorParameters<typeof OutlineEffect>[2] = {
     blendFunction: BlendFunction.ALPHA,
     edgeStrength: 100,
     pulseSpeed: 0.0,
-    visibleEdgeColor: 0xffffff,
-    hiddenEdgeColor: 0x9900ff,
     xRay: true,
     blur: true
   }
 
-  const outlineEffect = $derived.by(() => {
-    const effect = new OutlineEffect(scene, $camera, outlineEffectOptions)
-    effect.selection.add(mesh)
-    return effect
-  })
-
-  const outlineEffectPass = $derived(new EffectPass($camera, outlineEffect))
-
+  const outlineEffect = new OutlineEffect(scene, undefined, outlineEffectOptions)
   $effect(() => {
-    composer.addPass(renderPass)
-    composer.addPass(outlineEffectPass)
+    outlineEffect.selection.add(mesh)
     return () => {
-      composer.removeAllPasses() // always remove all passes anytime the effect needs to rerun
+      outlineEffect.selection.clear()
     }
   })
 
+  const outlineEffectPass = new EffectPass(undefined, outlineEffect)
+  composer.addPass(outlineEffectPass)
+
   $effect(() => {
-    composer.setSize($size.width, $size.height)
+    renderPass.mainCamera = $camera
+    outlineEffect.mainCamera = $camera
+    outlineEffectPass.mainCamera = $camera
+  })
+
+  $effect(() => {
+    return () => {
+      composer.removeAllPasses()
+      outlineEffectPass.dispose()
+      renderPass.dispose()
+      composer.dispose()
+    }
   })
 
   $effect(() => {

@@ -7,26 +7,62 @@ on:
       - next
 
 jobs:
-  validations:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
 
       - name: Install pnpm 🔧
         uses: pnpm/action-setup@v4
         with:
-          version: 9.4.0
           run_install: true
 
-      - name: Prettier 💅
-        run: pnpm run prettier
+      - name: Lint 💅
+        run: pnpm run lint
+
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
+
+      - name: Check
+        run: pnpm run check
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
 
       - name: Test
         run: pnpm run test

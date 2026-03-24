@@ -2,8 +2,8 @@
   import { T } from '@threlte/core'
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
-  import { useThrelteAudio } from '../useThrelteAudio'
-  import type { AudioListenerProps } from './types'
+  import { useThrelteAudio } from '../useThrelteAudio.js'
+  import type { AudioListenerProps } from './types.js'
 
   let { id, masterVolume, ref = $bindable(), children, ...props }: AudioListenerProps = $props()
 

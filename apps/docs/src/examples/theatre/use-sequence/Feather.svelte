@@ -7,7 +7,7 @@
 
   const { play, pause, position, length } = useSequence()
 
-  let baseline: number | undefined = undefined
+  let baseline = $state<number>()
 </script>
 
 <T.Group
@@ -17,11 +17,11 @@
     baseline = undefined
   }}
   onpointerdown={(event) => {
-    baseline = event.intersections[0].point.y
+    baseline = event.intersections[0]?.point.y
   }}
   onpointermove={(event) => {
     if (baseline) {
-      const current = event.intersections[0].point.y
+      const current = event.intersections[0]?.point.y ?? 0
       const progress = (baseline - current) / 2
       $position = $position + progress * $length
       baseline = current

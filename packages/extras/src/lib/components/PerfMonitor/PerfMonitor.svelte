@@ -1,8 +1,7 @@
 <script lang="ts">
   import { useStage, useTask, useThrelte } from '@threlte/core'
   import { ThreePerf } from 'three-perf'
-  import type { PerfMonitorProps } from './types'
-  import { onDestroy } from 'svelte'
+  import type { PerfMonitorProps } from './types.js'
 
   let {
     domElement = document.body,
@@ -24,12 +23,11 @@
   let perf: ThreePerf
 
   $effect.pre(() => {
-    domElement
-    perf?.dispose()
     perf = new ThreePerf({
       domElement,
       renderer
     })
+    return () => perf.dispose()
   })
 
   $effect.pre(() => {
@@ -67,8 +65,4 @@
       })
     }
   )
-
-  onDestroy(() => {
-    if (perf) perf.dispose()
-  })
 </script>

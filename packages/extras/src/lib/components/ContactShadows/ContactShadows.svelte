@@ -14,7 +14,7 @@
   } from 'three'
   import { HorizontalBlurShader } from 'three/examples/jsm/shaders/HorizontalBlurShader.js'
   import { VerticalBlurShader } from 'three/examples/jsm/shaders/VerticalBlurShader.js'
-  import type { ContactShadowsProps } from './types'
+  import type { ContactShadowsProps } from './types.js'
 
   let {
     opacity = 1,
@@ -36,7 +36,6 @@
   const { scene, renderer } = useThrelte()
 
   const group = new Group()
-
   const scaledWidth = $derived(width * (Array.isArray(scale) ? scale[0] : scale || 1))
   const scaledHeight = $derived(height * (Array.isArray(scale) ? scale[1] : scale || 1))
 
@@ -57,6 +56,7 @@
   const blurPlane = $derived(new Mesh(planeGeometry))
 
   const depthMaterial = $derived.by(() => {
+    const currentColor = color
     const dm = new MeshDepthMaterial({
       depthTest: false,
       depthWrite: false
@@ -65,7 +65,7 @@
       shader.uniforms = {
         ...shader.uniforms,
         uColor: {
-          value: new Color(color).convertSRGBToLinear()
+          value: new Color(currentColor).convertSRGBToLinear()
         }
       }
 
@@ -174,30 +174,20 @@
     renderShadows()
   }
 
-  const task = useTask(
-    () => {
-      renderShadows()
-    },
-    { autoStart: false }
-  )
+  const continuous = $derived(frames === Number.POSITIVE_INFINITY)
+
+  useTask(renderShadows, {
+    running: () => continuous
+  })
 
   let count = 0
-  const countTask = useTask(
+  useTask(
     () => {
       renderShadows()
       count += 1
-      if (count >= frames) countTask.stop()
     },
-    { autoStart: false }
+    { running: () => !continuous && count < frames }
   )
-
-  $effect.pre(() => {
-    if (frames === Number.POSITIVE_INFINITY) {
-      task.start()
-    } else if (count < frames) {
-      countTask.start()
-    }
-  })
 
   onDestroy(() => {
     renderTarget.dispose()

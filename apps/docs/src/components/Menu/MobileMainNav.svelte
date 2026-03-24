@@ -13,12 +13,12 @@
     class="flex flex-col gap-2 text-lg"
   >
     <a href="/docs/learn/getting-started/introduction"> Documentation </a>
+    <a href="/blog"> Blog </a>
 
     <!-- Implement as soon as there are showcase entries -->
     <!-- <a href="/showcase"> Showcase </a> -->
     <div class="mt-4">
-      <slot name="after" />
+      <slot name="socials" />
     </div>
-    <slot name="socials" />
   </div>
 </MobileNav>

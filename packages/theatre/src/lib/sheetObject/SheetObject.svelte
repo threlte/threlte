@@ -7,16 +7,16 @@
   lang="ts"
   generics="Props extends UnknownShorthandCompoundProps"
 >
-  import { useStudio } from '../studio/useStudio'
+  import { useStudio } from '../studio/useStudio.js'
   import type { ISheetObject, UnknownShorthandCompoundProps } from '@theatre/core'
-  import { currentWritable, useThrelte, watch, type CurrentWritable } from '@threlte/core'
+  import { currentWritable, useThrelte, observe, type CurrentWritable } from '@threlte/core'
   import { getContext, onDestroy, onMount } from 'svelte'
-  import type { SheetContext } from '../sheet/types'
+  import type { SheetContext } from '../sheet/types.js'
   import Declare from './declare/Declare.svelte'
-  import type { SheetObjectProps } from './types'
+  import type { SheetObjectProps } from './types.js'
   import Sync from './sync/Sync.svelte'
   import Transform from './transform/Transform.svelte'
-  import { createSheetContext } from './useSheet'
+  import { createSheetContext } from './useSheet.js'
 
   let {
     key,
@@ -108,25 +108,31 @@
 
   let values = $state($sheetObject?.value)
 
-  watch(sheetObject, (sheetObject) => {
-    return sheetObject.onValuesChange((newValues) => {
-      onchange?.(newValues)
-      values = newValues
-      // this invalidation also invalidates changes catched by slotted
-      // components such as <Sync> or <Declare>.
-      invalidate()
-    })
-  })
+  observe.pre(
+    () => [sheetObject],
+    ([sheetObject]) => {
+      return sheetObject.onValuesChange((newValues) => {
+        onchange?.(newValues)
+        values = newValues
+        // this invalidation also invalidates changes catched by slotted
+        // components such as <Sync> or <Declare>.
+        invalidate()
+      })
+    }
+  )
 
   // Provide a flag to indicate whether this sheet object is selected in the
   // Theatre.js studio.
   const studio = useStudio()
 
-  watch([studio, sheetObject], ([studio, sheetObject]) => {
-    return studio?.onSelectionChange((selection) => {
-      selected = selection.includes(sheetObject)
-    })
-  })
+  observe.pre(
+    () => [studio, sheetObject],
+    ([studio, sheetObject]) => {
+      return studio?.onSelectionChange((selection) => {
+        selected = selection.includes(sheetObject)
+      })
+    }
+  )
 
   // Provide a select function to select this sheet object in the Theatre.js
   // studio.

@@ -2,16 +2,27 @@
   import { T } from '@threlte/core'
   import { Gizmo, OrbitControls } from '@threlte/extras'
 
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
+  interface Props {
+    autoRotate: boolean
+    enableDamping: boolean
+    rotateSpeed: number
+    zoomToCursor: boolean
+    zoomSpeed: number
+    minPolarAngle: number
+    maxPolarAngle: number
+    enableZoom: boolean
+  }
 
-  export let autoRotate: boolean
-  export let enableDamping: boolean
-  export let rotateSpeed: number
-  export let zoomToCursor: boolean
-  export let zoomSpeed: number
-  export let minPolarAngle: number
-  export let maxPolarAngle: number
-  export let enableZoom: boolean
+  let {
+    autoRotate,
+    enableDamping,
+    rotateSpeed,
+    zoomToCursor,
+    zoomSpeed,
+    minPolarAngle,
+    maxPolarAngle,
+    enableZoom
+  }: Props = $props()
 </script>
 
 <T.PerspectiveCamera
@@ -41,8 +52,7 @@
 
 <T.GridHelper args={[10, 10]} />
 
-<T.Mesh
-  position.y={1}
-  geometry={new BoxGeometry(2, 2, 2)}
-  material={new MeshStandardMaterial()}
-/>
+<T.Mesh position.y={1}>
+  <T.BoxGeometry args={[2, 2, 2]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>

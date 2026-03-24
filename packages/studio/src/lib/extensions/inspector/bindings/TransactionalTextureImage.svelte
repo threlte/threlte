@@ -1,11 +1,8 @@
 <script lang="ts">
   import { resolvePropertyPath, useLoader } from '@threlte/core'
-  import { Binding, Image, List, type BindingRef, type ListOptions } from 'svelte-tweakpane-ui'
-  import { useTransactions } from '../../transactions/useTransactions'
+  import { Binding, type BindingRef } from 'svelte-tweakpane-ui'
   import * as plugin from '@kitschpatrol/tweakpane-image-plugin'
   import { TextureLoader } from 'three'
-
-  const { commit } = useTransactions()
 
   type Props = {
     objects: any[]
@@ -74,9 +71,12 @@
 
   $effect(() => {
     if (!ref) return
-    ref.on('change', onChangeHandler)
+
+    const internalRef = ref
+
+    internalRef.on('change', onChangeHandler)
     return () => {
-      ref.off('change', onChangeHandler)
+      internalRef.off('change', onChangeHandler)
     }
   })
 </script>

@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { HTML, OrbitControls } from '@threlte/extras'
-  import { spring } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { Spring } from 'svelte/motion'
 
   type Props = {
     autoRender?: boolean
@@ -19,7 +19,7 @@
   let isHovering = $state(false)
   let isPointerDown = $state(false)
 
-  let htmlPosZ = spring(0)
+  let htmlPosZ = new Spring(0)
   $effect(() => {
     htmlPosZ.set(isPointerDown ? -0.15 : isHovering ? -0.075 : 0, {
       hard: isPointerDown
@@ -35,10 +35,10 @@
 >
   <OrbitControls
     target.y={0.75}
-    maxPolarAngle={85 * DEG2RAD}
-    minPolarAngle={20 * DEG2RAD}
-    maxAzimuthAngle={45 * DEG2RAD}
-    minAzimuthAngle={-45 * DEG2RAD}
+    maxPolarAngle={85 * MathUtils.DEG2RAD}
+    minPolarAngle={20 * MathUtils.DEG2RAD}
+    maxAzimuthAngle={45 * MathUtils.DEG2RAD}
+    minAzimuthAngle={-45 * MathUtils.DEG2RAD}
     enableZoom={false}
   />
 </T.PerspectiveCamera>
@@ -54,7 +54,7 @@
   <T.SphereGeometry args={[0.5]} />
   <HTML
     position.y={1.25}
-    position.z={$htmlPosZ}
+    position.z={htmlPosZ.current}
     transform
     {autoRender}
   >

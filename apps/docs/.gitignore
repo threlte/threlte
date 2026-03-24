@@ -1,6 +1,11 @@
+# Docs don't need it
+.changeset
+CHANGELOG.md
+
 # build output
 dist/
 .output/
+
 # generated types
 .astro/
 

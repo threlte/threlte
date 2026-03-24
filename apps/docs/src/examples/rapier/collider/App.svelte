@@ -5,7 +5,7 @@
   import Scene from './Scene.svelte'
   import { Pane, Button } from 'svelte-tweakpane-ui'
 
-  let testIndex = 0
+  let testIndex = $state(0)
 </script>
 
 <Pane

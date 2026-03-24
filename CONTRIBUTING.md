@@ -3,34 +3,20 @@
 The Threlte project is open to different kinds of support:
 
 1. **Sharing**: tell people about us, whether on social media or during a casual chat.
-2. **Sponsorship**: every penny counts, since we have neglegible funding; see our [GitHub sponsor page](https://github.com/sponsors/grischaerbe).
-3. **Support**: have you learned enough about Threlte to answer questions? Help people out on our [Discord support forum](https://discord.com/channels/985983540804091964/1031843197963477002).
-4. **Proposals**: well researched and thought out ideas are welcome in our [Proposals Forums in Discord](https://discord.com/channels/985983540804091964/1098301342239432784).
-5. **Contributing PRs**: read about [how to contribute PRs](#how-to-contribute-prs) if you wanna start hacking at our code or docs.
+2. **Support**: have you learned enough about Threlte to answer questions? Help people out on our [Discord support forum](https://discord.com/channels/985983540804091964/1031843197963477002).
+3. **Docs PRs**: Spelling mistake? Wording off? We'd love the help. Check out [how to contribute PRs](#how-to-contribute-prs).
+4. **Code PRs**: get started by reading about [how to contribute PRs](#how-to-contribute-prs).
+5. **Sponsorship**: every penny counts, since we have neglegible funding; see our [GitHub sponsor page](https://github.com/sponsors/grischaerbe).
 
 # How to contribute PRs
 
-## Deciding what to contribute
+## Setup
 
-### Searching our backlog
-
-We maintain our backlog in GitHub issues for transparency. You can easily find issues where PRs are welcome using the [contribute label](https://github.com/threlte/threlte/issues?q=is%3Aissue+is%3Aopen+label%3Acontribute). You can also use the [easy label](https://github.com/threlte/threlte/issues?q=is%3Aissue+is%3Aopen+label%3Acontribute+label%3Aeasy) to find a good first contribution.
-
-Unclear about an issue label? Read our [label descriptions](https://github.com/threlte/threlte/labels).
-
-### Proposing new ideas
-
-If you wish to propose a totally new PR, please discuss it with the team before creating a PR. Well structured and researched ideas can be posted in our [Discord proposals forum](https://discord.com/channels/985983540804091964/1098301342239432784) or writen up as [a new GitHub issue](https://github.com/threlte/threlte/issues/new/choose). If you wanna just have a casual chat an idea, drop into our [Discord contribution chat](https://discord.com/channels/985983540804091964/986233334747254854) and fire away!
-
-## Setting up a dev environment
-
-Setting up the repo:
+If you don't already have these, install [git](https://git-scm.com/), [node](https://nodejs.org/) and [pnpm](https://pnpm.io/); then:
 
 1. **Clone** the repo with `git clone git@github.com:threlte/threlte.git`
 2. **Install** the packages by running `pnpm install:all` in the root of the repo
 3. **Develop** by going to `/apps/docs` and running `pnpm run dev`
-
-_Note:_ we practice **docs-driven development**: building the docs page for a feature while developing it. This allows us to test functionality through examples and feel out the API: if its hard to explain well, its probably flawed.
 
 Some editor tooling:
 
@@ -39,7 +25,12 @@ Some editor tooling:
 
 ## Commiting changes
 
-Threlte uses Git for version control and [Changesets](https://github.com/changesets/changesets) for release notes. You will need to understand our conventions with both to commit changes. If you get confused, remember that **Git commits are for Threlte maintainers while Changesets are for Threlte users**.
+Threlte uses Git for version control and [Changesets](https://github.com/changesets/changesets) for release notes. The convention is:
+
+- Git commits are for Threlte **maintainers**
+- Changesets are for Threlte **users**.
+
+Changes to docs do not need changesets.
 
 ### Git commits
 
@@ -49,7 +40,23 @@ We don't have a strict commit message policy. Here are some best practices:
 - **Go into technical details** if necessary to allow maintainers to understand the context of the change.
 - **Use present tense exclusively** to describe the changes in the commit.
 
-### Changesets
+## More about contributions
+
+### Proposing something new
+
+If it's something changing the `core` or a new package, the team will need to discuss and think about it; otherwise, generally contributions are welcome.
+
+If you'd like some early feedback on something there's posting in our [Discord proposals forum](https://discord.com/channels/985983540804091964/1098301342239432784), writing up [a new GitHub issue](https://github.com/threlte/threlte/issues/new/choose) or more casually the [Discord contribution chat](https://discord.com/channels/985983540804091964/986233334747254854).
+
+_Note:_ we practice **docs-driven development**: building the docs page for a feature while developing it. This allows us to test functionality through examples and feel out the API: if its hard to explain well, there's probably something not quite right.
+
+### Searching our backlog
+
+We maintain our backlog in GitHub issues for transparency. You can easily find issues where PRs are welcome using the [contribute label](https://github.com/threlte/threlte/issues?q=is%3Aissue+is%3Aopen+label%3Acontribute). You can also use the [easy label](https://github.com/threlte/threlte/issues?q=is%3Aissue+is%3Aopen+label%3Acontribute+label%3Aeasy) to find a good first contribution.
+
+Wanting a specific type of issue? Checkout our other [label descriptions](https://github.com/threlte/threlte/labels).
+
+### Using Changesets
 
 [Changesets](https://github.com/changesets/changesets) is a tool that helps us keep a changelog for all the packages in the monorepo and aggregate them into release notes.
 

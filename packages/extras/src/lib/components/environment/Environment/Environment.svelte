@@ -12,10 +12,12 @@
 <script lang="ts">
   import { T, useCache, useThrelte } from '@threlte/core'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
-  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
-  import { useSuspense } from '../../../suspense/useSuspense'
-  import { useEnvironment } from '../utils/useEnvironment.svelte'
-  import type { EquirectangularEnvironmentProps } from './types'
+  import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js'
+  import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+  import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js'
+  import { useSuspense } from '../../../suspense/useSuspense.js'
+  import { useEnvironment } from '../utils/useEnvironment.svelte.js'
+  import type { EquirectangularEnvironmentProps } from './types.js'
 
   const ctx = useThrelte()
 
@@ -60,24 +62,26 @@
     return loaders.tex
   })
 
-  $effect(() => {
-    if (url !== undefined && loader !== undefined) {
-      const suspendedTexture = suspend(
-        cache.remember(() => {
-          return loader.loadAsync(url)
-        }, [url])
-      )
+  $effect.pre(() => {
+    if (url === undefined || loader === undefined) {
+      return
+    }
 
-      suspendedTexture.then((t) => {
-        t.mapping = EquirectangularReflectionMapping
-        texture = t
+    const suspendedTexture = suspend(
+      cache.remember(() => {
+        return loader.loadAsync(url)
+      }, [url])
+    )
+
+    suspendedTexture.then((t) => {
+      t.mapping = EquirectangularReflectionMapping
+      texture = t
+    })
+
+    return () => {
+      suspendedTexture.then((texture) => {
+        texture.dispose()
       })
-
-      return () => {
-        suspendedTexture.then((texture) => {
-          texture.dispose()
-        })
-      }
     }
   })
 </script>
@@ -87,11 +91,6 @@
   {#if texture}
     <T
       is={GroundedSkybox}
-      oncreate={() => {
-        return () => {
-          skybox = undefined
-        }
-      }}
       bind:ref={skybox}
       args={[texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
     />

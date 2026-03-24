@@ -1,11 +1,10 @@
-import { currentWritable, useTask, watch, type CurrentWritable } from '@threlte/core'
-import { tick } from 'svelte'
+import { currentWritable, useTask, observe, type CurrentWritable } from '@threlte/core'
 import { derived, writable, type Writable } from 'svelte/store'
 import { AnimationMixer, type AnimationAction, type Object3D } from 'three'
-import type { GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import type { ThrelteGltf } from '../types/types.js'
 
 type UseGltfAnimationsReturnType<Actions> = {
-  gltf: Writable<GLTF | undefined>
+  gltf: Writable<ThrelteGltf | undefined>
   mixer: AnimationMixer
   actions: CurrentWritable<Actions>
   root: CurrentWritable<Root | undefined>
@@ -14,7 +13,7 @@ type UseGltfAnimationsReturnType<Actions> = {
 type Root = Object3D
 const isRoot = (value: any): value is Root => !!value?.isObject3D
 
-type GltfStore = Writable<GLTF | undefined>
+type GltfStore = Writable<ThrelteGltf | undefined>
 const isGltfStore = (value: any): value is GltfStore =>
   !!value?.subscribe && typeof value.subscribe === 'function'
 
@@ -53,7 +52,7 @@ export function useGltfAnimations<
   T extends string,
   Actions extends Partial<Record<T, AnimationAction>> = Partial<Record<T, AnimationAction>>
 >(rootOrGltf?: Root | GltfStore, maybeRoot?: Root): UseGltfAnimationsReturnType<Actions> {
-  const gltf = isGltfStore(rootOrGltf) ? rootOrGltf : writable<GLTF | undefined>(undefined)
+  const gltf = isGltfStore(rootOrGltf) ? rootOrGltf : writable<ThrelteGltf | undefined>(undefined)
   const root = currentWritable<Root | undefined>(
     isRoot(rootOrGltf) ? rootOrGltf : isRoot(maybeRoot) ? maybeRoot : undefined
   )
@@ -65,41 +64,37 @@ export function useGltfAnimations<
   const actions = currentWritable<Actions>({} as Actions)
   const mixer = new AnimationMixer(undefined as unknown as Object3D)
 
-  watch([gltf, actualRoot], async ([gltf, actualRoot]) => {
-    if (!gltf || !gltf.animations.length || !actualRoot) return
-    // we need to wait for the tick in order for the ref and
-    // its children to be mounted properly
-    await tick()
-    // if there's a mixer, we stop all running actions
-    const newActions = gltf.animations.reduce((acc, clip) => {
-      const action = mixer.clipAction(clip, actualRoot)
-      return {
-        ...acc,
-        [clip.name as T]: action
+  observe(
+    () => [gltf, actualRoot],
+    ([gltf, actualRoot]) => {
+      if (!gltf || !gltf.animations.length || !actualRoot) return
+
+      // if there's a mixer, we stop all running actions
+      const newActions = gltf.animations.reduce((acc, clip) => {
+        const action = mixer.clipAction(clip, actualRoot)
+        return {
+          ...acc,
+          [clip.name as T]: action
+        }
+      }, {} as Actions)
+      actions.set(newActions)
+
+      return () => {
+        Object.values(newActions).forEach((a) => {
+          const action = a as AnimationAction
+          action.stop()
+          mixer.uncacheClip(action.getClip())
+        })
       }
-    }, {} as Actions)
-    actions.set(newActions)
-
-    return () => {
-      Object.values(newActions).forEach((a) => {
-        const action = a as AnimationAction
-        action.stop()
-        mixer.uncacheClip(action.getClip())
-      })
     }
-  })
+  )
 
-  const { start, stop } = useTask(
+  useTask(
     (delta) => {
       mixer.update(delta)
     },
-    { autoStart: false }
+    { running: () => Object.keys(actions).length > 0 }
   )
-
-  watch(actions, (actions) => {
-    if (Object.keys(actions).length) start()
-    else stop()
-  })
 
   return {
     gltf,

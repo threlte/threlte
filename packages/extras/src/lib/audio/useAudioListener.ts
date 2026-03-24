@@ -1,5 +1,5 @@
 import type { AudioListener } from 'three'
-import { useThrelteAudio } from './useThrelteAudio'
+import { useThrelteAudio } from './useThrelteAudio.js'
 
 /**
  * Convenience Hook to get a THREE.AudioListener

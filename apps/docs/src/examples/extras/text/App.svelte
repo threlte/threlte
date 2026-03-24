@@ -3,8 +3,8 @@
   import Scene from './Scene.svelte'
   import { Pane, Slider, Text } from 'svelte-tweakpane-ui'
 
-  let text = 'hello world'
-  let fontSize = 1
+  let text = $state('hello world')
+  let fontSize = $state(1)
 </script>
 
 <Pane

@@ -1,6 +1,6 @@
-import { currentWritable } from '@threlte/core'
+import { writable } from 'svelte/store'
 import type { BufferGeometry } from 'three'
 
-export const debug = currentWritable(false)
+export const debug = writable(false)
 
-export const cubeGeometry = currentWritable<BufferGeometry | undefined>(undefined)
+export const cubeGeometry = writable<BufferGeometry | undefined>(undefined)

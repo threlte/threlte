@@ -1,6 +1,6 @@
 import { getContext, onDestroy } from 'svelte'
 import { derived, readable, type Writable } from 'svelte/store'
-import { suspenseContextIdentifier, type SuspenseContext } from './context'
+import { suspenseContextIdentifier, type SuspenseContext } from './context.js'
 
 type Suspend = <T extends Promise<unknown>>(promise: T) => T
 

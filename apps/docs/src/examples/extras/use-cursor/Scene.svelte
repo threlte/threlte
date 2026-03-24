@@ -5,14 +5,12 @@
 
   const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 
-  $: color = $hovering ? '#dddddd' : '#FE3D00'
+  interactivity()
 
   const { size } = useThrelte()
 
-  let zoom = $size.width / 7
-  $: zoom = $size.width / 7
-
-  interactivity()
+  const color = $derived($hovering ? '#dddddd' : '#FE3D00')
+  const zoom = $derived($size.width / 7)
 </script>
 
 <T.OrthographicCamera

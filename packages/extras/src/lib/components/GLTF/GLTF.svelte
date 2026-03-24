@@ -1,17 +1,11 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
-  import { useGltf } from '../../hooks/useGltf'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { ThrelteGltf } from '../../types/types'
-  import type { GltfProps } from './types'
+  import { useGltf } from '../../hooks/useGltf.js'
+  import { useSuspense } from '../../suspense/useSuspense.js'
+  import type { ThrelteGltf } from '../../types/types.js'
+  import type { GltfProps } from './types.js'
 
-  type AnyThrelteGltf = ThrelteGltf<{
-    nodes: Record<string, any>
-    materials: Record<string, any>
-  }>
-
-  type Props = GltfProps & { gltf?: AnyThrelteGltf } & AnyThrelteGltf['materials'] & ThreeGLTF
+  type Props = GltfProps & { gltf?: ThrelteGltf | undefined } & ThrelteGltf['materials']
 
   let {
     url,
@@ -41,7 +35,7 @@
     ktx2Loader
   })
 
-  const onLoad = (data: AnyThrelteGltf) => {
+  const onLoad = (data: ThrelteGltf) => {
     if (gltf) onunload?.()
 
     gltf = data
@@ -76,6 +70,7 @@
 
   const loadGltf = async (url: string) => {
     try {
+      // eslint-disable-next-line svelte/require-store-reactive-access
       const model = await suspend(loader.load(url))
       onLoad(model)
     } catch (error) {

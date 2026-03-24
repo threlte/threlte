@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { IRafDriver, ISequence } from '@theatre/core'
   import { getContext, onDestroy, setContext } from 'svelte'
-  import type { SheetContext } from '../sheet/types'
+  import type { SheetContext } from '../sheet/types.js'
   import type {
     Autoreset,
     IterationCount,
@@ -9,7 +9,7 @@
     PlaybackRange,
     SequenceAudioOptions,
     SequenceOptions
-  } from './types'
+  } from './types.js'
 
   // Parent context
   const { sequences } = getContext<SheetContext>('theatre-sheet')
@@ -95,9 +95,9 @@
     positionChangedBy = 'code'
     position = value
   })
-  $: position,
+  $: (position,
     positionChangedBy === 'user' && ($positionStore = position),
-    (positionChangedBy = 'user')
+    (positionChangedBy = 'user'))
 
   // playing
   let playingChangedBy = 'user'
@@ -105,7 +105,9 @@
     playingChangedBy = 'code'
     playing = value
   })
-  $: playing, playingChangedBy === 'user' && ($playingStore = playing), (playingChangedBy = 'user')
+  $: (playing,
+    playingChangedBy === 'user' && ($playingStore = playing),
+    (playingChangedBy = 'user'))
 
   // pass sequence to children via context
   setContext('theatre-sequence', sequence)

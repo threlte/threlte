@@ -3,7 +3,11 @@
   import { T } from '@threlte/core'
   import { useGltf, useTexture, InstancedMesh, Instance } from '@threlte/extras'
 
-  export let transformData: [number, number, number, number][] = []
+  interface Props {
+    transformData?: [number, number, number, number][]
+  }
+
+  let { transformData = [] }: Props = $props()
 
   type GLTFResult = {
     nodes: {
@@ -14,16 +18,14 @@
     }
   }
 
-  const gltf = useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Bush.gltf')
-  const texture1 = useTexture(
-    'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/Bush_Leaves.png'
-  )
-
-  const assets = Promise.all([gltf, texture1])
+  const assets = Promise.all([
+    useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Bush.gltf'),
+    useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/Bush_Leaves.png')
+  ])
 </script>
 
 {#await assets then [$gltf, $texture1]}
-  <InstancedMesh>
+  <InstancedMesh castShadow>
     <T is={$gltf.nodes.Bush.geometry} />
     <T.MeshStandardMaterial
       map={$texture1}

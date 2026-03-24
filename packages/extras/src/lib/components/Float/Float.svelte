@@ -2,7 +2,7 @@
   import { MathUtils, Group } from 'three'
   import type { Vector2Tuple } from 'three'
   import { useTask, T } from '@threlte/core'
-  import type { FloatProps } from './types'
+  import type { FloatProps } from './types.js'
 
   let {
     speed = 1,
@@ -61,11 +61,11 @@
 
 <T
   is={outerGroup}
+  bind:ref
   {...props}
 >
   <T
     is={group}
-    bind:ref
     matrixAutoUpdate={false}
   >
     {@render children?.({ ref: group })}

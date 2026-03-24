@@ -25,7 +25,7 @@
   />
   <T
     is={light}
-    distance={0.8}
+    distance={1.8}
     decay={0.5}
     position.y={-0.2}
     position.z={0.02}

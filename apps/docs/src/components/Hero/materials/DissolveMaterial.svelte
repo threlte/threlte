@@ -9,7 +9,7 @@ is based on the `THREE.MeshStandardMaterial` and supports all its props.
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Color, MeshStandardMaterial } from 'three'
-  import CustomShaderMaterial from './tcm'
+  import CustomShaderMaterial from 'three-custom-shader-material/vanilla'
   import { fragmentShader, vertexShader } from './shaders'
   import type { DissolveMaterialProps } from './types'
   import type CustomShaderMaterialType from 'three-custom-shader-material/vanilla'

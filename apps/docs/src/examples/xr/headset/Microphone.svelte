@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, type Props } from '@threlte/core'
   import { Edges } from '@threlte/extras'
+  import type { Mesh } from 'three'
+
+  let { ...rest }: Props<Mesh> = $props()
 </script>
 
-<T.Mesh {...$$restProps}>
+<T.Mesh {...rest}>
   {@const size = 0.005}
   {@const length = size * 14}
   <T.CylinderGeometry args={[size, size, length]} />

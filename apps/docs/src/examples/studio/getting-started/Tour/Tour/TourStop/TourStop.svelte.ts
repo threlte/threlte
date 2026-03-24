@@ -20,11 +20,13 @@ export abstract class TourStop {
 
   activate() {
     this.isActive = true
+    this.isCompleted = false
     this.onActivate?.()
   }
 
   deactivate() {
     this.isActive = false
+    this.isCompleted = false
     this.onDeactivate?.()
   }
 

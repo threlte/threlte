@@ -1,5 +1,3 @@
-import { revision } from '../../lib/revision'
-
 export const fragmentShader = `
 #include <fog_pars_fragment>
 #include <logdepthbuf_pars_fragment>
@@ -21,7 +19,7 @@ vec4 CustomLinearTosRGB( in vec4 value ) {
 
 void main()	{
 	#include <logdepthbuf_fragment>
-	#include <${revision < 154 ? 'encodings_fragment' : 'colorspace_fragment'}>
+	#include <colorspace_fragment>
 
 	vec4 c = vColor;
 

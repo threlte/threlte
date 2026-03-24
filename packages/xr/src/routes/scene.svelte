@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { XR, Controller, Hand, Headset, useTeleport, useXR } from '$lib'
+  import { XR, Controller, Hand, Headset, useTeleport, useXR } from '$lib/index.js'
   import Gamepad from './Gamepad.svelte'
   import Teleport from './Teleport.svelte'
 

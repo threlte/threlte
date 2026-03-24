@@ -20,8 +20,6 @@
 
   let torchX = $state(0)
   let torchZ = $state(0)
-  let candlesX = $state(0)
-  let candlesZ = $state(0)
 
   const dracoLoader = useDraco()
   const gltf = useGltf('/models/xr/ruins.glb', {
@@ -33,32 +31,22 @@
     })
     torchX = gltf.nodes.Torch1.position.x
     torchZ = gltf.nodes.Torch1.position.z
-    candlesX = gltf.nodes.Torch1.position.x
-    candlesZ = gltf.nodes.Torch1.position.z
 
     return gltf
   })
 
-  let time = $state(0)
-
-  const x = $derived(noise.noise(time, 0) / 10)
-  const y = $derived(noise.noise(0, time) / 10)
-
-  const lightPositionX = $derived(torchX + x)
-  const lightPositionZ = $derived(torchZ + y)
-
-  $effect(() => {
-    light1.position.x = lightPositionX
-    light2.position.x = lightPositionX
-  })
-
-  $effect(() => {
-    light1.position.z = lightPositionZ
-    light2.position.z = lightPositionZ
-  })
+  let time = 0
 
   useTask((delta) => {
     time += delta / 5
+    const x = noise.noise(time, 0) / 10
+    const y = noise.noise(0, time) / 10
+    const lightPositionX = torchX + x
+    const lightPositionZ = torchZ + y
+    light1.position.x = lightPositionX
+    light2.position.x = lightPositionX
+    light1.position.z = lightPositionZ
+    light2.position.z = lightPositionZ
   })
 </script>
 
