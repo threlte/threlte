@@ -1,34 +1,33 @@
 ---
 category: '@threlte/extras'
 group: 'Staging'
-title: '<Backdrop>'
-sourcePath: 'packages/extras/src/lib/components/Backdrop/Backdrop.svelte'
+title: '<BackdropGeometry>'
+sourcePath: 'packages/extras/src/lib/components/BackdropGeometry/BackdropGeometry.svelte'
 type: 'component'
 componentSignature:
   {
-    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
+    extends: { type: 'PlaneGeometry', url: 'https://threejs.org/docs/?q=planege#PlaneGeometry' },
     props:
       [
         {
-          name: 'floor',
+          name: 'length',
           type: 'number',
-          default: '0.25',
-          description: 'length of the floor segment',
-          required: false
+          default: '1',
+          description: 'length of the floor segment'
         },
+        { name: 'width', type: 'number', default: '1', description: 'width of the floor segment' },
+        { name: 'height', type: 'number', default: '1', description: 'length of the wall segment' },
         {
-          name: 'receiveShadow',
-          type: 'boolean',
-          default: 'false',
-          description: 'whether the backdrop is to receive shadows',
-          required: false
-        },
-        {
-          name: 'segments',
+          name: 'xSegments',
           type: 'number',
           default: '20',
-          description: "resolution of the backdrop's geometry",
-          required: false
+          description: "resolution of the backdrop's geometry x axis"
+        },
+        {
+          name: 'ySegments',
+          type: 'number',
+          default: '20',
+          description: "resolution of the backdrop's geometry x axis"
         }
       ]
   }

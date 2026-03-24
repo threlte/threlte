@@ -1,27 +1,31 @@
 <script lang="ts">
-  import type { BackdropProps } from '@threlte/extras'
-  import type { TransformControls as ThreeTransformControls } from 'three/examples/jsm/Addons.js'
-  import type {
-    ColorRepresentation,
-    DirectionalLight,
-    DirectionalLightHelper,
-    Mesh,
-    MeshStandardMaterial
+  import {
+    MathUtils,
+    type ColorRepresentation,
+    type DirectionalLight,
+    type DirectionalLightHelper,
+    type Mesh,
+    type MeshStandardMaterial
   } from 'three'
-  import { Backdrop, OrbitControls } from '@threlte/extras'
-  import { Resize, TransformControls, useGltf } from '@threlte/extras'
-  import { T, useThrelte } from '@threlte/core'
+  import {
+    BackdropGeometry,
+    Bounds,
+    Environment,
+    Gizmo,
+    OrbitControls,
+    TransformControls
+  } from '@threlte/extras'
+  import { useGltf } from '@threlte/extras'
+  import { isInstanceOf, T, useThrelte } from '@threlte/core'
 
-  let {
-    lightHelperVisible = true,
-    materialColor = 'white',
-    materialWireframe = false,
-    ...backdropProps
-  }: BackdropProps & {
-    lightHelperVisible: boolean
+  interface Props {
+    length: number
+    segments: number
     materialColor: ColorRepresentation
     materialWireframe: boolean
-  } = $props()
+  }
+
+  let { materialColor = 'white', materialWireframe = false, length, segments }: Props = $props()
 
   const gltf = useGltf<{
     nodes: { LOD3spShape: Mesh }
@@ -34,22 +38,97 @@
   const { scene } = useThrelte()
 
   let helper = $state.raw<DirectionalLightHelper>()
-  let controls = $state.raw<ThreeTransformControls>()
   let light = $state.raw<DirectionalLight>()
 
-  $effect(() => {
-    if (lightHelperVisible && light !== undefined) {
-      controls?.attach(light)
-    }
-    return () => {
-      controls?.detach()
-    }
-  })
+  let debug = false
 </script>
+
+<Environment url="/textures/equirectangular/hdr/blouberg_sunrise_2_1k.hdr" />
+
+<T.DirectionalLight
+  position.x={2}
+  position.y={0.5}
+  position.z={10}
+  intensity={2}
+  castShadow
+  shadow.camera.left={-10}
+  shadow.camera.right={10}
+  shadow.camera.top={-10}
+  shadow.camera.bottom={10}
+  shadow.bias={-0.001}
+  bind:ref={light}
+>
+  {#snippet children({ ref })}
+    {#if debug}
+      <T.DirectionalLightHelper
+        bind:ref={helper}
+        args={[ref]}
+        attach={scene}
+      />
+      <T.CameraHelper args={[ref.shadow.camera]} />
+    {/if}
+  {/snippet}
+</T.DirectionalLight>
+
+<TransformControls mode="scale">
+  <T.Mesh
+    receiveShadow
+    scale={20}
+    position.z={-5}
+  >
+    <BackdropGeometry
+      {length}
+      {segments}
+    />
+    <T.MeshStandardMaterial
+      color={materialColor}
+      wireframe={materialWireframe}
+      receiveShadow
+      roughness={0.4}
+      metalness={0.1}
+    />
+  </T.Mesh>
+</TransformControls>
+
+{#await gltf then { scene }}
+  <Bounds margin={0.5}>
+    {#each { length: 3 }, index}
+      <T.Group
+        scale={2}
+        position.z={Math.cos(index * MathUtils.degToRad(120)) * 4}
+        position.x={Math.sin(index * MathUtils.degToRad(120)) * 4}
+        position.y={-0}
+        rotation.y={Math.PI}
+        oncreate={(ref) => {
+          ref.lookAt(0, -0.2, 0)
+        }}
+      >
+        <T
+          is={scene.clone()}
+          rotation.y={-Math.PI / 2}
+          oncreate={(ref) => {
+            ref.traverse((child) => {
+              child.castShadow = true
+              child.receiveShadow = true
+              console.log(child)
+
+              if (isInstanceOf(child, 'Mesh')) {
+                const material = child.material
+                if (isInstanceOf(material, 'MeshStandardMaterial')) {
+                  material.roughness = 0.1
+                }
+              }
+            })
+          }}
+        />
+      </T.Group>
+    {/each}
+  </Bounds>
+{/await}
 
 <T.PerspectiveCamera
   makeDefault
-  position.x={10}
+  position.x={-30}
   position.y={5}
   position.z={10}
 >
@@ -58,49 +137,7 @@
     maxPolarAngle={0.5 * Math.PI}
     minAzimuthAngle={-1 * 0.25 * Math.PI}
     maxAzimuthAngle={0.25 * Math.PI}
-    maxDistance={20}
-  />
-</T.PerspectiveCamera>
-
-<T.DirectionalLight
-  position.x={-1 * 3}
-  position.y={2}
-  position.z={4}
-  castShadow
-  bind:ref={light}
->
-  {#snippet children({ ref })}
-    <TransformControls
-      bind:controls
-      onobjectChange={() => {
-        helper?.update()
-      }}
-    />
-    <T.DirectionalLightHelper
-      bind:ref={helper}
-      args={[ref]}
-      attach={scene}
-      visible={lightHelperVisible}
-    />
-  {/snippet}
-</T.DirectionalLight>
-
-<Backdrop
-  {...backdropProps}
-  scale={[50, 10, 10]}
->
-  <T.MeshStandardMaterial
-    color={materialColor}
-    wireframe={materialWireframe}
-  />
-</Backdrop>
-
-{#await gltf then { scene }}
-  <Resize
-    scale={4}
-    position.z={1}
-    rotation.y={Math.PI}
   >
-    <T is={scene} />
-  </Resize>
-{/await}
+    <Gizmo />
+  </OrbitControls>
+</T.PerspectiveCamera>

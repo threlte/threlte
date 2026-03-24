@@ -16,7 +16,7 @@ export { meshBounds } from './utilities/meshBounds.js'
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
-export { default as Backdrop } from './components/Backdrop/Backdrop.svelte'
+export { default as BackdropGeometry } from './components/BackdropGeometry/BackdropGeometry.svelte'
 export { default as Decal } from './components/Decal/Decal.svelte'
 export {
   default as CameraControls,

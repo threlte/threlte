@@ -1,42 +1,30 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import { Canvas } from '@threlte/core'
-  import { Checkbox, Color, Folder, Slider, Pane } from 'svelte-tweakpane-ui'
+  import { Checkbox, Color, Folder, Pane, Wheel } from 'svelte-tweakpane-ui'
 
-  let floor = $state(0.5)
-  let receiveShadow = $state(true)
+  let length = $state(0.25)
   let segments = $state(20)
-
   let materialColor = $state('#ffffff')
   let materialWireframe = $state(false)
-
-  let lightHelperVisible = $state(true)
 </script>
 
 <Pane
   position="fixed"
-  title="backdrop"
+  title=""
 >
-  <Folder title="component props">
-    <Slider
-      bind:value={floor}
-      min={0}
-      max={1}
-      step={0.25}
-      label="floor"
-    />
-    <Checkbox
-      bind:value={receiveShadow}
-      label="receive shadow"
-    />
-    <Slider
-      min={10}
-      max={50}
-      step={10}
-      bind:value={segments}
-      label="segments"
-    />
-  </Folder>
+  <Wheel
+    bind:value={length}
+    step={0.1}
+    label="length"
+  />
+
+  <Wheel
+    step={1}
+    bind:value={segments}
+    label="segments"
+  />
+
   <Folder title="material props">
     <Color
       bind:value={materialColor}
@@ -47,23 +35,15 @@
       bind:value={materialWireframe}
     />
   </Folder>
-  <Folder title="light helper">
-    <Checkbox
-      label="visible"
-      bind:value={lightHelperVisible}
-    />
-  </Folder>
 </Pane>
 
 <div>
   <Canvas>
     <Scene
-      {floor}
+      {length}
       {materialColor}
       {materialWireframe}
-      {receiveShadow}
       {segments}
-      {lightHelperVisible}
     />
   </Canvas>
 </div>
