@@ -1,7 +1,7 @@
 {
   "eslint.validate": ["javascript", "svelte"],
   "prettier.documentSelectors": ["**/*.svelte"],
-  "typescript.preferences.importModuleSpecifier": "relative",
+  "js/ts.preferences.importModuleSpecifier": "relative",
   "[svelte]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
