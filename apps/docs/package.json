@@ -46,6 +46,7 @@
     "@shikijs/themes": "^3.13.0",
     "@shikijs/transformers": "^3.13.0",
     "@stackblitz/sdk": "^1.8.2",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
     "@theatre/core": "^0.6.2",
     "@theatre/studio": "^0.6.2",
     "@threlte/core": "workspace:*",
