@@ -143,12 +143,11 @@ const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
           return item.id.split('/')[0] as string
         })
     )
-  ]
+  ].sort((a, b) => a.localeCompare(b))
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
     const menuItems = learnCollection
       .filter((item) => item.id.startsWith(category))
-      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         // Removes the file extension from item.id and finds last item in array
         // when splitting on '/'. This is the title of the example.
@@ -159,6 +158,7 @@ const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
           isDivider: false
         }
       })
+      .sort((a, b) => a.title.localeCompare(b.title))
     return {
       urlPrefix: '/docs/examples',
       menuItems,
