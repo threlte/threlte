@@ -1,4 +1,3 @@
-import { resolvePropertyPath } from '@threlte/core'
 import type {
   AmbientLight,
   DirectionalLight,
