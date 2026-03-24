@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.12.0
+
+### Minor Changes
+
+- fdaaa59: port <Bounds> component from drei
+
 ## 9.11.0
 
 ### Minor Changes
