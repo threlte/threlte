@@ -81,11 +81,17 @@
 
   useTask(
     (delta) => {
+      if (!controls.enabled) {
+        return
+      }
+
       if (controls.update(delta)) {
         invalidate()
       }
     },
-    { autoInvalidate: false }
+    {
+      autoInvalidate: false
+    }
   )
 </script>
 

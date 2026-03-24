@@ -1,329 +1,158 @@
-import { isInstanceOf, useTask, useThrelte } from '@threlte/core'
-import { getContext, setContext } from 'svelte'
+import { useTask, useThrelte } from '@threlte/core'
+import { getContext, setContext, tick } from 'svelte'
 import { fromStore } from 'svelte/store'
 import {
-  Object3D,
   Box3,
   Vector3,
   Group,
   Quaternion,
   Matrix4,
   PerspectiveCamera,
-  OrthographicCamera
+  OrthographicCamera,
+  Vector2,
+  Vector4,
+  Spherical,
+  Sphere,
+  Raycaster
 } from 'three'
 import { useControlsContext } from '../controls/useControlsContext.js'
 import type { OrbitControls, TrackballControls } from 'three/examples/jsm/Addons.js'
-import type CameraControls from 'camera-controls'
-import type { SizeProps } from './types.js'
+import CameraControls from 'camera-controls'
 
 export interface BoundsContext {
-  getSize: () => SizeProps
-  refresh(object?: Object3D | Box3): BoundsContext
-  reset(): BoundsContext
-  fit(): BoundsContext
-  clip(): BoundsContext
+  reset(): void
+  fit(): void
 }
 
-const defaultInterpolateFn = (t: number) => 1 - Math.exp(-5 * t) + 0.007 * t
-
 const key = Symbol('<Bounds>')
+
+let installed = false
+
+const install = () => {
+  if (installed) {
+    return
+  }
+
+  CameraControls.install({
+    THREE: {
+      Vector2,
+      Vector3,
+      Vector4,
+      Quaternion,
+      Matrix4,
+      Spherical,
+      Box3,
+      Sphere,
+      Raycaster
+    }
+  })
+
+  installed = true
+}
 
 export const provideBounds = (
   ref: () => Group,
   margin: () => number,
   animate: () => boolean,
-  maxDuration: () => number,
-  interpolate: () => ((progress: number) => number) | undefined,
-  onFit: () => ((sizeProps: SizeProps) => void) | undefined
+  onFit: () => (() => void) | undefined
 ) => {
-  const { camera: cameraStore, invalidate } = useThrelte()
+  install()
+
+  const { camera: cameraStore, dom, invalidate } = useThrelte()
   const {
     orbitControls: orbitStore,
     trackballControls: trackballStore,
     cameraControls: ccStore
   } = useControlsContext()
 
-  const camera = fromStore(cameraStore)
+  const camera = fromStore(cameraStore) as { current: PerspectiveCamera | OrthographicCamera }
   const orbitControls = fromStore(orbitStore)
   const trackballControls = fromStore(trackballStore)
   const cameraControls = fromStore(ccStore)
 
-  const controls = $derived<OrbitControls | CameraControls | TrackballControls | undefined>(
-    orbitControls.current ?? trackballControls.current ?? cameraControls.current
-  )
+  const boundsControls = new CameraControls(camera.current, dom)
+  const { smoothTime } = boundsControls
+  boundsControls.disconnect()
 
-  const goal = {
-    position: undefined as Vector3 | undefined,
-    rotation: undefined as Quaternion | undefined,
-    zoom: undefined as number | undefined,
-    up: undefined as Vector3 | undefined,
-    target: undefined as Vector3 | undefined
-  }
+  $effect.pre(() => {
+    boundsControls.camera = camera.current
+  })
 
-  const origin = {
-    position: new Vector3(),
-    rotation: new Quaternion(),
-    zoom: 1,
-    target: new Vector3()
-  }
-
-  let progress = 0 // represents animation state from 0 to 1
+  $effect.pre(() => {
+    boundsControls.smoothTime = animate() ? smoothTime : 0.001
+  })
 
   let animating = $state(false)
 
-  const box = new Box3()
-  const boxSize = new Vector3()
-  const boxCenter = new Vector3()
+  const controls = $derived<OrbitControls | CameraControls | TrackballControls>(
+    orbitControls.current ??
+      trackballControls.current ??
+      cameraControls.current ??
+      ({ enabled: false } as OrbitControls)
+  )
 
-  const getSize = (): SizeProps => {
-    const cam = camera.current
+  const fit = async () => {
+    const { azimuthAngle, polarAngle } = boundsControls
+    const currentMargin = margin()
+    const currentControls = controls
 
-    box.getSize(boxSize)
-    box.getCenter(boxCenter)
-    const maxSize = Math.max(boxSize.x, boxSize.y, boxSize.z)
+    currentControls.enabled = false
 
-    const fitHeightDistance = isInstanceOf(cam, 'PerspectiveCamera')
-      ? maxSize / (2 * Math.atan((Math.PI * cam.fov) / 360))
-      : maxSize * 4
+    animating = true
 
-    const fitWidthDistance = isInstanceOf(cam, 'PerspectiveCamera')
-      ? fitHeightDistance / cam.aspect
-      : maxSize * 4
+    await Promise.all([
+      boundsControls.fitToBox(ref(), true, {
+        paddingBottom: currentMargin,
+        paddingLeft: currentMargin,
+        paddingTop: currentMargin,
+        paddingRight: currentMargin
+      }),
 
-    const distance = margin() * Math.max(fitHeightDistance, fitWidthDistance)
+      // Preserve previous rotation
+      boundsControls?.rotateAzimuthTo(azimuthAngle, true),
+      boundsControls?.rotatePolarTo(polarAngle, true)
+    ])
 
-    return { box, size: boxSize, center: boxCenter, distance }
-  }
-
-  const refresh = (object?: Object3D | Box3) => {
-    const cam = camera.current
-
-    if (isInstanceOf(object, 'Box3')) {
-      box.copy(object)
+    if ('fromJSON' in currentControls) {
+      currentControls.fromJSON(boundsControls.toJSON())
+      currentControls.update?.(0)
     } else {
-      const target = object || ref()
-      if (!target) {
-        return context
-      }
-      target.updateWorldMatrix(true, true)
-      box.setFromObject(target)
-    }
-
-    if (box.isEmpty()) {
-      const max = cam.position.length() || 10
-      box.setFromCenterAndSize(new Vector3(), new Vector3(max, max, max))
-    }
-
-    origin.position.copy(cam.position)
-    origin.rotation.copy(cam.quaternion)
-
-    if (isInstanceOf(cam, 'OrthographicCamera')) {
-      origin.zoom = cam.zoom
-    }
-
-    if (controls && 'target' in controls) {
-      origin.target.copy(controls.target)
-    }
-
-    goal.position = undefined
-    goal.rotation = undefined
-    goal.zoom = undefined
-    goal.up = undefined
-    goal.target = undefined
-
-    return context
-  }
-
-  const setGoal = () => {
-    const cam = camera.current as PerspectiveCamera | OrthographicCamera
-
-    if (goal.position) {
-      cam.position.copy(goal.position)
-    }
-    if (goal.rotation) {
-      cam.quaternion.copy(goal.rotation)
-    }
-    if (goal.up) {
-      cam.up.copy(goal.up)
-    }
-    if (goal.zoom !== undefined && isInstanceOf(cam, 'OrthographicCamera')) {
-      cam.zoom = goal.zoom
-    }
-
-    cam.updateMatrixWorld()
-    cam.updateProjectionMatrix()
-
-    if (controls && goal.target) {
-      if ('setTarget' in controls) {
-        controls.setTarget(goal.target.x, goal.target.y, goal.target.z, false)
-      } else {
-        controls.target.copy(goal.target)
-      }
+      boundsControls.getTarget(currentControls.target, true)
+      currentControls.update?.()
     }
 
     animating = false
 
-    progress = 1
-    invalidate()
+    await tick()
+
+    currentControls.enabled = true
+
+    onFit()?.()
   }
 
-  $effect(() => {
-    if (!animating || !controls) {
-      return
-    }
+  const reset = async () => {
+    animating = true
 
-    const { enabled } = controls
-    controls.enabled = false
-    return () => {
-      if (controls) {
-        controls.enabled = enabled
-      }
-    }
-  })
+    await boundsControls.reset(animate())
 
-  const reset = () => {
-    const { center, distance } = getSize()
-    const cam = camera.current
-
-    const direction = cam.position.clone().sub(center).normalize()
-    goal.position = center.clone().addScaledVector(direction, distance)
-    goal.target = center.clone()
-    const mCamRot = new Matrix4().lookAt(goal.position, goal.target, cam.up)
-    goal.rotation = new Quaternion().setFromRotationMatrix(mCamRot)
-
-    if (animate()) {
-      animating = true
-      progress = 0
-    } else {
-      setGoal()
-    }
-
-    return context
+    animating = false
   }
 
-  const fit = () => {
-    const cam = camera.current
-
-    if (!isInstanceOf(cam, 'OrthographicCamera')) {
-      // For non-orthographic cameras, fit should behave exactly like reset
-      return reset()
-    }
-
-    // For orthographic cameras, fit should only modify the zoom value
-    let maxHeight = 0
-    let maxWidth = 0
-    const vertices = [
-      new Vector3(box.min.x, box.min.y, box.min.z),
-      new Vector3(box.min.x, box.max.y, box.min.z),
-      new Vector3(box.min.x, box.min.y, box.max.z),
-      new Vector3(box.min.x, box.max.y, box.max.z),
-      new Vector3(box.max.x, box.max.y, box.max.z),
-      new Vector3(box.max.x, box.max.y, box.min.z),
-      new Vector3(box.max.x, box.min.y, box.max.z),
-      new Vector3(box.max.x, box.min.y, box.min.z)
-    ]
-
-    // Transform the center and each corner to camera space
-    const pos = goal.position ?? cam.position
-    const target = goal.target ?? controls?.target
-    const up = goal.up ?? cam.up
-    const mCamWInv = target
-      ? new Matrix4().lookAt(pos, target, up).setPosition(pos).invert()
-      : cam.matrixWorldInverse
-
-    for (const v of vertices) {
-      v.applyMatrix4(mCamWInv)
-      maxHeight = Math.max(maxHeight, Math.abs(v.y))
-      maxWidth = Math.max(maxWidth, Math.abs(v.x))
-    }
-
-    maxHeight *= 2
-    maxWidth *= 2
-    const zoomForHeight = (cam.top - cam.bottom) / maxHeight
-    const zoomForWidth = (cam.right - cam.left) / maxWidth
-
-    goal.zoom = Math.min(zoomForHeight, zoomForWidth) / margin()
-
-    if (animate()) {
-      animating = true
-      progress = 0
-    } else {
-      setGoal()
-    }
-
-    onFit()?.(getSize())
-
-    return context
-  }
-
-  const clip = () => {
-    const { distance } = getSize()
-    const cam = camera.current as PerspectiveCamera | OrthographicCamera
-
-    cam.near = distance / 100
-    cam.far = distance * 100
-    cam.updateProjectionMatrix()
-
-    if (controls) {
-      controls.maxDistance = distance * 10
-      controls.update()
-    }
-
-    invalidate()
-
-    return context
-  }
-
-  // Camera animation loop.
   useTask(
     (delta) => {
-      const cam = camera.current as PerspectiveCamera | OrthographicCamera
-
-      progress += delta / maxDuration()
-
-      if (progress >= 1) {
-        setGoal()
-      } else {
-        const fn = interpolate() ?? defaultInterpolateFn
-        const k = fn(progress)
-
-        if (goal.position) {
-          cam.position.lerpVectors(origin.position, goal.position, k)
-        }
-
-        if (goal.rotation) {
-          cam.quaternion.slerpQuaternions(origin.rotation, goal.rotation, k)
-        }
-
-        if (goal.up) {
-          cam.up.set(0, 1, 0).applyQuaternion(cam.quaternion)
-        }
-
-        if (goal.zoom !== undefined && isInstanceOf(cam, 'OrthographicCamera')) {
-          cam.zoom = (1 - k) * origin.zoom + k * goal.zoom
-        }
-
-        if (controls && goal.target && 'target' in controls) {
-          controls.target.lerpVectors(origin.target, goal.target, k)
-        }
-
-        cam.updateMatrixWorld()
-        cam.updateProjectionMatrix()
+      if (boundsControls.update(delta)) {
+        invalidate()
       }
-
-      invalidate()
     },
     {
-      running: () => animating
+      running: () => animating,
+      autoInvalidate: false
     }
   )
 
   const context: BoundsContext = {
-    getSize,
-    refresh,
-    reset,
     fit,
-    clip
+    reset
   }
 
   setContext(key, context)

@@ -9,12 +9,9 @@
   import { provideBounds } from './useBounds.svelte.js'
 
   let {
-    maxDuration = 1,
-    margin = 1.2,
+    margin = 1,
     animate = true,
-    fit = false,
-    clip = false,
-    interpolate,
+    enabled = true,
     onFit,
     ref = $bindable(),
     children,
@@ -30,8 +27,6 @@
     () => group,
     () => margin,
     () => animate,
-    () => maxDuration,
-    () => interpolate,
     () => onFit
   )
 
@@ -39,28 +34,25 @@
     $cameraControls ?? $orbitControls ?? $trackballControls
   )
 
-  export const update = () => {
-    bounds.refresh()
-
-    if (fit) {
-      bounds.reset().fit()
-    }
-
-    if (clip) {
-      bounds.clip()
-    }
+  export const fit = () => {
+    bounds.fit()
   }
 
-  // Refresh bounds when viewport changes.
+  export const reset = () => {
+    bounds.reset()
+  }
+
   $effect(() => {
     $size
-    clip
-    fit
+    enabled
     margin
     $camera
     controls
+    animate
 
-    update()
+    if (enabled) {
+      fit()
+    }
   })
 </script>
 

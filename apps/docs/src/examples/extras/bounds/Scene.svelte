@@ -23,14 +23,13 @@
 
   interface Props {
     camera: 'orthographic' | 'perspective'
-    controls: 'camera' | 'orbit' | 'trackball'
+    controls: 'camera' | 'orbit' | 'trackball' | 'none'
     margin: number
     animate: boolean
-    fit: boolean
-    clip: boolean
+    enabled: boolean
   }
 
-  let { camera, controls, margin, animate, fit, clip }: Props = $props()
+  let { camera, controls, margin, animate, enabled }: Props = $props()
 
   const suspend = useSuspense()
   const gltf = suspend(useGltf('/models/portal/portal.glb'))
@@ -115,8 +114,7 @@
   <Bounds
     {margin}
     {animate}
-    {fit}
-    {clip}
+    {enabled}
   >
     <T
       is={$gltf.scene}

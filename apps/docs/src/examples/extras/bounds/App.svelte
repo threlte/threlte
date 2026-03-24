@@ -1,16 +1,14 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Checkbox, Slider, List, Button } from 'svelte-tweakpane-ui'
+  import { Pane, Checkbox, List, Button, Wheel } from 'svelte-tweakpane-ui'
   import { Suspense } from '@threlte/extras'
 
   let camera = $state<'perspective' | 'orthographic'>('perspective')
-  let controls = $state<'orbit' | 'camera' | 'trackball'>('orbit')
+  let controls = $state<'orbit' | 'camera' | 'trackball' | 'none'>('orbit')
   let animate = $state(true)
   let margin = $state(1.5)
-  let fit = $state(true)
-  let clip = $state(false)
-
+  let enabled = $state(true)
   let version = $state(0)
 </script>
 
@@ -32,26 +30,22 @@
     options={{
       OrbitControls: 'orbit',
       CameraControls: 'camera',
-      TrackballControls: 'trackball'
+      TrackballControls: 'trackball',
+      None: 'none'
     }}
   />
-  <Slider
+  <Wheel
     bind:value={margin}
     label="margin"
-    min={1}
-    max={10}
+    step={0.1}
   />
   <Checkbox
     bind:value={animate}
     label="animate"
   />
   <Checkbox
-    bind:value={fit}
-    label="fit"
-  />
-  <Checkbox
-    bind:value={clip}
-    label="clip"
+    bind:value={enabled}
+    label="enabled"
   />
   <Button
     title="Reset scene"
@@ -60,20 +54,19 @@
 </Pane>
 
 <div>
-  <Canvas>
-    <Suspense>
-      {#key version}
+  {#key version}
+    <Canvas>
+      <Suspense>
         <Scene
           {camera}
           {controls}
           {margin}
           {animate}
-          {fit}
-          {clip}
+          {enabled}
         />
-      {/key}
-    </Suspense>
-  </Canvas>
+      </Suspense>
+    </Canvas>
+  {/key}
 </div>
 
 <style>
