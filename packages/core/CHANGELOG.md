@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.5.1
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
 ## 8.5.0
 
 ### Minor Changes

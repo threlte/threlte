@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.3
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
 ## 3.0.2
 
 ### Patch Changes
