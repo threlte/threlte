@@ -2,8 +2,10 @@
   import { isInstanceOf, T, useTask } from '@threlte/core'
   import {
     Bounds,
+    CameraControls,
     OrbitControls,
     Sparkles,
+    TrackballControls,
     useGltf,
     useSuspense,
     useTexture
@@ -21,13 +23,14 @@
 
   interface Props {
     camera: 'orthographic' | 'perspective'
+    controls: 'camera' | 'orbit' | 'trackball'
     margin: number
     animate: boolean
     fit: boolean
     clip: boolean
   }
 
-  let { camera, margin, animate, fit, clip }: Props = $props()
+  let { camera, controls, margin, animate, fit, clip }: Props = $props()
 
   const suspend = useSuspense()
   const gltf = suspend(useGltf('/models/portal/portal.glb'))
@@ -65,6 +68,20 @@
   })
 </script>
 
+{#snippet Controls()}
+  {#if controls === 'orbit'}
+    <OrbitControls
+      enableDamping
+      enableZoom={false}
+      enablePan={false}
+    />
+  {:else if controls === 'camera'}
+    <CameraControls />
+  {:else if controls === 'trackball'}
+    <TrackballControls />
+  {/if}
+{/snippet}
+
 {#if camera === 'perspective'}
   <T.PerspectiveCamera
     makeDefault
@@ -72,15 +89,8 @@
     position.y={10}
     position.z={-20}
     fov={50}
-    oncreate={(ref) => {
-      ref.lookAt(0, 0, 0)
-    }}
   >
-    <OrbitControls
-      enableDamping
-      enableZoom={false}
-      enablePan={false}
-    />
+    {@render Controls()}
   </T.PerspectiveCamera>
 {:else if camera === 'orthographic'}
   <T.OrthographicCamera
@@ -89,15 +99,8 @@
     position.y={10}
     position.z={-20}
     zoom={50}
-    oncreate={(ref) => {
-      ref.lookAt(0, 0, 0)
-    }}
   >
-    <OrbitControls
-      enableDamping
-      enableZoom={false}
-      enablePan={false}
-    />
+    {@render Controls()}
   </T.OrthographicCamera>
 {/if}
 

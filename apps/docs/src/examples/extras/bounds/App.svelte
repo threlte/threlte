@@ -4,11 +4,12 @@
   import { Pane, Checkbox, Slider, List, Button } from 'svelte-tweakpane-ui'
   import { Suspense } from '@threlte/extras'
 
+  let camera = $state<'perspective' | 'orthographic'>('perspective')
+  let controls = $state<'orbit' | 'camera' | 'trackball'>('orbit')
   let animate = $state(true)
   let margin = $state(1.5)
   let fit = $state(true)
   let clip = $state(false)
-  let camera = $state<'perspective' | 'orthographic'>('perspective')
 
   let version = $state(0)
 </script>
@@ -21,8 +22,17 @@
     label="camera"
     bind:value={camera}
     options={{
-      orthographic: 'orthographic',
-      perspective: 'perspective'
+      OrthographicCamera: 'orthographic',
+      PerspectiveCamera: 'perspective'
+    }}
+  />
+  <List
+    label="controls"
+    bind:value={controls}
+    options={{
+      OrbitControls: 'orbit',
+      CameraControls: 'camera',
+      TrackballControls: 'trackball'
     }}
   />
   <Slider
@@ -55,6 +65,7 @@
       {#key version}
         <Scene
           {camera}
+          {controls}
           {margin}
           {animate}
           {fit}

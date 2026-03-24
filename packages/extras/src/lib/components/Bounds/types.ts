@@ -1,11 +1,25 @@
-import type { Box3, Group, Vector3 } from 'three'
+import type { Quaternion, Group, Vector3, Box3 } from 'three'
 import type { Props } from '@threlte/core'
 
-export type SizeProps = {
+export interface SizeProps {
   box: Box3
   size: Vector3
   center: Vector3
   distance: number
+}
+
+export interface Origin {
+  camPos: Vector3
+  camRot: Quaternion
+  camZoom: number
+}
+
+export interface Goal {
+  camPos: Vector3 | undefined
+  camRot: Quaternion | undefined
+  camZoom: number | undefined
+  camUp: Vector3 | undefined
+  target: Vector3 | undefined
 }
 
 export interface BoundsProps extends Props<Group> {
