@@ -9,7 +9,10 @@ type CacheItem = {
   keys: Keys
 }
 
+type Cache = CacheItem[]
+
 type CacheContext = {
+  items: Cache
   remember: <T>(callback: () => Promise<T>, keys: Keys) => Promise<T>
   clear: (keys: Keys) => void
 }
@@ -31,26 +34,31 @@ export const shallowEqualArrays = (arrA: unknown[], arrB: unknown[]) => {
  * in multiple scenes.
  */
 export const createCacheContext = () => {
-  const getCacheKey = (keys: Keys) => JSON.stringify(keys)
-
-  const items = new Map<string, CacheItem>()
+  const items: Cache = []
 
   const remember: CacheContext['remember'] = <T>(
     callback: () => Promise<T>,
     keys: Keys
   ): Promise<T> => {
-    const cacheKey = getCacheKey(keys)
-    const existing = items.get(cacheKey)
-
-    if (existing) {
-      return existing.promise as Promise<T>
+    for (let i = 0; i < items.length; i++) {
+      const entry = items[i]
+      if (shallowEqualArrays(keys, entry.keys)) {
+        if (entry.promise) return entry.promise as Promise<T>
+      }
     }
 
     const promise = callback()
 
     // If the promise rejects, remove the cache entry so that retries can be made
     promise.catch((error) => {
-      items.delete(cacheKey)
+      for (let i = 0; i < items.length; i++) {
+        const entry = items[i]
+        if (shallowEqualArrays(keys, entry.keys)) {
+          items.splice(i, 1)
+          break
+        }
+      }
+
       throw error
     })
 
@@ -61,20 +69,23 @@ export const createCacheContext = () => {
     }
 
     // Add the entry to the cache
-    items.set(cacheKey, {
-      promise,
-      keys
-    })
+    items.push(entry)
 
     // Return the promise
     return entry.promise as Promise<T>
   }
 
   const clear: CacheContext['clear'] = (keys) => {
-    items.delete(getCacheKey(keys))
+    for (let i = 0; i < items.length; i++) {
+      const entry = items[i]
+      if (shallowEqualArrays(keys, entry.keys)) {
+        items.splice(i, 1)
+        return
+      }
+    }
   }
 
-  const context: CacheContext = { remember, clear }
+  const context: CacheContext = { items, remember, clear }
 
   setContext<CacheContext>('threlte-cache', context)
 
