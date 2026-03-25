@@ -13,11 +13,14 @@ export const setupControllers = (factory: XRControllerModelFactory) => {
   const targetRaySpaces = [xr.getController(0), xr.getController(1)]
   const indexMap = new Map()
 
-  targetRaySpaces.forEach((targetRay, index) => {
+    targetRaySpaces.forEach((targetRay, index) => {
+
+    const model = (factory ?? new XRControllerModelFactory()).createControllerModel(targetRay);
+
     indexMap.set(targetRay, {
       targetRay,
       grip: xr.getControllerGrip(index),
-      model: factory.createControllerModel(targetRay)
+      model
     })
   })
 

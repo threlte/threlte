@@ -14,10 +14,13 @@ export const setupHands = (factory: XRHandModelFactory) => {
   const map = new Map()
 
   handSpaces.forEach((handSpace, index) => {
+
+    const model = (factory ?? new XRHandModelFactory()).createHandModel(handSpace, 'mesh');
+
     map.set(handSpace, {
       hand: handSpace,
       targetRay: xr.getController(index),
-      model: factory.createHandModel(handSpace, 'mesh')
+      model
     })
   })
 

@@ -64,7 +64,11 @@ This should be placed within a Threlte `<Canvas />`.
 
     /** Called after an XRSession is ended */
     onsessionend?: (event: XRSessionEvent) => void
+
+    /** Optionally provide custom XRHandModelFactory */
     handFactory?: XRHandModelFactory
+
+    /** Optionally provide custom XRControllerModelFactory */
     controllerFactory?: XRControllerModelFactory
 
     /** Called when an XRSession is hidden or unfocused. */
@@ -85,7 +89,7 @@ This should be placed within a Threlte `<Canvas />`.
     fallback,
     children,
     handFactory,
-    controllerFactory    
+    controllerFactory
   }: Props = $props()
 
   const { renderer, renderMode } = useThrelte()
