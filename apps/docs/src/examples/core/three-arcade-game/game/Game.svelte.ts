@@ -78,5 +78,3 @@ class Game {
 }
 
 export const game = new Game()
-
-export const debugValue = $state(0.5)

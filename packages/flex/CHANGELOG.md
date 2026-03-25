@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.2.1
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
 ## 2.2.0
 
 ### Minor Changes

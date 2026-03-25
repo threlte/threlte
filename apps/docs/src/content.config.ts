@@ -89,6 +89,7 @@ export const referenceCollection = defineCollection({
     order: z.number().optional(),
     isDivider: z.boolean().optional(),
     category: z.enum(referenceCategories),
+    group: z.string().optional(),
     componentSignature: componentSignature.optional(),
     showInSidebar: z.boolean().optional().default(true)
   })

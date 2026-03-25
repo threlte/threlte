@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 9.13.0
+
+### Minor Changes
+
+- 5f4d2b0: Add `<BackdropGeometry>` component
+
+## 9.12.1
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
+## 9.12.0
+
+### Minor Changes
+
+- fdaaa59: port <Bounds> component from drei
+
 ## 9.11.0
 
 ### Minor Changes

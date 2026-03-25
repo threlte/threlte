@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.4.1
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
 ## 3.4.0
 
 ### Minor Changes

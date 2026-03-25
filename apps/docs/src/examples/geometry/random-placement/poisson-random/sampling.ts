@@ -1,7 +1,7 @@
 // Adapted from: https://github.com/SebLague/Poisson-Disc-Sampling
 // https://www.cs.ubc.ca/~rbridson/docs/bridson-siggraph07-poissondisk.pdf
 
-export class PoissonDiscSample {
+class PoissonDiscSample {
   random: () => number
   radius: number
   cellSize: number

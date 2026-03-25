@@ -1,6 +1,6 @@
 {
   "name": "@threlte/studio",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "repository": {
@@ -48,7 +48,6 @@
     "rimraf": "catalog:",
     "svelte": "catalog:",
     "svelte-check": "catalog:",
-    "svelte2tsx": "catalog:",
     "three": "catalog:",
     "tslib": "catalog:",
     "tsup": "^8.3.5",
