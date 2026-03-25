@@ -11,7 +11,7 @@ Title: Sniper Scope NightForce_V2
   import { Group, type Vector3Tuple } from 'three'
   import { T } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
-  import { tweened, type Tweened } from 'svelte/motion'
+  import { Tween } from 'svelte/motion'
   import { scoping } from '../Controls.svelte'
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import type { Snippet } from 'svelte'
@@ -26,8 +26,8 @@ Title: Sniper Scope NightForce_V2
 
   const gltf = useGltf('/models/scope.glb')
 
-  const rotationX = tweened(-3)
-  const position: Tweened<Vector3Tuple> = tweened([0.4, -0.15, -1])
+  const rotationX = new Tween(-3)
+  const position = new Tween<Vector3Tuple>([0.4, -0.15, -1])
 
   $effect.pre(() => {
     if ($scoping) {
@@ -44,8 +44,8 @@ Title: Sniper Scope NightForce_V2
   is={group}
   dispose={false}
   scale={0.02}
-  position={$position}
-  rotation.y={DEG2RAD * $rotationX}
+  position={position.current}
+  rotation.y={DEG2RAD * rotationX.current}
 >
   {#await gltf then { nodes, materials }}
     <T.Mesh
