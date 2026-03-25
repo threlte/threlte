@@ -80,10 +80,12 @@
     "svelte-check": "catalog:",
     "svelte-portal": "^2.2.1",
     "svelte-tweakpane-ui": "catalog:",
+    "svelte2tsx": "^0.7.52",
     "tailwindcss": "^4.1.12",
     "terser": "^5.37.0",
     "three": "catalog:",
     "three.quarks": "^0.15.0",
+    "ts-morph": "^27.0.2",
     "tsx": "^4.8.1",
     "vite": "catalog:",
     "vite-plugin-mkcert": "^1.17.5"

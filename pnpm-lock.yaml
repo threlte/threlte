@@ -296,6 +296,9 @@ importers:
       svelte-tweakpane-ui:
         specifier: 'catalog:'
         version: 1.5.9(svelte@5.53.6)
+      svelte2tsx:
+        specifier: ^0.7.52
+        version: 0.7.52(svelte@5.53.6)(typescript@5.9.2)
       tailwindcss:
         specifier: ^4.1.12
         version: 4.1.12
@@ -308,6 +311,9 @@ importers:
       three.quarks:
         specifier: ^0.15.0
         version: 0.15.0(three@0.175.0)
+      ts-morph:
+        specifier: ^27.0.2
+        version: 27.0.2
       tsx:
         specifier: ^4.8.1
         version: 4.20.5
@@ -3163,6 +3169,9 @@ packages:
       '@threlte/extras': '>=9'
       svelte: '>=5'
 
+  '@ts-morph/common@0.28.1':
+    resolution: {integrity: sha512-W74iWf7ILp1ZKNYXY5qbddNaml7e9Sedv5lvU1V8lftlitkc9Pq1A+jlH23ltDgWYeZFFEqGCD1Ies9hqu3O+g==}
+
   '@tsconfig/node10@1.0.9':
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
 
@@ -3887,6 +3896,9 @@ packages:
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
+
+  code-block-writer@13.0.3:
+    resolution: {integrity: sha512-Oofo0pq3IKnsFtuHqSF7TqBfr71aeyZDVJ0HpmqB7FBM2qEigL0iPONSCZSO9pE9dZTAxANe5XHG9Uy0YMv8cg==}
 
   collapse-white-space@2.1.0:
     resolution: {integrity: sha512-loKTxY1zCOuG4j9f6EPnuyyYkf58RnhhWTvRoZEokgB+WbdXehfjFviyOVYkqzEWz1Q5kRiZdBYS5SwxbQYwzw==}
@@ -6781,6 +6793,9 @@ packages:
   scheduler@0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
 
+  scule@1.3.0:
+    resolution: {integrity: sha512-6FtHJEvt+pVMIB9IBY+IcCJ6Z5f1iQnytgyfKMhDKgmzYG+TeH/wx1y3l27rshSbLiSanrR9ffZDrEsmjlQF2g==}
+
   semver@5.7.2:
     resolution: {integrity: sha512-cBznnQ9KjJqU67B52RMC65CMarK2600WFnbkcaiwWq3xy/5haFJlshgnpjovMVJ+Hff49d8GEn0b87C5pDQ10g==}
     hasBin: true
@@ -7126,6 +7141,12 @@ packages:
       svelte: ^3.55 || ^4.0.0-next.0 || ^4.0 || ^5.0.0-next.0
       typescript: ^4.9.4 || ^5.0.0
 
+  svelte2tsx@0.7.52:
+    resolution: {integrity: sha512-svdT1FTrCLpvlU62evO5YdJt/kQ7nxgQxII/9BpQUvKr+GJRVdAXNVw8UWOt0fhoe5uWKyU0WsUTMRVAtRbMQg==}
+    peerDependencies:
+      svelte: ^3.55 || ^4.0.0-next.0 || ^4.0 || ^5.0.0-next.0
+      typescript: ^4.9.4 || ^5.0.0
+
   svelte@5.53.6:
     resolution: {integrity: sha512-lP5DGF3oDDI9fhHcSpaBiJEkFLuS16h92DhM1L5K1lFm0WjOmUh1i2sNkBBk8rkxJRpob0dBE75jRfUzGZUOGA==}
     engines: {node: '>=18'}
@@ -7331,6 +7352,9 @@ packages:
 
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
+
+  ts-morph@27.0.2:
+    resolution: {integrity: sha512-fhUhgeljcrdZ+9DZND1De1029PrE+cMkIP7ooqkLRTrRLTqcki2AstsyJm0vRNbTbVCNJ0idGlbBrfqc7/nA8w==}
 
   ts-node@10.8.2:
     resolution: {integrity: sha512-LYdGnoGddf1D6v8REPtIH+5iq/gTDuZqv2/UJUU7tKjuEU8xVZorBM+buCGNjj+pGEud+sOoM4CX3/YzINpENA==}
@@ -8329,7 +8353,7 @@ snapshots:
       '@sveltejs/vite-plugin-svelte': 5.1.1(svelte@5.53.6)(vite@7.1.4(@types/node@22.18.0)(jiti@2.6.1)(lightningcss@1.30.1)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.8.2))
       astro: 5.13.5(@types/node@22.18.0)(jiti@2.6.1)(lightningcss@1.30.1)(rollup@4.49.0)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(typescript@5.9.2)(yaml@2.8.2)
       svelte: 5.53.6
-      svelte2tsx: 0.7.42(svelte@5.53.6)(typescript@5.9.2)
+      svelte2tsx: 0.7.52(svelte@5.53.6)(typescript@5.9.2)
       typescript: 5.9.2
       vite: 7.1.4(@types/node@22.18.0)(jiti@2.6.1)(lightningcss@1.30.1)(sass@1.77.7)(terser@5.37.0)(tsx@4.20.5)(yaml@2.8.2)
     transitivePeerDependencies:
@@ -10419,6 +10443,12 @@ snapshots:
       '@threlte/extras': link:packages/extras
       svelte: 5.53.6
 
+  '@ts-morph/common@0.28.1':
+    dependencies:
+      minimatch: 10.2.4
+      path-browserify: 1.0.1
+      tinyglobby: 0.2.14
+
   '@tsconfig/node10@1.0.9':
     optional: true
 
@@ -11352,6 +11382,8 @@ snapshots:
   clsx@1.2.1: {}
 
   clsx@2.1.1: {}
+
+  code-block-writer@13.0.3: {}
 
   collapse-white-space@2.1.0: {}
 
@@ -14968,6 +15000,8 @@ snapshots:
     dependencies:
       loose-envify: 1.4.0
 
+  scule@1.3.0: {}
+
   semver@5.7.2: {}
 
   semver@6.3.1: {}
@@ -15420,6 +15454,13 @@ snapshots:
       svelte: 5.53.6
       typescript: 5.9.2
 
+  svelte2tsx@0.7.52(svelte@5.53.6)(typescript@5.9.2):
+    dependencies:
+      dedent-js: 1.0.1
+      scule: 1.3.0
+      svelte: 5.53.6
+      typescript: 5.9.2
+
   svelte@5.53.6:
     dependencies:
       '@jridgewell/remapping': 2.3.5
@@ -15615,6 +15656,11 @@ snapshots:
       typescript: 5.9.2
 
   ts-interface-checker@0.1.13: {}
+
+  ts-morph@27.0.2:
+    dependencies:
+      '@ts-morph/common': 0.28.1
+      code-block-writer: 13.0.3
 
   ts-node@10.8.2(@types/node@20.19.11)(typescript@5.4.5):
     dependencies:
