@@ -31,7 +31,7 @@
     const cam = $camera as PerspectiveCamera
 
     scope.visible = false
-    cam.fov = $zoomedFov
+    cam.fov = zoomedFov.current
     cam.updateProjectionMatrix()
     cam.matrixWorldNeedsUpdate = true
     renderer.setRenderTarget(renderTarget)
