@@ -1,8 +1,6 @@
 import { getContext, setContext } from 'svelte'
 
-type Tuple<T = unknown> = [T] | T[]
-
-type Keys = Tuple<unknown>
+type Keys = unknown[]
 
 type CacheItem = {
   // The promise that is being cached
@@ -11,10 +9,7 @@ type CacheItem = {
   keys: Keys
 }
 
-type Cache = CacheItem[]
-
 type CacheContext = {
-  items: Cache
   remember: <T>(callback: () => Promise<T>, keys: Keys) => Promise<T>
   clear: (keys: Keys) => void
 }
@@ -36,43 +31,50 @@ export const shallowEqualArrays = (arrA: unknown[], arrB: unknown[]) => {
  * in multiple scenes.
  */
 export const createCacheContext = () => {
-  const items: Cache = []
+  const getCacheKey = (keys: Keys) => JSON.stringify(keys)
+
+  const items = new Map<string, CacheItem>()
 
   const remember: CacheContext['remember'] = <T>(
     callback: () => Promise<T>,
     keys: Keys
   ): Promise<T> => {
-    for (let i = 0; i < items.length; i++) {
-      const entry = items[i]
-      if (shallowEqualArrays(keys, entry.keys)) {
-        if (entry.promise) return entry.promise as Promise<T>
-      }
+    const cacheKey = getCacheKey(keys)
+    const existing = items.get(cacheKey)
+
+    if (existing) {
+      return existing.promise as Promise<T>
     }
+
+    const promise = callback()
+
+    // If the promise rejects, remove the cache entry so that retries can be made
+    promise.catch((error) => {
+      items.delete(cacheKey)
+      throw error
+    })
 
     // If no match was found, create a new entry
     const entry: CacheItem = {
-      promise: callback(),
+      promise,
       keys
     }
 
     // Add the entry to the cache
-    items.push(entry)
+    items.set(cacheKey, {
+      promise,
+      keys
+    })
 
     // Return the promise
     return entry.promise as Promise<T>
   }
 
   const clear: CacheContext['clear'] = (keys) => {
-    for (let i = 0; i < items.length; i++) {
-      const entry = items[i]
-      if (shallowEqualArrays(keys, entry.keys)) {
-        items.splice(i, 1)
-        return
-      }
-    }
+    items.delete(getCacheKey(keys))
   }
 
-  const context: CacheContext = { items, remember, clear }
+  const context: CacheContext = { remember, clear }
 
   setContext<CacheContext>('threlte-cache', context)
 
@@ -84,8 +86,8 @@ export const createCacheContext = () => {
  *
  * This hook is used to access the cache. It returns a `remember` function that
  * can be used to cache a promise based on the provided keys. The `remember`
- * function will return the cached value if the promise has already been
- * resolved and the keys match.
+ * function will return the cached promise when the keys match, so repeated
+ * calls share the same in-flight or resolved result.
  *
  * @example
  * ```ts
