@@ -4,7 +4,7 @@
   import { XR, Controller, type XRControllerEvent } from '@threlte/xr'
   import { setupHands } from './setupHands'
 
-  const { renderer } = useThrelte();
+  const { renderer } = useThrelte()
   const boxes = $state<Mesh[]>([])
 
   const handleControllerEvent = (event: XRControllerEvent) => {
@@ -13,17 +13,14 @@
 
   const hands = ['left', 'right'] as const
 
-  const { leftHand, rightHand, handFactory} = setupHands(renderer);
-
+  const { leftHand, rightHand, handFactory } = setupHands(renderer)
 </script>
 
 <XR {handFactory}>
+  <T is={leftHand} />
+  <T is={rightHand} />
 
-<T is={leftHand}/>
-<T is={rightHand}/>
-
-  {#each hands as hand (hand)}   
-
+  {#each hands as hand (hand)}
     <Controller
       {hand}
       onconnected={handleControllerEvent}

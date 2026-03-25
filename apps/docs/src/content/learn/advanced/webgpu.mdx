@@ -291,9 +291,11 @@ attach the material.
 
 ```svelte
 <script>
-	const material = new MeshPhysicalNodeMaterial();
-	material.outputNode = outputNode;
-	material.castShadowNode = Fn(() => { /* ... */ }();
+  const material = new MeshPhysicalNodeMaterial()
+  material.outputNode = outputNode
+  material.castShadowNode = Fn(() => {
+    /* ... */
+  })()
 </script>
 
 <T is={material} />
