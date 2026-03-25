@@ -43,7 +43,10 @@ It will by default load a hand model.
 <Tip type="warning">
   Default hand models are fetched from the immersive web group's [webxr input profile
   repo](https://github.com/immersive-web/webxr-input-profiles). If you are developing an offline
-  app, you should download and provide any anticipated models.
+  app, you should download and provide any anticipated models. If you want to override the default factory behavior, you can provide your own [XRHandModelFactory](https://threejs.org/docs/?q=XRHand#XRHandModelFactory) or [XRControllerModelFactory](https://threejs.org/docs/?q=XRControllerModelFactory#XRControllerModelFactory) to the `<XR>` component:
+
+<Example path="xr/xr-factory" />
+
 </Tip>
 
 `<Hand>` can accept a snippet to replace the default model.
