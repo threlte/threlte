@@ -14,7 +14,6 @@
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
   import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js'
   import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js'
-  import { useSuspense } from '../../../suspense/useSuspense.svelte.js'
   import { useEnvironment } from '../utils/useEnvironment.svelte.js'
   import type { EquirectangularEnvironmentProps } from './types.js'
   import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js'
@@ -29,13 +28,6 @@
   }: EquirectangularEnvironmentProps = $props()
 
   const { scene: defaultScene } = useThrelte()
-  const suspend = useSuspense()
-
-  useEnvironment(
-    () => scene ?? defaultScene,
-    () => texture,
-    () => isBackground
-  )
 
   // defaults to `TextureLoader` if `url` is not provided
   const loader = $derived.by(() => {
@@ -53,33 +45,33 @@
     return loaders.tex
   })
 
+  const tex = $derived(await loader.loadAsync(url))
+
+  $effect.pre(() => {
+    texture = tex
+    tex.mapping = EquirectangularReflectionMapping
+  })
+
   $effect(() => {
-    if (url === undefined || loader === undefined) {
-      return
-    }
-
-    const suspendedTexture = suspend(loader.loadAsync(url))
-
-    suspendedTexture.then((t) => {
-      t.mapping = EquirectangularReflectionMapping
-      texture = t
-    })
-
     return () => {
-      suspendedTexture.then((texture) => {
-        texture.dispose()
-      })
+      tex.dispose()
     }
   })
+
+  useEnvironment(
+    () => scene ?? defaultScene,
+    () => tex,
+    () => isBackground
+  )
 </script>
 
 {#if ground}
   {@const options = ground === true ? {} : ground}
-  {#if texture}
+  {#if tex}
     <T
       is={GroundedSkybox}
       bind:ref={skybox}
-      args={[texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
+      args={[tex, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
     />
   {/if}
 {/if}

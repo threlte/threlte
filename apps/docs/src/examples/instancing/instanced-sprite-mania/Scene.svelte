@@ -17,27 +17,28 @@
 
   let { billboarding = false, fps, children }: Props = $props()
 
-  const grassTexture = useTexture('/textures/sprites/pixel-grass.png', {
-    transform: (texture) => {
-      texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(500, 500)
-      texture.minFilter = NearestFilter
-      texture.magFilter = NearestFilter
-      texture.needsUpdate = true
-      return texture
-    }
-  })
-
-  const skyTexture = useTexture('/textures/sprites/pixel-sky.png', {
-    transform: (texture) => {
-      texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(10, 2)
-      texture.minFilter = NearestFilter
-      texture.magFilter = NearestFilter
-      texture.needsUpdate = true
-      return texture
-    }
-  })
+  const [grassTexture, skyTexture] = await Promise.all([
+    useTexture('/textures/sprites/pixel-grass.png', {
+      transform: (texture) => {
+        texture.wrapS = texture.wrapT = RepeatWrapping
+        texture.repeat.set(500, 500)
+        texture.minFilter = NearestFilter
+        texture.magFilter = NearestFilter
+        texture.needsUpdate = true
+        return texture
+      }
+    }),
+    useTexture('/textures/sprites/pixel-sky.png', {
+      transform: (texture) => {
+        texture.wrapS = texture.wrapT = RepeatWrapping
+        texture.repeat.set(10, 2)
+        texture.minFilter = NearestFilter
+        texture.magFilter = NearestFilter
+        texture.needsUpdate = true
+        return texture
+      }
+    })
+  ])
 
   const { renderer } = useThrelte()
   renderer.setPixelRatio(1)
@@ -92,26 +93,26 @@
 
   <!-- SCENE SETUP: grass, sky, lights -->
 
-  {#if skyTexture.current}
+  {#if skyTexture}
     <T.Mesh
       position.y={-10}
       scale.y={0.5}
     >
       <T.SphereGeometry args={[300, 8, 8]} />
       <T.MeshBasicMaterial
-        map={skyTexture.current}
+        map={skyTexture}
         side={BackSide}
       />
     </T.Mesh>
   {/if}
 
-  {#if grassTexture.current}
+  {#if grassTexture}
     <T.Mesh
       rotation.x={-MathUtils.DEG2RAD * 90}
       receiveShadow
     >
       <T.CircleGeometry args={[300]} />
-      <T.MeshLambertMaterial map={grassTexture.current} />
+      <T.MeshLambertMaterial map={grassTexture} />
     </T.Mesh>
   {/if}
 </CSM>

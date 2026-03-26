@@ -80,7 +80,6 @@ export type { TransitionProps } from './transitions/types.js'
 
 // suspense
 export { default as Suspense } from './suspense/Suspense.svelte'
-export { useSuspense } from './suspense/useSuspense.svelte.js'
 export { onReveal } from './suspense/onReveal.svelte.js'
 export { onSuspend } from './suspense/onSuspend.svelte.js'
 

@@ -31,9 +31,11 @@
     },
     { running: () => running }
   )
+
+  const splat = await loader.load(src)
 </script>
 
-{#await loader.load(src) then splat}
+{#if splat}
   <T
     {...rest}
     dispose={false}
@@ -53,4 +55,4 @@
   >
     {@render children?.({ ref: Splat })}
   </T>
-{/await}
+{/if}

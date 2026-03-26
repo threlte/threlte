@@ -1,4 +1,4 @@
-import { useLoader, type AsyncState } from '@threlte/core'
+import { useLoader } from '@threlte/core'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import type { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
@@ -20,14 +20,14 @@ export function useGltf(options?: UseGltfOptions): {
     }
   >(
     url: string
-  ) => AsyncState<ThrelteGltf<Graph>>
+  ) => Promise<ThrelteGltf<Graph>>
 }
 export function useGltf<
   Graph extends SceneGraph = {
     nodes: Record<string, any>
     materials: Record<string, any>
   }
->(url: string, options?: UseGltfOptions): AsyncState<ThrelteGltf<Graph>>
+>(url: string, options?: UseGltfOptions): Promise<ThrelteGltf<Graph>>
 export function useGltf<
   Graph extends SceneGraph = {
     nodes: Record<string, any>
@@ -37,7 +37,7 @@ export function useGltf<
   urlOrOptions?: string | UseGltfOptions,
   options?: UseGltfOptions
 ):
-  | AsyncState<ThrelteGltf<Graph>>
+  | Promise<ThrelteGltf<Graph>>
   | {
       load: <
         Graph extends SceneGraph = {
@@ -46,7 +46,7 @@ export function useGltf<
         }
       >(
         url: string
-      ) => AsyncState<ThrelteGltf<Graph>>
+      ) => Promise<ThrelteGltf<Graph>>
     } {
   const opts = typeof urlOrOptions === 'string' ? options : urlOrOptions
 

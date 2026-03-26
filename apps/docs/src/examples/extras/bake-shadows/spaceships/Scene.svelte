@@ -1,7 +1,7 @@
 <script lang="ts">
   import Spaceship from './Spaceship.svelte'
   import type { SpaceshipProps } from './types'
-  import { BakeShadows, OrbitControls, Suspense } from '@threlte/extras'
+  import { BakeShadows, OrbitControls, Suspense, Text } from '@threlte/extras'
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
 
@@ -27,25 +27,25 @@
   ]
 </script>
 
-<T.OrthographicCamera
-  position={[-40, 25, 40]}
-  makeDefault
-  {zoom}
-  oncreate={(ref) => {
-    ref.lookAt(0, 0, -8)
-  }}
->
-  <OrbitControls />
-</T.OrthographicCamera>
-
-<T.SpotLight
-  position={[0, 25, 0]}
-  castShadow
-  intensity={1000}
-  angle={Math.PI / 3}
-/>
-
 <Suspense final>
+  <T.OrthographicCamera
+    position={[-40, 25, 40]}
+    makeDefault
+    {zoom}
+    oncreate={(ref) => {
+      ref.lookAt(0, 0, -8)
+    }}
+  >
+    <OrbitControls />
+  </T.OrthographicCamera>
+
+  <T.SpotLight
+    position={[0, 25, 0]}
+    castShadow
+    intensity={1000}
+    angle={Math.PI / 3}
+  />
+
   {#each ships as ship (ship)}
     <Spaceship
       name={ship.name}
@@ -53,13 +53,27 @@
     />
   {/each}
   <BakeShadows />
-</Suspense>
 
-<T.Mesh
-  receiveShadow
-  position.y={-10}
-  rotation.x={-1 * 0.5 * Math.PI}
->
-  <T.CircleGeometry args={[100]} />
-  <T.MeshStandardMaterial color="white" />
-</T.Mesh>
+  <T.Mesh
+    receiveShadow
+    position.y={-10}
+    rotation.x={-1 * 0.5 * Math.PI}
+  >
+    <T.CircleGeometry args={[100]} />
+    <T.MeshStandardMaterial color="white" />
+  </T.Mesh>
+
+  {#snippet fallback()}
+    <Text
+      position.z={-8}
+      text="Loading..."
+      fontSize={1}
+      color="white"
+      anchorX="50%"
+      anchorY="50%"
+      oncreate={(ref) => {
+        ref.lookAt(-40, 25, 40)
+      }}
+    />
+  {/snippet}
+</Suspense>

@@ -14,27 +14,28 @@
 
   let { billboarding = false, fps, children }: Props = $props()
 
-  const grassTexture = useTexture('/textures/sprites/pixel-grass.png', {
-    transform: (texture) => {
-      texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(100, 100)
-      texture.minFilter = NearestFilter
-      texture.magFilter = NearestFilter
-      texture.needsUpdate = true
-      return texture
-    }
-  })
-
-  const skyTexture = useTexture('/textures/sprites/pixel-sky.png', {
-    transform: (texture) => {
-      texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(10, 2)
-      texture.minFilter = NearestFilter
-      texture.magFilter = NearestFilter
-      texture.needsUpdate = true
-      return texture
-    }
-  })
+  const [grassTexture, skyTexture] = await Promise.all([
+    useTexture('/textures/sprites/pixel-grass.png', {
+      transform: (texture) => {
+        texture.wrapS = texture.wrapT = RepeatWrapping
+        texture.repeat.set(100, 100)
+        texture.minFilter = NearestFilter
+        texture.magFilter = NearestFilter
+        texture.needsUpdate = true
+        return texture
+      }
+    }),
+    useTexture('/textures/sprites/pixel-sky.png', {
+      transform: (texture) => {
+        texture.wrapS = texture.wrapT = RepeatWrapping
+        texture.repeat.set(10, 2)
+        texture.minFilter = NearestFilter
+        texture.magFilter = NearestFilter
+        texture.needsUpdate = true
+        return texture
+      }
+    })
+  ])
 </script>
 
 {@render children?.()}
@@ -54,28 +55,24 @@
 
 <!-- SCENE SETUP: grass, sky, lights -->
 
-{#if skyTexture.current}
-  <T.Mesh
-    position.y={-10}
-    scale.y={0.5}
-  >
-    <T.SphereGeometry args={[110]} />
-    <T.MeshBasicMaterial
-      map={skyTexture.current}
-      side={BackSide}
-    />
-  </T.Mesh>
-{/if}
+<T.Mesh
+  position.y={-10}
+  scale.y={0.5}
+>
+  <T.SphereGeometry args={[110]} />
+  <T.MeshBasicMaterial
+    map={skyTexture}
+    side={BackSide}
+  />
+</T.Mesh>
 
-{#if grassTexture.current}
-  <T.Mesh
-    rotation.x={MathUtils.DEG2RAD * -90}
-    receiveShadow
-  >
-    <T.CircleGeometry args={[110]} />
-    <T.MeshLambertMaterial map={grassTexture.current} />
-  </T.Mesh>
-{/if}
+<T.Mesh
+  rotation.x={MathUtils.DEG2RAD * -90}
+  receiveShadow
+>
+  <T.CircleGeometry args={[110]} />
+  <T.MeshLambertMaterial map={grassTexture} />
+</T.Mesh>
 
 <Sky elevation={13.35} />
 

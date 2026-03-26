@@ -20,7 +20,7 @@
     }
   }
 
-  const assets = Promise.all([
+  const [gltf, texture1, texture2, normalMap] = await Promise.all([
     useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/NormalTree_1.gltf'),
     useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/NormalTree_Bark.png'),
     useTexture(
@@ -32,48 +32,46 @@
   ])
 </script>
 
-{#await assets then [$gltf, $texture1, $texture2, $normalMap1]}
-  <InstancedMesh castShadow>
-    <T is={$gltf.nodes.Cylinder001.geometry} />
-    <T.MeshStandardMaterial
-      map={$texture1}
-      map.wrapS={THREE.RepeatWrapping}
-      map.wrapT={THREE.RepeatWrapping}
-      normalMap={$normalMap1}
-      normalMap.wrapS={THREE.RepeatWrapping}
-      normalMap.wrapT={THREE.RepeatWrapping}
+<InstancedMesh castShadow>
+  <T is={gltf.nodes.Cylinder001.geometry} />
+  <T.MeshStandardMaterial
+    map={texture1}
+    map.wrapS={THREE.RepeatWrapping}
+    map.wrapT={THREE.RepeatWrapping}
+    {normalMap}
+    normalMap.wrapS={THREE.RepeatWrapping}
+    normalMap.wrapT={THREE.RepeatWrapping}
+  />
+  {#each transformData as randomValues}
+    {@const x = randomValues[0] * 20 - 10}
+    {@const z = randomValues[1] * 20 - 10}
+    {@const rot = randomValues[2] * Math.PI * 2}
+    {@const scale = randomValues[3] * 2 + 1}
+    <Instance
+      position.x={x}
+      position.z={z}
+      rotation.y={rot}
+      {scale}
     />
-    {#each transformData as randomValues}
-      {@const x = randomValues[0] * 20 - 10}
-      {@const z = randomValues[1] * 20 - 10}
-      {@const rot = randomValues[2] * Math.PI * 2}
-      {@const scale = randomValues[3] * 2 + 1}
-      <Instance
-        position.x={x}
-        position.z={z}
-        rotation.y={rot}
-        {scale}
-      />
-    {/each}
-  </InstancedMesh>
-  <InstancedMesh castShadow>
-    <T is={$gltf.nodes.Cylinder001_1.geometry} />
-    <T.MeshStandardMaterial
-      map={$texture2}
-      side={THREE.DoubleSide}
-      alphaTest={0.5}
+  {/each}
+</InstancedMesh>
+<InstancedMesh castShadow>
+  <T is={gltf.nodes.Cylinder001_1.geometry} />
+  <T.MeshStandardMaterial
+    map={texture2}
+    side={THREE.DoubleSide}
+    alphaTest={0.5}
+  />
+  {#each transformData as randomValues}
+    {@const x = randomValues[0] * 20 - 10}
+    {@const z = randomValues[1] * 20 - 10}
+    {@const rot = randomValues[2] * Math.PI * 2}
+    {@const scale = randomValues[3] * 2 + 1}
+    <Instance
+      position.x={x}
+      position.z={z}
+      rotation.y={rot}
+      {scale}
     />
-    {#each transformData as randomValues}
-      {@const x = randomValues[0] * 20 - 10}
-      {@const z = randomValues[1] * 20 - 10}
-      {@const rot = randomValues[2] * Math.PI * 2}
-      {@const scale = randomValues[3] * 2 + 1}
-      <Instance
-        position.x={x}
-        position.z={z}
-        rotation.y={rot}
-        {scale}
-      />
-    {/each}
-  </InstancedMesh>
-{/await}
+  {/each}
+</InstancedMesh>

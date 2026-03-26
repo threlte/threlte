@@ -7,6 +7,7 @@
   let { settings } = $props()
 
   const dracoLoader = useDraco()
+
   const gltf = useGltf('https://infinite-turtles.pages.dev/models/cards-transformed.glb', {
     dracoLoader
   })

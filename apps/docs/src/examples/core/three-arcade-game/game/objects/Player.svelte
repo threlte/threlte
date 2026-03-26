@@ -63,7 +63,7 @@
     }
   }
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: { Player: Mesh }
     materials: Record<string, never>
   }>('/models/ball-game/player/player-simple.glb')
@@ -71,7 +71,7 @@
   let colliders = $state<Collider[]>([])
 
   useTask(() => {
-    if (colliders.length) {
+    if (colliders.length > 0) {
       const collider = colliders[0]!
       collider.setTranslation({ x: positionX, y: 0, z: positionZ })
     }
@@ -83,7 +83,7 @@
   {onkeyup}
 />
 
-{#if gltf.current?.nodes.Player}
+{#if gltf}
   <T.Group>
     <AutoColliders
       shape="convexHull"
@@ -97,7 +97,7 @@
         scale.x={0.5}
         scale.y={0.3}
       >
-        <T is={gltf.current.nodes.Player.geometry} />
+        <T is={gltf.nodes.Player.geometry} />
         <T.MeshStandardMaterial color="blue" />
 
         <Edges

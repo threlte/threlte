@@ -43,10 +43,10 @@
   }
 
   $effect(() => {
-    $size
+    size.current
     enabled
     margin
-    $camera
+    camera.current
     controls
     animate
 

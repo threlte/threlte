@@ -7,7 +7,6 @@
     Sparkles,
     TrackballControls,
     useGltf,
-    useSuspense,
     useTexture
   } from '@threlte/extras'
   import {
@@ -31,17 +30,6 @@
 
   let { camera, controls, margin, animate, enabled }: Props = $props()
 
-  const suspend = useSuspense()
-  const gltf = suspend(useGltf('/models/portal/portal.glb'))
-  const texture = suspend(
-    useTexture('/models/portal/portal_baked.jpg', {
-      transform(result) {
-        result.flipY = false
-        return result
-      }
-    })
-  )
-
   const poleLightMaterial = new MeshBasicMaterial({ color: 0xff_ff_e5 })
   const bakedMaterial = new MeshPhongMaterial()
 
@@ -56,11 +44,32 @@
     fragmentShader
   })
 
-  $effect(() => {
-    if ($texture) {
-      bakedMaterial.map = $texture
-    }
-  })
+  const [gltf] = await Promise.all([
+    useGltf('/models/portal/portal.glb').then((model) => {
+      model.scene.traverse((child) => {
+        if (!isInstanceOf(child, 'Mesh')) {
+          return
+        }
+
+        if (child.name === 'Portal') {
+          child.material = portalLightMaterial
+        } else if (child.name === 'LampLight1' || child.name === 'LampLight2') {
+          child.material = poleLightMaterial
+        } else {
+          child.material = bakedMaterial
+        }
+      })
+
+      return model
+    }),
+    useTexture('/models/portal/portal_baked.jpg', {
+      transform(result) {
+        result.flipY = false
+        bakedMaterial.map = result
+        return result
+      }
+    })
+  ])
 
   useTask((dt) => {
     portalLightMaterial.uniforms.uTime.value += dt
@@ -110,35 +119,16 @@
 
 <T.AmbientLight />
 
-{#if $gltf}
-  <Bounds
-    {margin}
-    {animate}
-    {enabled}
-  >
-    <T
-      is={$gltf.scene}
-      oncreate={(ref) => {
-        ref.traverse((child) => {
-          if (!isInstanceOf(child, 'Mesh')) {
-            return
-          }
-
-          if (child.name === 'Portal') {
-            child.material = portalLightMaterial
-          } else if (child.name === 'LampLight1' || child.name === 'LampLight2') {
-            child.material = poleLightMaterial
-          } else {
-            child.material = bakedMaterial
-          }
-        })
-      }}
-    >
-      <Sparkles
-        position={[0, 0.8, 0]}
-        size={4}
-        scale={[4, 1.5, 4]}
-      />
-    </T>
-  </Bounds>
-{/if}
+<Bounds
+  {margin}
+  {animate}
+  {enabled}
+>
+  <T is={gltf.scene}>
+    <Sparkles
+      position={[0, 0.8, 0]}
+      size={4}
+      scale={[4, 1.5, 4]}
+    />
+  </T>
+</Bounds>

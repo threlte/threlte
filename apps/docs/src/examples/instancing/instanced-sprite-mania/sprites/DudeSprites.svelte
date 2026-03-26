@@ -8,24 +8,26 @@
   import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import WalkingBehaviour from '../behaviours/WalkingBehaviour.svelte'
 
-  export let billboarding = false
-  export let fps: number
+  interface Props {
+    billboarding?: boolean
+    fps: number
+  }
 
-  const player = buildSpritesheet.fromAseprite(
+  let { billboarding = false, fps }: Props = $props()
+
+  const spritesheet = await buildSpritesheet.fromAseprite(
     '/textures/sprites/player.json',
     '/textures/sprites/player.png'
   )
 </script>
 
-{#await player then spritesheet}
-  <InstancedSprite
-    {spritesheet}
-    count={4000}
-    playmode={'FORWARD'}
-    {fps}
-    {billboarding}
-    castShadow
-  >
-    <WalkingBehaviour />
-  </InstancedSprite>
-{/await}
+<InstancedSprite
+  {spritesheet}
+  count={4000}
+  playmode={'FORWARD'}
+  {fps}
+  {billboarding}
+  castShadow
+>
+  <WalkingBehaviour />
+</InstancedSprite>

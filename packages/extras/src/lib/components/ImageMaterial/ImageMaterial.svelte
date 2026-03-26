@@ -2,7 +2,6 @@
   import { T, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
   import { Color, ShaderMaterial, Vector2, Vector3, type Mesh, type Texture } from 'three'
   import { useTexture } from '../../hooks/useTexture.js'
-  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import { fragmentShader, vertexShader } from './shaders.js'
   import type { ImageMaterialProps } from './types.js'
 
@@ -38,10 +37,7 @@
     if (side) material.side = side
   })
 
-  const suspend = useSuspense()
-
-  const texturePromise = suspend(useTexture(url ?? ''))
-  const resolvedTexture = $derived(texture ?? texturePromise?.current)
+  const resolvedTexture = $derived(texture ?? (await useTexture(url ?? '')))
 
   let { size } = useThrelte()
   const parent = useParent()

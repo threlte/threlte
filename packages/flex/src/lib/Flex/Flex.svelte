@@ -1,17 +1,11 @@
 <script lang="ts">
-  import { loadYoga, type Yoga } from 'yoga-layout/load'
+  import { loadYoga } from 'yoga-layout/load'
   import InnerFlex from './InnerFlex.svelte'
   import type { FlexProps } from './types.js'
 
   let { children: innerChildren, ref = $bindable(), ...props }: FlexProps = $props()
 
-  let yoga = $state<Yoga>()
-
-  const initialize = async () => {
-    yoga = await loadYoga()
-  }
-
-  initialize()
+  let yoga = await loadYoga()
 </script>
 
 {#if yoga}

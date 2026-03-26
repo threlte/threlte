@@ -5,7 +5,7 @@
   import { type MeshStandardMaterial, type Mesh, MathUtils } from 'three'
   import Ground from './Ground.svelte'
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: {
       'node_damagedHelmet_-6514': Mesh
     }
@@ -14,7 +14,7 @@
     }
   }>('/models/helmet/DamagedHelmet.gltf')
 
-  const helmet = $derived(gltf.current?.nodes['node_damagedHelmet_-6514'])
+  const helmet = $derived(gltf.nodes['node_damagedHelmet_-6514'])
 </script>
 
 <Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />

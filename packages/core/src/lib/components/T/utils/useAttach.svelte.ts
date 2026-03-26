@@ -36,6 +36,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
     // Auto-attach to parent material or geometry
     if (attach === undefined && isObject(parent.current)) {
       const currentParent = parent.current
+
       if (isInstanceOf(ref, 'Material')) {
         const originalMaterial = currentParent.material
         currentParent.material = ref

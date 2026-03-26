@@ -2,51 +2,44 @@
   import { T } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import { Group } from 'three'
-  import { createSuspenseContext } from './context.svelte.js'
 
   interface Props {
-    final?: boolean
-
     children?: Snippet<[{ suspended: boolean; errors: Error[] }]>
-    error?: Snippet<[{ errors: Error[] }]>
+    error?: Snippet<[{ error: unknown; reset: () => void }]>
     fallback?: Snippet
 
     onload?: () => void
-    onerror?: (error: Error[]) => void
+    onerror?: ((error: unknown, reset: () => void) => void) | undefined
     onsuspend?: () => void
   }
 
-  let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
-
-  const { suspended, errors } = createSuspenseContext(() => final)
+  let { onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
   $effect(() => {
-    if (suspended.current) {
+    if ($effect.pending() > 0) {
       onsuspend?.()
     } else {
       onload?.()
     }
   })
 
-  $effect(() => {
-    if (errors.current.length > 0) {
-      onerror?.(errors.current)
-    }
-  })
-
   const group = new Group()
 </script>
 
-<!-- Block the graph from mounting to the parent -->
-<T
-  is={group}
-  attach={suspended.current ? false : undefined}
->
-  {@render children?.({ suspended: suspended.current, errors: errors.current })}
-</T>
+<svelte:boundary {onerror}>
+  <!-- Block the graph from mounting to the parent -->
+  <T
+    is={group}
+    attach={$effect.pending() > 0 ? false : undefined}
+  >
+    {@render children?.({ suspended: $effect.pending() > 0, errors: [] })}
+  </T>
 
-{#if errors.current.length > 0}
-  {@render error?.({ errors: errors.current })}
-{:else if suspended.current}
-  {@render fallback?.()}
-{/if}
+  {#snippet pending()}
+    {@render fallback?.()}
+  {/snippet}
+
+  {#snippet failed(reason, reset)}
+    {@render error?.({ error: reason, reset })}
+  {/snippet}
+</svelte:boundary>

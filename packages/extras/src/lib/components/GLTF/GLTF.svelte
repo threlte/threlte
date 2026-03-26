@@ -1,9 +1,9 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { useGltf } from '../../hooks/useGltf.js'
-  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import type { ThrelteGltf } from '../../types/types.js'
   import type { GltfProps } from './types.js'
+  import { untrack } from 'svelte'
 
   type Props = GltfProps & { gltf?: ThrelteGltf | undefined } & ThrelteGltf['materials']
 
@@ -66,27 +66,29 @@
     onerror?.(error)
   }
 
-  const suspend = useSuspense()
+  const model = $derived(await loader.load(url))
+  $inspect(model)
 
-  const loadGltf = async (url: string) => {
-    try {
-      const model = await suspend(loader.load(url))
-      onLoad(model)
-    } catch (error) {
-      onError(error as Error)
-    }
-  }
-
-  $effect.pre(() => {
-    loadGltf(url)
+  $effect(() => {
+    model
+    untrack(() => {
+      gltf = model
+      scene = model.scene
+      animations = model.animations
+      asset = model.asset
+      cameras = model.cameras
+      scenes = model.scenes
+      userData = model.userData
+      parser = model.parser
+      materials = model.materials
+      nodes = model.nodes
+    })
   })
 </script>
 
-{#if scene}
-  <T
-    is={scene}
-    {...props}
-  >
-    {@render children?.({ ref: scene })}
-  </T>
-{/if}
+<T
+  is={model.scene}
+  {...props}
+>
+  {@render children?.({ ref: model.scene })}
+</T>

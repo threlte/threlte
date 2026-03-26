@@ -1,101 +1,63 @@
+import { currentWritable } from '@threlte/core'
 import { DefaultLoadingManager } from 'three'
+import { fromStore } from 'svelte/store'
 
 let previousTotalLoaded = 0
 
-class LoadingState {
-  finishedOnce = $state(false)
-  active = $state(false)
-  item = $state<string>()
-  loaded = $state(0)
-  total = $state(0)
-  errors = $state<string[]>([])
-  progress = $state(0)
-}
-
-const loadingState = new LoadingState()
+const finishedOnce = currentWritable(false)
+const activeStore = currentWritable(false)
+const itemStore = currentWritable<string | undefined>(undefined)
+const loadedStore = currentWritable<number>(0)
+const totalStore = currentWritable<number>(0)
+const errorsStore = currentWritable<string[]>([])
+const progressStore = currentWritable<number>(0)
 
 const { onStart, onLoad, onError } = DefaultLoadingManager
 
 DefaultLoadingManager.onStart = (url: string, loaded: number, total: number) => {
   onStart?.(url, loaded, total)
-
-  loadingState.active = true
-  loadingState.item = url
-  loadingState.loaded = loaded
-  loadingState.total = total
-
+  activeStore.set(true)
+  itemStore.set(url)
+  loadedStore.set(loaded)
+  totalStore.set(total)
   const progress = (loaded - previousTotalLoaded) / (total - previousTotalLoaded)
-  loadingState.progress = progress
-
-  if (progress === 1) {
-    loadingState.finishedOnce = true
-  }
+  progressStore.set(progress)
+  if (progress === 1) finishedOnce.set(true)
 }
 
 DefaultLoadingManager.onLoad = () => {
   onLoad?.()
-
-  loadingState.active = false
+  activeStore.set(false)
 }
 
 DefaultLoadingManager.onError = (url: string) => {
   onError?.(url)
-  loadingState.errors.push(url)
+  errorsStore.update((errors) => {
+    return [...errors, url]
+  })
 }
 
 DefaultLoadingManager.onProgress = (url: string, loaded: number, total: number) => {
   if (loaded === total) {
     previousTotalLoaded = total
   }
-  loadingState.active = true
-  loadingState.item = url
-  loadingState.loaded = loaded
-  loadingState.total = total
-
+  activeStore.set(true)
+  itemStore.set(url)
+  loadedStore.set(loaded)
+  totalStore.set(total)
   const progress = (loaded - previousTotalLoaded) / (total - previousTotalLoaded) || 1
-  loadingState.progress = progress
-
-  if (progress === 1) {
-    loadingState.finishedOnce = true
-  }
+  progressStore.set(progress)
+  if (progress === 1) finishedOnce.set(true)
 }
 
-const progressObject = {
-  active: {
-    get current() {
-      return loadingState.active
-    }
-  },
-  item: {
-    get current() {
-      return loadingState.item
-    }
-  },
-  loaded: {
-    get current() {
-      return loadingState.loaded
-    }
-  },
-  total: {
-    get current() {
-      return loadingState.total
-    }
-  },
-  errors: {
-    get current() {
-      return loadingState.errors
-    }
-  },
-  progress: {
-    get current() {
-      return loadingState.progress
-    }
-  },
-  finishedOnce: {
-    get current() {
-      return loadingState.finishedOnce
-    }
-  }
+const stores = {
+  active: fromStore(activeStore),
+  item: fromStore(itemStore),
+  loaded: fromStore(loadedStore),
+  total: fromStore(totalStore),
+  errors: fromStore(errorsStore),
+  progress: fromStore(progressStore),
+  finishedOnce: fromStore(finishedOnce)
 }
 
 export const useProgress = (): {
@@ -107,5 +69,5 @@ export const useProgress = (): {
   progress: { current: number }
   finishedOnce: { current: boolean }
 } => {
-  return progressObject
+  return stores
 }

@@ -62,12 +62,14 @@
     }
   })
 
-  const backgrounds = loader.load(hdrs, {
+  const backgrounds = await loader.load(hdrs, {
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping
       return texture
     }
   })
+
+  const background = $derived(isHdrKey(hdr) ? backgrounds[hdr] : hdr)
 </script>
 
 <T.PerspectiveCamera
@@ -93,46 +95,43 @@
   cellColor="#fff"
 />
 
-{#await backgrounds then backgroundMap}
-  {@const background = isHdrKey(hdr) ? backgroundMap[hdr] : hdr}
-  {#each colors as color, i}
-    {@const r = increment * i}
-    <T.Mesh
-      position.x={radius * Math.cos(r)}
-      position.y={i}
-      position.z={radius * Math.sin(r)}
-    >
-      <T.MeshStandardMaterial {color} />
-      <T.SphereGeometry />
-    </T.Mesh>
-  {/each}
+{#each colors as color, i}
+  {@const r = increment * i}
+  <T.Mesh
+    position.x={radius * Math.cos(r)}
+    position.y={i}
+    position.z={radius * Math.sin(r)}
+  >
+    <T.MeshStandardMaterial {color} />
+    <T.SphereGeometry />
+  </T.Mesh>
+{/each}
 
-  {#each Array(colors.length) as _, i}
-    {@const r = Math.PI + increment * i}
-    <T.Group
-      position.x={radius * Math.cos(r)}
-      position.z={radius * Math.sin(r)}
-      oncreate={(ref) => {
-        groups.push(ref)
-      }}
+{#each Array(colors.length), i}
+  {@const r = Math.PI + increment * i}
+  <T.Group
+    position.x={radius * Math.cos(r)}
+    position.z={radius * Math.sin(r)}
+    oncreate={(ref) => {
+      groups.push(ref)
+    }}
+  >
+    <CubeCamera
+      {background}
+      {frames}
+      {near}
+      {resolution}
     >
-      <CubeCamera
-        {background}
-        {frames}
-        {near}
-        {resolution}
-      >
-        {#snippet children({ renderTarget })}
-          <T.Mesh>
-            <T.SphereGeometry />
-            <T.MeshStandardMaterial
-              {roughness}
-              {metalness}
-              envMap={renderTarget.texture}
-            />
-          </T.Mesh>
-        {/snippet}
-      </CubeCamera>
-    </T.Group>
-  {/each}
-{/await}
+      {#snippet children({ renderTarget })}
+        <T.Mesh>
+          <T.SphereGeometry />
+          <T.MeshStandardMaterial
+            {roughness}
+            {metalness}
+            envMap={renderTarget.texture}
+          />
+        </T.Mesh>
+      {/snippet}
+    </CubeCamera>
+  </T.Group>
+{/each}

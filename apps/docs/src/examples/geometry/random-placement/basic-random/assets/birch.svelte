@@ -30,14 +30,14 @@
   ])
 </script>
 
-{#await assets then [$gltf, $texture1, $texture2, $normalMap1]}
+{#await assets then [gltf, texture1, texture2, normalMap]}
   <InstancedMesh castShadow>
-    <T is={$gltf.nodes.Cube004.geometry} />
+    <T is={gltf.nodes.Cube004.geometry} />
     <T.MeshStandardMaterial
-      map={$texture1}
+      map={texture1}
       map.wrapS={RepeatWrapping}
       map.wrapT={RepeatWrapping}
-      normalMap={$normalMap1}
+      {normalMap}
       normalMap.wrapS={RepeatWrapping}
       normalMap.wrapT={RepeatWrapping}
     />
@@ -56,9 +56,9 @@
   </InstancedMesh>
 
   <InstancedMesh castShadow>
-    <T is={$gltf.nodes.Cube004_1.geometry} />
+    <T is={gltf.nodes.Cube004_1.geometry} />
     <T.MeshStandardMaterial
-      map={$texture2}
+      map={texture2}
       alphaTest={0.5}
     />
     {#each transformData as randomValues}

@@ -18,35 +18,33 @@
     }
   }
 
-  const assets = Promise.all([
+  const [gltf, texture] = await Promise.all([
     useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Bush.gltf'),
     useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/Bush_Leaves.png')
   ])
 </script>
 
-{#await assets then [$gltf, $texture1]}
-  <InstancedMesh
-    castShadow
-    receiveShadow
-  >
-    <T is={$gltf.nodes.Bush.geometry} />
-    <T.MeshStandardMaterial
-      map={$texture1}
-      alphaTest={0.2}
-    />
-    {#each transformData as randomValues}
-      {@const x = randomValues[0] - 10}
-      {@const z = randomValues[1] - 10}
-      {@const rot = randomValues[2] * Math.PI * 2}
-      {@const scale = randomValues[3] * 2 + 0.5}
-      <T.Group
-        position.x={x}
-        position.z={z}
-        rotation.y={rot}
-        {scale}
-      >
-        <Instance rotation={[1.96, -0.48, -0.85]} />
-      </T.Group>
-    {/each}
-  </InstancedMesh>
-{/await}
+<InstancedMesh
+  castShadow
+  receiveShadow
+>
+  <T is={gltf.nodes.Bush.geometry} />
+  <T.MeshStandardMaterial
+    map={texture}
+    alphaTest={0.2}
+  />
+  {#each transformData as randomValues}
+    {@const x = randomValues[0] - 10}
+    {@const z = randomValues[1] - 10}
+    {@const rot = randomValues[2] * Math.PI * 2}
+    {@const scale = randomValues[3] * 2 + 0.5}
+    <T.Group
+      position.x={x}
+      position.z={z}
+      rotation.y={rot}
+      {scale}
+    >
+      <Instance rotation={[1.96, -0.48, -0.85]} />
+    </T.Group>
+  {/each}
+</InstancedMesh>

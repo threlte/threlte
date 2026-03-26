@@ -1,14 +1,12 @@
 <script lang="ts">
-  import { asyncState, useCache } from '@threlte/core'
+  import { useCache } from '@threlte/core'
   import Matcap from './Matcap.svelte'
 
   const { remember } = useCache()
 
-  const matcapsList = asyncState<Record<string, string>>(
-    remember('matcaps', () =>
-      fetch('https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/matcaps.json').then((response) =>
-        response.json()
-      )
+  const matcapsList = await remember('matcaps', () =>
+    fetch('https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/matcaps.json').then((response) =>
+      response.json()
     )
   )
 
@@ -41,8 +39,8 @@
   }
 </script>
 
-{#if matcapsList.current}
-  {@const fileName = `${matcapsList.current[String(matcapIndex)]}${getFormatString(format)}.png`}
+{#if matcapsList}
+  {@const fileName = `${matcapsList[String(matcapIndex)]}${getFormatString(format)}.png`}
   {@const url = `${matcapRoot}/${format}/${fileName}`}
 
   {#key url}

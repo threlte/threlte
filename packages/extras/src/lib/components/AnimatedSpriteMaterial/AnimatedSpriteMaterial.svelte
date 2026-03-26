@@ -1,14 +1,5 @@
 <script lang="ts">
-  import {
-    isInstanceOf,
-    T,
-    useLoader,
-    useParent,
-    useTask,
-    observe,
-    type AsyncState,
-    asyncState
-  } from '@threlte/core'
+  import { isInstanceOf, T, useLoader, useParent, useTask, observe } from '@threlte/core'
   import {
     DoubleSide,
     FileLoader,
@@ -21,8 +12,8 @@
     type Texture
   } from 'three'
   import { useTexture } from '../../hooks/useTexture.js'
-  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types.js'
+  import { untrack } from 'svelte'
 
   let {
     textureUrl,
@@ -73,7 +64,7 @@
   let flipOffset = flipX ? -1 : 1
   let frameWidth = 0
   let frameHeight = 0
-  let texture: Texture | undefined = $state()
+  let texture = $state<Texture>()
   let json: SpriteJsonHashData | undefined
   let frameNames: string[] = []
   let direction: (typeof supportedDirections)[number] = 'forward'
@@ -87,41 +78,35 @@
     is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
   })
 
-  const suspend = useSuspense()
+  const texturePromise = useTexture(textureUrl, {
+    transform: (value: Texture) => {
+      value.matrixAutoUpdate = false
+      value.generateMipmaps = false
+      value.premultiplyAlpha = false
+      value.wrapS = value.wrapT = RepeatWrapping
+      value.magFilter = value.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
+      return value
+    }
+  })
 
-  const textureStore = suspend(
-    useTexture(textureUrl, {
-      transform: (value: Texture) => {
-        value.matrixAutoUpdate = false
-        value.generateMipmaps = false
-        value.premultiplyAlpha = false
-        value.wrapS = value.wrapT = RepeatWrapping
-        value.magFilter = value.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
-        return value
-      }
-    })
-  )
+  const fileLoader = useLoader(FileLoader)
 
-  const jsonStore: AsyncState<SpriteJsonHashData | undefined> = suspend(
-    dataUrl
-      ? useLoader(FileLoader).load(dataUrl, {
-          transform: (file) => {
-            if (typeof file !== 'string') return
-            try {
-              return JSON.parse(file)
-            } catch {
-              return
-            }
+  const jsonPromise: Promise<SpriteJsonHashData | undefined> = dataUrl
+    ? fileLoader.load(dataUrl, {
+        transform: (file) => {
+          if (typeof file !== 'string') return
+          try {
+            return JSON.parse(file)
+          } catch {
+            return
           }
-        })
-      : asyncState<SpriteJsonHashData>(
-          new Promise((resolve) => {
-            textureStore.then((value) => {
-              resolve(createData(value))
-            })
-          })
-        )
-  )
+        }
+      })
+    : texturePromise.then((value) => {
+        return createData(value)
+      })
+
+  const [nextTexture, nextJson] = await Promise.all([texturePromise, jsonPromise])
 
   /**
    * Creates metadata if no JSON file is supplied.
@@ -207,7 +192,6 @@
    */
   export const play = async () => {
     playQueued = true
-    await Promise.all([textureStore, jsonStore])
     if (!playQueued) return
     timerOffset = performance.now() - delay
     running = true
@@ -273,11 +257,10 @@
     { running: () => running }
   )
 
-  observe.pre(
-    () => [textureStore.current, jsonStore.current],
-    ([nextTexture, nextJson]) => {
-      if (nextTexture === undefined || nextJson === undefined) return
+  $effect(() => {
+    if (nextTexture === undefined || nextJson === undefined) return
 
+    untrack(() => {
       texture = nextTexture.clone()
       json = nextJson
       frameNames = Object.keys(json.frames)
@@ -293,18 +276,13 @@
         1 / (spritesheetSize.h / frameHeight)
       )
 
-      setAnimation(animation)
-
       onload?.()
+    })
+  })
 
-      if (autoplay) {
-        play()
-      }
-    }
-  )
-
-  $effect.pre(() => {
+  $effect(() => {
     setAnimation(animation)
+
     if (autoplay) {
       play()
     }

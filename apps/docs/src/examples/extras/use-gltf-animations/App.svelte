@@ -50,7 +50,7 @@
 
 <div>
   <Canvas>
-    <Suspense final>
+    <Suspense>
       <Scene bind:this={scene} />
 
       {#snippet fallback()}

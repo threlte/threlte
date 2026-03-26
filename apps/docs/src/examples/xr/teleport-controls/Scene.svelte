@@ -22,7 +22,7 @@
   let torchZ = $state(0)
 
   const dracoLoader = useDraco()
-  const gltf = useGltf('/models/xr/ruins.glb', {
+  const gltf = await useGltf('/models/xr/ruins.glb', {
     dracoLoader
   }).then((gltf) => {
     gltf.scene.traverse((node) => {
@@ -73,22 +73,21 @@
   {/snippet}
 </XR>
 
-{#await gltf then { scene, nodes }}
-  <T is={scene} />
-  <T
-    is={light1}
-    intensity={8}
-    color="red"
-    position.y={nodes.Torch1.position.y + 0.45}
-  />
+<T is={gltf.scene} />
 
-  <T
-    is={light2}
-    intensity={4}
-    color="red"
-    position.y={nodes.Candles1.position.y + 0.45}
-  />
-{/await}
+<T
+  is={light1}
+  intensity={8}
+  color="red"
+  position.y={gltf.nodes.Torch1.position.y + 0.45}
+/>
+
+<T
+  is={light2}
+  intensity={4}
+  color="red"
+  position.y={gltf.nodes.Candles1.position.y + 0.45}
+/>
 
 <Surfaces
   {showSurfaces}

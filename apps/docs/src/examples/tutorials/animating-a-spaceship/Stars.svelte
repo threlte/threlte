@@ -7,7 +7,7 @@
   let colors = ['#fcaa67', '#C75D59', '#ffffc7', '#8CC5C6', '#A5898C'] as const
   let stars = $state<Star[]>([])
 
-  const map = useTexture('/spaceship-tutorial/textures/star.png')
+  const alphaMap = await useTexture('/spaceship-tutorial/textures/star.png')
 
   function r(min: number, max: number): number {
     let diff = Math.random() * (max - min)
@@ -61,24 +61,22 @@
   })
 </script>
 
-{#await map then value}
-  <InstancedMesh
-    limit={STARS_COUNT}
-    range={STARS_COUNT}
-  >
-    <T.PlaneGeometry args={[1, 0.05]} />
-    <T.MeshBasicMaterial
-      side={DoubleSide}
-      alphaMap={value}
-      transparent
-    />
+<InstancedMesh
+  limit={STARS_COUNT}
+  range={STARS_COUNT}
+>
+  <T.PlaneGeometry args={[1, 0.05]} />
+  <T.MeshBasicMaterial
+    side={DoubleSide}
+    {alphaMap}
+    transparent
+  />
 
-    {#each stars as { id, position, length, color } (id)}
-      <Instance
-        {position}
-        scale={[length, 1, 1]}
-        {color}
-      />
-    {/each}
-  </InstancedMesh>
-{/await}
+  {#each stars as { id, position, length, color } (id)}
+    <Instance
+      {position}
+      scale={[length, 1, 1]}
+      {color}
+    />
+  {/each}
+</InstancedMesh>

@@ -100,26 +100,26 @@ display info about your WebXR session. This is aliased by `ARButton` and
     `
       : props.style
   )
+
+  const state = await getXRSupportState(mode)
 </script>
 
-{#await getXRSupportState(mode) then state}
-  <button
-    onclick={(event) => {
-      handleButtonClick(event, state)
-    }}
-    {...props}
-    {style}
-  >
-    {#if children}
-      {@render children({ state })}
-    {:else if state === 'unsupported'}
-      {modeText} unsupported
-    {:else if state === 'insecure'}
-      HTTPS needed
-    {:else if state === 'blocked'}
-      {modeText} blocked
-    {:else if state === 'supported'}
-      {isPresenting.current ? 'Exit' : 'Enter'} {modeText}
-    {/if}
-  </button>
-{/await}
+<button
+  onclick={(event) => {
+    handleButtonClick(event, state)
+  }}
+  {...props}
+  {style}
+>
+  {#if children}
+    {@render children({ state })}
+  {:else if state === 'unsupported'}
+    {modeText} unsupported
+  {:else if state === 'insecure'}
+    HTTPS needed
+  {:else if state === 'blocked'}
+    {modeText} blocked
+  {:else if state === 'supported'}
+    {isPresenting.current ? 'Exit' : 'Enter'} {modeText}
+  {/if}
+</button>

@@ -4,7 +4,7 @@
   import { DoubleSide, Mesh, MathUtils, Vector3 } from 'three'
   import Flower from './Flower.svelte'
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: {
       Blossom: Mesh
       Stem: Mesh
@@ -31,34 +31,32 @@
   })
 </script>
 
-{#await gltf then { scene, nodes }}
-  <InstancedMeshes
-    castShadow
-    meshes={nodes}
-    oncreate={() => {
-      scene.traverse((child) => {
-        child.castShadow = true
-        child.receiveShadow = true
-      })
-    }}
-  >
-    {#snippet children({ components: { Blossom, Stem } })}
-      {#each items as item (item)}
-        <Flower
-          position.x={item.x}
-          position.z={item.z}
-          scale={item.scale}
-          rotation.y={item.rotation.y * MathUtils.DEG2RAD}
-          rotation.x={item.rotation.x * MathUtils.DEG2RAD}
-          rotation.z={item.rotation.z * MathUtils.DEG2RAD}
-        >
-          <Blossom />
-          <Stem />
-        </Flower>
-      {/each}
-    {/snippet}
-  </InstancedMeshes>
-{/await}
+<InstancedMeshes
+  castShadow
+  meshes={gltf.nodes}
+  oncreate={() => {
+    gltf.scene.traverse((child) => {
+      child.castShadow = true
+      child.receiveShadow = true
+    })
+  }}
+>
+  {#snippet children({ components: { Blossom, Stem } })}
+    {#each items as item (item)}
+      <Flower
+        position.x={item.x}
+        position.z={item.z}
+        scale={item.scale}
+        rotation.y={item.rotation.y * MathUtils.DEG2RAD}
+        rotation.x={item.rotation.x * MathUtils.DEG2RAD}
+        rotation.z={item.rotation.z * MathUtils.DEG2RAD}
+      >
+        <Blossom />
+        <Stem />
+      </Flower>
+    {/each}
+  {/snippet}
+</InstancedMeshes>
 
 <T.DirectionalLight
   position.y={3}

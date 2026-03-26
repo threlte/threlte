@@ -7,10 +7,10 @@
   import { Tween } from 'svelte/motion'
   import { cubicOut } from 'svelte/easing'
 
-  const texture = useTexture('/textures/sprites/bg.png')
+  const texture = await useTexture('/textures/sprites/bg.png')
 
-  let playerPosition: [number, number, number] = $state([-2.0, -2.75, 0.01])
-  let playerAtFire = $derived(playerPosition && Math.abs(playerPosition[0]) < 0.7)
+  let playerPosition = $state<[number, number, number]>([-2.0, -2.75, 0.01])
+  let playerAtFire = $derived(Math.abs(playerPosition[0]) < 0.7)
 
   const fov = new Tween(50, {
     easing: cubicOut,
@@ -31,14 +31,12 @@
 
 <Suspense>
   <Fire />
-</Suspense>
 
-<T.AmbientLight
-  color="#6697C7"
-  intensity={0.3}
-/>
+  <T.AmbientLight
+    color="#6697C7"
+    intensity={0.3}
+  />
 
-<Suspense>
   {#each { length: 9 } as _, i}
     <T.Sprite
       scale={0.5}
@@ -53,27 +51,23 @@
       />
     </T.Sprite>
   {/each}
-</Suspense>
 
-{#await texture then map}
   <T.Sprite
     scale={7.5}
     position.z={-0.01}
     position.y={0.4}
   >
-    <T.MeshBasicMaterial {map} />
+    <T.MeshBasicMaterial map={texture} />
   </T.Sprite>
-{/await}
 
-<Suspense>
   <ThrelteLogo show={playerAtFire} />
+
+  <Player bind:position={playerPosition} />
+
+  <T.PerspectiveCamera
+    makeDefault
+    position.z={7}
+    position.y={cameraPosY.current}
+    fov={fov.current}
+  />
 </Suspense>
-
-<Player bind:position={playerPosition} />
-
-<T.PerspectiveCamera
-  makeDefault
-  position.z={7}
-  position.y={cameraPosY.current}
-  fov={fov.current}
-/>

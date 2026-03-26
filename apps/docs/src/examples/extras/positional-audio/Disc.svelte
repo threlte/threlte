@@ -17,14 +17,14 @@
     }
   )
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: {
       Logo: Mesh
     }
     materials: {}
   }>('/models/turntable/disc-logo.glb')
 
-  const logoGeometry = $derived(gltf.current?.nodes.Logo.geometry)
+  const logoGeometry = $derived(gltf.nodes.Logo.geometry)
 </script>
 
 <T.Group {...rest}>

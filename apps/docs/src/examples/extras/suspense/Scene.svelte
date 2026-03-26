@@ -23,7 +23,7 @@
   intensity={2.5}
 />
 
-<Suspense final>
+<Suspense>
   {#snippet fallback()}
     <Text
       position.z={-8}

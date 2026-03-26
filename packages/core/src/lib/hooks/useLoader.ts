@@ -1,5 +1,4 @@
 import { Cache } from 'three'
-import { asyncState, type AsyncState } from '../utilities/index.js'
 import { useCache } from '../context/fragments/cache.js'
 
 type AsyncLoader = {
@@ -37,10 +36,10 @@ export type UseLoaderLoadResult<
   Input extends UseLoaderLoadInput,
   ResultType = LoaderResultType<TLoader>
 > = Input extends string
-  ? AsyncState<ResultType>
+  ? Promise<ResultType>
   : Input extends string[]
-    ? AsyncState<ResultType[]>
-    : AsyncState<Record<keyof Input, ResultType>>
+    ? Promise<ResultType[]>
+    : Promise<Record<keyof Input, ResultType>>
 
 type UseLoaderLoadTransform<TLoader extends Loader> = (result: LoaderResultType<TLoader>) => any
 
@@ -135,25 +134,20 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
       // map over the input array and return an array of promises
       const promises = input.map((url) => remember(url, () => loadResource(url)))
 
-      // return an AsyncState that resolves to the array of promises
-      return asyncState(Promise.all(promises)) as any // TODO: Dirty escape hatch
+      return Promise.all(promises) as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
       const promise = remember(input, () => loadResource(input))
 
-      // return an AsyncState that resolves to the promise
-      return asyncState(promise) as any // TODO: Dirty escape hatch
+      return promise as any // TODO: Dirty escape hatch
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
         return remember(url, () => loadResource(url))
       })
-      // return an AsyncState that resolves to the object of promises
 
-      return asyncState(
-        Promise.all(promises).then((results) => {
-          return Object.fromEntries(Object.entries(input).map(([key], i) => [key, results[i]]))
-        })
-      ) as any // TODO: Dirty escape hatch
+      return Promise.all(promises).then((results) => {
+        return Object.fromEntries(Object.entries(input).map(([key], i) => [key, results[i]]))
+      }) as any // TODO: Dirty escape hatch
     }
   }
 

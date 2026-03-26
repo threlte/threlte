@@ -7,8 +7,6 @@ import {
   Group,
   Quaternion,
   Matrix4,
-  PerspectiveCamera,
-  OrthographicCamera,
   Vector2,
   Vector4,
   Spherical,
@@ -58,14 +56,13 @@ export const provideBounds = (
 ) => {
   install()
 
-  const { camera: cameraStore, dom, invalidate } = useThrelte()
+  const { camera, dom, invalidate } = useThrelte()
   const {
     orbitControls: orbitStore,
     trackballControls: trackballStore,
     cameraControls: ccStore
   } = useControlsContext()
 
-  const camera = fromStore(cameraStore) as { current: PerspectiveCamera | OrthographicCamera }
   const orbitControls = fromStore(orbitStore)
   const trackballControls = fromStore(trackballStore)
   const cameraControls = fromStore(ccStore)

@@ -1,6 +1,12 @@
 import { vitePreprocess } from '@astrojs/svelte'
 
-export default {
+/** @type {import('@sveltejs/kit').Config} */
+const config = {
+  compilerOptions: {
+    experimental: {
+      async: true
+    }
+  },
   preprocess: vitePreprocess({
     style: {
       css: {
@@ -9,3 +15,5 @@ export default {
     }
   })
 }
+
+export default config

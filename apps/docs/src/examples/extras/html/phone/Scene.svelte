@@ -5,14 +5,14 @@
   import Geometries from './Geometries.svelte'
   import { RoundedPlaneGeometry } from './RoundedPlaneGeometry'
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: {
       phone: Mesh
     }
     materials: {}
   }>('/models/phone/phone.glb')
 
-  const phoneGeometry = $derived(gltf.current?.nodes.phone.geometry)
+  const phoneGeometry = $derived(gltf?.nodes.phone.geometry)
 
   const url = window.origin
 </script>
@@ -35,32 +35,32 @@
 
 <Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
-<Float
-  scale={0.7}
-  floatIntensity={5}
->
-  <HTML
-    rotation.y={90 * MathUtils.DEG2RAD}
-    position.x={1.2}
-    transform
-    occlude="blending"
-    geometry={new RoundedPlaneGeometry(10.5, 21.3, 1.6)}
+{#if phoneGeometry}
+  <Float
+    scale={0.7}
+    floatIntensity={5}
   >
-    <div
-      class="phone-wrapper"
-      style="border-radius:1rem"
+    <HTML
+      rotation.y={90 * MathUtils.DEG2RAD}
+      position.x={1.2}
+      transform
+      occlude="blending"
+      geometry={new RoundedPlaneGeometry(10.5, 21.3, 1.6)}
     >
-      <iframe
-        title=""
-        src={url}
-        width="100%"
-        height="100%"
-        frameborder="0"
-      ></iframe>
-    </div>
-  </HTML>
+      <div
+        class="phone-wrapper"
+        style="border-radius:1rem"
+      >
+        <iframe
+          title=""
+          src={url}
+          width="100%"
+          height="100%"
+          frameborder="0"
+        ></iframe>
+      </div>
+    </HTML>
 
-  {#if phoneGeometry}
     <T.Mesh
       scale={5.65}
       geometry={phoneGeometry}
@@ -71,8 +71,8 @@
         roughness={0.1}
       />
     </T.Mesh>
-  {/if}
-</Float>
+  </Float>
+{/if}
 
 <Geometries />
 

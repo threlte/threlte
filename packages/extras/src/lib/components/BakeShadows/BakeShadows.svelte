@@ -1,15 +1,10 @@
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
-  import { useSuspense } from '@threlte/extras'
-
-  const { suspended } = useSuspense()
 
   const { renderer } = useThrelte()
 
   $effect(() => {
-    if (suspended.current) {
-      return
-    }
+    if ($effect.pending() > 0) return
 
     const { autoUpdate } = renderer.shadowMap
 

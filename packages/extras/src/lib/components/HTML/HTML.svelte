@@ -41,7 +41,6 @@
     Raycaster,
     Vector3
   } from 'three'
-  import { useSuspense } from '../../suspense/useSuspense.svelte.js'
   import { logFragment, logVertex, spriteVertex } from './shaders.js'
   import type { HTMLProps } from './types.js'
   import {
@@ -278,8 +277,6 @@
       destroy: () => el.remove()
     }
   }
-
-  const { suspended } = useSuspense()
 </script>
 
 <T
@@ -329,7 +326,7 @@
   style:overflow={transform ? 'hidden' : undefined}
   style:transform={transform ? undefined : `translate3d(${pos[0]}px,${pos[1]}px,0)`}
   style:transform-origin={transform ? undefined : '0 0'}
-  style:display={suspended.current ? 'none' : undefined}
+  style:display={$effect.pending() > 0 ? 'none' : undefined}
 >
   {#if transform}
     <div

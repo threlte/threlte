@@ -43,7 +43,7 @@
     scope.visible = true
   })
 
-  const reticleTexture = useTexture('/textures/NightforceScopeReticle2.png')
+  const reticleTexture = await useTexture('/textures/NightforceScopeReticle2.png')
 </script>
 
 <T.Mesh
@@ -66,7 +66,7 @@
         value: 1
       }
     }}
-    uniforms.reticleTexture.value={reticleTexture.current}
+    uniforms.reticleTexture.value={reticleTexture}
     uniforms.aspect.value={aspect}
   />
 </T.Mesh>

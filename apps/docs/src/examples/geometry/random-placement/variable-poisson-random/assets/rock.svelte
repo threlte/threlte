@@ -18,29 +18,27 @@
     }
   }
 
-  const gltf = useGltf<GLTFResult>(
+  const gltf = await useGltf<GLTFResult>(
     'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Rock_2.gltf'
   )
 </script>
 
-{#await gltf then { nodes }}
-  <InstancedMesh
-    castShadow
-    receiveShadow
-  >
-    <T is={nodes.Rock_2.geometry} />
-    <T.MeshStandardMaterial color="grey" />
-    {#each transformData as randomValues}
-      {@const x = randomValues[0] - 10}
-      {@const z = randomValues[1] - 10}
-      {@const rot = randomValues[2] * Math.PI * 2}
-      {@const scale = randomValues[3] * 4 + 2}
-      <Instance
-        position.x={x}
-        position.z={z}
-        rotation.y={rot}
-        {scale}
-      />
-    {/each}
-  </InstancedMesh>
-{/await}
+<InstancedMesh
+  castShadow
+  receiveShadow
+>
+  <T is={gltf.nodes.Rock_2.geometry} />
+  <T.MeshStandardMaterial color="grey" />
+  {#each transformData as randomValues}
+    {@const x = randomValues[0] - 10}
+    {@const z = randomValues[1] - 10}
+    {@const rot = randomValues[2] * Math.PI * 2}
+    {@const scale = randomValues[3] * 4 + 2}
+    <Instance
+      position.x={x}
+      position.z={z}
+      rotation.y={rot}
+      {scale}
+    />
+  {/each}
+</InstancedMesh>

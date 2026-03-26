@@ -67,14 +67,14 @@
 
   const { onPointerEnter, onPointerLeave } = useCursor()
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: {
       Cover: Mesh
     }
     materials: {}
   }>('/models/turntable/cover.glb')
 
-  const coverGeometry = $derived(gltf.current?.nodes.Cover.geometry)
+  const coverGeometry = $derived(gltf?.nodes.Cover.geometry)
 </script>
 
 <T.Group {...rest}>

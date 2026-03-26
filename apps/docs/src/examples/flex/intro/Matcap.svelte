@@ -15,7 +15,7 @@
 
   const { onPointerEnter, onPointerLeave, hovering } = useCursor()
 
-  const texture = useTexture(url)
+  const texture = await useTexture(url)
 
   const animDelay = $derived(gridIndex * 10)
 
@@ -40,7 +40,7 @@
   }
 </script>
 
-{#if texture.current}
+{#if texture}
   <T.Group
     in={global(scaleTransition(true))}
     out={global(scaleTransition(true))}
@@ -57,7 +57,7 @@
         args={[100, 100, 20]}
         radius={2}
       />
-      <T.MeshMatcapMaterial matcap={texture.current as Texture} />
+      <T.MeshMatcapMaterial matcap={texture as Texture} />
     </T.Mesh>
   </T.Group>
 {/if}

@@ -12,14 +12,12 @@
   import { useThrelte } from '@threlte/core'
   import { CubeTextureLoader } from 'three'
   import { HDRCubeTextureLoader } from 'three/examples/jsm/loaders/HDRCubeTextureLoader.js'
-  import { useSuspense } from '../../../suspense/useSuspense.svelte.js'
   import { useEnvironment } from '../utils/useEnvironment.svelte.js'
   import type { CubeEnvironmentProps } from './types.js'
 
   let { isBackground = false, scene, texture = $bindable(), urls }: CubeEnvironmentProps = $props()
 
   const { scene: defaultScene } = useThrelte()
-  const suspend = useSuspense()
 
   useEnvironment(
     () => scene ?? defaultScene,
@@ -41,21 +39,15 @@
     return loaders.tex
   })
 
+  const tex = $derived(urls ? await loader?.loadAsync(urls) : undefined)
+
+  $effect.pre(() => {
+    texture = tex
+  })
+
   $effect(() => {
-    if (urls === undefined || loader === undefined) {
-      return
-    }
-
-    const suspendedTexture = suspend(loader.loadAsync(urls))
-
-    suspendedTexture.then((t) => {
-      texture = t
-    })
-
     return () => {
-      suspendedTexture.then((texture) => {
-        texture.dispose()
-      })
+      tex?.dispose()
     }
   })
 </script>

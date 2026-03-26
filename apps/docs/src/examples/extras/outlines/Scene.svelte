@@ -8,7 +8,7 @@
     rotation += delta
   })
 
-  const helmetGltf = useGltf<{
+  const helmetGltf = await useGltf<{
     nodes: {
       'node_damagedHelmet_-6514': Mesh
     }
@@ -17,7 +17,7 @@
     }
   }>('/models/helmet/DamagedHelmet.gltf')
 
-  const helmetGeometry = $derived(helmetGltf.current?.nodes['node_damagedHelmet_-6514'].geometry)
+  const helmetGeometry = $derived(helmetGltf.nodes['node_damagedHelmet_-6514'].geometry)
 
   const dracoLoader = useDraco()
   const suziGltf = useGltf<{

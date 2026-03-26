@@ -8,7 +8,7 @@
     rotation += delta
   })
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: {
       'node_damagedHelmet_-6514': Mesh
     }
@@ -25,20 +25,18 @@
 />
 
 <T.Group rotation.y={rotation}>
-  {#await gltf then { nodes }}
-    <T.Mesh
-      rotation.x={90 * MathUtils.DEG2RAD}
-      geometry={nodes['node_damagedHelmet_-6514'].geometry}
-    >
-      <T.MeshBasicMaterial
-        color={new Color(0xff3e00)}
-        toneMapped={false}
-      />
-      <Edges
-        thresholdAngle={20}
-        color="white"
-        scale={1.01}
-      />
-    </T.Mesh>
-  {/await}
+  <T.Mesh
+    rotation.x={90 * MathUtils.DEG2RAD}
+    geometry={gltf.nodes['node_damagedHelmet_-6514'].geometry}
+  >
+    <T.MeshBasicMaterial
+      color={new Color(0xff3e00)}
+      toneMapped={false}
+    />
+    <Edges
+      thresholdAngle={20}
+      color="white"
+      scale={1.01}
+    />
+  </T.Mesh>
 </T.Group>

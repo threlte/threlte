@@ -1,20 +1,15 @@
 <script lang="ts">
   import { type Vector3Tuple, DoubleSide, Quaternion, Vector3 } from 'three'
   import { T } from '@threlte/core'
-  import {
-    Decal,
-    TransformControls,
-    useTexture,
-    VirtualEnvironment,
-    useSuspense
-  } from '@threlte/extras'
+  import { Decal, TransformControls, useTexture, VirtualEnvironment } from '@threlte/extras'
   import { Attractor, Collider, RigidBody } from '@threlte/rapier'
 
   let { controls = false, debug = false } = $props()
 
-  const suspend = useSuspense()
-  const svelteIcon = suspend(useTexture('/icons/svelte.png'))
-  const threlteIcon = suspend(useTexture('/icons/mstile-150x150.png'))
+  const [svelteIcon, threlteIcon] = await Promise.all([
+    useTexture('/icons/svelte.png'),
+    useTexture('/icons/mstile-150x150.png')
+  ])
 
   let position = $state<Vector3Tuple>([0.5, 0, 0.5])
 
@@ -44,71 +39,67 @@
   <T.SphereGeometry args={[1, 256, 128]} />
   <T.MeshStandardMaterial roughness={0.1} />
 
-  {#if svelteIcon.current}
-    <Decal
-      {position}
-      {debug}
+  <Decal
+    {position}
+    {debug}
+  >
+    {#snippet children()}
+      <T.MeshStandardMaterial
+        map={svelteIcon}
+        transparent
+        roughness={0.2}
+        polygonOffset
+        polygonOffsetFactor={-10}
+      />
+      {#if controls}
+        <TransformControls
+          oncreate={(ref) => {
+            ref.position.fromArray(position)
+          }}
+          onchange={(event) => {
+            if (event.target.object) {
+              event.target.object.position.toArray(position)
+            }
+          }}
+        />
+      {/if}
+    {/snippet}
+  </Decal>
+</T.Mesh>
+
+{#each { length: 20 } as _, index (index)}
+  <RigidBody>
+    <T.Mesh
+      castShadow
+      position={vec3.randomDirection().toArray()}
+      quaternion={quat.random().toArray()}
     >
-      {#snippet children()}
+      <Collider
+        shape="ball"
+        args={[0.3]}
+        restitution={0.2}
+      />
+      <T.SphereGeometry args={[0.3, 256, 128]} />
+      <T.MeshStandardMaterial roughness={0.2} />
+
+      <Decal
+        position={[0.35, 0.35, 0.35]}
+        rotation={Math.PI / 4}
+        scale={0.8}
+        depthTest
+        {debug}
+      >
         <T.MeshStandardMaterial
-          map={svelteIcon.current}
+          map={threlteIcon}
           transparent
           roughness={0.2}
           polygonOffset
           polygonOffsetFactor={-10}
         />
-        {#if controls}
-          <TransformControls
-            oncreate={(ref) => {
-              ref.position.fromArray(position)
-            }}
-            onchange={(event) => {
-              if (event.target.object) {
-                event.target.object.position.toArray(position)
-              }
-            }}
-          />
-        {/if}
-      {/snippet}
-    </Decal>
-  {/if}
-</T.Mesh>
-
-{#if threlteIcon.current}
-  {#each { length: 20 } as _, index (index)}
-    <RigidBody>
-      <T.Mesh
-        castShadow
-        position={vec3.randomDirection().toArray()}
-        quaternion={quat.random().toArray()}
-      >
-        <Collider
-          shape="ball"
-          args={[0.3]}
-          restitution={0.2}
-        />
-        <T.SphereGeometry args={[0.3, 256, 128]} />
-        <T.MeshStandardMaterial roughness={0.2} />
-
-        <Decal
-          position={[0.35, 0.35, 0.35]}
-          rotation={Math.PI / 4}
-          scale={0.8}
-          depthTest
-          {debug}
-        >
-          <T.MeshStandardMaterial
-            map={threlteIcon.current}
-            transparent
-            roughness={0.2}
-            polygonOffset
-            polygonOffsetFactor={-10}
-          />
-        </Decal>
-      </T.Mesh>
-    </RigidBody>
-  {/each}
-{/if}
+      </Decal>
+    </T.Mesh>
+  </RigidBody>
+{/each}
 
 <Attractor strength={0.1} />
 

@@ -1,6 +1,3 @@
-import { getContext } from 'svelte'
-import { suspenseContextIdentifier, type SuspenseContext } from './context.svelte.js'
-
 /**
  * ### `onSuspend`
  *
@@ -13,13 +10,8 @@ import { suspenseContextIdentifier, type SuspenseContext } from './context.svelt
  * is suspended.
  */
 export const onSuspend = (callback: () => void): void => {
-  const ctx = getContext<SuspenseContext | undefined>(suspenseContextIdentifier)
-
-  // If there's no Suspense boundary, we can just return, the component will never suspend.
-  if (!ctx) return
-
   $effect.pre(() => {
-    if (ctx.suspended.current) {
+    if ($effect.pending() > 0) {
       callback()
     }
   })

@@ -1,21 +1,14 @@
 <script lang="ts">
-  import {
-    Environment,
-    OrbitControls,
-    useDraco,
-    useGltf,
-    useGltfAnimations,
-    useSuspense
-  } from '@threlte/extras'
+  import { Environment, OrbitControls, useDraco, useGltf, useGltfAnimations } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
 
-  const suspend = useSuspense()
   const dracoLoader = useDraco()
-  const gltf = suspend(useGltf('/models/LittlestTokyo.glb', { dracoLoader }))
+  const gltf = await useGltf('/models/LittlestTokyo.glb', { dracoLoader })
 
   const { scene } = useThrelte()
 
-  export const { actions, mixer } = useGltfAnimations<'Take 001'>(gltf)
+  export const { gltf: animatedGltf, actions, mixer } = useGltfAnimations<'Take 001'>()
+  animatedGltf.current = gltf
 
   let debug = false
 </script>
@@ -66,14 +59,12 @@
   {/snippet}
 </T.DirectionalLight>
 
-{#await gltf then { scene }}
-  <T
-    is={scene}
-    oncreate={(ref) => {
-      ref.traverse((child) => {
-        child.castShadow = true
-        child.receiveShadow = true
-      })
-    }}
-  />
-{/await}
+<T
+  is={gltf.scene}
+  oncreate={(ref) => {
+    ref.traverse((child) => {
+      child.castShadow = true
+      child.receiveShadow = true
+    })
+  }}
+/>

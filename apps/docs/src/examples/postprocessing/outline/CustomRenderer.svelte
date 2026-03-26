@@ -52,19 +52,19 @@
   })
 
   $effect(() => {
+    const last = untrack(() => autoRender.current)
+    autoRender.set(false)
+    return () => {
+      autoRender.set(last)
+    }
+  })
+
+  $effect(() => {
     return () => {
       composer.removeAllPasses()
       outlineEffectPass.dispose()
       renderPass.dispose()
       composer.dispose()
-    }
-  })
-
-  $effect(() => {
-    const last = untrack(() => autoRender.current)
-    autoRender.set(false)
-    return () => {
-      autoRender.set(last)
     }
   })
 
