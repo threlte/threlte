@@ -1,7 +1,11 @@
 import { readFileSync } from 'fs'
 import { svelte2tsx } from 'svelte2tsx'
-import { createSourceFile, ScriptTarget } from 'typescript'
 import { Project } from 'ts-morph'
+import { readdirSync, statSync } from 'fs'
+import { join, resolve } from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 // gather all exports from extra packages index.ts
 // export { default as Canvas } from './Canvas.svelte'
@@ -20,58 +24,178 @@ const { code } = svelte2tsx(source, {
 
 // or ts-morph
 const project = new Project()
+
+// Add all .ts and .js files from core/src to resolve types
+const getAllTsFiles = (dir: string): string[] => {
+  const files: string[] = []
+  const items = readdirSync(dir)
+  for (const item of items) {
+    const fullPath = join(dir, item)
+    if (statSync(fullPath).isDirectory()) {
+      files.push(...getAllTsFiles(fullPath))
+    } else if (item.endsWith('.ts') || item.endsWith('.js')) {
+      files.push(fullPath)
+    }
+  }
+  return files
+}
+
+const coreSrc = resolve(__dirname, '../../../packages/core/src')
+const tsFiles = getAllTsFiles(coreSrc)
+for (const file of tsFiles) {
+  project.addSourceFileAtPath(file)
+}
+
 const sourceFile = project.createSourceFile('./temp.tsx', code)
 
-// console.log(sourceFile)
-console.log(sourceFile.getFilePath())
+// Now, extract props
+const propsTypeAlias = sourceFile.getTypeAlias('Props')
+if (propsTypeAlias) {
+  const type = propsTypeAlias.getType()
+  const properties = type.getApparentProperties()
+  console.log('Props:')
+  for (const prop of properties) {
+    const name = prop.getName()
+    const propType = prop.getTypeAtLocation(sourceFile)
+    const typeText = propType.getText()
+    console.log({ name, type: typeText })
+  }
+} else {
+  console.log('Props type alias not found')
+}
+// Try to get from the type alias in project
+const typeAliases = project.getSourceFiles().flatMap((f) => f.getTypeAliases())
+const createThrelteOptionsAlias = typeAliases.find(
+  (t) => t.getName() === 'CreateThrelteContextOptions'
+)
+if (createThrelteOptionsAlias) {
+  const typeNode = createThrelteOptionsAlias.getTypeNode()
+  if (typeNode) {
+    const type = project.getTypeChecker().getTypeAtLocation(typeNode)
+    const properties = type.getApparentProperties()
+    console.log('CreateThrelteContextOptions properties:')
+    for (const prop of properties) {
+      const name = prop.getName()
+      const propType = prop.getTypeAtLocation(typeNode)
+      const typeText = propType
+        .getText()
+        .replace(/import\(.+@types\/three\/src\/constants"\)\./, 'THREE.')
+      console.log({ name, type: typeText })
+    }
+  }
+}
 
-// Aiming for this:
-// {
-//   props: [
-//     { name: 'dpr', type: 'number', default: 'window.devicePixelRatio' },
-//     {
-//       name: 'toneMapping',
-//       type: {
-//         name: 'THREE.ToneMapping',
-//         url: 'https://threejs.org/docs/index.html#api/en/constants/Renderer'
-//       },
-//       default: 'THREE.AgXToneMapping',
-//       description: 'renderer.toneMapping'
-//     },
-//     {
-//       name: 'colorSpace',
-//       type: {
-//         name: 'THREE.ColorSpace',
-//         url: 'https://github.com/mrdoob/three.js/blob/705e47d035591cb5a2e9cc83aa3576e21a4bf2c0/src/constants.js#L149-L153'
-//       },
-//       default: 'srgb'
-//     },
-//     {
-//       name: 'colorManagementEnabled',
-//       type: {
-//         name: 'boolean',
-//         url: 'https://threejs.org/docs/#manual/en/introduction/Color-management'
-//       },
-//       default: 'true'
-//     },
-//     { name: 'renderMode', type: "'always' | 'on-demand' | 'manual'", default: "'on-demand'" },
-//     {
-//       name: 'autoRender',
-//       type: 'boolean',
-//       default: 'true',
-//       description:
-//         'Whether to automatically render the scene every frame. Set to `false` to implement custom render pipelines.'
-//     },
-//     {
-//       name: 'shadows',
-//       type: 'boolean | THREE.ShadowMapType',
-//       default: 'THREE.PCFSoftShadowMap'
-//     },
-//     {
-//       name: 'createRenderer',
-//       type: '(canvas: HTMLCanvasElement) => THREE.Renderer',
-//       description:
-//         'To set up a custom renderer, pass a function that returns a new renderer instance.'
-//     }
-//   ]
-// }
+const defaultMap = new Map<string, string>()
+const collectDefaults = (aliasName: string) => {
+  const alias = typeAliases.find((t) => t.getName() === aliasName)
+  if (!alias) return
+
+  const type = alias.getType()
+  for (const symbol of type.getProperties()) {
+    const declarations = symbol.getDeclarations()
+    if (!declarations || declarations.length === 0) continue
+
+    for (const declaration of declarations) {
+      const jsDocs = declaration.getJsDocs()
+      for (const jsDoc of jsDocs) {
+        for (const tag of jsDoc.getTags()) {
+          if (tag.getTagName() === 'default') {
+            const comment = tag.getComment().trim() || ''
+            if (comment) {
+              defaultMap.set(symbol.getName(), comment)
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+collectDefaults('CreateRendererContextOptions')
+collectDefaults('CreateSchedulerContextOptions')
+collectDefaults('CreateDOMContextOptions')
+
+// Grab runtime fallback defaults from implementation code
+const collectRuntimeDefaults = () => {
+  const schedulerFilePath = resolve(
+    __dirname,
+    '../../../packages/core/src/lib/context/fragments/scheduler.svelte.ts'
+  )
+  const rendererFilePath = resolve(
+    __dirname,
+    '../../../packages/core/src/lib/context/fragments/renderer.svelte.ts'
+  )
+
+  const schedulerText = readFileSync(schedulerFilePath, 'utf-8')
+  const regexAutoRender =
+    /autoRender\s*:\s*currentWritable\(options\.autoRender\s*\?\?\s*([^\)]+)\)/
+  const regexRenderMode =
+    /renderMode\s*:\s*currentWritable\(options\.renderMode\s*\?\?\s*([^\)]+)\)/
+
+  const autoRenderMatch = schedulerText.match(regexAutoRender)
+  if (autoRenderMatch) {
+    defaultMap.set('autoRender', autoRenderMatch[1].trim())
+  }
+
+  const renderModeMatch = schedulerText.match(regexRenderMode)
+  if (renderModeMatch) {
+    defaultMap.set('renderMode', renderModeMatch[1].trim())
+  }
+
+  const rendererText = readFileSync(rendererFilePath, 'utf-8')
+  const regexColorManagement =
+    /colorManagementEnabled\s*:\s*currentWritable\(options\.colorManagementEnabled\s*\?\?\s*([^\)]+)\)/
+  const regexColorSpace =
+    /colorSpace\s*:\s*currentWritable\(options\.colorSpace\s*\?\?\s*([^\)]+)\)/
+  const regexToneMapping =
+    /toneMapping\s*:\s*currentWritable\(options\.toneMapping\s*\?\?\s*([^\)]+)\)/
+  const regexShadows = /shadows\s*:\s*currentWritable\(options\.shadows\s*\?\?\s*([^\)]+)\)/
+  const regexDpr = /dpr\s*:\s*currentWritable\(options\.dpr\s*\?\?\s*([^\)]+)\)/
+
+  const mCm = rendererText.match(regexColorManagement)
+  if (mCm) defaultMap.set('colorManagementEnabled', mCm[1].trim())
+  const mCs = rendererText.match(regexColorSpace)
+  if (mCs) defaultMap.set('colorSpace', mCs[1].trim())
+  const mTm = rendererText.match(regexToneMapping)
+  if (mTm) defaultMap.set('toneMapping', mTm[1].trim())
+  const mSh = rendererText.match(regexShadows)
+  if (mSh) defaultMap.set('shadows', mSh[1].trim())
+  const mDpr = rendererText.match(regexDpr)
+  if (mDpr) defaultMap.set('dpr', mDpr[1].trim())
+}
+
+collectRuntimeDefaults()
+
+if (createThrelteOptionsAlias) {
+  const type = createThrelteOptionsAlias.getType()
+  const properties = type.getApparentProperties()
+
+  const resultProps = properties
+    .filter((p) => !['canvas', 'dom'].includes(p.getName()))
+    .map((p) => {
+      const name = p.getName()
+      const propType = p.getTypeAtLocation(sourceFile)
+      const typeText = propType
+        .getText()
+        .replace(/import\(.+@types\/three\/src\/constants"\)\./, 'THREE.')
+
+      const defaultValue = defaultMap.get(name)
+
+      return {
+        name,
+        type: typeText,
+        default: defaultValue
+      }
+    })
+
+  resultProps.push({
+    name: 'children',
+    type: 'import("svelte").Snippet<[]>',
+    default: undefined
+  })
+
+  console.log('Final props with defaults:')
+  console.log(JSON.stringify(resultProps, null, 2))
+} else {
+  console.log('CreateThrelteContextOptions not found for defaults extraction')
+}
