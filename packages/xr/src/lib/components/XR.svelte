@@ -19,6 +19,8 @@ This should be placed within a Threlte `<Canvas />`.
 -->
 <script lang="ts">
   import type { EventListener, WebXRManager, Event as ThreeEvent } from 'three'
+  import type { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
+  import type { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
   import type { Snippet } from 'svelte'
   import { useThrelte } from '@threlte/core'
   import {
@@ -65,6 +67,12 @@ This should be placed within a Threlte `<Canvas />`.
     /** Called after an XRSession is ended */
     onsessionend?: (event: XRSessionEvent) => void
 
+    /** Optionally provide custom XRHandModelFactory */
+    handFactory?: XRHandModelFactory
+
+    /** Optionally provide custom XRControllerModelFactory */
+    controllerFactory?: XRControllerModelFactory
+
     /** Called when an XRSession is hidden or unfocused. */
     onvisibilitychange?: (event: XRSessionEvent) => void
 
@@ -81,7 +89,9 @@ This should be placed within a Threlte `<Canvas />`.
     onvisibilitychange,
     oninputsourceschange,
     fallback,
-    children
+    children,
+    handFactory,
+    controllerFactory
   }: Props = $props()
 
   const { renderer, renderMode } = useThrelte()
@@ -90,8 +100,8 @@ This should be placed within a Threlte `<Canvas />`.
 
   setupRaf()
   setupHeadset()
-  setupControllers()
-  setupHands()
+  setupControllers(controllerFactory)
+  setupHands(handFactory)
 
   const handleSessionStart: EventListener<object, 'sessionstart', WebXRManager> = (event) => {
     isPresenting.current = true
