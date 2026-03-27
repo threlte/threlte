@@ -20,7 +20,7 @@
 
   let {
     skybox = $bindable(),
-    texture = $bindable(),
+    texture,
     ground = false,
     isBackground = false,
     scene,
@@ -45,10 +45,9 @@
     return loaders.tex
   })
 
-  const tex = $derived(await loader.loadAsync(url))
+  const tex = $derived(texture ?? (await loader.loadAsync(url)))
 
   $effect.pre(() => {
-    texture = tex
     tex.mapping = EquirectangularReflectionMapping
   })
 
