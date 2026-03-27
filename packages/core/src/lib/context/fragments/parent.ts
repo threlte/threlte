@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte'
-import { currentWritable, type CurrentWritable } from '../../utilities/index.js'
+import { currentWritable, type CurrentWritable } from '../../utilities/currentWritable.js'
 
 const parentContextKey = Symbol('threlte-parent-context')
 

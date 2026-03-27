@@ -7,7 +7,7 @@ import {
   type WebGLRenderer
 } from 'three'
 import type { Scheduler, Stage, Task } from '../../frame-scheduling/index.js'
-import type { CurrentReadable, CurrentWritable } from '../../utilities/index.js'
+import type { CurrentReadable, CurrentWritable } from '../../utilities/currentWritable.js'
 import { useCamera } from '../fragments/camera.js'
 import { useDOM } from '../fragments/dom.js'
 import { useRenderer, type Renderer } from '../fragments/renderer.svelte.js'

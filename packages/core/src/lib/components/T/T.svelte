@@ -10,7 +10,7 @@
   import { usePlugins } from './utils/usePlugins.js'
   import { useProps } from './utils/useProps.svelte.js'
   import { determineRef } from './utils/utils.js'
-  import { isInstanceOf } from '../../utilities/index.js'
+  import { isInstanceOf } from '../../utilities/isInstanceOf.js'
   import { untrack } from 'svelte'
 
   let {
