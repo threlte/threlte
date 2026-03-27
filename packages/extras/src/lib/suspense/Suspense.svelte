@@ -1,10 +1,10 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import type { Snippet } from 'svelte'
+  import { tick, type Snippet } from 'svelte'
   import { Group } from 'three'
 
   interface Props {
-    children?: Snippet<[{ suspended: boolean; errors: Error[] }]>
+    children?: Snippet<[{ suspended: boolean }]>
     error?: Snippet<[{ error: unknown; reset: () => void }]>
     fallback?: Snippet
 
@@ -32,7 +32,7 @@
     is={group}
     attach={$effect.pending() > 0 ? false : undefined}
   >
-    {@render children?.({ suspended: $effect.pending() > 0, errors: [] })}
+    {@render children?.({ suspended: $effect.pending() > 0 })}
   </T>
 
   {#snippet pending()}

@@ -4,8 +4,8 @@ packages:
 
 catalog:
   three: ^0.183.2
-  '@types/three': ^0.175.0
-  svelte: '5.53.6'
+  '@types/three': ^0.183.1
+  svelte: '5.55.0'
   typescript: '5.9.2'
   vite: '^7.1.4'
   vitest: '^3.2.4'

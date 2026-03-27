@@ -21,7 +21,7 @@
 
   const captureCubemap = mode === 'env' || mode === 'object-env'
 
-  const splats = await remember(typeof source === 'string' ? source : (source.src ?? ''), () => {
+  const splats = await remember(() => {
     return new Promise<[LumaSplatsThree, CubeTexture | undefined]>((resolve) => {
       const splats = new LumaSplatsThree({
         source,
@@ -40,7 +40,7 @@
         }
       }
     })
-  })
+  }, [typeof source === 'string' ? source : (source.src ?? '')])
 
   let preheat =
     particleRevealEnabled && loadingAnimationEnabled ? 400 : loadingAnimationEnabled ? 100 : 10

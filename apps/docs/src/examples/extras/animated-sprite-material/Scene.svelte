@@ -31,7 +31,6 @@
     intensity={0.3}
   />
 
-<Suspense>
   {#each { length: 9 }, i}
     <T.Sprite
       scale={0.5}

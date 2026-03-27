@@ -60,3 +60,13 @@
   />
   <T.PlaneGeometry />
 </T.Mesh>
+
+<T.DirectionalLight
+  intensity={1}
+  castShadow
+  position={[1, 1, 1]}
+  shadow.mapSize.width={2 ** 11}
+  shadow.mapSize.height={2 ** 11}
+/>
+
+<T.AmbientLight intensity={0.5} />

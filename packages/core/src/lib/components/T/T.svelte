@@ -4,7 +4,6 @@
 >
   import type { TProps } from './types.js'
   import { useAttach } from './utils/useAttach.svelte.js'
-  import { useCamera } from './utils/useCamera.svelte.js'
   import { isDisposableObject, useDispose, useSetDispose } from './utils/useDispose.svelte.js'
   import { useIs } from './utils/useIs.js'
   import { usePlugins } from './utils/usePlugins.js'
@@ -14,13 +13,14 @@
   import { untrack } from 'svelte'
   import { createParent } from './utils/useParent.svelte.js'
   import { createParentObject3D } from './utils/useParentObject3D.svelte.js'
+  import Camera from './Camera.svelte'
 
   let {
     is = useIs<Type>(),
     args,
     attach,
-    manual = false,
-    makeDefault = false,
+    manual,
+    makeDefault,
     dispose,
     ref = $bindable(),
     oncreate,
@@ -75,21 +75,6 @@
     () => plugins?.pluginsProps
   )
 
-  // Camera management
-  $effect.pre(() => {
-    if (
-      isInstanceOf(internalRef, 'PerspectiveCamera') ||
-      isInstanceOf(internalRef, 'OrthographicCamera')
-    ) {
-      useCamera(
-        () => internalRef,
-        () => manual,
-        () => makeDefault,
-        () => props
-      )
-    }
-  })
-
   // Disposal
   useSetDispose(() => dispose)
 
@@ -108,5 +93,14 @@
     }
   })
 </script>
+
+{#if isInstanceOf(internalRef, 'PerspectiveCamera') || isInstanceOf(internalRef, 'OrthographicCamera')}
+  <Camera
+    ref={internalRef}
+    {manual}
+    {makeDefault}
+    {...props}
+  />
+{/if}
 
 {@render children?.({ ref: internalRef })}

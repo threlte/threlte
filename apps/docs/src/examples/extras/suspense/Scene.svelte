@@ -38,10 +38,10 @@
     />
   {/snippet}
 
-  {#snippet error({ errors })}
+  {#snippet error({ error })}
     <Text
       position.z={-8}
-      text={errors.map((e) => e).join(', ')}
+      text={String(error)}
       fontSize={1}
       color="white"
       anchorX="50%"

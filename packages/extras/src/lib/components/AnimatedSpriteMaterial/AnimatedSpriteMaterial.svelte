@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { isInstanceOf, T, useLoader, useParent, useTask, observe } from '@threlte/core'
+  import { isInstanceOf, T, useLoader, useParent, useTask } from '@threlte/core'
   import {
     DoubleSide,
     FileLoader,
@@ -46,6 +46,7 @@
   const parent = useParent()
 
   const supportedDirections = ['forward', 'reverse'] as const
+
   const isSupportedDirection = (
     value: string | undefined
   ): value is (typeof supportedDirections)[number] => {
@@ -61,7 +62,7 @@
   let timerOffset = 0
   let currentFrame = startFrame
   let numFrames = 0
-  let flipOffset = flipX ? -1 : 1
+  let flipOffset = $derived(flipX ? -1 : 1)
   let frameWidth = 0
   let frameHeight = 0
   let texture = $state<Texture>()
@@ -72,11 +73,8 @@
   let spritesheetSize = { w: 0, h: 0 }
 
   let fpsInterval = $derived(1000 / fps)
-  let isMesh = $derived(parent.current !== undefined && isInstanceOf(parent.current, 'Mesh'))
 
-  $effect.pre(() => {
-    is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
-  })
+  const fileLoader = useLoader(FileLoader)
 
   const texturePromise = useTexture(textureUrl, {
     transform: (value: Texture) => {
@@ -88,8 +86,6 @@
       return value
     }
   })
-
-  const fileLoader = useLoader(FileLoader)
 
   const jsonPromise: Promise<SpriteJsonHashData | undefined> = dataUrl
     ? fileLoader.load(dataUrl, {
@@ -289,9 +285,9 @@
   })
 </script>
 
-{#if texture && isMesh}
+{#if isInstanceOf(parent.current, 'Mesh')}
   <T
-    {is}
+    is={is ?? new MeshBasicMaterial()}
     bind:ref
     map={texture}
     toneMapped={false}
@@ -307,9 +303,9 @@
     map={texture}
     {alphaTest}
   />
-{:else if texture}
+{:else}
   <T
-    {is}
+    is={is ?? new SpriteMaterial()}
     bind:ref
     map={texture}
     toneMapped={false}

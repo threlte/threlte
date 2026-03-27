@@ -132,17 +132,17 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
 
     if (Array.isArray(input)) {
       // map over the input array and return an array of promises
-      const promises = input.map((url) => remember(url, () => loadResource(url)))
+      const promises = input.map((url) => remember(() => loadResource(url), [Proto, url]))
 
       return Promise.all(promises) as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
-      const promise = remember(input, () => loadResource(input))
+      const promise = remember(() => loadResource(input), [Proto, input])
 
       return promise as any // TODO: Dirty escape hatch
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
-        return remember(url, () => loadResource(url))
+        return remember(() => loadResource(url), [Proto, url])
       })
 
       return Promise.all(promises).then((results) => {
@@ -154,15 +154,15 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   const clear = (input: string | string[] | Record<string, string>) => {
     if (Array.isArray(input)) {
       input.forEach((url) => {
-        clearCacheItem(url)
+        clearCacheItem([Proto, url])
         Cache.remove(url)
       })
     } else if (typeof input === 'string') {
-      clearCacheItem(input)
+      clearCacheItem([Proto, 'input'])
       Cache.remove(input)
     } else {
       Object.entries(input).forEach(([, url]) => {
-        clearCacheItem(url)
+        clearCacheItem([Proto, url])
         Cache.remove(url)
       })
     }
