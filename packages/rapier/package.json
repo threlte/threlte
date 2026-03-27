@@ -15,7 +15,7 @@
     "cleanup": "rimraf node_modules .svelte-kit dist"
   },
   "devDependencies": {
-    "@dimforge/rapier3d-compat": "^0.16.2",
+    "@dimforge/rapier3d-compat": "^0.19.3",
     "@eslint/js": "catalog:",
     "@sveltejs/adapter-auto": "catalog:",
     "@sveltejs/kit": "catalog:",

@@ -640,8 +640,8 @@ importers:
   packages/rapier:
     devDependencies:
       '@dimforge/rapier3d-compat':
-        specifier: ^0.16.2
-        version: 0.16.2
+        specifier: ^0.19.3
+        version: 0.19.3
       '@eslint/js':
         specifier: 'catalog:'
         version: 9.26.0
@@ -1318,6 +1318,9 @@ packages:
 
   '@dimforge/rapier3d-compat@0.16.2':
     resolution: {integrity: sha512-VM4pOmZbWUgXzuSJbNmoiDVhurCV8KnHhg0/MB7cNcJEjkrhwTSlnMSAe7OCUU0MXnSJciXdIFOgJU8eCzGGkQ==}
+
+  '@dimforge/rapier3d-compat@0.19.3':
+    resolution: {integrity: sha512-mMVdSj1PRTT108s9Swbu2GQOmHbn8kbJANRV5xfczL3s0T4vkgZAuoMRgvBzQcHanpKusbC0ZJj6z3mC3aj3vg==}
 
   '@emmetio/abbreviation@2.3.3':
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
@@ -8726,6 +8729,8 @@ snapshots:
   '@csstools/css-tokenizer@4.0.0': {}
 
   '@dimforge/rapier3d-compat@0.16.2': {}
+
+  '@dimforge/rapier3d-compat@0.19.3': {}
 
   '@emmetio/abbreviation@2.3.3':
     dependencies:
