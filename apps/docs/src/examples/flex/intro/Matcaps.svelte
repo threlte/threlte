@@ -4,12 +4,10 @@
 
   const { remember } = useCache()
 
-  const matcapsList = await remember(
-    () =>
-      fetch('https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/matcaps.json').then((response) =>
-        response.json()
-      ),
-    ['matcaps']
+  const matcapsList = await remember('matcaps', () =>
+    fetch('https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/matcaps.json').then((response) =>
+      response.json()
+    )
   )
 
   interface Props {
