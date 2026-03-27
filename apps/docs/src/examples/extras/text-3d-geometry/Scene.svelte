@@ -2,23 +2,38 @@
   import { T } from '@threlte/core'
   import { Align, Environment, Float, OrbitControls, Text3DGeometry } from '@threlte/extras'
 
-  export let text: string
-  export let bevelEnabled: boolean
-  export let bevelOffset: number
-  export let bevelSegments: number
-  export let bevelSize: number
-  export let bevelThickness: number
-  export let curveSegments: number
-  export let depth: number
-  export let size: number
-  export let smooth: number
+  interface Props {
+    text: string
+    bevelEnabled: boolean
+    bevelOffset: number
+    bevelSegments: number
+    bevelSize: number
+    bevelThickness: number
+    curveSegments: number
+    depth: number
+    size: number
+    smooth: number
+  }
+
+  let {
+    text,
+    bevelEnabled,
+    bevelOffset,
+    bevelSegments,
+    bevelSize,
+    bevelThickness,
+    curveSegments,
+    depth,
+    size,
+    smooth
+  }: Props = $props()
 </script>
 
 <Align>
   {#snippet children({ align })}
     <T.Mesh>
       <Text3DGeometry
-        font={'/fonts/Inter-semibold.blob'}
+        font="/fonts/Inter-semibold.blob"
         {text}
         {bevelEnabled}
         {bevelOffset}

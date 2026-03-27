@@ -8,12 +8,11 @@ Title: Sniper Scope NightForce_V2
 -->
 
 <script lang="ts">
-  import { Group, type Vector3Tuple } from 'three'
+  import { Group, type Vector3Tuple, MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { useGltf } from '@threlte/extras'
   import { Tween } from 'svelte/motion'
   import { scoping } from '../Controls.svelte'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import type { Snippet } from 'svelte'
 
   interface Props {
@@ -45,7 +44,7 @@ Title: Sniper Scope NightForce_V2
   dispose={false}
   scale={0.02}
   position={position.current}
-  rotation.y={DEG2RAD * rotationX.current}
+  rotation.y={MathUtils.DEG2RAD * rotationX.current}
 >
   {#await gltf then { nodes, materials }}
     <T.Mesh

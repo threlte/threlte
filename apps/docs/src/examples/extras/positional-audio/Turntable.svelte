@@ -2,14 +2,7 @@
   import { T, useTask } from '@threlte/core'
   import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
   import { Spring, Tween } from 'svelte/motion'
-  import {
-    CylinderGeometry,
-    DoubleSide,
-    Mesh,
-    MeshStandardMaterial,
-    PositionalAudio as ThreePositionalAudio,
-    MathUtils
-  } from 'three'
+  import { DoubleSide, Mesh, PositionalAudio as ThreePositionalAudio, MathUtils } from 'three'
   import Button from './Button.svelte'
   import Disc from './Disc.svelte'
   import type { TurntableProps } from './types'
@@ -158,10 +151,6 @@
   >
     <T.Mesh
       castShadow
-      material={new MeshStandardMaterial({
-        color: 0xffffff
-      })}
-      geometry={new CylinderGeometry(0.1, 0.1, 3, 12)}
       position.y={1.5}
     >
       <T.CylinderGeometry args={[0.1, 0.1, 3, 12]} />

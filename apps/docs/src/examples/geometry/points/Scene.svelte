@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Align, OrbitControls, PointsMaterial } from '@threlte/extras'
-  import { BufferGeometry } from 'three'
+  import { BufferAttribute, BufferGeometry } from 'three'
 
   const size = 30
   const count = size ** 3
@@ -32,6 +32,9 @@
     //z
     positions[i * 3 + 2] = vz
   }
+
+  const geometry = new BufferGeometry()
+  geometry.setAttribute('position', new BufferAttribute(positions, 3))
 </script>
 
 <T.PerspectiveCamera
@@ -49,18 +52,7 @@
 
 <Align>
   <T.Points>
-    <T.BufferGeometry>
-      <T.BufferAttribute
-        args={[positions, 3]}
-        attach={({ parent, ref }) => {
-          ;(parent as BufferGeometry).setAttribute('position', ref)
-          return () => {
-            // cleanup function called when ref changes or the component unmounts
-            // https://threlte.xyz/docs/reference/core/t#attach
-          }
-        }}
-      />
-    </T.BufferGeometry>
+    <T is={geometry} />
     <PointsMaterial size={0.25} />
   </T.Points>
 </Align>

@@ -2,10 +2,7 @@
   import { T } from '@threlte/core'
   import { OrbitControls, Environment } from '@threlte/extras'
   import { AutoColliders, CollisionGroups, RigidBody } from '@threlte/rapier'
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
   import Ground from './Ground.svelte'
-
-  const geometry = new BoxGeometry(1, 1, 1)
 
   let resetCounter = 0
   export const reset = () => {
@@ -37,14 +34,11 @@
   >
     <T.Group position={[0, 1.5, 1 - Math.random() * 2]}>
       <RigidBody>
-        <AutoColliders shape={'cuboid'}>
-          <T.Mesh
-            castShadow
-            {geometry}
-            material={new MeshStandardMaterial({
-              color: 'red'
-            })}
-          />
+        <AutoColliders shape="cuboid">
+          <T.Mesh castShadow>
+            <T.BoxGeometry />
+            <T.MeshStandardMaterial color="red" />
+          </T.Mesh>
         </AutoColliders>
       </RigidBody>
     </T.Group>
@@ -57,14 +51,11 @@
   >
     <T.Group position={[0, 4.5, 1 - Math.random() * 2]}>
       <RigidBody>
-        <AutoColliders shape={'cuboid'}>
-          <T.Mesh
-            castShadow
-            {geometry}
-            material={new MeshStandardMaterial({
-              color: 'green'
-            })}
-          />
+        <AutoColliders shape="cuboid">
+          <T.Mesh castShadow>
+            <T.BoxGeometry />
+            <T.MeshStandardMaterial color="green" />
+          </T.Mesh>
         </AutoColliders>
       </RigidBody>
     </T.Group>
@@ -77,14 +68,11 @@
   >
     <T.Group position={[0, 3, 1 - Math.random() * 2]}>
       <RigidBody>
-        <AutoColliders shape={'cuboid'}>
-          <T.Mesh
-            castShadow
-            {geometry}
-            material={new MeshStandardMaterial({
-              color: 'blue'
-            })}
-          />
+        <AutoColliders shape="cuboid">
+          <T.Mesh castShadow>
+            <T.BoxGeometry />
+            <T.MeshStandardMaterial color="blue" />
+          </T.Mesh>
         </AutoColliders>
       </RigidBody>
     </T.Group>

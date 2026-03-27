@@ -1,31 +1,33 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import { Mesh, MeshPhongMaterial, CylinderGeometry, type Matrix4 } from 'three'
   import { T } from '@threlte/core'
   import { XR, Controller, Hand, useHitTest } from '@threlte/xr'
 
-  const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0)
+  const geometry = new CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0)
 
-  let meshes = $state<THREE.Mesh[]>([])
+  let meshes = $state<Mesh[]>([])
   let cursors = $state({
-    left: undefined! as THREE.Mesh,
-    right: undefined! as THREE.Mesh
+    left: new Mesh(),
+    right: new Mesh()
   })
 
   const hands = ['left', 'right'] as const
   type Hands = (typeof hands)[number]
 
-  const handleSelect = (hand: Hands) => () => {
-    if (!cursors[hand].visible) return
+  const handleSelect = (hand: Hands) => {
+    return () => {
+      if (!cursors[hand].visible) return
 
-    const material = new THREE.MeshPhongMaterial({ color: 0xffffff * Math.random() })
-    const mesh = new THREE.Mesh(geometry, material)
-    cursors[hand].matrix.decompose(mesh.position, mesh.quaternion, mesh.scale)
-    mesh.scale.y = Math.random() * 2 + 1
-    meshes.push(mesh)
+      const material = new MeshPhongMaterial({ color: 0xffffff * Math.random() })
+      const mesh = new Mesh(geometry, material)
+      cursors[hand].matrix.decompose(mesh.position, mesh.quaternion, mesh.scale)
+      mesh.scale.y = Math.random() * 2 + 1
+      meshes.push(mesh)
+    }
   }
 
-  const handleHitTest =
-    (hand: Hands) => (hitMatrix: THREE.Matrix4, hit: XRHitTestResult | undefined) => {
+  const handleHitTest = (hand: Hands) => {
+    return (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => {
       if (!cursors[hand]) return
 
       if (hit) {
@@ -35,6 +37,7 @@
         cursors[hand].visible = false
       }
     }
+  }
 
   useHitTest(handleHitTest('left'), { source: 'leftInput' })
   useHitTest(handleHitTest('right'), { source: 'rightInput' })
@@ -53,8 +56,8 @@
   {/each}
 </XR>
 
-<T.Mesh
-  bind:ref={cursors.left}
+<T
+  is={cursors.left}
   matrixAutoUpdate={false}
 >
   <T.RingGeometry
@@ -64,10 +67,10 @@
     }}
   />
   <T.MeshBasicMaterial />
-</T.Mesh>
+</T>
 
-<T.Mesh
-  bind:ref={cursors.right}
+<T
+  is={cursors.right}
   matrixAutoUpdate={false}
 >
   <T.RingGeometry
@@ -77,7 +80,7 @@
     }}
   />
   <T.MeshBasicMaterial />
-</T.Mesh>
+</T>
 
 <T.HemisphereLight
   args={[0xffffff, 0xbbbbff, 1]}
@@ -86,6 +89,6 @@
 
 <T.AmbientLight intensity={0.5} />
 
-{#each meshes as mesh, index (index)}
+{#each meshes as mesh (mesh)}
   <T is={mesh} />
 {/each}

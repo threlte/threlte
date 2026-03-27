@@ -5,12 +5,12 @@
   import { Grid, OrbitControls } from '@threlte/extras'
   import { Pane, Slider, List } from 'svelte-tweakpane-ui'
 
-  let innerWidth = 0
-  let width = 800
-  let height = 800
-  let rows = 5
-  let columns = 5
-  let size = 128
+  let innerWidth = $state(0)
+  let width = $state(800)
+  let height = $state(800)
+  let rows = $state(5)
+  let columns = $state(5)
+  let size = $state(128)
   let sizeOptions = {
     '64px': 64,
     '128px': 128,
