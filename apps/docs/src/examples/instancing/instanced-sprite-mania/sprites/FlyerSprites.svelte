@@ -11,8 +11,12 @@
   import type { SpritesheetMetadata } from '@threlte/extras'
   import FlyingBehaviour from '../behaviours/FlyingBehaviour.svelte'
 
-  export let billboarding = false
-  export let fps: number
+  interface Props {
+    billboarding?: boolean
+    fps: number
+  }
+
+  let { billboarding = false, fps }: Props = $props()
 
   const demonSpriteMeta: SpritesheetMetadata = [
     {

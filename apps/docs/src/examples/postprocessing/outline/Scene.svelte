@@ -8,14 +8,13 @@
   import { quadInOut } from 'svelte/easing'
 
   type Props = {
-    autoRotate?: boolean
     mesh: Mesh
     play?: boolean
     positions?: Vector3Tuple[]
     walls?: Wall[]
   }
 
-  let { autoRotate = true, mesh, positions = [], play = true, walls = [] }: Props = $props()
+  let { mesh, positions = [], play = true, walls = [] }: Props = $props()
 
   let positionIndex = 0
   const positionTween = new Tween(positions[positionIndex], {
@@ -57,10 +56,7 @@
   position={[10, 10, 10]}
   zoom={50}
 >
-  <OrbitControls
-    {autoRotate}
-    enableDamping
-  />
+  <OrbitControls enableDamping />
 </T.OrthographicCamera>
 
 <T.Group rotation.x={-1 * 0.5 * Math.PI}>

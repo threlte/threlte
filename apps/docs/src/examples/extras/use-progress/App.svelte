@@ -17,6 +17,12 @@
   const progressLessThanOne = $derived(tweenedProgress.current < 1)
 </script>
 
+<div class="main">
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+
 {#if progressLessThanOne}
   <div
     transition:fade={{
@@ -33,12 +39,6 @@
     </div>
   </div>
 {/if}
-
-<div class="main">
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div>
 
 <style>
   div.main {

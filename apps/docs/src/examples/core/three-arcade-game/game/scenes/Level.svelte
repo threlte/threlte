@@ -159,7 +159,7 @@
   }
 </script>
 
-{#each blocks as block, index (index)}
+{#each blocks as block (block)}
   <Block
     {...block}
     onHit={() => {

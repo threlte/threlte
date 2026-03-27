@@ -1,7 +1,7 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { Collider } from '@threlte/rapier'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import { arenaDepth, arenaHeight, arenaWidth } from '../config'
   import { useArenaCollisionEnterEvent } from '../hooks/useArenaCollider'
 
@@ -29,7 +29,7 @@
 <!-- LEFT GRID -->
 <T.CustomGridHelper
   args={[arenaDepth, arenaDepth, arenaHeight, arenaHeight]}
-  rotation.z={90 * DEG2RAD}
+  rotation.z={90 * MathUtils.DEG2RAD}
   position.x={(arenaWidth / 2) * -1}
 >
   <T.LineBasicMaterial
@@ -38,7 +38,7 @@
     opacity={sideGridOpacity}
   />
 
-  <T.Mesh rotation.x={90 * DEG2RAD}>
+  <T.Mesh rotation.x={90 * MathUtils.DEG2RAD}>
     <T.PlaneGeometry args={[arenaDepth, arenaHeight]} />
     <T.MeshBasicMaterial
       color="green"
@@ -51,7 +51,7 @@
 <!-- RIGHT GRID -->
 <T.CustomGridHelper
   args={[arenaDepth, arenaDepth, arenaHeight, arenaHeight]}
-  rotation.z={90 * DEG2RAD}
+  rotation.z={90 * MathUtils.DEG2RAD}
   position.x={arenaWidth / 2}
 >
   <T.LineBasicMaterial
@@ -60,7 +60,7 @@
     opacity={sideGridOpacity}
   />
 
-  <T.Mesh rotation.x={-90 * DEG2RAD}>
+  <T.Mesh rotation.x={-90 * MathUtils.DEG2RAD}>
     <T.PlaneGeometry args={[arenaDepth, arenaHeight]} />
     <T.MeshBasicMaterial
       color="green"
@@ -73,8 +73,8 @@
 <!-- TOP GRID -->
 <T.CustomGridHelper
   args={[arenaDepth, arenaDepth, arenaHeight, arenaHeight]}
-  rotation.y={90 * DEG2RAD}
-  rotation.x={90 * DEG2RAD}
+  rotation.y={90 * MathUtils.DEG2RAD}
+  rotation.x={90 * MathUtils.DEG2RAD}
   position.z={(arenaHeight / 2) * -1}
 >
   <T.LineBasicMaterial
@@ -83,7 +83,7 @@
     opacity={sideGridOpacity}
   />
 
-  <T.Mesh rotation.x={-90 * DEG2RAD}>
+  <T.Mesh rotation.x={-90 * MathUtils.DEG2RAD}>
     <T.PlaneGeometry args={[arenaDepth, arenaHeight]} />
     <T.MeshBasicMaterial
       color="green"
