@@ -5,7 +5,8 @@ import {
   createParentObject3DContext,
   useParentObject3D
 } from '../../../context/fragments/parentObject3D.js'
-import { isInstanceOf, resolvePropertyPath } from '../../../utilities/index.js'
+import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
+import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import type { BaseProps, MaybeInstance } from '../types.js'
 
 const isObject = (ref: unknown): ref is Record<string, any> => {

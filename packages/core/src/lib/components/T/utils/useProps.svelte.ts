@@ -1,6 +1,6 @@
 import { EventDispatcher } from 'three'
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { resolvePropertyPath } from '../../../utilities/index.js'
+import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import { untrack } from 'svelte'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])

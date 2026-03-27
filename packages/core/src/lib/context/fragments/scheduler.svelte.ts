@@ -1,5 +1,5 @@
 import { getContext, onDestroy, setContext } from 'svelte'
-import { type CurrentWritable, currentWritable } from '../../utilities/index.js'
+import { type CurrentWritable, currentWritable } from '../../utilities/currentWritable.js'
 import { Scheduler, type Stage } from '../../frame-scheduling/index.js'
 
 export type SchedulerContext = {
