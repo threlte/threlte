@@ -10,7 +10,7 @@
  -->
 
 <script
-  context="module"
+  module
   lang="ts"
 >
   import type { SpritesheetMetadata } from '@threlte/extras'
@@ -38,7 +38,11 @@
   import { InstancedSprite, buildSpritesheet } from '@threlte/extras'
   import FlyingBehaviourHook from '../behaviours/FlyingBehaviourHook.svelte'
 
-  export let billboarding = false
+  interface Props {
+    billboarding?: boolean
+  }
+
+  let { billboarding = false }: Props = $props()
 
   const count = 2000
 </script>
