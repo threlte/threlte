@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.5.3
+
+### Patch Changes
+
+- 761ab03: Remove barrel export files
+
 ## 8.5.2
 
 ### Patch Changes

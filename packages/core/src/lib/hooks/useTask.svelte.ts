@@ -1,6 +1,6 @@
 import { useScheduler } from '../context/fragments/scheduler.svelte.js'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling/index.js'
-import { browser } from '../utilities/index.js'
+import { browser } from '../utilities/browser.js'
 
 export interface ThrelteUseTask {
   task: Task

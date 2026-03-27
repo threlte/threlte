@@ -1,5 +1,4 @@
 import { getContext, setContext } from 'svelte'
-
 export interface DOMContext {
   /** The canvas wrapper element */
   dom: HTMLElement

@@ -1,5 +1,5 @@
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { isInstanceOf } from '../../../utilities/index.js'
+import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 
 const updateProjectionMatrixKeys = new Set([
