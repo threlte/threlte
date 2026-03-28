@@ -30,7 +30,7 @@ export const createCameraContext = (): CameraContext => {
     invalidate()
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     if (camera === undefined) {
       camera = defaultCamera
     }

@@ -1,7 +1,8 @@
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
 import { useParent } from './useParent.svelte.js'
 import { useParentObject3D } from './useParentObject3D.svelte.js'
-import { isInstanceOf, resolvePropertyPath } from '../../../utilities/index.js'
+import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
+import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import type { BaseProps, MaybeInstance } from '../types.js'
 
 const isObject = (ref: unknown): ref is Record<string, any> => {

@@ -5,6 +5,7 @@
   import { T, useLoader } from '@threlte/core'
 
   const { load } = useLoader(HDRLoader)
+
   const texture = await load('/textures/equirectangular/hdr/industrial_sunset_puresky_1k.hdr', {
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping

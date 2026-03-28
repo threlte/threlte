@@ -54,4 +54,15 @@ export { createUserContext } from './context/fragments/user.js'
 export { createCacheContext, useCache } from './context/fragments/cache.js'
 
 // utils
-export * from './utilities/index.js'
+export { observe } from './utilities/observe.svelte.js'
+export { isInstanceOf } from './utilities/isInstanceOf.js'
+export { type AsyncWritable, asyncWritable } from './utilities/asyncWritable.js'
+export { revision } from './utilities/revision.js'
+export { watch } from './utilities/watch.js'
+export {
+  type CurrentWritable,
+  type CurrentReadable,
+  currentWritable,
+  toCurrentReadable
+} from './utilities/currentWritable.js'
+export { resolvePropertyPath } from './utilities/resolvePropertyPath.js'

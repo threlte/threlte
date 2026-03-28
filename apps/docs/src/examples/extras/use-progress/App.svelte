@@ -15,7 +15,7 @@
   const progressLessThanOne = $derived(tweenedProgress.current < 1)
 </script>
 
-<div>
+<div class="main">
   <Canvas>
     <Scene />
   </Canvas>
