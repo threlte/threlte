@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.13.2
+
+### Patch Changes
+
+- 9645321: Use correct key granularity for instanced or non instanced objects when deduping interactivity events
+
 ## 9.13.1
 
 ### Patch Changes
