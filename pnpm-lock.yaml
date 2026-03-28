@@ -87,7 +87,7 @@ overrides:
 
 patchedDependencies:
   '@dimforge/rapier3d-compat@0.19.3':
-    hash: 5fd1ee4b78aef003c34b772a350e8424d15b3ed106355224286f9eb308d43650
+    hash: 9198d134c9d3715d5697ee14d151de50ba74453bbf0b5ad2930213153bcf72f8
     path: patches/@dimforge__rapier3d-compat@0.19.3.patch
   '@theatre/studio':
     hash: 1be11589f12d362f0a72e118ac4ef7b2c48bbd564289a80be63f7f5ac6f4e07f
@@ -644,7 +644,7 @@ importers:
     devDependencies:
       '@dimforge/rapier3d-compat':
         specifier: ^0.19.3
-        version: 0.19.3(patch_hash=5fd1ee4b78aef003c34b772a350e8424d15b3ed106355224286f9eb308d43650)
+        version: 0.19.3(patch_hash=9198d134c9d3715d5697ee14d151de50ba74453bbf0b5ad2930213153bcf72f8)
       '@eslint/js':
         specifier: 'catalog:'
         version: 9.26.0
@@ -8733,7 +8733,7 @@ snapshots:
 
   '@dimforge/rapier3d-compat@0.16.2': {}
 
-  '@dimforge/rapier3d-compat@0.19.3(patch_hash=5fd1ee4b78aef003c34b772a350e8424d15b3ed106355224286f9eb308d43650)': {}
+  '@dimforge/rapier3d-compat@0.19.3(patch_hash=9198d134c9d3715d5697ee14d151de50ba74453bbf0b5ad2930213153bcf72f8)': {}
 
   '@emmetio/abbreviation@2.3.3':
     dependencies:

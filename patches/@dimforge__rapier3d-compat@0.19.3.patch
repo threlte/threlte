@@ -205,10 +205,10 @@ index 4abc26166b959259c7bd367ea55a9e2f6cd4cabc..750f4e923f47b2c56edbb3e889bcd5e7
   * A set of rigid bodies that can be handled by a physics pipeline.
   *
 diff --git a/exports.d.ts b/exports.d.ts
-index 05e31330975f23b52ad939fc4449178511860616..61c64a7fa29d1ceb58d88fcdff592f85ab5a8dcd 100644
+index 05e31330975f23b52ad939fc4449178511860616..0ef0a51b76eb3930d83c05b50c6209db8e87938b 100644
 --- a/exports.d.ts
 +++ b/exports.d.ts
-@@ -1,8 +1,9 @@
+@@ -1,8 +1,8 @@
  export declare function version(): string;
  export declare function reserveMemory(extraBytesCount: number): void;
 -export * from "./math";
@@ -223,7 +223,9 @@ index 05e31330975f23b52ad939fc4449178511860616..61c64a7fa29d1ceb58d88fcdff592f85
 +export * from "./pipeline/index.js";
 +export * from "./init.js";
 +export * from "./control/index.js";
-+export * from "./raw.js";
+diff --git a/exports.d.ts.tmp b/exports.d.ts.tmp
+new file mode 100644
+index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/geometry/broad_phase.d.ts b/geometry/broad_phase.d.ts
 index a0e6b74d6a658b60d015b1fc5b08c0204a70306c..8242cb1f6d8171ccf1f05bd1e864b1e3906409db 100644
 --- a/geometry/broad_phase.d.ts
