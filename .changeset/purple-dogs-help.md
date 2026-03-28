@@ -2,4 +2,4 @@
 "@threlte/extras": patch
 ---
 
-interactivity: account for dynamic handler additions
+Fix: interactivity did not account for dynamic handler additions

@@ -2,4 +2,4 @@
 "@threlte/extras": patch
 ---
 
-Fix: duplicate events firing when parent and child are both registered
+Fix: interactivity duplicate events firing when parent and child are both registered
