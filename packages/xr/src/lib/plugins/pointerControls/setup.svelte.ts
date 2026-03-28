@@ -64,7 +64,7 @@ export const setupPointerControls = (
   function cancelPointer(intersections: Intersection[]) {
     if (handContext.hovered.size === 0) return
 
-    const toRemove: [string, Intersection][] = []
+    const toRemove: [string, IntersectionEvent][] = []
 
     for (const [id, hoveredObj] of handContext.hovered) {
       // When no objects were hit or the hovered object wasn't found underneath the cursor
