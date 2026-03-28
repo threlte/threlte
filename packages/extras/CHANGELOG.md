@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.13.1
+
+### Patch Changes
+
+- fe1ac6b: Fix: interactivity duplicate events firing when parent and child are both registered
+- 055abe9: Fix: interactivity did not account for dynamic handler additions
+
 ## 9.13.0
 
 ### Minor Changes
