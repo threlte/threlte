@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.5.4
+
+### Patch Changes
+
+- d9ad8f1: Fix case where `useTask`'s running option would run even if set to false
+
 ## 8.5.3
 
 ### Patch Changes
