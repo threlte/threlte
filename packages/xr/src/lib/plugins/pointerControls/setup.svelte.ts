@@ -16,9 +16,7 @@ import { isPresenting, pointerIntersection } from '../../internal/state.svelte.j
 type PointerEventName = (typeof events)[number]
 
 const getIntersectionId = (intersection: Intersection) => {
-  return `${(intersection.eventObject || intersection.object).uuid}/${intersection.index}${
-    intersection.instanceId ?? ''
-  }`
+  return `${(intersection.eventObject || intersection.object).uuid}|${intersection.index}|${intersection.instanceId}`
 }
 
 const EPSILON = 0.0001
@@ -64,8 +62,12 @@ export const setupPointerControls = (
   }
 
   function cancelPointer(intersections: Intersection[]) {
-    for (const [, hoveredObj] of handContext.hovered) {
-      // When no objects were hit or the the hovered object wasn't found underneath the cursor
+    if (handContext.hovered.size === 0) return
+
+    const toRemove: [string, IntersectionEvent][] = []
+
+    for (const [id, hoveredObj] of handContext.hovered) {
+      // When no objects were hit or the hovered object wasn't found underneath the cursor
       // we call pointerout and delete the object from the hovered elements map
       if (
         intersections.length === 0 ||
@@ -76,30 +78,45 @@ export const setupPointerControls = (
             hit.instanceId === hoveredObj.instanceId
         )
       ) {
-        const { eventObject } = hoveredObj
-        handContext.hovered.delete(getIntersectionId(hoveredObj))
-
-        const events = dispatchers.get(eventObject)
-        if (events !== undefined) {
-          // Clear out intersects, they are outdated by now
-          const data: IntersectionEvent = { ...hoveredObj, intersections }
-          events.onpointerout?.(data)
-          events.onpointerleave?.(data)
-
-          // Deal with cancelation
-          handContext.pointerOverTarget.set(false)
-          cancelPointer([])
-        }
+        toRemove.push([id, hoveredObj])
       }
+    }
+
+    for (const [id, hoveredObj] of toRemove) {
+      const { eventObject } = hoveredObj
+      handContext.hovered.delete(id)
+      const events = dispatchers.get(eventObject)
+      if (events !== undefined) {
+        // Clear out intersects, they are outdated by now
+        const data: IntersectionEvent = { ...hoveredObj, intersections }
+        events.onpointerout?.(data)
+        events.onpointerleave?.(data)
+      }
+    }
+
+    if (handContext.hovered.size === 0) {
+      handContext.pointerOverTarget.set(false)
     }
   }
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const hits = context.raycaster.intersectObjects(
+    const rawHits = context.raycaster.intersectObjects(
       context.interactiveObjects,
       true
     ) as Intersection[]
+    const seen = new Set<string>()
+    const hits = rawHits.filter((hit) => {
+      const key =
+        hit.instanceId !== undefined
+          ? `${hit.object.uuid}|${hit.instanceId}`
+          : hit.index !== undefined
+            ? `${hit.object.uuid}|${hit.index}`
+            : hit.object.uuid
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
     const filtered =
       context.filter === undefined ? hits : context.filter(hits, context, handContext)
 
