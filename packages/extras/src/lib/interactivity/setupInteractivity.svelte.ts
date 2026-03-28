@@ -60,7 +60,13 @@ export const setupInteractivity = (context: InteractivityContext) => {
     if (!context.enabled.current) return []
 
     const intersections: Intersection[] = []
-    const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const rawHits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const seen = new Set<string>()
+    const hits = rawHits.filter((hit) => {
+      if (seen.has(hit.object.uuid)) return false
+      seen.add(hit.object.uuid)
+      return true
+    })
     const filtered = context.filter === undefined ? hits : context.filter(hits, context)
 
     // Bubble up the events, find the event source (eventObject)
