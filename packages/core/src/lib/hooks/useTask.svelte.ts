@@ -202,17 +202,13 @@ export function useTask(
   const task = stage.createTask(key, fn, opts)
 
   $effect.pre(() => {
-    if (!running) {
-      return
-    }
+    if (running) {
+      task.start()
 
-    task.start()
-
-    if (autoInvalidate) {
-      schedulerCtx.autoInvalidations.add(fn)
-    }
-
-    return () => {
+      if (autoInvalidate) {
+        schedulerCtx.autoInvalidations.add(fn)
+      }
+    } else {
       task.stop()
 
       if (autoInvalidate) {
