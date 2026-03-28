@@ -2,4 +2,4 @@
 "@threlte/core": patch
 ---
 
-Core: fix case where `useTask`'s running option would run even if set to false
+Fix case where `useTask`'s running option would run even if set to false
