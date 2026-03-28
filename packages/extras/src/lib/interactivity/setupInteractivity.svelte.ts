@@ -63,7 +63,12 @@ export const setupInteractivity = (context: InteractivityContext) => {
     const rawHits = context.raycaster.intersectObjects(context.interactiveObjects, true)
     const seen = new Set<string>()
     const hits = rawHits.filter((hit) => {
-      const key = `${hit.object.uuid}|${hit.index}|${hit.instanceId}`
+      const key =
+        hit.instanceId !== undefined
+          ? `${hit.object.uuid}|${hit.instanceId}`
+          : hit.index !== undefined
+            ? `${hit.object.uuid}|${hit.index}`
+            : hit.object.uuid
       if (seen.has(key)) return false
       seen.add(key)
       return true
