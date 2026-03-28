@@ -96,10 +96,17 @@ export const setupPointerControls = (
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const hits = context.raycaster.intersectObjects(
+    const rawHits = context.raycaster.intersectObjects(
       context.interactiveObjects,
       true
     ) as Intersection[]
+    const seen = new Set<string>()
+    const hits = rawHits.filter((hit) => {
+      const key = `${hit.object.uuid}|${hit.index}|${hit.instanceId}`
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
     const filtered =
       context.filter === undefined ? hits : context.filter(hits, context, handContext)
 
