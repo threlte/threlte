@@ -1,5 +1,13 @@
 # @threlte/xr
 
+## 1.5.1
+
+### Patch Changes
+
+- c35e8d3: Fix: pointerControls duplicate events firing when parent and child are both registered
+- 9645321: Use correct key granularity for instanced or non instanced objects when deduping interactivity events
+- c35e8d3: Fix: pointerControls did not account for dynamic handler additions
+
 ## 1.5.0
 
 ### Minor Changes
