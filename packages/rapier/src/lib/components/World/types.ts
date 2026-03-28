@@ -9,10 +9,10 @@ import type {
   RawMultibodyJointSet,
   RawNarrowPhase,
   RawPhysicsPipeline,
-  RawQueryPipeline,
+
   RawRigidBodySet,
   RawSerializationPipeline
-} from '@dimforge/rapier3d-compat/raw.js'
+} from '@dimforge/rapier3d-compat'
 import type { Key, Stage } from '@threlte/core'
 import type { Snippet } from 'svelte'
 import type { Vector3 } from 'three'
@@ -30,7 +30,6 @@ export type WorldProps = {
   rawImpulseJoints?: RawImpulseJointSet
   rawMultibodyJoints?: RawMultibodyJointSet
   rawCCDSolver?: RawCCDSolver
-  rawQueryPipeline?: RawQueryPipeline
   rawPhysicsPipeline?: RawPhysicsPipeline
   rawSerializationPipeline?: RawSerializationPipeline
   rawDebugRenderPipeline?: RawDebugRenderPipeline

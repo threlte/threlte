@@ -1,0 +1,589 @@
+diff --git a/control/character_controller.d.ts b/control/character_controller.d.ts
+index 01f6a82e05c4d5c05e175cb29176c3c4361e1c1d..333258ade632744491b826873c86d2642e5ad399 100644
+--- a/control/character_controller.d.ts
++++ b/control/character_controller.d.ts
+@@ -1,7 +1,7 @@
+-import { Vector } from "../math";
+-import { BroadPhase, Collider, ColliderSet, InteractionGroups, NarrowPhase } from "../geometry";
+-import { QueryFilterFlags } from "../pipeline";
+-import { IntegrationParameters, RigidBodySet } from "../dynamics";
++import { Vector } from "../math.js";
++import { BroadPhase, Collider, ColliderSet, InteractionGroups, NarrowPhase } from "../geometry/index.js";
++import { QueryFilterFlags } from "../pipeline/index.js";
++import { IntegrationParameters, RigidBodySet } from "../dynamics/index.js";
+ /**
+  * A collision between the character and an obstacle hit on its path.
+  */
+diff --git a/control/index.d.ts b/control/index.d.ts
+index ea22a1d21521eb6a2df846afb4f0e37498d7e047..9bd89a4123aae4db270b8ed349d9c28232d59c4d 100644
+--- a/control/index.d.ts
++++ b/control/index.d.ts
+@@ -1,3 +1,3 @@
+-export * from "./character_controller";
+-export * from "./pid_controller";
+-export * from "./ray_cast_vehicle_controller";
++export * from "./character_controller.js";
++export * from "./pid_controller.js";
++export * from "./ray_cast_vehicle_controller.js";
+diff --git a/control/pid_controller.d.ts b/control/pid_controller.d.ts
+index 35dae6f35b5800cf8fc50fac809fb48dd13e2079..f4ae2c754219f19367057bedde502b6c37f61070 100644
+--- a/control/pid_controller.d.ts
++++ b/control/pid_controller.d.ts
+@@ -1,5 +1,5 @@
+-import { Rotation, Vector } from "../math";
+-import { IntegrationParameters, RigidBody, RigidBodySet } from "../dynamics";
++import { Rotation, Vector } from "../math.js";
++import { IntegrationParameters, RigidBody, RigidBodySet } from "../dynamics/index.js";
+ /**
+  * An enum representing the possible joint axes controlled by a PidController.
+  * They can be ORed together, like:
+diff --git a/control/ray_cast_vehicle_controller.d.ts b/control/ray_cast_vehicle_controller.d.ts
+index 590509ed123f0c9b5a5c6454d3dc5d9ce8d6bd53..0de39f14e634f46d1616408ee8dc5b3a57d2dc55 100644
+--- a/control/ray_cast_vehicle_controller.d.ts
++++ b/control/ray_cast_vehicle_controller.d.ts
+@@ -1,7 +1,7 @@
+-import { Vector } from "../math";
+-import { BroadPhase, Collider, ColliderSet, InteractionGroups, NarrowPhase } from "../geometry";
+-import { QueryFilterFlags } from "../pipeline";
+-import { RigidBody, RigidBodySet } from "../dynamics";
++import { Vector } from "../math.js";
++import { BroadPhase, Collider, ColliderSet, InteractionGroups, NarrowPhase } from "../geometry/index.js";
++import { QueryFilterFlags } from "../pipeline/index.js";
++import { RigidBody, RigidBodySet } from "../dynamics/index.js";
+ /**
+  * A character controller to simulate vehicles using ray-casting for the wheels.
+  */
+diff --git a/dynamics/ccd_solver.d.ts b/dynamics/ccd_solver.d.ts
+index 9d401ddcdfea08de53e812797164390c351c9f73..4154ee8846b42826228ab9e93f8ac0e740293a70 100644
+--- a/dynamics/ccd_solver.d.ts
++++ b/dynamics/ccd_solver.d.ts
+@@ -1,4 +1,4 @@
+-import { RawCCDSolver } from "../raw";
++import { RawCCDSolver } from "../raw.js";
+ /**
+  * The CCD solver responsible for resolving Continuous Collision Detection.
+  *
+diff --git a/dynamics/impulse_joint.d.ts b/dynamics/impulse_joint.d.ts
+index edb1f8a68816d1d935777726fbe098dbea230b9c..2fcf232f940b87223f27a6ab3346a6846dcdd0ea 100644
+--- a/dynamics/impulse_joint.d.ts
++++ b/dynamics/impulse_joint.d.ts
+@@ -1,7 +1,7 @@
+-import { Rotation, Vector } from "../math";
+-import { RawGenericJoint, RawImpulseJointSet, RawJointAxis } from "../raw";
+-import { RigidBody } from "./rigid_body";
+-import { RigidBodySet } from "./rigid_body_set";
++import { Rotation, Vector } from "../math.js";
++import { RawGenericJoint, RawImpulseJointSet, RawJointAxis } from "../raw.js";
++import { RigidBody } from "./rigid_body.js";
++import { RigidBodySet } from "./rigid_body_set.js";
+ /**
+  * The integer identifier of a collider added to a `ColliderSet`.
+  */
+diff --git a/dynamics/impulse_joint_set.d.ts b/dynamics/impulse_joint_set.d.ts
+index 13495bea886ac6d88b42da81c9d99a532e90c753..8be2ba705cc062727044d5e4d0226637de1e29c5 100644
+--- a/dynamics/impulse_joint_set.d.ts
++++ b/dynamics/impulse_joint_set.d.ts
+@@ -1,7 +1,7 @@
+-import { RawImpulseJointSet } from "../raw";
+-import { RigidBodySet } from "./rigid_body_set";
+-import { ImpulseJoint, ImpulseJointHandle, JointData } from "./impulse_joint";
+-import { RigidBodyHandle } from "./rigid_body";
++import { RawImpulseJointSet } from "../raw.js";
++import { RigidBodySet } from "./rigid_body_set.js";
++import { ImpulseJoint, ImpulseJointHandle, JointData } from "./impulse_joint.js";
++import { RigidBodyHandle } from "./rigid_body.js";
+ /**
+  * A set of joints.
+  *
+diff --git a/dynamics/index.d.ts b/dynamics/index.d.ts
+index 4141658e9c28d7dfbccce1885178c0559d3b0cf3..f223b2c84d88d027a99188a3fee03131ff1afdbc 100644
+--- a/dynamics/index.d.ts
++++ b/dynamics/index.d.ts
+@@ -1,10 +1,10 @@
+-export * from "./rigid_body";
+-export * from "./rigid_body_set";
+-export * from "./integration_parameters";
+-export * from "./impulse_joint";
+-export * from "./impulse_joint_set";
+-export * from "./multibody_joint";
+-export * from "./multibody_joint_set";
+-export * from "./coefficient_combine_rule";
+-export * from "./ccd_solver";
+-export * from "./island_manager";
++export * from "./rigid_body.js";
++export * from "./rigid_body_set.js";
++export * from "./integration_parameters.js";
++export * from "./impulse_joint.js";
++export * from "./impulse_joint_set.js";
++export * from "./multibody_joint.js";
++export * from "./multibody_joint_set.js";
++export * from "./coefficient_combine_rule.js";
++export * from "./ccd_solver.js";
++export * from "./island_manager.js";
+diff --git a/dynamics/integration_parameters.d.ts b/dynamics/integration_parameters.d.ts
+index ac5dd8f4bf72d96808be8bd270ec5126dabc560f..36f03603fd5559600d5d00236c881b7f4bc7dfc2 100644
+--- a/dynamics/integration_parameters.d.ts
++++ b/dynamics/integration_parameters.d.ts
+@@ -1,4 +1,4 @@
+-import { RawIntegrationParameters } from "../raw";
++import { RawIntegrationParameters } from "../raw.js";
+ export declare class IntegrationParameters {
+     raw: RawIntegrationParameters;
+     constructor(raw?: RawIntegrationParameters);
+diff --git a/dynamics/island_manager.d.ts b/dynamics/island_manager.d.ts
+index b7827a23a718ceb045ce34ac5e69593d5b2cc4ad..a6751df863828eb109a2b8e70d1c922bece6f585 100644
+--- a/dynamics/island_manager.d.ts
++++ b/dynamics/island_manager.d.ts
+@@ -1,5 +1,5 @@
+-import { RawIslandManager } from "../raw";
+-import { RigidBodyHandle } from "./rigid_body";
++import { RawIslandManager } from "../raw.js";
++import { RigidBodyHandle } from "./rigid_body.js";
+ /**
+  * The CCD solver responsible for resolving Continuous Collision Detection.
+  *
+diff --git a/dynamics/multibody_joint.d.ts b/dynamics/multibody_joint.d.ts
+index e486e999266a07507ac2ea8d5043c2f02311f99b..8d989b3b5ccd6e1821a6cfda92c5a69a157a0d45 100644
+--- a/dynamics/multibody_joint.d.ts
++++ b/dynamics/multibody_joint.d.ts
+@@ -1,4 +1,4 @@
+-import { RawJointAxis, RawMultibodyJointSet } from "../raw";
++import { RawJointAxis, RawMultibodyJointSet } from "../raw.js";
+ /**
+  * The integer identifier of a collider added to a `ColliderSet`.
+  */
+diff --git a/dynamics/multibody_joint_set.d.ts b/dynamics/multibody_joint_set.d.ts
+index abe9a0604345bfdcd0c24bd1302c0b18178aa0b7..5c527735fa7be6f8b0a80e405dc84834cd341277 100644
+--- a/dynamics/multibody_joint_set.d.ts
++++ b/dynamics/multibody_joint_set.d.ts
+@@ -1,7 +1,7 @@
+-import { RawMultibodyJointSet } from "../raw";
+-import { MultibodyJoint, MultibodyJointHandle } from "./multibody_joint";
+-import { JointData } from "./impulse_joint";
+-import { RigidBodyHandle } from "./rigid_body";
++import { RawMultibodyJointSet } from "../raw.js";
++import { MultibodyJoint, MultibodyJointHandle } from "./multibody_joint.js";
++import { JointData } from "./impulse_joint.js";
++import { RigidBodyHandle } from "./rigid_body.js";
+ /**
+  * A set of joints.
+  *
+diff --git a/dynamics/rigid_body.d.ts b/dynamics/rigid_body.d.ts
+index 7368b3a04b9adae09d3130e7d0c9bfc5904dd070..aef3245b8bdd9ade038fe120a76c853a6e5f847d 100644
+--- a/dynamics/rigid_body.d.ts
++++ b/dynamics/rigid_body.d.ts
+@@ -1,7 +1,7 @@
+-import { RawRigidBodySet } from "../raw";
+-import { Rotation, Vector } from "../math";
+-import { SdpMatrix3 } from "../math";
+-import { Collider, ColliderSet } from "../geometry";
++import { RawRigidBodySet } from "../raw.js";
++import { Rotation, Vector } from "../math.js";
++import { SdpMatrix3 } from "../math.js";
++import { Collider, ColliderSet } from "../geometry/index.js";
+ /**
+  * The integer identifier of a collider added to a `ColliderSet`.
+  */
+diff --git a/dynamics/rigid_body_set.d.ts b/dynamics/rigid_body_set.d.ts
+index 4abc26166b959259c7bd367ea55a9e2f6cd4cabc..750f4e923f47b2c56edbb3e889bcd5e7cd6e0e51 100644
+--- a/dynamics/rigid_body_set.d.ts
++++ b/dynamics/rigid_body_set.d.ts
+@@ -1,9 +1,9 @@
+-import { RawRigidBodySet } from "../raw";
+-import { RigidBody, RigidBodyDesc, RigidBodyHandle } from "./rigid_body";
+-import { ColliderSet } from "../geometry";
+-import { ImpulseJointSet } from "./impulse_joint_set";
+-import { MultibodyJointSet } from "./multibody_joint_set";
+-import { IslandManager } from "./island_manager";
++import { RawRigidBodySet } from "../raw.js";
++import { RigidBody, RigidBodyDesc, RigidBodyHandle } from "./rigid_body.js";
++import { ColliderSet } from "../geometry/index.js";
++import { ImpulseJointSet } from "./impulse_joint_set.js";
++import { MultibodyJointSet } from "./multibody_joint_set.js";
++import { IslandManager } from "./island_manager.js";
+ /**
+  * A set of rigid bodies that can be handled by a physics pipeline.
+  *
+diff --git a/exports.d.ts b/exports.d.ts
+index 05e31330975f23b52ad939fc4449178511860616..61c64a7fa29d1ceb58d88fcdff592f85ab5a8dcd 100644
+--- a/exports.d.ts
++++ b/exports.d.ts
+@@ -1,8 +1,9 @@
+ export declare function version(): string;
+ export declare function reserveMemory(extraBytesCount: number): void;
+-export * from "./math";
+-export * from "./dynamics";
+-export * from "./geometry";
+-export * from "./pipeline";
+-export * from "./init";
+-export * from "./control";
++export * from "./math.js";
++export * from "./dynamics/index.js";
++export * from "./geometry/index.js";
++export * from "./pipeline/index.js";
++export * from "./init.js";
++export * from "./control/index.js";
++export * from "./raw.js";
+diff --git a/geometry/broad_phase.d.ts b/geometry/broad_phase.d.ts
+index a0e6b74d6a658b60d015b1fc5b08c0204a70306c..8242cb1f6d8171ccf1f05bd1e864b1e3906409db 100644
+--- a/geometry/broad_phase.d.ts
++++ b/geometry/broad_phase.d.ts
+@@ -1,15 +1,15 @@
+-import { RawBroadPhase } from "../raw";
+-import { RigidBodyHandle, RigidBodySet } from "../dynamics";
+-import { ColliderSet } from "./collider_set";
+-import { Ray, RayColliderHit, RayColliderIntersection } from "./ray";
+-import { InteractionGroups } from "./interaction_groups";
+-import { ColliderHandle } from "./collider";
+-import { Rotation, Vector } from "../math";
+-import { Shape } from "./shape";
+-import { PointColliderProjection } from "./point";
+-import { ColliderShapeCastHit } from "./toi";
+-import { QueryFilterFlags } from "../pipeline";
+-import { NarrowPhase } from "./narrow_phase";
++import { RawBroadPhase } from "../raw.js";
++import { RigidBodyHandle, RigidBodySet } from "../dynamics/index.js";
++import { ColliderSet } from "./collider_set.js";
++import { Ray, RayColliderHit, RayColliderIntersection } from "./ray.js";
++import { InteractionGroups } from "./interaction_groups.js";
++import { ColliderHandle } from "./collider.js";
++import { Rotation, Vector } from "../math.js";
++import { Shape } from "./shape.js";
++import { PointColliderProjection } from "./point.js";
++import { ColliderShapeCastHit } from "./toi.js";
++import { QueryFilterFlags } from "../pipeline/index.js";
++import { NarrowPhase } from "./narrow_phase.js";
+ /**
+  * The broad-phase used for coarse collision-detection.
+  *
+diff --git a/geometry/collider.d.ts b/geometry/collider.d.ts
+index c823ff4bbacf64847c1df67207a27377dee575ef..0bc5c5a3eb522cac43d5f72f05a13b4ec6d8a0cc 100644
+--- a/geometry/collider.d.ts
++++ b/geometry/collider.d.ts
+@@ -1,13 +1,13 @@
+-import { Rotation, Vector } from "../math";
+-import { CoefficientCombineRule, RigidBody, RigidBodySet } from "../dynamics";
+-import { ActiveHooks, ActiveEvents } from "../pipeline";
+-import { InteractionGroups } from "./interaction_groups";
+-import { Shape, ShapeType, TriMeshFlags, HeightFieldFlags } from "./shape";
+-import { Ray, RayIntersection } from "./ray";
+-import { PointProjection } from "./point";
+-import { ColliderShapeCastHit, ShapeCastHit } from "./toi";
+-import { ShapeContact } from "./contact";
+-import { ColliderSet } from "./collider_set";
++import { Rotation, Vector } from "../math.js";
++import { CoefficientCombineRule, RigidBody, RigidBodySet } from "../dynamics/index.js";
++import { ActiveHooks, ActiveEvents } from "../pipeline/index.js";
++import { InteractionGroups } from "./interaction_groups.js";
++import { Shape, ShapeType, TriMeshFlags, HeightFieldFlags } from "./shape.js";
++import { Ray, RayIntersection } from "./ray.js";
++import { PointProjection } from "./point.js";
++import { ColliderShapeCastHit, ShapeCastHit } from "./toi.js";
++import { ShapeContact } from "./contact.js";
++import { ColliderSet } from "./collider_set.js";
+ /**
+  * Flags affecting whether collision-detection happens between two colliders
+  * depending on the type of rigid-bodies they are attached to.
+diff --git a/geometry/collider_set.d.ts b/geometry/collider_set.d.ts
+index cbe9f33e8c3bd799a492779b2b0ab6d4eceac12e..2f97fb0dd43cd4ab1431cbda6331937b7f0ac7cb 100644
+--- a/geometry/collider_set.d.ts
++++ b/geometry/collider_set.d.ts
+@@ -1,7 +1,7 @@
+-import { RawColliderSet } from "../raw";
+-import { Collider, ColliderDesc, ColliderHandle } from "./collider";
+-import { ImpulseJointHandle, IslandManager, RigidBodyHandle } from "../dynamics";
+-import { RigidBodySet } from "../dynamics";
++import { RawColliderSet } from "../raw.js";
++import { Collider, ColliderDesc, ColliderHandle } from "./collider.js";
++import { ImpulseJointHandle, IslandManager, RigidBodyHandle } from "../dynamics/index.js";
++import { RigidBodySet } from "../dynamics/index.js";
+ /**
+  * A set of rigid bodies that can be handled by a physics pipeline.
+  *
+diff --git a/geometry/contact.d.ts b/geometry/contact.d.ts
+index 62b1075c6c10541130009f9cf165987909ff3709..9f9d66db639bbb706f629a7542e7a2774eff450d 100644
+--- a/geometry/contact.d.ts
++++ b/geometry/contact.d.ts
+@@ -1,5 +1,5 @@
+-import { Vector } from "../math";
+-import { RawShapeContact } from "../raw";
++import { Vector } from "../math.js";
++import { RawShapeContact } from "../raw.js";
+ /**
+  * The contact info between two shapes.
+  */
+diff --git a/geometry/index.d.ts b/geometry/index.d.ts
+index 1bd19e50b87d552b36017a2fbadc083465cf7ad0..c0b44f0b14bfb82861625199f260de8056944ded 100644
+--- a/geometry/index.d.ts
++++ b/geometry/index.d.ts
+@@ -1,11 +1,11 @@
+-export * from "./broad_phase";
+-export * from "./narrow_phase";
+-export * from "./shape";
+-export * from "./collider";
+-export * from "./collider_set";
+-export * from "./feature";
+-export * from "./ray";
+-export * from "./point";
+-export * from "./toi";
+-export * from "./interaction_groups";
+-export * from "./contact";
++export * from "./broad_phase.js";
++export * from "./narrow_phase.js";
++export * from "./shape.js";
++export * from "./collider.js";
++export * from "./collider_set.js";
++export * from "./feature.js";
++export * from "./ray.js";
++export * from "./point.js";
++export * from "./toi.js";
++export * from "./interaction_groups.js";
++export * from "./contact.js";
+diff --git a/geometry/narrow_phase.d.ts b/geometry/narrow_phase.d.ts
+index a8e9dc7c31c5605b5bc30c3f8829d962ac4d36b2..5edab6adb675ae0fb993dc45ac881bfa7db316d9 100644
+--- a/geometry/narrow_phase.d.ts
++++ b/geometry/narrow_phase.d.ts
+@@ -1,6 +1,6 @@
+-import { RawNarrowPhase, RawContactManifold } from "../raw";
+-import { ColliderHandle } from "./collider";
+-import { Vector } from "../math";
++import { RawNarrowPhase, RawContactManifold } from "../raw.js";
++import { ColliderHandle } from "./collider.js";
++import { Vector } from "../math.js";
+ /**
+  * The narrow-phase used for precise collision-detection.
+  *
+diff --git a/geometry/point.d.ts b/geometry/point.d.ts
+index 8dd529508842b5081d8238a130020de3cba9634a..3172a6c2d9402dabdb672cf255c6b2a010808589 100644
+--- a/geometry/point.d.ts
++++ b/geometry/point.d.ts
+@@ -1,8 +1,8 @@
+-import { Collider } from "./collider";
+-import { Vector } from "../math";
+-import { RawPointColliderProjection, RawPointProjection } from "../raw";
+-import { FeatureType } from "./feature";
+-import { ColliderSet } from "./collider_set";
++import { Collider } from "./collider.js";
++import { Vector } from "../math.js";
++import { RawPointColliderProjection, RawPointProjection } from "../raw.js";
++import { FeatureType } from "./feature.js";
++import { ColliderSet } from "./collider_set.js";
+ /**
+  * The projection of a point on a collider.
+  */
+diff --git a/geometry/ray.d.ts b/geometry/ray.d.ts
+index 709e58160efb332f429b4329637dde00784c3a49..e723e2a4216b2b9daa6cd845150ad75e3a8aa2c8 100644
+--- a/geometry/ray.d.ts
++++ b/geometry/ray.d.ts
+@@ -1,8 +1,8 @@
+-import { Vector } from "../math";
+-import { RawRayColliderIntersection, RawRayColliderHit, RawRayIntersection } from "../raw";
+-import { Collider } from "./collider";
+-import { FeatureType } from "./feature";
+-import { ColliderSet } from "./collider_set";
++import { Vector } from "../math.js";
++import { RawRayColliderIntersection, RawRayColliderHit, RawRayIntersection } from "../raw.js";
++import { Collider } from "./collider.js";
++import { FeatureType } from "./feature.js";
++import { ColliderSet } from "./collider_set.js";
+ /**
+  * A ray. This is a directed half-line.
+  */
+diff --git a/geometry/shape.d.ts b/geometry/shape.d.ts
+index 2871eaaf3db9272c9add6aa10dfa127feaaa4fe2..b95170279a3ad3b2c8b9334ce34b027f0f3463b9 100644
+--- a/geometry/shape.d.ts
++++ b/geometry/shape.d.ts
+@@ -1,10 +1,10 @@
+-import { Vector, Rotation } from "../math";
+-import { RawColliderSet, RawShape } from "../raw";
+-import { ShapeContact } from "./contact";
+-import { PointProjection } from "./point";
+-import { Ray, RayIntersection } from "./ray";
+-import { ShapeCastHit } from "./toi";
+-import { ColliderHandle } from "./collider";
++import { Vector, Rotation } from "../math.js";
++import { RawColliderSet, RawShape } from "../raw.js";
++import { ShapeContact } from "./contact.js";
++import { PointProjection } from "./point.js";
++import { Ray, RayIntersection } from "./ray.js";
++import { ShapeCastHit } from "./toi.js";
++import { ColliderHandle } from "./collider.js";
+ export declare abstract class Shape {
+     abstract intoRaw(): RawShape;
+     /**
+diff --git a/geometry/toi.d.ts b/geometry/toi.d.ts
+index b14f513a5ade1b1e265edcbb144543149a70bf88..8870336099190e50948bb95efc99c7e3d9c26097 100644
+--- a/geometry/toi.d.ts
++++ b/geometry/toi.d.ts
+@@ -1,7 +1,7 @@
+-import { Collider } from "./collider";
+-import { Vector } from "../math";
+-import { RawShapeCastHit, RawColliderShapeCastHit } from "../raw";
+-import { ColliderSet } from "./collider_set";
++import { Collider } from "./collider.js";
++import { Vector } from "../math.js";
++import { RawShapeCastHit, RawColliderShapeCastHit } from "../raw.js";
++import { ColliderSet } from "./collider_set.js";
+ /**
+  * The intersection between a ray and a collider.
+  */
+diff --git a/math.d.ts b/math.d.ts
+index e51d607f13d16f112cccdc97e46d05cd90dbbf35..d1f7fb07ee0f4ce804738d7f711b00658a447f74 100644
+--- a/math.d.ts
++++ b/math.d.ts
+@@ -1,5 +1,5 @@
+-import { RawVector, RawRotation } from "./raw";
+-import { RawSdpMatrix3 } from "./raw";
++import { RawVector, RawRotation } from "./raw.js";
++import { RawSdpMatrix3 } from "./raw.js";
+ export interface Vector {
+     x: number;
+     y: number;
+diff --git a/pipeline/debug_render_pipeline.d.ts b/pipeline/debug_render_pipeline.d.ts
+index bec58c9f05df5de34858eaff1bb97b480c58c418..b29c95c52122dd45cc817c980f4a9bcaab1c474c 100644
+--- a/pipeline/debug_render_pipeline.d.ts
++++ b/pipeline/debug_render_pipeline.d.ts
+@@ -1,7 +1,7 @@
+-import { RawDebugRenderPipeline } from "../raw";
+-import { ImpulseJointSet, MultibodyJointSet, RigidBodySet } from "../dynamics";
+-import { Collider, ColliderSet, NarrowPhase } from "../geometry";
+-import { QueryFilterFlags } from "./query_pipeline";
++import { RawDebugRenderPipeline } from "../raw.js";
++import { ImpulseJointSet, MultibodyJointSet, RigidBodySet } from "../dynamics/index.js";
++import { Collider, ColliderSet, NarrowPhase } from "../geometry/index.js";
++import { QueryFilterFlags } from "./query_pipeline.js";
+ /**
+  * The vertex and color buffers for debug-redering the physics scene.
+  */
+diff --git a/pipeline/event_queue.d.ts b/pipeline/event_queue.d.ts
+index 4a337311af30753ec68a476eee63382508258a01..442892fc21283a7b294de01ee98b81bf44c03b95 100644
+--- a/pipeline/event_queue.d.ts
++++ b/pipeline/event_queue.d.ts
+@@ -1,6 +1,6 @@
+-import { RawContactForceEvent, RawEventQueue } from "../raw";
+-import { ColliderHandle } from "../geometry";
+-import { Vector } from "../math";
++import { RawContactForceEvent, RawEventQueue } from "../raw.js";
++import { ColliderHandle } from "../geometry/index.js";
++import { Vector } from "../math.js";
+ /**
+  * Flags indicating what events are enabled for colliders.
+  */
+diff --git a/pipeline/index.d.ts b/pipeline/index.d.ts
+index 092c1a5961d00126616622fdb6f4985e56e293a9..818cf766c90c2785e097396337066805760708ff 100644
+--- a/pipeline/index.d.ts
++++ b/pipeline/index.d.ts
+@@ -1,7 +1,7 @@
+-export * from "./world";
+-export * from "./physics_pipeline";
+-export * from "./serialization_pipeline";
+-export * from "./event_queue";
+-export * from "./physics_hooks";
+-export * from "./debug_render_pipeline";
+-export * from "./query_pipeline";
++export * from "./world.js";
++export * from "./physics_pipeline.js";
++export * from "./serialization_pipeline.js";
++export * from "./event_queue.js";
++export * from "./physics_hooks.js";
++export * from "./debug_render_pipeline.js";
++export * from "./query_pipeline.js";
+diff --git a/pipeline/physics_hooks.d.ts b/pipeline/physics_hooks.d.ts
+index 4d1001632584a3faf91cdba34028babcc12b0ece..9ef7def74029fccd38d1326dd7e92bf8c0c9f16b 100644
+--- a/pipeline/physics_hooks.d.ts
++++ b/pipeline/physics_hooks.d.ts
+@@ -1,5 +1,5 @@
+-import { RigidBodyHandle } from "../dynamics";
+-import { ColliderHandle } from "../geometry";
++import { RigidBodyHandle } from "../dynamics/index.js";
++import { ColliderHandle } from "../geometry/index.js";
+ export declare enum ActiveHooks {
+     NONE = 0,
+     FILTER_CONTACT_PAIRS = 1,
+diff --git a/pipeline/physics_pipeline.d.ts b/pipeline/physics_pipeline.d.ts
+index 15fa1cb0eca9516c40d66cd315d43d9a779df4f5..4a6adf6ad0832b0831699ce151dac71935294d2e 100644
+--- a/pipeline/physics_pipeline.d.ts
++++ b/pipeline/physics_pipeline.d.ts
+@@ -1,9 +1,9 @@
+-import { RawPhysicsPipeline } from "../raw";
+-import { Vector } from "../math";
+-import { IntegrationParameters, ImpulseJointSet, MultibodyJointSet, RigidBodySet, CCDSolver, IslandManager } from "../dynamics";
+-import { BroadPhase, ColliderSet, NarrowPhase } from "../geometry";
+-import { EventQueue } from "./event_queue";
+-import { PhysicsHooks } from "./physics_hooks";
++import { RawPhysicsPipeline } from "../raw.js";
++import { Vector } from "../math.js";
++import { IntegrationParameters, ImpulseJointSet, MultibodyJointSet, RigidBodySet, CCDSolver, IslandManager } from "../dynamics/index.js";
++import { BroadPhase, ColliderSet, NarrowPhase } from "../geometry/index.js";
++import { EventQueue } from "./event_queue.js";
++import { PhysicsHooks } from "./physics_hooks.js";
+ export declare class PhysicsPipeline {
+     raw: RawPhysicsPipeline;
+     free(): void;
+diff --git a/pipeline/serialization_pipeline.d.ts b/pipeline/serialization_pipeline.d.ts
+index 87b8e937c301a62e612bd0c5baa46600069d1feb..96ea6cb536955949e589ce0aa66462f4c263e65e 100644
+--- a/pipeline/serialization_pipeline.d.ts
++++ b/pipeline/serialization_pipeline.d.ts
+@@ -1,8 +1,8 @@
+-import { RawSerializationPipeline } from "../raw";
+-import { Vector } from "../math";
+-import { IntegrationParameters, IslandManager, ImpulseJointSet, MultibodyJointSet, RigidBodySet } from "../dynamics";
+-import { BroadPhase, ColliderSet, NarrowPhase } from "../geometry";
+-import { World } from "./world";
++import { RawSerializationPipeline } from "../raw.js";
++import { Vector } from "../math.js";
++import { IntegrationParameters, IslandManager, ImpulseJointSet, MultibodyJointSet, RigidBodySet } from "../dynamics/index.js";
++import { BroadPhase, ColliderSet, NarrowPhase } from "../geometry/index.js";
++import { World } from "./world.js";
+ /**
+  * A pipeline for serializing the physics scene.
+  *
+diff --git a/pipeline/world.d.ts b/pipeline/world.d.ts
+index 0a918b8770271429298b914b220e4805175807c8..e905674f84b15dc6e5ef728cd18f385b46a1330f 100644
+--- a/pipeline/world.d.ts
++++ b/pipeline/world.d.ts
+@@ -1,15 +1,15 @@
+-import { RawBroadPhase, RawCCDSolver, RawColliderSet, RawDeserializedWorld, RawIntegrationParameters, RawIslandManager, RawImpulseJointSet, RawMultibodyJointSet, RawNarrowPhase, RawPhysicsPipeline, RawRigidBodySet, RawSerializationPipeline, RawDebugRenderPipeline } from "../raw";
+-import { BroadPhase, Collider, ColliderDesc, ColliderHandle, ColliderSet, InteractionGroups, NarrowPhase, PointColliderProjection, Ray, RayColliderIntersection, RayColliderHit, Shape, ColliderShapeCastHit, TempContactManifold } from "../geometry";
+-import { CCDSolver, IntegrationParameters, IslandManager, ImpulseJoint, ImpulseJointHandle, MultibodyJoint, MultibodyJointHandle, JointData, ImpulseJointSet, MultibodyJointSet, RigidBody, RigidBodyDesc, RigidBodyHandle, RigidBodySet } from "../dynamics";
+-import { Rotation, Vector } from "../math";
+-import { PhysicsPipeline } from "./physics_pipeline";
+-import { QueryFilterFlags } from "./query_pipeline";
+-import { SerializationPipeline } from "./serialization_pipeline";
+-import { EventQueue } from "./event_queue";
+-import { PhysicsHooks } from "./physics_hooks";
+-import { DebugRenderBuffers, DebugRenderPipeline } from "./debug_render_pipeline";
+-import { KinematicCharacterController, PidAxesMask, PidController } from "../control";
+-import { DynamicRayCastVehicleController } from "../control";
++import { RawBroadPhase, RawCCDSolver, RawColliderSet, RawDeserializedWorld, RawIntegrationParameters, RawIslandManager, RawImpulseJointSet, RawMultibodyJointSet, RawNarrowPhase, RawPhysicsPipeline, RawRigidBodySet, RawSerializationPipeline, RawDebugRenderPipeline } from "../raw.js";
++import { BroadPhase, Collider, ColliderDesc, ColliderHandle, ColliderSet, InteractionGroups, NarrowPhase, PointColliderProjection, Ray, RayColliderIntersection, RayColliderHit, Shape, ColliderShapeCastHit, TempContactManifold } from "../geometry/index.js";
++import { CCDSolver, IntegrationParameters, IslandManager, ImpulseJoint, ImpulseJointHandle, MultibodyJoint, MultibodyJointHandle, JointData, ImpulseJointSet, MultibodyJointSet, RigidBody, RigidBodyDesc, RigidBodyHandle, RigidBodySet } from "../dynamics/index.js";
++import { Rotation, Vector } from "../math.js";
++import { PhysicsPipeline } from "./physics_pipeline.js";
++import { QueryFilterFlags } from "./query_pipeline.js";
++import { SerializationPipeline } from "./serialization_pipeline.js";
++import { EventQueue } from "./event_queue.js";
++import { PhysicsHooks } from "./physics_hooks.js";
++import { DebugRenderBuffers, DebugRenderPipeline } from "./debug_render_pipeline.js";
++import { KinematicCharacterController, PidAxesMask, PidController } from "../control/index.js";
++import { DynamicRayCastVehicleController } from "../control/index.js";
+ /**
+  * The physics world.
+  *
+diff --git a/rapier.d.ts b/rapier.d.ts
+index dbf4d053aadc947fa22467fe80efbe2918514055..7afc45fb9f41df62d7d1d06ba5569cf23a0bb34c 100644
+--- a/rapier.d.ts
++++ b/rapier.d.ts
+@@ -1,3 +1,3 @@
+-import * as RAPIER from "./exports";
+-export * from "./exports";
++import * as RAPIER from "./exports.js";
++export * from "./exports.js";
+ export default RAPIER;
+diff --git a/raw.d.ts b/raw.d.ts
+index c56d85d5a2a5a2d78014c5280dcc5228a9a69a54..dba3ac3838fd1e2e21fc39c9b3963ab63c19c63a 100644
+--- a/raw.d.ts
++++ b/raw.d.ts
+@@ -1 +1 @@
+-export * from "./rapier_wasm3d"
++export * from "./rapier_wasm3d.js"

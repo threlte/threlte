@@ -33,7 +33,8 @@
     },
     "patchedDependencies": {
       "@theatre/studio": "patches/@theatre__studio.patch",
-      "mitt": "patches/mitt.patch"
+      "mitt": "patches/mitt.patch",
+      "@dimforge/rapier3d-compat@0.19.3": "patches/@dimforge__rapier3d-compat@0.19.3.patch"
     }
   },
   "engines": {
