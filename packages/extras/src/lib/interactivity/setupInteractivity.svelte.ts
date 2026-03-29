@@ -62,11 +62,18 @@ export const setupInteractivity = (context: InteractivityContext) => {
     const intersections: Intersection[] = []
     const rawHits = context.raycaster.intersectObjects(context.interactiveObjects, true)
     const seen = new Set<string>()
+    // Deduplicate hits by object. When recursive=true, intersectObjects searches
+    // each registered object's full subtree, so a child that is itself registered
+    // appears once per registered ancestor — causing duplicate events. The key is
+    // context-sensitive so that legitimate multi-hit objects are preserved:
+    //   InstancedMesh — each instance is a distinct target, key by instanceId
+    //   Points        — each point is a distinct target, key by point index
+    //   Mesh / other  — uuid only; multiple face hits are the same surface
     const hits = rawHits.filter((hit) => {
       const key =
         hit.instanceId !== undefined
           ? `${hit.object.uuid}|${hit.instanceId}`
-          : hit.index !== undefined
+          : (hit.object as THREE.Points).isPoints
             ? `${hit.object.uuid}|${hit.index}`
             : hit.object.uuid
       if (seen.has(key)) return false
@@ -157,6 +164,9 @@ export const setupInteractivity = (context: InteractivityContext) => {
             const higher = hits.slice(0, hits.indexOf(hit))
             cancelPointer([...higher, hit])
           }
+        },
+        stopImmediatePropagation() {
+          event.stopImmediatePropagation()
         },
         camera: context.raycaster.camera,
         delta,
