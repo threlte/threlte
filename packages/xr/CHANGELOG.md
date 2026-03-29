@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.5.2
+
+### Patch Changes
+
+- b41ad7c: Delegate stopImmediatePropagation on synthetic events to the native DOM event, allowing handlers to block camera controls (e.g. OrbitControls) during drags.
+
 ## 1.5.1
 
 ### Patch Changes
