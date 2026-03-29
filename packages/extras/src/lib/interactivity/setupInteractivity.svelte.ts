@@ -1,4 +1,4 @@
-import type * as THREE from 'three'
+import type { Points, Object3D } from 'three'
 import { type InteractivityContext, useInteractivity } from './context.js'
 import type { DomEvent, Intersection, IntersectionEvent } from './types.js'
 import { fromStore } from 'svelte/store'
@@ -73,7 +73,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
       const key =
         hit.instanceId !== undefined
           ? `${hit.object.uuid}|${hit.instanceId}`
-          : (hit.object as THREE.Points).isPoints
+          : (hit.object as Points).isPoints
             ? `${hit.object.uuid}|${hit.index}`
             : hit.object.uuid
       if (seen.has(key)) return false
@@ -84,7 +84,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
-      let eventObject: THREE.Object3D | null = hit.object
+      let eventObject: Object3D | null = hit.object
       // Bubble event up
       while (eventObject) {
         if (handlers.has(eventObject)) intersections.push({ ...hit, eventObject })
@@ -95,7 +95,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
     return intersections
   }
 
-  const pointerMissed = (event: MouseEvent, objects: THREE.Object3D[]) => {
+  const pointerMissed = (event: MouseEvent, objects: Object3D[]) => {
     for (const object of objects) {
       handlers.get(object)?.onpointermissed?.(event)
     }
