@@ -1,4 +1,4 @@
-import { Vector3, type Event, type Object3D } from 'three'
+import { Vector3, type Event, type Object3D, type Points } from 'three'
 import { observe } from '@threlte/core'
 import type {
   ControlsContext,
@@ -106,11 +106,18 @@ export const setupPointerControls = (
       true
     ) as Intersection[]
     const seen = new Set<string>()
+    // Deduplicate hits by object. When recursive=true, intersectObjects searches
+    // each registered object's full subtree, so a child that is itself registered
+    // appears once per registered ancestor — causing duplicate events. The key is
+    // context-sensitive so that legitimate multi-hit objects are preserved:
+    //   InstancedMesh — each instance is a distinct target, key by instanceId
+    //   Points        — each point is a distinct target, key by point index
+    //   Mesh / other  — uuid only; multiple face hits are the same surface
     const hits = rawHits.filter((hit) => {
       const key =
         hit.instanceId !== undefined
           ? `${hit.object.uuid}|${hit.instanceId}`
-          : hit.index !== undefined
+          : (hit.object as Points).isPoints
             ? `${hit.object.uuid}|${hit.index}`
             : hit.object.uuid
       if (seen.has(key)) return false

@@ -22,6 +22,8 @@ export interface IntersectionEvent<NativeEvent> extends Intersection {
   camera: Camera
   /** stopPropagation will stop underlying handlers from firing */
   stopPropagation: () => void
+  /** stopImmediatePropagation delegates to the native event, blocking any further DOM listeners (e.g. OrbitControls) */
+  stopImmediatePropagation: () => void
   /** The original host event */
   nativeEvent: NativeEvent
   /** If the event was stopped by calling stopPropagation */
