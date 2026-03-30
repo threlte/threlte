@@ -67,7 +67,10 @@ export type CurrentReadable<T = unknown> = Readable<T> & { current: T }
  * `.subscribe` is powered by `toStore`, which tracks the getter reactively
  * via `$effect`.
  */
-export const runeToCurrentWritable = <T>(get: () => T, set: (value: T) => void): CurrentWritable<T> => {
+export const runeToCurrentWritable = <T>(
+  get: () => T,
+  set: (value: T) => void
+): CurrentWritable<T> => {
   const store = toStore(get, set)
   return {
     subscribe: store.subscribe,
