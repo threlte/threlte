@@ -8,7 +8,7 @@
     "dev": "vite dev",
     "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
     "prepare": "svelte-kit sync",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",

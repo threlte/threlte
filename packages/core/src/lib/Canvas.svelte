@@ -10,8 +10,8 @@
 
   let { children, ...rest }: Props = $props()
 
-  let canvas = $state<HTMLCanvasElement>()
-  let dom = $state<HTMLDivElement>()
+  let canvas = $state.raw<HTMLCanvasElement>()
+  let dom = $state.raw<HTMLDivElement>()
 </script>
 
 <div bind:this={dom}>
