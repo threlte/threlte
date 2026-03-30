@@ -14,8 +14,11 @@ export type CreateDOMContextOptions = {
   canvas: HTMLCanvasElement
 }
 
-export const createDOMContext = (options: () => CreateDOMContextOptions) => {
-  const { dom, canvas } = options()
+export const createDOMContext = (
+  options: CreateDOMContextOptions | (() => CreateDOMContextOptions)
+) => {
+  const opts = typeof options === 'function' ? options() : options
+  const { dom, canvas } = opts
 
   const { size } = useMeasure(dom)
 
