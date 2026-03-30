@@ -43,10 +43,11 @@ export const useAttach = <T extends MaybeInstance<any>>(
 
     // Most common: auto-attach to parent Object3D
     if (attach === undefined && isInstanceOf(current, 'Object3D')) {
-      parentObject3D.current?.add(current)
+      const currentParent = parentObject3D.current
+      currentParent?.add(current)
       return () => {
         invalidate()
-        parentObject3D.current?.remove(current)
+        currentParent?.remove(current)
       }
     }
 

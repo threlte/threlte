@@ -179,8 +179,8 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
     } else if (typeof input === 'string') {
       clearCacheItem([Proto, input])
     } else {
-      Object.entries(input).forEach(([key, url]) => {
-        clearCacheItem([Proto, key, url])
+      Object.entries(input).forEach(([, url]) => {
+        clearCacheItem([Proto, url])
       })
     }
   }

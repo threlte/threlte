@@ -1,4 +1,4 @@
-import { getContext, setContext } from 'svelte'
+import { getContext, setContext, untrack } from 'svelte'
 import {
   AgXToneMapping,
   ColorManagement,
@@ -86,14 +86,16 @@ export const createRendererContext = <T extends Renderer>(
   const { canvas, dom } = useDOM()
 
   const opts = $derived(options())
-  const renderer = opts.createRenderer
-    ? opts.createRenderer(canvas)
-    : new WebGLRenderer({
-        canvas,
-        powerPreference: 'high-performance',
-        antialias: true,
-        alpha: true
-      })
+  const renderer = untrack(() =>
+    opts.createRenderer
+      ? opts.createRenderer(canvas)
+      : new WebGLRenderer({
+          canvas,
+          powerPreference: 'high-performance',
+          antialias: true,
+          alpha: true
+        })
+  )
 
   const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), () => {
     renderer.render(scene, camera.current)
@@ -121,12 +123,15 @@ export const createRendererContext = <T extends Renderer>(
 
   $effect.pre(() => {
     ColorManagement.enabled = colorManagementEnabled
+    invalidate()
   })
   $effect.pre(() => {
     renderer.outputColorSpace = colorSpace
+    invalidate()
   })
   $effect.pre(() => {
     renderer.setPixelRatio(dpr)
+    invalidate()
   })
 
   $effect.pre(() => {
@@ -137,10 +142,12 @@ export const createRendererContext = <T extends Renderer>(
     } else if (shadows === true) {
       renderer.shadowMap.type = PCFSoftShadowMap
     }
+    invalidate()
   })
 
   $effect.pre(() => {
     renderer.toneMapping = toneMapping
+    invalidate()
   })
 
   $effect.pre(() => {
@@ -149,6 +156,8 @@ export const createRendererContext = <T extends Renderer>(
     } else {
       context.autoRenderTask.stop()
     }
+    invalidate()
+
     return () => {
       context.autoRenderTask.stop()
     }
