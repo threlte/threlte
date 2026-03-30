@@ -6,7 +6,6 @@ import { join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
-const output: Record<string, any> = {}
 
 const packagesDir = resolve(__dirname, '../../../packages')
 const folders = readdirSync(packagesDir).filter((item) => {
@@ -16,17 +15,18 @@ const folders = readdirSync(packagesDir).filter((item) => {
 })
 
 console.log(folders)
-for (let i = 0; i < folders.length; i++) {
-  output[folders[i]] = {}
-}
-console.log(output)
 
 for (let i = 0; i < folders.length; i++) {
   const packageName = folders[i]
   const project = createProject(packageName)
-  if (packageName === 'core') {
-  } else {
-  }
+  const filepaths = collectSveltePathsFromIndex(packageName)
+  // console.log(packageName)
+  // console.log(filepaths)
+  filepaths.forEach((path) => {
+    console.log(path)
+    processSrc(project, path)
+  })
+  // break
 }
 
 function createProject(name: string) {
@@ -62,29 +62,32 @@ function collectSveltePathsFromIndex(name: string) {
   // we only care about the files ending in .svelte not .svelte.ts or otherwise
   const filepaths = []
   const srcIndex = resolve(__dirname, `../../../packages/${name}/src/lib/index.ts`)
+  const content = readFileSync(srcIndex, 'utf-8')
+  const regex = /export.*from\s+['"]([^'"]*\.svelte)['"]/g
+  let match
+  while ((match = regex.exec(content)) !== null) {
+    const relativePath = match[1]
+    const fullPath = resolve(__dirname, `../../../packages/${name}/src/lib`, relativePath)
+    filepaths.push(fullPath)
+  }
+  return filepaths
 }
 
-function processPackage() {
-  const project = createProject('core')
-
-  // we only care about the files ending in .svelte not .svelte.ts or otherwise
-  const filepath = '../../../packages/core/src/lib/Canvas.svelte'
-
-  const source = readFileSync(filepath, 'utf-8')
+function processSrc(project: Project, path: string) {
+  const source = readFileSync(path, 'utf-8')
 
   const { code } = svelte2tsx(source, {
     filename: 'Canvas.svelte',
     mode: 'ts'
   })
 
-  const sourceFile = project.createSourceFile('./canvas-temp.tsx', code)
+  const sourceFile = project.createSourceFile('./temp.tsx', code)
 
   // Now, extract props
   const propsTypeAlias = sourceFile.getTypeAlias('Props')
   if (propsTypeAlias) {
     const type = propsTypeAlias.getType()
     const properties = type.getApparentProperties()
-    console.log('Props:')
     for (const prop of properties) {
       const name = prop.getName()
       const propType = prop.getTypeAtLocation(sourceFile)
@@ -94,6 +97,9 @@ function processPackage() {
   } else {
     console.log('Props type alias not found')
   }
+}
+
+function name() {
   // Try to get from the type alias in project
   const typeAliases = project.getSourceFiles().flatMap((f) => f.getTypeAliases())
   const createThrelteOptionsAlias = typeAliases.find(
