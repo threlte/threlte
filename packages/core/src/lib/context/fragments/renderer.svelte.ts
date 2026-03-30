@@ -15,7 +15,8 @@ import type { Task } from '../../frame-scheduling/index.js'
 import {
   runeToCurrentReadable,
   runeToCurrentWritable,
-  type CurrentReadable
+  type CurrentReadable,
+  type CurrentWritable
 } from '../../utilities/currentWritable.js'
 import { useCamera } from './camera.svelte.js'
 import { useDOM } from './dom.svelte.js'
@@ -34,10 +35,10 @@ type CreateRenderer<T extends Renderer> = (canvas: HTMLCanvasElement) => T
 export interface RendererContext<T extends Renderer> {
   renderer: T
   colorManagementEnabled: CurrentReadable<boolean>
-  colorSpace: CurrentReadable<ColorSpace>
-  toneMapping: CurrentReadable<ToneMapping>
-  shadows: CurrentReadable<boolean | ShadowMapType>
-  dpr: CurrentReadable<number>
+  colorSpace: CurrentWritable<ColorSpace>
+  toneMapping: CurrentWritable<ToneMapping>
+  shadows: CurrentWritable<boolean | ShadowMapType>
+  dpr: CurrentWritable<number>
   autoRenderTask: Task
 }
 
@@ -110,10 +111,16 @@ export const createRendererContext = <T extends Renderer>(
     renderer.render(scene, camera.current)
   })
 
-  let colorSpace = $derived<ColorSpace>(opts.colorSpace ?? SRGBColorSpace)
-  let dpr = $derived(opts.dpr ?? devicePixelRatio.current ?? window.devicePixelRatio)
-  let shadows = $derived(opts.shadows ?? PCFSoftShadowMap)
-  let toneMapping = $derived(opts.toneMapping ?? AgXToneMapping)
+  const optsColorSpace = $derived(opts.colorSpace)
+  const optsDpr = $derived(opts.dpr)
+  const optsShadows = $derived(opts.shadows)
+  const optsToneMapping = $derived(opts.toneMapping)
+
+  // Seperate derived runes since users can set these values through the canvas or by .set()
+  let colorSpace = $derived<ColorSpace>(optsColorSpace ?? SRGBColorSpace)
+  let dpr = $derived(optsDpr ?? devicePixelRatio.current ?? window.devicePixelRatio)
+  let shadows = $derived(optsShadows ?? PCFSoftShadowMap)
+  let toneMapping = $derived(optsToneMapping ?? AgXToneMapping)
 
   const context: RendererContext<T> = {
     renderer: renderer as T,
