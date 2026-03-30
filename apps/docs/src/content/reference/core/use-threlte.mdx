@@ -21,11 +21,11 @@ const { renderer, camera } = useThrelte()
 console.log(renderer, $camera)
 ```
 
-… or read render properties:
+… or update render properties:
 
 ```ts
 const { toneMapping } = useThrelte()
-console.log(toneMapping)
+toneMapping.set(THREE.LinearToneMapping)
 ```
 
 ### Usage
