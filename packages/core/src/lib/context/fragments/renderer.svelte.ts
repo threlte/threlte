@@ -19,6 +19,7 @@ import { useScheduler } from './scheduler.svelte.js'
 import type { WebGPURenderer } from 'three/webgpu'
 import { fromStore } from 'svelte/store'
 import { devicePixelRatio } from 'svelte/reactivity/window'
+import { useMeasure } from '../../utilities/useMeasure.svelte.js'
 
 export type Renderer = WebGLRenderer | WebGPURenderer
 
@@ -84,6 +85,7 @@ export const createRendererContext = <T extends Renderer>(
     frameInvalidated
   } = useScheduler()
   const { canvas, dom } = useDOM()
+  const { shouldUpdateSize, size } = useMeasure(dom)
 
   const opts = $derived(options())
   const renderer = untrack(() =>
@@ -164,17 +166,9 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   renderer.setAnimationLoop((time) => {
-    if (!renderer.xr.isPresenting) {
-      const width = dom.clientWidth
-      const height = dom.clientHeight
-      const pixelRatio = renderer.getPixelRatio()
-      if (
-        Math.round(width * pixelRatio) !== canvas.width ||
-        Math.round(height * pixelRatio) !== canvas.height
-      ) {
-        renderer.setSize(width, height)
-        invalidate()
-      }
+    if (!renderer.xr.isPresenting && shouldUpdateSize()) {
+      renderer.setSize(size.current.width, size.current.height)
+      invalidate()
     }
 
     dispose()

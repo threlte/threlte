@@ -2,39 +2,7 @@
 
 ---
 
-## Bug 4: `useLoader.clear` uses wrong cache keys for object inputs
-
-**File**: `packages/core/src/lib/hooks/useLoader.ts`
-
-When loading an object input, resources are cached with the key `[Proto, url]`:
-
-```ts
-const promises = Object.values(input).map((url) => {
-  return remember(() => loadResource(url), [Proto, url])
-})
-```
-
-But `clear` for object inputs uses `[Proto, key, url]` — including the object's property key — which never matches the stored cache keys:
-
-```ts
-Object.entries(input).forEach(([key, url]) => {
-  clearCacheItem([Proto, key, url]) // ← [Proto, key, url] ≠ [Proto, url]
-})
-```
-
-Calling `clear` on an object-loaded resource is silently a no-op; the cache entry is never removed and the resource can't be reloaded.
-
-**Fix**: Match the cache key used at load time:
-
-```ts
-Object.values(input).forEach((url) => {
-  clearCacheItem([Proto, url])
-})
-```
-
----
-
-## Bug 5: `useLoader` always returns `undefined` for the `loader` property
+## Bug 1: `useLoader` always returns `undefined` for the `loader` property
 
 **File**: `packages/core/src/lib/hooks/useLoader.ts`
 
@@ -74,55 +42,7 @@ return {
 
 ---
 
-## Bug 6: `useAttach` uses live `parentObject3D.current` in cleanup instead of captured value
-
-**File**: `packages/core/src/lib/components/T/utils/useAttach.svelte.ts`
-
-When auto-attaching an `Object3D` to its parent, the cleanup reads `parentObject3D.current` live rather than capturing the parent at effect-run time:
-
-```ts
-if (attach === undefined && isInstanceOf(current, 'Object3D')) {
-  parentObject3D.current?.add(current) // parent captured implicitly as reactive dep
-  return () => {
-    invalidate()
-    parentObject3D.current?.remove(current) // ← live lookup, not the parent we added to
-  }
-}
-```
-
-Because `parentObject3D.current` is a reactive dependency of the effect, the effect re-runs whenever the parent Object3D changes (e.g. a parent `<T.Mesh>` swaps its underlying mesh). When that happens:
-
-1. Cleanup runs — `parentObject3D.current` is already the **new** parent, so `remove` is called on the wrong object.
-2. New run — `add` is called on the new parent correctly.
-
-The child is never removed from the old parent, leaving a ghost child, and is then also added to the new parent.
-
-The other attach branches (`Material`, `BufferGeometry`, string path) correctly capture the parent at effect time:
-
-```ts
-const p = parent.current // ← captured
-p.material = current
-return () => {
-  p.material = originalMaterial
-} // uses captured p
-```
-
-**Fix**: Capture the parent before adding:
-
-```ts
-if (attach === undefined && isInstanceOf(current, 'Object3D')) {
-  const capturedParent = parentObject3D.current
-  capturedParent?.add(current)
-  return () => {
-    invalidate()
-    capturedParent?.remove(current)
-  }
-}
-```
-
----
-
-## Bug 7: `useDispose` uses live `$derived` in cleanup, so old objects are never disposed when `is` changes
+## Bug 2: `useDispose` uses live `$derived` in cleanup, so old objects are never disposed when `is` changes
 
 **File**: `packages/core/src/lib/components/T/utils/useDispose.svelte.ts`
 
@@ -142,7 +62,7 @@ $effect(() => {
 
 When `internalRef` changes (e.g. the `is` prop on `<T>` changes), the parent `$effect.pre` in `T.svelte` re-runs and destroys its child effects, including the `$effect` above. Before the effect is re-created, the cleanup runs: `disposableObjectUnmounted(disposable)`. At that point `disposable` is a live `$derived` — accessing it triggers recomputation via `getDisposable() = () => internalRef`, which returns the **new** `internalRef`. So `disposableObjectUnmounted` is called with the new object (which has count 0 — a no-op), not the old one. The old object's mount count stays at 1 and it is never disposed on component remount.
 
-This is the same class of bug as Bug 6 (`useAttach` live parent lookup in cleanup). The fix is to snapshot `disposable` at the start of the effect body:
+The fix is to snapshot `disposable` at the start of the effect body:
 
 ```ts
 $effect(() => {
@@ -153,6 +73,111 @@ $effect(() => {
   }
   removeObjectFromDisposal(_disposable)
 })
+```
+
+---
+
+## Bug 3: `offsetWidth` vs `clientWidth` mismatch between DOM context and renderer
+
+**Files**: `packages/core/src/lib/context/fragments/dom.svelte.ts`, `packages/core/src/lib/context/fragments/renderer.svelte.ts`, `packages/core/src/lib/context/fragments/camera.svelte.ts`
+
+`dom.svelte.ts` measures the container using `offsetWidth/offsetHeight` (includes CSS borders):
+
+```ts
+let size = $state.raw({
+  width: dom.offsetWidth,
+  height: dom.offsetHeight
+})
+```
+
+`renderer.svelte.ts` sizes the canvas buffer using `clientWidth/clientHeight` (excludes borders):
+
+```ts
+const width = dom.clientWidth
+const height = dom.clientHeight
+renderer.setSize(width, height)
+```
+
+The `size` from the DOM context is what `camera.svelte.ts` uses for the default camera's aspect ratio, and what is exposed to users via `useThrelte().size`. If the container div has any CSS border, the camera aspect ratio and the reported size are both wrong relative to the actual rendered pixel dimensions, causing subtle distortion.
+
+**Fix**: Use a single source of truth, the same approach R3F takes via `react-use-measure`. The simplest equivalent in Threlte: pick one measurement in `dom.svelte.ts` (`clientWidth/clientHeight` or `contentRect` from the ResizeObserver entry — identical for a container without padding) and have `renderer.svelte.ts` read from `size.current` instead of calling `dom.clientWidth/clientHeight` directly. That way camera aspect, the exposed `useThrelte().size`, and the renderer buffer are all derived from the same number.
+
+---
+
+## Bug 4: `getDefaultComputeFunction` uses inconsistent size before and after first resize
+
+**File**: `packages/extras/src/lib/interactivity/defaults.svelte.ts`
+
+The initial `width` and `height` used for pointer NDC normalization are set from `clientWidth/clientHeight`:
+
+```ts
+let width = targetWritable.current.clientWidth
+let height = targetWritable.current.clientHeight
+
+const resizeObserver = new ResizeObserver(([entry]) => {
+  width = entry.contentRect.width   // ← different property
+  height = entry.contentRect.height
+})
+```
+
+`clientWidth` includes padding but `contentRect` excludes it. Before the first `ResizeObserver` fires, pointer coordinates are normalized against a size that may differ from all subsequent frames. If the target element has padding, the first pointer event maps to a different NDC position than subsequent ones, causing a one-time raycasting offset.
+
+**Fix**: Initialize `width` and `height` consistently with what the observer will use. The simplest approach is to initialize them to `0` and let the first `ResizeObserver` callback set the real values before any pointer event can be processed, or read `getBoundingClientRect()` at init time which matches what `contentRect` will later report.
+
+---
+
+## Bug 5: `removeInteractiveObject` corrupts the interactive objects array on double-removal
+
+**File**: `packages/extras/src/lib/interactivity/context.ts`
+
+```ts
+removeInteractiveObject: (object: Object3D) => {
+  const index = context.interactiveObjects.indexOf(object)
+  context.interactiveObjects.splice(index, 1)  // ← splice(-1, 1) if not found
+  context.handlers.delete(object)
+}
+```
+
+If `object` is not in `interactiveObjects`, `indexOf` returns `-1` and `splice(-1, 1)` removes the **last** element of the array — silently unregistering an unrelated interactive object. Any double-removal (e.g. a component whose cleanup runs twice, or an `addInteractiveObject` guard that fires before a delayed cleanup) will corrupt the list without any error.
+
+**Fix**: Guard against the not-found case:
+
+```ts
+removeInteractiveObject: (object: Object3D) => {
+  const index = context.interactiveObjects.indexOf(object)
+  if (index === -1) return
+  context.interactiveObjects.splice(index, 1)
+  context.handlers.delete(object)
+}
+```
+
+---
+
+## Bug 6: `addInteractiveObject` silently ignores updated event handlers for already-registered objects
+
+**File**: `packages/extras/src/lib/interactivity/context.ts`
+
+```ts
+addInteractiveObject: (object: Object3D, events: Events) => {
+  if (context.interactiveObjects.indexOf(object) > -1) {
+    return  // ← early return, handlers not updated
+  }
+  context.handlers.set(object, events)
+  context.interactiveObjects.push(object)
+}
+```
+
+If the same object is registered twice (e.g. an effect re-runs without the cleanup having removed it first), the new `events` object is silently discarded and the stale handlers remain. Today `plugin.svelte.ts` always removes before re-adding via `$effect.pre` cleanup, so this doesn't manifest in normal usage. But any direct call to `addInteractiveObject` without a prior remove, or any timing edge where cleanup and re-registration overlap, will leave the object responding to outdated callbacks.
+
+**Fix**: Update the handlers map even when the object is already registered:
+
+```ts
+addInteractiveObject: (object: Object3D, events: Events) => {
+  context.handlers.set(object, events)
+  if (context.interactiveObjects.indexOf(object) === -1) {
+    context.interactiveObjects.push(object)
+  }
+}
 ```
 
 ---
@@ -267,41 +292,7 @@ The concern: every time `object()`, `props()` (reference), or `pluginProps()` ch
 
 ---
 
-## Pattern 5: Mixed `watch` (deprecated) and `$effect.pre` for the same settings in `renderer`
-
-**File**: `packages/core/src/lib/context/fragments/renderer.svelte.ts`
-
-The renderer syncs props into stores with `$effect.pre`, then applies Three.js side effects with `watch`:
-
-```ts
-// hop 1: prop → store
-$effect.pre(() => {
-  context.colorSpace.set(options.colorSpace ?? 'srgb')
-})
-
-// hop 2: store → Three.js
-watch([context.colorSpace], ([colorSpace]) => {
-  if ('outputColorSpace' in renderer) renderer.outputColorSpace = colorSpace
-})
-```
-
-This two-hop chain mixes a deprecated API (`watch`) with the current one (`$effect.pre`) for the same settings. The indirection makes it harder to trace reactivity — a change in `options.colorSpace` triggers `$effect.pre`, which updates the store, which triggers `watch`, which updates the renderer. Each setting could be a single `$effect.pre` that reads the prop directly and applies the side effect.
-
-**Potential Solution**: Merge each two-hop pair into a single `$effect.pre` that both updates the store and applies the Three.js side effect:
-
-```ts
-$effect.pre(() => {
-  const cs = options.colorSpace ?? 'srgb'
-  context.colorSpace.set(cs)
-  if ('outputColorSpace' in renderer) renderer.outputColorSpace = cs
-})
-```
-
-The public stores remain writable for external consumers who set them directly; those writes still flow through their own `watch`/subscribe chains. The `watch` calls in `renderer.svelte.ts` are only needed to cover that external-write path — the internal prop-sync path can be collapsed.
-
----
-
-## Pattern 6: `observe` captures initial store/non-store classification and never updates it
+## Pattern 5: `observe` captures initial store/non-store classification and never updates it
 
 **File**: `packages/core/src/lib/utilities/observe.svelte.ts`
 
@@ -338,7 +329,7 @@ This removes the frozen classification entirely at the cost of a Map lookup per 
 
 ---
 
-## Pattern 7: `parentObject3D` writable never cleared when ref changes from Object3D to non-Object3D
+## Pattern 6: `parentObject3D` writable never cleared when ref changes from Object3D to non-Object3D
 
 **File**: `packages/core/src/lib/components/T/utils/useAttach.svelte.ts`, `packages/core/src/lib/context/fragments/parentObject3D.ts`
 
@@ -373,7 +364,7 @@ The derived `object3D ?? parentObject3D` will then correctly fall through to the
 
 ---
 
-## Pattern 9: `useThrelteUserContext` mutates store value in-place on `merge`
+## Pattern 7: `useThrelteUserContext` mutates store value in-place on `merge`
 
 **File**: `packages/core/src/lib/hooks/useThrelteUserContext.ts`
 
@@ -402,7 +393,7 @@ This matches the immutable-update convention used everywhere else in the store.
 
 ---
 
-## Pattern 10: `useStage` silently ignores `options` when stage already exists
+## Pattern 8: `useStage` silently ignores `options` when stage already exists
 
 **File**: `packages/core/src/lib/hooks/useStage.ts`
 
@@ -419,7 +410,7 @@ If two components call `useStage` with the same key but different `options` (e.g
 
 ---
 
-## Pattern 11: `usePlugins` initializes plugins once, non-reactively
+## Pattern 9: `usePlugins` initializes plugins once, non-reactively
 
 **File**: `packages/core/src/lib/components/T/utils/usePlugins.ts`
 
@@ -450,7 +441,7 @@ export const usePlugins = (args: () => Parameters<Plugin>[0]) => {
 
 ---
 
-## Pattern 8: `dispose()` called unawaited every animation frame
+## Pattern 10: `dispose()` called unawaited every animation frame
 
 **File**: `packages/core/src/lib/context/fragments/renderer.svelte.ts`
 
@@ -484,13 +475,13 @@ Alternatively, evaluate whether the `await tick()` inside `dispose` is still nec
 
 ---
 
-## Pattern 12: `useEvents.svelte.ts` is dead code with the same live-ref-in-cleanup bug as `useAttach`
+## Pattern 11: `useEvents.svelte.ts` is dead code with the same live-ref-in-cleanup bug as Bug 2
 
 **File**: `packages/core/src/lib/components/T/utils/useEvents.svelte.ts`
 
 `useEvents` is defined but never imported or called anywhere in the codebase (confirmed by search — the only reference to it is its own file). It was presumably replaced when `T.svelte` was simplified, but the file was not removed.
 
-Additionally, the implementation has the same class of bug as Bug 6 and Bug 7: `ref` and `prop` are `$derived` values accessed live inside cleanup closures rather than being captured at effect-run time:
+Additionally, the implementation has the same class of bug as Bug 2: `ref` and `prop` are `$derived` values accessed live inside cleanup closures rather than being captured at effect-run time:
 
 ```ts
 $effect.pre(() => {
@@ -503,4 +494,4 @@ $effect.pre(() => {
 
 When `ref` changes, the cleanup calls `ref.removeEventListener(name, prop)` on the **new** object (which never had the listener), leaving the old object with a stale listener attached. Similarly when `prop` changes, the old handler is never removed. The file should either be deleted or the pattern corrected before it's brought back into use.
 
-**Potential Solution**: Delete the file — it is not used anywhere. If it is revived, apply the same snapshot fix used in Bug 6 and Bug 7: capture both `ref` and `prop` as local variables at the start of the effect body so the cleanup closure closes over the values that were live when the listener was added, not the values at cleanup time.
+**Potential Solution**: Delete the file — it is not used anywhere. If it is revived, apply the same snapshot fix used in Bug 2: capture both `ref` and `prop` as local variables at the start of the effect body so the cleanup closure closes over the values that were live when the listener was added, not the values at cleanup time.

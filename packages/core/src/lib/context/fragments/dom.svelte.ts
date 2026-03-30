@@ -1,5 +1,6 @@
 import { getContext, setContext } from 'svelte'
 import { runeToCurrentReadable, type CurrentReadable } from '../../utilities/currentWritable.js'
+import { useMeasure } from '../../utilities/useMeasure.svelte.js'
 
 export interface DOMContext {
   /** The canvas wrapper element */
@@ -16,30 +17,12 @@ export type CreateDOMContextOptions = {
 export const createDOMContext = (options: () => CreateDOMContextOptions) => {
   const { dom, canvas } = options()
 
-  let size = $state.raw({
-    width: dom.offsetWidth,
-    height: dom.offsetHeight
-  })
-
-  const resizeObserver = new ResizeObserver(() => {
-    const { offsetWidth, offsetHeight } = dom
-    if (size.width !== offsetWidth || size.height !== offsetHeight) {
-      size = { width: offsetWidth, height: offsetHeight }
-    }
-  })
-
-  $effect(() => {
-    resizeObserver.observe(dom)
-
-    return () => {
-      resizeObserver.disconnect()
-    }
-  })
+  const { size } = useMeasure(dom)
 
   const context: DOMContext = {
     dom,
     canvas,
-    size: runeToCurrentReadable(() => size)
+    size: runeToCurrentReadable(() => size.current)
   }
 
   setContext<DOMContext>('threlte-dom-context', context)
