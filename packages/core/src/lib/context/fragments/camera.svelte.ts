@@ -4,9 +4,15 @@ import { runeToCurrentWritable, type CurrentWritable } from '../../utilities/cur
 import { useDOM } from './dom.svelte.js'
 import { useScheduler } from './scheduler.svelte.js'
 import { fromStore } from 'svelte/store'
+import { SvelteSet } from 'svelte/reactivity'
 
 export interface CameraContext {
   camera: CurrentWritable<Camera>
+  makeDefaultCameras: SvelteSet<Camera>
+  manual: {
+    current: boolean
+    set(value: boolean): void
+  }
 }
 
 export const createCameraContext = (): CameraContext => {
@@ -14,15 +20,18 @@ export const createCameraContext = (): CameraContext => {
   const size = fromStore(sizeStore)
   const { invalidate } = useScheduler()
 
+  const makeDefaultCameras = new SvelteSet<Camera>()
+
   // Create a default camera to use when no camera is defined by the user
   const defaultCamera = new PerspectiveCamera(75, 0, 0.1, 1000)
   defaultCamera.position.z = 5
   defaultCamera.lookAt(0, 0, 0)
 
+  let manual = $state(false)
   let camera = $state.raw<PerspectiveCamera | OrthographicCamera>(defaultCamera)
 
   $effect.pre(() => {
-    if (camera !== defaultCamera) {
+    if (camera !== defaultCamera || manual) {
       return
     }
     const { width, height } = size.current
@@ -33,16 +42,26 @@ export const createCameraContext = (): CameraContext => {
   })
 
   $effect.pre(() => {
-    if (camera === undefined) {
+    if (camera === undefined || makeDefaultCameras.size === 0) {
       camera = defaultCamera
+      invalidate()
     }
   })
 
   const context: CameraContext = {
+    makeDefaultCameras,
     camera: runeToCurrentWritable(
       () => camera,
       (value) => (camera = value)
-    )
+    ),
+    manual: {
+      get current() {
+        return manual
+      },
+      set(value) {
+        manual = value
+      }
+    }
   }
 
   setContext<CameraContext>('threlte-camera-context', context)

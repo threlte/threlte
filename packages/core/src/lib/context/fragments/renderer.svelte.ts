@@ -7,7 +7,9 @@ import {
   WebGLRenderer,
   type ColorSpace,
   type ShadowMapType,
-  type ToneMapping
+  type ToneMapping,
+  OrthographicCamera,
+  PerspectiveCamera
 } from 'three'
 import type { Task } from '../../frame-scheduling/index.js'
 import { runeToCurrentReadable, type CurrentReadable } from '../../utilities/currentWritable.js'
@@ -20,6 +22,7 @@ import type { WebGPURenderer } from 'three/webgpu'
 import { fromStore } from 'svelte/store'
 import { devicePixelRatio } from 'svelte/reactivity/window'
 import { useMeasure } from '../../utilities/useMeasure.svelte.js'
+import { updateCamera } from '../../components/T/utils/useCamera.svelte.js'
 
 export type Renderer = WebGLRenderer | WebGPURenderer
 
@@ -75,7 +78,7 @@ export const createRendererContext = <T extends Renderer>(
   options: () => CreateRendererContextOptions<T>
 ): RendererContext<T> => {
   const { dispose } = useDisposal()
-  const { camera } = useCamera()
+  const { camera, manual } = useCamera()
   const { scene } = useScene()
   const {
     invalidate,
@@ -168,6 +171,15 @@ export const createRendererContext = <T extends Renderer>(
   renderer.setAnimationLoop((time) => {
     if (!renderer.xr.isPresenting && shouldUpdateSize()) {
       renderer.setSize(size.current.width, size.current.height)
+
+      if (!manual.current) {
+        updateCamera(
+          camera.current as PerspectiveCamera | OrthographicCamera,
+          size.current.width,
+          size.current.height
+        )
+      }
+
       invalidate()
     }
 
