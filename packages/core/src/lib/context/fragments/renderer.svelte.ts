@@ -10,7 +10,6 @@ import {
   type ToneMapping
 } from 'three'
 import type { Task } from '../../frame-scheduling/index.js'
-import { useTask } from '../../hooks/useTask.svelte.js'
 import { runeToCurrentReadable, type CurrentReadable } from '../../utilities/currentWritable.js'
 import { useCamera } from './camera.svelte.js'
 import { useDisposal } from './disposal.js'
@@ -84,7 +83,7 @@ export const createRendererContext = <T extends Renderer>(
     scheduler,
     frameInvalidated
   } = useScheduler()
-  const { size: sizeStore, canvas } = useDOM()
+  const { canvas } = useDOM()
 
   const opts = $derived(options())
   const renderer = opts.createRenderer
@@ -118,7 +117,6 @@ export const createRendererContext = <T extends Renderer>(
 
   setContext<RendererContext<T>>('threlte-renderer-context', context)
 
-  const size = fromStore(sizeStore)
   const autoRender = fromStore(autoRenderStore)
 
   $effect.pre(() => {
@@ -129,30 +127,6 @@ export const createRendererContext = <T extends Renderer>(
   })
   $effect.pre(() => {
     renderer.setPixelRatio(dpr)
-  })
-
-  // Resize the renderer when the size changes
-  let running = $state(false)
-  useTask(
-    () => {
-      if (!('xr' in renderer) || renderer.xr?.isPresenting) {
-        return
-      }
-
-      renderer.setSize(size.current.width, size.current.height)
-      invalidate()
-      running = false
-    },
-    {
-      before: autoRenderTask,
-      autoInvalidate: false,
-      running: () => running
-    }
-  )
-  $effect.pre(() => {
-    if (size.current.width > 0 && size.current.height > 0) {
-      running = true
-    }
   })
 
   $effect.pre(() => {
@@ -181,6 +155,19 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   renderer.setAnimationLoop((time) => {
+    if (!renderer.xr.isPresenting) {
+      const width = canvas.clientWidth
+      const height = canvas.clientHeight
+      const pixelRatio = renderer.getPixelRatio()
+      if (
+        Math.round(width * pixelRatio) !== canvas.width ||
+        Math.round(height * pixelRatio) !== canvas.height
+      ) {
+        renderer.setSize(width, height, false)
+        invalidate()
+      }
+    }
+
     dispose()
     scheduler.run(time)
     frameInvalidated.current = false
