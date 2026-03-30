@@ -30,6 +30,8 @@ export const useAttach = <T extends MaybeInstance<any>>(
 
     if (isInstanceOf(ref, 'Object3D')) {
       object3D.set(ref)
+    } else {
+      object3D.set(undefined)
     }
 
     invalidate()
