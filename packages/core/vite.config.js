@@ -1,10 +1,11 @@
 import { resolve } from 'path'
 import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
 import { sveltekit } from '@sveltejs/kit/vite'
+import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { defineConfig } from 'vite'
 
 export default defineConfig(({ mode }) => ({
-  plugins: [sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
+  plugins: [mode === 'test' ? svelte() : sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
   resolve: {
     conditions: mode === 'test' ? ['browser'] : undefined,
     alias: {
@@ -16,7 +17,8 @@ export default defineConfig(({ mode }) => ({
   // causing parse errors during dep pre-bundling in browser mode.
   ...(mode === 'test' && {
     optimizeDeps: {
-      exclude: ['@threlte/core', '@threlte/extras', '@threlte/test']
+      exclude: ['@threlte/core', '@threlte/extras', '@threlte/test'],
+      entries: ['src/lib/**/*.svelte', 'node_modules/@threlte/extras/src/lib/index.ts']
     }
   }),
   test: {
