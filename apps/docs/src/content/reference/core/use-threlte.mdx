@@ -41,7 +41,7 @@ const {
   canvas, // HTMLCanvasElement
   camera, // CurrentWritable<Camera>
   scene, // Scene
-  dpr, // CurrentReadable<number>
+  dpr, // CurrentWritable<number>
   renderer, // WebGLRenderer
   renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
   autoRender, // CurrentWritable<boolean>
@@ -53,9 +53,9 @@ const {
   autoRenderTask, // Task
   shouldRender, // () => boolean
   colorManagementEnabled, // CurrentReadable<boolean>
-  colorSpace, // CurrentReadable<ColorSpace>
-  toneMapping, // CurrentReadable<ToneMapping>
-  shadows // CurrentReadable<boolean | ShadowMapType>
+  colorSpace, // CurrentWritable<ColorSpace>
+  toneMapping, // CurrentWritable<ToneMapping>
+  shadows // CurrentWritable<boolean | ShadowMapType>
 } = useThrelte()
 ```
 

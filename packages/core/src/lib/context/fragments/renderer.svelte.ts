@@ -12,7 +12,11 @@ import {
   PerspectiveCamera
 } from 'three'
 import type { Task } from '../../frame-scheduling/index.js'
-import { runeToCurrentReadable, type CurrentReadable } from '../../utilities/currentWritable.js'
+import {
+  runeToCurrentReadable,
+  runeToCurrentWritable,
+  type CurrentReadable
+} from '../../utilities/currentWritable.js'
 import { useCamera } from './camera.svelte.js'
 import { useDisposal } from './disposal.svelte.js'
 import { useDOM } from './dom.svelte.js'
@@ -48,6 +52,8 @@ export type CreateRendererContextOptions<T extends Renderer> = {
    * Set to true for certain conversions (for hexadecimal and CSS colors in sRGB) to be made automatically.
    *
    * This property is not reactive and must be enabled before initializing colors.
+   *
+   * @deprecated If you wish to set this to false, set THREE.ColorManagement.enabled = false
    *
    * @default true
    */
@@ -106,7 +112,6 @@ export const createRendererContext = <T extends Renderer>(
     renderer.render(scene, camera.current)
   })
 
-  let colorManagementEnabled = $derived(opts.colorManagementEnabled ?? true)
   let colorSpace = $derived<ColorSpace>(opts.colorSpace ?? SRGBColorSpace)
   let dpr = $derived(opts.dpr ?? devicePixelRatio.current ?? window.devicePixelRatio)
   let shadows = $derived(opts.shadows ?? PCFSoftShadowMap)
@@ -114,11 +119,23 @@ export const createRendererContext = <T extends Renderer>(
 
   const context: RendererContext<T> = {
     renderer: renderer as T,
-    colorManagementEnabled: runeToCurrentReadable(() => colorManagementEnabled),
-    colorSpace: runeToCurrentReadable(() => colorSpace),
-    dpr: runeToCurrentReadable(() => dpr),
-    shadows: runeToCurrentReadable(() => shadows),
-    toneMapping: runeToCurrentReadable(() => toneMapping),
+    colorManagementEnabled: runeToCurrentReadable(() => opts.colorManagementEnabled ?? true),
+    colorSpace: runeToCurrentWritable(
+      () => colorSpace,
+      (value) => (colorSpace = value)
+    ),
+    dpr: runeToCurrentWritable(
+      () => dpr,
+      (value) => (dpr = value)
+    ),
+    shadows: runeToCurrentWritable(
+      () => shadows,
+      (value) => (shadows = value)
+    ),
+    toneMapping: runeToCurrentWritable(
+      () => toneMapping,
+      (value) => (toneMapping = value)
+    ),
     autoRenderTask
   }
 
@@ -126,14 +143,13 @@ export const createRendererContext = <T extends Renderer>(
 
   const autoRender = fromStore(autoRenderStore)
 
-  $effect.pre(() => {
-    ColorManagement.enabled = colorManagementEnabled
-    invalidate()
-  })
+  ColorManagement.enabled = opts.colorManagementEnabled ?? true
+
   $effect.pre(() => {
     renderer.outputColorSpace = colorSpace
     invalidate()
   })
+
   $effect.pre(() => {
     renderer.setPixelRatio(dpr)
     invalidate()
