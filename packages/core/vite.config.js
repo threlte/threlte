@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => ({
   ...(mode === 'test' && {
     optimizeDeps: {
       exclude: ['@threlte/core', '@threlte/extras', '@threlte/test'],
-      entries: ['src/lib/**/*.svelte', 'node_modules/@threlte/extras/src/lib/index.ts']
+      entries: ['src/lib/**/*.svelte', resolve('../extras/src/lib/index.ts')]
     }
   }),
   test: {
