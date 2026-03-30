@@ -18,7 +18,6 @@ import {
   type CurrentReadable
 } from '../../utilities/currentWritable.js'
 import { useCamera } from './camera.svelte.js'
-import { useDisposal } from './disposal.svelte.js'
 import { useDOM } from './dom.svelte.js'
 import { useScene } from './scene.js'
 import { useScheduler } from './scheduler.svelte.js'
@@ -83,7 +82,6 @@ export type CreateRendererContextOptions<T extends Renderer> = {
 export const createRendererContext = <T extends Renderer>(
   options: () => CreateRendererContextOptions<T>
 ): RendererContext<T> => {
-  const { dispose } = useDisposal()
   const { camera, manual } = useCamera()
   const { scene } = useScene()
   const {
@@ -199,7 +197,6 @@ export const createRendererContext = <T extends Renderer>(
       invalidate()
     }
 
-    dispose()
     scheduler.run(time)
     frameInvalidated.current = false
   })
