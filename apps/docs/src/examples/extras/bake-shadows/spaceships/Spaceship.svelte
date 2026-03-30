@@ -7,7 +7,7 @@
 
   const suspend = useSuspense()
 
-  let gltf = $derived(suspend(useGltf(`/models/spaceships/${name}.gltf`)))
+  let gltf = suspend(useGltf(`/models/spaceships/${name}.gltf`))
 </script>
 
 {#await gltf then { scene }}

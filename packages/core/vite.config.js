@@ -11,11 +11,23 @@ export default defineConfig(({ mode }) => ({
       threlte: resolve('./src/lib')
     }
   },
+  // Workaround: vite-plugin-svelte's optimize-module plugin doesn't strip
+  // TypeScript from .svelte.ts files before calling svelte.compileModule(),
+  // causing parse errors during dep pre-bundling in browser mode.
+  ...(mode === 'test' && {
+    optimizeDeps: {
+      exclude: ['@threlte/core', '@threlte/extras', '@threlte/test']
+    }
+  }),
   test: {
     include: ['**/*.{test,spec}.ts', '**/*.{test,spec}.svelte.ts'],
-    environment: 'happy-dom',
     coverage: { include: ['src'] },
     mockReset: true,
-    unstubGlobals: true
+    unstubGlobals: true,
+    browser: {
+      enabled: true,
+      provider: 'playwright',
+      instances: [{ browser: 'chromium' }]
+    },
   }
 }))

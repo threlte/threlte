@@ -35,18 +35,24 @@
     ref.lookAt(0, 0, -8)
   }}
 >
-  <OrbitControls />
+  <OrbitControls
+    enableDamping
+    target={[0, 0, -8]}
+  />
 </T.OrthographicCamera>
 
 <T.SpotLight
   position={[0, 25, 0]}
   castShadow
+  shadow.bias={-0.0001}
+  shadow.mapSize.width={2 ** 11}
+  shadow.mapSize.height={2 ** 11}
   intensity={1000}
   angle={Math.PI / 3}
 />
 
 <Suspense final>
-  {#each ships as { name, position }}
+  {#each ships as { name, position } (name)}
     <Spaceship
       {name}
       {position}

@@ -163,7 +163,8 @@ export const createRendererContext = <T extends Renderer>(
   $effect.pre(() => {
     renderer.shadowMap.enabled = shadows !== false
 
-    if (shadows && shadows !== true) {
+    // If shadows isn't a boolean, it's a shadowMap type
+    if (shadows !== false && shadows !== true) {
       renderer.shadowMap.type = shadows
     } else if (shadows === true) {
       renderer.shadowMap.type = PCFSoftShadowMap
