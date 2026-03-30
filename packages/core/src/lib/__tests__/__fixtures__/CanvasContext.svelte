@@ -17,7 +17,11 @@
   document.body.append(dom)
 </script>
 
-<Context {canvas} {dom} {...rest}>
+<Context
+  {canvas}
+  {dom}
+  {...rest}
+>
   {@const ctx = useThrelte()}
   {oncontext?.(ctx)}
 </Context>

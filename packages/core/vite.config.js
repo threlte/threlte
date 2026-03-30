@@ -28,6 +28,6 @@ export default defineConfig(({ mode }) => ({
       enabled: true,
       provider: 'playwright',
       instances: [{ browser: 'chromium' }]
-    },
+    }
   }
 }))
