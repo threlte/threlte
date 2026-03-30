@@ -42,7 +42,7 @@ export { createThrelteContext } from './context/createThrelteContext.svelte.js'
 export { createCacheContext, useCache } from './context/fragments/cache.js'
 export { createCameraContext, useCamera } from './context/fragments/camera.svelte.js'
 export { createDOMContext, useDOM } from './context/fragments/dom.svelte.js'
-export { createDisposalContext, useDisposal } from './context/fragments/disposal.js'
+export { createDisposalContext, useDisposal } from './context/fragments/disposal.svelte.js'
 export { createParentContext, useParent } from './context/fragments/parent.js'
 export {
   createParentObject3DContext,

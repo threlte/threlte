@@ -1,5 +1,5 @@
 import { getContext, setContext } from 'svelte'
-import { useDisposal, type DisposableObject } from '../../../context/fragments/disposal.js'
+import { useDisposal, type DisposableObject } from '../../../context/fragments/disposal.svelte.js'
 
 const contextName = Symbol('threlte-disposable-object-context')
 type ThrelteDisposeContext = () => boolean

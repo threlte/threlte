@@ -12,7 +12,7 @@ import {
 import type { Task } from '../../frame-scheduling/index.js'
 import { runeToCurrentReadable, type CurrentReadable } from '../../utilities/currentWritable.js'
 import { useCamera } from './camera.svelte.js'
-import { useDisposal } from './disposal.js'
+import { useDisposal } from './disposal.svelte.js'
 import { useDOM } from './dom.svelte.js'
 import { useScene } from './scene.js'
 import { useScheduler } from './scheduler.svelte.js'
@@ -83,7 +83,7 @@ export const createRendererContext = <T extends Renderer>(
     scheduler,
     frameInvalidated
   } = useScheduler()
-  const { canvas } = useDOM()
+  const { canvas, dom } = useDOM()
 
   const opts = $derived(options())
   const renderer = opts.createRenderer
@@ -156,14 +156,14 @@ export const createRendererContext = <T extends Renderer>(
 
   renderer.setAnimationLoop((time) => {
     if (!renderer.xr.isPresenting) {
-      const width = canvas.clientWidth
-      const height = canvas.clientHeight
+      const width = dom.clientWidth
+      const height = dom.clientHeight
       const pixelRatio = renderer.getPixelRatio()
       if (
         Math.round(width * pixelRatio) !== canvas.width ||
         Math.round(height * pixelRatio) !== canvas.height
       ) {
-        renderer.setSize(width, height, false)
+        renderer.setSize(width, height)
         invalidate()
       }
     }
