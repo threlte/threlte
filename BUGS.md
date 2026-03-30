@@ -42,68 +42,6 @@ return {
 
 ---
 
-## Bug 2: `useDispose` uses live `$derived` in cleanup, so old objects are never disposed when `is` changes
-
-**File**: `packages/core/src/lib/components/T/utils/useDispose.svelte.ts`
-
-Inside `useDispose`, `disposable` is a `$derived`:
-
-```ts
-const disposable = $derived(getDisposable())
-
-$effect(() => {
-  if (dispose) {
-    disposableObjectMounted(disposable)
-    return () => disposableObjectUnmounted(disposable) // ← live $derived read
-  }
-  ...
-})
-```
-
-When `internalRef` changes (e.g. the `is` prop on `<T>` changes), the parent `$effect.pre` in `T.svelte` re-runs and destroys its child effects, including the `$effect` above. Before the effect is re-created, the cleanup runs: `disposableObjectUnmounted(disposable)`. At that point `disposable` is a live `$derived` — accessing it triggers recomputation via `getDisposable() = () => internalRef`, which returns the **new** `internalRef`. So `disposableObjectUnmounted` is called with the new object (which has count 0 — a no-op), not the old one. The old object's mount count stays at 1 and it is never disposed on component remount.
-
-The fix is to snapshot `disposable` at the start of the effect body:
-
-```ts
-$effect(() => {
-  const _disposable = disposable // capture at run time
-  if (dispose) {
-    disposableObjectMounted(_disposable)
-    return () => disposableObjectUnmounted(_disposable)
-  }
-  removeObjectFromDisposal(_disposable)
-})
-```
-
----
-
-## Bug 3: `offsetWidth` vs `clientWidth` mismatch between DOM context and renderer
-
-**Files**: `packages/core/src/lib/context/fragments/dom.svelte.ts`, `packages/core/src/lib/context/fragments/renderer.svelte.ts`, `packages/core/src/lib/context/fragments/camera.svelte.ts`
-
-`dom.svelte.ts` measures the container using `offsetWidth/offsetHeight` (includes CSS borders):
-
-```ts
-let size = $state.raw({
-  width: dom.offsetWidth,
-  height: dom.offsetHeight
-})
-```
-
-`renderer.svelte.ts` sizes the canvas buffer using `clientWidth/clientHeight` (excludes borders):
-
-```ts
-const width = dom.clientWidth
-const height = dom.clientHeight
-renderer.setSize(width, height)
-```
-
-The `size` from the DOM context is what `camera.svelte.ts` uses for the default camera's aspect ratio, and what is exposed to users via `useThrelte().size`. If the container div has any CSS border, the camera aspect ratio and the reported size are both wrong relative to the actual rendered pixel dimensions, causing subtle distortion.
-
-**Fix**: Use a single source of truth, the same approach R3F takes via `react-use-measure`. The simplest equivalent in Threlte: pick one measurement in `dom.svelte.ts` (`clientWidth/clientHeight` or `contentRect` from the ResizeObserver entry — identical for a container without padding) and have `renderer.svelte.ts` read from `size.current` instead of calling `dom.clientWidth/clientHeight` directly. That way camera aspect, the exposed `useThrelte().size`, and the renderer buffer are all derived from the same number.
-
----
-
 ## Bug 4: `getDefaultComputeFunction` uses inconsistent size before and after first resize
 
 **File**: `packages/extras/src/lib/interactivity/defaults.svelte.ts`
@@ -115,7 +53,7 @@ let width = targetWritable.current.clientWidth
 let height = targetWritable.current.clientHeight
 
 const resizeObserver = new ResizeObserver(([entry]) => {
-  width = entry.contentRect.width   // ← different property
+  width = entry.contentRect.width // ← different property
   height = entry.contentRect.height
 })
 ```
@@ -133,7 +71,7 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 ```ts
 removeInteractiveObject: (object: Object3D) => {
   const index = context.interactiveObjects.indexOf(object)
-  context.interactiveObjects.splice(index, 1)  // ← splice(-1, 1) if not found
+  context.interactiveObjects.splice(index, 1) // ← splice(-1, 1) if not found
   context.handlers.delete(object)
 }
 ```
@@ -160,7 +98,7 @@ removeInteractiveObject: (object: Object3D) => {
 ```ts
 addInteractiveObject: (object: Object3D, events: Events) => {
   if (context.interactiveObjects.indexOf(object) > -1) {
-    return  // ← early return, handlers not updated
+    return // ← early return, handlers not updated
   }
   context.handlers.set(object, events)
   context.interactiveObjects.push(object)
@@ -231,12 +169,6 @@ $effect.pre(() => {
     )
   }
 })
-
-$effect.pre(() => {
-  if (isDisposableObject(internalRef)) {
-    useDispose(() => internalRef)
-  }
-})
 ```
 
 Both `useCamera` and `useDispose` create their own `$effect.pre`/`$effect` calls internally. In Svelte 5 these become child effects and are cleaned up correctly when the parent re-runs. It works today, but calling hooks conditionally inside effects is explicitly discouraged in most reactive frameworks because:
@@ -246,20 +178,6 @@ Both `useCamera` and `useDispose` create their own `$effect.pre`/`$effect` calls
 - If `internalRef` rapidly alternates between a camera and a non-camera type, cleanup and re-registration of camera state (including the module-level `defaultCameras` Set in `useCamera.svelte.ts`) happens on every flip, which could produce unexpected intermediate states.
 
 **Potential Solution**: Hoist the hook calls unconditionally to component initialisation time and make the hooks themselves guard on the reactive condition internally. For example, `useCamera` could contain `$effect.pre(() => { if (!isCamera(ref())) return; ... })` at its own top level rather than being called inside a conditional effect in `T.svelte`. This keeps all hook registrations unconditional from Svelte's perspective, moves the condition inside where it is a normal reactive guard, and avoids calling `getContext` outside component initialisation.
-
----
-
-## Pattern 3: Module-level `defaultCameras` Set shared across all Canvas instances
-
-**File**: `packages/core/src/lib/components/T/utils/useCamera.svelte.ts`
-
-```ts
-const defaultCameras = new Set()
-```
-
-This Set is declared at module scope, meaning it is shared across all `<Canvas>` instances in the same JS module (i.e. the entire app). If two `<Canvas>` components are mounted simultaneously and both have a `<T.PerspectiveCamera makeDefault />`, they share the same `defaultCameras` Set. Unmounting a camera in one canvas could set `defaultCamera` to `undefined` in the other canvas if it happens to be the last entry in the shared Set, because the cleanup checks `defaultCameras.size === 0` globally rather than per-canvas.
-
-**Potential Solution**: Move `defaultCameras` inside `createCameraContext` so each Canvas gets its own Set, and pass it (or the camera context itself) as an argument to `useCamera`. This is the standard fix for any module-level state that is logically per-instance.
 
 ---
 
@@ -326,41 +244,6 @@ const deps = $derived(dependencies().map((d) => (isStore(d) ? getWrapper(d).curr
 ```
 
 This removes the frozen classification entirely at the cost of a Map lookup per dependency per reactive update — negligible in practice.
-
----
-
-## Pattern 6: `parentObject3D` writable never cleared when ref changes from Object3D to non-Object3D
-
-**File**: `packages/core/src/lib/components/T/utils/useAttach.svelte.ts`, `packages/core/src/lib/context/fragments/parentObject3D.ts`
-
-`createParentObject3DContext` returns a writable that is set when the ref is an `Object3D`, but is never explicitly cleared when the ref changes to a non-Object3D type:
-
-```ts
-$effect.pre(() => {
-  currentRef.set(ref)
-
-  if (isInstanceOf(ref, 'Object3D')) {
-    object3D.set(ref)
-    // ← no else branch to clear object3D when ref is not an Object3D
-  }
-
-  invalidate()
-})
-```
-
-The `parentObject3DContext` is derived as `object3D ?? parentObject3D`. If `object3D` was set to a Mesh and then `ref` changes to a Material, `object3D` still holds the stale Mesh. Child components continue to see the old Mesh as their parent Object3D rather than falling through to the actual grandparent. In practice this only triggers if `is` is changed from an Object3D type to a non-Object3D type on the same `<T>` component, which is unusual but not impossible with dynamic `is` bindings.
-
-**Potential Solution**: Add an `else` branch that clears `object3D` when `ref` is not an `Object3D`:
-
-```ts
-if (isInstanceOf(ref, 'Object3D')) {
-  object3D.set(ref)
-} else {
-  object3D.set(undefined)
-}
-```
-
-The derived `object3D ?? parentObject3D` will then correctly fall through to the grandparent when the current ref is not an `Object3D`.
 
 ---
 
@@ -440,58 +323,3 @@ export const usePlugins = (args: () => Parameters<Plugin>[0]) => {
 **Potential Solution**: Document the constraint explicitly in the plugin authoring guide so that authors know all props they may ever intercept must be declared synchronously at plugin init. If dynamic `pluginProps` become necessary in the future, the return value of `plugin(pluginArgs)` would need to be reactive (e.g. a store or `$derived`-backed object), and `useProps` would need to subscribe to it — a significant but self-contained change.
 
 ---
-
-## Pattern 10: `dispose()` called unawaited every animation frame
-
-**File**: `packages/core/src/lib/context/fragments/renderer.svelte.ts`
-
-```ts
-renderer.setAnimationLoop((time) => {
-  dispose() // async, not awaited
-  scheduler.run(time)
-  resetFrameInvalidation()
-})
-```
-
-`dispose` is an `async` function that starts with `await tick()`. Calling it without `await` means a new in-flight Promise is created on every frame. Each frame, `dispose()` suspends at `await tick()`, `scheduler.run` executes synchronously, and then on the next microtask tick each pending `dispose` resumes and checks `shouldDispose`. JavaScript's single-threaded model prevents true concurrency, so multiple in-flight instances don't corrupt state — but it does mean disposal runs are queued as microtasks and can pile up. It also makes the intent of the code harder to follow: it looks like fire-and-forget but relies on the microtask queue resolving before the next frame for correctness.
-
-**Potential Solution**: Guard against overlapping runs with a boolean flag so at most one `dispose` call is in-flight at a time:
-
-```ts
-let disposing = false
-renderer.setAnimationLoop((time) => {
-  if (!disposing && context.shouldDispose) {
-    disposing = true
-    dispose().finally(() => {
-      disposing = false
-    })
-  }
-  scheduler.run(time)
-  resetFrameInvalidation()
-})
-```
-
-Alternatively, evaluate whether the `await tick()` inside `dispose` is still necessary. If `shouldDispose` is already set synchronously before the animation loop fires, a synchronous disposal path would let the call be awaited naturally and eliminate the piling concern entirely.
-
----
-
-## Pattern 11: `useEvents.svelte.ts` is dead code with the same live-ref-in-cleanup bug as Bug 2
-
-**File**: `packages/core/src/lib/components/T/utils/useEvents.svelte.ts`
-
-`useEvents` is defined but never imported or called anywhere in the codebase (confirmed by search — the only reference to it is its own file). It was presumably replaced when `T.svelte` was simplified, but the file was not removed.
-
-Additionally, the implementation has the same class of bug as Bug 2: `ref` and `prop` are `$derived` values accessed live inside cleanup closures rather than being captured at effect-run time:
-
-```ts
-$effect.pre(() => {
-  if (typeof prop !== 'function' || !isEventDispatcher(ref)) return
-  const name = key.slice(2)
-  ref.addEventListener(name, prop)
-  return () => ref.removeEventListener(name, prop) // ← live $derived reads
-})
-```
-
-When `ref` changes, the cleanup calls `ref.removeEventListener(name, prop)` on the **new** object (which never had the listener), leaving the old object with a stale listener attached. Similarly when `prop` changes, the old handler is never removed. The file should either be deleted or the pattern corrected before it's brought back into use.
-
-**Potential Solution**: Delete the file — it is not used anywhere. If it is revived, apply the same snapshot fix used in Bug 2: capture both `ref` and `prop` as local variables at the start of the effect body so the cleanup closure closes over the values that were live when the listener was added, not the values at cleanup time.
