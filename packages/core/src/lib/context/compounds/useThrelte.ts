@@ -13,7 +13,7 @@ import { useScheduler, type SchedulerContext } from '../fragments/scheduler.svel
  */
 export interface ThrelteContext<T extends Renderer>
   extends
-    Omit<CameraContext, 'manual'>,
+    Omit<CameraContext, 'manual' | 'makeDefaultCameras'>,
     DOMContext,
     RendererContext<T>,
     SceneContext,
