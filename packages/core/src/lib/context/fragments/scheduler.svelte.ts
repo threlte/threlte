@@ -54,6 +54,11 @@ export type SchedulerContext = {
    * @deprecated Use invalidate()
    */
   advance: () => void
+
+  /**
+   * @deprecated Use frameInvalidated.current = false
+   */
+  resetFrameInvalidation: () => void
 }
 
 export type CreateSchedulerContextOptions = {
@@ -119,6 +124,9 @@ export const createSchedulerContext = (
     ),
     invalidate() {
       frameInvalidated = true
+    },
+    resetFrameInvalidation() {
+      frameInvalidated = false
     },
     mainStage,
     shouldRender,

@@ -21,11 +21,11 @@ const { renderer, camera } = useThrelte()
 console.log(renderer, $camera)
 ```
 
-… or update render properties:
+… or read render properties:
 
 ```ts
 const { toneMapping } = useThrelte()
-toneMapping.set(THREE.LinearToneMapping)
+console.log(toneMapping)
 ```
 
 ### Usage
@@ -41,7 +41,7 @@ const {
   canvas, // HTMLCanvasElement
   camera, // CurrentWritable<Camera>
   scene, // Scene
-  dpr, // CurrentWritable<number>
+  dpr, // CurrentReadable<number>
   renderer, // WebGLRenderer
   renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
   autoRender, // CurrentWritable<boolean>
@@ -52,10 +52,10 @@ const {
   renderStage, // Stage
   autoRenderTask, // Task
   shouldRender, // () => boolean
-  colorManagementEnabled, // CurrentWritable<boolean>
-  colorSpace, // CurrentWritable<ColorSpace>
-  toneMapping, // CurrentWritable<ToneMapping>
-  shadows // CurrentWritable<boolean | ShadowMapType>
+  colorManagementEnabled, // CurrentReadable<boolean>
+  colorSpace, // CurrentReadable<ColorSpace>
+  toneMapping, // CurrentReadable<ToneMapping>
+  shadows // CurrentReadable<boolean | ShadowMapType>
 } = useThrelte()
 ```
 
@@ -72,9 +72,9 @@ invalidate()
 If the [renderMode is set to `'manual'`](/docs/reference/core/canvas) you must manually trigger a re-render:
 
 ```ts
-const { advance } = useThrelte()
+const { invalidate } = useThrelte()
 
-advance()
+invalidate()
 ```
 
 The property can be changed at any time, but it will only take effect on the next frame.

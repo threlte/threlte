@@ -17,7 +17,7 @@ export interface ThrelteContext<T extends Renderer>
     DOMContext,
     RendererContext<T>,
     SceneContext,
-    Omit<SchedulerContext, 'frameInvalidated' | 'autoInvalidations'> {}
+    Omit<SchedulerContext, 'frameInvalidated' | 'autoInvalidations' | 'resetFrameInvalidation'> {}
 
 /**
  * ### `useThrelte`
