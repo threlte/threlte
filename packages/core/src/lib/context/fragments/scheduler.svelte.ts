@@ -72,7 +72,7 @@ export const createSchedulerContext = (
   const scheduler = new Scheduler()
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
 
-  let opts = $derived(options())
+  const opts = $derived(options())
 
   let autoRender = $state(opts.autoRender ?? true)
   $effect.pre(() => {
