@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.13.4
+
+### Patch Changes
+
+- 2a7aa09: OrbitControls: do not invalidate unless onchange has been called
+
 ## 9.13.3
 
 ### Patch Changes
