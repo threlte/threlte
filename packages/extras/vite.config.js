@@ -20,6 +20,8 @@ export default defineConfig(({ mode }) => ({
     coverage: { include: ['src'] },
     mockReset: true,
     unstubGlobals: true,
+    fileParallelism: false,
+    retry: 1,
     browser: {
       enabled: true,
       provider: 'playwright',
