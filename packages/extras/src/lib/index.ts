@@ -11,6 +11,7 @@ export { useFBO } from './hooks/useFBO.svelte.js'
 export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
+export { useTrailTexture, type TrailTextureConfig } from './hooks/useTrailTexture.svelte.js'
 export { meshBounds } from './utilities/meshBounds.js'
 
 // abstractions
