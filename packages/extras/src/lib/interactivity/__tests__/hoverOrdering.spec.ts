@@ -116,8 +116,12 @@ describe('hover event ordering', () => {
     // 'auto' on leave. The cursor value after all events should reflect
     // whether the pointer is over the object.
     let cursor = 'auto'
-    const onpointerenterA = vi.fn(() => { cursor = 'pointer' })
-    const onpointerleaveA = vi.fn(() => { cursor = 'auto' })
+    const onpointerenterA = vi.fn(() => {
+      cursor = 'pointer'
+    })
+    const onpointerleaveA = vi.fn(() => {
+      cursor = 'auto'
+    })
 
     const { context, container } = render(Scene, {
       props: {

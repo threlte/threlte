@@ -17,7 +17,7 @@
     onpointerleaveFront,
     onpointerleaveBack,
     onpointermoveFront,
-    onpointermoveBack,
+    onpointermoveBack
   }: {
     onpointerdownFront?: Handler
     onpointerdownBack?: Handler

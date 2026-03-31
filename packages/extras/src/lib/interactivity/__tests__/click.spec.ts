@@ -55,5 +55,4 @@ describe('onclick', () => {
 
     expect(onclickA).not.toHaveBeenCalled()
   })
-
 })

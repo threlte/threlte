@@ -15,7 +15,7 @@
     onpointerleaveChild,
     onpointerleaveParent,
     onpointerenterChild,
-    onpointerenterParent,
+    onpointerenterParent
   }: {
     onpointerdownChild?: Handler
     onpointerdownParent?: Handler
