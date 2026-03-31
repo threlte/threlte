@@ -22,6 +22,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  base: process.env.BASE_PATH || '/',
   compressHTML: false,
   markdown: {
     syntaxHighlight: false
