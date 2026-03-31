@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
 import { sveltekit } from '@sveltejs/kit/vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
@@ -11,7 +12,10 @@ export default defineConfig(({ mode }) => ({
   ...(mode === 'test' && {
     optimizeDeps: {
       exclude: ['@threlte/core', '@threlte/extras', '@threlte/test'],
-      entries: ['src/**/*.{svelte,ts}']
+      entries: [
+        'src/lib/**/*.svelte',
+        resolve('../core/src/lib/index.ts')
+      ]
     }
   }),
   test: {
