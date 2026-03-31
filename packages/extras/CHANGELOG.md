@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.14.0
+
+### Minor Changes
+
+- 29a1e7e: Add `<ShadowAlpha>` component
+
 ## 9.13.4
 
 ### Patch Changes
