@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { setupDom, pointer, tick, nextFrame } from './helpers.js'
+import { tick } from 'svelte'
+import { setupDom, pointer, nextFrame } from './helpers.js'
 import Scene from './__fixtures__/Scene.svelte'
 
 describe('pointerleave', () => {
@@ -14,12 +15,11 @@ describe('pointerleave', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // Move pointer to center — hovers mesh A
+    // First move — processed immediately, hovers mesh A
     pointer(target, 'pointermove', 100, 100)
-    await nextFrame()
     await tick()
 
-    // Move pointer to empty space — leaves mesh A
+    // Second move — coalesced to next rAF, leaves mesh A
     pointer(target, 'pointermove', 0, 0)
     await nextFrame()
     await tick()
@@ -37,9 +37,8 @@ describe('pointerleave', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // Move pointer to center — hovers mesh A
+    // First move — processed immediately, hovers mesh A
     pointer(target, 'pointermove', 100, 100)
-    await nextFrame()
     await tick()
 
     // Pointer leaves the canvas entirely — handled synchronously by

@@ -1,7 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { Raycaster, Vector2 } from 'three'
-import { setupDom, pointer, tick } from './helpers.js'
+import { tick } from 'svelte'
+import { setupDom, pointer } from './helpers.js'
 import Scene from './__fixtures__/Scene.svelte'
 
 describe('event data', () => {

@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { setupDom, pointer, tick, nextFrame } from './helpers.js'
+import { tick } from 'svelte'
+import { setupDom, pointer, nextFrame } from './helpers.js'
 import OverlappingScene from './__fixtures__/OverlappingScene.svelte'
 import PropagationScene from './__fixtures__/PropagationScene.svelte'
 
@@ -137,9 +138,8 @@ describe('event propagation', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // First move → hover both objects (no stopPropagation)
+    // First move — processed immediately, hover both objects (no stopPropagation)
     pointer(target, 'pointermove')
-    await nextFrame()
     await tick()
 
     expect(onpointeroverBack).toHaveBeenCalledOnce()

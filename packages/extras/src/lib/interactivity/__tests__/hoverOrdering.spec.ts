@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { setupDom, pointer, tick, nextFrame } from './helpers.js'
+import { tick } from 'svelte'
+import { setupDom, pointer, nextFrame } from './helpers.js'
 import Scene from './__fixtures__/Scene.svelte'
 import OverlappingScene from './__fixtures__/OverlappingScene.svelte'
 
@@ -30,17 +31,15 @@ describe('hover event ordering', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // Move to center → hover both Front and Back
+    // First move — processed immediately, hover both Front and Back
     pointer(target, 'pointermove')
-    await nextFrame()
     await tick()
 
     expect(onpointerenterFront).toHaveBeenCalledOnce()
     expect(onpointerenterBack).toHaveBeenCalledOnce()
     callOrder.length = 0
 
-    // Move to empty space → leave both objects
-    // Then move back to center → enter both again
+    // Second move — coalesced to rAF, leave both objects
     pointer(target, 'pointermove', 0, 0)
     await nextFrame()
     await tick()
@@ -49,15 +48,17 @@ describe('hover event ordering', () => {
     expect(onpointerleaveBack).toHaveBeenCalledOnce()
     callOrder.length = 0
 
-    // Move back to center — leave events from the empty-space hover (none)
-    // should fire before enter events on the newly hovered objects
+    // Third move — coalesced to rAF, re-enter both objects.
+    // Leave events (none here since both already left) must fire before
+    // enter events on the newly hovered objects.
     pointer(target, 'pointermove', 100, 100)
     await nextFrame()
     await tick()
 
-    // Enter events should fire (objects are hovered again)
     expect(onpointerenterFront).toHaveBeenCalledTimes(2)
     expect(onpointerenterBack).toHaveBeenCalledTimes(2)
+    // Verify enter events fired in order (no interleaved leave events)
+    expect(callOrder).toEqual(['enter-front', 'enter-back'])
   })
 
   it('fires pointerout before pointerover when moving between objects', async () => {
@@ -79,16 +80,15 @@ describe('hover event ordering', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // Move to center → hover mesh A
+    // First move — processed immediately, hover mesh A
     pointer(target, 'pointermove')
-    await nextFrame()
     await tick()
 
     expect(onpointerenterA).toHaveBeenCalledOnce()
     expect(onpointeroverA).toHaveBeenCalledOnce()
     callOrder.length = 0
 
-    // Move to empty space → should fire out/leave on A
+    // Second move — coalesced to rAF, leave mesh A
     pointer(target, 'pointermove', 0, 0)
     await nextFrame()
     await tick()
@@ -133,14 +133,13 @@ describe('hover event ordering', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // Move to center → hover mesh A
+    // First move — processed immediately, hover mesh A
     pointer(target, 'pointermove')
-    await nextFrame()
     await tick()
 
     expect(cursor).toBe('pointer')
 
-    // Move to empty space → leave mesh A
+    // Second move — coalesced to rAF, leave mesh A
     pointer(target, 'pointermove', 0, 0)
     await nextFrame()
     await tick()

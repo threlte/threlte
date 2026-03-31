@@ -1,6 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
-import { setupDom, pointer, tick, nextFrame } from './helpers.js'
+import { tick } from 'svelte'
+import { setupDom, pointer, nextFrame } from './helpers.js'
 import PropagationScene from './__fixtures__/PropagationScene.svelte'
 import type { IntersectionEvent } from '../types.js'
 
@@ -42,9 +43,8 @@ describe('stopPropagation', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // pointermove at center → hovers Child, which calls stopPropagation
+    // First pointermove — processed immediately, hovers Child which calls stopPropagation
     pointer(target, 'pointermove')
-    await nextFrame()
     await tick()
 
     expect(onpointeroverChild).toHaveBeenCalledOnce()

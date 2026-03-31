@@ -1,4 +1,3 @@
-import { tick } from 'svelte'
 import type { ThrelteContext } from '@threlte/core'
 import type { WebGLRenderer } from 'three'
 
@@ -52,5 +51,3 @@ export const wheel = (target: HTMLElement, x = 100, y = 100, deltaY = 100) => {
  * Wait for a requestAnimationFrame to fire (needed for throttled pointermove).
  */
 export const nextFrame = () => new Promise<void>((r) => requestAnimationFrame(() => r()))
-
-export { tick }
