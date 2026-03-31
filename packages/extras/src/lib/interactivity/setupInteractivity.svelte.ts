@@ -130,12 +130,13 @@ export const setupInteractivity = (context: InteractivityContext) => {
       context.initialHits = hits.map((hit) => hit.eventObject)
     }
 
-    // If a click yields no results, pass it back to the user as a miss
-    // Missed events have to come first in order to establish user-land side-effect clean up
-    if (isClickEvent && hits.length === 0) {
-      if (delta <= 2) {
-        pointerMissed(event, context.interactiveObjects)
-      }
+    // Fire pointermissed for objects that were not under the pointer at pointerdown.
+    // Must come before the dispatch loop so user-land cleanup runs first.
+    if (isClickEvent && delta <= 2) {
+      pointerMissed(
+        event,
+        context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
+      )
     }
 
     // Take care of unhover
@@ -203,22 +204,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
         // All other events
         if (events[`on${name}`]) {
           if (!isClickEvent || context.initialHits.includes(hit.eventObject)) {
-            // Missed events have to come first
-            pointerMissed(
-              event,
-              context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
-            )
-
-            // Call the event
             events[`on${name}`]?.(intersectionEvent)
-          }
-        } else {
-          // "Real" click event
-          if (isClickEvent && context.initialHits.includes(hit.eventObject)) {
-            pointerMissed(
-              event,
-              context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
-            )
           }
         }
       }
