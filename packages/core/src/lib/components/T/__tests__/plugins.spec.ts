@@ -39,4 +39,13 @@ describe('<T> plugins', () => {
      * */
     expect(fn).toHaveBeenCalledTimes(6)
   })
+
+  it('does not apply plugin-reserved props to the Three.js object', () => {
+    const fn = vi.fn()
+    const { scene } = render(Scene, { props: { plugin: { fn, props: ['lookat'] } } })
+
+    const mesh = scene.getObjectByName('child') as Mesh
+    // "lookat" is a plugin-reserved prop, so it should not be set on the mesh
+    expect((mesh as any).lookat).toBeUndefined()
+  })
 })

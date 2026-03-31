@@ -220,6 +220,9 @@ export function useTask(
   $effect.pre(() => {
     return () => {
       stage.removeTask(key)
+      if (autoInvalidate) {
+        schedulerCtx.autoInvalidations.delete(fn)
+      }
     }
   })
 
