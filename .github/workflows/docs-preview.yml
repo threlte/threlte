@@ -69,6 +69,7 @@ jobs:
             const prNumber = context.payload.pull_request.number;
             const owner = context.repo.owner;
             const repo = context.repo.repo;
+            // TODO: Update to https://threlte.xyz once the custom domain is linked
             const previewUrl = `https://${owner}.github.io/${repo}/previews/pr-${prNumber}/`;
             const body = `📖 Docs preview deployed to: ${previewUrl}`;
 
