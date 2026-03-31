@@ -48,7 +48,7 @@ describe('<T>', () => {
 
   it('reconstructs the instance when args change', async () => {
     const oncreate = vi.fn()
-    const { scene, rerender } = render(T.BoxGeometry, { props: { args: [1, 1, 1], oncreate } })
+    const { rerender } = render(T.BoxGeometry, { props: { args: [1, 1, 1], oncreate } })
 
     expect(oncreate).toHaveBeenCalledTimes(1)
 
