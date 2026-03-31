@@ -86,4 +86,16 @@ describe('useThrelte', () => {
     context.invalidate()
     expect(context.shouldRender()).toBe(true)
   })
+
+  it('shouldRender reflects the current renderMode', () => {
+    const { context } = render(T.Group)
+
+    // on-demand: shouldRender is true when frame is invalidated (initial state)
+    expect(context.renderMode.current).toBe('on-demand')
+    expect(context.shouldRender()).toBe(true)
+
+    // always: shouldRender is always true
+    context.renderMode.set('always')
+    expect(context.shouldRender()).toBe(true)
+  })
 })

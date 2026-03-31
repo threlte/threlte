@@ -27,7 +27,9 @@ export const useDispose = <T>(
   // We merge the local dispose with the parent dispose. If the parent dispose
   // is not set, we use true as default.
   const mergedDispose = $derived.by(() => {
-    if (dispose() === false) return false
+    // An explicit local dispose value takes precedence over the parent.
+    const local = dispose()
+    if (local !== undefined) return local !== false
     if (parentDispose?.() === false) return false
     return true
   })
