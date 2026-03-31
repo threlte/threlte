@@ -1,4 +1,4 @@
-import { getContext, setContext, untrack } from 'svelte'
+import { getContext, setContext } from 'svelte'
 import { type CurrentWritable, runeToCurrentWritable } from '../../utilities/currentWritable.js'
 import { Scheduler, type Stage } from '../../frame-scheduling/index.js'
 

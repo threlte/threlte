@@ -1,11 +1,9 @@
-import { DirectionalLight, Group, Mesh, MeshBasicMaterial, OrthographicCamera } from 'three'
+import { Group, Mesh, MeshBasicMaterial } from 'three'
 import { describe, it, expect, vi } from 'vitest'
-import { tick } from 'svelte'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
 import Scene from './__fixtures__/Scene.svelte'
 import Attach from './__fixtures__/Attach.svelte'
-import AttachDotNotation from './__fixtures__/AttachDotNotation.svelte'
 
 describe('<T> attach', () => {
   it('attaches and detaches to an object that is passed to "attach"', () => {
