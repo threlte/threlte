@@ -1,0 +1,67 @@
+---
+category: '@threlte/extras'
+group: 'Staging'
+title: <ShadowAlpha>
+sourcePath: 'packages/extras/src/lib/components/ShadowAlpha/ShadowAlpha.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        { name: 'opacity', type: 'number', description: 'Shadow opacity. Defaults to parent material opacity.' },
+        { name: 'alphaMap', type: 'THREE.Texture | false', description: 'Alpha map for the shadow. Defaults to parent material alphaMap. Pass false to disable.' }
+      ]
+  }
+---
+
+This component is a port of [drei's `<ShadowAlpha>` component](https://github.com/pmndrs/drei#shadowalpha).
+
+By default in Three.js, shadows are always fully opaque regardless of the material's opacity or alpha map. `<ShadowAlpha>` fixes this by making a mesh's shadow respect its material's `opacity` and `alphaMap`.
+
+Place it as a child of the mesh whose shadow you want to control:
+
+```svelte
+<T.Mesh castShadow>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial transparent opacity={0.5} />
+  <ShadowAlpha />
+</T.Mesh>
+```
+
+The shadow will now be 50% transparent, matching the material's opacity.
+
+### Alpha Maps
+
+If the parent material has an `alphaMap` (e.g. a leaf texture with cutouts), the shadow will automatically match those cutouts:
+
+```svelte
+<T.Mesh castShadow>
+  <T.PlaneGeometry />
+  <T.MeshStandardMaterial
+    transparent
+    map={leafTexture}
+    alphaMap={leafAlpha}
+  />
+  <ShadowAlpha />
+</T.Mesh>
+```
+
+You can override the alpha map or disable it:
+
+```svelte
+<!-- Use a custom alpha map -->
+<ShadowAlpha alphaMap={customTexture} />
+
+<!-- Disable alpha map, only use opacity -->
+<ShadowAlpha alphaMap={false} />
+```
+
+### How It Works
+
+`<ShadowAlpha>` uses [Bayer dithering](https://en.wikipedia.org/wiki/Ordered_dithering) in custom depth and distance materials. Fragments below the opacity threshold are discarded from the shadow map, creating a pattern that approximates transparency. This is a screen-space technique, so the dither pattern may be visible at close range.
+
+<Tip type="info">
+  This component is a workaround for a [long-standing Three.js limitation](https://github.com/mrdoob/three.js/issues/10600). It will be deprecated when Three.js adds native support for shadows from transparent objects.
+</Tip>
+
+<Example path="extras/shadow-alpha" />
