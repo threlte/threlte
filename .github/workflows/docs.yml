@@ -30,6 +30,9 @@ jobs:
           run_install: true
 
       - name: Build docs
+        env:
+          # TODO: Remove BASE_PATH once threlte.xyz custom domain is linked
+          BASE_PATH: /threlte
         run: pnpm run build:docs
 
       - name: Checkout gh-pages
