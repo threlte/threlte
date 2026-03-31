@@ -8,8 +8,16 @@ componentSignature:
   {
     props:
       [
-        { name: 'opacity', type: 'number', description: 'Shadow opacity. Defaults to parent material opacity.' },
-        { name: 'alphaMap', type: 'THREE.Texture | false', description: 'Alpha map for the shadow. Defaults to parent material alphaMap. Pass false to disable.' }
+        {
+          name: 'opacity',
+          type: 'number',
+          description: 'Shadow opacity. Defaults to parent material opacity.'
+        },
+        {
+          name: 'alphaMap',
+          type: 'THREE.Texture | false',
+          description: 'Alpha map for the shadow. Defaults to parent material alphaMap. Pass false to disable.'
+        }
       ]
   }
 ---
@@ -23,7 +31,10 @@ Place it as a child of the mesh whose shadow you want to control:
 ```svelte
 <T.Mesh castShadow>
   <T.BoxGeometry />
-  <T.MeshStandardMaterial transparent opacity={0.5} />
+  <T.MeshStandardMaterial
+    transparent
+    opacity={0.5}
+  />
   <ShadowAlpha />
 </T.Mesh>
 ```
@@ -61,7 +72,9 @@ You can override the alpha map or disable it:
 `<ShadowAlpha>` uses [Bayer dithering](https://en.wikipedia.org/wiki/Ordered_dithering) in custom depth and distance materials. Fragments below the opacity threshold are discarded from the shadow map, creating a pattern that approximates transparency. This is a screen-space technique, so the dither pattern may be visible at close range.
 
 <Tip type="info">
-  This component is a workaround for a [long-standing Three.js limitation](https://github.com/mrdoob/three.js/issues/10600). It will be deprecated when Three.js adds native support for shadows from transparent objects.
+  This component is a workaround for a [long-standing Three.js
+  limitation](https://github.com/mrdoob/three.js/issues/10600). It will be deprecated when Three.js
+  adds native support for shadows from transparent objects.
 </Tip>
 
 <Example path="extras/shadow-alpha" />

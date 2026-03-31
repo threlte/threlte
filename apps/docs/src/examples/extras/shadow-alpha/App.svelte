@@ -8,9 +8,21 @@
   let overrideOpacity = $state(false)
 </script>
 
-<Pane title="ShadowAlpha" position="fixed">
-  <Slider bind:value={meshOpacity} label="material opacity" min={0} max={1} step={0.01} />
-  <Checkbox bind:value={overrideOpacity} label="override shadow opacity" />
+<Pane
+  title="ShadowAlpha"
+  position="fixed"
+>
+  <Slider
+    bind:value={meshOpacity}
+    label="material opacity"
+    min={0}
+    max={1}
+    step={0.01}
+  />
+  <Checkbox
+    bind:value={overrideOpacity}
+    label="override shadow opacity"
+  />
   <Slider
     bind:value={shadowOpacity}
     label="shadow opacity"

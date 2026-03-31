@@ -37,7 +37,10 @@
 <T.AmbientLight intensity={0.4} />
 
 <!-- Ground -->
-<T.Mesh receiveShadow rotation.x={-Math.PI / 2}>
+<T.Mesh
+  receiveShadow
+  rotation.x={-Math.PI / 2}
+>
   <T.PlaneGeometry args={[10, 10]} />
   <T.MeshStandardMaterial color="#f0ebe3" />
 </T.Mesh>
