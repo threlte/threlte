@@ -10,9 +10,10 @@ export default defineConfig(({ mode }) => ({
   },
   ...(mode === 'test' && {
     optimizeDeps: {
-      exclude: ['@threlte/core', '@threlte/extras', '@threlte/test'],
+      exclude: ['@threlte/core', '@threlte/extras'],
       entries: ['src/**/*.{svelte,ts}'],
-      include: ['svelte', 'svelte/internal', 'svelte/internal/client', 'three']
+      include: ['svelte', 'svelte/internal', 'svelte/internal/client', 'three'],
+      noDiscovery: true
     }
   }),
   test: {
