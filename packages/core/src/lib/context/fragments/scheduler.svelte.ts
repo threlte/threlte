@@ -73,20 +73,11 @@ export const createSchedulerContext = (
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
 
   const opts = $derived(options())
+  const optsAutoRender = $state(opts.autoRender)
+  const optsRenderMode = $state(opts.renderMode)
 
-  let autoRender = $state(opts.autoRender ?? true)
-  $effect.pre(() => {
-    if (opts) {
-      untrack(() => (autoRender = opts.autoRender ?? true))
-    }
-  })
-
-  let renderMode = $state(opts.renderMode ?? 'on-demand')
-  $effect.pre(() => {
-    if (opts) {
-      untrack(() => (renderMode = opts.renderMode ?? 'on-demand'))
-    }
-  })
+  let autoRender = $derived(optsAutoRender ?? true)
+  let renderMode = $derived(optsRenderMode ?? 'on-demand')
 
   const autoInvalidations = new Set()
 
@@ -125,9 +116,6 @@ export const createSchedulerContext = (
     invalidate() {
       frameInvalidated = true
     },
-    resetFrameInvalidation() {
-      frameInvalidated = false
-    },
     mainStage,
     shouldRender,
     renderStage: scheduler.createStage(Symbol('threlte-render-stage'), {
@@ -135,7 +123,10 @@ export const createSchedulerContext = (
       callback(_, runTasks) {
         if (context.shouldRender()) runTasks()
       }
-    })
+    }),
+    resetFrameInvalidation() {
+      frameInvalidated = false
+    }
   }
 
   $effect(() => {

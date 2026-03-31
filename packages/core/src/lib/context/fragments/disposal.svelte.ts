@@ -33,7 +33,7 @@ export const createDisposalContext = (): DisposalContext => {
         disposableObjects.set(object, 1)
       }
     },
-    disposableObjectUnmounted: async (object) => {
+    disposableObjectUnmounted: (object) => {
       const currentValue = disposableObjects.get(object)
       if (currentValue && currentValue > 0) {
         disposableObjects.set(object, currentValue - 1)
@@ -50,6 +50,7 @@ export const createDisposalContext = (): DisposalContext => {
       for (const [object] of disposableObjects) {
         object.dispose()
       }
+      disposableObjects.clear()
     }
   })
 
