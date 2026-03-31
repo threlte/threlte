@@ -1,39 +1,8 @@
 import { describe, it, expect, vi } from 'vitest'
+import { tick } from 'svelte'
 import { render } from '@threlte/test'
-import PointerMissedScene from './__fixtures__/PointerMissedScene.svelte'
-
-/**
- * Workaround for @threlte/test bugs #1, #5:
- * The dom element is detached so clientWidth/Height are 0. Appending it to the
- * container with explicit pixel dimensions gives it real layout. Must wait for
- * ResizeObserver to fire.
- */
-const setupDom = async (context: { dom: HTMLElement }, container: HTMLElement) => {
-  const dom = context.dom
-  dom.style.width = '200px'
-  dom.style.height = '200px'
-  container.appendChild(dom)
-  await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())))
-}
-
-/**
- * Dispatch a pointer event at position (x, y) relative to the target element.
- * offsetX/offsetY are read-only computed properties that Chromium computes
- * unreliably for synthetic events (@threlte/test bug #6), so we override them.
- */
-const pointer = (target: HTMLElement, type: string, x = 100, y = 100) => {
-  const event = new PointerEvent(type, {
-    bubbles: true,
-    pointerId: 1,
-    clientX: x,
-    clientY: y
-  })
-  Object.defineProperty(event, 'offsetX', { value: x })
-  Object.defineProperty(event, 'offsetY', { value: y })
-  target.dispatchEvent(event)
-}
-
-const tick = () => new Promise<void>((r) => setTimeout(r, 0))
+import { setupDom, pointer } from './helpers.js'
+import Scene from './__fixtures__/Scene.svelte'
 
 describe('pointerMissed', () => {
   it('fires onpointermissed exactly once per object not under the pointer', async () => {
@@ -42,7 +11,7 @@ describe('pointerMissed', () => {
     const onpointermissedB = vi.fn()
     const onpointermissedC = vi.fn()
 
-    const { context, container } = render(PointerMissedScene, {
+    const { context, container } = render(Scene, {
       props: {
         onclickA,
         onpointermissedA,
@@ -73,7 +42,7 @@ describe('pointerMissed', () => {
     const onpointermissedB = vi.fn()
     const onpointermissedC = vi.fn()
 
-    const { context, container } = render(PointerMissedScene, {
+    const { context, container } = render(Scene, {
       props: {
         onpointermissedA,
         onpointermissedB,
@@ -97,18 +66,14 @@ describe('pointerMissed', () => {
     expect(onpointermissedC).toHaveBeenCalledOnce()
   })
 
-  it('does not fire onpointermissed when the pointer was dragged', async () => {
+  it('treats a small movement within the distance threshold as a click', async () => {
     const onclickA = vi.fn()
-    const onpointermissedA = vi.fn()
     const onpointermissedB = vi.fn()
-    const onpointermissedC = vi.fn()
 
-    const { context, container } = render(PointerMissedScene, {
+    const { context, container } = render(Scene, {
       props: {
         onclickA,
-        onpointermissedA,
-        onpointermissedB,
-        onpointermissedC
+        onpointermissedB
       }
     })
 
@@ -119,14 +84,75 @@ describe('pointerMissed', () => {
     pointer(target, 'pointerdown', 100, 100)
     await tick()
 
-    // click far away (delta > 2) — this is a drag, not a click
-    pointer(target, 'click', 150, 150)
+    // click 5px away (within the default 8px threshold) — still a click
+    pointer(target, 'click', 105, 100)
+    await tick()
+
+    expect(onclickA).toHaveBeenCalledOnce()
+    expect(onpointermissedB).toHaveBeenCalledOnce()
+  })
+
+  it('does not fire click or pointermissed when dragged beyond distance threshold', async () => {
+    const onclickA = vi.fn()
+    const onpointermissedA = vi.fn()
+    const onpointermissedB = vi.fn()
+
+    const { context, container } = render(Scene, {
+      props: {
+        onclickA,
+        onpointermissedA,
+        onpointermissedB
+      }
+    })
+
+    await setupDom(context, container)
+    const target = context.dom
+
+    // pointerdown at center
+    pointer(target, 'pointerdown', 100, 100)
+    await tick()
+
+    // click 10px away (beyond the default 8px threshold) — treated as drag
+    pointer(target, 'click', 110, 100)
     await tick()
 
     expect(onclickA).not.toHaveBeenCalled()
     expect(onpointermissedA).not.toHaveBeenCalled()
     expect(onpointermissedB).not.toHaveBeenCalled()
-    expect(onpointermissedC).not.toHaveBeenCalled()
+  })
+
+  it('does not fire click or pointermissed when click arrives after time threshold', async () => {
+    const onclickA = vi.fn()
+    const onpointermissedA = vi.fn()
+    const onpointermissedB = vi.fn()
+
+    const { context, container } = render(Scene, {
+      props: {
+        onclickA,
+        onpointermissedA,
+        onpointermissedB,
+        clickTimeThreshold: 200
+      }
+    })
+
+    await setupDom(context, container)
+    const target = context.dom
+
+    // Stub performance.now to control time deterministically.
+    // handleEvent reads it twice: once on pointerdown (to record), once on click (to check).
+    const now = vi.spyOn(performance, 'now')
+    now.mockReturnValueOnce(0) // pointerdown records t=0
+    now.mockReturnValueOnce(300) // click checks elapsed: 300 > 200ms threshold
+
+    pointer(target, 'pointerdown', 100, 100)
+    pointer(target, 'click', 100, 100)
+    await tick()
+
+    expect(onclickA).not.toHaveBeenCalled()
+    expect(onpointermissedA).not.toHaveBeenCalled()
+    expect(onpointermissedB).not.toHaveBeenCalled()
+
+    now.mockRestore()
   })
 
   it('does not fire onclick on an object that was not under the pointer at pointerdown', async () => {
@@ -135,7 +161,7 @@ describe('pointerMissed', () => {
     const onpointermissedA = vi.fn()
     const onpointermissedB = vi.fn()
 
-    const { context, container } = render(PointerMissedScene, {
+    const { context, container } = render(Scene, {
       props: {
         onclickA,
         onclickB,

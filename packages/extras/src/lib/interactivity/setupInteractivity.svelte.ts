@@ -124,25 +124,29 @@ export const setupInteractivity = (context: InteractivityContext) => {
     const hits = getHits()
     const delta = isClickEvent ? calculateDistance(event) : 0
 
-    // Save initial coordinates on pointer-down
+    // Save initial coordinates and timestamp on pointer-down
     if (name === 'pointerdown') {
       context.initialClick = [event.offsetX, event.offsetY]
+      context.initialClickTime = performance.now()
       context.initialHits = hits.map((hit) => hit.eventObject)
     }
 
+    const isClick =
+      isClickEvent &&
+      delta <= context.clickDistanceThreshold &&
+      performance.now() - context.initialClickTime <= context.clickTimeThreshold
+
     // Fire pointermissed for objects that were not under the pointer at pointerdown.
     // Must come before the dispatch loop so user-land cleanup runs first.
-    if (isClickEvent && delta <= 2) {
+    if (isClick) {
       pointerMissed(
         event,
         context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
       )
     }
 
-    // Take care of unhover
-    if (isPointerMove) cancelPointer(hits)
-
     let stopped = false
+    let stoppedAt = -1
 
     // loop through all hits and dispatch events
     dispatchEvents: for (const hit of hits) {
@@ -200,16 +204,37 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
         // Call pointer move
         events.onpointermove?.(intersectionEvent as IntersectionEvent<PointerEvent>)
+
+        // If the pointermove handler called stopPropagation, update the hovered
+        // entry so subsequent moves continue to block farther objects.
+        if (intersectionEvent.stopped) {
+          const id = createIntersectionId(intersectionEvent)
+          const hoveredItem = context.hovered.get(id)
+          if (hoveredItem) {
+            hoveredItem.stopped = true
+          }
+        }
       } else {
         // All other events
         if (events[`on${name}`]) {
-          if (!isClickEvent || context.initialHits.includes(hit.eventObject)) {
+          if (!isClickEvent || (isClick && context.initialHits.includes(hit.eventObject))) {
             events[`on${name}`]?.(intersectionEvent)
           }
         }
       }
 
-      if (stopped) break dispatchEvents
+      if (stopped) {
+        stoppedAt = hits.indexOf(hit)
+        break dispatchEvents
+      }
+    }
+
+    // Update hover state after dispatch so that stopPropagation can prevent
+    // deeper objects from receiving pointerout/pointerleave. When propagation
+    // was stopped, only include hits up to and including the stopped object —
+    // farther objects should be treated as unhovered.
+    if (isPointerMove) {
+      cancelPointer(stopped ? hits.slice(0, stoppedAt + 1) : hits)
     }
   }
 

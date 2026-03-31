@@ -7,8 +7,8 @@ export const getDefaultComputeFunction = (
 ): ComputeFunction => {
   const { camera } = useThrelte()
 
-  let width = targetWritable.current.clientWidth
-  let height = targetWritable.current.clientHeight
+  let width = 0
+  let height = 0
 
   const resizeObserver = new ResizeObserver(([entry]) => {
     width = entry.contentRect.width
