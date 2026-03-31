@@ -2,8 +2,53 @@ import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { setupDom, pointer, tick, nextFrame } from './helpers.js'
 import OverlappingScene from './__fixtures__/OverlappingScene.svelte'
+import PropagationScene from './__fixtures__/PropagationScene.svelte'
 
 describe('event propagation', () => {
+  it('bubbles events from child to parent', async () => {
+    const onpointerdownChild = vi.fn()
+    const onpointerdownParent = vi.fn()
+
+    const { context, container } = render(PropagationScene, {
+      props: {
+        onpointerdownChild,
+        onpointerdownParent
+      }
+    })
+
+    await setupDom(context, container)
+    const target = context.dom
+
+    // pointerdown at center → hits Child, bubbles to Parent
+    pointer(target, 'pointerdown')
+    await tick()
+
+    expect(onpointerdownChild).toHaveBeenCalledOnce()
+    expect(onpointerdownParent).toHaveBeenCalledOnce()
+  })
+
+  it('delivers the event to the child before the parent', async () => {
+    const callOrder: string[] = []
+    const onpointerdownChild = vi.fn(() => callOrder.push('child'))
+    const onpointerdownParent = vi.fn(() => callOrder.push('parent'))
+
+    const { context, container } = render(PropagationScene, {
+      props: {
+        onpointerdownChild,
+        onpointerdownParent
+      }
+    })
+
+    await setupDom(context, container)
+    const target = context.dom
+
+    // pointerdown at center → hits Child, bubbles to Parent
+    pointer(target, 'pointerdown')
+    await tick()
+
+    expect(callOrder).toEqual(['child', 'parent'])
+  })
+
   it('delivers events to the nearest object first', async () => {
     const callOrder: string[] = []
     const onpointerdownFront = vi.fn(() => callOrder.push('front'))

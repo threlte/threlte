@@ -28,29 +28,6 @@ describe('stopPropagation', () => {
     expect(onpointerdownParent).not.toHaveBeenCalled()
   })
 
-  it('allows the event to bubble when not called', async () => {
-    const onpointerdownChild = vi.fn()
-    const onpointerdownParent = vi.fn()
-
-    const { context, container } = render(PropagationScene, {
-      props: {
-        onpointerdownChild,
-        onpointerdownParent
-      }
-    })
-
-    await setupDom(context, container)
-    const target = context.dom
-
-    // pointerdown at center → hits Child, does not stop propagation
-    pointer(target, 'pointerdown')
-    await tick()
-
-    // Both child and parent should receive the event
-    expect(onpointerdownChild).toHaveBeenCalledOnce()
-    expect(onpointerdownParent).toHaveBeenCalledOnce()
-  })
-
   it('prevents parent from receiving pointerover when child stops propagation on first hover', async () => {
     const onpointeroverChild = vi.fn((e) => e.stopPropagation())
     const onpointeroverParent = vi.fn()
@@ -73,28 +50,6 @@ describe('stopPropagation', () => {
     expect(onpointeroverChild).toHaveBeenCalledOnce()
     // Parent should not receive pointerover because Child stopped propagation
     expect(onpointeroverParent).not.toHaveBeenCalled()
-  })
-
-  it('delivers the event to the child before the parent', async () => {
-    const callOrder: string[] = []
-    const onpointerdownChild = vi.fn(() => callOrder.push('child'))
-    const onpointerdownParent = vi.fn(() => callOrder.push('parent'))
-
-    const { context, container } = render(PropagationScene, {
-      props: {
-        onpointerdownChild,
-        onpointerdownParent
-      }
-    })
-
-    await setupDom(context, container)
-    const target = context.dom
-
-    // pointerdown at center → hits Child, bubbles to Parent
-    pointer(target, 'pointerdown')
-    await tick()
-
-    expect(callOrder).toEqual(['child', 'parent'])
   })
 
   it('sets the stopped property on the event object', async () => {
