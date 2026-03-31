@@ -1,1 +1,0 @@
-import{ar as d,u,ap as n,d as p,aF as c}from"./runtime.BsM9HEgF.js";function y(s,o,e){d(()=>{var a=u(()=>o(s,e?.())||{});if(e&&a?.update){var t=!1,f={};n(()=>{var r=e();p(r),t&&c(f,r)&&(f=r,a.update(r))}),t=!0}if(a?.destroy)return()=>a.destroy()})}export{y as a};
