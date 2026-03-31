@@ -64,8 +64,16 @@ jobs:
         with:
           run_install: true
 
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
       - name: Install Playwright Browsers
-        run: pnpm --filter @threlte/core exec playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Test
         run: pnpm run test
