@@ -1,6 +1,6 @@
 import { isInstanceOf } from '@threlte/core'
 import { createTransition } from '@threlte/extras'
-import { cubicOut } from 'svelte/easing'
+import { cubicIn } from 'svelte/easing'
 
 export const fade = (opacity = 0) => {
   return createTransition((ref) => {
@@ -16,7 +16,7 @@ export const fade = (opacity = 0) => {
       tick: (t: number) => {
         ref.opacity = t * (1 - opacity)
       },
-      easing: cubicOut
+      easing: cubicIn
     }
   })
 }
