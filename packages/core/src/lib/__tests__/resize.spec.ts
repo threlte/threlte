@@ -1,32 +1,33 @@
 import { PerspectiveCamera, Vector2 } from 'three'
 import { describe, it, expect } from 'vitest'
-import { mount } from 'svelte'
+import { mount, tick } from 'svelte'
 import CanvasContext from './__fixtures__/CanvasContext.svelte'
 import type { ThrelteContext } from '../context/compounds/useThrelte.js'
 import type { Renderer } from '../context/fragments/renderer.svelte.js'
 
-const renderCanvas = (props: Record<string, unknown> = {}) => {
+const renderCanvas = async (width: number, height: number) => {
   let ctx!: ThrelteContext<Renderer>
   const target = document.createElement('div')
+  target.style.cssText = `width: ${width}px; height: ${height}px;`
   document.body.append(target)
   mount(CanvasContext, {
     target,
     props: {
       oncontext: (c: ThrelteContext<Renderer>) => {
         ctx = c
-      },
-      ...props
+      }
     }
   })
-  return ctx
+  await tick()
+  return { ctx, target }
 }
 
 describe('resize', () => {
-  it('updates renderer size when the dom element resizes', () => {
-    const ctx = renderCanvas()
+  it('updates renderer size when the dom element resizes', async () => {
+    const { ctx, target } = await renderCanvas(200, 200)
 
-    ctx.dom.style.width = '400px'
-    ctx.dom.style.height = '300px'
+    target.style.width = '400px'
+    target.style.height = '300px'
 
     ctx.scheduler.run(16)
 
@@ -35,12 +36,12 @@ describe('resize', () => {
     expect(size.y).toBe(300)
   })
 
-  it('updates camera aspect ratio on resize', () => {
-    const ctx = renderCanvas()
+  it('updates camera aspect ratio on resize', async () => {
+    const { ctx, target } = await renderCanvas(200, 200)
     const camera = ctx.camera.current as PerspectiveCamera
 
-    ctx.dom.style.width = '800px'
-    ctx.dom.style.height = '400px'
+    target.style.width = '800px'
+    target.style.height = '400px'
 
     ctx.scheduler.run(16)
 
