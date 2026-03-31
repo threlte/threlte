@@ -8,8 +8,8 @@ import PointerMissedScene from './__fixtures__/PointerMissedScene.svelte'
  * container with explicit pixel dimensions gives it real layout. Must wait for
  * ResizeObserver to fire.
  */
-const setupDom = async (context: any, container: HTMLElement) => {
-  const dom = context.dom as HTMLElement
+const setupDom = async (context: { dom: HTMLElement }, container: HTMLElement) => {
+  const dom = context.dom
   dom.style.width = '200px'
   dom.style.height = '200px'
   container.appendChild(dom)
@@ -26,7 +26,7 @@ const pointer = (target: HTMLElement, type: string, x = 100, y = 100) => {
     bubbles: true,
     pointerId: 1,
     clientX: x,
-    clientY: y,
+    clientY: y
   })
   Object.defineProperty(event, 'offsetX', { value: x })
   Object.defineProperty(event, 'offsetY', { value: y })
@@ -47,8 +47,8 @@ describe('pointerMissed', () => {
         onclickA,
         onpointermissedA,
         onpointermissedB,
-        onpointermissedC,
-      },
+        onpointermissedC
+      }
     })
 
     await setupDom(context, container)
@@ -77,8 +77,8 @@ describe('pointerMissed', () => {
       props: {
         onpointermissedA,
         onpointermissedB,
-        onpointermissedC,
-      },
+        onpointermissedC
+      }
     })
 
     await setupDom(context, container)
@@ -108,8 +108,8 @@ describe('pointerMissed', () => {
         onclickA,
         onpointermissedA,
         onpointermissedB,
-        onpointermissedC,
-      },
+        onpointermissedC
+      }
     })
 
     await setupDom(context, container)
@@ -140,8 +140,8 @@ describe('pointerMissed', () => {
         onclickA,
         onclickB,
         onpointermissedA,
-        onpointermissedB,
-      },
+        onpointermissedB
+      }
     })
 
     await setupDom(context, container)

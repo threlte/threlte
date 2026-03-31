@@ -3,17 +3,17 @@
   import { BoxGeometry, MeshBasicMaterial } from 'three'
 
   let {
-    onclickA = undefined,
-    onclickB = undefined,
-    onpointermissedA = undefined,
-    onpointermissedB = undefined,
-    onpointermissedC = undefined,
+    onclickA,
+    onclickB,
+    onpointermissedA,
+    onpointermissedB,
+    onpointermissedC
   }: {
-    onclickA?: (e: any) => void
-    onclickB?: (e: any) => void
-    onpointermissedA?: (e: any) => void
-    onpointermissedB?: (e: any) => void
-    onpointermissedC?: (e: any) => void
+    onclickA?: (event: Event) => void
+    onclickB?: (event: Event) => void
+    onpointermissedA?: (event: Event) => void
+    onpointermissedB?: (event: Event) => void
+    onpointermissedC?: (event: Event) => void
   } = $props()
 
   const geometry = new BoxGeometry(2, 2, 2)
@@ -21,7 +21,11 @@
 </script>
 
 <!-- Camera with valid aspect ratio so raycasting works in tests -->
-<T.PerspectiveCamera makeDefault args={[75, 1, 0.1, 1000]} position.z={0} />
+<T.PerspectiveCamera
+  makeDefault
+  args={[75, 1, 0.1, 1000]}
+  position.z={0}
+/>
 
 <!-- A: centered at z=-5, directly in front of the camera -->
 <T.Mesh
