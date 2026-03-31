@@ -87,6 +87,7 @@ export const createRendererContext = <T extends Renderer>(
   const { scene } = useScene()
   const {
     invalidate,
+    mainStage,
     renderStage,
     autoRender: autoRenderStore,
     scheduler,
@@ -106,6 +107,27 @@ export const createRendererContext = <T extends Renderer>(
           alpha: true
         })
   )
+
+  const resizeStage = scheduler.createStage(Symbol('threlte-resize-stage'), {
+    before: mainStage
+  })
+
+  resizeStage.createTask(Symbol('threlte-resize-task'), () => {
+    if (renderer.xr.isPresenting) return
+    if (!shouldUpdateSize()) return
+
+    renderer.setSize(size.current.width, size.current.height)
+
+    if (!manual.current) {
+      updateCamera(
+        camera.current as PerspectiveCamera | OrthographicCamera,
+        size.current.width,
+        size.current.height
+      )
+    }
+
+    invalidate()
+  })
 
   const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), () => {
     renderer.render(scene, camera.current)
@@ -191,20 +213,6 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   renderer.setAnimationLoop((time) => {
-    if (!renderer.xr.isPresenting && shouldUpdateSize()) {
-      renderer.setSize(size.current.width, size.current.height)
-
-      if (!manual.current) {
-        updateCamera(
-          camera.current as PerspectiveCamera | OrthographicCamera,
-          size.current.width,
-          size.current.height
-        )
-      }
-
-      invalidate()
-    }
-
     scheduler.run(time)
     frameInvalidated.current = false
   })
