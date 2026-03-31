@@ -46,6 +46,17 @@ describe('<T>', () => {
     expect(oncreate).toHaveBeenCalledOnce()
   })
 
+  it('reconstructs the instance when args change', async () => {
+    const oncreate = vi.fn()
+    const { scene, rerender } = render(T.BoxGeometry, { props: { args: [1, 1, 1], oncreate } })
+
+    expect(oncreate).toHaveBeenCalledTimes(1)
+
+    await rerender({ args: [2, 2, 2] })
+
+    expect(oncreate).toHaveBeenCalledTimes(2)
+  })
+
   it('creates a bindable ref', async () => {
     const group = new Group()
     const onRefCreate = vi.fn()
