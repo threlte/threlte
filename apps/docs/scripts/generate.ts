@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 const PACKAGES_DIR = resolve(__dirname, '../../../packages')
-const IGNORED_PACKAGES = ['gltf']
+const IGNORED_PACKAGES = ['gltf', 'extras', 'studio', 'theatre', 'xr', 'flex', 'rapier']
 
 interface PropInfo {
   name: string
@@ -51,7 +51,7 @@ interface OptionInfo {
 
 async function main() {
   const packages = collectPackageNames(PACKAGES_DIR, IGNORED_PACKAGES)
-  console.log('Detected packages:', packages)
+  console.log('Collected Packages:', packages)
 
   const allComponents: ComponentData[] = []
 
@@ -62,7 +62,7 @@ async function main() {
     const components = collectComponents(packageName)
 
     for (const componentPath of components) {
-      console.log('  Processing:', componentPath)
+      console.log('Processing:', componentPath)
       const data = extractComponentData(packageName, componentPath, project)
       allComponents.push(data)
     }
@@ -80,24 +80,26 @@ function collectPackageNames(packagesDir: string, ignored: string[]): string[] {
 }
 
 function collectComponents(packageName: string): string[] {
-  const libDir = resolve(PACKAGES_DIR, packageName, 'src', 'lib')
-  return getAllSvelteFiles(libDir)
-}
+  const srcIndex = resolve(PACKAGES_DIR, packageName, 'src', 'lib', 'index.ts')
 
-function getAllSvelteFiles(dir: string): string[] {
-  const filePaths: string[] = []
+  const content = readFileSync(srcIndex, 'utf-8')
+  const regex = /export.*from\s+['"]([^'"]*\.svelte)['"]/g
+  const filepaths = []
 
-  for (const entry of readdirSync(dir)) {
-    const fullPath = join(dir, entry)
-
-    if (statSync(fullPath).isDirectory()) {
-      filePaths.push(...getAllSvelteFiles(fullPath))
-    } else if (fullPath.endsWith('.svelte')) {
-      filePaths.push(fullPath)
-    }
+  let match
+  while ((match = regex.exec(content)) !== null) {
+    const relativePath = match[1]
+    const fullPath = resolve(__dirname, `../../../packages/${packageName}/src/lib`, relativePath)
+    filepaths.push(fullPath)
   }
 
-  return filePaths
+  // core is weird too? lets add T for funzies
+  if (packageName === 'core') {
+    // hardcoded because we can
+    const fullPath = resolve(__dirname, `../../../packages/core/src/lib/components/T/T.svelte`)
+    filepaths.push(fullPath)
+  }
+  return filepaths
 }
 
 function createProject(packageName: string): Project {
@@ -142,17 +144,6 @@ function extractComponentData(
   const tsxSourceFile = project.createSourceFile(tsxPath, code, { overwrite: true })
 
   const props = extractPropsFromTsx(tsxSourceFile, svelteSource, project, typesPath, name)
-  if (name === 'Canvas') {
-    const options = extractThrelteOptions(project)
-    props.push(
-      ...options.map((o) => ({
-        name: o.name,
-        type: o.type,
-        default: o.default,
-        description: undefined
-      }))
-    )
-  }
   const events = extractEvents(project, typesPath, name)
   const bindings = extractBindings(svelteSource)
   const snippets = extractSnippets(project, typesPath, name)
@@ -214,7 +205,6 @@ function extractPropsFromTsx(
 
     const propType = prop.getTypeAtLocation(sourceFile)
     let typeText = propType.getText()
-    typeText = typeText.replace(/import\(.+@types\/three\/src\/constants"\)\./, 'THREE.')
 
     let defaultValue: string | undefined
     let description: string | undefined
@@ -254,7 +244,41 @@ function extractPropsFromTsx(
     })
   }
 
+  // canvas is a weird one
+  if (componentName === 'Canvas') {
+    const options = extractThrelteOptions(project)
+    props.push(
+      ...options.map((o) => ({
+        name: o.name,
+        type: o.type,
+        default: o.default,
+        description: undefined
+      }))
+    )
+  }
+
+  // now update typeText as we need to repalce imports
+  for (let i = 0; i < props.length; i++) {
+    props[i].type = updateTypeText(props[i].type)
+  }
+
   return props
+}
+
+function updateTypeText(text: string) {
+  const regex = /import\(.+?\)\./g
+  let match
+  while ((match = regex.exec(text)) !== null) {
+    console.log(match[0])
+    if (match[0].includes('constants')) {
+      text = text.replace(regex, 'THREE.')
+    } else if (match[0].includes('packages')) {
+      text = text.replace(regex, '')
+    } else {
+      text = text.replace(regex, '')
+    }
+  }
+  return text
 }
 
 function findPropsTypeAlias(
@@ -280,8 +304,7 @@ function extractThrelteOptions(project: Project): OptionInfo[] {
   const contextAlias = typeAliases.find((t) => t.getName() === 'CreateThrelteContextOptions')
 
   if (!contextAlias) {
-    console.log('  No CreateThrelteContextOptions type alias found')
-    return []
+    throw 'No CreateThrelteContextOptions type alias found'
   }
 
   const defaultMap = collectDefaults(project, typeAliases)
@@ -295,15 +318,10 @@ function extractThrelteOptions(project: Project): OptionInfo[] {
       const typeText = prop.getTypeAtLocation(contextAlias).getText()
       return {
         name: prop.getName(),
-        type: typeText.replace(/import\(.+@types\/three\/src\/constants"\)\./, 'THREE.'),
+        type: typeText,
         default: defaultMap.get(prop.getName())
       }
     })
-
-  options.push({ name: 'children', type: 'import("svelte").Snippet<[]>', default: undefined })
-
-  console.log('  CreateThrelteContextOptions detected with defaults:')
-  options.forEach((o) => console.log('    -', o.name, o.type, 'default=', o.default))
 
   return options
 }
@@ -459,6 +477,11 @@ function extractEvents(
       type: typeText,
       description
     })
+  }
+
+  // now update typeText as we need to repalce imports
+  for (let i = 0; i < events.length; i++) {
+    events[i].type = updateTypeText(events[i].type)
   }
 
   return events
