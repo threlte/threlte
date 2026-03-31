@@ -249,7 +249,10 @@ export const setupInteractivity = (context: InteractivityContext) => {
   let lastMoveY = -Infinity
   const MIN_MOVE_DELTA = 0.25 // pixels; ignore tiny jitter
 
-  // pointermove can occur at a much higher frequency than requestAnimationFrame, throttle it
+  // Process the first pointermove in a frame immediately for responsive hover
+  // updates, then coalesce any additional moves within the same frame into one
+  // deferred rAF call. This avoids the one-frame lag that causes cursor flicker
+  // when moving rapidly between interactive objects.
   const handlePointerMove = (event: DomEvent) => {
     // ignore sub-pixel jitter to cut redundant raycasts
     if (
@@ -262,8 +265,10 @@ export const setupInteractivity = (context: InteractivityContext) => {
     lastMoveX = event.offsetX
     lastMoveY = event.offsetY
 
-    queuedMoveEvent = event
     if (!moveRAF) {
+      // First move this frame — process immediately
+      handleEvent(event)
+      // Schedule a rAF to catch any coalesced moves that arrive before the next frame
       moveRAF = requestAnimationFrame(() => {
         moveRAF = 0
         if (queuedMoveEvent) {
@@ -271,6 +276,9 @@ export const setupInteractivity = (context: InteractivityContext) => {
           queuedMoveEvent = null
         }
       })
+    } else {
+      // Additional moves this frame — queue for the rAF callback
+      queuedMoveEvent = event
     }
   }
 

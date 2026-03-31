@@ -44,7 +44,7 @@ describe('pointermove', () => {
     expect(onpointermoveA).not.toHaveBeenCalled()
   })
 
-  it('throttles pointermove to one per animation frame', async () => {
+  it('processes the first pointermove immediately and coalesces the rest', async () => {
     const onpointermoveA = vi.fn()
 
     const { context, container } = render(Scene, {
@@ -56,13 +56,20 @@ describe('pointermove', () => {
     await setupDom(context, container)
     const target = context.dom
 
-    // dispatch two pointermove events in rapid succession without waiting;
-    // the throttle should coalesce them so only the latest fires
-    pointer(target, 'pointermove', 100, 100)
-    pointer(target, 'pointermove', 101, 100)
+    // The first pointermove in a frame is processed immediately for responsive
+    // hover updates. Additional moves within the same frame are coalesced —
+    // only the latest fires on the next rAF.
+    pointer(target, 'pointermove', 100, 100) // processed immediately
+    pointer(target, 'pointermove', 101, 100) // queued
+    pointer(target, 'pointermove', 102, 100) // replaces queued
+
+    // Before rAF: only the first event has been processed
+    expect(onpointermoveA).toHaveBeenCalledOnce()
+
+    // After rAF: the last queued event is processed
     await nextFrame()
     await tick()
 
-    expect(onpointermoveA).toHaveBeenCalledOnce()
+    expect(onpointermoveA).toHaveBeenCalledTimes(2)
   })
 })
