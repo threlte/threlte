@@ -1,5 +1,14 @@
 # @threlte/extras
 
+## 9.14.1
+
+### Patch Changes
+
+- 02b7cb8: Fix: interactivity `pointerMissed` fires multiple times per click event
+- 9823f69: Add interactivity tests that match docs-described behavior
+- 9823f69: Fix: interactivity no longer silently removes the last interactive object when no objects are found
+- 9823f69: Fix: interactivity always updates handlers, even if object has already been added
+
 ## 9.14.0
 
 ### Minor Changes
