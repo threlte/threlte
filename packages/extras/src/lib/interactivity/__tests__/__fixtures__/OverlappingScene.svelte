@@ -5,20 +5,7 @@
 
   type Handler = (event: IntersectionEvent<PointerEvent>) => void
 
-  let {
-    onpointerdownFront,
-    onpointerdownBack,
-    onpointeroverFront,
-    onpointeroverBack,
-    onpointeroutFront,
-    onpointeroutBack,
-    onpointerenterFront,
-    onpointerenterBack,
-    onpointerleaveFront,
-    onpointerleaveBack,
-    onpointermoveFront,
-    onpointermoveBack
-  }: {
+  interface Props {
     onpointerdownFront?: Handler
     onpointerdownBack?: Handler
     onpointeroverFront?: Handler
@@ -31,7 +18,9 @@
     onpointerleaveBack?: Handler
     onpointermoveFront?: Handler
     onpointermoveBack?: Handler
-  } = $props()
+  }
+
+  let { ...props }: Props = $props()
 
   const geometry = new BoxGeometry(2, 2, 2)
   const material = new MeshBasicMaterial()
@@ -52,12 +41,12 @@
   {geometry}
   {material}
   position.z={-3}
-  onpointerdown={onpointerdownFront}
-  onpointerover={onpointeroverFront}
-  onpointerout={onpointeroutFront}
-  onpointerenter={onpointerenterFront}
-  onpointerleave={onpointerleaveFront}
-  onpointermove={onpointermoveFront}
+  onpointerdown={props.onpointerdownFront}
+  onpointerover={props.onpointeroverFront}
+  onpointerout={props.onpointeroutFront}
+  onpointerenter={props.onpointerenterFront}
+  onpointerleave={props.onpointerleaveFront}
+  onpointermove={props.onpointermoveFront}
 />
 
 <T.Mesh
@@ -65,10 +54,10 @@
   {geometry}
   {material}
   position.z={-7}
-  onpointerdown={onpointerdownBack}
-  onpointerover={onpointeroverBack}
-  onpointerout={onpointeroutBack}
-  onpointerenter={onpointerenterBack}
-  onpointerleave={onpointerleaveBack}
-  onpointermove={onpointermoveBack}
+  onpointerdown={props.onpointerdownBack}
+  onpointerover={props.onpointeroverBack}
+  onpointerout={props.onpointeroutBack}
+  onpointerenter={props.onpointerenterBack}
+  onpointerleave={props.onpointerleaveBack}
+  onpointermove={props.onpointermoveBack}
 />

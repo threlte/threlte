@@ -10,28 +10,7 @@
   type MissHandler = (event: MouseEvent) => void
 
   let {
-    onclickA,
-    onclickB,
-    oncontextmenuA,
-    ondblclickA,
-    onwheelA,
-    onpointerdownA,
-    onpointerupA,
-    onpointeroverA,
-    onpointeroutA,
-    onpointerenterA,
-    onpointerleaveA,
-    onpointermoveA,
-    onpointermissedA,
-    onpointeroverB,
-    onpointeroutB,
-    onpointerenterB,
-    onpointerleaveB,
-    onpointermoveB,
-    onpointermissedB,
-    onpointermissedC,
-    clickTimeThreshold,
-    clickDistanceThreshold
+    ...props
   }: {
     onclickA?: ClickHandler
     onclickB?: ClickHandler
@@ -60,8 +39,12 @@
   const ctx = useInteractivity()
 
   $effect.pre(() => {
-    if (clickTimeThreshold !== undefined) ctx.clickTimeThreshold = clickTimeThreshold
-    if (clickDistanceThreshold !== undefined) ctx.clickDistanceThreshold = clickDistanceThreshold
+    if (props.clickTimeThreshold !== undefined) {
+      ctx.clickTimeThreshold = props.clickTimeThreshold
+    }
+    if (props.clickDistanceThreshold !== undefined) {
+      ctx.clickDistanceThreshold = props.clickDistanceThreshold
+    }
   })
 
   const geometry = new BoxGeometry(2, 2, 2)
@@ -81,18 +64,18 @@
   {geometry}
   {material}
   position.z={-5}
-  onclick={onclickA}
-  oncontextmenu={oncontextmenuA}
-  ondblclick={ondblclickA}
-  onwheel={onwheelA}
-  onpointerdown={onpointerdownA}
-  onpointerup={onpointerupA}
-  onpointerover={onpointeroverA}
-  onpointerout={onpointeroutA}
-  onpointerenter={onpointerenterA}
-  onpointerleave={onpointerleaveA}
-  onpointermove={onpointermoveA}
-  onpointermissed={onpointermissedA}
+  onclick={props.onclickA}
+  oncontextmenu={props.oncontextmenuA}
+  ondblclick={props.ondblclickA}
+  onwheel={props.onwheelA}
+  onpointerdown={props.onpointerdownA}
+  onpointerup={props.onpointerupA}
+  onpointerover={props.onpointeroverA}
+  onpointerout={props.onpointeroutA}
+  onpointerenter={props.onpointerenterA}
+  onpointerleave={props.onpointerleaveA}
+  onpointermove={props.onpointermoveA}
+  onpointermissed={props.onpointermissedA}
 />
 
 <!-- B: offset to the right, won't be hit by a centered ray -->
@@ -101,13 +84,13 @@
   {geometry}
   {material}
   position={[10, 0, -5]}
-  onclick={onclickB}
-  onpointerover={onpointeroverB}
-  onpointerout={onpointeroutB}
-  onpointerenter={onpointerenterB}
-  onpointerleave={onpointerleaveB}
-  onpointermove={onpointermoveB}
-  onpointermissed={onpointermissedB}
+  onclick={props.onclickB}
+  onpointerover={props.onpointeroverB}
+  onpointerout={props.onpointeroutB}
+  onpointerenter={props.onpointerenterB}
+  onpointerleave={props.onpointerleaveB}
+  onpointermove={props.onpointermoveB}
+  onpointermissed={props.onpointermissedB}
 />
 
 <!-- C: offset to the left, no click handler — only pointermissed -->
@@ -116,5 +99,5 @@
   {geometry}
   {material}
   position={[-10, 0, -5]}
-  onpointermissed={onpointermissedC}
+  onpointermissed={props.onpointermissedC}
 />

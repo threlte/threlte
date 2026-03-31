@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { tick } from 'svelte'
-import { setupDom, pointer, nextFrame } from './helpers.js'
+import { setupDom, pointer } from './helpers.js'
 import PropagationScene from './__fixtures__/PropagationScene.svelte'
 import type { IntersectionEvent } from '../types.js'
 
