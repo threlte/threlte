@@ -20,12 +20,6 @@ export default defineConfig(({ mode }) => ({
     coverage: { include: ['src'] },
     mockReset: true,
     unstubGlobals: true,
-    // Run test files sequentially and retry once to handle Vite browser mode
-    // reload races. Late dep discovery can trigger a server reload that kills
-    // in-flight module fetches. Sequential execution limits this to at most one
-    // file, and the retry succeeds because deps are cached after the first pass.
-    fileParallelism: false,
-    retry: 1,
     browser: {
       enabled: true,
       provider: 'playwright',
