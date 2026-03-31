@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
 import { sveltekit } from '@sveltejs/kit/vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
@@ -10,8 +11,8 @@ export default defineConfig(({ mode }) => ({
   },
   ...(mode === 'test' && {
     optimizeDeps: {
-      exclude: ['@threlte/core', '@threlte/extras', '@threlte/test'],
-      entries: ['src/lib/**/*.svelte', 'src/lib/**/*.ts']
+      exclude: ['@threlte/core', '@threlte/extras'],
+      entries: ['src/lib/**/*.svelte', resolve('../core/src/lib/index.ts')]
     }
   }),
   test: {
@@ -19,6 +20,8 @@ export default defineConfig(({ mode }) => ({
     coverage: { include: ['src'] },
     mockReset: true,
     unstubGlobals: true,
+    fileParallelism: false,
+    retry: 1,
     browser: {
       enabled: true,
       provider: 'playwright',
