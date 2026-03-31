@@ -145,6 +145,11 @@ export const setupInteractivity = (context: InteractivityContext) => {
       )
     }
 
+    // Update hover state before dispatch so that pointerout/pointerleave fire
+    // before pointerover/pointerenter on newly hit objects. This ordering is
+    // important for useCursor and similar hooks that set state in both handlers.
+    if (isPointerMove) cancelPointer(hits)
+
     let stopped = false
     let stoppedAt = -1
 
@@ -229,12 +234,12 @@ export const setupInteractivity = (context: InteractivityContext) => {
       }
     }
 
-    // Update hover state after dispatch so that stopPropagation can prevent
-    // deeper objects from receiving pointerout/pointerleave. When propagation
-    // was stopped, only include hits up to and including the stopped object —
-    // farther objects should be treated as unhovered.
-    if (isPointerMove) {
-      cancelPointer(stopped ? hits.slice(0, stoppedAt + 1) : hits)
+    // When propagation was stopped, run cancelPointer again with only the hits
+    // up to the stopped object. The pre-loop cancelPointer passed all hits, so
+    // farther objects were still considered "hovered". This second pass removes
+    // them and fires pointerout/pointerleave.
+    if (isPointerMove && stopped) {
+      cancelPointer(hits.slice(0, stoppedAt + 1))
     }
   }
 

@@ -12,6 +12,10 @@
     onpointeroverBack,
     onpointeroutFront,
     onpointeroutBack,
+    onpointerenterFront,
+    onpointerenterBack,
+    onpointerleaveFront,
+    onpointerleaveBack,
     onpointermoveFront,
     onpointermoveBack,
   }: {
@@ -21,6 +25,10 @@
     onpointeroverBack?: Handler
     onpointeroutFront?: Handler
     onpointeroutBack?: Handler
+    onpointerenterFront?: Handler
+    onpointerenterBack?: Handler
+    onpointerleaveFront?: Handler
+    onpointerleaveBack?: Handler
     onpointermoveFront?: Handler
     onpointermoveBack?: Handler
   } = $props()
@@ -47,6 +55,8 @@
   onpointerdown={onpointerdownFront}
   onpointerover={onpointeroverFront}
   onpointerout={onpointeroutFront}
+  onpointerenter={onpointerenterFront}
+  onpointerleave={onpointerleaveFront}
   onpointermove={onpointermoveFront}
 />
 
@@ -58,5 +68,7 @@
   onpointerdown={onpointerdownBack}
   onpointerover={onpointeroverBack}
   onpointerout={onpointeroutBack}
+  onpointerenter={onpointerenterBack}
+  onpointerleave={onpointerleaveBack}
   onpointermove={onpointermoveBack}
 />
