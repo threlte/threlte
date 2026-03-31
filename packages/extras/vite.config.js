@@ -20,10 +20,10 @@ export default defineConfig(({ mode }) => ({
     coverage: { include: ['src'] },
     mockReset: true,
     unstubGlobals: true,
-    // Retry once — Vite browser mode can reload mid-import when dep
-    // optimization discovers new dependencies during the first run.
-    // The retry always succeeds because deps are cached after the first pass.
-    retry: 1,
+    // Run test files sequentially to avoid Vite browser mode reload races.
+    // When files load in parallel, late dep discovery can trigger a server
+    // reload that kills in-flight module fetches for larger test files.
+    fileParallelism: false,
     browser: {
       enabled: true,
       provider: 'playwright',
