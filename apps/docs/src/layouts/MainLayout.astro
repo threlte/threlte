@@ -12,7 +12,9 @@ export interface Props {
 
 const title = Astro.props.title
 
-const isBlog = Astro.url.pathname.startsWith('/blog')
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/')
+
+const isBlog = pathname.startsWith('/blog')
 ---
 
 <AppLayout {title}>
@@ -32,7 +34,7 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
   >
     <!-- Header Left -->
     <div class="flex flex-row items-center gap-12">
-      <a href="/">
+      <a href={import.meta.env.BASE_URL}>
         <Image
           src={LogoWithText}
           alt="threlte logo"
@@ -47,13 +49,13 @@ const isBlog = Astro.url.pathname.startsWith('/blog')
         <!-- <a href="/showcase">Showcase</a> -->
         <a
           class="hover:text-white"
-          href="/docs/learn/getting-started/introduction"
+          href={`${import.meta.env.BASE_URL}docs/learn/getting-started/introduction`}
           >Documentation</a
         >
         <a
           class="hover:text-white"
           class:list={[isBlog && 'text-orange']}
-          href="/blog"
+          href={`${import.meta.env.BASE_URL}blog`}
           >Blog</a
         >
       </nav>

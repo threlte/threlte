@@ -5,15 +5,16 @@ import Sidebar from './LeftSidebar.svelte'
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-const activeSidebarTab: 'learn' | 'reference' | 'examples' = Astro.url.pathname.startsWith(
-  '/docs/learn'
-)
+// Strip the base path so route matching works regardless of deployment prefix
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/')
+
+const activeSidebarTab: 'learn' | 'reference' | 'examples' = pathname.startsWith('/docs/learn')
   ? 'learn'
-  : Astro.url.pathname.startsWith('/docs/examples')
+  : pathname.startsWith('/docs/examples')
     ? 'examples'
     : 'reference'
 
-const activeUrlPathName = Astro.url.pathname
+const activeUrlPathName = pathname
 
 const referenceUrlMap: Record<(typeof referenceCategories)[number], string> = {
   '@threlte/core': '/docs/reference/core',

@@ -26,11 +26,13 @@ const title = Astro.props.title
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-const activeSidebarTab: 'learn' | 'reference' = Astro.url.pathname.startsWith('/docs/learn')
+const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/')
+
+const activeSidebarTab: 'learn' | 'reference' = pathname.startsWith('/docs/learn')
   ? 'learn'
   : 'reference'
 
-const activeUrlPathName = Astro.url.pathname
+const activeUrlPathName = pathname
 
 const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-white group'
 const activeLinkStyles = 'text-orange!'
@@ -43,7 +45,7 @@ const activeLinkStyles = 'text-orange!'
     transition:name="desktop_nav"
   >
     <div class="justify flex items-center justify-start gap-6 xl:gap-12">
-      <a href="/">
+      <a href={import.meta.env.BASE_URL}>
         <Image
           src={Logo}
           alt="threlte logo"
@@ -64,14 +66,14 @@ const activeLinkStyles = 'text-orange!'
 
       <div class="flex h-[30px] flex-row items-center justify-start gap-4 lg:gap-6">
         <a
-          href="/docs/learn/getting-started/introduction"
+          href={`${import.meta.env.BASE_URL}docs/learn/getting-started/introduction`}
           class:list={[linkStyles, activeUrlPathName.includes('/docs/learn') && activeLinkStyles]}
         >
           <Book class="hidden h-[16px] lg:block" />Learn
         </a>
 
         <a
-          href="/docs/examples/examples"
+          href={`${import.meta.env.BASE_URL}docs/examples/examples`}
           class:list={[
             linkStyles,
             activeUrlPathName.includes('/docs/examples') && activeLinkStyles
@@ -84,7 +86,7 @@ const activeLinkStyles = 'text-orange!'
 
         <div class="relative flex items-center gap-6">
           <a
-            href="/docs/reference/core/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/core/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/core') && activeLinkStyles
@@ -93,7 +95,7 @@ const activeLinkStyles = 'text-orange!'
             <Package class="hidden h-[16px] md:block" />core</a
           >
           <a
-            href="/docs/reference/extras/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/extras/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/extras') && activeLinkStyles
@@ -102,7 +104,7 @@ const activeLinkStyles = 'text-orange!'
             <Package class="hidden h-[16px] md:block" />extras</a
           >
           <a
-            href="/docs/reference/gltf/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/gltf/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/gltf') && activeLinkStyles
@@ -111,7 +113,7 @@ const activeLinkStyles = 'text-orange!'
             <Package class="hidden h-[16px] md:block" />gltf</a
           >
           <a
-            href="/docs/reference/rapier/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/rapier/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/rapier') && activeLinkStyles
@@ -120,7 +122,7 @@ const activeLinkStyles = 'text-orange!'
             <Package class="hidden h-[16px] md:block" />rapier</a
           >
           <a
-            href="/docs/reference/theatre/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/theatre/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/theatre') && activeLinkStyles
@@ -129,7 +131,7 @@ const activeLinkStyles = 'text-orange!'
             <Package class="hidden h-[16px] md:block" />theatre</a
           >
           <a
-            href="/docs/reference/xr/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/xr/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/xr') && activeLinkStyles
@@ -138,7 +140,7 @@ const activeLinkStyles = 'text-orange!'
             <Package class="hidden h-[16px] md:block" />xr
           </a>
           <a
-            href="/docs/reference/flex/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/flex/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/flex') && activeLinkStyles
@@ -147,7 +149,7 @@ const activeLinkStyles = 'text-orange!'
             <Package class="hidden h-[16px] md:block" />flex
           </a>
           <a
-            href="/docs/reference/studio/getting-started"
+            href={`${import.meta.env.BASE_URL}docs/reference/studio/getting-started`}
             class:list={[
               linkStyles,
               activeUrlPathName.includes('/docs/reference/studio') && activeLinkStyles
