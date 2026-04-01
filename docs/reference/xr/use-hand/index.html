@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-[#0A0F19]">
   <head>
+    <script>(function(){const base = "/threlte/";
+
+      if (base !== '/' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.register(base + 'sw-base-rewrite.js', { scope: base }).then((reg) => {
+          // On first visit the SW isn't active yet — reload once it takes control
+          // so all asset requests go through the rewriter
+          if (!navigator.serviceWorker.controller) {
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              window.location.reload()
+            }, { once: true })
+          }
+        })
+      }
+    })();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>useHand | @threlte/xr</title>
@@ -286,8 +300,8 @@
 	animation-duration: 180ms;
 	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
 	animation-fill-mode: both;
-	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-zqizi6vp-4"] { view-transition-name: astro-zqizi6vp-4; }</style></head>
-  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-zqizi6vp-4">
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-kyllinzg-4"] { view-transition-name: astro-kyllinzg-4; }</style></head>
+  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-kyllinzg-4">
     
   <script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).only=e;window.dispatchEvent(new Event("astro:only"));})();</script><astro-island uid="1mK3Ef" component-url="/threlte/_astro/Markprompt.LXGYI8j5.js" component-export="default" renderer-url="/threlte/_astro/client.C2q8ziLu.js" props="{}" ssr client="only" opts="{&quot;name&quot;:&quot;Markprompt&quot;,&quot;value&quot;:&quot;preact&quot;}"></astro-island>
   <header class="border-b-orange/25 fixed z-40 mx-auto hidden h-[var(--docs-navbar-height)] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex" data-astro-transition-scope="astro-x42chjtd-1">
