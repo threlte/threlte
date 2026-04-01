@@ -56,13 +56,13 @@ interface CursorContext {
 }
 
 export const useCursor = (
-  onPointerOver: Cursor | Writable<Cursor> = 'pointer',
+  cursor: Cursor | Writable<Cursor> = 'pointer',
 
   /**
    * @deprecated Set the default cursor in CSS instead. This parameter will be removed in a future version.
    */
   onPointerOut?: Cursor | Writable<Cursor>,
-  target: HTMLElement | undefined = undefined
+  target?: HTMLElement | undefined
 ): {
   onPointerEnter: () => void
   onPointerLeave: () => void
@@ -100,7 +100,7 @@ export const useCursor = (
     )
   }
 
-  const ctx = useThrelteUserContext<CursorContext>('threlte-cursor', () => {
+  const ctx = useThrelteUserContext<CursorContext>('threlte-extras-use-cursor', () => {
     const originalCursor = el.style.cursor
     const active: CursorInstance[] = []
 
@@ -117,7 +117,7 @@ export const useCursor = (
         if (index === -1) return
         active.splice(index, 1)
         if (active.length > 0) {
-          el.style.cursor = active[active.length - 1]!.cursor
+          el.style.cursor = active[active.length - 1]?.cursor
         } else {
           el.style.cursor = instance.fallback ?? originalCursor
         }
@@ -130,12 +130,10 @@ export const useCursor = (
     }
   })
 
-  // Reactively track cursor values. If onPointerOver or onPointerOut is a
+  // Reactively track cursor values. If cursor or onPointerOut is a
   // store, this effect re-runs when the store changes, keeping the instance
   // in sync and refreshing the cursor if this instance is currently active.
-  const cursorStore = fromStore(
-    typeof onPointerOver === 'string' ? writable(onPointerOver) : onPointerOver
-  )
+  const cursorStore = fromStore(typeof cursor === 'string' ? writable(cursor) : cursor)
   const fallbackStore =
     onPointerOut !== undefined
       ? fromStore(typeof onPointerOut === 'string' ? writable(onPointerOut) : onPointerOut)
