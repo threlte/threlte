@@ -73,23 +73,22 @@ jobs:
             const previewUrl = `https://${owner}.github.io/${repo}/previews/pr-${prNumber}/`;
             const body = `📖 Docs preview deployed to: ${previewUrl}\n\nLast updated: <relative-time datetime="${new Date().toISOString()}">${new Date().toISOString()}</relative-time>`;
 
-            // Check if we already commented
+            // Delete previous preview comment so the new one appears at the bottom
             const comments = await github.rest.issues.listComments({
               owner, repo, issue_number: prNumber
             });
             const existing = comments.data.find(c =>
               c.user.login === 'github-actions[bot]' && c.body.includes('Docs preview deployed')
             );
-
             if (existing) {
-              await github.rest.issues.updateComment({
-                owner, repo, comment_id: existing.id, body
-              });
-            } else {
-              await github.rest.issues.createComment({
-                owner, repo, issue_number: prNumber, body
+              await github.rest.issues.deleteComment({
+                owner, repo, comment_id: existing.id
               });
             }
+
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: prNumber, body
+            });
 
   cleanup-preview:
     if: github.event.action == 'closed'
