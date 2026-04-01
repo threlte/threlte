@@ -71,7 +71,8 @@ jobs:
             const repo = context.repo.repo;
             // TODO: Update to https://threlte.xyz once the custom domain is linked
             const previewUrl = `https://${owner}.github.io/${repo}/previews/pr-${prNumber}/`;
-            const body = `📖 Docs preview deployed to: ${previewUrl}`;
+            const time = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'UTC' });
+            const body = `📖 Docs preview deployed to: ${previewUrl}\n\nLast updated: ${time} UTC`;
 
             // Check if we already commented
             const comments = await github.rest.issues.listComments({
