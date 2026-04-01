@@ -27,25 +27,31 @@
   ]
 </script>
 
-<Suspense final>
-  <T.OrthographicCamera
-    position={[-40, 25, 40]}
-    makeDefault
-    {zoom}
-    oncreate={(ref) => {
-      ref.lookAt(0, 0, -8)
-    }}
-  >
-    <OrbitControls />
-  </T.OrthographicCamera>
-
-  <T.SpotLight
-    position={[0, 25, 0]}
-    castShadow
-    intensity={1000}
-    angle={Math.PI / 3}
+<T.OrthographicCamera
+  position={[-40, 25, 40]}
+  makeDefault
+  {zoom}
+  oncreate={(ref) => {
+    ref.lookAt(0, 0, -8)
+  }}
+>
+  <OrbitControls
+    enableDamping
+    target={[0, 0, -8]}
   />
+</T.OrthographicCamera>
 
+<T.SpotLight
+  position={[0, 25, 0]}
+  castShadow
+  shadow.bias={-0.0001}
+  shadow.mapSize.width={2 ** 11}
+  shadow.mapSize.height={2 ** 11}
+  intensity={1000}
+  angle={Math.PI / 3}
+/>
+
+<Suspense>
   {#each ships as ship (ship)}
     <Spaceship
       name={ship.name}

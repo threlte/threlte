@@ -64,5 +64,8 @@ jobs:
         with:
           run_install: true
 
+      - name: Install Playwright Browsers
+        run: pnpm --filter @threlte/core --filter @threlte/extras exec playwright install --with-deps chromium
+
       - name: Test
         run: pnpm run test

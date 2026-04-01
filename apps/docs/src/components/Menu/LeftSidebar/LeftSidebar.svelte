@@ -3,8 +3,8 @@
 
   export let menu: Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
   export let activeSidebarTab: 'learn' | 'reference' | 'examples'
-
   export let activeUrlPathName: string
+  export let baseUrl: string
 </script>
 
 <nav class="relative hidden h-full w-full pr-2 pl-6 md:block">
@@ -17,6 +17,7 @@
         <LeftSidebarCategory
           {category}
           {activeUrlPathName}
+          {baseUrl}
         />
       </li>
     {/each}

@@ -1,3 +1,4 @@
+import { useThrelteUserContext } from '@threlte/core'
 import type { LiteralUnion } from 'type-fest'
 
 type Cursor = LiteralUnion<
@@ -39,9 +40,21 @@ type Cursor = LiteralUnion<
   string
 >
 
+interface CursorInstance {
+  cursor: string
+}
+
+interface CursorContext {
+  active: CursorInstance[]
+  originalCursor: string
+  el: HTMLElement
+  add: (instance: CursorInstance) => void
+  remove: (instance: CursorInstance) => void
+  refresh: () => void
+}
+
 export const useCursor = (
-  onPointerOver: Cursor | (() => Cursor) = 'pointer',
-  onPointerOut: Cursor | (() => Cursor) = 'auto',
+  cursor: Cursor | (() => Cursor) = 'pointer',
   target: HTMLElement | undefined = undefined
 ): {
   onPointerEnter: () => void
@@ -50,14 +63,19 @@ export const useCursor = (
 } => {
   let hovering = $state(false)
 
+  const instance: CursorInstance = { cursor: '' }
+
   const onPointerEnter = () => {
     hovering = true
-  }
-  const onPointerLeave = () => {
-    hovering = false
+    ctx.add(instance)
   }
 
-  // Account for SSR use
+  const onPointerLeave = () => {
+    hovering = false
+    ctx.remove(instance)
+  }
+
+  // Account for SSR
   if (typeof window === 'undefined') {
     return {
       hovering: {
@@ -70,22 +88,51 @@ export const useCursor = (
     }
   }
 
-  const pointerOver = $derived(
-    typeof onPointerOver === 'function' ? onPointerOver() : onPointerOver
-  )
-  const pointerOut = $derived(typeof onPointerOut === 'function' ? onPointerOut() : onPointerOut)
-
   const el: HTMLElement = target ?? document.body
-  const originalCursor = el.style.cursor
 
-  $effect(() => {
-    el.style.cursor = hovering ? pointerOver : pointerOut
+  const ctx = useThrelteUserContext<CursorContext>('threlte-extras-use-cursor', () => {
+    const originalCursor = el.style.cursor
+    const active: CursorInstance[] = []
+
+    return {
+      active,
+      originalCursor,
+      el,
+      add(instance: CursorInstance) {
+        active.push(instance)
+        el.style.cursor = instance.cursor
+      },
+      remove(instance: CursorInstance) {
+        const index = active.indexOf(instance)
+        if (index === -1) return
+        active.splice(index, 1)
+        if (active.length > 0) {
+          el.style.cursor = active[active.length - 1]?.cursor
+        } else {
+          el.style.cursor = originalCursor
+        }
+      },
+      refresh() {
+        if (active.length > 0) {
+          el.style.cursor = active[active.length - 1]!.cursor
+        }
+      }
+    }
   })
 
-  // Reset the cursor style
+  const resolvedCursor = typeof cursor === 'string' ? () => cursor : cursor
+
+  $effect.pre(() => {
+    instance.cursor = resolvedCursor()
+    if (hovering) {
+      ctx.refresh()
+    }
+  })
+
+  // Clean up on unmount
   $effect(() => {
     return () => {
-      el.style.cursor = originalCursor
+      ctx.remove(instance)
     }
   })
 

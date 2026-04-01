@@ -52,7 +52,7 @@ The following interaction events are available:
   onpointerenter={(e) => console.log('enter')}
   onpointerleave={(e) => console.log('leave')}
   onpointermove={(e) => console.log('move')}
-  onpointermissed={() => console.log('missed')}
+  onpointermissed={(e) => console.log('missed')}
 />
 ```
 
@@ -62,15 +62,23 @@ All interaction events contain the following data:
 
 ```typescript
 type Event = THREE.Intersection & {
-  intersections: THREE.Intersection[] // The first intersection of each intersected object
+  // Inherited from THREE.Intersection:
   object: THREE.Object3D // The object that was actually hit
+  distance: number // Distance from the ray origin to the intersection
+  point: THREE.Vector3 // The intersection point in world coordinates
+  face: THREE.Face | null // The intersected face
+  // ... and other THREE.Intersection properties (uv, normal, instanceId, etc.)
+
+  // Added by interactivity:
   eventObject: THREE.Object3D // The object that registered the event
+  intersections: Intersection[] // All intersections, including the eventObject that registered each handler
   camera: THREE.Camera // The camera used for raycasting
-  delta: THREE.Vector2 //  Distance between mouse down and mouse up event in pixels
+  delta: number // Distance in pixels between the pointerdown position and this event's position (0 for non-click events)
   nativeEvent: MouseEvent | PointerEvent | WheelEvent // The native browser event
   pointer: Vector2 // The pointer position in normalized device coordinates
   ray: THREE.Ray // The ray used for raycasting
-  stopPropagation: () => void // Function to stop propagation of the event
+  stopPropagation: () => void // Stops the event from being delivered to farther objects
+  stopImmediatePropagation: () => void // Delegates to the native DOM event, blocking all further listeners (e.g. OrbitControls)
   stopped: boolean // Whether the event propagation has been stopped
 }
 ```
@@ -208,6 +216,8 @@ export type State = {
   interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction
   filter?: FilterFunction
+  clickDistanceThreshold: number
+  clickTimeThreshold: number
 }
 ```
 

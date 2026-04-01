@@ -16,6 +16,25 @@ const title = Astro.props.title
   class="bg-[#0A0F19]"
 >
   <head>
+    <script is:inline define:vars={{ base: import.meta.env.BASE_URL }}>
+      if (base !== '/' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register(base + 'sw-base-rewrite.js', { scope: base })
+          .then((reg) => {
+            // On first visit the SW isn't active yet — reload once it takes control
+            // so all asset requests go through the rewriter
+            if (!navigator.serviceWorker.controller) {
+              navigator.serviceWorker.addEventListener(
+                'controllerchange',
+                () => {
+                  window.location.reload()
+                },
+                { once: true }
+              )
+            }
+          })
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -39,32 +58,32 @@ const title = Astro.props.title
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="/icons/apple-touch-icon.png"
+      href={`${import.meta.env.BASE_URL}icons/apple-touch-icon.png`}
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="/icons/favicon-32x32.png"
+      href={`${import.meta.env.BASE_URL}icons/favicon-32x32.png`}
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="/icons/favicon-16x16.png"
+      href={`${import.meta.env.BASE_URL}icons/favicon-16x16.png`}
     />
     <link
       rel="manifest"
-      href="/icons/site.webmanifest"
+      href={`${import.meta.env.BASE_URL}icons/site.webmanifest`}
     />
     <link
       rel="mask-icon"
-      href="/icons/safari-pinned-tab.svg"
+      href={`${import.meta.env.BASE_URL}icons/safari-pinned-tab.svg`}
       color="#fe3d00"
     />
     <link
       rel="shortcut icon"
-      href="/icons/favicon.ico"
+      href={`${import.meta.env.BASE_URL}icons/favicon.ico`}
     />
     <meta
       name="msapplication-TileColor"
@@ -72,7 +91,7 @@ const title = Astro.props.title
     />
     <meta
       name="msapplication-config"
-      content="/icons/browserconfig.xml"
+      content={`${import.meta.env.BASE_URL}icons/browserconfig.xml`}
     />
     <meta
       name="theme-color"

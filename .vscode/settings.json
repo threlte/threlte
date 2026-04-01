@@ -1,5 +1,11 @@
 {
-  "eslint.validate": ["javascript", "svelte"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "svelte",
+    "typescript",
+    "typescriptreact"
+  ],
   "prettier.documentSelectors": ["**/*.svelte"],
   "js/ts.preferences.importModuleSpecifier": "relative",
   "[svelte]": {

@@ -1,5 +1,21 @@
 # @threlte/core
 
+## 8.5.5
+
+### Patch Changes
+
+- 1c778ba: Use reactive devicePixelRatio to account for browser zoom
+- 3054b68: Resolve all state_referenced_locally warnings
+- bc2215b: Fix: `useTask` leaks `fn` in `autoInvalidations` on unmount
+- dc8b512: Prevent flickering when resizing viewport
+- 9215d09: Defer disposal until unmount when `<T>` is given multiple instances via the `is` property
+
+## 8.5.4
+
+### Patch Changes
+
+- d9ad8f1: Fix case where `useTask`'s running option would run even if set to false
+
 ## 8.5.3
 
 ### Patch Changes

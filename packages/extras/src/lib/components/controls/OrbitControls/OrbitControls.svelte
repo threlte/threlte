@@ -1,6 +1,9 @@
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+  import {
+    OrbitControls as ThreeOrbitControls,
+    type OrbitControlsEventMap
+  } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext.js'
   import type { OrbitControlsProps } from './types.js'
   import type { Event, OrthographicCamera, PerspectiveCamera } from 'three'
@@ -44,17 +47,15 @@
     }
   )
 
-  $effect.pre(() => {
-    const handleChange = (event: Event<any, ThreeOrbitControls>) => {
-      invalidate()
-      props.onchange?.(event)
-    }
+  const handleChange = (event: Event<keyof OrbitControlsEventMap, ThreeOrbitControls>) => {
+    invalidate()
+    props.onchange?.(event)
+  }
 
+  $effect.pre(() => {
     orbitControls.set(controls)
-    controls.addEventListener('change', handleChange)
     return () => {
       orbitControls.set(undefined)
-      controls.removeEventListener('change', handleChange)
     }
   })
 </script>
@@ -63,6 +64,7 @@
   is={controls}
   bind:ref
   {...props}
+  onchange={handleChange}
 >
   {@render children?.({ ref: controls })}
 </T>

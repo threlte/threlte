@@ -54,6 +54,11 @@ export type SchedulerContext = {
    * on-demand rendering.
    */
   renderStage: Stage
+
+  /**
+   * @deprecated Use frameInvalidated.current = false
+   */
+  resetFrameInvalidation: () => void
 }
 
 export type CreateSchedulerContextOptions = {
@@ -67,9 +72,12 @@ export const createSchedulerContext = (
   const scheduler = new Scheduler()
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
 
-  let opts = $derived(options())
-  let autoRender = $derived(opts.autoRender ?? true)
-  let renderMode = $derived(opts.renderMode ?? 'on-demand')
+  const opts = $derived(options())
+  const optsAutoRender = $state(opts.autoRender)
+  const optsRenderMode = $state(opts.renderMode)
+
+  let autoRender = $derived(optsAutoRender ?? true)
+  let renderMode = $derived(optsRenderMode ?? 'on-demand')
 
   const autoInvalidations = new Set()
 
@@ -122,7 +130,10 @@ export const createSchedulerContext = (
           runTasks()
         }
       }
-    })
+    }),
+    resetFrameInvalidation() {
+      frameInvalidated = false
+    }
   }
 
   $effect(() => {

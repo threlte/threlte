@@ -1,4 +1,6 @@
 import { getContext, setContext } from 'svelte'
+import { useMeasure } from '../../utilities/useMeasure.svelte.js'
+
 export interface DOMContext {
   /** The canvas wrapper element */
   dom: HTMLElement
@@ -15,35 +17,20 @@ export type CreateDOMContextOptions = {
   canvas: HTMLCanvasElement
 }
 
-export const createDOMContext = (options: CreateDOMContextOptions) => {
-  const { dom, canvas } = options
+export const createDOMContext = (
+  options: CreateDOMContextOptions | (() => CreateDOMContextOptions)
+) => {
+  const opts = typeof options === 'function' ? options() : options
+  const { dom, canvas } = opts
 
-  let size = $state.raw({
-    width: dom.offsetWidth,
-    height: dom.offsetHeight
-  })
-
-  const resizeObserver = new ResizeObserver(() => {
-    const { offsetWidth, offsetHeight } = dom
-    if (size.width !== offsetWidth || size.height !== offsetHeight) {
-      size = { width: offsetWidth, height: offsetHeight }
-    }
-  })
-
-  $effect(() => {
-    resizeObserver.observe(dom)
-
-    return () => {
-      resizeObserver.disconnect()
-    }
-  })
+  const { size } = useMeasure(dom)
 
   const context: DOMContext = {
     dom,
     canvas,
     size: {
       get current() {
-        return size
+        return size.current
       }
     }
   }

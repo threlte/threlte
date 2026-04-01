@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "9.13.0",
+  "version": "9.14.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Utilities, abstractions and plugins for your Threlte apps",
@@ -10,6 +10,8 @@
     "prepare": "svelte-kit sync",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
     "cleanup": "rimraf node_modules .svelte-kit dist"
@@ -38,6 +40,10 @@
     "type-fest": "catalog:",
     "typescript": "catalog:",
     "typescript-eslint": "catalog:",
+    "@threlte/test": "^1.0.0",
+    "@vitest/browser": "^3.2.4",
+    "playwright": "^1.58.2",
+    "vitest": "catalog:",
     "vite": "catalog:"
   },
   "peerDependencies": {

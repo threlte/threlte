@@ -39,10 +39,11 @@ export {
 // contexts
 export type { ThrelteContext } from './context/compounds/useThrelte.js'
 export { createThrelteContext } from './context/createThrelteContext.svelte.js'
+export { createParent, useParent } from './components/T/utils/useParent.svelte.js'
+export { createCacheContext, useCache } from './context/fragments/cache.js'
 export { createCameraContext, useCamera } from './context/fragments/camera.svelte.js'
 export { createDOMContext, useDOM } from './context/fragments/dom.svelte.js'
 export { createDisposalContext, useDisposal } from './context/fragments/disposal.svelte.js'
-export { createParent, useParent } from './components/T/utils/useParent.svelte.js'
 export {
   createParentObject3D,
   useParentObject3D
@@ -51,7 +52,6 @@ export { createRendererContext, useRenderer } from './context/fragments/renderer
 export { createSceneContext, useScene } from './context/fragments/scene.js'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte.js'
 export { createUserContext } from './context/fragments/user.js'
-export { createCacheContext, useCache } from './context/fragments/cache.js'
 
 // utils
 export { observe } from './utilities/observe.svelte.js'

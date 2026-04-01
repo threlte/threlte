@@ -1,0 +1,95 @@
+---
+category: '@threlte/extras'
+group: 'Interaction'
+sourcePath: 'packages/extras/src/lib/hooks/useTrailTexture.svelte.ts'
+title: useTrailTexture
+type: 'hook'
+---
+
+A hook that creates a canvas-based trail texture driven by pointer movement. The texture can be used as a displacement map, alpha map, or in any other way a `Texture` can be used.
+
+<Example path="extras/use-trail-texture" />
+
+### Usage
+
+Pass the returned `onPointerMove` handler to a mesh and use the `texture` as a displacement map:
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { useTrailTexture, interactivity } from '@threlte/extras'
+
+  interactivity()
+
+  const { texture, onPointerMove } = useTrailTexture(() => ({
+    size: 512,
+    radius: 0.3,
+    maxAge: 750,
+    intensity: 0.4
+  }))
+</script>
+
+<T.Mesh onpointermove={onPointerMove}>
+  <T.PlaneGeometry args={[3, 3, 128, 128]} />
+  <T.MeshStandardMaterial
+    displacementMap={texture}
+    displacementScale={0.3}
+  />
+</T.Mesh>
+```
+
+### Programmatic Usage
+
+Use `setTrail` to drive the trail from any source, not just pointer events.
+
+<Example path="extras/use-trail-texture/programmatic" />
+
+```svelte
+<script lang="ts">
+  import { useTask } from '@threlte/core'
+  import { useTrailTexture } from '@threlte/extras'
+
+  const { texture, setTrail } = useTrailTexture()
+
+  let time = 0
+  useTask((delta) => {
+    time += delta
+    const x = 0.5 + Math.cos(time) * 0.3
+    const y = 0.5 + Math.sin(time) * 0.3
+    setTrail(x, y)
+  })
+</script>
+```
+
+### Options
+
+```ts
+const {
+  // CanvasTexture updated every frame with the trail
+  texture,
+  // Event handler to pass to onpointermove
+  onPointerMove,
+  // Programmatically add a trail point at UV coordinates
+  setTrail
+} = useTrailTexture(() => ({
+  // Texture resolution in pixels (default: 256)
+  size: 256,
+  // Max lifetime of trail points in ms (default: 750)
+  maxAge: 750,
+  // Radius of the trail brush, 0-1 (default: 0.3)
+  radius: 0.3,
+  // Opacity of trail points, 0-1 (default: 0.2)
+  intensity: 0.2,
+  // Interpolated points between sparse pointer events (default: 0)
+  interpolate: 0,
+  // Moving average smoothing factor for pointer force (default: 0)
+  smoothing: 0,
+  // Minimum pointer force threshold (default: 0.3)
+  minForce: 0.3,
+  // Canvas blend mode (default: 'screen')
+  blend: 'screen' as GlobalCompositeOperation,
+  // Easing function for intensity falloff (default: easeCircleOut)
+  // Compatible with svelte/easing functions, e.g. cubicOut
+  ease: (t: number) => Math.sqrt(1 - Math.pow(t - 1, 2))
+}))
+```

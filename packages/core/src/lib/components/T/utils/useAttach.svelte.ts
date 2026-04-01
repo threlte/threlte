@@ -10,11 +10,10 @@ const isObject = (ref: unknown): ref is Record<string, any> => {
 }
 
 export const useAttach = <T extends MaybeInstance<any>>(
-  getRef: () => T,
-  getAttach: () => BaseProps<T>['attach']
+  ref: () => T,
+  attach: () => BaseProps<T>['attach']
 ) => {
   const { invalidate } = useThrelte()
-  const attach = $derived(getAttach())
   const parent = useParent()
   const parentObject3D = useParentObject3D()
 
@@ -22,32 +21,33 @@ export const useAttach = <T extends MaybeInstance<any>>(
     invalidate()
 
     // Save the current ref in case it is destroyed / changed
-    const ref = getRef()
+    const currentRef = ref()
+    const currentAttach = attach()
 
     // Most common: auto-attach to parent Object3D
-    if (attach === undefined && isInstanceOf(ref, 'Object3D')) {
-      const currentParentObject3D = parentObject3D.current
-      currentParentObject3D?.add(ref)
+    if (currentAttach === undefined && isInstanceOf(currentRef, 'Object3D')) {
+      const currentParent = parentObject3D.current
+      currentParent?.add(currentRef)
       return () => {
         invalidate()
-        currentParentObject3D?.remove(ref)
+        currentParent?.remove(currentRef)
       }
     }
 
     // Auto-attach to parent material or geometry
-    if (attach === undefined && isObject(parent.current)) {
+    if (currentAttach === undefined && isObject(parent.current)) {
       const currentParent = parent.current
 
-      if (isInstanceOf(ref, 'Material')) {
+      if (isInstanceOf(currentRef, 'Material')) {
         const originalMaterial = currentParent.material
-        currentParent.material = ref
+        currentParent.material = currentRef
         return () => {
           invalidate()
           currentParent.material = originalMaterial
         }
-      } else if (isInstanceOf(ref, 'BufferGeometry')) {
+      } else if (isInstanceOf(currentRef, 'BufferGeometry')) {
         const originalGeometry = currentParent.geometry
-        currentParent.geometry = ref
+        currentParent.geometry = currentRef
         return () => {
           invalidate()
           currentParent.geometry = originalGeometry
@@ -56,16 +56,16 @@ export const useAttach = <T extends MaybeInstance<any>>(
     }
 
     // Explicitly do not attach
-    if (attach === false) {
+    if (currentAttach === false) {
       return () => {
         invalidate()
       }
     }
 
     // Custom attach function
-    if (typeof attach === 'function') {
-      const cleanup = attach({
-        ref: ref as MaybeInstance<T>,
+    if (typeof currentAttach === 'function') {
+      const cleanup = currentAttach({
+        ref: currentRef as MaybeInstance<T>,
         parent: parent.current,
         parentObject3D: parentObject3D.current
       })
@@ -76,14 +76,14 @@ export const useAttach = <T extends MaybeInstance<any>>(
     }
 
     // Attach to parent prop
-    if (typeof attach === 'string') {
-      const { target, key } = resolvePropertyPath(parent.current, attach)
+    if (typeof currentAttach === 'string') {
+      const { target, key } = resolvePropertyPath(parent.current, currentAttach)
 
       if (key in target) {
         // If the key is already in the target, we need to save
         // the value before attaching …
         const valueBeforeAttach = target[key]
-        target[key] = ref
+        target[key] = currentRef
         return () => {
           invalidate()
           // … and restore it when the component unmounts
@@ -91,7 +91,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
         }
       } else {
         // If the key is not in the target, we need to add it …
-        target[key] = ref
+        target[key] = currentRef
         return () => {
           invalidate()
           // … and delete it when the component unmounts
@@ -101,11 +101,11 @@ export const useAttach = <T extends MaybeInstance<any>>(
     }
 
     // Attach to parent Object3D
-    if (isInstanceOf(attach, 'Object3D') && isInstanceOf(ref, 'Object3D')) {
-      attach.add(ref)
+    if (isInstanceOf(currentAttach, 'Object3D') && isInstanceOf(currentRef, 'Object3D')) {
+      currentAttach.add(currentRef)
       return () => {
         invalidate()
-        attach.remove(ref)
+        currentAttach.remove(currentRef)
       }
     }
 

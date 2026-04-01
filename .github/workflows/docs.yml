@@ -1,0 +1,63 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
+
+      - name: Build docs
+        env:
+          # TODO: Remove BASE_PATH once threlte.xyz custom domain is linked
+          BASE_PATH: /threlte
+        run: pnpm run build:docs
+
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Deploy to gh-pages
+        run: |
+          # Preserve the previews directory
+          if [ -d gh-pages/previews ]; then
+            cp -r gh-pages/previews apps/docs/dist/previews
+          fi
+
+          cd gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Replace everything except .git
+          find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
+          cp -r ../apps/docs/dist/* .
+          touch .nojekyll
+
+          git add -A
+          git diff --staged --quiet || git commit -m "Deploy docs from ${{ github.sha }}"
+          git pull --rebase
+          git push

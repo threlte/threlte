@@ -1,4 +1,4 @@
-import type * as THREE from 'three'
+import type { Points, Object3D } from 'three'
 import { type InteractivityContext, useInteractivity } from './context.svelte.js'
 import type { DomEvent, Intersection, IntersectionEvent } from './types.js'
 
@@ -59,12 +59,31 @@ export const setupInteractivity = (context: InteractivityContext) => {
     if (!context.enabled.current) return []
 
     const intersections: Intersection[] = []
-    const hits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const rawHits = context.raycaster.intersectObjects(context.interactiveObjects, true)
+    const seen = new Set<string>()
+    // Deduplicate hits by object. When recursive=true, intersectObjects searches
+    // each registered object's full subtree, so a child that is itself registered
+    // appears once per registered ancestor — causing duplicate events. The key is
+    // context-sensitive so that legitimate multi-hit objects are preserved:
+    //   InstancedMesh — each instance is a distinct target, key by instanceId
+    //   Points        — each point is a distinct target, key by point index
+    //   Mesh / other  — uuid only; multiple face hits are the same surface
+    const hits = rawHits.filter((hit) => {
+      const key =
+        hit.instanceId !== undefined
+          ? `${hit.object.uuid}|${hit.instanceId}`
+          : (hit.object as Points).isPoints
+            ? `${hit.object.uuid}|${hit.index}`
+            : hit.object.uuid
+      if (seen.has(key)) return false
+      seen.add(key)
+      return true
+    })
     const filtered = context.filter === undefined ? hits : context.filter(hits, context)
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
-      let eventObject: THREE.Object3D | null = hit.object
+      let eventObject: Object3D | null = hit.object
       // Bubble event up
       while (eventObject) {
         if (handlers.has(eventObject)) intersections.push({ ...hit, eventObject })
@@ -75,7 +94,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
     return intersections
   }
 
-  const pointerMissed = (event: MouseEvent, objects: THREE.Object3D[]) => {
+  const pointerMissed = (event: MouseEvent, objects: Object3D[]) => {
     for (const object of objects) {
       handlers.get(object)?.onpointermissed?.(event)
     }
@@ -104,24 +123,34 @@ export const setupInteractivity = (context: InteractivityContext) => {
     const hits = getHits()
     const delta = isClickEvent ? calculateDistance(event) : 0
 
-    // Save initial coordinates on pointer-down
+    // Save initial coordinates and timestamp on pointer-down
     if (name === 'pointerdown') {
       context.initialClick = [event.offsetX, event.offsetY]
+      context.initialClickTime = performance.now()
       context.initialHits = hits.map((hit) => hit.eventObject)
     }
 
-    // If a click yields no results, pass it back to the user as a miss
-    // Missed events have to come first in order to establish user-land side-effect clean up
-    if (isClickEvent && hits.length === 0) {
-      if (delta <= 2) {
-        pointerMissed(event, context.interactiveObjects)
-      }
+    const isClick =
+      isClickEvent &&
+      delta <= context.clickDistanceThreshold &&
+      performance.now() - context.initialClickTime <= context.clickTimeThreshold
+
+    // Fire pointermissed for objects that were not under the pointer at pointerdown.
+    // Must come before the dispatch loop so user-land cleanup runs first.
+    if (isClick) {
+      pointerMissed(
+        event,
+        context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
+      )
     }
 
-    // Take care of unhover
+    // Update hover state before dispatch so that pointerout/pointerleave fire
+    // before pointerover/pointerenter on newly hit objects. This ordering is
+    // important for useCursor and similar hooks that set state in both handlers.
     if (isPointerMove) cancelPointer(hits)
 
     let stopped = false
+    let stoppedAt = -1
 
     // loop through all hits and dispatch events
     dispatchEvents: for (const hit of hits) {
@@ -144,6 +173,9 @@ export const setupInteractivity = (context: InteractivityContext) => {
             const higher = hits.slice(0, hits.indexOf(hit))
             cancelPointer([...higher, hit])
           }
+        },
+        stopImmediatePropagation() {
+          event.stopImmediatePropagation()
         },
         camera: context.raycaster.camera,
         delta,
@@ -176,31 +208,37 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
         // Call pointer move
         events.onpointermove?.(intersectionEvent as IntersectionEvent<PointerEvent>)
+
+        // If the pointermove handler called stopPropagation, update the hovered
+        // entry so subsequent moves continue to block farther objects.
+        if (intersectionEvent.stopped) {
+          const id = createIntersectionId(intersectionEvent)
+          const hoveredItem = context.hovered.get(id)
+          if (hoveredItem) {
+            hoveredItem.stopped = true
+          }
+        }
       } else {
         // All other events
         if (events[`on${name}`]) {
-          if (!isClickEvent || context.initialHits.includes(hit.eventObject)) {
-            // Missed events have to come first
-            pointerMissed(
-              event,
-              context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
-            )
-
-            // Call the event
+          if (!isClickEvent || (isClick && context.initialHits.includes(hit.eventObject))) {
             events[`on${name}`]?.(intersectionEvent)
-          }
-        } else {
-          // "Real" click event
-          if (isClickEvent && context.initialHits.includes(hit.eventObject)) {
-            pointerMissed(
-              event,
-              context.interactiveObjects.filter((object) => !context.initialHits.includes(object))
-            )
           }
         }
       }
 
-      if (stopped) break dispatchEvents
+      if (stopped) {
+        stoppedAt = hits.indexOf(hit)
+        break dispatchEvents
+      }
+    }
+
+    // When propagation was stopped, run cancelPointer again with only the hits
+    // up to the stopped object. The pre-loop cancelPointer passed all hits, so
+    // farther objects were still considered "hovered". This second pass removes
+    // them and fires pointerout/pointerleave.
+    if (isPointerMove && stopped) {
+      cancelPointer(hits.slice(0, stoppedAt + 1))
     }
   }
 
@@ -210,7 +248,10 @@ export const setupInteractivity = (context: InteractivityContext) => {
   let lastMoveY = -Infinity
   const MIN_MOVE_DELTA = 0.25 // pixels; ignore tiny jitter
 
-  // pointermove can occur at a much higher frequency than requestAnimationFrame, throttle it
+  // Process the first pointermove in a frame immediately for responsive hover
+  // updates, then coalesce any additional moves within the same frame into one
+  // deferred rAF call. This avoids the one-frame lag that causes cursor flicker
+  // when moving rapidly between interactive objects.
   const handlePointerMove = (event: DomEvent) => {
     // ignore sub-pixel jitter to cut redundant raycasts
     if (
@@ -223,8 +264,10 @@ export const setupInteractivity = (context: InteractivityContext) => {
     lastMoveX = event.offsetX
     lastMoveY = event.offsetY
 
-    queuedMoveEvent = event
     if (!moveRAF) {
+      // First move this frame — process immediately
+      handleEvent(event)
+      // Schedule a rAF to catch any coalesced moves that arrive before the next frame
       moveRAF = requestAnimationFrame(() => {
         moveRAF = 0
         if (queuedMoveEvent) {
@@ -232,6 +275,9 @@ export const setupInteractivity = (context: InteractivityContext) => {
           queuedMoveEvent = null
         }
       })
+    } else {
+      // Additional moves this frame — queue for the rAF callback
+      queuedMoveEvent = event
     }
   }
 

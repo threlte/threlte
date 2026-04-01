@@ -7,6 +7,7 @@ import { tick } from 'svelte'
 import Dispose from './__fixtures__/Dispose.svelte'
 import DisposeMany from './__fixtures__/DisposeMany.svelte'
 import DisposeN from './__fixtures__/DisposeN.svelte'
+import DisposeSubtree from './__fixtures__/DisposeSubtree.svelte'
 
 describe('<T> dispose', () => {
   it('does not dispose an object with "dispose"=false', async () => {
@@ -120,6 +121,25 @@ describe('<T> dispose', () => {
     await tick()
 
     expect(onDispose).toHaveBeenCalledOnce()
+  })
+
+  it('re-enables disposal in a subtree when dispose is set on a child', async () => {
+    const { scene, unmount } = render(DisposeSubtree)
+
+    const onDispose = vi.fn()
+    const meshes = scene.getObjectsByProperty('type', 'Mesh') as Mesh[]
+
+    for (const mesh of meshes) {
+      mesh.geometry.addEventListener('dispose', onDispose)
+      ;(mesh.material as MeshBasicMaterial).addEventListener('dispose', onDispose)
+    }
+
+    unmount()
+    await tick()
+
+    // The child with dispose re-enabled should dispose its geometry and material (2)
+    // The parent with dispose=false should not dispose its geometry and material (0)
+    expect(onDispose).toHaveBeenCalledTimes(2)
   })
 
   it('does not dispose until the mount count becomes zero', async () => {

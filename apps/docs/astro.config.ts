@@ -22,6 +22,8 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  // TODO: Remove base once threlte.xyz custom domain is linked
+  base: process.env.BASE_PATH ? `/${process.env.BASE_PATH.replace(/^\/|\/$/g, '')}/` : '/',
   compressHTML: false,
   markdown: {
     syntaxHighlight: false

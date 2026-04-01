@@ -21,16 +21,18 @@ export const injectInteractivityPlugin = (): void => {
   injectPlugin('interactivity', (args) => {
     if (!isInstanceOf(args.ref, 'Object3D')) return
 
-    const hasEventHandlers = Object.entries(args.props).some(([key, value]) => {
-      return value !== undefined && interactivityEventNames.includes(key as keyof ThrelteEvents)
-    })
-
-    if (!hasEventHandlers) return
-
     const { addInteractiveObject, removeInteractiveObject } = useInteractivity()
 
     $effect.pre(() => {
-      const { ref, props } = args
+      const ref = args.ref
+      const props = args.props
+
+      const hasEventHandlers = interactivityEventNames.some(
+        (eventName) => typeof props[eventName] === 'function'
+      )
+
+      if (!hasEventHandlers) return
+
       addInteractiveObject(ref, props)
       return () => {
         removeInteractiveObject(ref)
