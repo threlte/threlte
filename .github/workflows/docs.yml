@@ -55,6 +55,7 @@ jobs:
           # Replace everything except .git
           find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
           cp -r ../apps/docs/dist/* .
+          touch .nojekyll
 
           git add -A
           git diff --staged --quiet || git commit -m "Deploy docs from ${{ github.sha }}"

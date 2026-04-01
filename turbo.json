@@ -1,5 +1,6 @@
 {
   "$schema": "https://turborepo.org/schema.json",
+  "globalPassThroughEnv": ["BASE_PATH"],
   "tasks": {
     "test": {
       "cache": false
