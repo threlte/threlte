@@ -1,4 +1,4 @@
-import { useTask } from '@threlte/core'
+import { useTask, useThrelte } from '@threlte/core'
 import { CanvasTexture } from 'three'
 
 type Point = {
@@ -177,6 +177,7 @@ class TrailTexture {
 }
 
 export function useTrailTexture(config?: () => TrailTextureConfig | undefined) {
+  const { invalidate } = useThrelte()
   const trail = new TrailTexture(config?.() ?? {})
 
   $effect(() => {
@@ -191,9 +192,15 @@ export function useTrailTexture(config?: () => TrailTextureConfig | undefined) {
     trail.ease = c.ease ?? easeCircleOut
   })
 
-  useTask((delta) => {
-    trail.update(delta)
-  })
+  useTask(
+    (delta) => {
+      trail.update(delta)
+      if (trail.trail.length > 0) {
+        invalidate()
+      }
+    },
+    { autoInvalidate: false }
+  )
 
   const setTrail = (x: number, y: number) => {
     trail.addTouch(x, y)
