@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-[#0A0F19]">
   <head>
+    <script>(function(){const base = "/threlte/previews/pr-1746/";
+
+      if (base !== '/' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.register(base + 'sw-base-rewrite.js', { scope: base }).then((reg) => {
+          // On first visit the SW isn't active yet — reload once it takes control
+          // so all asset requests go through the rewriter
+          if (!navigator.serviceWorker.controller) {
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              window.location.reload()
+            }, { once: true })
+          }
+        })
+      }
+    })();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>Welcome to Threlte.</title>
@@ -36,8 +50,8 @@
 <link rel="stylesheet" href="/threlte/previews/pr-1746/_astro/index.Czy7AHkm.css">
 <style>.reveal.svelte-1w2yszs{--enter: calc(var(--progress) * 200%);--leave: calc(var(--enter) - 100%);mask-position:center;-webkit-mask-position-x:center;-webkit-mask-position-y:center;mask-size:cover;mask-image:linear-gradient(90deg,#000 var(--leave),transparent var(--enter))}@keyframes svelte-blk7g0-custom-pulse{50%{opacity:0}}.pulse-1.svelte-blk7g0{animation:svelte-blk7g0-custom-pulse 2s cubic-bezier(.4,0,.6,1) infinite}.pulse-2.svelte-blk7g0{animation:svelte-blk7g0-custom-pulse 2s .3s cubic-bezier(.4,0,.6,1) infinite}.pulse-3.svelte-blk7g0{animation:svelte-blk7g0-custom-pulse 2s .6s cubic-bezier(.4,0,.6,1) infinite}
 div.svelte-1xiz80p{position:relative;width:100%;height:100%;overflow:hidden}canvas.svelte-1xiz80p{display:block;position:relative;width:100%;height:100%}
-</style><script type="module" src="/threlte/previews/pr-1746/_astro/page.CrCnOucz.js"></script><style>[data-astro-transition-scope="astro-zqizi6vp-1"] { view-transition-name: astro-zqizi6vp-1; }</style></head>
-  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-zqizi6vp-1">
+</style><script type="module" src="/threlte/previews/pr-1746/_astro/page.CrCnOucz.js"></script><style>[data-astro-transition-scope="astro-kyllinzg-1"] { view-transition-name: astro-kyllinzg-1; }</style></head>
+  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-kyllinzg-1">
     
   
   <div class="fixed top-0 left-0 z-5 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]">

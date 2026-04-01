@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-[#0A0F19]">
   <head>
+    <script>(function(){const base = "/threlte/previews/pr-1746/";
+
+      if (base !== '/' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.register(base + 'sw-base-rewrite.js', { scope: base }).then((reg) => {
+          // On first visit the SW isn't active yet — reload once it takes control
+          // so all asset requests go through the rewriter
+          if (!navigator.serviceWorker.controller) {
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              window.location.reload()
+            }, { once: true })
+          }
+        })
+      }
+    })();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>Blog</title>
@@ -33,8 +47,8 @@
     <meta name="twitter:description" content="Threlte is a 3D framework for Svelte that lets you rapidly build interactive 3D apps for the web">
     <meta property="og:site_name" content="Threlte">
   <link rel="stylesheet" href="/threlte/previews/pr-1746/_astro/index.BUk9QW6a.css">
-<link rel="stylesheet" href="/threlte/previews/pr-1746/_astro/index.Czy7AHkm.css"><script type="module" src="/threlte/previews/pr-1746/_astro/page.CrCnOucz.js"></script><style>[data-astro-transition-scope="astro-zqizi6vp-1"] { view-transition-name: astro-zqizi6vp-1; }</style></head>
-  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-zqizi6vp-1">
+<link rel="stylesheet" href="/threlte/previews/pr-1746/_astro/index.Czy7AHkm.css"><script type="module" src="/threlte/previews/pr-1746/_astro/page.CrCnOucz.js"></script><style>[data-astro-transition-scope="astro-kyllinzg-1"] { view-transition-name: astro-kyllinzg-1; }</style></head>
+  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-kyllinzg-1">
     
   
   <div class="fixed top-0 left-0 z-5 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]">

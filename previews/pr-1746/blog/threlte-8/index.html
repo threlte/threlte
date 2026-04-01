@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" class="bg-[#0A0F19]">
   <head>
+    <script>(function(){const base = "/threlte/previews/pr-1746/";
+
+      if (base !== '/' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker.register(base + 'sw-base-rewrite.js', { scope: base }).then((reg) => {
+          // On first visit the SW isn't active yet — reload once it takes control
+          // so all asset requests go through the rewriter
+          if (!navigator.serviceWorker.controller) {
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+              window.location.reload()
+            }, { once: true })
+          }
+        })
+      }
+    })();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width">
     <title>Threlte 8</title>
@@ -177,8 +191,8 @@
 </style><style>div.ssr-tab-page.svelte-10tuliv:not(:first-child){overflow:hidden;display:none}
 </style><style>#toolbar-items-wrapper.svelte-1g2l7di{display:flex;gap:.25rem;align-items:stretch;justify-content:space-between;padding:2px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}#toolbar-items-wrapper.svelte-1g2l7di::-webkit-scrollbar{display:none}.toolbar-items.svelte-1g2l7di>*+*{display:block!important;border-left:1px solid #444548;padding-left:.5rem;margin-left:.25rem}#toolbar-items-wrapper.svelte-1g2l7di .toolbar-items-center:where(.svelte-1g2l7di){justify-content:center}#toolbar-items-wrapper.svelte-1g2l7di .toolbar-items-right:where(.svelte-1g2l7di){justify-content:flex-end}#toolbar-items-wrapper.svelte-1g2l7di div:where(.svelte-1g2l7di){flex-shrink:0;flex-grow:1;display:flex;gap:.25rem;align-items:stretch}.tp-lblv_v:has(.tp-ckbv){width:auto!important}
 </style><style>.tooltip.svelte-o814g6{display:none;width:max-content;position:absolute;top:0;left:0;background:#222;color:#fff;padding:4px;border-radius:3px;font-size:11px;font-family:monospace;z-index:1000}.arrow.svelte-o814g6{position:absolute;background:#222;width:8px;height:8px;transform:rotate(45deg)}
-</style><style>[data-astro-transition-scope="astro-zqizi6vp-1"] { view-transition-name: astro-zqizi6vp-1; }</style></head>
-  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-zqizi6vp-1">
+</style><style>[data-astro-transition-scope="astro-kyllinzg-1"] { view-transition-name: astro-kyllinzg-1; }</style></head>
+  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-kyllinzg-1">
     
   
   <div class="fixed top-0 left-0 z-5 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
