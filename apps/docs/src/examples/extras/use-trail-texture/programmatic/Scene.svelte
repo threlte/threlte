@@ -1,47 +1,117 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
-  import { OrbitControls, useTrailTexture } from '@threlte/extras'
+  import { T, useTask, isInstanceOf } from '@threlte/core'
+  import { useTrailTexture, useTexture, transitions, createTransition } from '@threlte/extras'
+  import { cubicInOut } from 'svelte/easing'
+  import { SimplexNoise } from 'three/examples/jsm/Addons.js'
 
-  const { texture, setTrail } = useTrailTexture(() => ({
-    size: 512,
-    radius: 0.4,
-    maxAge: 1500,
-    intensity: 0.3,
-    interpolate: 2,
+  transitions()
+
+  const paintings = [
+    '/textures/paintings/klimt.jpg',
+    '/textures/paintings/vangogh.jpg',
+    '/textures/paintings/caravaggio.jpg',
+    '/textures/paintings/swan.jpg'
+  ]
+
+  const allLoaded = Promise.all(paintings.map((src) => useTexture(src)))
+
+  let {
+    size = 256,
+    maxAge = 3500,
+    radius = 0.2,
+    intensity = 1,
+    interpolate = 2,
+    smoothing = 0.9,
+    minForce = 0.3,
+    ease
+  }: {
+    size?: number
+    maxAge?: number
+    radius?: number
+    intensity?: number
+    interpolate?: number
+    smoothing?: number
+    minForce?: number
+    ease?: (t: number) => number
+  } = $props()
+
+  const { texture: trailTexture, setTrail } = useTrailTexture(() => ({
+    size,
+    radius,
+    maxAge,
+    intensity,
+    interpolate,
+    smoothing,
+    minForce,
+    ease
   }))
 
-  let time = 0
-  useTask((delta) => {
-    time += delta * 1.5
-    setTrail({
-      x: 0.5 + Math.sin(time) * 0.25,
-      y: 0.5 + Math.sin(time * 2) * 0.15,
-    })
+  const fade = createTransition((ref) => {
+    if (!isInstanceOf(ref, 'Material')) return
+    ref.transparent = true
+    ref.needsUpdate = true
+    return {
+      duration: 1500,
+      easing: cubicInOut,
+      tick: (t) => {
+        ref.opacity = t
+      }
+    }
   })
+
+  const noise = new SimplexNoise()
+
+  let index = $state(0)
+  let elapsed = 0
+  const swapInterval = 6
+  let time = 0
+
+  useTask((delta) => {
+    time += delta * 0.5
+
+    const x = 0.5 + noise.noise(time, 0) * 0.4
+    const y = 0.5 + noise.noise(0, time) * 0.4
+    setTrail(x, y)
+
+    elapsed += delta
+    if (elapsed >= swapInterval) {
+      elapsed = 0
+      index = (index + 1) % paintings.length
+    }
+  })
+
+  let fgIndex = $derived((index + 1) % paintings.length)
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[-3, 3, 3]}
+  position={[0, 0, 1.8]}
   fov={45}
->
-  <OrbitControls enableZoom={false} />
-</T.PerspectiveCamera>
-
-<T.AmbientLight intensity={0.3} />
-<T.DirectionalLight
-  position={[2, 4, 3]}
-  intensity={1.5}
 />
 
-<T.Mesh>
-  <T.PlaneGeometry args={[3, 3, 128, 128]} />
-  <T.MeshStandardMaterial
-    displacementMap={texture}
-    displacementScale={0.3}
-    color="#14b8a6"
-    roughness={0.4}
-    metalness={0.1}
-    wireframe
-  />
-</T.Mesh>
+{#await allLoaded then maps}
+  {#key index}
+    <T.Mesh>
+      <T.PlaneGeometry args={[1.6, 1.6]} />
+      <T.MeshBasicMaterial
+        map={maps[index]}
+        transparent
+        transition={fade}
+      />
+    </T.Mesh>
+  {/key}
+
+  {#key fgIndex}
+    <T.Mesh position.z={0.001}>
+      <T.PlaneGeometry args={[1.6, 1.6]} />
+      <T.MeshBasicMaterial
+        map={maps[fgIndex]}
+        transparent
+        alphaMap={trailTexture}
+        transition={fade}
+      />
+    </T.Mesh>
+  {/key}
+
+  <!-- Trail-revealed next painting on top -->
+{/await}

@@ -35,7 +35,7 @@ function smoothAverage(current: number, measurement: number, smoothing: number =
 
 const easeCircleOut = (x: number) => Math.sqrt(1 - Math.pow(x - 1, 2))
 
-class TrailTextureImpl {
+class TrailTexture {
   trail: Point[] = []
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
@@ -61,7 +61,7 @@ class TrailTextureImpl {
     smoothing = 0,
     minForce = 0.3,
     blend = 'screen',
-    ease = easeCircleOut,
+    ease = easeCircleOut
   }: TrailTextureConfig = {}) {
     this.size = size
     this.maxAge = maxAge
@@ -111,12 +111,12 @@ class TrailTextureImpl {
     this.ctx.fillRect(0, 0, this.size, this.size)
   }
 
-  addTouch(point: { x: number; y: number }) {
+  addTouch(x: number, y: number) {
     const last = this.trail[this.trail.length - 1]
 
     if (last) {
-      const dx = last.x - point.x
-      const dy = last.y - point.y
+      const dx = last.x - x
+      const dy = last.y - y
       const dd = dx * dx + dy * dy
 
       const force = Math.max(this.minForce, Math.min(dd * 10000, 1))
@@ -130,20 +130,20 @@ class TrailTextureImpl {
               x: last.x - (dx / lines) * i,
               y: last.y - (dy / lines) * i,
               age: 0,
-              force,
+              force
             })
           }
         }
       }
     }
 
-    this.trail.push({ x: point.x, y: point.y, age: 0, force: this.force })
+    this.trail.push({ x, y, age: 0, force: this.force })
   }
 
   drawTouch(point: Point) {
     const pos = {
       x: point.x * this.size,
-      y: (1 - point.y) * this.size,
+      y: (1 - point.y) * this.size
     }
 
     let intensity = 1
@@ -176,11 +176,11 @@ class TrailTextureImpl {
   }
 }
 
-export function useTrailTexture(config: () => TrailTextureConfig | undefined) {
-  const trail = new TrailTextureImpl(config() ?? {})
+export function useTrailTexture(config?: () => TrailTextureConfig | undefined) {
+  const trail = new TrailTexture(config?.() ?? {})
 
   $effect(() => {
-    const c = config() ?? {}
+    const c = config?.() ?? {}
     trail.maxAge = c.maxAge ?? 750
     trail.radius = c.radius ?? 0.3
     trail.intensity = c.intensity ?? 0.2
@@ -195,19 +195,19 @@ export function useTrailTexture(config: () => TrailTextureConfig | undefined) {
     trail.update(delta)
   })
 
-  const setTrail = (point: { x: number; y: number }) => {
-    trail.addTouch(point)
+  const setTrail = (x: number, y: number) => {
+    trail.addTouch(x, y)
   }
 
-  const onPointerMove = (e: { uv?: { x: number; y: number } }) => {
-    if (e.uv) {
-      setTrail(e.uv)
+  const onPointerMove = (event: { uv?: { x: number; y: number } }) => {
+    if (event.uv) {
+      setTrail(event.uv.x, event.uv.y)
     }
   }
 
   return {
     texture: trail.texture,
     onPointerMove,
-    setTrail,
+    setTrail
   }
 }

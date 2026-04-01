@@ -1,31 +1,34 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { OrbitControls, useTrailTexture, interactivity } from '@threlte/extras'
+  import { ShaderMaterial, Color, DoubleSide, type Texture } from 'three'
 
   interactivity()
 
   let {
+    size = 64,
     maxAge = 750,
     radius = 0.3,
-    intensity = 0.4,
-    interpolate = 1,
-    smoothing = 0.5,
+    intensity = 0.2,
+    interpolate = 0,
+    smoothing = 0,
     minForce = 0.3,
-    displacementScale = 0.3,
+    amount = 0.1,
     ease,
   }: {
+    size?: number
     maxAge?: number
     radius?: number
     intensity?: number
     interpolate?: number
     smoothing?: number
     minForce?: number
-    displacementScale?: number
+    amount?: number
     ease?: (t: number) => number
   } = $props()
 
   const { texture, onPointerMove } = useTrailTexture(() => ({
-    size: 512,
+    size,
     radius,
     maxAge,
     intensity,
@@ -34,30 +37,60 @@
     minForce,
     ease,
   }))
+
+  function createMaterial(map: Texture) {
+    return new ShaderMaterial({
+      uniforms: {
+        map: { value: map },
+        color: { value: new Color('turquoise') },
+        color2: { value: new Color('magenta') },
+        amount: { value: amount },
+      },
+      vertexShader: `
+        uniform sampler2D map;
+        uniform float amount;
+        varying float vDisplace;
+        void main() {
+          float displace = texture2D(map, uv).r;
+          vDisplace = displace;
+          vec3 pos = position;
+          pos.z += displace * amount;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 color;
+        uniform vec3 color2;
+        varying float vDisplace;
+        void main() {
+          vec3 col = mix(color, color2, vDisplace);
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `,
+      wireframe: true,
+      side: DoubleSide,
+    })
+  }
+
+  const material = createMaterial(texture)
+
+  $effect(() => {
+    material.uniforms.amount!.value = amount
+  })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[-3, 3, 3]}
+  position={[0, 0, 2.5]}
   fov={45}
->
-  <OrbitControls enableZoom={false} />
-</T.PerspectiveCamera>
-
-<T.AmbientLight intensity={0.3} />
-<T.DirectionalLight
-  position={[2, 4, 3]}
-  intensity={1.5}
 />
 
-<T.Mesh onpointermove={onPointerMove}>
-  <T.PlaneGeometry args={[3, 3, 128, 128]} />
-  <T.MeshStandardMaterial
-    displacementMap={texture}
-    {displacementScale}
-    color="#6366f1"
-    roughness={0.4}
-    metalness={0.1}
-    wireframe
-  />
-</T.Mesh>
+<T.Group rotation.x={-Math.PI * 0.3}>
+  <T.Mesh
+    rotation.z={Math.PI * 0.2}
+    onpointermove={onPointerMove}
+  >
+    <T.PlaneGeometry args={[2, 2, 32, 32]} />
+    <T is={material} />
+  </T.Mesh>
+</T.Group>
