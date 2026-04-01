@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, useTrailTexture, interactivity } from '@threlte/extras'
+  import { useTrailTexture, interactivity } from '@threlte/extras'
   import { ShaderMaterial, Color, DoubleSide, type Texture } from 'three'
 
   interactivity()
