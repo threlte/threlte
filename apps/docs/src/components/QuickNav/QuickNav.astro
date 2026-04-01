@@ -32,7 +32,7 @@ const nextMenuItemCategory = nextMenuItem
   : undefined
 
 const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCategory) => {
-  return `${category.urlPrefix}/${menuItem.slug}`
+  return `${import.meta.env.BASE_URL}${category.urlPrefix.substring(1)}/${menuItem.slug}`
 }
 ---
 

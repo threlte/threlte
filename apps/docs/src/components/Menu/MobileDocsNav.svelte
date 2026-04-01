@@ -9,6 +9,7 @@
 
   export let activeSidebarTab: 'learn' | 'reference' | 'examples'
   export let activeUrlPathName: string
+  export let baseUrl: string
 </script>
 
 <MobileNav search>
@@ -50,6 +51,7 @@
                 <LeftSidebarCategory
                   {category}
                   {activeUrlPathName}
+                  {baseUrl}
                 />
               </li>
             {/each}

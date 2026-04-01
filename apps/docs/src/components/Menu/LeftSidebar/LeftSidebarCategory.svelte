@@ -4,9 +4,10 @@
   interface Props {
     category: LeftSidebarMenuCategory
     activeUrlPathName: string
+    baseUrl: string
   }
 
-  let { category, activeUrlPathName }: Props = $props()
+  let { category, activeUrlPathName, baseUrl }: Props = $props()
 
   let open = true
 
@@ -42,7 +43,7 @@
               : 'text-faded'
           ]}
         >
-          <a href={`${category.urlPrefix}/${item.slug}`}>
+          <a href={`${baseUrl}${category.urlPrefix.substring(1)}/${item.slug}`}>
             {item.title}
           </a>
         </li>

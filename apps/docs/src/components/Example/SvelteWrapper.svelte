@@ -36,7 +36,7 @@
 >
   {#if iframe}
     <iframe
-      src="/examples/{path}"
+      src="{import.meta.env.BASE_URL}examples/{path}"
       title={path}
       class="h-full w-full border-none"
     ></iframe>
