@@ -4,6 +4,8 @@ import { Project, SourceFile, TypeAliasDeclaration } from 'ts-morph'
 import { join, resolve, basename, dirname } from 'path'
 import { fileURLToPath } from 'url'
 
+// TODO-DefinitelyMaybe: camera props "manual" and "makeDefault" make it to the T component data
+
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 const PACKAGES_DIR = resolve(__dirname, '../../../packages')
@@ -37,10 +39,10 @@ interface SnippetInfo {
 interface ComponentData {
   name: string
   package: string
-  props: PropInfo[]
-  events: EventInfo[]
-  bindings: BindingInfo[]
-  snippets: SnippetInfo[]
+  props?: PropInfo[]
+  events?: EventInfo[]
+  bindings?: BindingInfo[]
+  snippets?: SnippetInfo[]
 }
 
 interface OptionInfo {
@@ -135,27 +137,81 @@ function extractComponentData(
   project: Project
 ): ComponentData {
   const name = basename(componentPath, '.svelte')
+  const data: {
+    name: string
+    package: string
+    props?: PropInfo[]
+    events?: EventInfo[]
+    snippets?: SnippetInfo[]
+    bindings?: BindingInfo[]
+  } = {
+    name,
+    package: packageName
+  }
+
   const typesPath = findTypesFile(componentPath)
   const svelteSource = readFileSync(componentPath, 'utf-8')
 
-  // Convert to TSX for props
-  const { code } = svelte2tsx(svelteSource, { filename: componentPath, mode: 'ts' })
-  const tsxPath = join('./', `${name}.tsx`)
-  const tsxSourceFile = project.createSourceFile(tsxPath, code, { overwrite: true })
+  const props: PropInfo[] = []
+  // extractPropsFromTsx(tsxSourceFile, svelteSource, project, typesPath, name)
+  const events: EventInfo[] = []
+  //  extractEvents(project, typesPath, name)
+  const snippets: SnippetInfo[] = []
+  // extractSnippets(project, typesPath, name)
+  const bindings: BindingInfo[] = extractBindings(svelteSource)
 
-  const props = extractPropsFromTsx(tsxSourceFile, svelteSource, project, typesPath, name)
-  const events = extractEvents(project, typesPath, name)
-  const bindings = extractBindings(svelteSource)
-  const snippets = extractSnippets(project, typesPath, name)
-
-  return {
+  const propsData = getPropsFromSources({
     name,
-    package: packageName,
-    props,
-    events,
-    bindings,
-    snippets
+    src: svelteSource,
+    path: componentPath,
+    typesPath,
+    project
+  })
+
+  if (propsData) {
+    for (const prop of propsData) {
+      const { name } = prop
+
+      if (name.startsWith('on')) {
+        // events
+        events.push({
+          name: '',
+          type: ''
+        })
+      } else if (name === 'children') {
+        // snippets
+        snippets.push({
+          name: '',
+          parameters: []
+        })
+      } else {
+        let defaultValue
+        let description
+
+        props.push({
+          name,
+          type: '',
+          default: defaultValue,
+          description
+        })
+      }
+    }
   }
+
+  if (props.length > 0) {
+    data.props = props
+  }
+  if (events.length > 0) {
+    data.events = events
+  }
+  if (snippets.length > 0) {
+    data.snippets = snippets
+  }
+  if (bindings.length > 0) {
+    data.bindings = bindings
+  }
+
+  return data
 }
 
 function findTypesFile(componentPath: string): string | null {
@@ -173,6 +229,79 @@ function findTypesFile(componentPath: string): string | null {
   return null
 }
 
+/**
+ *
+ * we either use the .svelte file convertered into tsx or we look into the surrounding types.ts files
+ */
+function getPropsFromSources(params: {
+  name: string
+  src: string
+  path: string
+  typesPath: string
+  project: Project
+}) {
+  const { name, src, path, typesPath, project } = params
+
+  const propsData: (PropInfo | EventInfo | SnippetInfo)[] = []
+
+  // use the svelte file first
+  const { code } = svelte2tsx(src, { filename: path, mode: 'ts' })
+  const tsxPath = join('./', `${name}.tsx`)
+  const tsxSourceFile = project.createSourceFile(tsxPath, code, { overwrite: true })
+
+  let propsAlias = tsxSourceFile.getTypeAlias('Props')
+
+  let type = propsAlias?.getType()
+  let properties = type?.getApparentProperties()
+
+  console.log('Alias (svelte2tsx):')
+  if (properties) {
+    for (const prop of properties) {
+      const name = prop.getName()
+      console.log(name)
+    }
+  }
+
+  // then try the types.ts files around the svelte file
+  const typesSourceFile = project.getSourceFile(typesPath)
+  if (typesSourceFile) {
+    propsAlias = findAlias(typesSourceFile, name) ?? undefined
+  }
+
+  type = propsAlias?.getType()
+  properties = type?.getApparentProperties()
+
+  console.log('Alias (types.ts):')
+  if (properties) {
+    for (const prop of properties) {
+      const name = prop.getName()
+      console.log(name)
+    }
+  }
+
+  // canvas is a special one
+  if (name === 'Canvas') {
+    const options = extractThrelteOptions(project)
+    propsData.push(
+      ...options.map((o) => ({
+        name: o.name,
+        type: o.type,
+        default: o.default,
+        description: undefined
+      }))
+    )
+  }
+
+  // Process the props
+  // const type = propsAlias.getType()
+  // const properties = type.getApparentProperties()
+  // const typeName = prop.getName()
+  // let typeText = prop.getTypeAtLocation(sourceFile).getText()
+  // typeText = updateTypeText(typeText)
+
+  return propsData
+}
+
 function extractPropsFromTsx(
   tsxSourceFile: SourceFile,
   svelteSource: string,
@@ -186,7 +315,7 @@ function extractPropsFromTsx(
     // fallback to types.ts
     const typesSourceFile = project.getSourceFile(typesPath)
     if (typesSourceFile) {
-      const alias = findPropsTypeAlias(typesSourceFile, componentName)
+      const alias = findAlias(typesSourceFile, componentName)
       if (alias) {
         propsTypeAlias = alias
         sourceFile = typesSourceFile
@@ -201,7 +330,14 @@ function extractPropsFromTsx(
   const props: PropInfo[] = []
   for (const prop of properties) {
     const name = prop.getName()
-    if (name.startsWith('on') || name === 'children') continue // skip events and snippets
+
+    if (name.startsWith('on')) {
+      // events
+      continue
+    } else if (name === 'children') {
+      // snippets
+      continue
+    }
 
     const propType = prop.getTypeAtLocation(sourceFile)
     let typeText = propType.getText()
@@ -244,24 +380,6 @@ function extractPropsFromTsx(
     })
   }
 
-  // canvas is a weird one
-  if (componentName === 'Canvas') {
-    const options = extractThrelteOptions(project)
-    props.push(
-      ...options.map((o) => ({
-        name: o.name,
-        type: o.type,
-        default: o.default,
-        description: undefined
-      }))
-    )
-  }
-
-  // now update typeText as we need to repalce imports
-  for (let i = 0; i < props.length; i++) {
-    props[i].type = updateTypeText(props[i].type)
-  }
-
   return props
 }
 
@@ -281,10 +399,7 @@ function updateTypeText(text: string) {
   return text
 }
 
-function findPropsTypeAlias(
-  sourceFile: SourceFile,
-  componentName: string
-): TypeAliasDeclaration | null {
+function findAlias(sourceFile: SourceFile, componentName: string): TypeAliasDeclaration | null {
   // try componentName + 'Props'
   let alias = sourceFile.getTypeAlias(componentName + 'Props')
   if (alias) return alias
@@ -449,7 +564,7 @@ function extractEvents(
   const sourceFile = project.getSourceFile(typesPath)
   if (!sourceFile) return []
 
-  const propsAlias = findPropsTypeAlias(sourceFile, componentName)
+  const propsAlias = findAlias(sourceFile, componentName)
   if (!propsAlias) return []
 
   const type = propsAlias.getType()
@@ -512,7 +627,7 @@ function extractSnippets(
   const sourceFile = project.getSourceFile(typesPath)
   if (!sourceFile) return []
 
-  const propsAlias = findPropsTypeAlias(sourceFile, componentName)
+  const propsAlias = findAlias(sourceFile, componentName)
   if (!propsAlias) return []
 
   const type = propsAlias.getType()
@@ -530,7 +645,8 @@ function extractSnippets(
       const paramMatch = typeText.match(/Snippet<\[([^\]]+)\]>/)
       let parameters: { name: string; type: string }[] | undefined
       if (paramMatch) {
-        const paramsStr = paramMatch[1]
+        let paramsStr = paramMatch[1]
+        paramsStr = updateTypeText(paramsStr).slice(1, -1)
         parameters = paramsStr.split(',').map((p) => {
           const parts = p.split(':').map((s) => s.trim())
           return { name: parts[0], type: parts[1] || 'unknown' }
