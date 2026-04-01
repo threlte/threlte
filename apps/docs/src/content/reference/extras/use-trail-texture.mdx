@@ -25,7 +25,7 @@ Pass the returned `onPointerMove` handler to a mesh and use the `texture` as a d
     size: 512,
     radius: 0.3,
     maxAge: 750,
-    intensity: 0.4,
+    intensity: 0.4
   }))
 </script>
 
@@ -40,7 +40,7 @@ Pass the returned `onPointerMove` handler to a mesh and use the `texture` as a d
 
 ### Programmatic Usage
 
-Use `setTrail` to drive the trail from any source, not just pointer events:
+Use `setTrail` to drive the trail from any source, not just pointer events. Here it animates ripples across a sphere:
 
 <Example path="extras/use-trail-texture/programmatic" />
 
@@ -49,15 +49,14 @@ Use `setTrail` to drive the trail from any source, not just pointer events:
   import { useTask } from '@threlte/core'
   import { useTrailTexture } from '@threlte/extras'
 
-  const { texture, setTrail } = useTrailTexture(() => ({}))
+  const { texture, setTrail } = useTrailTexture()
 
   let time = 0
   useTask((delta) => {
     time += delta
-    setTrail({
-      x: 0.5 + Math.cos(time) * 0.3,
-      y: 0.5 + Math.sin(time) * 0.3,
-    })
+    const x = 0.5 + Math.cos(time) * 0.3
+    const y = 0.5 + Math.sin(time) * 0.3
+    setTrail(x, y)
   })
 </script>
 ```
@@ -71,7 +70,7 @@ const {
   // Event handler to pass to onpointermove
   onPointerMove,
   // Programmatically add a trail point at UV coordinates
-  setTrail,
+  setTrail
 } = useTrailTexture(() => ({
   // Texture resolution in pixels (default: 256)
   size: 256,
@@ -91,6 +90,6 @@ const {
   blend: 'screen' as GlobalCompositeOperation,
   // Easing function for intensity falloff (default: easeCircleOut)
   // Compatible with svelte/easing functions, e.g. cubicOut
-  ease: (t: number) => Math.sqrt(1 - Math.pow(t - 1, 2)),
+  ease: (t: number) => Math.sqrt(1 - Math.pow(t - 1, 2))
 }))
 ```
