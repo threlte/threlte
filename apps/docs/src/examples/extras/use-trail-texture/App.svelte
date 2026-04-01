@@ -21,30 +21,95 @@
     quadOut: 'quadOut',
     expoOut: 'expoOut',
     elasticOut: 'elasticOut',
-    bounceOut: 'bounceOut',
+    bounceOut: 'bounceOut'
   }
 
   const ease = $derived(easings[easeName])
 </script>
 
 <div>
-  <Pane position="fixed" title="Trail Texture">
+  <Pane
+    position="fixed"
+    title="Trail Texture"
+  >
     <Folder title="Trail">
-      <Slider label="size" bind:value={size} min={8} max={256} step={8} />
-      <Slider label="maxAge" bind:value={maxAge} min={300} max={1000} step={50} />
-      <Slider label="radius" bind:value={radius} min={0} max={1} step={0.01} />
-      <Slider label="intensity" bind:value={intensity} min={0} max={1} step={0.1} />
-      <Slider label="interpolate" bind:value={interpolate} min={0} max={2} step={1} />
-      <Slider label="smoothing" bind:value={smoothing} min={0} max={0.99} step={0.01} />
-      <Slider label="minForce" bind:value={minForce} min={0} max={1} step={0.1} />
-      <List label="ease" bind:value={easeName} options={easingOptions} />
+      <Slider
+        label="size"
+        bind:value={size}
+        min={8}
+        max={256}
+        step={8}
+      />
+      <Slider
+        label="maxAge"
+        bind:value={maxAge}
+        min={300}
+        max={1000}
+        step={50}
+      />
+      <Slider
+        label="radius"
+        bind:value={radius}
+        min={0}
+        max={1}
+        step={0.01}
+      />
+      <Slider
+        label="intensity"
+        bind:value={intensity}
+        min={0}
+        max={1}
+        step={0.1}
+      />
+      <Slider
+        label="interpolate"
+        bind:value={interpolate}
+        min={0}
+        max={2}
+        step={1}
+      />
+      <Slider
+        label="smoothing"
+        bind:value={smoothing}
+        min={0}
+        max={0.99}
+        step={0.01}
+      />
+      <Slider
+        label="minForce"
+        bind:value={minForce}
+        min={0}
+        max={1}
+        step={0.1}
+      />
+      <List
+        label="ease"
+        bind:value={easeName}
+        options={easingOptions}
+      />
     </Folder>
     <Folder title="Displacement">
-      <Slider label="amount" bind:value={amount} min={0} max={0.5} step={0.01} />
+      <Slider
+        label="amount"
+        bind:value={amount}
+        min={0}
+        max={0.5}
+        step={0.01}
+      />
     </Folder>
   </Pane>
   <Canvas>
-    <Scene {size} {maxAge} {radius} {intensity} {interpolate} {smoothing} {minForce} {amount} {ease} />
+    <Scene
+      {size}
+      {maxAge}
+      {radius}
+      {intensity}
+      {interpolate}
+      {smoothing}
+      {minForce}
+      {amount}
+      {ease}
+    />
   </Canvas>
 </div>
 
