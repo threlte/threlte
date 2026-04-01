@@ -59,4 +59,5 @@ jobs:
 
           git add -A
           git diff --staged --quiet || git commit -m "Deploy docs from ${{ github.sha }}"
+          git pull --rebase
           git push

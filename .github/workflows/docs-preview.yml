@@ -53,13 +53,13 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Replace only this PR's preview directory
           rm -rf previews/pr-${{ github.event.pull_request.number }}
           mkdir -p previews/pr-${{ github.event.pull_request.number }}
           cp -r ../apps/docs/dist/* previews/pr-${{ github.event.pull_request.number }}/
 
           git add -A
           git diff --staged --quiet || git commit -m "Deploy preview for PR #${{ github.event.pull_request.number }}"
+          git pull --rebase
           git push
 
       - name: Comment preview URL
@@ -108,4 +108,5 @@ jobs:
 
           git add -A
           git diff --staged --quiet || git commit -m "Remove preview for PR #${{ github.event.pull_request.number }}"
+          git pull --rebase
           git push
