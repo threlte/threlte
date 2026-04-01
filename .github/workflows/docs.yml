@@ -56,6 +56,7 @@ jobs:
           find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
           cp -r ../apps/docs/dist/* .
           touch .nojekyll
+          echo "threlte.xyz" > CNAME
 
           git add -A
           git diff --staged --quiet || git commit -m "Deploy docs from ${{ github.sha }}"
