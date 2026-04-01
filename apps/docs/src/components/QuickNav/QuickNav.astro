@@ -3,7 +3,7 @@ import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarM
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-let pathname = Astro.url.pathname
+let pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/')
 pathname = pathname.startsWith('/') ? pathname.slice(1) : pathname
 pathname = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
 

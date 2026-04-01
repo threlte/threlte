@@ -4,7 +4,7 @@
 
 <MobileNav>
   <svelte:fragment slot="topbar-left">
-    <a href="/">
+    <a href={import.meta.env.BASE_URL}>
       <slot name="logo" />
     </a>
   </svelte:fragment>
@@ -12,8 +12,8 @@
     slot="content"
     class="flex flex-col gap-2 text-lg"
   >
-    <a href="/docs/learn/getting-started/introduction"> Documentation </a>
-    <a href="/blog"> Blog </a>
+    <a href={`${import.meta.env.BASE_URL}docs/learn/getting-started/introduction`}> Documentation </a>
+    <a href={`${import.meta.env.BASE_URL}blog`}> Blog </a>
 
     <!-- Implement as soon as there are showcase entries -->
     <!-- <a href="/showcase"> Showcase </a> -->
