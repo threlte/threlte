@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.14.2
+
+### Patch Changes
+
+- 07af185: Add useTrailTexture hook
+- 8992f93: Fix: coordinate useCursor through a shared context instead of racing independent effects
+
 ## 9.14.1
 
 ### Patch Changes
