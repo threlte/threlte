@@ -16,6 +16,7 @@ const section = pathnameItems[0] as 'learn' | 'reference'
 const allMenuItems = sidebarMenu[section].categories
   .flat()
   .flatMap((category) => category.menuItems)
+  .filter((item) => !item.isDivider)
 
 const currentMenuItemIndex = allMenuItems.findIndex((menuItem) => pathname.endsWith(menuItem.slug))
 
