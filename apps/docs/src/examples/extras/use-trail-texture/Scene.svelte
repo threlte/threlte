@@ -14,7 +14,7 @@
     smoothing = 0,
     minForce = 0.3,
     amount = 0.1,
-    ease,
+    ease
   }: {
     size?: number
     maxAge?: number
@@ -35,7 +35,7 @@
     interpolate,
     smoothing,
     minForce,
-    ease,
+    ease
   }))
 
   function createMaterial(map: Texture) {
@@ -44,7 +44,7 @@
         map: { value: map },
         color: { value: new Color('turquoise') },
         color2: { value: new Color('magenta') },
-        amount: { value: amount },
+        amount: { value: amount }
       },
       vertexShader: `
         uniform sampler2D map;
@@ -68,7 +68,7 @@
         }
       `,
       wireframe: true,
-      side: DoubleSide,
+      side: DoubleSide
     })
   }
 

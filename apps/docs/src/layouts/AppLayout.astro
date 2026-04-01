@@ -18,15 +18,21 @@ const title = Astro.props.title
   <head>
     <script is:inline define:vars={{ base: import.meta.env.BASE_URL }}>
       if (base !== '/' && 'serviceWorker' in navigator) {
-        navigator.serviceWorker.register(base + 'sw-base-rewrite.js', { scope: base }).then((reg) => {
-          // On first visit the SW isn't active yet — reload once it takes control
-          // so all asset requests go through the rewriter
-          if (!navigator.serviceWorker.controller) {
-            navigator.serviceWorker.addEventListener('controllerchange', () => {
-              window.location.reload()
-            }, { once: true })
-          }
-        })
+        navigator.serviceWorker
+          .register(base + 'sw-base-rewrite.js', { scope: base })
+          .then((reg) => {
+            // On first visit the SW isn't active yet — reload once it takes control
+            // so all asset requests go through the rewriter
+            if (!navigator.serviceWorker.controller) {
+              navigator.serviceWorker.addEventListener(
+                'controllerchange',
+                () => {
+                  window.location.reload()
+                },
+                { once: true }
+              )
+            }
+          })
       }
     </script>
     <meta charset="UTF-8" />
