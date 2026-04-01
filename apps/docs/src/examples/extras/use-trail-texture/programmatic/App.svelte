@@ -29,65 +29,64 @@
 <div>
   <Pane
     position="fixed"
-    title="Trail Texture"
+    title=""
   >
-    <Folder title="Trail">
-      <Slider
-        label="size"
-        bind:value={size}
-        min={8}
-        max={256}
-        step={8}
-      />
-      <Slider
-        label="maxAge"
-        bind:value={maxAge}
-        min={300}
-        max={5000}
-        step={100}
-      />
-      <Slider
-        label="radius"
-        bind:value={radius}
-        min={0}
-        max={1}
-        step={0.01}
-      />
-      <Slider
-        label="intensity"
-        bind:value={intensity}
-        min={0}
-        max={1}
-        step={0.1}
-      />
-      <Slider
-        label="interpolate"
-        bind:value={interpolate}
-        min={0}
-        max={5}
-        step={1}
-      />
-      <Slider
-        label="smoothing"
-        bind:value={smoothing}
-        min={0}
-        max={0.99}
-        step={0.01}
-      />
-      <Slider
-        label="minForce"
-        bind:value={minForce}
-        min={0}
-        max={1}
-        step={0.1}
-      />
-      <List
-        label="ease"
-        bind:value={easeName}
-        options={easingOptions}
-      />
-    </Folder>
+    <Slider
+      label="size"
+      bind:value={size}
+      min={8}
+      max={256}
+      step={8}
+    />
+    <Slider
+      label="maxAge"
+      bind:value={maxAge}
+      min={300}
+      max={5000}
+      step={100}
+    />
+    <Slider
+      label="radius"
+      bind:value={radius}
+      min={0}
+      max={1}
+      step={0.01}
+    />
+    <Slider
+      label="intensity"
+      bind:value={intensity}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <Slider
+      label="interpolate"
+      bind:value={interpolate}
+      min={0}
+      max={5}
+      step={1}
+    />
+    <Slider
+      label="smoothing"
+      bind:value={smoothing}
+      min={0}
+      max={0.99}
+      step={0.01}
+    />
+    <Slider
+      label="minForce"
+      bind:value={minForce}
+      min={0}
+      max={1}
+      step={0.1}
+    />
+    <List
+      label="ease"
+      bind:value={easeName}
+      options={easingOptions}
+    />
   </Pane>
+
   <Canvas>
     <Scene
       {size}
