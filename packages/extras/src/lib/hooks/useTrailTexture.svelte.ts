@@ -1,32 +1,11 @@
-import { useTask } from '@threlte/core'
+import { useTask, useThrelte } from '@threlte/core'
 import { CanvasTexture } from 'three'
 
-type Point = {
+interface Point {
   x: number
   y: number
   age: number
   force: number
-}
-
-export type TrailTextureConfig = {
-  /** Texture resolution (default: 256) */
-  size?: number
-  /** Max age (ms) of trail points (default: 750) */
-  maxAge?: number
-  /** Trail radius (default: 0.3) */
-  radius?: number
-  /** Canvas trail opacity (default: 0.2) */
-  intensity?: number
-  /** Add interpolated points between sparse pointer events (default: 0) */
-  interpolate?: number
-  /** Moving average smoothing factor for pointer force (default: 0) */
-  smoothing?: number
-  /** Minimum pointer force (default: 0.3) */
-  minForce?: number
-  /** Canvas blend mode (default: 'screen') */
-  blend?: CanvasRenderingContext2D['globalCompositeOperation']
-  /** Easing function for intensity falloff (default: easeCircOut) */
-  ease?: (t: number) => number
 }
 
 function smoothAverage(current: number, measurement: number, smoothing: number = 0.9) {
@@ -60,9 +39,9 @@ class TrailTexture {
     interpolate = 0,
     smoothing = 0,
     minForce = 0.3,
-    blend = 'screen',
+    blend = 'screen' as CanvasRenderingContext2D['globalCompositeOperation'],
     ease = easeCircleOut
-  }: TrailTextureConfig = {}) {
+  } = {}) {
     this.size = size
     this.maxAge = maxAge
     this.radius = radius
@@ -176,7 +155,48 @@ class TrailTexture {
   }
 }
 
-export function useTrailTexture(config?: () => TrailTextureConfig | undefined) {
+/**
+ * Creates a canvas-based trail texture that responds to pointer movement.
+ * The texture renders a fading trail of points that can be used as a
+ * displacement map, alpha map, or any other texture-driven effect.
+ *
+ * @example
+ * ```svelte
+ * <script>
+ *   const { texture, onPointerMove } = useTrailTexture()
+ * </script>
+ *
+ * <T.Mesh onpointermove={onPointerMove}>
+ *   <T.PlaneGeometry />
+ *   <T.MeshStandardMaterial displacementMap={texture} />
+ * </T.Mesh>
+ * ```
+ */
+export const useTrailTexture = (
+  config?: () =>
+    | {
+        /** Texture resolution (default: 256) */
+        size?: number
+        /** Max age (ms) of trail points (default: 750) */
+        maxAge?: number
+        /** Trail radius (default: 0.3) */
+        radius?: number
+        /** Canvas trail opacity (default: 0.2) */
+        intensity?: number
+        /** Add interpolated points between sparse pointer events (default: 0) */
+        interpolate?: number
+        /** Moving average smoothing factor for pointer force (default: 0) */
+        smoothing?: number
+        /** Minimum pointer force (default: 0.3) */
+        minForce?: number
+        /** Canvas blend mode (default: 'screen') */
+        blend?: CanvasRenderingContext2D['globalCompositeOperation']
+        /** Easing function for intensity falloff (default: easeCircOut) */
+        ease?: (t: number) => number
+      }
+    | undefined
+) => {
+  const { invalidate } = useThrelte()
   const trail = new TrailTexture(config?.() ?? {})
 
   $effect(() => {
@@ -191,9 +211,15 @@ export function useTrailTexture(config?: () => TrailTextureConfig | undefined) {
     trail.ease = c.ease ?? easeCircleOut
   })
 
-  useTask((delta) => {
-    trail.update(delta)
-  })
+  useTask(
+    (delta) => {
+      trail.update(delta)
+      if (trail.trail.length > 0) {
+        invalidate()
+      }
+    },
+    { autoInvalidate: false }
+  )
 
   const setTrail = (x: number, y: number) => {
     trail.addTouch(x, y)
