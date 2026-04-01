@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
-  import { Pane, Folder, Slider, List } from 'svelte-tweakpane-ui'
+  import { Pane, Slider, List } from 'svelte-tweakpane-ui'
   import * as easings from 'svelte/easing'
 
   let size = $state(256)
