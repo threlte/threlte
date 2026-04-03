@@ -319,7 +319,7 @@ type StandardXRGamepad = ReturnType<typeof createXrStandard>
 export function useGamepad(): StandardGamepad
 export function useGamepad(options: UseGamepadOptions & { xr?: never }): StandardGamepad
 export function useGamepad(options: UseGamepadOptions & { xr: true }): StandardXRGamepad
-export function useGamepad(options: UseGamepadOptions = {}) {
+export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | StandardXRGamepad {
   const { axisDeadzone = 0.05 } = options
   const allEvents: Events = {}
   const events: Events[] = []
