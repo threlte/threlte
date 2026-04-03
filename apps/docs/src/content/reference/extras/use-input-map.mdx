@@ -1,0 +1,289 @@
+---
+category: '@threlte/extras'
+group: 'Interaction'
+sourcePath: 'packages/extras/src/lib/hooks/useInputMap.svelte.ts'
+title: useInputMap
+type: 'hook'
+---
+
+`useInputMap` provides an action mapping system that abstracts physical
+inputs into named actions. Define actions like `"jump"` or `"moveLeft"` once, bind
+them to keyboard keys and gamepad buttons, then query them by name. This decouples
+game logic from specific input devices.
+
+<Example path="extras/use-input-map" />
+
+```svelte
+<script lang="ts">
+  import { useTask } from '@threlte/core'
+  import { useInputMap, useGamepad } from '@threlte/extras'
+
+  const gamepad = useGamepad()
+
+  const input = useInputMap(
+    () => ({
+      jump: [useInputMap.key('Space'), useInputMap.gamepadButton('clusterBottom')],
+      moveLeft: [useInputMap.key('a'), useInputMap.gamepadAxis('leftStick', 'x', -1)],
+      moveRight: [useInputMap.key('d'), useInputMap.gamepadAxis('leftStick', 'x', 1)],
+      moveForward: [useInputMap.key('w'), useInputMap.gamepadAxis('leftStick', 'y', -1)],
+      moveBack: [useInputMap.key('s'), useInputMap.gamepadAxis('leftStick', 'y', 1)]
+    }),
+    { gamepad }
+  )
+
+  useTask(
+    () => {
+      if (input.action('jump').justPressed) {
+        player.jump()
+      }
+
+      const move = input.vector('moveLeft', 'moveRight', 'moveForward', 'moveBack')
+      player.velocity.x = move.x * speed
+      player.velocity.z = move.y * speed
+    },
+    { after: input.task }
+  )
+</script>
+```
+
+## Reactive Definitions
+
+The definitions are passed as a function, so you can reactively update bindings at
+runtime — for example, when the user remaps controls in a settings screen:
+
+```svelte
+<script lang="ts">
+  import { useInputMap } from '@threlte/extras'
+
+  let jumpKey = $state('Space')
+
+  const input = useInputMap(() => ({
+    jump: [useInputMap.key(jumpKey)]
+  }))
+
+  // Later, when the user remaps:
+  jumpKey = 'j'
+</script>
+```
+
+## Bindings
+
+Each action maps to an array of bindings. Any active binding triggers the action.
+Three binding types are available, all namespaced under `useInputMap`:
+
+### useInputMap.key(key)
+
+Binds a keyboard key by its
+[`KeyboardEvent.key`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key)
+value. Matching is case-insensitive, so `'w'` matches both `'w'` and `'W'` (when Shift
+is held).
+
+```ts
+import { useInputMap } from '@threlte/extras'
+
+useInputMap.key('Space') // spacebar
+useInputMap.key('w') // W key
+useInputMap.key('ArrowUp') // up arrow
+useInputMap.key('Shift') // either shift key
+```
+
+### useInputMap.gamepadButton(button)
+
+Binds a standard gamepad button. Uses the same button names as
+[`useGamepad`](/docs/reference/extras/use-gamepad).
+
+```ts
+import { useInputMap } from '@threlte/extras'
+
+useInputMap.gamepadButton('clusterBottom') // A / Cross
+useInputMap.gamepadButton('clusterRight') // B / Circle
+useInputMap.gamepadButton('leftTrigger') // LT / L2
+useInputMap.gamepadButton('leftBumper') // LB / L1
+```
+
+### useInputMap.gamepadAxis(stick, axis, direction, threshold?)
+
+Binds a gamepad stick axis in a specific direction. The `threshold` parameter
+controls the minimum axis value before the binding activates (default `0.1`).
+
+```ts
+import { useInputMap } from '@threlte/extras'
+
+useInputMap.gamepadAxis('leftStick', 'x', 1) // right on left stick
+useInputMap.gamepadAxis('leftStick', 'x', -1) // left on left stick
+useInputMap.gamepadAxis('leftStick', 'y', -1) // up on left stick (y is inverted)
+useInputMap.gamepadAxis('leftStick', 'y', 1) // down on left stick
+useInputMap.gamepadAxis('rightStick', 'x', 1, 0.2) // right on right stick, 0.2 deadzone
+```
+
+## Action State
+
+Call `input.action(name)` to get the current state of an action:
+
+| Property       | Type      | Description                                         |
+| -------------- | --------- | --------------------------------------------------- |
+| `pressed`      | `boolean` | Whether any binding for this action is active       |
+| `justPressed`  | `boolean` | Whether the action became active this frame         |
+| `justReleased` | `boolean` | Whether the action became inactive this frame       |
+| `strength`     | `number`  | Analog strength 0–1. Digital inputs produce 0 or 1. |
+
+```ts
+const jump = input.action('jump')
+
+if (jump.justPressed) startJump()
+if (jump.pressed) holdJump()
+if (jump.justReleased) releaseJump()
+```
+
+<Tip type="info">
+  `strength` is useful for analog inputs like gamepad triggers, where you might want partial values.
+  For keyboard keys, strength is always 0 or 1.
+</Tip>
+
+Action state properties are reactive, so you can use them directly in your template:
+
+```svelte
+<p>{input.action('sprint').pressed ? 'Sprinting!' : 'Walking'}</p>
+```
+
+## Axes and Vectors
+
+### axis(negative, positive)
+
+Combines two actions into a signed axis value from -1 to 1. This is equivalent to
+Godot's `Input.get_axis()`.
+
+```ts
+const horizontal = input.axis('moveLeft', 'moveRight') // -1 to 1
+const vertical = input.axis('moveBack', 'moveForward') // -1 to 1
+```
+
+### vector(negativeX, positiveX, negativeY, positiveY)
+
+Combines four actions into a 2D vector, clamped to a unit circle (magnitude ≤ 1).
+This is equivalent to Godot's `Input.get_vector()` and handles diagonal normalization
+automatically.
+
+```ts
+const move = input.vector('moveLeft', 'moveRight', 'moveForward', 'moveBack')
+// move.x: -1 to 1
+// move.y: -1 to 1
+// magnitude is clamped to 1 (no faster diagonal movement)
+```
+
+<Tip type="info">
+  `vector()` returns the same object reference each call to avoid allocations in the game loop.
+  Don't store it across frames — read the values immediately.
+</Tip>
+
+## Active Device
+
+`input.activeDevice.current` is a reactive property that returns `'keyboard'` or
+`'gamepad'`, based on whichever device most recently provided input. Can be used, for example, to show
+context-sensitive button prompts:
+
+```svelte
+{#if input.activeDevice.current === 'keyboard'}
+  <p>Press Space to jump</p>
+{:else}
+  <p>Press A to jump</p>
+{/if}
+```
+
+## Options
+
+### keyboard
+
+Pass an existing [`useKeyboard`](/docs/reference/extras/use-keyboard) instance to
+share keyboard state. If omitted, one is created internally.
+
+```ts
+import { useKeyboard, useInputMap } from '@threlte/extras'
+
+const keyboard = useKeyboard()
+
+const input = useInputMap(
+  () => ({
+    jump: [useInputMap.key('Space')]
+  }),
+  { keyboard }
+)
+
+// Use keyboard directly for non-action key checks
+keyboard.key('Escape').justPressed
+```
+
+### gamepad
+
+Pass a [`useGamepad`](/docs/reference/extras/use-gamepad) return value to enable
+gamepad bindings. Only required if any action uses `useInputMap.gamepadButton()` or
+`useInputMap.gamepadAxis()`.
+
+```ts
+import { useGamepad, useInputMap } from '@threlte/extras'
+
+const gamepad = useGamepad()
+
+const input = useInputMap(
+  () => ({
+    jump: [useInputMap.key('Space'), useInputMap.gamepadButton('clusterBottom')]
+  }),
+  { gamepad }
+)
+```
+
+## Task Ordering
+
+`useInputMap` runs its processing task after the internal keyboard task. Schedule
+your game logic after `input.task`:
+
+```ts
+useTask(
+  () => {
+    // All action states are up to date here
+  },
+  { after: input.task }
+)
+```
+
+## Keyboard-Only Example
+
+If you don't need gamepad support, just use `useInputMap.key()` bindings:
+
+```svelte
+<script lang="ts">
+  import { T, useTask } from '@threlte/core'
+  import { useInputMap } from '@threlte/extras'
+
+  const input = useInputMap(() => ({
+    jump: [useInputMap.key('Space')],
+    moveLeft: [useInputMap.key('a'), useInputMap.key('ArrowLeft')],
+    moveRight: [useInputMap.key('d'), useInputMap.key('ArrowRight')],
+    moveForward: [useInputMap.key('w'), useInputMap.key('ArrowUp')],
+    moveBack: [useInputMap.key('s'), useInputMap.key('ArrowDown')],
+    sprint: [useInputMap.key('Shift')]
+  }))
+
+  let x = $state(0)
+  let z = $state(0)
+
+  useTask(
+    (delta) => {
+      const move = input.vector('moveLeft', 'moveRight', 'moveForward', 'moveBack')
+      const speed = input.action('sprint').pressed ? 10 : 5
+
+      x += move.x * speed * delta
+      z += move.y * speed * delta
+    },
+    { after: input.task }
+  )
+</script>
+
+<T.Mesh
+  position.x={x}
+  position.z={z}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial color="orange" />
+</T.Mesh>
+```
