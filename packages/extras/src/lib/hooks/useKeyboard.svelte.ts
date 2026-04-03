@@ -31,7 +31,6 @@ const normalize = (key: string) => {
 }
 
 export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
-
   const keys = new Map<string, KeyState>()
   const pendingDown = new Set<string>()
   const pendingUp = new Set<string>()

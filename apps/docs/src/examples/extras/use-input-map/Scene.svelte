@@ -4,7 +4,10 @@
   import { useInputMap, useGamepad, useKeyboard, Grid, HTML } from '@threlte/extras'
   import Character from './Character.svelte'
 
-  let { sprintKey = 'Shift', activeDevice = $bindable('keyboard') }: { sprintKey?: string; activeDevice?: string } = $props()
+  let {
+    sprintKey = 'Shift',
+    activeDevice = $bindable('keyboard')
+  }: { sprintKey?: string; activeDevice?: string } = $props()
 
   const keyboard = useKeyboard()
   const gamepad = useGamepad()

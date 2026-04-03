@@ -30,7 +30,10 @@
 
 <div>
   <Canvas>
-    <Scene {sprintKey} bind:activeDevice />
+    <Scene
+      {sprintKey}
+      bind:activeDevice
+    />
   </Canvas>
 </div>
 
