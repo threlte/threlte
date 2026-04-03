@@ -313,8 +313,8 @@ const processAxis = (
 
 type StandardGamepadButton = ReturnType<typeof createButton>
 type StandardGamepadStick = ReturnType<typeof createAxis>
-type StandardGamepad = ReturnType<typeof createStandard>
-type StandardXRGamepad = ReturnType<typeof createXrStandard>
+export type StandardGamepad = ReturnType<typeof createStandard>
+export type StandardXRGamepad = ReturnType<typeof createXrStandard>
 
 export function useGamepad(): StandardGamepad
 export function useGamepad(options: UseGamepadOptions & { xr?: never }): StandardGamepad

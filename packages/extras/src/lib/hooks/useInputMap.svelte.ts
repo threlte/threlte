@@ -1,6 +1,6 @@
 import { useTask } from '@threlte/core'
 import type { UseKeyboardReturn } from './useKeyboard.svelte.js'
-import type { useGamepad } from './useGamepad.svelte.js'
+import type { StandardGamepad, StandardXRGamepad } from './useGamepad.svelte.js'
 
 interface KeyboardBinding {
   type: 'keyboard'
@@ -42,7 +42,7 @@ interface UseInputMapOptions {
    * A gamepad returned by `useGamepad()`. Required only if any action uses
    * `useInputMap.gamepadButton()` or `useInputMap.gamepadAxis()` bindings.
    */
-  gamepad?: ReturnType<typeof useGamepad>
+  gamepad?: StandardGamepad | StandardXRGamepad
 }
 
 const bindingHelpers = {
