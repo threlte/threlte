@@ -9,17 +9,8 @@ export { useProgress } from './hooks/useProgress.js'
 export { useTexture } from './hooks/useTexture.js'
 export { useFBO } from './hooks/useFBO.svelte.js'
 export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad.svelte.js'
-export {
-  useKeyboard,
-  KeyState,
-  type UseKeyboardOptions,
-  type UseKeyboardReturn
-} from './hooks/useKeyboard.svelte.js'
-export {
-  useInputMap,
-  type UseInputMapOptions,
-  type UseInputMapReturn
-} from './hooks/useInputMap.svelte.js'
+export { useKeyboard } from './hooks/useKeyboard.svelte.js'
+export { useInputMap } from './hooks/useInputMap.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
 export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'

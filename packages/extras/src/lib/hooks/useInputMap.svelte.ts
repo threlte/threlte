@@ -1,5 +1,6 @@
 import { useTask } from '@threlte/core'
 import type { UseKeyboardReturn } from './useKeyboard.svelte.js'
+import type { useGamepad } from './useGamepad.svelte.js'
 
 interface KeyboardBinding {
   type: 'keyboard'
@@ -34,27 +35,53 @@ class ActionState {
 
 type ActionDefinitions = Record<string, Binding[]>
 
-interface Gamepad {
-  [key: string]: {
-    pressed?: boolean
-    value?: number
-    x?: number
-    y?: number
-  }
-}
-
-export interface UseInputMapOptions {
+interface UseInputMapOptions {
   /** A `useKeyboard` instance for resolving keyboard bindings. */
   keyboard: UseKeyboardReturn
   /**
    * A gamepad returned by `useGamepad()`. Required only if any action uses
    * `useInputMap.gamepadButton()` or `useInputMap.gamepadAxis()` bindings.
    */
-  gamepad?: Gamepad
+  gamepad?: ReturnType<typeof useGamepad>
 }
 
-function useInputMapFn<T extends ActionDefinitions>(
-  definitionsFn: () => T,
+const bindingHelpers = {
+  /** Bind a keyboard key by its `KeyboardEvent.key` value. Matching is case-insensitive. */
+  key: (key: string): KeyboardBinding => ({
+    type: 'keyboard',
+    key
+  }),
+  /** Bind a standard gamepad button (e.g. `'clusterBottom'`, `'leftTrigger'`). */
+  gamepadButton: (button: string): GamepadButtonBinding => ({
+    type: 'gamepadButton',
+    button
+  }),
+  /**
+   * Bind a gamepad stick axis.
+   *
+   * ```ts
+   * gamepadAxis('leftStick', 'x', 1)   // right on the left stick
+   * gamepadAxis('leftStick', 'y', -1)  // up on the left stick
+   * ```
+   */
+  gamepadAxis: (
+    stick: string,
+    axis: 'x' | 'y',
+    direction: 1 | -1,
+    threshold = 0.1
+  ): GamepadAxisBinding => ({
+    type: 'gamepadAxis',
+    stick,
+    axis,
+    direction,
+    threshold
+  })
+} as const
+
+export type BindingHelpers = typeof bindingHelpers
+
+export function useInputMap<T extends ActionDefinitions>(
+  definitionsFn: (map: BindingHelpers) => T,
   options: UseInputMapOptions
 ) {
   type ActionName = keyof T & string
@@ -68,7 +95,7 @@ function useInputMapFn<T extends ActionDefinitions>(
   const previousPressed = new Map<string, boolean>()
 
   // Eagerly create action states so they're available before the first frame
-  for (const name of Object.keys(definitionsFn())) {
+  for (const name of Object.keys(definitionsFn(bindingHelpers))) {
     actionStates.set(name, new ActionState())
     previousPressed.set(name, false)
   }
@@ -81,13 +108,13 @@ function useInputMapFn<T extends ActionDefinitions>(
       }
       case 'gamepadButton': {
         if (!gamepad) return 0
-        const btn = gamepad[binding.button]
+        const btn = (gamepad as any)[binding.button]
         if (!btn) return 0
         return btn.value ?? (btn.pressed ? 1 : 0)
       }
       case 'gamepadAxis': {
         if (!gamepad) return 0
-        const stick = gamepad[binding.stick]
+        const stick = (gamepad as any)[binding.stick]
         if (!stick) return 0
         const raw = stick[binding.axis] ?? 0
         const directed = raw * binding.direction
@@ -114,7 +141,7 @@ function useInputMapFn<T extends ActionDefinitions>(
   const { task } = useTask(
     'useInputMap',
     () => {
-      const actions = definitionsFn()
+      const actions = definitionsFn(bindingHelpers)
 
       for (const [name, bindings] of Object.entries(actions) as [ActionName, Binding[]][]) {
         const state = getOrCreateState(name)
@@ -198,47 +225,4 @@ function useInputMapFn<T extends ActionDefinitions>(
   }
 }
 
-// ---------------------------------------------------------------------------
-// Binding helpers — namespaced as static methods on useInputMap
-// ---------------------------------------------------------------------------
-
-/** Bind a keyboard key by its `KeyboardEvent.key` value. Matching is case-insensitive. */
-const key = (key: string): KeyboardBinding => ({
-  type: 'keyboard',
-  key
-})
-
-/** Bind a standard gamepad button (e.g. `'clusterBottom'`, `'leftTrigger'`). */
-const gamepadButton = (button: string): GamepadButtonBinding => ({
-  type: 'gamepadButton',
-  button
-})
-
-/**
- * Bind a gamepad stick axis.
- *
- * ```ts
- * useInputMap.gamepadAxis('leftStick', 'x', 1)   // right on the left stick
- * useInputMap.gamepadAxis('leftStick', 'y', -1)  // up on the left stick
- * ```
- */
-const gamepadAxis = (
-  stick: string,
-  axis: 'x' | 'y',
-  direction: 1 | -1,
-  threshold = 0.1
-): GamepadAxisBinding => ({
-  type: 'gamepadAxis',
-  stick,
-  axis,
-  direction,
-  threshold
-})
-
-export const useInputMap = Object.assign(useInputMapFn, {
-  key,
-  gamepadButton,
-  gamepadAxis
-})
-
-export type UseInputMapReturn = ReturnType<typeof useInputMapFn>
+export type UseInputMapReturn = ReturnType<typeof useInputMap>

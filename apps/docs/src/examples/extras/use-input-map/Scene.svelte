@@ -13,28 +13,12 @@
   const gamepad = useGamepad()
 
   const input = useInputMap(
-    () => ({
-      moveLeft: [
-        useInputMap.key('a'),
-        useInputMap.key('ArrowLeft'),
-        useInputMap.gamepadAxis('leftStick', 'x', -1)
-      ],
-      moveRight: [
-        useInputMap.key('d'),
-        useInputMap.key('ArrowRight'),
-        useInputMap.gamepadAxis('leftStick', 'x', 1)
-      ],
-      moveForward: [
-        useInputMap.key('w'),
-        useInputMap.key('ArrowUp'),
-        useInputMap.gamepadAxis('leftStick', 'y', -1)
-      ],
-      moveBack: [
-        useInputMap.key('s'),
-        useInputMap.key('ArrowDown'),
-        useInputMap.gamepadAxis('leftStick', 'y', 1)
-      ],
-      sprint: [useInputMap.key(sprintKey), useInputMap.gamepadButton('leftBumper')]
+    ({ key, gamepadAxis, gamepadButton }) => ({
+      moveLeft: [key('a'), key('ArrowLeft'), gamepadAxis('leftStick', 'x', -1)],
+      moveRight: [key('d'), key('ArrowRight'), gamepadAxis('leftStick', 'x', 1)],
+      moveForward: [key('w'), key('ArrowUp'), gamepadAxis('leftStick', 'y', -1)],
+      moveBack: [key('s'), key('ArrowDown'), gamepadAxis('leftStick', 'y', 1)],
+      sprint: [key(sprintKey), gamepadButton('leftBumper')]
     }),
     { keyboard, gamepad }
   )
