@@ -16,8 +16,9 @@ game logic from specific input devices.
 ```svelte
 <script lang="ts">
   import { useTask } from '@threlte/core'
-  import { useInputMap, useGamepad } from '@threlte/extras'
+  import { useInputMap, useKeyboard, useGamepad } from '@threlte/extras'
 
+  const keyboard = useKeyboard()
   const gamepad = useGamepad()
 
   const input = useInputMap(
@@ -28,7 +29,7 @@ game logic from specific input devices.
       moveForward: [useInputMap.key('w'), useInputMap.gamepadAxis('leftStick', 'y', -1)],
       moveBack: [useInputMap.key('s'), useInputMap.gamepadAxis('leftStick', 'y', 1)]
     }),
-    { gamepad }
+    { keyboard, gamepad }
   )
 
   useTask(
@@ -53,13 +54,17 @@ runtime — for example, when the user remaps controls in a settings screen:
 
 ```svelte
 <script lang="ts">
-  import { useInputMap } from '@threlte/extras'
+  import { useInputMap, useKeyboard } from '@threlte/extras'
 
+  const keyboard = useKeyboard()
   let jumpKey = $state('Space')
 
-  const input = useInputMap(() => ({
-    jump: [useInputMap.key(jumpKey)]
-  }))
+  const input = useInputMap(
+    () => ({
+      jump: [useInputMap.key(jumpKey)]
+    }),
+    { keyboard }
+  )
 
   // Later, when the user remaps:
   jumpKey = 'j'
@@ -194,8 +199,8 @@ context-sensitive button prompts:
 
 ### keyboard
 
-Pass an existing [`useKeyboard`](/docs/reference/extras/use-keyboard) instance to
-share keyboard state. If omitted, one is created internally.
+A [`useKeyboard`](/docs/reference/extras/use-keyboard) instance for resolving
+keyboard bindings.
 
 ```ts
 import { useKeyboard, useInputMap } from '@threlte/extras'
@@ -208,9 +213,6 @@ const input = useInputMap(
   }),
   { keyboard }
 )
-
-// Use keyboard directly for non-action key checks
-keyboard.key('Escape').justPressed
 ```
 
 ### gamepad
@@ -220,15 +222,16 @@ gamepad bindings. Only required if any action uses `useInputMap.gamepadButton()`
 `useInputMap.gamepadAxis()`.
 
 ```ts
-import { useGamepad, useInputMap } from '@threlte/extras'
+import { useKeyboard, useGamepad, useInputMap } from '@threlte/extras'
 
+const keyboard = useKeyboard()
 const gamepad = useGamepad()
 
 const input = useInputMap(
   () => ({
     jump: [useInputMap.key('Space'), useInputMap.gamepadButton('clusterBottom')]
   }),
-  { gamepad }
+  { keyboard, gamepad }
 )
 ```
 
@@ -253,16 +256,21 @@ If you don't need gamepad support, just use `useInputMap.key()` bindings:
 ```svelte
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { useInputMap } from '@threlte/extras'
+  import { useInputMap, useKeyboard } from '@threlte/extras'
 
-  const input = useInputMap(() => ({
-    jump: [useInputMap.key('Space')],
-    moveLeft: [useInputMap.key('a'), useInputMap.key('ArrowLeft')],
-    moveRight: [useInputMap.key('d'), useInputMap.key('ArrowRight')],
-    moveForward: [useInputMap.key('w'), useInputMap.key('ArrowUp')],
-    moveBack: [useInputMap.key('s'), useInputMap.key('ArrowDown')],
-    sprint: [useInputMap.key('Shift')]
-  }))
+  const keyboard = useKeyboard()
+
+  const input = useInputMap(
+    () => ({
+      jump: [useInputMap.key('Space')],
+      moveLeft: [useInputMap.key('a'), useInputMap.key('ArrowLeft')],
+      moveRight: [useInputMap.key('d'), useInputMap.key('ArrowRight')],
+      moveForward: [useInputMap.key('w'), useInputMap.key('ArrowUp')],
+      moveBack: [useInputMap.key('s'), useInputMap.key('ArrowDown')],
+      sprint: [useInputMap.key('Shift')]
+    }),
+    { keyboard }
+  )
 
   let x = $state(0)
   let z = $state(0)

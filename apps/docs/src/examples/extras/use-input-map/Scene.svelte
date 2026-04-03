@@ -1,11 +1,12 @@
 <script lang="ts">
   import { MathUtils } from 'three'
   import { T, useTask } from '@threlte/core'
-  import { useInputMap, useGamepad, Grid, HTML } from '@threlte/extras'
+  import { useInputMap, useGamepad, useKeyboard, Grid, HTML } from '@threlte/extras'
   import Character from './Character.svelte'
 
   let { sprintKey = 'Shift', activeDevice = $bindable('keyboard') }: { sprintKey?: string; activeDevice?: string } = $props()
 
+  const keyboard = useKeyboard()
   const gamepad = useGamepad()
 
   const input = useInputMap(
@@ -32,11 +33,11 @@
       ],
       sprint: [useInputMap.key(sprintKey), useInputMap.gamepadButton('leftBumper')]
     }),
-    { gamepad }
+    { keyboard, gamepad }
   )
 
   // Prevent arrow keys from scrolling the page
-  input.keyboard.on('keydown', (e) => {
+  keyboard.on('keydown', (e) => {
     if (e.key.startsWith('Arrow')) e.preventDefault()
   })
 

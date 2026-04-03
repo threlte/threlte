@@ -1,5 +1,5 @@
 import { useTask } from '@threlte/core'
-import { useKeyboard, type UseKeyboardReturn } from './useKeyboard.svelte.js'
+import type { UseKeyboardReturn } from './useKeyboard.svelte.js'
 
 interface KeyboardBinding {
   type: 'keyboard'
@@ -44,11 +44,8 @@ interface Gamepad {
 }
 
 export interface UseInputMapOptions {
-  /**
-   * An existing `useKeyboard` return value. If omitted, one is created
-   * internally. Share a keyboard instance when you also need raw key access.
-   */
-  keyboard?: UseKeyboardReturn
+  /** A `useKeyboard` instance for resolving keyboard bindings. */
+  keyboard: UseKeyboardReturn
   /**
    * A gamepad returned by `useGamepad()`. Required only if any action uses
    * `useInputMap.gamepadButton()` or `useInputMap.gamepadAxis()` bindings.
@@ -58,11 +55,11 @@ export interface UseInputMapOptions {
 
 function useInputMapFn<T extends ActionDefinitions>(
   definitionsFn: () => T,
-  options: UseInputMapOptions = {}
+  options: UseInputMapOptions
 ) {
   type ActionName = keyof T & string
 
-  const keyboard = options.keyboard ?? useKeyboard()
+  const keyboard = options.keyboard
   const gamepad = options.gamepad
 
   let _activeDevice: 'keyboard' | 'gamepad' = $state('keyboard')
@@ -189,8 +186,6 @@ function useInputMapFn<T extends ActionDefinitions>(
   return {
     /** The internal task, for ordering other tasks via `after`/`before`. */
     task,
-    /** The keyboard instance used by this input map. */
-    keyboard,
     /** The most recently active input device. Switches when a new device provides input. */
     activeDevice: {
       get current() {
