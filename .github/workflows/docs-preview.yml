@@ -38,7 +38,7 @@ jobs:
 
       - name: Build docs
         env:
-          BASE_PATH: /threlte/previews/pr-${{ github.event.pull_request.number }}
+          BASE_PATH: /previews/pr-${{ github.event.pull_request.number }}
         run: pnpm run build:docs
 
       - name: Checkout gh-pages
