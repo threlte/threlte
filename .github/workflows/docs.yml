@@ -30,9 +30,6 @@ jobs:
           run_install: true
 
       - name: Build docs
-        env:
-          # TODO: Remove BASE_PATH once threlte.xyz custom domain is linked
-          BASE_PATH: /threlte
         run: pnpm run build:docs
 
       - name: Checkout gh-pages
@@ -56,6 +53,7 @@ jobs:
           find . -maxdepth 1 ! -name '.git' ! -name '.' -exec rm -rf {} +
           cp -r ../apps/docs/dist/* .
           touch .nojekyll
+          echo "threlte.xyz" > CNAME
 
           git add -A
           git diff --staged --quiet || git commit -m "Deploy docs from ${{ github.sha }}"
