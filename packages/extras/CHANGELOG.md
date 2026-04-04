@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.14.3
+
+### Patch Changes
+
+- 0cbb589: Add useInputMap: action mapping system unifying keyboard and gamepad
+- 0cbb589: Add useKeyboard: reactive, frame accurate keyboard tracking
+
 ## 9.14.2
 
 ### Patch Changes
