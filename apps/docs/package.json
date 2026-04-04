@@ -57,6 +57,7 @@
     "@threlte/theatre": "workspace:*",
     "@threlte/xr": "workspace:*",
     "@types/animejs": "^3.1.7",
+    "@types/node": "catalog:",
     "@types/three": "catalog:",
     "@types/webxr": "catalog:",
     "animejs": "^3.2.1",
