@@ -130,15 +130,15 @@ Event listeners can be attached to individual buttons, sticks, or the gamepad it
 
 Available events:
 
-| Event        | Description                                              |
-| ------------ | -------------------------------------------------------- |
-| `down`       | Fires when a button press begins                         |
-| `up`         | Fires when a button press ends                           |
-| `press`      | Fires when a button is pressed (after release)           |
-| `change`     | Fires when a button or stick value changes               |
-| `touchstart` | Fires when a touch begins (if supported by the gamepad)  |
-| `touchend`   | Fires when a touch ends                                  |
-| `touch`      | Fires when a touch completes (after release)             |
+| Event        | Description                                             |
+| ------------ | ------------------------------------------------------- |
+| `down`       | Fires when a button press begins                        |
+| `up`         | Fires when a button press ends                          |
+| `press`      | Fires when a button is pressed (after release)          |
+| `change`     | Fires when a button or stick value changes              |
+| `touchstart` | Fires when a touch begins (if supported by the gamepad) |
+| `touchend`   | Fires when a touch ends                                 |
+| `touch`      | Fires when a touch completes (after release)            |
 
 ## Task Ordering
 
@@ -188,8 +188,8 @@ The raw unmapped [Gamepad](https://developer.mozilla.org/en-US/docs/Web/API/Game
 can be accessed via `gamepad.raw`. This will be `null` unless a gamepad is connected.
 
 <Tip type="warning">
-  Gamepad data is fetched as an immutable snapshot on every frame, so any variable
-  that caches `gamepad.raw` will become stale on the next frame.
+  Gamepad data is fetched as an immutable snapshot on every frame, so any variable that caches
+  `gamepad.raw` will become stale on the next frame.
 </Tip>
 
 ## Button Mapping
@@ -197,6 +197,7 @@ can be accessed via `gamepad.raw`. This will be `null` unless a gamepad is conne
 The gamepad maps 17 standard buttons and 2 sticks:
 
 **Buttons:**
+
 - **Right cluster:** `clusterBottom`, `clusterRight`, `clusterLeft`, `clusterTop`
 - **Bumpers and triggers:** `leftBumper`, `rightBumper`, `leftTrigger`, `rightTrigger`
 - **Center:** `select`, `start`, `center`
@@ -204,6 +205,7 @@ The gamepad maps 17 standard buttons and 2 sticks:
 - **D-pad:** `directionalTop`, `directionalBottom`, `directionalLeft`, `directionalRight`
 
 **Sticks:**
+
 - `leftStick`, `rightStick`
 
 ## XR Gamepad
