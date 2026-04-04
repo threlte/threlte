@@ -26,6 +26,7 @@ interface BindingInfo {
   name: string
   type: string
   description?: string
+	isbinding?: boolean
 }
 
 interface SnippetInfo {
@@ -162,7 +163,7 @@ function getPropsFromSources(params: { name: string; path: string; project: Proj
   const props: PropInfo[] = []
   const events: EventInfo[] = []
   const snippets: SnippetInfo[] = []
-  const bindings = extractBindings(src)
+  const bindings: BindingInfo[] = extractBindings(src)
 
   const propsSvelteFile = dataFromSvelteFile({name, src, path, project})
 	const propsTypesFile = dataFromTypesFile({name, path, project})
@@ -173,12 +174,8 @@ function getPropsFromSources(params: { name: string; path: string; project: Proj
 		propsSvelteFile.push(data)
   }
 
-  // Process the props
-  // const type = propsAlias.getType()
-  // const properties = type.getApparentProperties()
-  // const typeName = prop.getName()
-  // let typeText = prop.getTypeAtLocation(sourceFile).getText()
-  // typeText = updateTypeText(typeText)
+	// merge
+	let propsData = Object.assign({}, propsSvelteFile, propsTypesFile)
 
 	// TODO-DefinitelyMaybe: camera props "manual" and "makeDefault" make it to the T component data
 
@@ -192,12 +189,12 @@ function getPropsFromSources(params: { name: string; path: string; project: Proj
       snippets.push(prop as SnippetInfo)
     } else {
 			// we attached a boolean to check here
-			const check = prop.isbinding ? true: false
+			const check = (prop as BindingInfo).isbinding ? true: false
 			if (check) {
 				bindings.push({
 					name: prop.name,
 					type: prop.type,
-					description: prop.description
+					description: (prop as BindingInfo).description
 				})
 			} else {
 				props.push(prop as PropInfo)
@@ -373,6 +370,13 @@ function dataFromSvelteFile(params:{name:string, src:string, path:string, projec
 
   let type = propsAlias?.getType()
   let properties = type?.getApparentProperties()
+
+	// Process the props
+  // const type = propsAlias.getType()
+  // const properties = type.getApparentProperties()
+  // const typeName = prop.getName()
+  // let typeText = prop.getTypeAtLocation(sourceFile).getText()
+  // typeText = updateTypeText(typeText)
 
 	const data = []
 
