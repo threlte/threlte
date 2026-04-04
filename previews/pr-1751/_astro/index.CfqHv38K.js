@@ -1,0 +1,1 @@
+function r(n){return n}function c(n){return n<.5?4*n*n*n:.5*Math.pow(2*n-2,3)+1}function a(n){return n*n*n}function i(n){const u=n-1;return u*u*u+1}function e(n){return n/=.5,n<1?.5*n*n:(n--,-.5*(n*(n-2)-1))}function o(n){return-n*(n-2)}export{o as a,a as b,i as c,c as d,r as l,e as q};

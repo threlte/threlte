@@ -1,0 +1,1 @@
+import{az as c,g as i,m as n,ap as u,u as f,aA as s,q as o}from"./runtime.XdAhm9hg.js";function b(a){let e=0,r=n(0),t;return()=>{c()&&(i(r),u(()=>(e===0&&(t=f(()=>a(()=>s(r)))),e+=1,()=>{o(()=>{e-=1,e===0&&(t?.(),t=void 0,s(r))})})))}}export{b as c};

@@ -1,0 +1,1 @@
+import"./disclose-version.DsnmJJEf.js";import{a as o}from"./T.CIQBugds.js";/* empty css                                                      */const a=(r,i)=>{let e=0;const t=i.fixedStep??1/60;return o(m=>{for(e+=m;e>=t;)e-=t,r(t)},i)};export{a as u};
