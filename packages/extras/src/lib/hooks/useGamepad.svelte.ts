@@ -93,7 +93,7 @@ export type StandardGamepadEvent =
     }
 
 type Fn = (event: StandardGamepadEvent) => void
-type Events = { [K in StandardGamepadEvents]?: Fn[] }
+type Events = { [K in StandardGamepadEvents]?: Set<Fn> }
 
 class GamepadButtonState {
   pressed = $state(false)
@@ -106,14 +106,12 @@ class GamepadButtonState {
 
   constructor(events: Events[], index: number) {
     this.off = (name: StandardGamepadEvents, fn: Fn): void => {
-      if (!(index in events) || !(name in events[index])) return
-      const arrayIndex = events[index][name]!.indexOf(fn)
-      if (arrayIndex > -1) events[index][name]!.splice(arrayIndex, 1)
+      events[index]?.[name]?.delete(fn)
     }
 
     this.on = (name: StandardGamepadEvents, fn: Fn): (() => void) => {
-      events[index][name] ??= []
-      events[index][name]!.push(fn)
+      events[index][name] ??= new Set()
+      events[index][name]!.add(fn)
       return () => {
         this.off(name, fn)
       }
@@ -129,13 +127,11 @@ class GamepadAxisState {
 
   constructor(events: Events[], index: number) {
     this.off = (name, fn) => {
-      if (!(index in events) || !(name in events[index])) return
-      const arrayIndex = events[index][name]!.indexOf(fn)
-      if (arrayIndex > -1) events[index][name]!.splice(arrayIndex, 1)
+      events[index]?.[name]?.delete(fn)
     }
     this.on = (name, fn) => {
-      events[index][name] ??= []
-      events[index][name]!.push(fn)
+      events[index][name] ??= new Set()
+      events[index][name]!.add(fn)
       return () => this.off(name, fn)
     }
   }
@@ -146,14 +142,12 @@ const createAxis = (events: Events[], index: number) => new GamepadAxisState(eve
 
 const createXrStandard = (allEvents: Events, events: Events[]) => {
   const off = (name: StandardGamepadEvents, fn: Fn) => {
-    if (!allEvents[name]) return
-    const index = allEvents[name]!.indexOf(fn)
-    if (index > -1) allEvents[name]!.splice(index, 1)
+    allEvents[name]?.delete(fn)
   }
 
   const on = (name: StandardGamepadEvents, fn: Fn) => {
-    allEvents[name] ??= []
-    allEvents[name]!.push(fn)
+    allEvents[name] ??= new Set()
+    allEvents[name]!.add(fn)
     return () => off(name, fn)
   }
 
@@ -217,14 +211,12 @@ const createXrStandard = (allEvents: Events, events: Events[]) => {
 
 const createStandard = (allEvents: Events, events: Events[]) => {
   const off = (name: StandardGamepadEvents, fn: Fn) => {
-    if (!allEvents[name]) return
-    const index = allEvents[name]!.indexOf(fn)
-    if (index > -1) allEvents[name]!.splice(index, 1)
+    allEvents[name]?.delete(fn)
   }
 
   const on = (name: StandardGamepadEvents, fn: Fn) => {
-    allEvents[name] ??= []
-    allEvents[name]!.push(fn)
+    allEvents[name] ??= new Set()
+    allEvents[name]!.add(fn)
     return () => off(name, fn)
   }
 

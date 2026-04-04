@@ -1,12 +1,11 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import type { StandardGamepad } from '@threlte/extras'
-  import { Pane, Folder, Slider, Checkbox } from 'svelte-tweakpane-ui'
+  import { Pane, Folder, Slider, ButtonGrid } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
 
   let gamepadRef = $state<StandardGamepad>()
 
-  // Buttons
   const buttonNames = [
     'clusterBottom',
     'clusterRight',
@@ -14,8 +13,6 @@
     'clusterTop',
     'leftBumper',
     'rightBumper',
-    'leftTrigger',
-    'rightTrigger',
     'select',
     'start',
     'leftStickButton',
@@ -28,21 +25,25 @@
   ] as const
 
   const stickNames = ['leftStick', 'rightStick'] as const
+
+  const buttonLabels = $derived(
+    gamepadRef
+      ? buttonNames.map((name) => (gamepadRef?.button(name).pressed ? `▶ ${name}` : name))
+      : buttonNames.map((name) => name)
+  )
 </script>
 
 <Pane
   title=""
   position="fixed"
 >
-  {#if gamepadRef}
-    {#each buttonNames as name}
-      <Checkbox
-        value={gamepadRef.button(name).pressed}
-        label={name}
-        disabled
-      />
-    {/each}
+  <ButtonGrid
+    buttons={buttonLabels}
+    columns={2}
+    disabled
+  />
 
+  {#if gamepadRef}
     <Folder title="Triggers">
       <Slider
         value={gamepadRef.button('leftTrigger').value}
@@ -78,12 +79,6 @@
         />
       {/each}
     </Folder>
-  {:else}
-    <Checkbox
-      value={false}
-      label="connected"
-      disabled
-    />
   {/if}
 </Pane>
 
