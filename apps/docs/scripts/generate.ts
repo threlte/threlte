@@ -1,10 +1,8 @@
 import { readFileSync, statSync, readdirSync, writeFileSync, existsSync } from 'fs'
 import { svelte2tsx } from 'svelte2tsx'
-import { Project, SourceFile, TypeAliasDeclaration } from 'ts-morph'
+import { Node, Project, SourceFile, type Symbol, TypeAliasDeclaration } from 'ts-morph'
 import { join, resolve, basename, dirname } from 'path'
 import { fileURLToPath } from 'url'
-
-// TODO-DefinitelyMaybe: camera props "manual" and "makeDefault" make it to the T component data
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
@@ -45,12 +43,6 @@ interface ComponentData {
   snippets?: SnippetInfo[]
 }
 
-interface OptionInfo {
-  name: string
-  type: string
-  default?: string
-}
-
 async function main() {
   const packages = collectPackageNames(PACKAGES_DIR, IGNORED_PACKAGES)
   console.log('Collected Packages:', packages)
@@ -65,7 +57,19 @@ async function main() {
 
     for (const componentPath of components) {
       console.log('Processing:', componentPath)
-      const data = extractComponentData(packageName, componentPath, project)
+      const name = basename(componentPath, '.svelte')
+
+      const propsData = getPropsFromSources({
+        name,
+        path: componentPath,
+        project
+      })
+
+			const data = {
+        name,
+        package: packageName
+				...propsData
+      }
       allComponents.push(data)
     }
   }
@@ -131,89 +135,6 @@ function getAllTsFiles(dir: string): string[] {
   return filePaths
 }
 
-function extractComponentData(
-  packageName: string,
-  componentPath: string,
-  project: Project
-): ComponentData {
-  const name = basename(componentPath, '.svelte')
-  const data: {
-    name: string
-    package: string
-    props?: PropInfo[]
-    events?: EventInfo[]
-    snippets?: SnippetInfo[]
-    bindings?: BindingInfo[]
-  } = {
-    name,
-    package: packageName
-  }
-
-  const typesPath = findTypesFile(componentPath)
-  const svelteSource = readFileSync(componentPath, 'utf-8')
-
-  const props: PropInfo[] = []
-  // extractPropsFromTsx(tsxSourceFile, svelteSource, project, typesPath, name)
-  const events: EventInfo[] = []
-  //  extractEvents(project, typesPath, name)
-  const snippets: SnippetInfo[] = []
-  // extractSnippets(project, typesPath, name)
-  const bindings: BindingInfo[] = extractBindings(svelteSource)
-
-  const propsData = getPropsFromSources({
-    name,
-    src: svelteSource,
-    path: componentPath,
-    typesPath,
-    project
-  })
-
-  if (propsData) {
-    for (const prop of propsData) {
-      const { name } = prop
-
-      if (name.startsWith('on')) {
-        // events
-        events.push({
-          name: '',
-          type: ''
-        })
-      } else if (name === 'children') {
-        // snippets
-        snippets.push({
-          name: '',
-          parameters: []
-        })
-      } else {
-        let defaultValue
-        let description
-
-        props.push({
-          name,
-          type: '',
-          default: defaultValue,
-          description
-        })
-      }
-    }
-  }
-
-  if (props.length > 0) {
-    data.props = props
-  }
-  if (events.length > 0) {
-    data.events = events
-  }
-  if (snippets.length > 0) {
-    data.snippets = snippets
-  }
-  if (bindings.length > 0) {
-    data.bindings = bindings
-  }
-
-  return data
-}
-
 function findTypesFile(componentPath: string): string | null {
   const dir = dirname(componentPath)
   const typesPath = join(dir, 'types.ts')
@@ -231,65 +152,25 @@ function findTypesFile(componentPath: string): string | null {
 
 /**
  *
- * we either use the .svelte file convertered into tsx or we look into the surrounding types.ts files
+ * we use both the .svelte file convertered into tsx and we look into the surrounding types.ts files
  */
-function getPropsFromSources(params: {
-  name: string
-  src: string
-  path: string
-  typesPath: string
-  project: Project
-}) {
-  const { name, src, path, typesPath, project } = params
+function getPropsFromSources(params: { name: string; path: string; project: Project }) {
+  const { name, path, project } = params
 
-  const propsData: (PropInfo | EventInfo | SnippetInfo)[] = []
+  const src = readFileSync(path, 'utf-8')
 
-  // use the svelte file first
-  const { code } = svelte2tsx(src, { filename: path, mode: 'ts' })
-  const tsxPath = join('./', `${name}.tsx`)
-  const tsxSourceFile = project.createSourceFile(tsxPath, code, { overwrite: true })
+  const props: PropInfo[] = []
+  const events: EventInfo[] = []
+  const snippets: SnippetInfo[] = []
+  const bindings = extractBindings(src)
 
-  let propsAlias = tsxSourceFile.getTypeAlias('Props')
-
-  let type = propsAlias?.getType()
-  let properties = type?.getApparentProperties()
-
-  console.log('Alias (svelte2tsx):')
-  if (properties) {
-    for (const prop of properties) {
-      const name = prop.getName()
-      console.log(name)
-    }
-  }
-
-  // then try the types.ts files around the svelte file
-  const typesSourceFile = project.getSourceFile(typesPath)
-  if (typesSourceFile) {
-    propsAlias = findAlias(typesSourceFile, name) ?? undefined
-  }
-
-  type = propsAlias?.getType()
-  properties = type?.getApparentProperties()
-
-  console.log('Alias (types.ts):')
-  if (properties) {
-    for (const prop of properties) {
-      const name = prop.getName()
-      console.log(name)
-    }
-  }
+  const propsSvelteFile = dataFromSvelteFile({name, src, path, project})
+	const propsTypesFile = dataFromTypesFile({name, path, project})
 
   // canvas is a special one
   if (name === 'Canvas') {
-    const options = extractThrelteOptions(project)
-    propsData.push(
-      ...options.map((o) => ({
-        name: o.name,
-        type: o.type,
-        default: o.default,
-        description: undefined
-      }))
-    )
+    const data = extractCanvasData(project)
+		propsSvelteFile.push(data)
   }
 
   // Process the props
@@ -299,8 +180,248 @@ function getPropsFromSources(params: {
   // let typeText = prop.getTypeAtLocation(sourceFile).getText()
   // typeText = updateTypeText(typeText)
 
-  return propsData
+	// TODO-DefinitelyMaybe: camera props "manual" and "makeDefault" make it to the T component data
+
+	// sort props into their categories
+  for (const prop of propsData) {
+    const { name } = prop
+
+    if (name.startsWith('on')) {
+			events.push(prop as EventInfo)
+    } else if (name === 'children') {
+      snippets.push(prop as SnippetInfo)
+    } else {
+			// we attached a boolean to check here
+			const check = prop.isbinding ? true: false
+			if (check) {
+				bindings.push({
+					name: prop.name,
+					type: prop.type,
+					description: prop.description
+				})
+			} else {
+				props.push(prop as PropInfo)
+			}
+    }
+  }
+
+	let output: {
+    props?: PropInfo[]
+    events?: EventInfo[]
+    snippets?: SnippetInfo[]
+    bindings?: BindingInfo[]
+  } = {}
+
+	if (props.length > 0) {
+		output.props = props
+	}
+	if (events.length > 0) {
+		output.events = events
+	}
+	if (snippets.length > 0) {
+		output.snippets = snippets
+	}
+	if (bindings.length > 0) {
+		output.bindings = bindings
+	}
+
+  return output
 }
+
+function updateTypeText(text: string) {
+  const regex = /import\(.+?\)\./g
+  let match
+  while ((match = regex.exec(text)) !== null) {
+    console.log(match[0])
+    if (match[0].includes('constants')) {
+      text = text.replace(regex, 'THREE.')
+    } else if (match[0].includes('packages')) {
+      text = text.replace(regex, '')
+    } else {
+      text = text.replace(regex, '')
+    }
+  }
+  return text
+}
+
+function findAlias(sourceFile: SourceFile, componentName: string): TypeAliasDeclaration | null {
+  // try componentName + 'Props'
+  let alias = sourceFile.getTypeAlias(componentName + 'Props')
+  if (alias) return alias
+  // try 'Props'
+  alias = sourceFile.getTypeAlias('Props')
+  if (alias) return alias
+  // try other with 'Props'
+  const aliases = sourceFile.getTypeAliases()
+  for (const a of aliases) {
+    if (a.getName().includes('Props')) return a
+  }
+  return null
+}
+
+function getDataFromJSDocs(prop: Symbol) {
+  let description: string | undefined
+  let defaultValue: string | undefined
+  for (const declaration of prop.getDeclarations()) {
+    if (Node.isJSDocable(declaration)) {
+      const jsDocs = declaration.getJsDocs()
+      for (const jsDoc of jsDocs) {
+        description = jsDoc.getDescription().trim() || undefined
+        for (const tag of jsDoc.getTags()) {
+          if (tag.getTagName() === 'default') {
+            const comment = tag.getComment()
+            defaultValue = typeof comment === 'string' ? comment.trim() : undefined
+          }
+        }
+				// if (tag.getTagName() === 'default') {
+        //       const comment = tag.getComment()
+        //       if (typeof comment === 'string' && comment.trim()) {
+        //         defaultMap.set(prop.getName(), comment.trim())
+        //       }
+        //     }
+      }
+    }
+  }
+  return { description, defaultValue }
+}
+
+function extractCanvasData(project: Project): PropInfo[] {
+  const typeAliases = project.getSourceFiles().flatMap((file) => file.getTypeAliases())
+  const contextAlias = typeAliases.find((t) => t.getName() === 'CreateThrelteContextOptions')
+
+  if (!contextAlias) {
+    throw 'No CreateThrelteContextOptions type alias found'
+  }
+
+  const defaultMap = collectDefaults(typeAliases)
+
+  const data = contextAlias
+    .getType()
+    .getApparentProperties()
+    .filter((prop) => !['canvas', 'dom'].includes(prop.getName()))
+    .map((prop) => {
+      const typeText = prop.getTypeAtLocation(contextAlias).getText()
+      return {
+        name: prop.getName(),
+        type: typeText,
+        default: defaultMap[prop.getName()]
+      }
+    })
+
+		// propsData.push(
+    //   ...options.map((o) => ({
+    //     name: o.name,
+    //     type: o.type,
+    //     default: o.default,
+    //     description: undefined
+    //   }))
+    // )
+
+  return data
+}
+
+function collectDefaults(
+  typeAliases: Array<ReturnType<SourceFile['getTypeAliases']>[number]>
+) {
+  const aliases = [
+    'CreateRendererContextOptions',
+    'CreateSchedulerContextOptions',
+    'CreateDOMContextOptions'
+  ]
+  const defaultMap: Record<string, string> = {}
+
+  for (const name of aliases) {
+    const alias = typeAliases.find((t) => t.getName() === name)
+    if (!alias) continue
+
+    for (const prop of alias.getType().getProperties()) {
+			let {description} = getDataFromJSDocs(prop)
+			if (description) {
+
+					defaultMap[prop.getName()] = description
+			}
+    }
+  }
+
+  return defaultMap
+}
+
+function extractBindings(svelteSource: string) {
+  const bindings = []
+  const bindableRegex = /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=\s*\$bindable\(\)/g
+  let match
+  while ((match = bindableRegex.exec(svelteSource)) !== null) {
+    const varName = match[1]
+    bindings.push({
+      name: varName,
+      type: 'unknown', // TODO: infer from types
+      description: undefined,
+			isbinding:true
+    })
+  }
+  return bindings
+}
+
+function dataFromSvelteFile(params:{name:string, src:string, path:string, project:Project}) {
+	const {name, src, path, project} = params
+	// use the svelte file first
+  const { code } = svelte2tsx(src, { filename: path, mode: 'ts' })
+  const tsxPath = join('./', `${name}.tsx`)
+  const tsxSourceFile = project.createSourceFile(tsxPath, code, { overwrite: true })
+
+  let propsAlias = tsxSourceFile.getTypeAlias('Props')
+
+  let type = propsAlias?.getType()
+  let properties = type?.getApparentProperties()
+
+	const data = []
+
+  if (properties) {
+    for (const prop of properties) {
+      const name = prop.getName()
+			data.push({
+				name,
+				type:'todo'
+			})
+    }
+  }
+
+	return data
+}
+
+function dataFromTypesFile(params:{name:string, path:string, project:Project}) {
+	const {name, path, project} = params
+	const typesPath = findTypesFile(path)
+
+	let propsAlias
+
+  if (typesPath) {
+    const typesSourceFile = project.getSourceFile(typesPath)
+    if (typesSourceFile) {
+      propsAlias = findAlias(typesSourceFile, name) ?? undefined
+    }
+  }
+
+	let type = propsAlias?.getType()
+  let properties = type?.getApparentProperties()
+
+	let data = []
+  if (properties) {
+   for (const prop of properties) {
+      const name = prop.getName()
+			data.push({
+				name,
+				type:'todo'
+			})
+    }
+  }
+	return data
+}
+
+main().catch((e) => {
+  console.error('Failure in generate script:', e)
+  process.exit(1)
+})
 
 function extractPropsFromTsx(
   tsxSourceFile: SourceFile,
@@ -347,25 +468,14 @@ function extractPropsFromTsx(
 
     // from JSDoc if in types
     if (sourceFile !== tsxSourceFile) {
-      for (const declaration of prop.getDeclarations()) {
-        if ('getJsDocs' in declaration) {
-          const jsDocs = declaration.getJsDocs()
-          for (const jsDoc of jsDocs) {
-            description = jsDoc.getDescription().trim() || undefined
-            for (const tag of jsDoc.getTags()) {
-              if (tag.getTagName() === 'default') {
-                const comment = tag.getComment()
-                defaultValue = typeof comment === 'string' ? comment.trim() : undefined
-              }
-            }
-          }
-        }
-      }
+      let { description: desc, defaultValue: dvalue } = getDataFromJSDocs(prop)
+      description = desc
+      defaultValue = dvalue
     }
 
     // check destructuring in svelteSource
     if (!defaultValue) {
-      const destructRegex = new RegExp(`let\\s*\\{\\s*[^}]*${name}\\s*=\\s*([^,}]+)`, 'g')
+      const destructRegex = /let\s*\{\s*[^}]*${name}\s*=\s*([^,}]+)/g
       const match = destructRegex.exec(svelteSource)
       if (match) {
         defaultValue = match[1].trim()
@@ -381,177 +491,6 @@ function extractPropsFromTsx(
   }
 
   return props
-}
-
-function updateTypeText(text: string) {
-  const regex = /import\(.+?\)\./g
-  let match
-  while ((match = regex.exec(text)) !== null) {
-    console.log(match[0])
-    if (match[0].includes('constants')) {
-      text = text.replace(regex, 'THREE.')
-    } else if (match[0].includes('packages')) {
-      text = text.replace(regex, '')
-    } else {
-      text = text.replace(regex, '')
-    }
-  }
-  return text
-}
-
-function findAlias(sourceFile: SourceFile, componentName: string): TypeAliasDeclaration | null {
-  // try componentName + 'Props'
-  let alias = sourceFile.getTypeAlias(componentName + 'Props')
-  if (alias) return alias
-  // try 'Props'
-  alias = sourceFile.getTypeAlias('Props')
-  if (alias) return alias
-  // try other with 'Props'
-  const aliases = sourceFile.getTypeAliases()
-  for (const a of aliases) {
-    if (a.getName().includes('Props')) return a
-  }
-  return null
-}
-
-function extractThrelteOptions(project: Project): OptionInfo[] {
-  const typeAliases = project.getSourceFiles().flatMap((file) => file.getTypeAliases())
-  const contextAlias = typeAliases.find((t) => t.getName() === 'CreateThrelteContextOptions')
-
-  if (!contextAlias) {
-    throw 'No CreateThrelteContextOptions type alias found'
-  }
-
-  const defaultMap = collectDefaults(project, typeAliases)
-  collectRuntimeDefaults(defaultMap)
-
-  const options = contextAlias
-    .getType()
-    .getApparentProperties()
-    .filter((prop) => !['canvas', 'dom'].includes(prop.getName()))
-    .map((prop) => {
-      const typeText = prop.getTypeAtLocation(contextAlias).getText()
-      return {
-        name: prop.getName(),
-        type: typeText,
-        default: defaultMap.get(prop.getName())
-      }
-    })
-
-  return options
-}
-
-function collectDefaults(
-  project: Project,
-  typeAliases: Array<ReturnType<SourceFile['getTypeAliases']>[number]>
-): Map<string, string> {
-  const aliases = [
-    'CreateRendererContextOptions',
-    'CreateSchedulerContextOptions',
-    'CreateDOMContextOptions'
-  ]
-  const defaultMap = new Map<string, string>()
-
-  for (const name of aliases) {
-    const alias = typeAliases.find((t) => t.getName() === name)
-    if (!alias) continue
-
-    for (const prop of alias.getType().getProperties()) {
-      for (const declaration of prop.getDeclarations()) {
-        for (const jsDoc of declaration.getJsDocs()) {
-          for (const tag of jsDoc.getTags()) {
-            if (tag.getTagName() === 'default') {
-              const comment = tag.getComment()
-              if (typeof comment === 'string' && comment.trim()) {
-                defaultMap.set(prop.getName(), comment.trim())
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  return defaultMap
-}
-
-function collectRuntimeDefaults(defaultMap: Map<string, string>): void {
-  const schedulerFile = resolve(
-    PACKAGES_DIR,
-    'core',
-    'src',
-    'lib',
-    'context',
-    'fragments',
-    'scheduler.svelte.ts'
-  )
-  const rendererFile = resolve(
-    PACKAGES_DIR,
-    'core',
-    'src',
-    'lib',
-    'context',
-    'fragments',
-    'renderer.svelte.ts'
-  )
-
-  const schedulerText = readFileSync(schedulerFile, 'utf-8')
-  const rendererText = readFileSync(rendererFile, 'utf-8')
-
-  addDefaultFromRegex(
-    defaultMap,
-    schedulerText,
-    /autoRender\s*:\s*currentWritable\(options\.autoRender\s*\?\?\s*([^\)]+)\)/,
-    'autoRender'
-  )
-  addDefaultFromRegex(
-    defaultMap,
-    schedulerText,
-    /renderMode\s*:\s*currentWritable\(options\.renderMode\s*\?\?\s*([^\)]+)\)/,
-    'renderMode'
-  )
-  addDefaultFromRegex(
-    defaultMap,
-    rendererText,
-    /colorManagementEnabled\s*:\s*currentWritable\(options\.colorManagementEnabled\s*\?\?\s*([^\)]+)\)/,
-    'colorManagementEnabled'
-  )
-  addDefaultFromRegex(
-    defaultMap,
-    rendererText,
-    /colorSpace\s*:\s*currentWritable\(options\.colorSpace\s*\?\?\s*([^\)]+)\)/,
-    'colorSpace'
-  )
-  addDefaultFromRegex(
-    defaultMap,
-    rendererText,
-    /toneMapping\s*:\s*currentWritable\(options\.toneMapping\s*\?\?\s*([^\)]+)\)/,
-    'toneMapping'
-  )
-  addDefaultFromRegex(
-    defaultMap,
-    rendererText,
-    /shadows\s*:\s*currentWritable\(options\.shadows\s*\?\?\s*([^\)]+)\)/,
-    'shadows'
-  )
-  addDefaultFromRegex(
-    defaultMap,
-    rendererText,
-    /dpr\s*:\s*currentWritable\(options\.dpr\s*\?\?\s*([^\)]+)\)/,
-    'dpr'
-  )
-}
-
-function addDefaultFromRegex(
-  map: Map<string, string>,
-  fileText: string,
-  regex: RegExp,
-  key: string
-) {
-  const match = fileText.match(regex)
-  if (match) {
-    map.set(key, match[1].trim())
-  }
 }
 
 function extractEvents(
@@ -579,13 +518,7 @@ function extractEvents(
     const propType = prop.getTypeAtLocation(sourceFile)
     const typeText = propType.getText()
 
-    let description: string | undefined
-    for (const declaration of prop.getDeclarations()) {
-      const jsDocs = declaration.getJsDocs()
-      for (const jsDoc of jsDocs) {
-        description = jsDoc.getDescription().trim() || undefined
-      }
-    }
+    let { description } = getDataFromJSDocs(prop)
 
     events.push({
       name: eventName,
@@ -600,21 +533,6 @@ function extractEvents(
   }
 
   return events
-}
-
-function extractBindings(svelteSource: string): BindingInfo[] {
-  const bindings: BindingInfo[] = []
-  const bindableRegex = /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=\s*\$bindable\(\)/g
-  let match
-  while ((match = bindableRegex.exec(svelteSource)) !== null) {
-    const varName = match[1]
-    bindings.push({
-      name: varName,
-      type: 'unknown', // TODO: infer from types
-      description: undefined
-    })
-  }
-  return bindings
 }
 
 function extractSnippets(
@@ -653,13 +571,7 @@ function extractSnippets(
         })
       }
 
-      let description: string | undefined
-      for (const declaration of prop.getDeclarations()) {
-        const jsDocs = declaration.getJsDocs()
-        for (const jsDoc of jsDocs) {
-          description = jsDoc.getDescription().trim() || undefined
-        }
-      }
+      let { description } = getDataFromJSDocs(prop)
 
       snippets.push({
         name,
@@ -671,8 +583,3 @@ function extractSnippets(
 
   return snippets
 }
-
-main().catch((e) => {
-  console.error('Failure in generate script:', e)
-  process.exit(1)
-})
