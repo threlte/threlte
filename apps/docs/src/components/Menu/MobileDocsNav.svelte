@@ -9,13 +9,14 @@
 
   export let activeSidebarTab: 'learn' | 'reference' | 'examples'
   export let activeUrlPathName: string
+  export let baseUrl: string
 </script>
 
 <MobileNav search>
   <svelte:fragment slot="topbar-left">
     <a
       class="flex flex-row gap-3"
-      href="/"
+      href={import.meta.env.BASE_URL}
     >
       <slot name="logo" />
     </a>
@@ -50,6 +51,7 @@
                 <LeftSidebarCategory
                   {category}
                   {activeUrlPathName}
+                  {baseUrl}
                 />
               </li>
             {/each}

@@ -1,7 +1,7 @@
 <script lang="ts">
   import SliceMaterial from './SliceMaterial.svelte'
   import type { ColorRepresentation, Mesh } from 'three/webgpu'
-  import { ACESFilmicToneMapping, DoubleSide, Group } from 'three/webgpu'
+  import { DoubleSide, Group } from 'three/webgpu'
   import { Environment, OrbitControls, useDraco, useGltf } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
 
@@ -20,20 +20,8 @@
     { dracoLoader }
   )
 
-  const { scene, toneMapping } = useThrelte()
-
-  $effect(() => {
-    const blurriness = scene.backgroundBlurriness
-    const lastToneMapping = toneMapping.current
-
-    scene.backgroundBlurriness = 0.5
-    toneMapping.set(ACESFilmicToneMapping)
-
-    return () => {
-      scene.backgroundBlurriness = blurriness
-      toneMapping.set(lastToneMapping)
-    }
-  })
+  const { scene } = useThrelte()
+  scene.backgroundBlurriness = 0.5
 
   let rotation = $state(0)
 

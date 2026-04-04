@@ -1,10 +1,5 @@
 <script lang="ts">
-  import { T, useDisposal, useTask } from '@threlte/core'
-
-  const { dispose } = useDisposal()
-
-  // This simulates the default animation loop calling dispose
-  useTask(() => dispose())
+  import { T } from '@threlte/core'
 </script>
 
 <T.Group>

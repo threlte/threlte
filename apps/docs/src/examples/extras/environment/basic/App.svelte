@@ -3,7 +3,6 @@
   import { Checkbox, Folder, List, Pane, Slider } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
 
-  let autoRotateCamera = $state(false)
   let environmentIsBackground = $state(true)
   let useEnvironment = $state(true)
   let environmentInputsDisabled = $derived(!useEnvironment)
@@ -106,18 +105,11 @@
       step={0.1}
     />
   </Folder>
-  <Folder title="camera">
-    <Checkbox
-      bind:value={autoRotateCamera}
-      label="auto rotate"
-    />
-  </Folder>
 </Pane>
 
 <div>
   <Canvas>
     <Scene
-      {autoRotateCamera}
       {environmentUrl}
       {environmentIsBackground}
       {materialMetalness}

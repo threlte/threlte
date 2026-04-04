@@ -26,6 +26,18 @@ export type InteractivityOptions = {
    * filter function is provided, the plugin will use the default filter function.
    */
   filter?: FilterFunction
+  /**
+   * Maximum distance in pixels between pointerdown and click for the
+   * interaction to count as a click. Movements beyond this threshold are
+   * treated as drags. Defaults to 8.
+   */
+  clickDistanceThreshold?: number
+  /**
+   * Maximum time in milliseconds between pointerdown and click for the
+   * interaction to count as a click. Defaults to Infinity (no time limit),
+   * matching native DOM behavior.
+   */
+  clickTimeThreshold?: number
 }
 
 type Events = Record<string, (arg: unknown) => void>
@@ -38,12 +50,15 @@ export type InteractivityContext = {
   lastEvent: DomEvent | undefined
   raycaster: Raycaster
   initialClick: [x: number, y: number]
+  initialClickTime: number
   initialHits: Object3D[]
   hovered: Map<string, IntersectionEvent<DomEvent>>
   interactiveObjects: Object3D[]
   handlers: WeakMap<Object3D, Events>
   compute: ComputeFunction
   filter?: FilterFunction | undefined
+  clickDistanceThreshold: number
+  clickTimeThreshold: number
   addInteractiveObject: (object: Object3D, events: Events) => void
   removeInteractiveObject: (object: Object3D) => void
 }
@@ -64,6 +79,7 @@ export const setInteractivityContext = (options?: InteractivityOptions) => {
     lastEvent: undefined,
     raycaster: new Raycaster(),
     initialClick: [0, 0] as [number, number],
+    initialClickTime: 0,
     initialHits: [],
     hovered: new Map(),
     interactiveObjects: [],
@@ -71,17 +87,22 @@ export const setInteractivityContext = (options?: InteractivityOptions) => {
     handlers: new WeakMap(),
     compute: options?.compute ?? getDefaultComputeFunction(target),
     filter: options?.filter,
+    clickDistanceThreshold: options?.clickDistanceThreshold ?? 8,
+    clickTimeThreshold: options?.clickTimeThreshold ?? Number.POSITIVE_INFINITY,
     addInteractiveObject: (object: Object3D, events: Events) => {
-      // check if the object is already in the list
-      if (context.interactiveObjects.indexOf(object) > -1) {
-        return
-      }
-
+      // Always update handlers so re-registration picks up new callbacks,
+      // even if the object is already in the list.
       context.handlers.set(object, events)
-      context.interactiveObjects.push(object)
+      if (context.interactiveObjects.indexOf(object) === -1) {
+        context.interactiveObjects.push(object)
+      }
     },
     removeInteractiveObject: (object: Object3D) => {
       const index = context.interactiveObjects.indexOf(object)
+      // Guard against double-removal: indexOf returns -1 when the object
+      // isn't in the list, and splice(-1, 1) would silently remove the
+      // last element — corrupting an unrelated registration.
+      if (index === -1) return
       context.interactiveObjects.splice(index, 1)
       context.handlers.delete(object)
     }

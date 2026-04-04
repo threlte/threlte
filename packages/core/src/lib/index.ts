@@ -40,9 +40,9 @@ export {
 export type { ThrelteContext } from './context/compounds/useThrelte.js'
 export { createThrelteContext } from './context/createThrelteContext.svelte.js'
 export { createCacheContext, useCache } from './context/fragments/cache.js'
-export { createCameraContext, useCamera } from './context/fragments/camera.js'
-export { createDOMContext, useDOM } from './context/fragments/dom.js'
-export { createDisposalContext, useDisposal } from './context/fragments/disposal.js'
+export { createCameraContext, useCamera } from './context/fragments/camera.svelte.js'
+export { createDOMContext, useDOM } from './context/fragments/dom.svelte.js'
+export { createDisposalContext, useDisposal } from './context/fragments/disposal.svelte.js'
 export { createParentContext, useParent } from './context/fragments/parent.js'
 export {
   createParentObject3DContext,
@@ -54,4 +54,15 @@ export { createSchedulerContext, useScheduler } from './context/fragments/schedu
 export { createUserContext } from './context/fragments/user.js'
 
 // utils
-export * from './utilities/index.js'
+export { observe } from './utilities/observe.svelte.js'
+export { isInstanceOf } from './utilities/isInstanceOf.js'
+export { type AsyncWritable, asyncWritable } from './utilities/asyncWritable.js'
+export { revision } from './utilities/revision.js'
+export { watch } from './utilities/watch.js'
+export {
+  type CurrentWritable,
+  type CurrentReadable,
+  currentWritable,
+  toCurrentReadable
+} from './utilities/currentWritable.js'
+export { resolvePropertyPath } from './utilities/resolvePropertyPath.js'

@@ -6,6 +6,8 @@
 
   type Nodes = `ball-${'1' | '2' | '3' | '4' | '5'}`
 
+  interactivity()
+
   const dracoLoader = useDraco()
   const gltf = useGltf<{
     nodes: Record<Nodes, Mesh>
@@ -13,8 +15,6 @@
   }>('/models/blobs/blobs.glb', {
     dracoLoader
   })
-
-  interactivity()
 
   const red = '#fe3d00'
   const blue = '#0000ff'

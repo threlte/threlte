@@ -1,5 +1,5 @@
 import { useCache } from '../context/fragments/cache.js'
-import { asyncWritable, type AsyncWritable } from '../utilities/index.js'
+import { asyncWritable, type AsyncWritable } from '../utilities/asyncWritable.js'
 
 type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
@@ -179,8 +179,8 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
     } else if (typeof input === 'string') {
       clearCacheItem([Proto, input])
     } else {
-      Object.entries(input).forEach(([key, url]) => {
-        clearCacheItem([Proto, key, url])
+      Object.entries(input).forEach(([, url]) => {
+        clearCacheItem([Proto, url])
       })
     }
   }

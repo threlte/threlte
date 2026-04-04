@@ -7,8 +7,12 @@ export const getDefaultComputeFunction = (
 ): ComputeFunction => {
   const { camera } = useThrelte()
 
-  let width = targetWritable.current.clientWidth
-  let height = targetWritable.current.clientHeight
+  // Use contentRect dimensions from ResizeObserver for consistency.
+  // Initialize to 0 — the observer fires before any meaningful pointer
+  // event can be processed. The compute function guards against 0 to
+  // avoid NaN from division.
+  let width = 0
+  let height = 0
 
   const resizeObserver = new ResizeObserver(([entry]) => {
     width = entry.contentRect.width
@@ -27,6 +31,9 @@ export const getDefaultComputeFunction = (
   })
 
   return (event, state) => {
+    // Guard against zero dimensions before ResizeObserver has fired
+    if (width === 0 || height === 0) return
+
     state.pointer.update((pointer) => {
       pointer.set((event.offsetX / width) * 2 - 1, -(event.offsetY / height) * 2 + 1)
       return pointer

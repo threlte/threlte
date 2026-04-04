@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 3.4.1
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
+## 3.4.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
 ## 3.3.0
 
 ### Minor Changes

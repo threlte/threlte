@@ -1,18 +1,52 @@
 import { fromStore } from 'svelte/store'
+import { useCamera as useDefaultCamera } from '../../../context/fragments/camera.svelte.js'
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { isInstanceOf } from '../../../utilities/index.js'
+import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 
-const defaultCameras = new Set()
+const updateProjectionMatrixKeys = new Set([
+  'fov',
+  'aspect',
+  'near',
+  'far',
+  'left',
+  'right',
+  'top',
+  'bottom',
+  'zoom',
+  'filmGauge',
+  'filmOffset'
+])
+
+export const updateCamera = (
+  camera: PerspectiveCamera | OrthographicCamera,
+  width: number,
+  height: number
+) => {
+  if (isInstanceOf(camera, 'PerspectiveCamera')) {
+    camera.aspect = width / height
+  } else if (isInstanceOf(camera, 'OrthographicCamera')) {
+    camera.left = width / -2
+    camera.right = width / 2
+    camera.top = height / 2
+    camera.bottom = height / -2
+  }
+
+  camera.updateProjectionMatrix()
+  camera.updateMatrixWorld()
+}
 
 export const useCamera = (
   getCamera: () => PerspectiveCamera | OrthographicCamera,
   getManual: () => boolean,
-  getMakeDefault: () => boolean
+  getMakeDefault: () => boolean,
+  props: () => Record<string, unknown>
 ) => {
-  const { invalidate, size: sizeStore, camera: defaultCamera } = useThrelte()
+  const { camera: defaultCamera, manual: defaultManual, makeDefaultCameras } = useDefaultCamera()
+  const { invalidate, size: sizeStore } = useThrelte()
 
   const camera = $derived(getCamera())
+  const manual = $derived(getManual())
   const size = fromStore(sizeStore)
 
   $effect.pre(() => {
@@ -20,17 +54,28 @@ export const useCamera = (
       return
     }
 
-    const current = camera
+    const currentCamera = camera
 
-    defaultCameras.add(current)
-    defaultCamera.set(current)
+    makeDefaultCameras.add(currentCamera)
+    defaultCamera.set(currentCamera)
+    defaultManual.set(manual)
     invalidate()
 
     return () => {
-      defaultCameras.delete(current)
-      if (defaultCameras.size === 0) {
-        defaultCamera.set(undefined!)
+      makeDefaultCameras.delete(currentCamera)
+    }
+  })
+
+  $effect.pre(() => {
+    if (manual) {
+      return
+    }
+
+    for (const key in props()) {
+      if (updateProjectionMatrixKeys.has(key)) {
+        camera.updateProjectionMatrix()
         invalidate()
+        break
       }
     }
   })
@@ -40,19 +85,6 @@ export const useCamera = (
       return
     }
 
-    const { width, height } = size.current
-
-    if (isInstanceOf(camera, 'PerspectiveCamera')) {
-      camera.aspect = width / height
-    } else if (isInstanceOf(camera, 'OrthographicCamera')) {
-      camera.left = width / -2
-      camera.right = width / 2
-      camera.top = height / 2
-      camera.bottom = height / -2
-    }
-
-    camera.updateProjectionMatrix()
-    camera.updateMatrixWorld()
-    invalidate()
+    updateCamera(camera, size.current.width, size.current.height)
   })
 }

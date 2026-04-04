@@ -2,7 +2,7 @@
   import Scene from './Scene.svelte'
   import { Canvas, extend } from '@threlte/core'
   import { Checkbox, Color, Folder, Pane, Slider } from 'svelte-tweakpane-ui'
-  import { MathUtils } from 'three'
+  import { ACESFilmicToneMapping, MathUtils } from 'three'
   import {
     DirectionalLight,
     MeshPhysicalNodeMaterial,
@@ -51,6 +51,7 @@
   </Folder>
 </Pane>
 <Canvas
+  toneMapping={ACESFilmicToneMapping}
   createRenderer={(canvas) => {
     return new WebGPURenderer({
       antialias: true,

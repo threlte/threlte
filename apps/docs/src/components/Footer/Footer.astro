@@ -11,7 +11,7 @@ interface Props {
   <div class="flex flex-col gap-6">
     <Image
       src={LogoOnly}
-      alt="threlte logo"
+      alt="Threlte logo"
       width={37}
       height={35}
       class="w-[37px]"
@@ -28,21 +28,21 @@ interface Props {
       <li>
         <a
           class="text-faded block py-2 hover:text-white"
-          href="/docs/learn/getting-started/installation"
+          href={`${import.meta.env.BASE_URL}docs/learn/getting-started/installation`}
           >Install</a
         >
       </li>
       <li>
         <a
           class="text-faded block py-2 hover:text-white"
-          href="/docs/learn/getting-started/your-first-scene"
+          href={`${import.meta.env.BASE_URL}docs/learn/getting-started/your-first-scene`}
           >Concepts</a
         >
       </li>
       <li>
         <a
           class="text-faded block py-2 hover:text-white"
-          href="/docs/reference/core/getting-started"
+          href={`${import.meta.env.BASE_URL}docs/reference/core/getting-started`}
           >Reference</a
         >
       </li>

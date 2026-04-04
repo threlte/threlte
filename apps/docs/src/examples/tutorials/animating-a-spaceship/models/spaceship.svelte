@@ -10,7 +10,7 @@ Title: Rusty Spaceship - Orange
   import type { Snippet } from 'svelte'
   import { AddEquation, CustomBlending, Group, LessEqualDepth, Material, OneFactor } from 'three'
   import { T } from '@threlte/core'
-  import { useGltf, useTexture } from '@threlte/extras'
+  import { useGltf, useDraco, useTexture } from '@threlte/extras'
 
   interface Props {
     ref?: Group
@@ -20,11 +20,12 @@ Title: Rusty Spaceship - Orange
     [key: string]: any
   }
 
-  let { fallback, error, children, ref = $bindable(), ...rest }: Props = $props()
+  let { fallback, error, children, ref = $bindable(), ...props }: Props = $props()
 
-  const group = new Group()
-
-  const gltf = useGltf('/spaceship-tutorial/models/spaceship.glb')
+  const dracoLoader = useDraco()
+  const gltf = useGltf('/spaceship-tutorial/models/spaceship-transformed.glb', {
+    dracoLoader
+  })
   const map = useTexture('/spaceship-tutorial/textures/energy-beam-opacity.png')
 
   function alphaFix(material: Material) {
@@ -41,11 +42,10 @@ Title: Rusty Spaceship - Orange
   })
 </script>
 
-<T
-  is={group}
+<T.Group
   bind:ref
   dispose={false}
-  {...rest}
+  {...props}
 >
   {#await gltf}
     {@render fallback?.()}
@@ -53,103 +53,24 @@ Title: Rusty Spaceship - Orange
     <T.Group
       scale={0.003}
       rotation={[0, -Math.PI * 0.5, 0]}
-      position={[0.95, 0, -2.235]}
+      position={[0.95, 0, 0]}
     >
       <T.Mesh
         castShadow
         receiveShadow
         geometry={gltf.nodes.Cube001_spaceship_racer_0.geometry}
         material={gltf.materials.spaceship_racer}
-        position={[739.26, -64.81, 64.77]}
       />
       <T.Mesh
         castShadow
         receiveShadow
-        geometry={gltf.nodes.Cylinder002_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[739.69, -59.39, -553.38]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cylinder003_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[742.15, -64.53, -508.88]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cube003_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[737.62, 46.84, -176.41]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cylinder004_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[789.52, 59.45, -224.91]}
-        rotation={[1, 0, 0]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cube001_RExtr001_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[745.54, 159.32, -5.92]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cube001_RPanel003_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[739.26, 0, 0]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cube001_RPanel003_RExtr_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[739.26, 0, 0]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cube002_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[736.79, -267.14, -33.21]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cube001_RPanel001_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[739.26, 0, 0]}
-      />
-      <T.Mesh
-        castShadow
-        receiveShadow
-        geometry={gltf.nodes.Cube001_RPanel003_RExtr001_spaceship_racer_0.geometry}
-        material={gltf.materials.spaceship_racer}
-        position={[739.26, 0, 0]}
-      />
-      <T.Mesh
         geometry={gltf.nodes.Cube005_cockpit_0.geometry}
         material={gltf.materials.cockpit}
-        position={[739.45, 110.44, 307.18]}
-        rotation={[0.09, 0, 0]}
       />
-      <T.Mesh
-        geometry={gltf.nodes.Sphere_cockpit_0.geometry}
-        material={gltf.materials.cockpit}
-        position={[739.37, 145.69, 315.6]}
-        rotation={[0.17, 0, 0]}
-      />
+
       {#await map then mapValue}
         <T.Mesh
-          position={[740, -60, -1350]}
+          position={[0, 0, -1350]}
           rotation.x={Math.PI * 0.5}
         >
           <T.CylinderGeometry args={[70, 25, 1600, 15]} />
@@ -169,4 +90,4 @@ Title: Rusty Spaceship - Orange
   {/await}
 
   {@render children?.({ ref })}
-</T>
+</T.Group>

@@ -92,6 +92,8 @@ describe('<T> attach', () => {
     expect(material.map).toBeFalsy()
   })
 
+  it.todo('attaches to a nested parent property via dot-notation')
+
   it('attaches and detaches a conditionally rendered component', async () => {
     const { scene, rerender } = render(Attach, { props: { attach: false } })
 

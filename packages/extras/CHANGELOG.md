@@ -1,5 +1,95 @@
 # @threlte/extras
 
+## 9.14.3
+
+### Patch Changes
+
+- 0cbb589: Add useInputMap: action mapping system unifying keyboard and gamepad
+- 0cbb589: Add useKeyboard: reactive, frame accurate keyboard tracking
+
+## 9.14.2
+
+### Patch Changes
+
+- 07af185: Add useTrailTexture hook
+- 8992f93: Fix: coordinate useCursor through a shared context instead of racing independent effects
+
+## 9.14.1
+
+### Patch Changes
+
+- 02b7cb8: Fix: interactivity `pointerMissed` fires multiple times per click event
+- 9823f69: Add interactivity tests that match docs-described behavior
+- 9823f69: Fix: interactivity no longer silently removes the last interactive object when no objects are found
+- 9823f69: Fix: interactivity always updates handlers, even if object has already been added
+
+## 9.14.0
+
+### Minor Changes
+
+- 29a1e7e: Add `<ShadowAlpha>` component
+
+## 9.13.4
+
+### Patch Changes
+
+- 2a7aa09: OrbitControls: do not invalidate unless onchange has been called
+
+## 9.13.3
+
+### Patch Changes
+
+- b41ad7c: Delegate stopImmediatePropagation on synthetic events to the native DOM event, allowing handlers to block camera controls (e.g. OrbitControls) during drags.
+
+## 9.13.2
+
+### Patch Changes
+
+- 9645321: Use correct key granularity for instanced or non instanced objects when deduping interactivity events
+
+## 9.13.1
+
+### Patch Changes
+
+- fe1ac6b: Fix: interactivity duplicate events firing when parent and child are both registered
+- 055abe9: Fix: interactivity did not account for dynamic handler additions
+
+## 9.13.0
+
+### Minor Changes
+
+- 5f4d2b0: Add `<BackdropGeometry>` component
+
+## 9.12.1
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
+## 9.12.0
+
+### Minor Changes
+
+- fdaaa59: port <Bounds> component from drei
+
+## 9.11.0
+
+### Minor Changes
+
+- 1305cab: `<Sparkles>` component ported from drei
+
+## 9.10.0
+
+### Minor Changes
+
+- d2e9cd6: Fix Contact Shadows color reactivity
+
+## 9.9.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
 ## 9.8.2
 
 ### Patch Changes
@@ -1390,10 +1480,7 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   - Before:
 
   ```ts
-  const { gltf } = useGltf<
-    "MeshA" | "MeshB" | "Object3DA",
-    "MaterialA" | "MaterialB"
-  >("/some/url");
+  const { gltf } = useGltf<'MeshA' | 'MeshB' | 'Object3DA', 'MaterialA' | 'MaterialB'>('/some/url')
   ```
 
   - After:
@@ -1401,15 +1488,15 @@ Note: We're considering this a bug fix, but it might be a breaking change for yo
   ```ts
   const { gltf } = useGltf<{
     nodes: {
-      MeshA: THREE.Mesh;
-      MeshB: THREE.Mesh;
-      Object3DA: THREE.Object3D;
-    };
+      MeshA: THREE.Mesh
+      MeshB: THREE.Mesh
+      Object3DA: THREE.Object3D
+    }
     materials: {
-      MaterialA: THREE.MeshStandardMaterial;
-      MaterialB: THREE.MeshBasicMaterial;
-    };
-  }>("/some/url");
+      MaterialA: THREE.MeshStandardMaterial
+      MaterialB: THREE.MeshBasicMaterial
+    }
+  }>('/some/url')
   ```
 
 ## 4.4.1

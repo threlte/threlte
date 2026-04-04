@@ -1,5 +1,23 @@
 # @threlte/studio
 
+## 0.4.2
+
+### Patch Changes
+
+- da99fff: Run `knip` and prune unused dependencies and exports
+
+## 0.4.1
+
+### Patch Changes
+
+- 35e4303: fix(studio): constrain scene hierarchy pane width and enable horizontal scroll for deeply nested tree items
+
+## 0.4.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,13 +1,20 @@
-import { getContext, onDestroy, setContext } from 'svelte'
-import { type CurrentWritable, currentWritable } from '../../utilities/index.js'
+import { getContext, setContext } from 'svelte'
+import { type CurrentWritable, runeToCurrentWritable } from '../../utilities/currentWritable.js'
 import { Scheduler, type Stage } from '../../frame-scheduling/index.js'
 
 export type SchedulerContext = {
+  /** The scheduler used by this Threlte app */
   scheduler: Scheduler
+
   /**
+   * If set to 'on-demand', the scene will only be rendered when the current frame is invalidated
+   * If set to 'manual', the scene will only be rendered when advance() is called
+   * If set to 'always', the scene will be rendered every frame
+   *
    * @default 'on-demand'
    */
   renderMode: CurrentWritable<'always' | 'on-demand' | 'manual'>
+
   /**
    * By default, Threlte will automatically render the scene. To implement
    * custom render pipelines, set this to `false`.
@@ -15,28 +22,43 @@ export type SchedulerContext = {
    * @default true
    */
   autoRender: CurrentWritable<boolean>
+
   /** A flag to indicate whether the current frame has been invalidated */
-  frameInvalidated: boolean
-  /** Advance one frame when renderMode === 'manual' */
-  advance: () => void
-  /** A flag to indicate whether the frame should be advanced in the manual renderMode */
-  shouldAdvance: boolean
+  frameInvalidated: { current: boolean }
+
   /** If anything is in this set, the frame will be considered invalidated */
   autoInvalidations: Set<unknown>
-  /** A function to be called at the end of the frame loop that resets the invalidation flags */
-  resetFrameInvalidation: () => void
+
   /**
    * Function to determine if a rendering should happen according to on-demand
    * rendering. The value of this function is valid for the duration of the
    * current frame.
    */
   shouldRender: () => boolean
+
   /**
    * Invalidates the current frame when renderMode === 'on-demand'
    */
   invalidate: () => void
+
+  /** The stage which useTask defaults to */
   mainStage: Stage
+
+  /**
+   * The default render stage. Tasks in this stage are ran according to
+   * on-demand rendering.
+   */
   renderStage: Stage
+
+  /**
+   * @deprecated Use invalidate()
+   */
+  advance: () => void
+
+  /**
+   * @deprecated Use frameInvalidated.current = false
+   */
+  resetFrameInvalidation: () => void
 }
 
 export type CreateSchedulerContextOptions = {
@@ -45,33 +67,57 @@ export type CreateSchedulerContextOptions = {
 }
 
 export const createSchedulerContext = (
-  options: CreateSchedulerContextOptions
+  options: () => CreateSchedulerContextOptions
 ): SchedulerContext => {
   const scheduler = new Scheduler()
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
 
+  const opts = $derived(options())
+  const optsAutoRender = $state(opts.autoRender)
+  const optsRenderMode = $state(opts.renderMode)
+
+  let autoRender = $derived(optsAutoRender ?? true)
+  let renderMode = $derived(optsRenderMode ?? 'on-demand')
+
+  const autoInvalidations = new Set()
+
+  let frameInvalidated = true
+
+  const shouldRender = () => {
+    return (
+      renderMode === 'always' ||
+      (renderMode === 'on-demand' && (frameInvalidated || autoInvalidations.size > 0)) ||
+      (renderMode === 'manual' && frameInvalidated)
+    )
+  }
+
   const context: SchedulerContext = {
     scheduler,
-    frameInvalidated: true,
-    autoInvalidations: new Set(),
-    shouldAdvance: false,
-    advance: () => {
-      context.shouldAdvance = true
+    autoInvalidations,
+    frameInvalidated: {
+      get current() {
+        return frameInvalidated
+      },
+      set current(value) {
+        frameInvalidated = value
+      }
     },
-    autoRender: currentWritable(options.autoRender ?? true),
-    renderMode: currentWritable(options.renderMode ?? 'on-demand'),
+    advance: () => {
+      frameInvalidated = true
+    },
+    autoRender: runeToCurrentWritable(
+      () => autoRender,
+      (value) => (autoRender = value)
+    ),
+    renderMode: runeToCurrentWritable(
+      () => renderMode,
+      (value) => (renderMode = value)
+    ),
     invalidate() {
-      context.frameInvalidated = true
+      frameInvalidated = true
     },
     mainStage,
-    shouldRender: () => {
-      return (
-        context.renderMode.current === 'always' ||
-        (context.renderMode.current === 'on-demand' &&
-          (context.frameInvalidated || context.autoInvalidations.size > 0)) ||
-        (context.renderMode.current === 'manual' && context.shouldAdvance)
-      )
-    },
+    shouldRender,
     renderStage: scheduler.createStage(Symbol('threlte-render-stage'), {
       after: mainStage,
       callback(_, runTasks) {
@@ -79,20 +125,14 @@ export const createSchedulerContext = (
       }
     }),
     resetFrameInvalidation() {
-      context.frameInvalidated = false
-      context.shouldAdvance = false
+      frameInvalidated = false
     }
   }
 
   $effect(() => {
-    context.autoRender.set(options.autoRender ?? true)
-  })
-  $effect(() => {
-    context.renderMode.set(options.renderMode ?? 'on-demand')
-  })
-
-  onDestroy(() => {
-    context.scheduler.dispose()
+    return () => {
+      scheduler.dispose()
+    }
   })
 
   setContext<SchedulerContext>('threlte-scheduler-context', context)

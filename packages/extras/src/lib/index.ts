@@ -8,14 +8,23 @@ export { useGltfAnimations } from './hooks/useGltfAnimations.js'
 export { useProgress } from './hooks/useProgress.js'
 export { useTexture } from './hooks/useTexture.js'
 export { useFBO } from './hooks/useFBO.svelte.js'
-export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad.svelte.js'
+export {
+  useGamepad,
+  type StandardGamepadEvent,
+  type StandardGamepad,
+  type StandardXRGamepad
+} from './hooks/useGamepad.svelte.js'
+export { useKeyboard } from './hooks/useKeyboard.svelte.js'
+export { useInputMap } from './hooks/useInputMap.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
+export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'
 export { meshBounds } from './utilities/meshBounds.js'
 
 // abstractions
 export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMaterial/AnimatedSpriteMaterial.svelte'
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
+export { default as BackdropGeometry } from './components/BackdropGeometry/BackdropGeometry.svelte'
 export { default as Decal } from './components/Decal/Decal.svelte'
 export {
   default as CameraControls,
@@ -33,6 +42,7 @@ export { default as Environment } from './components/environment/Environment/Env
 export { default as VirtualEnvironment } from './components/environment/VirtualEnvironment/VirtualEnvironment.svelte'
 export { default as ImageMaterial } from './components/ImageMaterial/ImageMaterial.svelte'
 export { default as Grid } from './components/Grid/Grid.svelte'
+export { default as Bounds } from './components/Bounds/Bounds.svelte'
 export { default as RoundedBoxGeometry } from './components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
 export { default as TransformControls } from './components/controls/TransformControls/TransformControls.svelte'
 export { default as OrbitControls } from './components/controls/OrbitControls/OrbitControls.svelte'
@@ -41,6 +51,7 @@ export { default as InstancedMesh } from './components/Instancing/InstancedMesh.
 export { default as Instance } from './components/Instancing/Instance.svelte'
 export { default as InstancedMeshes } from './components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
 export { default as SoftShadows } from './components/SoftShadows/SoftShadows.svelte'
+export { default as Sparkles } from './components/Sparkles/Sparkles.svelte'
 export { default as MeshLineGeometry } from './components/MeshLine/MeshLineGeometry.svelte'
 export { default as MeshLineMaterial } from './components/MeshLine/MeshLineMaterial.svelte'
 export { default as PointsMaterial } from './components/PointsMaterial/PointsMaterial.svelte'
@@ -49,6 +60,7 @@ export { default as Align } from './components/Align/Align.svelte'
 export { default as CSM } from './components/CSM/CSM.svelte'
 export { default as Billboard } from './components/Billboard/Billboard.svelte'
 export { default as FakeGlowMaterial } from './components/FakeGlowMaterial/FakeGlowMaterial.svelte'
+export { default as ShadowAlpha } from './components/ShadowAlpha/ShadowAlpha.svelte'
 export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMaterial.svelte'
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as SVG } from './components/Svg/Svg.svelte'

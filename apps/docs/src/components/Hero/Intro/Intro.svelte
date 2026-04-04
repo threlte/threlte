@@ -53,7 +53,7 @@
         </code>
 
         <Button
-          href="/docs/learn/getting-started/introduction"
+          href={`${import.meta.env.BASE_URL}docs/learn/getting-started/introduction`}
           color="orange"
         >
           Start Building →

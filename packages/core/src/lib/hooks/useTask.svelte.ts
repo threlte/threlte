@@ -1,7 +1,7 @@
 import { readable, toStore, type Readable } from 'svelte/store'
 import { useScheduler } from '../context/fragments/scheduler.svelte.js'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling/index.js'
-import { browser } from '../utilities/index.js'
+import { browser } from '../utilities/browser.js'
 
 export interface ThrelteUseTask {
   task: Task
@@ -202,17 +202,13 @@ export function useTask(
   const task = stage.createTask(key, fn, opts)
 
   $effect.pre(() => {
-    if (!running) {
-      return
-    }
+    if (running) {
+      task.start()
 
-    task.start()
-
-    if (autoInvalidate) {
-      schedulerCtx.autoInvalidations.add(fn)
-    }
-
-    return () => {
+      if (autoInvalidate) {
+        schedulerCtx.autoInvalidations.add(fn)
+      }
+    } else {
       task.stop()
 
       if (autoInvalidate) {
@@ -224,6 +220,9 @@ export function useTask(
   $effect.pre(() => {
     return () => {
       stage.removeTask(key)
+      if (autoInvalidate) {
+        schedulerCtx.autoInvalidations.delete(fn)
+      }
     }
   })
 

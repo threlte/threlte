@@ -9,23 +9,17 @@
 
   const texture = useTexture('/textures/sprites/bg.png')
 
-  let playerPosition: [number, number, number] = $state([-2.0, -2.75, 0.01])
-  let playerAtFire = $derived(playerPosition && Math.abs(playerPosition[0]) < 0.7)
+  let playerPosition = $state<[number, number, number]>([-2.0, -2.75, 0.01])
+  let playerAtFire = $derived(Math.abs(playerPosition[0]) < 0.7)
 
-  const fov = new Tween(50, {
-    easing: cubicOut,
-    duration: 900
-  })
-  const cameraPosY = new Tween(-0.2, {
+  const fov = Tween.of(() => (playerAtFire ? 45 : 50), {
     easing: cubicOut,
     duration: 900
   })
 
-  $effect(() => {
-    fov.set(playerAtFire ? 45 : 50)
-  })
-  $effect(() => {
-    cameraPosY.set(playerAtFire ? -0.9 : -0.2)
+  const cameraPosY = Tween.of(() => (playerAtFire ? -0.9 : -0.2), {
+    easing: cubicOut,
+    duration: 900
   })
 </script>
 
@@ -39,7 +33,7 @@
 />
 
 <Suspense>
-  {#each { length: 9 } as _, i}
+  {#each { length: 9 }, i}
     <T.Sprite
       scale={0.5}
       position.y={-1.99}

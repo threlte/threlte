@@ -20,11 +20,11 @@
 </script>
 
 <T.OrthographicCamera
-  zoom={80}
+  zoom={40}
   position={10}
   makeDefault
 >
-  <OrbitControls />
+  <OrbitControls enableZoom={false} />
 </T.OrthographicCamera>
 
 <T.AmbientLight intensity={0.4} />

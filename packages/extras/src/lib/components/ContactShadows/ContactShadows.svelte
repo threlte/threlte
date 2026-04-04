@@ -56,6 +56,7 @@
   const blurPlane = $derived(new Mesh(planeGeometry))
 
   const depthMaterial = $derived.by(() => {
+    const currentColor = color
     const dm = new MeshDepthMaterial({
       depthTest: false,
       depthWrite: false
@@ -64,7 +65,7 @@
       shader.uniforms = {
         ...shader.uniforms,
         uColor: {
-          value: new Color(color).convertSRGBToLinear()
+          value: new Color(currentColor).convertSRGBToLinear()
         }
       }
 

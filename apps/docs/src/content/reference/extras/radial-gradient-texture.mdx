@@ -1,6 +1,6 @@
 ---
-order: 5.9
 category: '@threlte/extras'
+group: 'Visual Effects'
 sourcePath: 'packages/extras/src/lib/components/GradientTexture/RadialGradientTexture.svelte'
 title: '<RadialGradientTexture>'
 type: 'component'
@@ -109,11 +109,9 @@ If the colors in your scene do not match the color in your stops, you may need t
 
 ```svelte
 <script>
-  import { useThrelte } from '@threlte/core'
+  import { Canvas } from '@threlte/core'
   import { LinearToneMapping } from 'three'
-
-  const { toneMapping } = useThrelte()
-
-  toneMapping.set(LinearToneMapping)
 </script>
+
+<Canvas toneMapping={LinearToneMapping}>...</Canvas>
 ```
