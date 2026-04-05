@@ -1,5 +1,4 @@
 import { readFileSync, statSync, readdirSync, writeFileSync, existsSync } from 'fs'
-import { svelte2tsx } from 'svelte2tsx'
 import { Node, Project, SourceFile, type Symbol, TypeAliasDeclaration } from 'ts-morph'
 import { join, resolve, basename, dirname } from 'path'
 import { fileURLToPath } from 'url'
@@ -13,27 +12,21 @@ const parser = new ComponentParser()
 
 interface PropInfo {
   name: string
-  type: string
+  type?: string
+  required?: boolean
   default?: string
   description?: string
 }
 
 interface EventInfo {
   name: string
-  type: string
+  payload?: string
   description?: string
 }
 
-interface BindingInfo {
+interface ExportInfo {
   name: string
-  type: string
-  description?: string
-  isbinding?: boolean
-}
-
-interface SnippetInfo {
-  name: string
-  parameters?: { name: string; type: string }[]
+  type?: string
   description?: string
 }
 
@@ -42,8 +35,7 @@ interface ComponentData {
   package: string
   props?: PropInfo[]
   events?: EventInfo[]
-  bindings?: BindingInfo[]
-  snippets?: SnippetInfo[]
+  exports?: ExportInfo[]
 }
 
 async function main() {
@@ -131,82 +123,21 @@ function findTypesFile(componentPath: string) {
 function getDataFromSources(params: { name: string; path: string }) {
   const { name, path } = params
 
-  const src = readFileSync(path, 'utf-8')
+  const svelteFileData = dataFromSvelteFile({ name, path })
+  let typesFileData = dataFromTypesFile({ name, path })
 
-  const props: PropInfo[] = []
-  const events: EventInfo[] = []
-  const snippets: SnippetInfo[] = []
-  const bindings: BindingInfo[] = extractBindings(src)
-  const exports = [] // TODO-DefinitelyMaybe
-
-  const svelteFileData = dataFromSvelteFile({ name, src, path })
-  const typesFileData = dataFromTypesFile({ name, path })
-
-  // canvas is a special one
-  // if (name === 'Canvas') {
-  //   const data = extractCanvasData(project)
-  //   svelteFileData.push(data)
-  // }
-
-  // TODO-DefinitelyMaybe: merge
-  let mergedData = typesFileData
-
-  // sort props into their categories
-  for (const prop of mergedData) {
-    const { name } = prop
-    if (name.startsWith('on')) {
-      events.push({
-        ...prop,
-        name: name.slice(2)
-      })
-    } else if (name === 'children') {
-      snippets.push(prop as SnippetInfo)
-    } else {
-      // we attached a boolean to check here
-      const check = (prop as BindingInfo).isbinding ? true : false
-      if (check) {
-        let temp = {
-          name: prop.name,
-          type: prop.type
-        }
-        if ((prop as BindingInfo).description) {
-          temp.description = (prop as BindingInfo).description
-        }
-        bindings.push(temp)
-      } else {
-        props.push(prop as PropInfo)
-      }
-    }
+  // canvas is a special case
+  if (name === 'Canvas') {
+    typesFileData = extractCanvasData({ name, path })
   }
 
-  let output: {
-    props?: PropInfo[]
-    events?: EventInfo[]
-    snippets?: SnippetInfo[]
-    bindings?: BindingInfo[]
-  } = {}
-
-  if (props.length > 0) {
-    output.props = props
-  }
-  if (events.length > 0) {
-    output.events = events
-  }
-  if (snippets.length > 0) {
-    output.snippets = snippets
-  }
-  if (bindings.length > 0) {
-    output.bindings = bindings
-  }
-
-  return output
+  return mergeData(svelteFileData, typesFileData)
 }
 
 function updateTypeText(text: string) {
   const regex = /import\(.+?\)\./g
   let match
   while ((match = regex.exec(text)) !== null) {
-    // console.log(match[0])
     if (match[0].includes('constants')) {
       text = text.replace(regex, 'THREE.')
     } else if (match[0].includes('packages')) {
@@ -263,28 +194,179 @@ function getDataFromJSDocs(prop: Symbol) {
   return { description, defaultValue }
 }
 
-function extractCanvasData(project: Project): PropInfo[] {
-  const typeAliases = project.getSourceFiles().flatMap((file) => file.getTypeAliases())
-  const contextAlias = typeAliases.find((t) => t.getName() === 'CreateThrelteContextOptions')
+function dataFromSvelteFile(params: { name: string; path: string }) {
+  const { name, path } = params
 
-  if (!contextAlias) {
-    throw 'No CreateThrelteContextOptions type alias found'
+  const src = readFileSync(path, 'utf-8')
+
+  const parsedComponent = parser.parseSvelteComponent(src, {
+    filePath: path,
+    moduleName: name
+  })
+
+  const exports: ExportInfo[] = parsedComponent.props
+    .filter((value) => value.constant) // TODO-DefinitelyMaybe: check the assumption here
+    .map((value) => {
+      return {
+        name: value.name,
+        type: value.type,
+        description: value.description
+      } as ExportInfo
+    })
+
+  const ignoredProps = ['ref', 'is']
+  const ignoredExports = exports.map((value) => value.name)
+
+  const props: PropInfo[] = parsedComponent.props
+    .filter((value) => {
+      return (
+        !ignoredProps.includes(value.name) &&
+        !ignoredExports.includes(value.name) &&
+        !value.name.startsWith('on')
+      )
+    })
+    .map((value) => {
+      let data: PropInfo = {
+        name: value.name
+      }
+      if (value.type) {
+        data.type = value.type
+      }
+      if (value.description) {
+        data.description = value.description
+      }
+      if (value.value && value.value != 'undefined') {
+        data.default = value.value
+      }
+      return data
+    })
+
+  const events: EventInfo[] = parsedComponent.props
+    .filter((value) => {
+      return value.name.startsWith('on')
+    })
+    .map((value) => {
+      let data: EventInfo = {
+        name: value.name.slice(2)
+      }
+      if (value.type) {
+        data.payload = value.type
+      }
+      if (value.description) {
+        data.description = value.description
+      }
+      return data
+    })
+
+  return {
+    props,
+    events,
+    exports
   }
+}
 
-  const defaultMap = collectDefaults(typeAliases)
+function dataFromTypesFile(params: { name: string; path: string }) {
+  const { name, path } = params
 
-  const data = contextAlias
+  const typesPath = findTypesFile(path)
+  if (!typesPath) return { props: [], events: [] }
+
+  const project = new Project()
+  const sourceFile = project.addSourceFileAtPath(typesPath)
+
+  const alias = findAlias(sourceFile, name)
+  if (!alias) return { props: [], events: [] }
+
+  const data = alias
     .getType()
     .getApparentProperties()
-    .filter((prop) => !['canvas', 'dom'].includes(prop.getName()))
+    .filter((prop) => prop.getDeclarations().some((d) => d.getSourceFile() === sourceFile))
     .map((prop) => {
-      const typeText = prop.getTypeAtLocation(contextAlias).getText()
+      const typeText = updateTypeText(prop.getTypeAtLocation(alias).getText())
+      const { description, defaultValue } = getDataFromJSDocs(prop)
       return {
         name: prop.getName(),
         type: typeText,
-        default: defaultMap[prop.getName()]
+        description,
+        default: defaultValue
       }
     })
+
+  const props: PropInfo[] = []
+  const events: EventInfo[] = []
+
+  // sort props into their categories
+  for (const prop of data) {
+    const { name } = prop
+    if (name.startsWith('on')) {
+      events.push({
+        ...prop,
+        name: name.slice(2)
+      } as EventInfo)
+    } else {
+      props.push(prop as PropInfo)
+    }
+  }
+  return { props, events }
+}
+
+function mergeData(
+  svelteDataSource: { props: PropInfo[]; events: EventInfo[]; exports: ExportInfo[] },
+  typesDataSource: { props: PropInfo[]; events: EventInfo[] }
+) {
+  const finalProps: PropInfo[] = []
+  const finalEvents: EventInfo[] = []
+  const finalExports: ExportInfo[] = []
+
+  // console.log(svelteDataSource)
+  // console.log('-------------------------')
+  // console.log(typesDataSource)
+
+  for (const prop of svelteDataSource.props) {
+  }
+
+  let merged: {
+    props?: PropInfo[]
+    events?: EventInfo[]
+    exports?: ExportInfo[]
+  } = {}
+
+  if (finalProps.length > 0) {
+    merged.props = finalProps
+  }
+  if (finalEvents.length > 0) {
+    merged.events = finalEvents
+  }
+  if (finalExports.length > 0) {
+    merged.exports = finalExports
+  }
+  return merged
+}
+
+function extractCanvasData(params: { name: string; path: string }) {
+  const { name, path } = params
+
+  // const typeAliases = project.getSourceFiles().flatMap((file) => file.getTypeAliases())
+  // const contextAlias = typeAliases.find((t) => t.getName() === 'CreateThrelteContextOptions')
+
+  // if (!contextAlias) {
+  //   throw 'No CreateThrelteContextOptions type alias found'
+  // }
+
+  // const defaultMap = collectDefaults(typeAliases)
+
+  // const data = contextAlias
+  //   .getType()
+  //   .getApparentProperties()
+  //   .filter((prop) => !['canvas', 'dom'].includes(prop.getName()))
+  //   .map((prop) => {
+  //     const typeText = prop.getTypeAtLocation(contextAlias).getText()
+  //     return {
+  //       name: prop.getName(),
+  //       type: typeText,
+  //       default: defaultMap[prop.getName()]
+  //     }
+  //   })
 
   // propsData.push(
   //   ...options.map((o) => ({
@@ -295,7 +377,7 @@ function extractCanvasData(project: Project): PropInfo[] {
   //   }))
   // )
 
-  return data
+  return { props: [], events: [] } //data
 }
 
 function collectDefaults(typeAliases: Array<ReturnType<SourceFile['getTypeAliases']>[number]>) {
@@ -319,66 +401,6 @@ function collectDefaults(typeAliases: Array<ReturnType<SourceFile['getTypeAliase
   }
 
   return defaultMap
-}
-
-function extractBindings(svelteSource: string) {
-  const bindings = []
-  const bindableRegex = /([a-zA-Z_$][a-zA-Z0-9_$]*)\s*=\s*\$bindable\(\)/g
-  let match
-  while ((match = bindableRegex.exec(svelteSource)) !== null) {
-    const varName = match[1]
-    if (varName == 'ref') continue // TODO-DefinitelyMaybe: check is this what we always want to do?
-    bindings.push({
-      name: varName,
-      type: 'unknown', // TODO: infer from types
-      description: undefined,
-      isbinding: true
-    })
-  }
-  return bindings
-}
-
-function dataFromSvelteFile(params: { name: string; src: string; path: string }) {
-  const { name, path, src } = params
-
-  const parsedComponent = parser.parseSvelteComponent(src, {
-    filePath: path,
-    moduleName: name
-  })
-
-  // TODO-DefinitelyMaybe: transform the parsedComponentdata into what we use for our docs
-
-  return []
-}
-
-function dataFromTypesFile(params: { name: string; path: string }) {
-  const { name, path } = params
-
-  const typesPath = findTypesFile(path)
-  if (!typesPath) return []
-
-  const project = new Project()
-  const sourceFile = project.addSourceFileAtPath(typesPath)
-
-  const alias = findAlias(sourceFile, name)
-  if (!alias) return []
-
-  const data = alias
-    .getType()
-    .getApparentProperties()
-    .filter((prop) => prop.getDeclarations().some((d) => d.getSourceFile() === sourceFile))
-    .map((prop) => {
-      const typeText = updateTypeText(prop.getTypeAtLocation(alias).getText())
-      const { description, defaultValue } = getDataFromJSDocs(prop)
-      return {
-        name: prop.getName(),
-        type: typeText,
-        description,
-        default: defaultValue
-      }
-    })
-
-  return data
 }
 
 main().catch((e) => {
