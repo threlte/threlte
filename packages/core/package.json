@@ -47,9 +47,6 @@
     "vite": "catalog:",
     "vitest": "catalog:"
   },
-  "dependencies": {
-    "mitt": "^3.0.1"
-  },
   "peerDependencies": {
     "svelte": ">=5",
     "three": ">=0.160"

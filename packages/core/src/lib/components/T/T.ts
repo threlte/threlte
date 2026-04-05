@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-
 import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
@@ -13,6 +11,7 @@ type ThreeCatalogue = {
 }
 
 type TComponentProxy = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
   [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
 }
 
@@ -73,11 +72,13 @@ export const T = new Proxy(TComp, {
       throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
     }
 
-    setIs<typeof module>(module)
-
-    return TComp
+    return (...args: Parameters<typeof TComp>) => {
+      setIs(module)
+      return TComp(...args)
+    }
   }
 }) as typeof TComp &
   TComponentProxy & {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
   } & Record<string, Component>

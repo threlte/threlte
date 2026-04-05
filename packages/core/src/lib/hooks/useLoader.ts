@@ -110,22 +110,12 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
 ): ThrelteUseLoader<InstanceType<Proto>> {
   const { remember, clear: clearCacheItem } = useCache()
 
-  let loader: InstanceType<Proto> | undefined
-
-  const initializeLoader = (): InstanceType<Proto> => {
-    // Type-wrestling galore
-    const lazyLoader = new Proto(...(((options as any)?.args as []) ?? [])) as InstanceType<Proto>
-    // extend the loader if necessary
-    options?.extend?.(lazyLoader)
-    return lazyLoader
-  }
+  const loader = new Proto(...(options?.args ?? [])) as InstanceType<Proto>
+  options?.extend?.(loader)
 
   const load: ThrelteUseLoader<InstanceType<Proto>>['load'] = (input, options) => {
     // Allow Async and Sync loaders
     const loadResource = async (url: string) => {
-      if (!loader) {
-        loader = initializeLoader()
-      }
       if ('loadAsync' in loader) {
         const result = await loader.loadAsync(url, options?.onProgress)
         return options?.transform?.(result) ?? result
