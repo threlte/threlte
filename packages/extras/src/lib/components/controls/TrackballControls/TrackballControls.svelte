@@ -40,17 +40,16 @@ by demand invalidate the frame loop.
   import type { TrackballControlsProps } from './types.js'
   import type { Event } from 'three'
 
-  let { onchange, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
+  let { onchange, camera, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
+  const { dom, camera: defaultCamera, invalidate, size } = useThrelte()
   const parent = useParent()
-  const { dom, invalidate, size } = useThrelte()
-
-  if (!isInstanceOf($parent, 'Camera')) {
-    throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
-  }
+  const resolvedParent = $derived(
+    camera ? camera : isInstanceOf($parent, 'Camera') ? $parent : $defaultCamera
+  )
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = $derived(new ThreeTrackballControls($parent))
+  const controls = $derived(new ThreeTrackballControls(resolvedParent))
 
   useTask(
     () => {
@@ -67,9 +66,11 @@ by demand invalidate the frame loop.
   })
 
   $effect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $size
-    controls.handleResize()
+    const { width, height } = $size
+
+    if (width && height) {
+      controls.handleResize()
+    }
   })
 
   const { trackballControls } = useControlsContext()

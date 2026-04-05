@@ -9,8 +9,10 @@
   import type { TransformControlsProps } from './types.js'
 
   let {
-    autoPauseOrbitControls = true,
-    autoPauseTrackballControls = true,
+    autoPauseControls = true,
+    autoPauseOrbitControls,
+    autoPauseTrackballControls,
+    cameraControls: customCameraControls,
     object,
     controls = $bindable(),
     group = $bindable(),
@@ -20,36 +22,57 @@
 
   const { camera, dom, invalidate, scene } = useThrelte()
 
-  const { orbitControls, trackballControls } = useControlsContext()
+  const { orbitControls, trackballControls, cameraControls } = useControlsContext()
 
   let isDragging = $state(false)
 
+  // Resolve effective pause state: deprecated per-control props take
+  // precedence if explicitly set, otherwise fall back to autoPauseControls.
+  const shouldPauseOrbit = $derived(autoPauseOrbitControls ?? autoPauseControls)
+  const shouldPauseTrackball = $derived(autoPauseTrackballControls ?? autoPauseControls)
+  const shouldPauseCamera = $derived(autoPauseControls)
+
   observe(
-    () => [orbitControls, isDragging, autoPauseOrbitControls],
-    ([orbitControls, isDragging, useAutoPauseOrbitControls]) => {
-      // if there are no orbitcontrols or we're not even
-      // dragging, or the orbitcontrols are disabled, return
+    () => [orbitControls, isDragging, shouldPauseOrbit],
+    ([orbitControls, isDragging, shouldPause]) => {
       if (!orbitControls || (!orbitControls.enabled && isDragging)) return
-      orbitControls.enabled = !(isDragging && useAutoPauseOrbitControls)
+      orbitControls.enabled = !(isDragging && shouldPause)
       return () => {
-        // we know they were enabled before, so we can
-        // safely re-enable them
         orbitControls.enabled = true
       }
     }
   )
 
   observe(
-    () => [trackballControls, isDragging, autoPauseTrackballControls],
-    ([trackballControls, isDragging, useAutoPausetrackballControls]) => {
-      // if there are no trackballcontrols or we're not even
-      // dragging, or the trackballcontrols are disabled, return
+    () => [trackballControls, isDragging, shouldPauseTrackball],
+    ([trackballControls, isDragging, shouldPause]) => {
       if (!trackballControls || (!trackballControls.enabled && isDragging)) return
-      trackballControls.enabled = !(isDragging && useAutoPausetrackballControls)
+      trackballControls.enabled = !(isDragging && shouldPause)
       return () => {
-        // we know they were enabled before, so we can
-        // safely re-enable them
         trackballControls.enabled = true
+      }
+    }
+  )
+
+  observe(
+    () => [cameraControls, isDragging, shouldPauseCamera],
+    ([cameraControls, isDragging, shouldPause]) => {
+      if (!cameraControls || (!cameraControls.enabled && isDragging)) return
+      cameraControls.enabled = !(isDragging && shouldPause)
+      return () => {
+        cameraControls.enabled = true
+      }
+    }
+  )
+
+  // Custom/third-party controls passed via the cameraControls prop
+  observe(
+    () => [customCameraControls, isDragging, autoPauseControls],
+    ([controls, isDragging, shouldPause]) => {
+      if (!controls || (!controls.enabled && isDragging)) return
+      controls.enabled = !(isDragging && shouldPause)
+      return () => {
+        controls.enabled = true
       }
     }
   )
