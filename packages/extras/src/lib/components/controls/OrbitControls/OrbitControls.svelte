@@ -7,17 +7,24 @@
   import { useControlsContext } from '../useControlsContext.js'
   import type { OrbitControlsProps } from './types.js'
   import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
   let { camera, ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
   const { dom, camera: defaultCamera, invalidate } = useThrelte()
   const parent = useParent()
-  const resolvedParent = $derived(
+  const resolvedCamera = $derived(
     camera ? camera : isInstanceOf($parent, 'Camera') ? $parent : $defaultCamera
   )
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = $derived(new OrbitControls(resolvedParent, dom))
+  const controls = new OrbitControls(
+    untrack(() => resolvedCamera),
+    dom
+  )
+  $effect.pre(() => {
+    controls.object = resolvedCamera
+  })
 
   const { orbitControls } = useControlsContext()
 

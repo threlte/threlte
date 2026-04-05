@@ -39,17 +39,21 @@ by demand invalidate the frame loop.
   import { useControlsContext } from '../useControlsContext.js'
   import type { TrackballControlsProps } from './types.js'
   import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
   let { onchange, camera, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
   const { dom, camera: defaultCamera, invalidate, size } = useThrelte()
   const parent = useParent()
-  const resolvedParent = $derived(
+  const resolvedCamera = $derived(
     camera ? camera : isInstanceOf($parent, 'Camera') ? $parent : $defaultCamera
   )
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = $derived(new ThreeTrackballControls(resolvedParent))
+  const controls = new ThreeTrackballControls(untrack(() => resolvedCamera))
+  $effect.pre(() => {
+    controls.object = resolvedCamera
+  })
 
   useTask(
     () => {
