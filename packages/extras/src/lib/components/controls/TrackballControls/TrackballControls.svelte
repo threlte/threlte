@@ -9,9 +9,11 @@ carefully inspect a model from every angle.
 For an alternative camera controller, see
 [`<OrbitControls>`](https://threlte.xyz/docs/reference/extras/orbit-controls).
 
-The component `<TrackballControls>` must be a direct child of a camera
-component and will mount itself to that camera. By default, damping is
-enabled. You can disable this by setting `staticMoving` to true.
+If placed as a child of a camera component, `<TrackballControls>` will
+attach to that camera. Otherwise, it attaches to the scene's default
+camera. A camera can also be passed explicitly via the `camera` prop.
+By default, damping is enabled. You can disable this by setting
+`staticMoving` to true.
 
 ## Usage
 
