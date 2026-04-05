@@ -308,7 +308,7 @@ export class DAG<T extends { key: Key }> {
       throw new Error('The graph contains a cycle, and thus can not be sorted topologically.')
     }
 
-    this.sortedConnectedValues = []
+    this.sortedConnectedValues.length = 0
     for (let i = 0; i < result.length; i++) {
       const value = this.connectedVertices.get(result[i])!.value
       if (value !== undefined) {

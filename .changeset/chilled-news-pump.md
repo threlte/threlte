@@ -2,4 +2,4 @@
 "@threlte/core": patch
 ---
 
-Reduce garbage generation in DAG with intermediate arrays
+Reduce garbage generation in DAG caused by intermediate arrays

@@ -437,10 +437,14 @@ describe('DAG', () => {
       expect(i).toBe(1)
       i++
     })
-    stage.createTask('task a', () => {
-      expect(i).toBe(0)
-      i++
-    }, { before: 'task b' })
+    stage.createTask(
+      'task a',
+      () => {
+        expect(i).toBe(0)
+        i++
+      },
+      { before: 'task b' }
+    )
     scheduler.run(0)
     expect(i).toBe(2)
   })
@@ -457,10 +461,14 @@ describe('DAG', () => {
       expect(i).toBe(2)
       i++
     })
-    stage.createTask('task b', () => {
-      expect(i).toBe(1)
-      i++
-    }, { after: 'task a', before: 'task c' })
+    stage.createTask(
+      'task b',
+      () => {
+        expect(i).toBe(1)
+        i++
+      },
+      { after: 'task a', before: 'task c' }
+    )
     scheduler.run(0)
     expect(i).toBe(3)
   })
@@ -470,10 +478,14 @@ describe('DAG', () => {
     const stage = scheduler.createStage('stage')
     let i = 0
     // task a references task b via "before", but task b doesn't exist yet
-    stage.createTask('task a', () => {
-      expect(i).toBe(0)
-      i++
-    }, { before: 'task b' })
+    stage.createTask(
+      'task a',
+      () => {
+        expect(i).toBe(0)
+        i++
+      },
+      { before: 'task b' }
+    )
     stage.createTask('task b', () => {
       expect(i).toBe(1)
       i++
@@ -543,10 +555,14 @@ describe('DAG', () => {
       i++
     })
     // task b depends on task a — task a should be promoted to connected
-    stage.createTask('task b', () => {
-      expect(i).toBe(1)
-      i++
-    }, { after: 'task a' })
+    stage.createTask(
+      'task b',
+      () => {
+        expect(i).toBe(1)
+        i++
+      },
+      { after: 'task a' }
+    )
     scheduler.run(0)
     expect(i).toBe(2)
   })
@@ -596,10 +612,14 @@ describe('DAG', () => {
       expect(i).toBe(0)
       i++
     })
-    stage.createTask(taskB, () => {
-      expect(i).toBe(1)
-      i++
-    }, { after: taskA })
+    stage.createTask(
+      taskB,
+      () => {
+        expect(i).toBe(1)
+        i++
+      },
+      { after: taskA }
+    )
     scheduler.run(0)
     expect(i).toBe(2)
   })

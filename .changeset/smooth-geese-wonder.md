@@ -2,4 +2,4 @@
 "@threlte/core": patch
 ---
 
-Replace mitt dependency with a smaller internal even emitter
+Remove mitt runtime dependency by using a smaller internal event emitter
