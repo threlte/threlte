@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 
-import { dirname } from 'node:path'
+import { dirname, parse } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import meow from 'meow'
 import { readPackageUpSync } from 'read-pkg-up'
@@ -75,9 +75,10 @@ if (cli.input.length === 0) {
   console.log(cli.help)
 } else {
   const file = cli.input[0]
-  const nameExt = file.match(/[-_\w]+[.][\w]+$/i)[0]
-  const name = nameExt.split('.').slice(0, -1).join('.')
-  const output = `${name}.svelte`
+  const name = parse(file).name
+  const output = cli.flags.output
+    ? cli.flags.output.endsWith('.svelte') ? cli.flags.output : `${cli.flags.output}.svelte`
+    : `${name}.svelte`
 
   try {
     await gltf(file, output, {
