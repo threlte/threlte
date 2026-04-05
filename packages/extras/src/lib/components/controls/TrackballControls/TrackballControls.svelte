@@ -9,9 +9,11 @@ carefully inspect a model from every angle.
 For an alternative camera controller, see
 [`<OrbitControls>`](https://threlte.xyz/docs/reference/extras/orbit-controls).
 
-The component `<TrackballControls>` must be a direct child of a camera
-component and will mount itself to that camera. By default, damping is
-enabled. You can disable this by setting `staticMoving` to true.
+If placed as a child of a camera component, `<TrackballControls>` will
+attach to that camera. Otherwise, it attaches to the scene's default
+camera. A camera can also be passed explicitly via the `camera` prop.
+By default, damping is enabled. You can disable this by setting
+`staticMoving` to true.
 
 ## Usage
 
@@ -39,18 +41,21 @@ by demand invalidate the frame loop.
   import { useControlsContext } from '../useControlsContext.js'
   import type { TrackballControlsProps } from './types.js'
   import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
-  let { onchange, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
+  let { onchange, camera, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
+  const { dom, camera: defaultCamera, invalidate, size } = useThrelte()
   const parent = useParent()
-  const { dom, invalidate, size } = useThrelte()
-
-  if (!isInstanceOf($parent, 'Camera')) {
-    throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
-  }
+  const resolvedCamera = $derived(
+    camera ? camera : isInstanceOf($parent, 'Camera') ? $parent : $defaultCamera
+  )
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = $derived(new ThreeTrackballControls($parent))
+  const controls = new ThreeTrackballControls(untrack(() => resolvedCamera))
+  $effect.pre(() => {
+    controls.object = resolvedCamera
+  })
 
   useTask(
     () => {
@@ -67,9 +72,11 @@ by demand invalidate the frame loop.
   })
 
   $effect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    $size
-    controls.handleResize()
+    const { width, height } = $size
+
+    if (width && height) {
+      controls.handleResize()
+    }
   })
 
   const { trackballControls } = useControlsContext()
