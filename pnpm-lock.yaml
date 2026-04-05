@@ -287,6 +287,9 @@ importers:
       shiki:
         specifier: ^3.13.0
         version: 3.13.0
+      sveld:
+        specifier: ^0.30.0
+        version: 0.30.0
       svelte:
         specifier: 'catalog:'
         version: 5.53.6
@@ -7097,6 +7100,10 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  sveld@0.30.0:
+    resolution: {integrity: sha512-GUvWgq1wAJSal3WuNBTtFvQefMC0y/CfL06yPO4/7kJwAfPn49loA+0cAlowLR5f2jluqhmc+2emlZ4WrIrgnQ==}
+    hasBin: true
 
   svelte-check@4.3.1:
     resolution: {integrity: sha512-lkh8gff5gpHLjxIV+IaApMxQhTGnir2pNUAqcNgeKkvK5bT/30Ey/nzBxNLDlkztCH4dP7PixkMt9SWEKFPBWg==}
@@ -15352,6 +15359,10 @@ snapshots:
     optional: true
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  sveld@0.30.0:
+    dependencies:
+      prettier: 3.8.1
 
   svelte-check@4.3.1(picomatch@4.0.3)(svelte@5.53.6)(typescript@5.4.5):
     dependencies:

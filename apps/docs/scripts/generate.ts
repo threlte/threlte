@@ -3,11 +3,13 @@ import { svelte2tsx } from 'svelte2tsx'
 import { Node, Project, SourceFile, type Symbol, TypeAliasDeclaration } from 'ts-morph'
 import { join, resolve, basename, dirname } from 'path'
 import { fileURLToPath } from 'url'
+import { ComponentParser } from 'sveld'
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 const PACKAGES_DIR = resolve(__dirname, '../../../packages')
-const IGNORED_PACKAGES = ['gltf', 'extras', 'studio', 'theatre', 'xr', 'flex', 'rapier']
+const IGNORED_PACKAGES = ['core', 'gltf', 'studio', 'theatre', 'xr', 'flex', 'rapier', 'sv']
+const parser = new ComponentParser()
 
 interface PropInfo {
   name: string
@@ -26,7 +28,7 @@ interface BindingInfo {
   name: string
   type: string
   description?: string
-	isbinding?: boolean
+  isbinding?: boolean
 }
 
 interface SnippetInfo {
@@ -53,25 +55,29 @@ async function main() {
   for (const packageName of packages) {
     console.log('\nProcessing package:', packageName)
 
-    const project = createProject(packageName)
     const components = collectComponents(packageName)
 
     for (const componentPath of components) {
       console.log('Processing:', componentPath)
       const name = basename(componentPath, '.svelte')
 
-      const propsData = getPropsFromSources({
+      const srcData = getDataFromSources({
         name,
-        path: componentPath,
-        project
+        path: componentPath
       })
 
-			const data = {
+      const data = {
         name,
         package: packageName
-				...propsData
       }
+
+      for (const key in srcData) {
+        const element = srcData[key]
+        data[key] = element
+      }
+
       allComponents.push(data)
+      break
     }
   }
 
@@ -109,54 +115,21 @@ function collectComponents(packageName: string): string[] {
   return filepaths
 }
 
-function createProject(packageName: string): Project {
-  const project = new Project()
-  const srcLibDir = resolve(PACKAGES_DIR, packageName, 'src', 'lib')
-
-  for (const file of getAllTsFiles(srcLibDir)) {
-    project.addSourceFileAtPath(file)
-  }
-
-  return project
-}
-
-function getAllTsFiles(dir: string): string[] {
-  const filePaths: string[] = []
-
-  for (const entry of readdirSync(dir)) {
-    const fullPath = join(dir, entry)
-
-    if (statSync(fullPath).isDirectory()) {
-      filePaths.push(...getAllTsFiles(fullPath))
-    } else if (fullPath.endsWith('.ts') || fullPath.endsWith('.js')) {
-      filePaths.push(fullPath)
-    }
-  }
-
-  return filePaths
-}
-
-function findTypesFile(componentPath: string): string | null {
+function findTypesFile(componentPath: string) {
   const dir = dirname(componentPath)
   const typesPath = join(dir, 'types.ts')
   if (existsSync(typesPath)) {
     return typesPath
   }
-  // maybe in parent
-  const parentDir = dirname(dir)
-  const parentTypes = join(parentDir, 'types.ts')
-  if (existsSync(parentTypes)) {
-    return parentTypes
-  }
-  return null
+  return undefined
 }
 
 /**
  *
  * we use both the .svelte file convertered into tsx and we look into the surrounding types.ts files
  */
-function getPropsFromSources(params: { name: string; path: string; project: Project }) {
-  const { name, path, project } = params
+function getDataFromSources(params: { name: string; path: string }) {
+  const { name, path } = params
 
   const src = readFileSync(path, 'utf-8')
 
@@ -164,63 +137,67 @@ function getPropsFromSources(params: { name: string; path: string; project: Proj
   const events: EventInfo[] = []
   const snippets: SnippetInfo[] = []
   const bindings: BindingInfo[] = extractBindings(src)
+  const exports = [] // TODO-DefinitelyMaybe
 
-  const propsSvelteFile = dataFromSvelteFile({name, src, path, project})
-	const propsTypesFile = dataFromTypesFile({name, path, project})
+  const svelteFileData = dataFromSvelteFile({ name, src, path })
+  const typesFileData = dataFromTypesFile({ name, path })
 
   // canvas is a special one
-  if (name === 'Canvas') {
-    const data = extractCanvasData(project)
-		propsSvelteFile.push(data)
-  }
+  // if (name === 'Canvas') {
+  //   const data = extractCanvasData(project)
+  //   svelteFileData.push(data)
+  // }
 
-	// merge
-	let propsData = Object.assign({}, propsSvelteFile, propsTypesFile)
+  // TODO-DefinitelyMaybe: merge
+  let mergedData = typesFileData
 
-	// TODO-DefinitelyMaybe: camera props "manual" and "makeDefault" make it to the T component data
-
-	// sort props into their categories
-  for (const prop of propsData) {
+  // sort props into their categories
+  for (const prop of mergedData) {
     const { name } = prop
-
     if (name.startsWith('on')) {
-			events.push(prop as EventInfo)
+      events.push({
+        ...prop,
+        name: name.slice(2)
+      })
     } else if (name === 'children') {
       snippets.push(prop as SnippetInfo)
     } else {
-			// we attached a boolean to check here
-			const check = (prop as BindingInfo).isbinding ? true: false
-			if (check) {
-				bindings.push({
-					name: prop.name,
-					type: prop.type,
-					description: (prop as BindingInfo).description
-				})
-			} else {
-				props.push(prop as PropInfo)
-			}
+      // we attached a boolean to check here
+      const check = (prop as BindingInfo).isbinding ? true : false
+      if (check) {
+        let temp = {
+          name: prop.name,
+          type: prop.type
+        }
+        if ((prop as BindingInfo).description) {
+          temp.description = (prop as BindingInfo).description
+        }
+        bindings.push(temp)
+      } else {
+        props.push(prop as PropInfo)
+      }
     }
   }
 
-	let output: {
+  let output: {
     props?: PropInfo[]
     events?: EventInfo[]
     snippets?: SnippetInfo[]
     bindings?: BindingInfo[]
   } = {}
 
-	if (props.length > 0) {
-		output.props = props
-	}
-	if (events.length > 0) {
-		output.events = events
-	}
-	if (snippets.length > 0) {
-		output.snippets = snippets
-	}
-	if (bindings.length > 0) {
-		output.bindings = bindings
-	}
+  if (props.length > 0) {
+    output.props = props
+  }
+  if (events.length > 0) {
+    output.events = events
+  }
+  if (snippets.length > 0) {
+    output.snippets = snippets
+  }
+  if (bindings.length > 0) {
+    output.bindings = bindings
+  }
 
   return output
 }
@@ -229,7 +206,7 @@ function updateTypeText(text: string) {
   const regex = /import\(.+?\)\./g
   let match
   while ((match = regex.exec(text)) !== null) {
-    console.log(match[0])
+    // console.log(match[0])
     if (match[0].includes('constants')) {
       text = text.replace(regex, 'THREE.')
     } else if (match[0].includes('packages')) {
@@ -238,6 +215,8 @@ function updateTypeText(text: string) {
       text = text.replace(regex, '')
     }
   }
+  // easy edit for quirky quotes "'
+  text = text.replaceAll(/"/g, "'")
   return text
 }
 
@@ -264,13 +243,15 @@ function getDataFromJSDocs(prop: Symbol) {
       const jsDocs = declaration.getJsDocs()
       for (const jsDoc of jsDocs) {
         description = jsDoc.getDescription().trim() || undefined
+        // easy edit to remove \n 's
+        description = description?.replaceAll(/\n+/g, '. ')
         for (const tag of jsDoc.getTags()) {
           if (tag.getTagName() === 'default') {
             const comment = tag.getComment()
             defaultValue = typeof comment === 'string' ? comment.trim() : undefined
           }
         }
-				// if (tag.getTagName() === 'default') {
+        // if (tag.getTagName() === 'default') {
         //       const comment = tag.getComment()
         //       if (typeof comment === 'string' && comment.trim()) {
         //         defaultMap.set(prop.getName(), comment.trim())
@@ -305,21 +286,19 @@ function extractCanvasData(project: Project): PropInfo[] {
       }
     })
 
-		// propsData.push(
-    //   ...options.map((o) => ({
-    //     name: o.name,
-    //     type: o.type,
-    //     default: o.default,
-    //     description: undefined
-    //   }))
-    // )
+  // propsData.push(
+  //   ...options.map((o) => ({
+  //     name: o.name,
+  //     type: o.type,
+  //     default: o.default,
+  //     description: undefined
+  //   }))
+  // )
 
   return data
 }
 
-function collectDefaults(
-  typeAliases: Array<ReturnType<SourceFile['getTypeAliases']>[number]>
-) {
+function collectDefaults(typeAliases: Array<ReturnType<SourceFile['getTypeAliases']>[number]>) {
   const aliases = [
     'CreateRendererContextOptions',
     'CreateSchedulerContextOptions',
@@ -332,11 +311,10 @@ function collectDefaults(
     if (!alias) continue
 
     for (const prop of alias.getType().getProperties()) {
-			let {description} = getDataFromJSDocs(prop)
-			if (description) {
-
-					defaultMap[prop.getName()] = description
-			}
+      let { description } = getDataFromJSDocs(prop)
+      if (description) {
+        defaultMap[prop.getName()] = description
+      }
     }
   }
 
@@ -349,241 +327,61 @@ function extractBindings(svelteSource: string) {
   let match
   while ((match = bindableRegex.exec(svelteSource)) !== null) {
     const varName = match[1]
+    if (varName == 'ref') continue // TODO-DefinitelyMaybe: check is this what we always want to do?
     bindings.push({
       name: varName,
       type: 'unknown', // TODO: infer from types
       description: undefined,
-			isbinding:true
+      isbinding: true
     })
   }
   return bindings
 }
 
-function dataFromSvelteFile(params:{name:string, src:string, path:string, project:Project}) {
-	const {name, src, path, project} = params
-	// use the svelte file first
-  const { code } = svelte2tsx(src, { filename: path, mode: 'ts' })
-  const tsxPath = join('./', `${name}.tsx`)
-  const tsxSourceFile = project.createSourceFile(tsxPath, code, { overwrite: true })
+function dataFromSvelteFile(params: { name: string; src: string; path: string }) {
+  const { name, path, src } = params
 
-  let propsAlias = tsxSourceFile.getTypeAlias('Props')
+  const parsedComponent = parser.parseSvelteComponent(src, {
+    filePath: path,
+    moduleName: name
+  })
 
-  let type = propsAlias?.getType()
-  let properties = type?.getApparentProperties()
+  // TODO-DefinitelyMaybe: transform the parsedComponentdata into what we use for our docs
 
-	// Process the props
-  // const type = propsAlias.getType()
-  // const properties = type.getApparentProperties()
-  // const typeName = prop.getName()
-  // let typeText = prop.getTypeAtLocation(sourceFile).getText()
-  // typeText = updateTypeText(typeText)
-
-	const data = []
-
-  if (properties) {
-    for (const prop of properties) {
-      const name = prop.getName()
-			data.push({
-				name,
-				type:'todo'
-			})
-    }
-  }
-
-	return data
+  return []
 }
 
-function dataFromTypesFile(params:{name:string, path:string, project:Project}) {
-	const {name, path, project} = params
-	const typesPath = findTypesFile(path)
+function dataFromTypesFile(params: { name: string; path: string }) {
+  const { name, path } = params
 
-	let propsAlias
+  const typesPath = findTypesFile(path)
+  if (!typesPath) return []
 
-  if (typesPath) {
-    const typesSourceFile = project.getSourceFile(typesPath)
-    if (typesSourceFile) {
-      propsAlias = findAlias(typesSourceFile, name) ?? undefined
-    }
-  }
+  const project = new Project()
+  const sourceFile = project.addSourceFileAtPath(typesPath)
 
-	let type = propsAlias?.getType()
-  let properties = type?.getApparentProperties()
+  const alias = findAlias(sourceFile, name)
+  if (!alias) return []
 
-	let data = []
-  if (properties) {
-   for (const prop of properties) {
-      const name = prop.getName()
-			data.push({
-				name,
-				type:'todo'
-			})
-    }
-  }
-	return data
+  const data = alias
+    .getType()
+    .getApparentProperties()
+    .filter((prop) => prop.getDeclarations().some((d) => d.getSourceFile() === sourceFile))
+    .map((prop) => {
+      const typeText = updateTypeText(prop.getTypeAtLocation(alias).getText())
+      const { description, defaultValue } = getDataFromJSDocs(prop)
+      return {
+        name: prop.getName(),
+        type: typeText,
+        description,
+        default: defaultValue
+      }
+    })
+
+  return data
 }
 
 main().catch((e) => {
   console.error('Failure in generate script:', e)
   process.exit(1)
 })
-
-function extractPropsFromTsx(
-  tsxSourceFile: SourceFile,
-  svelteSource: string,
-  project: Project,
-  typesPath: string | null,
-  componentName: string
-): PropInfo[] {
-  let propsTypeAlias = tsxSourceFile.getTypeAlias('Props')
-  let sourceFile = tsxSourceFile
-  if (!propsTypeAlias && typesPath) {
-    // fallback to types.ts
-    const typesSourceFile = project.getSourceFile(typesPath)
-    if (typesSourceFile) {
-      const alias = findAlias(typesSourceFile, componentName)
-      if (alias) {
-        propsTypeAlias = alias
-        sourceFile = typesSourceFile
-      }
-    }
-  }
-  if (!propsTypeAlias) return []
-
-  const type = propsTypeAlias.getType()
-  const properties = type.getApparentProperties()
-
-  const props: PropInfo[] = []
-  for (const prop of properties) {
-    const name = prop.getName()
-
-    if (name.startsWith('on')) {
-      // events
-      continue
-    } else if (name === 'children') {
-      // snippets
-      continue
-    }
-
-    const propType = prop.getTypeAtLocation(sourceFile)
-    let typeText = propType.getText()
-
-    let defaultValue: string | undefined
-    let description: string | undefined
-
-    // from JSDoc if in types
-    if (sourceFile !== tsxSourceFile) {
-      let { description: desc, defaultValue: dvalue } = getDataFromJSDocs(prop)
-      description = desc
-      defaultValue = dvalue
-    }
-
-    // check destructuring in svelteSource
-    if (!defaultValue) {
-      const destructRegex = /let\s*\{\s*[^}]*${name}\s*=\s*([^,}]+)/g
-      const match = destructRegex.exec(svelteSource)
-      if (match) {
-        defaultValue = match[1].trim()
-      }
-    }
-
-    props.push({
-      name,
-      type: typeText,
-      default: defaultValue,
-      description
-    })
-  }
-
-  return props
-}
-
-function extractEvents(
-  project: Project,
-  typesPath: string | null,
-  componentName: string
-): EventInfo[] {
-  if (!typesPath) return []
-
-  const sourceFile = project.getSourceFile(typesPath)
-  if (!sourceFile) return []
-
-  const propsAlias = findAlias(sourceFile, componentName)
-  if (!propsAlias) return []
-
-  const type = propsAlias.getType()
-  const properties = type.getApparentProperties()
-
-  const events: EventInfo[] = []
-  for (const prop of properties) {
-    const name = prop.getName()
-    if (!name.startsWith('on')) continue
-
-    const eventName = name.slice(2)
-    const propType = prop.getTypeAtLocation(sourceFile)
-    const typeText = propType.getText()
-
-    let { description } = getDataFromJSDocs(prop)
-
-    events.push({
-      name: eventName,
-      type: typeText,
-      description
-    })
-  }
-
-  // now update typeText as we need to repalce imports
-  for (let i = 0; i < events.length; i++) {
-    events[i].type = updateTypeText(events[i].type)
-  }
-
-  return events
-}
-
-function extractSnippets(
-  project: Project,
-  typesPath: string | null,
-  componentName: string
-): SnippetInfo[] {
-  if (!typesPath) return []
-
-  const sourceFile = project.getSourceFile(typesPath)
-  if (!sourceFile) return []
-
-  const propsAlias = findAlias(sourceFile, componentName)
-  if (!propsAlias) return []
-
-  const type = propsAlias.getType()
-  const properties = type.getApparentProperties()
-
-  const snippets: SnippetInfo[] = []
-  for (const prop of properties) {
-    const name = prop.getName()
-    if (name !== 'children') continue // only children for now
-
-    const propType = prop.getTypeAtLocation(sourceFile)
-    const typeText = propType.getText()
-
-    if (typeText.includes('Snippet<')) {
-      const paramMatch = typeText.match(/Snippet<\[([^\]]+)\]>/)
-      let parameters: { name: string; type: string }[] | undefined
-      if (paramMatch) {
-        let paramsStr = paramMatch[1]
-        paramsStr = updateTypeText(paramsStr).slice(1, -1)
-        parameters = paramsStr.split(',').map((p) => {
-          const parts = p.split(':').map((s) => s.trim())
-          return { name: parts[0], type: parts[1] || 'unknown' }
-        })
-      }
-
-      let { description } = getDataFromJSDocs(prop)
-
-      snippets.push({
-        name,
-        parameters,
-        description
-      })
-    }
-  }
-
-  return snippets
-}
