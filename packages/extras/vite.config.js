@@ -14,6 +14,11 @@ export default defineConfig(({ mode }) => ({
       exclude: ['@threlte/core', '@threlte/extras'],
       entries: ['src/lib/**/*.svelte', resolve('../core/src/lib/index.ts')],
       include: ['three', 'svelte']
+    },
+    server: {
+      warmup: {
+        clientFiles: ['src/lib/interactivity/__tests__/**/*.spec.ts']
+      }
     }
   }),
   test: {
