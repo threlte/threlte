@@ -77,7 +77,9 @@ if (cli.input.length === 0) {
   const file = cli.input[0]
   const name = parse(file).name
   const output = cli.flags.output
-    ? cli.flags.output.endsWith('.svelte') ? cli.flags.output : `${cli.flags.output}.svelte`
+    ? cli.flags.output.endsWith('.svelte')
+      ? cli.flags.output
+      : `${cli.flags.output}.svelte`
     : `${name}.svelte`
 
   try {
