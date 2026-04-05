@@ -2,4 +2,4 @@
 "@threlte/core": patch
 ---
 
-Fix: useLoader "loader" prop is undefiend before calling load
+Fix: useLoader "loader" prop is undefined before calling load
