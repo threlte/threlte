@@ -1,0 +1,1 @@
+import{aE as u}from"./runtime.BsM9HEgF.js";function i(){const e=u("theatre-sheet").sheet;return(o,{key:t,props:r,callback:c,options:n={reconfigure:!0}})=>{const s=e.object(t,r,n).onValuesChange(a=>{c(o,a)});return{destroy(){s(),e.detachObject(t)}}}}export{i as c};
