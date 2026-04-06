@@ -284,12 +284,20 @@ function dataFromTypesFile(params: { name: string; path: string }) {
     .map((prop) => {
       const typeText = updateTypeText(prop.getTypeAtLocation(alias).getText())
       const { description, defaultValue } = getDataFromJSDocs(prop)
-      return {
+      let temp: PropInfo = {
         name: prop.getName(),
-        type: typeText,
-        description,
-        default: defaultValue
+        type: typeText
       }
+      if (description) {
+        temp.description = description
+      }
+      if (defaultValue) {
+        temp.default = defaultValue
+      }
+      if (!prop.isOptional()) {
+        temp.required = true
+      }
+      return temp
     })
 
   const props: PropInfo[] = []
@@ -316,13 +324,32 @@ function mergeData(
 ) {
   const finalProps: PropInfo[] = []
   const finalEvents: EventInfo[] = []
-  const finalExports: ExportInfo[] = []
+  const finalExports: ExportInfo[] =
+    svelteDataSource.exports.length > 0 ? svelteDataSource.exports : []
 
   // console.log(svelteDataSource)
   // console.log('-------------------------')
   // console.log(typesDataSource)
 
   for (const prop of svelteDataSource.props) {
+    const { name } = prop
+
+    const typeV = typesDataSource.props.find((value) => value.name == name)
+    if (typeV) {
+      finalProps.push({ ...prop, ...typeV })
+    } else {
+      finalProps.push(prop)
+    }
+  }
+  for (const prop of svelteDataSource.events) {
+    const { name } = prop
+
+    const typeV = typesDataSource.events.find((value) => value.name == name)
+    if (typeV) {
+      finalEvents.push({ ...prop, ...typeV })
+    } else {
+      finalEvents.push(prop)
+    }
   }
 
   let merged: {
