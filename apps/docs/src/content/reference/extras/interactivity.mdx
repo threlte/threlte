@@ -107,6 +107,37 @@ even if you don't want this object to respond to the pointer event. If you do wa
 event as well as using `stopPropagation()`, remember that the `pointerout` events will happen during
 the `stopPropagation()` call. You probably want your other event handling to happen after this.
 
+## Touch interactions
+
+On touch devices, the browser may cancel `pointermove` events mid-gesture when it decides to
+use the touch for its own navigation (scrolling, pinch-zoom, swipe-back, etc.). This is
+controlled by the CSS [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action)
+property. When the browser takes over a touch, it fires a
+[`pointercancel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/pointercancel_event)
+event and stops delivering `pointermove` updates — meaning `onpointermove` handlers on your
+3D objects will stop receiving events during touch-and-drag interactions.
+
+If your canvas is the primary interaction surface (e.g. a fullscreen 3D experience or a
+dedicated viewport), you can fix this by setting `touch-action: none` on a parent element
+wrapping the `<Canvas>` component. This tells the browser not to intercept any touch gestures,
+ensuring pointer events fire reliably throughout the entire interaction.
+
+```svelte title="App.svelte"
+<div style="touch-action: none;">
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+```
+
+<Tip type="warning">
+  Only use `touch-action: none` when the canvas is the primary interaction surface. For
+  canvases embedded in scrollable pages, this will prevent users from scrolling past the
+  canvas with touch. In that case, consider more targeted values like `touch-action: pan-y`
+  (allows vertical scrolling but captures horizontal gestures) or handle the trade-off in
+  your application logic.
+</Tip>
+
 ## Event targets
 
 If no event target is specified, all event handlers listen to events on the `domElement` of the
