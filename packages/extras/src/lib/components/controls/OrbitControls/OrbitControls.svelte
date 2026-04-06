@@ -1,38 +1,33 @@
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import {
-    OrbitControls as ThreeOrbitControls,
+    OrbitControls,
     type OrbitControlsEventMap
   } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext.js'
   import type { OrbitControlsProps } from './types.js'
-  import type { Event, OrthographicCamera, PerspectiveCamera } from 'three'
+  import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
-  let { ref = $bindable(), camera: userCamera, children, ...props }: OrbitControlsProps = $props()
+  let { camera, ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
-  const { dom, invalidate, camera: defaultCamera } = useThrelte()
+  const { dom, camera: defaultCamera, invalidate } = useThrelte()
   const parent = useParent()
-
-  const camera = $derived.by(() => {
-    if (userCamera) {
-      return userCamera
-    }
-
-    if (
-      isInstanceOf(parent.current, 'PerspectiveCamera') ||
-      isInstanceOf(parent.current, 'OrthographicCamera')
-    ) {
-      return parent.current
-    }
-
-    return defaultCamera.current as PerspectiveCamera | OrthographicCamera
-  })
+  const resolvedCamera = $derived(
+    camera
+      ? camera
+      : isInstanceOf(parent.current, 'Camera')
+        ? parent.current
+        : defaultCamera.current
+  )
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  // svelte-ignore state_referenced_locally
-  const controls = new ThreeOrbitControls(camera, dom)
+  const controls = new OrbitControls(
+    untrack(() => resolvedCamera),
+    dom
+  )
   $effect.pre(() => {
-    controls.object = camera
+    controls.object = resolvedCamera
   })
 
   const { orbitControls } = useControlsContext()
@@ -47,7 +42,7 @@
     }
   )
 
-  const handleChange = (event: Event<keyof OrbitControlsEventMap, ThreeOrbitControls>) => {
+  const handleChange = (event: Event<keyof OrbitControlsEventMap, OrbitControls>) => {
     invalidate()
     props.onchange?.(event)
   }

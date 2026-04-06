@@ -1,5 +1,15 @@
 # @threlte/core
 
+## 8.5.6
+
+### Patch Changes
+
+- d6cd393: Reduce garbage generation in DAG caused by intermediate arrays
+- d6cd393: Improve DAG sort performance by removing redundant array searches
+- d6cd393: Remove mitt runtime dependency by using a smaller internal event emitter
+- d6cd393: Improve DAG performance by using Maps
+- a0e83d5: Fix: useLoader "loader" prop is undefined before calling load
+
 ## 8.5.5
 
 ### Patch Changes

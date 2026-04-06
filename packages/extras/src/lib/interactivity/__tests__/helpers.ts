@@ -4,15 +4,25 @@ import type { WebGLRenderer } from 'three'
 /**
  * Workaround for @threlte/test bugs #1, #5:
  * The dom element is detached so clientWidth/Height are 0. Appending it to the
- * container with explicit pixel dimensions gives it real layout. Must wait for
- * ResizeObserver to fire.
+ * container with explicit pixel dimensions gives it real layout. We poll until
+ * the size is actually non-zero rather than hoping rAF timing aligns with
+ * ResizeObserver — this eliminates flakiness in CI.
  */
 export const setupDom = async (context: ThrelteContext<WebGLRenderer>, container: HTMLElement) => {
   const dom = context.dom
   dom.style.width = '200px'
   dom.style.height = '200px'
   container.appendChild(dom)
-  await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())))
+  await new Promise<void>((resolve) => {
+    const check = () => {
+      if (context.size.current.width > 0 && context.size.current.height > 0) {
+        resolve()
+      } else {
+        requestAnimationFrame(check)
+      }
+    }
+    requestAnimationFrame(check)
+  })
 }
 
 /**

@@ -69,6 +69,7 @@
   )
 
   await new Promise((res) => preloadFont({ font, characters, sdfGlyphSize }, res))
+  invalidate()
 </script>
 
 <T

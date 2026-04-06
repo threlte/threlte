@@ -12,7 +12,13 @@ export default defineConfig(({ mode }) => ({
   ...(mode === 'test' && {
     optimizeDeps: {
       exclude: ['@threlte/core', '@threlte/extras'],
-      entries: ['src/lib/**/*.svelte', resolve('../core/src/lib/index.ts')]
+      entries: ['src/lib/**/*.svelte', resolve('../core/src/lib/index.ts')],
+      include: ['three', 'svelte']
+    },
+    server: {
+      warmup: {
+        clientFiles: ['src/lib/interactivity/__tests__/**/*.spec.ts']
+      }
     }
   }),
   test: {
@@ -21,7 +27,7 @@ export default defineConfig(({ mode }) => ({
     mockReset: true,
     unstubGlobals: true,
     fileParallelism: false,
-    retry: 1,
+    testTimeout: 10_000,
     browser: {
       enabled: true,
       provider: 'playwright',

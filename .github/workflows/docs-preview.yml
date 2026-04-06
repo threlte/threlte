@@ -38,7 +38,7 @@ jobs:
 
       - name: Build docs
         env:
-          BASE_PATH: /threlte/previews/pr-${{ github.event.pull_request.number }}
+          BASE_PATH: /previews/pr-${{ github.event.pull_request.number }}
         run: pnpm run build:docs
 
       - name: Checkout gh-pages
@@ -69,8 +69,7 @@ jobs:
             const prNumber = context.payload.pull_request.number;
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            // TODO: Update to https://threlte.xyz once the custom domain is linked
-            const previewUrl = `https://${owner}.github.io/${repo}/previews/pr-${prNumber}/`;
+            const previewUrl = `https://threlte.xyz/previews/pr-${prNumber}/`;
             const body = `📖 Docs preview deployed to: ${previewUrl}\n\nLast updated: <relative-time datetime="${new Date().toISOString()}">${new Date().toISOString()}</relative-time>`;
 
             // Delete previous preview comment so the new one appears at the bottom

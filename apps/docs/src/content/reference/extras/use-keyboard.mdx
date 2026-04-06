@@ -1,0 +1,145 @@
+---
+category: '@threlte/extras'
+group: 'Interaction'
+sourcePath: 'packages/extras/src/lib/hooks/useKeyboard.svelte.ts'
+title: useKeyboard
+type: 'hook'
+---
+
+`useKeyboard` provides frame-accurate keyboard state tracking for game-style input.
+Key presses that happen between frames are collected and applied together at the start of each frame, giving you
+reliable `justPressed` and `justReleased` states that last exactly one frame — just
+like [`Input.is_action_just_pressed()`](https://docs.godotengine.org/en/stable/classes/class_input.html#class-input-method-is-action-just-pressed) in Godot.
+
+<Example path="extras/use-keyboard" />
+
+```svelte
+<script lang="ts">
+  import { useTask } from '@threlte/core'
+  import { useKeyboard } from '@threlte/extras'
+
+  const keyboard = useKeyboard()
+
+  useTask(
+    () => {
+      if (keyboard.key('Space').justPressed) {
+        console.log('Jump!')
+      }
+
+      if (keyboard.key('w').pressed) {
+        console.log('Moving forward...')
+      }
+    },
+    { after: keyboard.task }
+  )
+</script>
+```
+
+## Key State
+
+Each key is identified by its
+[`KeyboardEvent.key`](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key)
+value (e.g. `'w'`, `'Space'`, `'ArrowUp'`, `'Shift'`). Matching is case-insensitive, so
+`'w'` matches both `'w'` and `'W'` (when Shift is held). Call `keyboard.key(name)` to
+get a `KeyState` object:
+
+| Property       | Type      | Description                                  |
+| -------------- | --------- | -------------------------------------------- |
+| `pressed`      | `boolean` | Whether the key is currently held down       |
+| `justPressed`  | `boolean` | Whether the key was first pressed this frame |
+| `justReleased` | `boolean` | Whether the key was released this frame      |
+
+The `KeyState` object is stable — calling `keyboard.key('Space')` always returns the
+same object reference, so you can store it:
+
+```svelte
+<script lang="ts">
+  import { useTask } from '@threlte/core'
+  import { useKeyboard } from '@threlte/extras'
+
+  const keyboard = useKeyboard()
+  const space = keyboard.key('Space')
+  const w = keyboard.key('w')
+
+  useTask(
+    () => {
+      if (space.justPressed) jump()
+      if (w.pressed) moveForward()
+    },
+    { after: keyboard.task }
+  )
+</script>
+```
+
+## Reactivity
+
+`KeyState` properties are reactive, so you can use them directly in your template
+or in `$derived` expressions without a game loop:
+
+```svelte
+<script lang="ts">
+  import { useKeyboard } from '@threlte/extras'
+
+  const keyboard = useKeyboard()
+  const space = keyboard.key('Space')
+</script>
+
+<p>{space.pressed ? 'Jumping!' : 'On the ground'}</p>
+```
+
+## Event Listeners
+
+For immediate (non-polling) reactions, use `on()`. Events fire as soon as the browser
+delivers them, before frame processing.
+
+```svelte
+<script lang="ts">
+  import { useKeyboard } from '@threlte/extras'
+
+  const keyboard = useKeyboard()
+
+  keyboard.on('keydown', (e) => {
+    console.log(`Pressed: ${e.key}`)
+  })
+
+  const off = keyboard.on('keyup', (e) => {
+    console.log(`Released: ${e.key}`)
+  })
+
+  // Stop listening:
+  // off()
+</script>
+```
+
+## Task Ordering
+
+`useKeyboard` processes buffered events in a named task (`'useKeyboard'`). To ensure
+your game logic reads the latest keyboard state, schedule your task **after** it:
+
+```ts
+useTask(
+  () => {
+    // keyboard state is up to date here
+  },
+  { after: keyboard.task }
+)
+```
+
+## Options
+
+### `target`
+
+The DOM element to listen on. Defaults to `window`, which captures keyboard input
+globally regardless of focus. Pass a specific element if you want scoped input:
+
+```ts
+import { useThrelte } from '@threlte/core'
+
+const { dom } = useThrelte()
+const keyboard = useKeyboard(() => ({ target: dom }))
+```
+
+## Focus Handling
+
+When the window loses focus (blur), all pressed keys are automatically released. This
+prevents stuck keys when the user alt-tabs away while holding a key.

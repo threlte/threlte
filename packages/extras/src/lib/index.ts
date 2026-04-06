@@ -8,7 +8,14 @@ export { useGltfAnimations } from './hooks/useGltfAnimations.svelte.js'
 export { useProgress } from './hooks/useProgress.svelte.js'
 export { useTexture } from './hooks/useTexture.js'
 export { useFBO } from './hooks/useFBO.svelte.js'
-export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad.svelte.js'
+export {
+  useGamepad,
+  type StandardGamepadEvent,
+  type StandardGamepad,
+  type StandardXRGamepad
+} from './hooks/useGamepad.svelte.js'
+export { useKeyboard } from './hooks/useKeyboard.svelte.js'
+export { useInputMap } from './hooks/useInputMap.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
 export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'

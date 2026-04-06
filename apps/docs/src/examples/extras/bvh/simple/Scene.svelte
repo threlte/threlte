@@ -19,8 +19,9 @@
 
   bvh(() => rest)
 
-  const gltf = useGltf('/models/stanford_bunny.glb')
-  const mesh = $derived(gltf.current ? (gltf.current.nodes['Object_2'] as Mesh) : undefined)
+  const gltf = await useGltf('/models/stanford_bunny.glb')
+
+  const mesh = $derived(gltf ? (gltf.nodes['Object_2'] as Mesh) : undefined)
 
   $effect(() => {
     if (mesh) {
@@ -74,9 +75,9 @@
   />
 </T.PerspectiveCamera>
 
-{#if gltf.current}
+{#if gltf}
   <T
-    is={gltf.current.nodes['Object_2'] as Mesh}
+    is={gltf.nodes['Object_2'] as Mesh}
     scale={10}
     rotation.x={-Math.PI / 2}
     position.y={-0.35}

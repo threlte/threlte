@@ -9,9 +9,11 @@ carefully inspect a model from every angle.
 For an alternative camera controller, see
 [`<OrbitControls>`](https://threlte.xyz/docs/reference/extras/orbit-controls).
 
-The component `<TrackballControls>` must be a direct child of a camera
-component and will mount itself to that camera. By default, damping is
-enabled. You can disable this by setting `staticMoving` to true.
+If placed as a child of a camera component, `<TrackballControls>` will
+attach to that camera. Otherwise, it attaches to the scene's default
+camera. A camera can also be passed explicitly via the `camera` prop.
+By default, damping is enabled. You can disable this by setting
+`staticMoving` to true.
 
 ## Usage
 
@@ -38,39 +40,25 @@ by demand invalidate the frame loop.
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
   import { useControlsContext } from '../useControlsContext.js'
   import type { TrackballControlsProps } from './types.js'
-  import type { Event, OrthographicCamera, PerspectiveCamera } from 'three'
+  import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
-  let {
-    onchange,
-    ref = $bindable(),
-    camera: userCamera,
-    children,
-    ...props
-  }: TrackballControlsProps = $props()
+  let { onchange, camera, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
-  const { dom, invalidate, size, camera: defaultCamera } = useThrelte()
+  const { dom, camera: defaultCamera, invalidate, size } = useThrelte()
   const parent = useParent()
-
-  const camera = $derived.by(() => {
-    if (userCamera) {
-      return userCamera
-    }
-
-    if (
-      isInstanceOf(parent.current, 'PerspectiveCamera') ||
-      isInstanceOf(parent.current, 'OrthographicCamera')
-    ) {
-      return parent.current
-    }
-
-    return defaultCamera.current as PerspectiveCamera | OrthographicCamera
-  })
+  const resolvedCamera = $derived(
+    camera
+      ? camera
+      : isInstanceOf(parent.current, 'Camera')
+        ? parent.current
+        : defaultCamera.current
+  )
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  // svelte-ignore state_referenced_locally
-  const controls = new ThreeTrackballControls(camera)
+  const controls = new ThreeTrackballControls(untrack(() => resolvedCamera))
   $effect.pre(() => {
-    controls.object = camera
+    controls.object = resolvedCamera
   })
 
   useTask(

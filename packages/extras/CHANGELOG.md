@@ -1,5 +1,20 @@
 # @threlte/extras
 
+## 9.14.4
+
+### Patch Changes
+
+- 7a355fc: Added additional options for all controls to allow customization
+- 7a355fc: Fix: TransformControls should auto-pause CameraControls
+- 7a355fc: OrbitControls and TrackballControls falls back to default camera instead of erroring
+
+## 9.14.3
+
+### Patch Changes
+
+- 0cbb589: Add useInputMap: action mapping system unifying keyboard and gamepad
+- 0cbb589: Add useKeyboard: reactive, frame accurate keyboard tracking
+
 ## 9.14.2
 
 ### Patch Changes
