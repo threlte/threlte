@@ -16,7 +16,9 @@ export const setupDom = async (context: ThrelteContext<WebGLRenderer>, container
   await new Promise<void>((resolve) => {
     const check = () => {
       if (context.size.current.width > 0 && context.size.current.height > 0) {
-        resolve()
+        // Extra frame to allow all ResizeObservers (including interactivity's)
+        // to process the layout change.
+        requestAnimationFrame(() => resolve())
       } else {
         requestAnimationFrame(check)
       }
