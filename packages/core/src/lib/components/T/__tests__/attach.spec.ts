@@ -1,4 +1,4 @@
-import { DirectionalLight, Group, Mesh, MeshBasicMaterial } from 'three'
+import { DirectionalLight, Group, Mesh, MeshBasicMaterial, OrthographicCamera } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
@@ -94,12 +94,11 @@ describe('<T> attach', () => {
   })
 
   it('attaches to a nested parent property via dot-notation', () => {
-    const { scene } = render(NestedAttach)
+    const light = new DirectionalLight()
+    const camera = new OrthographicCamera()
+    render(NestedAttach, { light, camera })
 
-    const light = scene.getObjectByName('light') as DirectionalLight
-
-    expect(light.shadow.camera.left).toBe(-10)
-    expect(light.shadow.camera.right).toBe(10)
+    expect(light.shadow.camera).toBe(camera)
   })
 
   it('attaches and detaches a conditionally rendered component', async () => {

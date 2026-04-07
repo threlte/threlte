@@ -1,12 +1,12 @@
 <script lang="ts">
   import { T } from '@threlte/core'
+
+  let { light, camera } = $props()
 </script>
 
-<T.DirectionalLight name="light">
-  <T.OrthographicCamera
+<T is={light}>
+  <T
+    is={camera}
     attach="shadow.camera"
-    args={[-10, 10, 10, -10]}
-    name="shadow-camera"
-    manual
   />
-</T.DirectionalLight>
+</T>
