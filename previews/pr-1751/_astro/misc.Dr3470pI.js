@@ -1,1 +1,0 @@
-import{O as u,e as i,g as a,m as l}from"./runtime.XdAhm9hg.js";function c(t){var e=l(0);return function(){return arguments.length===1?(i(e,a(e)+1),arguments[0]):(a(e),t())}}function f(t,e){var r=t.$$events?.[e.type],s=u(r)?r.slice():r==null?[]:[r];for(var n of s)n.call(this,e)}export{f as b,c as r};
