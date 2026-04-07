@@ -30,6 +30,6 @@
     "tslib": "^2.6.2",
     "type-fest": "^4.15.0",
     "typescript-eslint": "^8.32.0",
-    "@threlte/test": "^2.0.0"
+    "@threlte/test": "^2.0.1"
   }
 }
