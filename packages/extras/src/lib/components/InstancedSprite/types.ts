@@ -45,7 +45,7 @@ export type InstancedSpriteProps = Omit<
 
   /**
    * Base material used to construct the sprite material.
-   * @default MeshBasicMaterial
+   * @default typeof MeshBasicMaterial
    */
   baseMaterial?:
     | typeof MeshBasicMaterial
@@ -57,15 +57,14 @@ export type InstancedSpriteProps = Omit<
   /**
    * sets the default global billboarding state that is used unless the setAt was called on the instance
    *
-   * @default true
+   * @default undefined
    */
   billboarding?: boolean
 
   /**
    * changes playmode for all instances
-   * `"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"`
    *
-   * @default "FORWARD"
+   * @default 'FORWARD'
    */
   playmode?: keyof typeof PLAY_MODE
 
@@ -106,6 +105,8 @@ export type InstancedSpriteProps = Omit<
     | undefined
 
   /**
+   * Offset sprite animation time by a random number of milliseconds.
+   *
    * @default false
    */
   randomPlaybackOffset?: boolean | number
