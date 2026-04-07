@@ -20,16 +20,58 @@ const getReferenceSidebarMenu = async (): Promise<LeftSidebarMenu> => {
   const categoryNames = [...new Set(referenceCollection.map((item) => item.data.category))]
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
-    const menuItems = referenceCollection
-      .filter((item) => item.data.showInSidebar && item.data.category === category)
-      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
-      .map((item): LeftSidebarMenuItem => {
-        return {
-          title: item.data.name,
-          slug: item.slug,
-          isDivider: item.data.isDivider ?? false
-        }
-      })
+    const items = referenceCollection.filter(
+      (item) => item.data.showInSidebar && item.data.category === category
+    )
+
+    let menuItems: LeftSidebarMenuItem[]
+
+    if (category === '@threlte/extras') {
+      const ungrouped = items
+        .filter((item) => !item.data.group && !item.data.isDivider)
+        .sort((a, b) => a.data.title.localeCompare(b.data.title))
+        .map(
+          (item): LeftSidebarMenuItem => ({
+            title: item.data.title,
+            slug: item.id,
+            isDivider: false
+          })
+        )
+
+      const groupMap = new Map<string, LeftSidebarMenuItem[]>()
+      for (const item of items) {
+        if (!item.data.group) continue
+        if (!groupMap.has(item.data.group)) groupMap.set(item.data.group, [])
+        groupMap
+          .get(item.data.group)!
+          .push({ title: item.data.title, slug: item.id, isDivider: false })
+      }
+
+      for (const groupItems of groupMap.values()) {
+        groupItems.sort((a, b) => a.title.localeCompare(b.title))
+      }
+
+      const sortedGroups = [...groupMap.entries()].sort(([a], [b]) => a.localeCompare(b))
+
+      menuItems = [
+        ...ungrouped,
+        ...sortedGroups.flatMap(([group, groupItems]) => [
+          { title: group, slug: '', isDivider: true },
+          ...groupItems
+        ])
+      ]
+    } else {
+      menuItems = items
+        .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
+        .map(
+          (item): LeftSidebarMenuItem => ({
+            title: item.data.title,
+            slug: item.id,
+            isDivider: item.data.isDivider ?? false
+          })
+        )
+    }
+
     return {
       urlPrefix: '/docs/reference',
       menuItems,
@@ -71,7 +113,7 @@ const getLearnSidebarMenu = async (): Promise<LeftSidebarMenu> => {
       .map((item): LeftSidebarMenuItem => {
         return {
           title: item.data.title,
-          slug: item.slug,
+          slug: item.id,
           isDivider: item.data.isDivider ?? false
         }
       })
@@ -111,22 +153,22 @@ const getExamplesSidebarMenu = async (): Promise<LeftSidebarMenu> => {
           return item.id.split('/')[0] as string
         })
     )
-  ]
+  ].sort((a, b) => a.localeCompare(b))
 
   const categories = categoryNames.map((category): LeftSidebarMenuCategory => {
     const menuItems = learnCollection
       .filter((item) => item.id.startsWith(category))
-      .sort((a, b) => (a.data.order || 0) - (b.data.order || 0))
       .map((item): LeftSidebarMenuItem => {
         // Removes the file extension from item.id and finds last item in array
         // when splitting on '/'. This is the title of the example.
         const title = item.id.split('/').pop()?.split('.')[0] as string
         return {
           title,
-          slug: item.slug,
+          slug: item.id,
           isDivider: false
         }
       })
+      .sort((a, b) => a.title.localeCompare(b.title))
     return {
       urlPrefix: '/docs/examples',
       menuItems,

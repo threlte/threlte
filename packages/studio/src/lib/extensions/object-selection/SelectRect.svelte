@@ -1,21 +1,20 @@
 <script lang="ts">
-  import { useCanvas, useThrelte, watch } from '@threlte/core'
+  import { useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import { Object3D } from 'three'
   import { SelectionBox } from 'three/examples/jsm/interactive/SelectionBox.js'
   import { SelectionHelper } from 'three/examples/jsm/interactive/SelectionHelper.js'
-  import { useStudio } from '../../internal/extensions'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useTransformControls } from '../transform-controls/useTransformControls'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { useTransformControls } from '../transform-controls/useTransformControls.js'
   import {
     objectSelectionScope,
     type ObjectSelectionActions,
     type ObjectSelectionState
-  } from './types'
-  import { useObjectSelection } from './useObjectSelection.svelte'
+  } from './types.js'
+  import { useObjectSelection } from './useObjectSelection.svelte.js'
 
-  const { camera, scene, renderer } = useThrelte()
-  const { wrapper } = useCanvas()
+  const { camera, scene, renderer, dom } = useThrelte()
 
   const { useExtension } = useStudio()
   const { addToSelection, removeFromSelection, selectObjects } = useObjectSelection()
@@ -30,13 +29,14 @@
 
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
-  watch(camera, (camera) => {
-    selectionBox.camera = camera
+  $effect.pre(() => {
+    selectionBox.camera = camera.current
   })
 
   const filter = (objects: Object3D[]): Object3D[] => {
     let objs = objects.filter((object) => {
-      return !studioObjectsRegistry.objects.has(object)
+			const isNotSelectable = object?.userData?.selectable === false
+      return !studioObjectsRegistry.objects.has(object) && !isNotSelectable
     })
     return objs
   }
@@ -121,15 +121,15 @@
   }
 
   onMount(() => {
-    wrapper.addEventListener('pointerdown', onPointerDown)
-    wrapper.addEventListener('pointermove', onPointerMove)
-    wrapper.addEventListener('pointerup', onPointerUp)
-    wrapper.style.cursor = 'crosshair'
+    dom.addEventListener('pointerdown', onPointerDown)
+    dom.addEventListener('pointermove', onPointerMove)
+    dom.addEventListener('pointerup', onPointerUp)
+    dom.style.cursor = 'crosshair'
     return () => {
       if (lastEvent) onPointerUp(lastEvent)
-      wrapper.removeEventListener('pointerdown', onPointerDown)
-      wrapper.removeEventListener('pointermove', onPointerMove)
-      wrapper.removeEventListener('pointerup', onPointerUp)
+      dom.removeEventListener('pointerdown', onPointerDown)
+      dom.removeEventListener('pointermove', onPointerMove)
+      dom.removeEventListener('pointerup', onPointerUp)
       try {
         // this sometimes throws an error, but we fail silently
         const h = selectionHelper as any
@@ -138,7 +138,7 @@
         console.warn(error)
       }
       selectionHelper.dispose()
-      wrapper.style.cursor = 'auto'
+      dom.style.cursor = 'auto'
     }
   })
 </script>

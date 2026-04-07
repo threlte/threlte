@@ -1,4 +1,4 @@
-import { type Placement } from '@floating-ui/dom'
+import type { Placement } from '@floating-ui/dom'
 
 export interface Instructions {
   content: {

@@ -1,16 +1,12 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { Suspense, Text } from '@threlte/extras'
-  import { Color } from 'three'
   import Spaceship from './Spaceship.svelte'
   import StarsEmitter from './StarsEmitter.svelte'
 
-  const { size, scene } = useThrelte()
+  const { size } = useThrelte()
 
-  scene.background = new Color('black')
-
-  let zoom = $size.width / 50
-  $: zoom = $size.width / 50
+  let zoom = $derived(size.current.width / 50)
 </script>
 
 <T.OrthographicCamera
@@ -27,7 +23,7 @@
   intensity={2.5}
 />
 
-<Suspense final>
+<Suspense>
   {#snippet fallback()}
     <Text
       position.z={-8}
@@ -42,10 +38,10 @@
     />
   {/snippet}
 
-  {#snippet error({ errors })}
+  {#snippet error({ error })}
     <Text
       position.z={-8}
-      text={errors.map((e) => e).join(', ')}
+      text={String(error)}
       fontSize={1}
       color="white"
       anchorX="50%"

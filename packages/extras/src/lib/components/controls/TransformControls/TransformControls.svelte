@@ -1,15 +1,18 @@
 <script lang="ts">
-  import { T, currentWritable, useThrelte, watch, type Props } from '@threlte/core'
-  import { writable } from 'svelte/store'
+  import { T, observe, useThrelte, type Props } from '@threlte/core'
   import { Group } from 'three'
-  import type { TransformControlsEventMap } from 'three/examples/jsm/Addons.js'
-  import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
-  import { useControlsContext } from '../useControlsContext'
-  import type { TransformControlsProps } from './types'
+  import {
+    TransformControls,
+    type TransformControlsEventMap
+  } from 'three/examples/jsm/controls/TransformControls.js'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { TransformControlsProps } from './types.js'
 
   let {
-    autoPauseOrbitControls = true,
-    autoPauseTrackballControls = true,
+    autoPauseControls = true,
+    autoPauseOrbitControls,
+    autoPauseTrackballControls,
+    cameraControls: customCameraControls,
     object,
     controls = $bindable(),
     group = $bindable(),
@@ -17,52 +20,70 @@
     ...props
   }: TransformControlsProps = $props()
 
-  const { camera, renderer, invalidate, scene } = useThrelte()
+  const { camera, dom, invalidate, scene } = useThrelte()
 
-  const { orbitControls, trackballControls } = useControlsContext()
-  const isDragging = currentWritable(false)
-  const useAutoPauseOrbitControls = writable(autoPauseOrbitControls ?? true)
-  $effect.pre(() => useAutoPauseOrbitControls.set(autoPauseOrbitControls ?? true))
+  const { orbitControls, trackballControls, cameraControls } = useControlsContext()
 
-  const useAutoPauseTrackballControls = writable(autoPauseTrackballControls ?? true)
-  $effect.pre(() => useAutoPauseTrackballControls.set(autoPauseTrackballControls ?? true))
+  let isDragging = $state(false)
 
-  watch(
-    [orbitControls, isDragging, useAutoPauseOrbitControls],
-    ([orbitControls, isDragging, useAutoPauseOrbitControls]) => {
-      // if there are no orbitcontrols or we're not even
-      // dragging, or the orbitcontrols are disabled, return
+  // Resolve effective pause state: deprecated per-control props take
+  // precedence if explicitly set, otherwise fall back to autoPauseControls.
+  const shouldPauseOrbit = $derived(autoPauseOrbitControls ?? autoPauseControls)
+  const shouldPauseTrackball = $derived(autoPauseTrackballControls ?? autoPauseControls)
+  const shouldPauseCamera = $derived(autoPauseControls)
+
+  observe(
+    () => [orbitControls, isDragging, shouldPauseOrbit],
+    ([orbitControls, isDragging, shouldPause]) => {
       if (!orbitControls || (!orbitControls.enabled && isDragging)) return
-      orbitControls.enabled = !(isDragging && useAutoPauseOrbitControls)
+      orbitControls.enabled = !(isDragging && shouldPause)
       return () => {
-        // we know they were enabled before, so we can
-        // safely re-enable them
         orbitControls.enabled = true
       }
     }
   )
 
-  watch(
-    [trackballControls, isDragging, useAutoPauseTrackballControls],
-    ([trackballControls, isDragging, useAutoPausetrackballControls]) => {
-      // if there are no trackballcontrols or we're not even
-      // dragging, or the trackballcontrols are disabled, return
+  observe(
+    () => [trackballControls, isDragging, shouldPauseTrackball],
+    ([trackballControls, isDragging, shouldPause]) => {
       if (!trackballControls || (!trackballControls.enabled && isDragging)) return
-      trackballControls.enabled = !(isDragging && useAutoPausetrackballControls)
+      trackballControls.enabled = !(isDragging && shouldPause)
       return () => {
-        // we know they were enabled before, so we can
-        // safely re-enable them
         trackballControls.enabled = true
       }
     }
   )
 
-  const attachGroup = new Group()
+  observe(
+    () => [cameraControls, isDragging, shouldPauseCamera],
+    ([cameraControls, isDragging, shouldPause]) => {
+      if (!cameraControls || (!cameraControls.enabled && isDragging)) return
+      cameraControls.enabled = !(isDragging && shouldPause)
+      return () => {
+        cameraControls.enabled = true
+      }
+    }
+  )
+
+  // Custom/third-party controls passed via the cameraControls prop
+  observe(
+    () => [customCameraControls, isDragging, autoPauseControls],
+    ([controls, isDragging, shouldPause]) => {
+      if (!controls || (!controls.enabled && isDragging)) return
+      controls.enabled = !(isDragging && shouldPause)
+      return () => {
+        controls.enabled = true
+      }
+    }
+  )
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  let transformControls = $derived(
-    new TransformControls($camera, renderer.domElement.parentElement!)
-  )
+  const transformControls = new TransformControls(camera.current, dom)
+  const attachGroup = new Group()
+
+  $effect.pre(() => {
+    transformControls.camera = camera.current
+  })
 
   $effect.pre(() => {
     transformControls?.attach(object ?? attachGroup)
@@ -89,8 +110,8 @@
     'onobjectChange'
   ]
 
-  let transformProps: Props<TransformControls> = $state({})
-  let objectProps: Props<Group> = $state({})
+  let transformProps = $state<Props<TransformControls>>({})
+  let objectProps = $state<Props<Group>>({})
 
   $effect.pre(() => {
     transformProps = {}
@@ -109,10 +130,10 @@
 
   const onchange = (event: TransformControlsEventMap['change']) => {
     invalidate()
-    if (transformControls.dragging && !isDragging.current) {
-      isDragging.set(true)
-    } else if (!transformControls.dragging && isDragging.current) {
-      isDragging.set(false)
+    if (transformControls.dragging && !isDragging) {
+      isDragging = true
+    } else if (!transformControls.dragging && isDragging) {
+      isDragging = false
     }
     // TODO: unfortunately the type of the event prop is not correct *yet*
     props.onchange?.(event as any)
@@ -143,7 +164,5 @@
   bind:ref={group}
   {...objectProps}
 >
-  {#if children}
-    {@render children({ ref: attachGroup })}
-  {/if}
+  {@render children?.({ ref: attachGroup })}
 </T>

@@ -1,7 +1,8 @@
 <script lang="ts">
   import { MathUtils, Group } from 'three'
+  import type { Vector2Tuple } from 'three'
   import { useTask, T } from '@threlte/core'
-  import type { FloatProps } from './types'
+  import type { FloatProps } from './types.js'
 
   let {
     speed = 1,
@@ -9,7 +10,7 @@
     floatingRange = [-0.1, 0.1],
     rotationSpeed = 0,
     rotationIntensity = 0,
-    seed = Math.random() * 10000,
+    seed = 10_000 * Math.random(),
     ref = $bindable(),
     children,
     ...props
@@ -18,7 +19,7 @@
   const outerGroup = new Group()
   const group = new Group()
 
-  let t = seed
+  let t = $derived(seed)
 
   const map = MathUtils.mapLinear
 
@@ -28,7 +29,7 @@
       ? floatIntensity
       : [floatIntensity, floatIntensity, floatIntensity]
   )
-  let fRange: [x: [number, number], y: [number, number], z: [number, number]] = $derived(
+  let fRange: [x: Vector2Tuple, y: Vector2Tuple, z: Vector2Tuple] = $derived(
     floatingRange.length === 3 ? floatingRange : [[0, 0], floatingRange, [0, 0]]
   )
   // Rotation
@@ -60,11 +61,11 @@
 
 <T
   is={outerGroup}
+  bind:ref
   {...props}
 >
   <T
     is={group}
-    bind:ref
     matrixAutoUpdate={false}
   >
     {@render children?.({ ref: group })}

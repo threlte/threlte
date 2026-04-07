@@ -1,17 +1,11 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import type { GLTF as ThreeGLTF } from 'three/examples/jsm/loaders/GLTFLoader.js'
-  import { useGltf } from '../../hooks/useGltf'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { ThrelteGltf } from '../../types/types'
-  import type { GltfProps } from './types'
+  import { useGltf } from '../../hooks/useGltf.js'
+  import type { ThrelteGltf } from '../../types/types.js'
+  import type { GltfProps } from './types.js'
+  import { untrack } from 'svelte'
 
-  type AnyThrelteGltf = ThrelteGltf<{
-    nodes: Record<string, any>
-    materials: Record<string, any>
-  }>
-
-  type Props = GltfProps & { gltf?: AnyThrelteGltf } & AnyThrelteGltf['materials'] & ThreeGLTF
+  type Props = GltfProps & { gltf?: ThrelteGltf | undefined } & ThrelteGltf['materials']
 
   let {
     url,
@@ -41,7 +35,7 @@
     ktx2Loader
   })
 
-  const onLoad = (data: AnyThrelteGltf) => {
+  const onLoad = (data: ThrelteGltf) => {
     if (gltf) onunload?.()
 
     gltf = data
@@ -72,27 +66,29 @@
     onerror?.(error)
   }
 
-  const suspend = useSuspense()
+  const model = $derived(await loader.load(url))
+  $inspect(model)
 
-  const loadGltf = async (url: string) => {
-    try {
-      const model = await suspend(loader.load(url))
-      onLoad(model)
-    } catch (error) {
-      onError(error as Error)
-    }
-  }
-
-  $effect.pre(() => {
-    loadGltf(url)
+  $effect(() => {
+    model
+    untrack(() => {
+      gltf = model
+      scene = model.scene
+      animations = model.animations
+      asset = model.asset
+      cameras = model.cameras
+      scenes = model.scenes
+      userData = model.userData
+      parser = model.parser
+      materials = model.materials
+      nodes = model.nodes
+    })
   })
 </script>
 
-{#if scene}
-  <T
-    is={scene}
-    {...props}
-  >
-    {@render children?.({ ref: scene })}
-  </T>
-{/if}
+<T
+  is={model.scene}
+  {...props}
+>
+  {@render children?.({ ref: model.scene })}
+</T>

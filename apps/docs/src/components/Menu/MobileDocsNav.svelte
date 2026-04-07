@@ -9,13 +9,14 @@
 
   export let activeSidebarTab: 'learn' | 'reference' | 'examples'
   export let activeUrlPathName: string
+  export let baseUrl: string
 </script>
 
 <MobileNav search>
   <svelte:fragment slot="topbar-left">
     <a
       class="flex flex-row gap-3"
-      href="/"
+      href={import.meta.env.BASE_URL}
     >
       <slot name="logo" />
     </a>
@@ -33,23 +34,24 @@
             id={key}
             open={activeSidebarTab === key}
           >
-            <div
-              class="font-normal"
-              slot="summary"
-            >
-              {#if key === 'learn'}
-                Learn
-              {:else if key === 'reference'}
-                Reference
-              {:else if key === 'examples'}
-                Examples
-              {/if}
-            </div>
+            {#snippet summary()}
+              <div class="font-normal">
+                {#if key === 'learn'}
+                  Learn
+                {:else if key === 'reference'}
+                  Reference
+                {:else if key === 'examples'}
+                  Examples
+                {/if}
+              </div>
+            {/snippet}
+
             {#each sidebarMenu[key].categories as category}
-              <li class="mb-0 ml-4 mt-2 text-sm">
+              <li class="mt-2 mb-0 ml-4 text-sm">
                 <LeftSidebarCategory
                   {category}
                   {activeUrlPathName}
+                  {baseUrl}
                 />
               </li>
             {/each}
@@ -65,6 +67,6 @@
       <a href="/showcase"> Showcase </a>
     </div> -->
 
-    <slot name="after-navigation" />
+    <slot name="socials" />
   </div>
 </MobileNav>

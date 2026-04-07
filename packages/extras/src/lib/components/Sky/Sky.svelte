@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { observe, T, useTask, useThrelte } from '@threlte/core'
+  import { CubeEnvironment } from '../../index.js'
   import {
     CubeCamera,
     HalfFloatType,
@@ -10,7 +10,7 @@
     WebGLCubeRenderTarget
   } from 'three'
   import { Sky } from 'three/examples/jsm/objects/Sky.js'
-  import type { SkyProps } from './types'
+  import type { SkyProps } from './types.js'
 
   let {
     scale = 1000,
@@ -34,34 +34,23 @@
 
   const { uniforms } = sky.material
 
-  const { renderer, scene, invalidate } = useThrelte()
+  const { renderer, invalidate } = useThrelte()
 
-  let renderTarget: WebGLCubeRenderTarget | undefined = $state()
-  let cubeCamera: CubeCamera | undefined
+  let renderTarget = $derived(
+    setEnvironment
+      ? new WebGLCubeRenderTarget(cubeMapSize, {
+          type: HalfFloatType,
+          generateMipmaps: true,
+          minFilter: LinearMipmapLinearFilter,
+          ...webGLRenderTargetOptions
+        })
+      : undefined
+  )
+  let cubeCamera = $derived(renderTarget ? new CubeCamera(1, 1.1, renderTarget) : undefined)
 
-  const init = () => {
-    renderTarget = new WebGLCubeRenderTarget(cubeMapSize, {
-      type: HalfFloatType,
-      generateMipmaps: true,
-      minFilter: LinearMipmapLinearFilter,
-      ...webGLRenderTargetOptions
-    })
-    cubeCamera = new CubeCamera(1, 1.1, renderTarget)
-  }
+  let running = $state(false)
 
-  const originalEnvironment = scene.environment
-
-  $effect.pre(() => {
-    if (setEnvironment && renderTarget) {
-      scene.environment = renderTarget.texture
-      invalidate()
-    } else if (!setEnvironment) {
-      scene.environment = originalEnvironment
-      invalidate()
-    }
-  })
-
-  const { start: scheduleUpdate, stop } = useTask(
+  useTask(
     () => {
       sky.scale.setScalar(scale)
 
@@ -77,37 +66,45 @@
       uniforms.sunPosition.value.copy(sunPosition)
 
       if (setEnvironment) {
-        if (!renderTarget || !cubeCamera) init()
         cubeCamera?.update(renderer, sky)
       }
 
       invalidate()
-      stop()
+      running = false
     },
     {
-      autoStart: false,
-      autoInvalidate: false
+      autoInvalidate: false,
+      running: () => running
     }
   )
 
-  $effect.pre(() => {
-    scale
-    turbidity
-    rayleigh
-    mieCoefficient
-    mieDirectionalG
-    elevation
-    azimuth
-    scheduleUpdate()
-  })
+  observe.pre(
+    () => [
+      scale,
+      turbidity,
+      rayleigh,
+      mieCoefficient,
+      mieDirectionalG,
+      elevation,
+      azimuth,
+      setEnvironment,
+      cubeMapSize,
+      webGLRenderTargetOptions
+    ],
+    () => {
+      running = true
+    }
+  )
 
-  onDestroy(() => {
-    sky.material.dispose()
-    scene.environment = originalEnvironment
-    try {
-      renderTarget?.dispose()
-    } catch (error) {
-      console.warn('Could not dispose renderTarget:', error)
+  $effect(() => {
+    return () => {
+      sky.material.dispose()
+
+      try {
+        renderTarget?.dispose()
+      } catch (error) {
+        console.warn('Could not dispose renderTarget:', error)
+      }
     }
   })
 </script>
@@ -119,3 +116,7 @@
 >
   {@render children?.({ ref: sky, sunPosition, renderTarget })}
 </T>
+
+{#if setEnvironment}
+  <CubeEnvironment texture={renderTarget?.texture} />
+{/if}

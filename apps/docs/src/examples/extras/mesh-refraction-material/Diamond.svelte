@@ -28,9 +28,9 @@
     geometry={nodes.Diamond_1_0.geometry}
     {...props}
   >
-    {#await env then e}
+    {#await env then envMap}
       <MeshRefractionMaterial
-        envMap={e}
+        {envMap}
         fresnel={0.5}
         ior={2.75}
         aberrationStrength={0.04}

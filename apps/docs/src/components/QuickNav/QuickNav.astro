@@ -3,7 +3,7 @@ import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarM
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-let pathname = Astro.url.pathname
+let pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/')
 pathname = pathname.startsWith('/') ? pathname.slice(1) : pathname
 pathname = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
 
@@ -16,6 +16,7 @@ const section = pathnameItems[0] as 'learn' | 'reference'
 const allMenuItems = sidebarMenu[section].categories
   .flat()
   .flatMap((category) => category.menuItems)
+  .filter((item) => !item.isDivider)
 
 const currentMenuItemIndex = allMenuItems.findIndex((menuItem) => pathname.endsWith(menuItem.slug))
 
@@ -32,7 +33,7 @@ const nextMenuItemCategory = nextMenuItem
   : undefined
 
 const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCategory) => {
-  return `${category.urlPrefix}/${menuItem.slug}`
+  return `${import.meta.env.BASE_URL}${category.urlPrefix.substring(1)}/${menuItem.slug}`
 }
 ---
 
@@ -42,7 +43,7 @@ const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCatego
   {
     previousMenuItem && previousMenuItemCategory ? (
       <a
-        class="flex flex-row items-center gap-3 px-6 py-6 !text-inherit no-underline hover:!text-white"
+        class="flex flex-row items-center gap-3 px-6 py-6 text-inherit! no-underline hover:text-white!"
         href={makeHref(previousMenuItem, previousMenuItemCategory)}
       >
         <svg
@@ -80,7 +81,7 @@ const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCatego
   {
     nextMenuItem && nextMenuItemCategory ? (
       <a
-        class="flex flex-row items-center gap-3 self-end px-6 py-6 !text-inherit no-underline hover:!text-white md:self-auto"
+        class="flex flex-row items-center gap-3 self-end px-6 py-6 text-inherit! no-underline hover:text-white! md:self-auto"
         href={makeHref(nextMenuItem, nextMenuItemCategory)}
       >
         <div class="flex flex-col items-end">

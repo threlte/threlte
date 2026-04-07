@@ -1,7 +1,7 @@
 ---
-order: 3.4
 category: '@threlte/extras'
-name: '<TransformControls>'
+group: 'Interaction'
+title: '<TransformControls>'
 sourcePath: 'packages/extras/src/lib/components/controls/TransformControls/TransformControls.svelte'
 type: 'component'
 componentSignature:
@@ -9,9 +9,9 @@ componentSignature:
     pretext: 'The component <code>&lt;TransformControls&gt;</code> extends both <code>&lt;T.TransformControls&gt;</code> and <code>&lt;T.Group&gt;</code>. You may pass any property of either of these components to the component <code>&lt;TransformControls&gt;</code>.',
     props:
       [
-        { name: 'autoPauseOrbitControls', type: 'boolean', required: false },
-        { name: 'autoPauseTrackballControls', type: 'boolean', required: false },
-        { name: 'object', type: 'THREE.Object3D', required: false }
+        { name: 'autoPauseControls', type: 'boolean', default: 'true' },
+        { name: 'cameraControls', type: '{ enabled: boolean }' },
+        { name: 'object', type: 'THREE.Object3D' }
       ],
     bindings:
       [
@@ -21,18 +21,56 @@ componentSignature:
   }
 ---
 
-This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scenes camera.
+This component can be used to transform objects in 3D space by adapting a similar interaction model of DCC tools like Blender. Unlike other controls, it is not intended to transform the scene's camera.
 
 The component `<TransformControls>` needs to be the parent of the component to be transformed.
-
-To accommodate `<OrbitControls>` or `<TrackballControls>` as well as a `<TransformControls>` component in the same scene, the `<TransformControls>` component is able automatically pause the currently active `<OrbitControls>` or `<TrackballControls>` component when the user is interacting with the `<TransformControls>` component. You can opt out of this behaviour by setting the property `autoPauseOrbitControls` or `autoPauseTrackballControls` to `false`.
 
 <Example
   path="extras/transform-controls"
   iframe
 />
 
-### Examples
+## Camera Controls
+
+When using camera controls alongside `<TransformControls>`, dragging a
+transform gizmo would also move the camera. To prevent this,
+`<TransformControls>` automatically pauses any registered camera controls
+while dragging.
+
+The following controls are handled automatically (no extra setup needed):
+
+- `<OrbitControls>`
+- `<TrackballControls>`
+- `<CameraControls>`
+
+You can disable this with `autoPauseControls={false}`.
+
+### Third-party controls
+
+For custom or third-party controls, pass them via the `cameraControls` prop.
+Any object with an `enabled` property works:
+
+```svelte
+<script>
+  import { TransformControls } from '@threlte/extras'
+  import { MyCustomControls } from './MyCustomControls'
+
+  let customControls = $state()
+</script>
+
+<MyCustomControls bind:ref={customControls} />
+
+<TransformControls cameraControls={customControls}>
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
+</TransformControls>
+```
+
+## Examples
+
+### Basic usage
 
 ```svelte title="Scene.svelte"
 <script>
@@ -49,7 +87,9 @@ To accommodate `<OrbitControls>` or `<TrackballControls>` as well as a `<Transfo
 </TransformControls>
 ```
 
-The `<TransformControls>` component can also be used to transform an object passed to it:
+### Transforming an external object
+
+The `<TransformControls>` component can also transform an object passed to it:
 
 ```svelte title="Scene.svelte"
 <script>

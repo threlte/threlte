@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
-  import { PlaneGeometry, RepeatWrapping, TextureLoader, Vector3 } from 'three'
+  import { PlaneGeometry, RepeatWrapping, TextureLoader, Vector3, MathUtils, Uniform } from 'three'
   import { Water } from 'three/examples/jsm/objects/Water.js'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
 
   const waterGeometry = new PlaneGeometry(10000, 10000)
 
@@ -18,11 +17,13 @@
     distortionScale: 1.7
   })
 
-  water.rotation.x = -DEG2RAD * 90
-  water.material.uniforms['size'].value = 1000
+  water.rotation.x = -MathUtils.DEG2RAD * 90
+
+  const uniforms = water.material.uniforms as { size: Uniform<number> }
+  uniforms.size.value = 1000
 
   useTask((delta) => {
-    water.material.uniforms['time'].value += delta
+    uniforms.size.value += delta
   })
 </script>
 

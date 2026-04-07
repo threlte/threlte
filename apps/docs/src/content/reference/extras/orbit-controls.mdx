@@ -1,13 +1,14 @@
 ---
-order: 3.2
 category: '@threlte/extras'
+group: 'Interaction'
 sourcePath: 'packages/extras/src/lib/components/controls/OrbitControls/OrbitControls.svelte'
-name: '<OrbitControls>'
+title: '<OrbitControls>'
 type: 'component'
 componentSignature:
   {
     extends:
-      { type: 'OrbitControls', url: 'https://threejs.org/docs/#examples/controls/OrbitControls' }
+      { type: 'OrbitControls', url: 'https://threejs.org/docs/#examples/controls/OrbitControls' },
+    props: [{ name: 'camera', type: 'THREE.Camera' }]
   }
 ---
 
@@ -19,8 +20,9 @@ models of products because it prevents them from ever appearing upside down. For
 an alternative camera controller, see
 [`<TrackballControls>`](/docs/reference/extras/trackball-controls).
 
-The `<OrbitControls>` component must be a direct child of a camera component and
-will mount itself to that camera.
+If placed as a child of a camera component, `<OrbitControls>` will attach to that
+camera. Otherwise, it attaches to the scene's default camera. A camera can also
+be passed explicitly via the `camera` prop.
 
 <Example
   path="extras/orbit-controls"
@@ -48,5 +50,5 @@ docs](https://threejs.org/docs/#examples/en/controls/OrbitControls).
 ```
 
 `<OrbitControls>` is a light wrapper that will use its parent as the target
-camera and the DOM element the renderer is rendering to as the DOM element to
-listen to pointer events.
+camera (or the default camera if not a child of one) and the DOM element the
+renderer is rendering to as the DOM element to listen to pointer events.

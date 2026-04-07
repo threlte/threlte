@@ -2,17 +2,17 @@
   lang="ts"
   generics="Type"
 >
-  import { resolvePropertyPath, useParent, watch } from '@threlte/core'
+  import { resolvePropertyPath, useParent, observe } from '@threlte/core'
   import { onDestroy } from 'svelte'
-  import { useStudio } from '../../studio/useStudio'
-  import type { Transformer } from '../transfomers/types'
-  import { useSheet } from '../useSheet'
-  import type { AnyProp, SyncProps } from './types'
-  import { getInitialValue } from './utils/getInitialValue'
-  import { isComplexProp } from './utils/isComplexProp'
-  import { isStringProp } from './utils/isStringProp'
-  import { makeAlphanumeric } from './utils/makeAlphanumeric'
-  import { parsePropLabel } from './utils/parsePropLabel'
+  import { useStudio } from '../../studio/useStudio.js'
+  import type { Transformer } from '../transfomers/types.js'
+  import { useSheet } from '../useSheet.js'
+  import type { AnyProp, SyncProps } from './types.js'
+  import { getInitialValue } from './utils/getInitialValue.js'
+  import { isComplexProp } from './utils/isComplexProp.js'
+  import { isStringProp } from './utils/isStringProp.js'
+  import { makeAlphanumeric } from './utils/makeAlphanumeric.js'
+  import { parsePropLabel } from './utils/parsePropLabel.js'
 
   let { type, children, ...rest }: SyncProps<Type> = $props()
 
@@ -43,7 +43,7 @@
       const key = customKey ?? makeAlphanumeric(propertyPath)
 
       // get the initial value as well as the correct transformer for the property
-      const { value, transformer } = getInitialValue(propertyPath, propertyValue, $parent)
+      const { value, transformer } = getInitialValue(propertyPath, propertyValue, parent.current)
       const label = parsePropLabel(key, propertyValue)
 
       // apply the label to the value
@@ -75,34 +75,37 @@
     'aspect'
   ]
 
-  watch([parent, sheetObject], ([parent, sheetObject]) => {
-    if (!parent) return
+  observe.pre(
+    () => [parent.current, sheetObject],
+    ([parent, sheetObject]) => {
+      if (!parent) return
 
-    return sheetObject?.onValuesChange((values) => {
-      // Ensure that the parent is still mounted
+      return sheetObject?.onValuesChange((values) => {
+        // Ensure that the parent is still mounted
 
-      Object.keys(values).forEach((key) => {
-        // first, check if the prop is mapped in this component
-        const propMapping = propMappings[key]
+        Object.keys(values).forEach((key) => {
+          // first, check if the prop is mapped in this component
+          const propMapping = propMappings[key]
 
-        if (!propMapping) return
+          if (!propMapping) return
 
-        // we're using the addedProps map to infer the target property name from the property name on values
-        const { target, key: targetKey } = resolvePropertyPath(
-          parent as any,
-          propMapping.propertyPath
-        )
+          // we're using the addedProps map to infer the target property name from the property name on values
+          const { target, key: targetKey } = resolvePropertyPath(
+            parent as any,
+            propMapping.propertyPath
+          )
 
-        // use a transformer to apply value
-        const transformer = propMapping.transformer
-        transformer.apply(target, targetKey, values[key])
+          // use a transformer to apply value
+          const transformer = propMapping.transformer
+          transformer.apply(target, targetKey, values[key])
 
-        if (updateProjectionMatrixKeys.includes(targetKey)) {
-          target.updateProjectionMatrix?.()
-        }
+          if (updateProjectionMatrixKeys.includes(targetKey)) {
+            target.updateProjectionMatrix?.()
+          }
+        })
       })
-    })
-  })
+    }
+  )
 
   initProps()
 
@@ -122,7 +125,10 @@
       if (!propMapping) return
 
       // we're using the addedProps map to infer the target property name from the property name on values
-      const { target, key: targetKey } = resolvePropertyPath($parent, propMapping.propertyPath)
+      const { target, key: targetKey } = resolvePropertyPath(
+        parent.current,
+        propMapping.propertyPath
+      )
 
       const value = propMapping.transformer.transform(target[targetKey]).default
 

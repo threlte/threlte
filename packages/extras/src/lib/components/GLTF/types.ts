@@ -1,4 +1,4 @@
-import type { ThrelteGltf } from '../../types/types'
+import type { ThrelteGltf } from '../../types/types.js'
 import type { Props } from '@threlte/core'
 import type { Group } from 'three'
 import type { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'

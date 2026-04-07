@@ -1,16 +1,16 @@
 // hooks
-export { useRapier } from './hooks/useRapier'
-export { useCollisionGroups } from './hooks/useCollisionGroups'
-export { useRigidBody } from './hooks/useRigidBody'
-export { usePhysicsTask } from './hooks/usePhysicsTask'
+export { useRapier } from './hooks/useRapier.js'
+export { useCollisionGroups } from './hooks/useCollisionGroups.js'
+export { useRigidBody } from './hooks/useRigidBody.js'
+export { usePhysicsTask } from './hooks/usePhysicsTask.js'
 
 // Joints
-export { useRevoluteJoint } from './hooks/useRevoluteJoint'
-export { usePrismaticJoint } from './hooks/usePrismaticJoint'
-export { useFixedJoint } from './hooks/useFixedJoint'
-export { useSphericalJoint } from './hooks/useSphericalJoint'
-export { useJoint } from './hooks/useJoint'
-export { useRopeJoint } from './hooks/useRopeJoint'
+export { useRevoluteJoint } from './hooks/useRevoluteJoint.js'
+export { usePrismaticJoint } from './hooks/usePrismaticJoint.js'
+export { useFixedJoint } from './hooks/useFixedJoint.js'
+export { useSphericalJoint } from './hooks/useSphericalJoint.js'
+export { useJoint } from './hooks/useJoint.js'
+export { useRopeJoint } from './hooks/useRopeJoint.js'
 
 // components
 export { default as World } from './components/World/World.svelte'
@@ -22,7 +22,7 @@ export { default as CollisionGroups } from './components/CollisionGroups/Collisi
 export { default as Attractor } from './components/Attractor/Attractor.svelte'
 
 // lib
-export { computeBitMask } from './lib/computeBitMask'
+export { computeBitMask } from './lib/computeBitMask.js'
 
 export type {
   CollisionGroupsBitMask,
@@ -37,4 +37,4 @@ export type {
   GravityType,
   CreateEvent,
   Framerate
-} from './types/types'
+} from './types/types.js'

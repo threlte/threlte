@@ -1,4 +1,5 @@
 import { useThrelteUserContext } from '@threlte/core'
+import type CameraControls from 'camera-controls'
 import { writable, type Writable } from 'svelte/store'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
@@ -6,6 +7,7 @@ import type { TrackballControls } from 'three/examples/jsm/controls/TrackballCon
 type ControlsContext = {
   orbitControls: Writable<OrbitControls | undefined>
   trackballControls: Writable<TrackballControls | undefined>
+  cameraControls: Writable<CameraControls | undefined>
 }
 
 /**
@@ -18,6 +20,7 @@ type ControlsContext = {
 export const useControlsContext = (): ControlsContext => {
   return useThrelteUserContext<ControlsContext>('threlte-controls', {
     orbitControls: writable<OrbitControls | undefined>(undefined),
-    trackballControls: writable<TrackballControls | undefined>(undefined)
+    trackballControls: writable<TrackballControls | undefined>(undefined),
+    cameraControls: writable<CameraControls | undefined>(undefined)
   })
 }

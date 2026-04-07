@@ -6,15 +6,14 @@ import type {
   Raycaster,
   Event
 } from 'three'
-import type { CurrentWritable } from '@threlte/core'
-import type { ComputeFunction } from './compute'
+import type { ComputeFunction } from './compute.js'
 
 export type Properties<T> = Pick<
   T,
   { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
 >
 
-export interface Intersection extends ThreeIntersection {
+export interface Intersection<T extends Object3D = Object3D> extends ThreeIntersection<T> {
   /** The event source (the object which registered the handler) */
   eventObject: Object3D
 }
@@ -55,9 +54,9 @@ export type ControlsContext = {
 // State attached to a left / right hand or controller
 export type HandContext = {
   hand: 'left' | 'right'
-  enabled: CurrentWritable<boolean>
-  pointer: CurrentWritable<Vector3>
-  pointerOverTarget: CurrentWritable<boolean>
+  enabled: { current: boolean }
+  pointer: { current: Vector3 }
+  pointerOverTarget: { current: boolean }
   lastEvent: Event | undefined
   initialClick: [x: number, y: number, z: number]
   initialHits: Object3D[]

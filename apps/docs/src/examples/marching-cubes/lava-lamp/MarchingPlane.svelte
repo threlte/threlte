@@ -3,15 +3,14 @@
   import { T } from '@threlte/core'
   import { MarchingPlane } from './MarchingPlane'
 
-  type MarchingPlaneProps = Props<MarchingPlane>
+  let { children, ...props }: Props<MarchingPlane> = $props()
 
-  let { ref = $bindable(), children, ...props }: MarchingPlaneProps = $props()
+  const plane = new MarchingPlane()
 </script>
 
 <T
-  is={MarchingPlane}
-  bind:ref
+  is={plane}
   {...props}
 >
-  {@render children?.({ ref })}
+  {@render children?.({ ref: plane })}
 </T>

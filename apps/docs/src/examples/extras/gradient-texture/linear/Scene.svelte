@@ -1,20 +1,19 @@
 <script lang="ts">
-  import type { ColorRepresentation, ToneMapping, Wrapping } from 'three'
-  import type { GradientStop } from '@threlte/extras'
+  import type { ColorRepresentation, Wrapping } from 'three'
+  import type { ColorStop } from '@threlte/extras'
   import { DoubleSide } from 'three'
   import { LinearGradientTexture, OrbitControls } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
 
   type SceneProps = {
     canvasSize: number
-    gradientEndColor: ColorRepresentation
+    gradientEndColor: string
     gradientEndX: number
     gradientEndY: number
-    gradientStartColor: ColorRepresentation
+    gradientStartColor: string
     gradientStartX: number
     gradientStartY: number
     sceneClearColor: ColorRepresentation
-    sceneToneMapping: ToneMapping
     textureCenterX: number
     textureCenterY: number
     textureOffsetX: number
@@ -35,7 +34,6 @@
     gradientStartX,
     gradientStartY,
     sceneClearColor,
-    sceneToneMapping,
     textureCenterX,
     textureCenterY,
     textureOffsetX,
@@ -47,17 +45,12 @@
     textureWrapT
   }: SceneProps = $props()
 
-  let stops: GradientStop[] = $derived([
+  let stops = $derived<ColorStop[]>([
     { color: gradientStartColor, offset: 0 },
     { color: gradientEndColor, offset: 1 }
   ])
 
-  const { invalidate, renderer, toneMapping } = useThrelte()
-
-  $effect(() => {
-    toneMapping.set(sceneToneMapping)
-    invalidate()
-  })
+  const { invalidate, renderer } = useThrelte()
 
   $effect(() => {
     renderer.setClearColor(sceneClearColor)

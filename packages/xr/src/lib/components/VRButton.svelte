@@ -12,9 +12,9 @@
 <script lang="ts">
   import type { ComponentProps } from 'svelte'
   import XRButton from './XRButton.svelte'
-  import { defaultFeatures } from '../internal/defaultFeatures'
+  import { defaultFeatures } from '../internal/defaultFeatures.js'
 
-  type Props = Omit<ComponentProps<XRButton>, 'mode' | 'sessionInit'>
+  type Props = Omit<ComponentProps<typeof XRButton>, 'mode' | 'sessionInit'>
 
   let { ...props }: Props = $props()
 </script>

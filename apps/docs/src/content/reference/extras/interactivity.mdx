@@ -1,13 +1,12 @@
 ---
-order: 3.5
 category: '@threlte/extras'
+group: 'Interaction'
 sourcePath: 'packages/extras/src/lib/interactivity'
-name: 'interactivity'
+title: 'interactivity'
 type: 'plugin'
 ---
 
-To add click, pointer and wheel events to your Threlte app, import the plugin `interactivity` from
-`'@threlte/extras'` and call it in your main scene component.
+To add click, pointer and wheel events to your Threlte app use the `interactivity` plugin.
 
 ```svelte title="Scene.svelte" {2,3}+
 <script>
@@ -16,7 +15,9 @@ To add click, pointer and wheel events to your Threlte app, import the plugin `i
 </script>
 ```
 
-All child components now receive events.
+<Example path="extras/interactivity" />
+
+All child components can now make use of the new events.
 
 ```svelte title="Scene.svelte" {7-9}+
 <script>
@@ -34,7 +35,7 @@ All child components now receive events.
 </T.Mesh>
 ```
 
-## Available Events
+## Available events
 
 The following interaction events are available:
 
@@ -51,30 +52,38 @@ The following interaction events are available:
   onpointerenter={(e) => console.log('enter')}
   onpointerleave={(e) => console.log('leave')}
   onpointermove={(e) => console.log('move')}
-  onpointermissed={() => console.log('missed')}
+  onpointermissed={(e) => console.log('missed')}
 />
 ```
 
-## Event Data
+## Event data
 
 All interaction events contain the following data:
 
 ```typescript
 type Event = THREE.Intersection & {
-  intersections: THREE.Intersection[] // The first intersection of each intersected object
+  // Inherited from THREE.Intersection:
   object: THREE.Object3D // The object that was actually hit
+  distance: number // Distance from the ray origin to the intersection
+  point: THREE.Vector3 // The intersection point in world coordinates
+  face: THREE.Face | null // The intersected face
+  // ... and other THREE.Intersection properties (uv, normal, instanceId, etc.)
+
+  // Added by interactivity:
   eventObject: THREE.Object3D // The object that registered the event
+  intersections: Intersection[] // All intersections, including the eventObject that registered each handler
   camera: THREE.Camera // The camera used for raycasting
-  delta: THREE.Vector2 //  Distance between mouse down and mouse up event in pixels
+  delta: number // Distance in pixels between the pointerdown position and this event's position (0 for non-click events)
   nativeEvent: MouseEvent | PointerEvent | WheelEvent // The native browser event
   pointer: Vector2 // The pointer position in normalized device coordinates
   ray: THREE.Ray // The ray used for raycasting
-  stopPropagation: () => void // Function to stop propagation of the event
+  stopPropagation: () => void // Stops the event from being delivered to farther objects
+  stopImmediatePropagation: () => void // Delegates to the native DOM event, blocking all further listeners (e.g. OrbitControls)
   stopped: boolean // Whether the event propagation has been stopped
 }
 ```
 
-## Event Propagation
+## Event propagation
 
 Propagation works a bit differently to the DOM because objects can occlude each other in 3D.
 The intersections array in the event data includes all objects intersecting the ray, not just the
@@ -98,7 +107,7 @@ even if you don't want this object to respond to the pointer event. If you do wa
 event as well as using `stopPropagation()`, remember that the `pointerout` events will happen during
 the `stopPropagation()` call. You probably want your other event handling to happen after this.
 
-## Interactivity Event Target
+## Event targets
 
 If no event target is specified, all event handlers listen to events on the `domElement` of the
 `renderer` (which is the canvas element by default). You can specify a different target by passing
@@ -129,7 +138,7 @@ It's also possible to change the target at runtime by updating the store `target
 </script>
 ```
 
-## Interactivity Event Compute
+## Compute function
 
 In the event that your event target is not the same size as the canvas, you can pass a `compute` function
 to the `interactivity` plugin. This function receives the DOM event and the interactivity state and should
@@ -149,16 +158,18 @@ as set the raycaster up for raycasting.
       state.pointer.update((p) => {
         p.x = (event.clientX / window.innerWidth) * 2 - 1
         p.y = -(event.clientY / window.innerHeight) * 2 + 1
+
+        return p
       })
 
       // Update the raycaster
-      state.raycaster.setFromCamera(state.pointer.current, $camera)
+      state.raycaster.setFromCamera(state.pointer.current, camera.current)
     }
   })
 </script>
 ```
 
-## Interactivity Event Filtering
+## Event filtering
 
 You can filter and sort events by passing a `filter` to the `interactivity` plugin. The function receives all hits and the interactivity state and should return the hits that should be delivered to the event handlers in the order they should be delivered.
 
@@ -175,7 +186,7 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
-## Interactivity State
+## Interactivity state
 
 To access the interactivity state, you can use the `useInteractivity` hook in any child component of the component that implements the `interactivity` plugin as follows:
 
@@ -185,7 +196,7 @@ To access the interactivity state, you can use the `useInteractivity` hook in an
 
   const { pointer, pointerOverTarget } = useInteractivity()
 
-  $inspect($pointer, $pointerOverTarget)
+  $inspect(pointer.current, pointerOverTarget.current)
 </script>
 ```
 
@@ -205,6 +216,8 @@ export type State = {
   interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction
   filter?: FilterFunction
+  clickDistanceThreshold: number
+  clickTimeThreshold: number
 }
 ```
 
@@ -216,7 +229,7 @@ export type State = {
 
 ## TypeScript
 
-### Prop Types
+### Prop types
 
 By default, the `interactivity` plugin does not add any prop types to the `<T>`
 component. You can however extend the types of the `<T>` component by defining

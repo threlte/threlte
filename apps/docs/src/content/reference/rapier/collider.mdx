@@ -2,7 +2,7 @@
 order: 3
 category: '@threlte/rapier'
 sourcePath: 'packages/rapier/src/lib/components/Colliders/Collider/Collider.svelte'
-name: '<Collider>'
+title: '<Collider>'
 type: 'component'
 componentSignature:
   {
@@ -15,20 +15,20 @@ componentSignature:
           required: true
         },
         { name: 'args', type: 'Parameters<typeof ColliderDesc[Shape]>', required: true },
-        { name: 'density', required: false, type: 'number' },
-        { name: 'mass', required: false, type: 'number' },
-        { name: 'massProperties', required: false, type: '{
+        { name: 'density',  type: 'number' },
+        { name: 'mass',  type: 'number' },
+        { name: 'massProperties',  type: '{
             mass: number,
             centerOfMass: Position,
             principalAngularInertia: Position,
             angularInertiaLocalFrame: Rotation,
             }' },
-        { name: 'restitution', required: false, type: 'number' },
-        { name: 'restitutionCombineRule', required: false, type: 'CoefficientCombineRule' },
-        { name: 'friction', required: false, type: 'number' },
-        { name: 'frictionCombineRule', required: false, type: 'CoefficientCombineRule' },
-        { name: 'sensor', required: false, type: 'boolean' },
-        { name: 'contactForceEventThreshold', required: false, type: 'number' }
+        { name: 'restitution',  type: 'number' },
+        { name: 'restitutionCombineRule',  type: 'CoefficientCombineRule' },
+        { name: 'friction',  type: 'number' },
+        { name: 'frictionCombineRule',  type: 'CoefficientCombineRule' },
+        { name: 'sensor',  type: 'boolean' },
+        { name: 'contactForceEventThreshold',  type: 'number' }
       ],
 		exports:
       [

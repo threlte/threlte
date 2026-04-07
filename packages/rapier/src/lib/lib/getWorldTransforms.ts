@@ -1,8 +1,7 @@
-import { Euler, Object3D, Quaternion, Vector3 } from 'three'
+import { Object3D, Quaternion, Vector3 } from 'three'
 
 const tempPosition = new Vector3()
 const tempQuaternion = new Quaternion()
-const tempRotation = new Euler()
 const tempScale = new Vector3()
 
 /**
@@ -29,22 +28,6 @@ export const getWorldPosition = (object: Object3D, target?: Vector3): Vector3 =>
  */
 export const getWorldQuaternion = (object: Object3D, target?: Quaternion): Quaternion => {
   return object.getWorldQuaternion(target ?? tempQuaternion)
-}
-
-/**
- * Get the world rotation of an object.
- * If no target is provided, a globally used
- * temporary Euler is used.
- *
- * @param object
- * @param target
- * @returns
- */
-export const getWorldRotation = (object: Object3D, target?: Euler): Euler => {
-  object.getWorldQuaternion(tempQuaternion)
-  return target
-    ? target.setFromQuaternion(tempQuaternion)
-    : tempRotation.setFromQuaternion(tempQuaternion)
 }
 
 /**

@@ -1,10 +1,7 @@
 ---
-import '$styles/variables.css'
-import '$styles/code.css'
 import '$styles/app.css'
-import '$styles/prose.css'
-import '$styles/markprompt.css'
-import '$styles/dracula.css'
+import '$styles/code.css'
+import '$styles/markdown.css'
 
 export interface Props {
   title: string
@@ -14,8 +11,30 @@ const title = Astro.props.title
 ---
 
 <!doctype html>
-<html lang="en">
+<html
+  lang="en"
+  class="bg-[#0A0F19]"
+>
   <head>
+    <script is:inline define:vars={{ base: import.meta.env.BASE_URL }}>
+      if (base !== '/' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register(base + 'sw-base-rewrite.js', { scope: base })
+          .then((reg) => {
+            // On first visit the SW isn't active yet — reload once it takes control
+            // so all asset requests go through the rewriter
+            if (!navigator.serviceWorker.controller) {
+              navigator.serviceWorker.addEventListener(
+                'controllerchange',
+                () => {
+                  window.location.reload()
+                },
+                { once: true }
+              )
+            }
+          })
+      }
+    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
@@ -39,32 +58,32 @@ const title = Astro.props.title
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="/icons/apple-touch-icon.png"
+      href={`${import.meta.env.BASE_URL}icons/apple-touch-icon.png`}
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="/icons/favicon-32x32.png"
+      href={`${import.meta.env.BASE_URL}icons/favicon-32x32.png`}
     />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="/icons/favicon-16x16.png"
+      href={`${import.meta.env.BASE_URL}icons/favicon-16x16.png`}
     />
     <link
       rel="manifest"
-      href="/icons/site.webmanifest"
+      href={`${import.meta.env.BASE_URL}icons/site.webmanifest`}
     />
     <link
       rel="mask-icon"
-      href="/icons/safari-pinned-tab.svg"
+      href={`${import.meta.env.BASE_URL}icons/safari-pinned-tab.svg`}
       color="#fe3d00"
     />
     <link
       rel="shortcut icon"
-      href="/icons/favicon.ico"
+      href={`${import.meta.env.BASE_URL}icons/favicon.ico`}
     />
     <meta
       name="msapplication-TileColor"
@@ -72,7 +91,7 @@ const title = Astro.props.title
     />
     <meta
       name="msapplication-config"
-      content="/icons/browserconfig.xml"
+      content={`${import.meta.env.BASE_URL}icons/browserconfig.xml`}
     />
     <meta
       name="theme-color"
@@ -93,11 +112,11 @@ const title = Astro.props.title
     />
     <meta
       name="description"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       property="og:description"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       property="og:image"
@@ -117,7 +136,7 @@ const title = Astro.props.title
     />
     <meta
       property="og:image:alt"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       name="twitter:card"
@@ -125,7 +144,7 @@ const title = Astro.props.title
     />
     <meta
       name="twitter:title"
-      content="Threlte – Rapidly build interactive 3D apps for the web"
+      content="Threlte - Rapidly build interactive 3D apps for the web"
     />
     <meta
       name="twitter:description"
@@ -136,22 +155,10 @@ const title = Astro.props.title
       content="Threlte"
     />
   </head>
-  <body transition:animate="initial">
+  <body
+    transition:animate="initial"
+    class="relative bg-[#0A0F19] font-sans text-white"
+  >
     <slot />
-    <style>
-      html {
-        @apply bg-[#0A0F19];
-      }
-
-      body {
-        @apply relative text-white;
-        @apply bg-[#0A0F19];
-      }
-    </style>
-
-    <script>
-      import { inject } from '@vercel/analytics'
-      inject()
-    </script>
   </body>
 </html>

@@ -8,11 +8,17 @@
  -->
 
 <script lang="ts">
+  import { run } from 'svelte/legacy'
+
   import { InstancedSprite, buildSpritesheet, type SpritesheetMetadata } from '@threlte/extras'
   import { AdaptedPoissonDiscSample as Sampler } from '../util'
   import type { Vector3Tuple } from 'three'
 
-  export let billboarding = false
+  interface Props {
+    billboarding?: boolean
+  }
+
+  let { billboarding = false }: Props = $props()
 
   const treeAtlasMeta = [
     {
@@ -71,7 +77,7 @@
   const sampler = new Sampler(4, [REGION_W, REGION_Z], undefined, Math.random)
 
   const points = sampler.GeneratePoints().filter((v) => {
-    return Math.sqrt((v[0] - REGION_W / 2) ** 2 + (v[1] - REGION_Z / 2) ** 2) < maxRadius
+    return Math.sqrt((v[0] ?? 0 - REGION_W / 2) ** 2 + (v[1] ?? 0 - REGION_Z / 2) ** 2) < maxRadius
   })
 
   const pickRandomTreeType = () => {
@@ -85,9 +91,9 @@
     return `green_${Math.floor(greenTrees * Math.random())}`
   }
 
-  let sprite: any
+  let sprite: any = $state()
 
-  $: {
+  run(() => {
     // manually update once to apply tree atlas
     // also, flip random trees on X axis for more variety
     if (sprite) {
@@ -96,7 +102,7 @@
       }
       sprite.update()
     }
-  }
+  })
 </script>
 
 {#await treeAtlas.spritesheet then spritesheet}
@@ -110,7 +116,7 @@
     castShadow
   >
     {#snippet children({ Instance })}
-      {#each points as [x, z], i}
+      {#each points as [x = 0, z = 0], i}
         {#if i < points.length / 2}
           <!-- Pick a random tree from atlas via animation name -->
           <Instance

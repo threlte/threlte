@@ -1,12 +1,19 @@
-/* eslint-disable @typescript-eslint/ban-types */
-
 import type { Component } from 'svelte'
 import * as THREE from 'three'
 import TComp from './T.svelte'
-import type { Props } from './types'
-import { setIs } from './utils/useIs'
+import type { Props } from './types.js'
+import { setIs } from './utils/useIs.js'
 
 type Extensions = Record<string, unknown>
+
+type ThreeCatalogue = {
+  [K in keyof typeof THREE]: (typeof THREE)[K]
+}
+
+type TComponentProxy = {
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+  [K in keyof ThreeCatalogue]: Component<Props<ThreeCatalogue[K]>, {}, 'ref'>
+}
 
 const catalogue: Extensions = {}
 
@@ -49,14 +56,14 @@ export const extend = (extensions: Extensions) => {
  * </T.Mesh>
  * ```
  */
-export const T = new Proxy(function () {}, {
-  apply(_target, _thisArg, argArray: [internal: unknown, props: { is: unknown }]) {
-    return TComp(...argArray)
-  },
+export const T = new Proxy(TComp, {
   get(_target, is: keyof typeof THREE) {
-    // Handle snippets
+    // Forward non-string keys (Symbols) to the underlying component.
+    // Returning TComp directly (what we previously did) for symbols
+    // caused Svelte 5.53+ DEV mode to accidentally call TComp via
+    // internal symbol lookups (PROXY_PATH_SYMBOL).
     if (typeof is !== 'string') {
-      return TComp
+      return Reflect.get(_target, is)
     }
 
     const module = catalogue[is] || THREE[is]
@@ -65,12 +72,13 @@ export const T = new Proxy(function () {}, {
       throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)
     }
 
-    setIs<typeof module>(module)
-
-    return TComp
+    return (...args: Parameters<typeof TComp>) => {
+      setIs(module)
+      return TComp(...args)
+    }
   }
-}) as unknown as typeof TComp & {
-  [Key in keyof typeof THREE]: Component<Props<(typeof THREE)[Key]>, {}, 'ref'>
-} & {
-  [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
-} & Record<string, Component>
+}) as typeof TComp &
+  TComponentProxy & {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+    [Key in keyof Threlte.UserCatalogue]: Component<Props<Threlte.UserCatalogue[Key]>, {}, 'ref'>
+  } & Record<string, Component>

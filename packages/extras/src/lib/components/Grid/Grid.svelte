@@ -2,8 +2,8 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import { Color, DoubleSide, Plane, Vector3, Mesh, type ShaderMaterial, type Uniform } from 'three'
-  import type { GridProps } from './types'
-  import { fragmentShader, vertexShader } from './gridShaders'
+  import type { GridProps } from './types.js'
+  import { fragmentShader, vertexShader } from './gridShaders.js'
 
   let {
     cellColor = '#000000',
@@ -18,6 +18,7 @@
     infiniteGrid = false,
     fadeDistance = 100,
     fadeStrength = 1,
+    fadeOrigin = undefined,
     cellThickness = 1,
     sectionThickness = 2,
     side = DoubleSide,
@@ -82,6 +83,9 @@
     },
     fadeStrength: {
       value: fadeStrength
+    },
+    fadeOrigin: {
+      value: new Vector3()
     },
     cellThickness: {
       value: cellThickness
@@ -172,6 +176,12 @@
     invalidate()
   })
   $effect.pre(() => {
+    if (fadeOrigin) {
+      uniforms.fadeOrigin.value = fadeOrigin
+      invalidate()
+    }
+  })
+  $effect.pre(() => {
     uniforms.cellThickness.value = cellThickness
     invalidate()
   })
@@ -222,8 +232,15 @@
       const material = mesh.material as ShaderMaterial
       const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
       const worldPlanePosition = material.uniforms.worldPlanePosition as Uniform<Vector3>
+      const uFadeOrigin = material.uniforms.fadeOrigin as Uniform<Vector3>
 
-      gridPlane.projectPoint(camera.current.position, worldCamProjPosition.value)
+      const projectedPoint = gridPlane.projectPoint(
+        camera.current.position,
+        worldCamProjPosition.value
+      )
+      if (!fadeOrigin) {
+        uFadeOrigin.value = projectedPoint
+      }
       worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)
     },
     { autoInvalidate: false }

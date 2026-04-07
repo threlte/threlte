@@ -2,15 +2,16 @@ import type { Object3D } from 'three'
 
 export type BaseProps = {
   ref: any
-  args?: any[]
+  args?: any[] | undefined
   attach?:
     | string
     | Object3D
     | ((args: { ref: any; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
     | false
-  manual?: boolean
-  makeDefault?: boolean
-  dispose?: boolean
+    | undefined
+  manual?: boolean | undefined
+  makeDefault?: boolean | undefined
+  dispose?: boolean | undefined
 }
 
 export type AnyProps = Record<string, any>
@@ -25,4 +26,4 @@ export type Plugin<Props extends AnyProps = AnyProps> = (
 
 export type PluginContext = Record<string, Plugin<AnyProps>>
 
-export type PluginContextName = 'threlte-plugin-context'
+export const pluginContextKey = 'threlte-plugin-context'

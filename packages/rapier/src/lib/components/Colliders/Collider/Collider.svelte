@@ -1,4 +1,11 @@
 <script
+  module
+  lang="ts"
+>
+  const vec3 = new Vector3()
+</script>
+
+<script
   lang="ts"
   generics="TShape extends Shape, TMassDef extends MassDef"
 >
@@ -7,19 +14,18 @@
     CoefficientCombineRule,
     ColliderDesc
   } from '@dimforge/rapier3d-compat'
-  import { createParentObject3DContext, useParentObject3D, useTask, watch } from '@threlte/core'
-  import { onDestroy, onMount, tick } from 'svelte'
+  import { createParentObject3D, useParentObject3D, useTask } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { Object3D, Quaternion, Vector3 } from 'three'
-  import { useCollisionGroups } from '../../../hooks/useCollisionGroups'
-  import { useRapier } from '../../../hooks/useRapier'
-  import { useRigidBody } from '../../../hooks/useRigidBody'
-  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents'
-  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion'
-  import { getWorldPosition, getWorldQuaternion } from '../../../lib/getWorldTransforms'
-  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext'
-  import { scaleColliderArgs } from '../../../lib/scaleColliderArgs'
-  import { useCreateEvent } from '../../../lib/useCreateEvent'
-  import type { ColliderProps, MassDef, Shape } from './types'
+  import { useCollisionGroups } from '../../../hooks/useCollisionGroups.js'
+  import { useRapier } from '../../../hooks/useRapier.js'
+  import { useRigidBody } from '../../../hooks/useRigidBody.js'
+  import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents.js'
+  import { eulerToQuaternion } from '../../../lib/eulerToQuaternion.js'
+  import { getWorldPosition, getWorldQuaternion } from '../../../lib/getWorldTransforms.js'
+  import { useParentRigidbodyObject } from '../../../lib/rigidBodyObjectContext.js'
+  import { scaleColliderArgs } from '../../../lib/scaleColliderArgs.js'
+  import type { ColliderProps, MassDef, Shape } from './types.js'
 
   let {
     shape,
@@ -36,7 +42,7 @@
     centerOfMass,
     principalAngularInertia,
     angularInertiaLocalFrame,
-    collider = $bindable(),
+    collider: externalCollider = $bindable(),
     oncreate,
     oncollisionenter,
     oncollisionexit,
@@ -48,7 +54,6 @@
 
   const object = new Object3D()
 
-  const { updateRef } = useCreateEvent(oncreate)
   const rigidBody = useRigidBody()
   const parentRigidBodyObject = useParentRigidbodyObject()
   const hasRigidBodyParent = !!rigidBody
@@ -66,23 +71,17 @@
     onsensorexit
   }
 
+  const scale = $derived(object.getWorldScale(vec3))
+  const scaledArgs = $derived(scaleColliderArgs(shape, args, scale))
+  const colliderDesc = $derived(ColliderDesc[shape](...scaledArgs) as ColliderDesc)
+  const collider = $derived(world.createCollider(colliderDesc, rigidBody))
+
   /**
    * Actual collider setup happens onMount as only then
    * the transforms are finished.
    */
-  onMount(async () => {
-    await tick()
-
-    const scale = object.getWorldScale(new Vector3())
-
-    const scaledArgs = scaleColliderArgs(shape, args, scale)
-
-    // @ts-ignore
-    const colliderDesc = ColliderDesc[shape](...scaledArgs) as ColliderDesc
-
-    collider = world.createCollider(colliderDesc, rigidBody)
+  $effect(() => {
     collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
-    updateRef(collider)
 
     /**
      * Add collider to context
@@ -127,12 +126,17 @@
   $effect.pre(() => {
     collider?.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
   })
-  $effect.pre(() => collider?.setSensor(sensor ?? false))
-  $effect.pre(() => collider?.setContactForceEventThreshold(contactForceEventThreshold ?? 0))
   $effect.pre(() => {
-    if (density !== undefined) collider?.setDensity(density)
+    collider?.setSensor(sensor ?? false)
   })
-
+  $effect.pre(() => {
+    collider?.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
+  })
+  $effect.pre(() => {
+    if (density !== undefined) {
+      collider?.setDensity(density)
+    }
+  })
   $effect.pre(() => {
     if (collider && mass) {
       if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame) {
@@ -168,37 +172,44 @@
    * If the Collider isAttached (i.e. NOT child of a RigidBody), update the
    * transforms on every frame.
    */
-  const { start, stop } = useTask(
+  useTask(
     () => {
       refresh()
     },
     {
-      autoStart: !hasRigidBodyParent && type === 'dynamic'
+      running: () => !hasRigidBodyParent && type === 'dynamic'
     }
   )
 
+  const parent3DObject = useParentObject3D()
+  createParentObject3D(() => object)
+
   $effect.pre(() => {
-    if (!hasRigidBodyParent && type === 'dynamic') start()
-    else stop()
+    parent3DObject.current.add(object)
+    return () => {
+      parent3DObject.current.remove(object)
+    }
+  })
+
+  $effect.pre(() => {
+    const _collider = collider
+    if (_collider) {
+      return untrack(() => {
+        externalCollider = collider
+        return oncreate?.(_collider)
+      })
+    }
   })
 
   /**
    * Cleanup
    */
-  onDestroy(() => {
-    if (!collider) return
-    rapierContext.removeColliderFromContext(collider)
-    collisionGroups.removeColliders([collider])
-    world.removeCollider(collider, true)
-    collider = undefined
-  })
-
-  const parent3DObject = useParentObject3D()
-  createParentObject3DContext(object)
-  watch(parent3DObject, (parent) => {
-    parent?.add(object)
+  $effect(() => {
     return () => {
-      parent?.remove(object)
+      if (!collider) return
+      rapierContext.removeColliderFromContext(collider)
+      collisionGroups.removeColliders([collider])
+      world.removeCollider(collider, true)
     }
   })
 </script>

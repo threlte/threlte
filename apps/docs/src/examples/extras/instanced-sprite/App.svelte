@@ -2,10 +2,10 @@
   import { Canvas, T } from '@threlte/core'
   import Scene from './Scene.svelte'
   import Settings from './Settings.svelte'
-  import { OrbitControls } from '@threlte/extras'
+  import { OrbitControls, Suspense } from '@threlte/extras'
 
-  let billboarding = false
-  let fps = 10
+  let billboarding = $state(false)
+  let fps = $state(10)
 </script>
 
 <div>
@@ -18,10 +18,12 @@
       <OrbitControls />
     </T.PerspectiveCamera>
 
-    <Scene
-      {billboarding}
-      {fps}
-    />
+    <Suspense>
+      <Scene
+        {billboarding}
+        {fps}
+      />
+    </Suspense>
   </Canvas>
 
   <Settings

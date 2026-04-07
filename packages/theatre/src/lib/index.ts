@@ -7,15 +7,15 @@ export { default as Theatre } from './theatre/Theatre.svelte'
 
 // SheetObject related things
 export { default as SheetObject } from './sheetObject/SheetObject.svelte'
-export { createTransformer } from './sheetObject/transfomers/createTransformer'
-export type { Transformer } from './sheetObject/transfomers/types'
+export { createTransformer } from './sheetObject/transfomers/createTransformer.js'
+export type { Transformer } from './sheetObject/transfomers/types.js'
 
 // hooks
-export { useStudio } from './studio/useStudio'
-export { useSequence } from './sequence/useSequence'
+export { useStudio } from './studio/useStudio.js'
+export { useSequence } from './sequence/useSequence.js'
 
 // actions
-export { createSheetObjectAction } from './sheet/createSheetObjectAction'
+export { createSheetObjectAction } from './sheet/createSheetObjectAction.js'
 
 // type exports
-export type { SequenceController } from './sequence/SequenceController'
+export type { SequenceController } from './sequence/SequenceController.js'

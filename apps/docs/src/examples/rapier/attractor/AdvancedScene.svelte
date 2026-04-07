@@ -1,6 +1,6 @@
 <script
   lang="ts"
-  context="module"
+  module
 >
   const geometry = new SphereGeometry(1)
   const material = new MeshBasicMaterial({ color: 'red' })
@@ -13,14 +13,20 @@
   import type { GravityType } from '@threlte/rapier'
   import { MeshBasicMaterial, SphereGeometry } from 'three'
 
-  export let type: GravityType = 'static'
-  let hide = false
+  interface Props {
+    type?: GravityType
+  }
+
+  let { type = 'static' }: Props = $props()
+
+  let hide = $state(false)
+
   export const reset = () => {
     hide = true
     setTimeout(() => (hide = false))
   }
 
-  const config: any = {
+  const config = {
     static: {
       type: 'static',
       strength: 3,
@@ -49,10 +55,7 @@
   fov={70}
   far={10000}
 >
-  <OrbitControls
-    enableZoom={true}
-    target.y={20}
-  />
+  <OrbitControls target.y={20} />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight

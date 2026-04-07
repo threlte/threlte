@@ -24,7 +24,7 @@ Title: duck floaty
   }
 
   const dracoLoader = useDraco()
-  const gltf = useGltf<GLTFResult>('/models/duck_floaty-transformed.glb', { dracoLoader })
+  const gltf = await useGltf<GLTFResult>('/models/duck_floaty-transformed.glb', { dracoLoader })
 
   const duckSpread = 200
 </script>
@@ -33,27 +33,23 @@ Title: duck floaty
   dispose={false}
   frustumCulled={false}
 >
-  {#await gltf}
-    <slot name="fallback" />
-  {:then gltf}
-    <InstancedMeshes meshes={gltf.nodes}>
-      {#snippet children({ components: { Object_4, Object_6 } })}
-        {#each { length: 200 } as _}
-          {@const posX = Math.random() * duckSpread - duckSpread / 2}
-          {@const posZ = Math.random() * duckSpread - 300}
-          <T.Group
-            position.x={posX}
-            position.z={posZ}
-            scale={0.1}
-          >
-            <Object_4
-              position={[0, 1.59, 2.54]}
-              scale={0.43}
-            />
-            <Object_6 position={[0, -0.03, 0]} />
-          </T.Group>
-        {/each}
-      {/snippet}
-    </InstancedMeshes>
-  {/await}
+  <InstancedMeshes meshes={gltf.nodes}>
+    {#snippet children({ components: { Object_4, Object_6 } })}
+      {#each { length: 200 } as _}
+        {@const posX = Math.random() * duckSpread - duckSpread / 2}
+        {@const posZ = Math.random() * duckSpread - 300}
+        <T.Group
+          position.x={posX}
+          position.z={posZ}
+          scale={0.1}
+        >
+          <Object_4
+            position={[0, 1.59, 2.54]}
+            scale={0.43}
+          />
+          <Object_6 position={[0, -0.03, 0]} />
+        </T.Group>
+      {/each}
+    {/snippet}
+  </InstancedMeshes>
 </T.Group>

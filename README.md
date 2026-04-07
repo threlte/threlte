@@ -26,13 +26,7 @@ Check out our **[documentation](https://threlte.xyz)** and our **[Discord commun
 
 ### Installation
 
-For a quick interactive setup of a fresh Threlte project, run:
-
-```sh
-npm create threlte my-project
-```
-
-Alternatively you can check out the full [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
+Check out the [installation instructions](https://threlte.xyz/docs/learn/getting-started/installation).
 
 ### Tutorial
 
@@ -79,10 +73,6 @@ Contributions are what make the open source community such an amazing place to l
 
 - **Filing Issues** - if you have feature requestions or you think you spotted a bug, [submit an issue](https://github.com/threlte/threlte/issues/new).
 - **Contributing Code** - if you would like to drop us a PR, read the [contribution guide](https://github.com/threlte/threlte/blob/main/CONTRIBUTING.md) first.
-
-## Sponsors
-
-[![Powered by Vercel](./assets/vercel/powered-by-vercel.svg)](https://vercel.com/?utm_source=threlte&utm_campaign=oss)
 
 ---
 

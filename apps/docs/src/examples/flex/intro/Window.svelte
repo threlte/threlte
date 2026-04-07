@@ -30,7 +30,7 @@
     <T.MeshBasicMaterial color="#0A0F19" />
   </T.Mesh>
 
-  <Box class="h-26 pr-53 w-full items-center justify-start gap-5 pl-8">
+  <Box class="h-26 w-full items-center justify-start gap-5 pr-53 pl-8">
     {#snippet children({ height, width })}
       <T.Mesh position.z={20}>
         <RoundedBoxGeometry

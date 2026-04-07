@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { globalProjects } from '../consts'
-  import { getProject } from '../theatre'
+  import { globalProjects } from '../consts.js'
+  import { getProject } from '../theatre.js'
   import { setContext, type Snippet } from 'svelte'
   import type { IProject, IProjectConfig } from '@theatre/core'
 
   interface Props {
-    name: string
+    name?: string
     config?: IProjectConfig | undefined
     project?: IProject
     isReady?: boolean

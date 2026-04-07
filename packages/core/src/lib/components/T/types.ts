@@ -1,6 +1,5 @@
 import type { Snippet } from 'svelte'
-import type { Object3D } from 'three'
-import type { DisposableObject } from '../../context/fragments/disposal'
+import type { Camera, Object3D } from 'three'
 
 /** Inlined from type-fest */
 type ConditionalKeys<Base, Condition> = {
@@ -56,31 +55,26 @@ export type AnyProps = Record<string, any>
  * ### Base Props
  */
 export type BaseProps<Type, ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]> = {
+  /**
+   * If true, the object will be deeply disposed when the component unmounts.
+   */
+  dispose?: boolean
+
   attach?:
     | string
     | Object3D
-    | ((args: { ref: Type; parent: unknown; parentObject3D: Object3D }) => void | (() => void))
+    | ((args: {
+        ref: MaybeInstance<Type>
+        parent: unknown
+        parentObject3D: Object3D
+      }) => void | (() => void))
     | false
+    | undefined
 
   children?: Snippet<ChildrenArgs>
 
-  oncreate?: CreateEvent<Type>
+  oncreate?: CreateEvent<MaybeInstance<Type>>
 }
-
-/**
- * ### Disposable Props
- */
-export type DisposableProps<Type> =
-  MaybeInstance<Type> extends DisposableObject
-    ? {
-        /**
-         * If true, the object will be deeply disposed when the component unmounts.
-         */
-        dispose?: boolean
-      }
-    : {
-        dispose?: never
-      }
 
 /**
  * ### Class Props
@@ -102,7 +96,7 @@ export type RefProps<Type> = {
  * ### Camera Props
  */
 export type CameraProps<Type> =
-  MaybeInstance<Type> extends { isCamera: true }
+  MaybeInstance<Type> extends Camera
     ? {
         /**
          * By default, Threlte will update the cameras aspect ratio or frustum
@@ -172,7 +166,7 @@ type ExtractPayload<
   ? EventData
   : never
 
-export type CreateEvent<Type> = (ref: MaybeInstance<Type>) => void | (() => void)
+type CreateEvent<Type> = (ref: Type) => void | (() => void)
 
 // –––––––––––––––––––––––– PROPS ––––––––––––––––––––––––
 
@@ -188,13 +182,12 @@ export type Props<
   Type,
   ChildrenArgs extends unknown[] = [{ ref: MaybeInstance<Type> }]
 > = AnyProps &
-  DisposableProps<Type> &
   RefProps<Type> &
   BaseProps<Type, ChildrenArgs> &
   ClassProps<Type> &
   CameraProps<Type> &
   InstanceProps<Type> &
-  EventProps<Type> &
+  EventProps<MaybeInstance<Type>> &
   Threlte.UserProps
 
 /**

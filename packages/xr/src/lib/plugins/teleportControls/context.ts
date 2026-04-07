@@ -1,12 +1,11 @@
 import { type Mesh, Raycaster, type Intersection } from 'three'
 import { getContext, setContext } from 'svelte'
-import type { CurrentWritable } from '@threlte/core'
-import { defaultComputeFunction } from './compute'
-import type { TeleportControlsOptions } from '.'
+import { defaultComputeFunction } from './compute.js'
+import type { TeleportControlsOptions } from './index.svelte.js'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
-export type TeleportEvents = {}
+export type TeleportEvents = Record<string, (arg: unknown) => void>
 
 export interface Context {
   interactiveObjects: Mesh[]
@@ -23,9 +22,9 @@ export interface Context {
 
 export interface HandContext {
   hand: 'left' | 'right'
-  enabled: CurrentWritable<boolean>
-  active: CurrentWritable<boolean>
-  hovered: CurrentWritable<Intersection | undefined>
+  enabled: { current: boolean }
+  active: { current: boolean }
+  hovered: { current: Intersection | undefined }
 }
 
 const handContextKeys = {

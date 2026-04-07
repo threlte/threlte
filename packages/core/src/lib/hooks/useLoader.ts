@@ -1,5 +1,5 @@
-import { useCache } from '../context/fragments/cache'
-import { asyncWritable, type AsyncWritable } from '../utilities'
+import { Cache } from 'three'
+import { useCache } from '../context/fragments/cache.js'
 
 type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
@@ -36,10 +36,10 @@ export type UseLoaderLoadResult<
   Input extends UseLoaderLoadInput,
   ResultType = LoaderResultType<TLoader>
 > = Input extends string
-  ? AsyncWritable<ResultType>
+  ? Promise<ResultType>
   : Input extends string[]
-    ? AsyncWritable<ResultType[]>
-    : AsyncWritable<Record<keyof Input, ResultType>>
+    ? Promise<ResultType[]>
+    : Promise<Record<keyof Input, ResultType>>
 
 type UseLoaderLoadTransform<TLoader extends Loader> = (result: LoaderResultType<TLoader>) => any
 
@@ -109,23 +109,12 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
   options?: UseLoaderOptions<Proto>
 ): ThrelteUseLoader<InstanceType<Proto>> {
   const { remember, clear: clearCacheItem } = useCache()
-
-  let loader: InstanceType<Proto> | undefined
-
-  const initializeLoader = (): InstanceType<Proto> => {
-    // Type-wrestling galore
-    const lazyLoader = new Proto(...(((options as any)?.args as []) ?? [])) as InstanceType<Proto>
-    // extend the loader if necessary
-    options?.extend?.(lazyLoader)
-    return lazyLoader
-  }
+  const loader = new Proto(...(options?.args ?? [])) as InstanceType<Proto>
+  options?.extend?.(loader)
 
   const load: ThrelteUseLoader<InstanceType<Proto>>['load'] = (input, options) => {
     // Allow Async and Sync loaders
     const loadResource = async (url: string) => {
-      if (!loader) {
-        loader = initializeLoader()
-      }
       if ('loadAsync' in loader) {
         const result = await loader.loadAsync(url, options?.onProgress)
         return options?.transform?.(result) ?? result
@@ -134,7 +123,7 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
           ;(loader as SyncLoader).load(
             url,
             (data) => resolve(options?.transform?.(data) ?? data),
-            (event) => options?.onProgress?.(event),
+            options?.onProgress,
             reject
           )
         })
@@ -143,44 +132,38 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
 
     if (Array.isArray(input)) {
       // map over the input array and return an array of promises
-      const promises = input.map((url) => {
-        return remember(() => loadResource(url), [Proto, url])
-      })
+      const promises = input.map((url) => remember(url, () => loadResource(url)))
 
-      // return an AsyncWritable that resolves to the array of promises
-      const store = asyncWritable(Promise.all(promises))
-      return store as any // TODO: Dirty escape hatch
+      return Promise.all(promises) as any // TODO: Dirty escape hatch
     } else if (typeof input === 'string') {
-      const promise = remember(() => loadResource(input), [Proto, input])
+      const promise = remember(input, () => loadResource(input))
 
-      // return an AsyncWritable that resolves to the promise
-      const store = asyncWritable(promise)
-      return store as any // TODO: Dirty escape hatch
+      return promise as any // TODO: Dirty escape hatch
     } else {
       // map over the input object and return an array of promises
       const promises = Object.values(input).map((url) => {
-        return remember(() => loadResource(url), [Proto, url])
+        return remember(url, () => loadResource(url))
       })
-      // return an AsyncWritable that resolves to the object of promises
-      const store = asyncWritable(
-        Promise.all(promises).then((results) => {
-          return Object.fromEntries(Object.entries(input).map(([key], i) => [key, results[i]]))
-        })
-      )
-      return store as any // TODO: Dirty escape hatch
+
+      return Promise.all(promises).then((results) => {
+        return Object.fromEntries(Object.entries(input).map(([key], i) => [key, results[i]]))
+      }) as any // TODO: Dirty escape hatch
     }
   }
 
   const clear = (input: string | string[] | Record<string, string>) => {
     if (Array.isArray(input)) {
       input.forEach((url) => {
-        clearCacheItem([Proto, url])
+        clearCacheItem(url)
+        Cache.remove(url)
       })
     } else if (typeof input === 'string') {
-      clearCacheItem([Proto, input])
+      clearCacheItem('input')
+      Cache.remove(input)
     } else {
-      Object.entries(input).forEach(([key, url]) => {
-        clearCacheItem([Proto, key, url])
+      Object.entries(input).forEach(([, url]) => {
+        clearCacheItem(url)
+        Cache.remove(url)
       })
     }
   }

@@ -1,31 +1,10 @@
 import { getContext, setContext } from 'svelte'
 
-type Tuple<T = unknown> = [T] | T[]
-
-type Keys = Tuple<unknown>
-
-type CacheItem = {
-  // The promise that is being cached
-  promise: Promise<unknown>
-  // The cache keys
-  keys: Keys
-}
-
-type Cache = CacheItem[]
+type Cache = Map<string, unknown>
 
 type CacheContext = {
-  items: Cache
-  remember: <T>(callback: () => Promise<T>, keys: Keys) => Promise<T>
-  clear: (keys: Keys) => void
-}
-
-export const shallowEqualArrays = (arrA: unknown[], arrB: unknown[]) => {
-  if (arrA === arrB) return true
-  if (!arrA || !arrB) return false
-  const len = arrA.length
-  if (arrB.length !== len) return false
-  for (let i = 0; i < len; i++) if (arrA[i] !== arrB[i]) return false
-  return true
+  remember: <T>(keys: string, callback: () => Promise<T>) => Promise<T>
+  clear: (key: string) => void
 }
 
 /**
@@ -36,43 +15,38 @@ export const shallowEqualArrays = (arrA: unknown[], arrB: unknown[]) => {
  * in multiple scenes.
  */
 export const createCacheContext = () => {
-  const items: Cache = []
+  const cache: Cache = new Map<string, unknown>()
 
   const remember: CacheContext['remember'] = <T>(
-    callback: () => Promise<T>,
-    keys: Keys
+    key: string,
+    callback: () => Promise<T>
   ): Promise<T> => {
-    for (let i = 0; i < items.length; i++) {
-      const entry = items[i]
-      if (shallowEqualArrays(keys, entry.keys)) {
-        if (entry.promise) return entry.promise as Promise<T>
-      }
+    const entry = cache.get(key)
+
+    if (entry) {
+      return entry as Promise<T>
     }
 
-    // If no match was found, create a new entry
-    const entry: CacheItem = {
-      promise: callback(),
-      keys
-    }
+    const promise = callback()
 
-    // Add the entry to the cache
-    items.push(entry)
+    // If the promise rejects, remove the cache entry so that retries can be made
+    promise.catch((error) => {
+      cache.delete(key)
+      throw error
+    })
+
+    // If no match was found, create a new entry and add to the cache
+    cache.set(key, promise)
 
     // Return the promise
-    return entry.promise as Promise<T>
+    return promise
   }
 
-  const clear: CacheContext['clear'] = (keys) => {
-    for (let i = 0; i < items.length; i++) {
-      const entry = items[i]
-      if (shallowEqualArrays(keys, entry.keys)) {
-        items.splice(i, 1)
-        return
-      }
-    }
+  const clear: CacheContext['clear'] = (key: string) => {
+    cache.delete(key)
   }
 
-  const context: CacheContext = { items, remember, clear }
+  const context: CacheContext = { remember, clear }
 
   setContext<CacheContext>('threlte-cache', context)
 
@@ -83,9 +57,9 @@ export const createCacheContext = () => {
  * ### `useCache`
  *
  * This hook is used to access the cache. It returns a `remember` function that
- * can be used to cache a promise based on the provided keys. The `remember`
- * function will return the cached value if the promise has already been
- * resolved and the keys match.
+ * can be used to cache a promise based on the provided key. The `remember`
+ * function will return the cached promise when the key matches, so repeated
+ * calls share the same in-flight or resolved result.
  *
  * @example
  * ```ts
@@ -99,7 +73,7 @@ export const createCacheContext = () => {
  * ```
  *
  * The model will only be loaded once, even if `remember` is invoked multiple
- * times with the same keys.
+ * times with the same key.
  *
  * The `clear` function can be used to clear the cache for a specific set of keys.
  */

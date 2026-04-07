@@ -1,51 +1,41 @@
 ---
-order: 7.141
 category: '@threlte/extras'
+group: 'Staging'
 sourcePath: 'packages/extras/src/lib/components/environment/Environment/Environment.svelte'
-name: <Environment>
+title: <Environment>
 type: 'component'
 componentSignature:
   {
     props:
       [
-        {
-          description: 'the url to a texture to load and use',
-          name: 'url',
-          required: false,
-          type: 'string'
-        },
+        { description: 'the url to a texture to load and use', name: 'url', type: 'string' },
         {
           description: 'a bindable of the loaded texture',
           name: 'texture',
-          required: false,
           type: 'THREE.DataTexture | THREE.Texture'
         },
         {
           default: 'false',
           description: 'whether to set `scene.background` to the loaded environment texture',
           name: 'isBackground',
-          required: false,
           type: 'boolean'
         },
         {
           default: 'useThrelte().scene',
           description: 'the scene that will have its environment and/or background set',
           name: 'scene',
-          required: false,
           type: 'THREE.Scene'
         },
         {
           default: 'false',
           description: 'creates a ground projected skybox',
           name: 'ground',
-          required: false,
           type: 'boolean | { height?: number, radius?: number, resolution?: number }'
         },
         {
           default: 'undefined',
           description: 'a reference to the created `GroundedSkybox` instance when using grounded projection',
           name: 'skybox',
-          required: false,
           type: 'undefined | THREE.GroundedSkybox'
         }
       ]
@@ -60,7 +50,7 @@ Asynchronously loads a single equirectangular-mapped texture and sets the provid
 
 `<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment`.
 
-`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by ThreeJS's [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
+`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by Three.js' [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
 Internally `<Environment>` creates a loader based on the extension of the `url` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
 
@@ -76,7 +66,7 @@ Internally `<Environment>` creates a loader based on the extension of the `url` 
 
 ### Loaders Are Simple
 
-Loaders used inside `<Environment>` are not extendable. They only fetch and load the texture at `url`. If you need to use the methods that [ThreeJS loaders](https://threejs.org/docs/index.html?q=loader#api/en/loaders/Loader) have, you should create the loader outside of `<Environment>` and load it there then pass the texture through the `texture` prop.
+Loaders used inside `<Environment>` are not extendable. They only fetch and load the texture at `url`. If you need to use the methods that [Three.js loaders](https://threejs.org/docs/index.html?q=loader#api/en/loaders/Loader) have, you should create the loader outside of `<Environment>` and load it there then pass the texture through the `texture` prop.
 
 ```svelte
 <script>

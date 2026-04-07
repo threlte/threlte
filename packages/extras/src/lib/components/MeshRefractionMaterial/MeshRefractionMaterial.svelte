@@ -1,11 +1,10 @@
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { onMount } from 'svelte'
-  import { Color, type CubeTexture, Matrix4, Mesh, ShaderMaterial, Texture, Vector2 } from 'three'
+  import { Color, type CubeTexture, Matrix4, ShaderMaterial, Texture, Vector2 } from 'three'
   import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
-  import type { MeshRefractionMaterialProps } from './types'
-  import { fragmentShader } from './fragment'
-  import { vertexShader } from './vertex'
+  import type { MeshRefractionMaterialProps } from './types.js'
+  import { fragmentShader } from './fragment.js'
+  import { vertexShader } from './vertex.js'
 
   let {
     envMap,
@@ -38,6 +37,7 @@
     vertexShader,
     uniforms
   })
+  ref = material
 
   const { size, invalidate, camera } = useThrelte()
   const parent = useParent()
@@ -73,12 +73,12 @@
     updateDefines(envMap, aberrationStrength, fastChroma)
   })
 
-  onMount(() => {
+  $effect(() => {
     // Update the BVH
-    if ($parent && $parent instanceof Mesh && $parent.geometry) {
+    if (isInstanceOf(parent.current, 'Mesh') && parent.current.geometry) {
       uniforms.bvh.value = new MeshBVHUniformStruct()
       uniforms.bvh.value.updateFrom(
-        new MeshBVH($parent?.geometry.clone().toNonIndexed(), {
+        new MeshBVH(parent.current.geometry.clone().toNonIndexed(), {
           strategy: SAH
         })
       )
@@ -93,7 +93,7 @@
     { autoInvalidate: false }
   )
 
-  const colorObj = new Color(color)
+  const colorObj = new Color()
   $effect.pre(() => {
     colorObj.set(color)
     invalidate()
@@ -102,14 +102,13 @@
 
 <T
   is={material}
-  bind:ref
   uniforms.envMap.value={envMap}
   uniforms.bounces.value={bounces}
   uniforms.ior.value={ior}
   uniforms.fresnel.value={fresnel}
   uniforms.aberrationStrength.value={aberrationStrength}
   uniforms.color.value={colorObj}
-  uniforms.resolution.value={[$size.width, $size.height]}
+  uniforms.resolution.value={[size.current.width, size.current.height]}
   {defines}
   {...props}
 />

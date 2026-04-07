@@ -31,29 +31,29 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import {
-    Vector3,
-    Group,
-    Mesh,
-    PerspectiveCamera,
-    Object3D,
     DoubleSide,
+    Group,
     Matrix4,
+    Mesh,
+    Object3D,
     OrthographicCamera,
-    Raycaster
+    PerspectiveCamera,
+    Raycaster,
+    Vector3
   } from 'three'
+  import { logFragment, logVertex, spriteVertex } from './shaders.js'
+  import type { HTMLProps } from './types.js'
   import {
     defaultCalculatePosition,
     epsilon,
     getCameraCSSMatrix,
     getObjectCSSMatrix,
+    getViewportFactor,
     isObjectBehindCamera,
     isObjectVisible,
     objectScale,
-    objectZIndex,
-    getViewportFactor
-  } from './utils'
-  import { logVertex, logFragment, spriteVertex } from './shaders'
-  import type { HTMLProps } from './types'
+    objectZIndex
+  } from './utils.js'
 
   let {
     autoRender = true,
@@ -65,8 +65,8 @@
     sprite = false,
     transform = false,
     occlude = false,
-    castShadow,
-    receiveShadow,
+    castShadow = false,
+    receiveShadow = false,
     material,
     geometry,
     zIndexRange = [16777271, 0],
@@ -76,22 +76,21 @@
     pointerEvents = 'auto',
     ref = $bindable(),
     visible = $bindable(),
-    style,
     children,
     ...props
   }: HTMLProps = $props()
 
   visible = true
 
-  const { renderer, camera, scene, size } = useThrelte()
+  const { camera, scene, size, dom, canvas, renderStage } = useThrelte()
 
   const group = new Group()
 
   let element = document.createElement(as)
   let oldZoom = 0
   let oldPosition = [0, 0]
-  let transformOuterRef: HTMLDivElement | undefined = $state()
-  let transformInnerRef: HTMLDivElement | undefined = $state()
+  let transformOuterRef = $state.raw<HTMLDivElement>()
+  let transformInnerRef = $state.raw<HTMLDivElement>()
   let isMeshSizeSet = false
 
   const occlusionMesh = new Mesh()
@@ -102,12 +101,12 @@
   )
 
   let matrix = new Matrix4()
-  let width = $derived($size.width)
-  let height = $derived($size.height)
+  let width = $derived(size.current.width)
+  let height = $derived(size.current.height)
   let halfWidth = $derived(width / 2)
   let halfHeight = $derived(height / 2)
-  let fov = $derived($camera.projectionMatrix.elements[5] * halfHeight)
-  let viewportFactor = $derived(getViewportFactor($camera, new Vector3(), $size))
+  let fov = $derived(camera.current.projectionMatrix.elements[5] * halfHeight)
+  let viewportFactor = $derived(getViewportFactor(camera.current, new Vector3(), size.current))
 
   $effect.pre(() => {
     if (wrapperClass) element.className = wrapperClass
@@ -116,19 +115,19 @@
   $effect.pre(() => {
     if (occlude === 'blending') {
       activeOccludeInstances += 1
-      modifyCanvas(renderer.domElement, zIndexRange[0])
+      modifyCanvas(canvas, zIndexRange[0])
     }
 
     return () => {
       activeOccludeInstances -= 1
-      modifyCanvas(renderer.domElement, zIndexRange[0])
+      modifyCanvas(canvas, zIndexRange[0])
     }
   })
 
   export const render = () => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
-    const vec = transform ? oldPosition : calculatePosition(group, camera.current, $size)
+    const vec = transform ? oldPosition : calculatePosition(group, camera.current, size.current)
 
     if (
       transform ||
@@ -256,25 +255,19 @@
     }
   }
 
-  export const { start: startRendering, stop: stopRendering } = useTask(render, {
-    autoStart: false
-  })
-  $effect(() => {
-    if (autoRender) {
-      startRendering()
-      return () => {
-        stopRendering()
-      }
-    }
+  useTask(render, {
+    autoInvalidate: false,
+    stage: renderStage,
+    running: () => autoRender
   })
 
   let pos = $derived.by(() => {
     scene.updateMatrixWorld()
-    return calculatePosition(group, $camera, $size)
+    return calculatePosition(group, camera.current, size.current)
   })
 
   const portalAction = (el: HTMLElement) => {
-    const target = portal ?? renderer.domElement.parentElement
+    const target = portal ?? dom
     if (!target) {
       console.warn('<HTML>: target is undefined.')
       return
@@ -333,6 +326,7 @@
   style:overflow={transform ? 'hidden' : undefined}
   style:transform={transform ? undefined : `translate3d(${pos[0]}px,${pos[1]}px,0)`}
   style:transform-origin={transform ? undefined : '0 0'}
+  style:display={$effect.pending() > 0 ? 'none' : undefined}
 >
   {#if transform}
     <div
@@ -354,7 +348,7 @@
           class={props.class}
           style={props.style}
         >
-          {@render children?.({ render, startRendering, stopRendering })}
+          {@render children?.({ render })}
         </div>
       </div>
     </div>
@@ -364,12 +358,12 @@
       style:transform={center ? 'translate3d(-50%,-50%,0)' : 'none'}
       style:top={fullscreen ? `${-height / 2}px` : undefined}
       style:left={fullscreen ? `${-width / 2}px` : undefined}
-      style:width={fullscreen ? `${width / 2}px` : undefined}
+      style:width={fullscreen ? `${width}px` : undefined}
       style:height={fullscreen ? `${height}px` : undefined}
       style={props.style}
       class={props.class}
     >
-      {@render children?.({ render, startRendering, stopRendering })}
+      {@render children?.({ render })}
     </div>
   {/if}
 </svelte:element>

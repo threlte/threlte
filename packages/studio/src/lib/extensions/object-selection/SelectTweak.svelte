@@ -1,18 +1,17 @@
 <script lang="ts">
-  import { useCanvas, useThrelte } from '@threlte/core'
+  import { useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import * as THREE from 'three'
   import { Raycaster } from 'three'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { useObjectSelection } from './useObjectSelection.svelte'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { useObjectSelection } from './useObjectSelection.svelte.js'
 
   const raycaster = new Raycaster()
 
   const { clearSelection, selectObjects, toggleSelection } = useObjectSelection()
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
-  const { camera, scene } = useThrelte()
-  const { wrapper, size } = useCanvas()
+  const { camera, scene, dom, size } = useThrelte()
 
   const down = new THREE.Vector2()
   const up = new THREE.Vector2()
@@ -29,8 +28,8 @@
     }
 
     // Calculate pointer position in normalized device coordinates
-    pointer.x = (event.clientX / $size.width) * 2 - 1
-    pointer.y = -((event.clientY / $size.height) * 2) + 1
+    pointer.x = (event.clientX / size.current.width) * 2 - 1
+    pointer.y = -((event.clientY / size.current.height) * 2) + 1
 
     // Update the picking ray with the camera and pointer position
     raycaster.setFromCamera(pointer, camera.current)
@@ -52,6 +51,10 @@
       hit = hits.shift()
     }
 
+		if (hit?.object?.userData?.selectable === false) {
+			hit = undefined
+		}
+
     if (event.shiftKey) {
       if (!hit || !hit.object) return
       toggleSelection([hit.object])
@@ -65,12 +68,12 @@
   }
 
   onMount(() => {
-    wrapper.addEventListener('pointerdown', recordDown)
-    wrapper.addEventListener('pointerup', raycast)
+    dom.addEventListener('pointerdown', recordDown)
+    dom.addEventListener('pointerup', raycast)
 
     return () => {
-      wrapper.removeEventListener('pointerdown', recordDown)
-      wrapper.removeEventListener('pointerup', raycast)
+      dom.removeEventListener('pointerdown', recordDown)
+      dom.removeEventListener('pointerup', raycast)
     }
   })
 </script>

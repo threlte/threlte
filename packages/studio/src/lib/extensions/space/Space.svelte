@@ -2,8 +2,11 @@
   import ToolbarButton from '../../components/ToolbarButton.svelte'
   import ToolbarItem from '../../components/ToolbarItem.svelte'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { spaceScope, type SpaceActions, type SpaceState } from './types'
+  import { useStudio } from '../../internal/extensions.js'
+  import { spaceScope, type SpaceActions, type SpaceState } from './types.js'
+  import type { Snippet } from 'svelte'
+
+  let { children }: { children?: Snippet } = $props()
 
   const { createExtension } = useStudio()
 
@@ -37,7 +40,7 @@
       icon="mdiAxisArrow"
       label="Local"
       tooltip="Local (W)"
-      on:click={() => {
+      onclick={() => {
         extension.setSpace('local')
       }}
     />
@@ -46,11 +49,11 @@
       icon="mdiEarth"
       label="World"
       tooltip="World (W)"
-      on:click={() => {
+      onclick={() => {
         extension.setSpace('world')
       }}
     />
   </HorizontalButtonGroup>
 </ToolbarItem>
 
-<slot />
+{@render children?.()}

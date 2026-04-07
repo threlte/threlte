@@ -2,23 +2,25 @@
   lang="ts"
   generics="Type"
 >
-  import type { TProps } from './types'
-  import { useAttach } from './utils/useAttach'
-  import { useCamera } from './utils/useCamera'
-  import { useCreateEvent } from './utils/useCreateEvent'
-  import { useDispose } from './utils/useDispose'
-  import { useEvents } from './utils/useEvents'
-  import { useIs } from './utils/useIs'
-  import { usePlugins } from './utils/usePlugins'
-  import { useProps } from './utils/useProps'
-  import { determineRef } from './utils/utils'
+  import type { TProps } from './types.js'
+  import { useAttach } from './utils/useAttach.svelte.js'
+  import { useDispose } from './utils/useDispose.svelte.js'
+  import { useIs } from './utils/useIs.js'
+  import { usePlugins } from './utils/usePlugins.js'
+  import { useProps } from './utils/useProps.svelte.js'
+  import { determineRef } from './utils/utils.js'
+  import { isInstanceOf } from '../../utilities/isInstanceOf.js'
+  import { untrack } from 'svelte'
+  import { createParent } from './utils/useParent.svelte.js'
+  import { createParentObject3D } from './utils/useParentObject3D.svelte.js'
+  import Camera from './Camera.svelte'
 
   let {
     is = useIs<Type>(),
     args,
     attach,
-    manual = false,
-    makeDefault = false,
+    manual,
+    makeDefault,
     dispose,
     ref = $bindable(),
     oncreate,
@@ -26,19 +28,19 @@
     ...props
   }: TProps<Type> = $props()
 
-  // We can't create the object in a reactive statement due to providing context
-  let internalRef = $derived(determineRef<Type>(is, args))
+  /**
+   * When "is" or "args" change, we need to create a new ref.
+   */
+  const internalRef = $derived(determineRef<Type>(is, args))
 
-  // Create Event
-  const createEvent = useCreateEvent<Type>(oncreate)
+  // Attachment
+  useAttach<Type>(
+    () => internalRef,
+    () => attach
+  )
 
-  // When "is" or "args" change, we need to create a new ref.
-  $effect.pre(() => {
-    if (ref === internalRef) return
-    ref = internalRef
-    // The ref is recreated, emit the event
-    createEvent.updateRef(internalRef)
-  })
+  createParent(() => internalRef)
+  createParentObject3D(() => (isInstanceOf(internalRef, 'Object3D') ? internalRef : undefined))
 
   // Plugins are initialized here so that pluginsProps
   // is available in the props update
@@ -67,35 +69,35 @@
   }))
 
   // Props
-  const { updateProp } = useProps()
-  Object.keys(props).forEach((key) => {
-    $effect.pre(() => {
-      updateProp(internalRef, key, props[key], {
-        manualCamera: manual,
-        pluginsProps: plugins?.pluginsProps
-      })
-    })
-  })
-
-  // Attachment
-  const attachment = useAttach<Type>()
-  $effect.pre(() => attachment.updateAttach(attach))
-  $effect.pre(() => attachment.updateRef(internalRef))
-
-  // Camera management
-  const camera = useCamera()
-  $effect.pre(() => camera.updateRef(internalRef))
-  $effect.pre(() => camera.updateManual(manual))
-  $effect.pre(() => camera.updateMakeDefault(makeDefault))
+  useProps(
+    () => internalRef,
+    () => props,
+    () => plugins?.pluginsProps
+  )
 
   // Disposal
-  const disposal = useDispose(dispose)
-  $effect.pre(() => disposal.updateRef(internalRef))
-  $effect.pre(() => disposal.updateDispose(dispose))
+  useDispose(
+    () => internalRef,
+    () => dispose
+  )
 
-  // Events
-  const events = useEvents(props)
-  $effect.pre(() => events.updateRef(internalRef))
+  $effect.pre(() => {
+    if (internalRef) {
+      return untrack(() => {
+        ref = internalRef
+        return oncreate?.(internalRef)
+      })
+    }
+  })
 </script>
+
+{#if isInstanceOf(internalRef, 'PerspectiveCamera') || isInstanceOf(internalRef, 'OrthographicCamera')}
+  <Camera
+    ref={internalRef}
+    {manual}
+    {makeDefault}
+    {...props}
+  />
+{/if}
 
 {@render children?.({ ref: internalRef })}

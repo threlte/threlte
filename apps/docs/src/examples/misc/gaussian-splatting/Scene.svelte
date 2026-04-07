@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy'
+
   import { T } from '@threlte/core'
   import { GLTF, OrbitControls } from '@threlte/extras'
   import { Checkbox, Folder, FpsGraph, List, Pane, Slider } from 'svelte-tweakpane-ui'
@@ -9,26 +11,28 @@
   import Splat from './Splat/Splat.svelte'
 
   // <LumaSplatsThree>
-  let showLumaSplats = true
-  let lumaSplatsMode: 'object' | 'object-env' | 'env' = 'object-env'
+  let showLumaSplats = $state(true)
+  let lumaSplatsMode: 'object' | 'object-env' | 'env' = $state('object-env')
 
   // <Splat>
-  let showSplat = true
-  let alphaHash = false
-  let alphaTest = 0.06
-  let toneMapped = true
+  let showSplat = $state(true)
+  let alphaHash = $state(false)
+  let alphaTest = $state(0.06)
+  let toneMapped = $state(true)
 
   // Car
-  let showPorsche = true
+  let showPorsche = $state(true)
 
-  let paneExpanded = false
+  let paneExpanded = $state(false)
 
-  let gltfMaterials: Record<string, MeshStandardMaterial> | undefined
-  $: if (gltfMaterials) {
-    Object.values(gltfMaterials).forEach((material) => {
-      material.envMapIntensity = 5
-    })
-  }
+  let gltfMaterials: Record<string, MeshStandardMaterial> | undefined = $state()
+  run(() => {
+    if (gltfMaterials) {
+      Object.values(gltfMaterials).forEach((material) => {
+        material.envMapIntensity = 5
+      })
+    }
+  })
 </script>
 
 <LumaSplats
@@ -52,8 +56,8 @@
   position={[-1.48, -0.51, 2.15]}
   rotation.y={57 * DEG2RAD}
   scale={0.7}
-  bind:materials={gltfMaterials}
   url="/models/splat-example/porsche_959.glb"
+  bind:materials={gltfMaterials}
 />
 
 <T.PerspectiveCamera

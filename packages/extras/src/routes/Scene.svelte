@@ -1,7 +1,7 @@
 <script lang="ts">
   import { browser } from '$app/environment'
   import { T } from '@threlte/core'
-  import { Grid, OrbitControls, Sky } from '../lib'
+  import { Grid, OrbitControls, Sky } from '../lib/index.js'
   import Gamepad from './Gamepad.svelte'
   import MountedGamepad from './MountedGamepad.svelte'
 

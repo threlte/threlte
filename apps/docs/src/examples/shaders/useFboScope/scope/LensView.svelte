@@ -9,21 +9,29 @@
 
   const { camera, renderer, scene, size } = useThrelte()
 
-  export let scope: Group
+  interface Props {
+    scope: Group
+  }
+
+  let { scope = $bindable() }: Props = $props()
 
   // render scene at a lower resolution but multiple samples for antialiasing
-  const renderTarget = useFBO($size.width * 0.5, $size.height * 0.5, {
+  const renderTarget = useFBO(() => ({
+    size: {
+      width: size.current.width * 0.5,
+      height: size.current.height * 0.5
+    },
     samples: 8
-  })
+  }))
 
-  $: aspect = $size.width / $size.height
+  let aspect = $derived(size.current.width / size.current.height)
 
   useTask(() => {
     if (!scope || !$scoping) return
-    const cam = $camera as PerspectiveCamera
+    const cam = camera.current as PerspectiveCamera
 
     scope.visible = false
-    cam.fov = $zoomedFov
+    cam.fov = zoomedFov.current
     cam.updateProjectionMatrix()
     cam.matrixWorldNeedsUpdate = true
     renderer.setRenderTarget(renderTarget)
@@ -35,7 +43,7 @@
     scope.visible = true
   })
 
-  const reticleTexture = useTexture('/textures/NightforceScopeReticle2.png')
+  const reticleTexture = await useTexture('/textures/NightforceScopeReticle2.png')
 </script>
 
 <T.Mesh
@@ -58,7 +66,7 @@
         value: 1
       }
     }}
-    uniforms.reticleTexture.value={$reticleTexture}
+    uniforms.reticleTexture.value={reticleTexture}
     uniforms.aspect.value={aspect}
   />
 </T.Mesh>

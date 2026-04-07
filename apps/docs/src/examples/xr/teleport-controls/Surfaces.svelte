@@ -1,36 +1,40 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { T } from '@threlte/core'
   import { teleportControls } from '@threlte/xr'
   import { useDraco, useGltf } from '@threlte/extras'
 
-  export let showSurfaces: boolean
-  export let showBlockers: boolean
+  type Props = {
+    children?: Snippet
+    showBlockers: boolean
+    showSurfaces: boolean
+  }
+
+  let { children, showBlockers, showSurfaces }: Props = $props()
 
   teleportControls('left')
   teleportControls('right')
 
   const dracoLoader = useDraco()
-  const gltf = useGltf('/models/xr/ruins.glb', {
+  const gltf = await useGltf('/models/xr/ruins.glb', {
     dracoLoader
   })
 </script>
 
-<slot />
+{@render children?.()}
 
-{#if $gltf}
-  {#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as n}
-    <T
-      is={$gltf.nodes[`teleportBlocker${n}`]}
-      visible={showBlockers}
-      teleportBlocker
-    />
-  {/each}
+{#each [1, 2, 3, 4, 5, 6, 7, 8, 9] as n}
+  <T
+    is={gltf.nodes[`teleportBlocker${n}`]}
+    visible={showBlockers}
+    teleportBlocker
+  />
+{/each}
 
-  {#each [1, 2, 3] as n}
-    <T
-      is={$gltf.nodes[`teleportSurface${n}`]}
-      visible={showSurfaces}
-      teleportSurface
-    />
-  {/each}
-{/if}
+{#each [1, 2, 3] as n}
+  <T
+    is={gltf.nodes[`teleportSurface${n}`]}
+    visible={showSurfaces}
+    teleportSurface
+  />
+{/each}

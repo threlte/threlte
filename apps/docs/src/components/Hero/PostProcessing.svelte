@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useTask, useThrelte, watch } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
   import {
     BlendFunction,
     BloomEffect,
@@ -12,9 +12,9 @@
     ToneMappingEffect,
     ToneMappingMode
   } from 'postprocessing'
-  import { onMount } from 'svelte'
   import { HalfFloatType } from 'three'
   import { StaticNoiseEffect } from './StaticNoise/StaticNoise'
+  import { untrack } from 'svelte'
 
   let {
     bloomIntensity = 2,
@@ -88,29 +88,31 @@
     bcEffect.brightness = brightness
   })
 
-  const { renderer, scene, camera, autoRender, renderStage } = useThrelte()
+  const { renderer, scene, camera, autoRender, renderStage, size } = useThrelte()
 
   const composer = new EffectComposer(renderer, {
     alpha: true,
     frameBufferType: HalfFloatType
   })
+  $effect(() => {
+    composer.setSize(size.current.width, size.current.height)
+  })
 
-  const setup = () => {
-    composer.removeAllPasses()
+  $effect(() => {
     composer.addPass(new RenderPass(scene, camera.current))
     composer.addPass(new EffectPass(camera.current, fxaaEffect))
     composer.addPass(
       new EffectPass(camera.current, noiseEffect, bcEffect, bloomEffect, toneMappingEffect)
     )
-  }
 
-  watch(camera, (camera) => {
-    if (camera) setup()
+    return () => {
+      composer.removeAllPasses()
+    }
   })
 
   // When using PostProcessing, we need to disable autoRender
-  onMount(() => {
-    let before = autoRender.current
+  $effect(() => {
+    let before = untrack(() => autoRender.current)
     autoRender.set(false)
     return () => {
       autoRender.set(before)
@@ -123,10 +125,4 @@
     },
     { stage: renderStage, autoInvalidate: false }
   )
-
-  const { size } = useThrelte()
-
-  watch(size, (size) => {
-    composer.setSize(size.width, size.height)
-  })
 </script>

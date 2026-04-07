@@ -1,67 +1,44 @@
 <script lang="ts">
-  import { T, injectPlugin, isInstanceOf, observe, useParent } from '@threlte/core'
-  import { onDestroy, untrack } from 'svelte'
-  import type { Object3D } from 'three'
+  import type { DetailedProps } from './types.js'
+
   import { LOD } from 'three'
-  import type { DetailedProps } from './types'
+  import { T, injectPlugin, isInstanceOf } from '@threlte/core'
+  import { untrack } from 'svelte'
 
   let { ref = $bindable(), children, ...props }: DetailedProps = $props()
 
   const lod = new LOD()
 
   injectPlugin<{ distance?: number; hysteresis?: number }>('detailed', (args) => {
-    const parent = useParent()
-    if (parent.current !== lod) return
+    if (!isInstanceOf(args.ref, 'Object3D')) return
+    if (args.ref === lod) return
 
-    let previousRef: Object3D | undefined
-    let previousDistance = args.props.distance
-    let previousHysteresis = args.props.hysteresis
-
-    const ref = $derived(isInstanceOf(args.ref, 'Object3D') ? args.ref : undefined)
     const distance = $derived(args.props.distance ?? 0)
     const hysteresis = $derived(args.props.hysteresis ?? 0)
 
-    const addLevel = (ref: Object3D, distance: number, hysteresis: number) => {
-      lod.addLevel(ref, distance, hysteresis)
-    }
+    $effect(() => {
+      const { ref } = args
 
-    const removeLevel = (ref: Object3D) => {
-      const i = lod.levels.findIndex((l) => l.object === ref)
-      if (i > -1) {
-        lod.levels.splice(i, 1)
-      }
-    }
+      return untrack(() => {
+        lod.addLevel(ref, distance, hysteresis)
 
-    const mutateLevel = (ref: Object3D, distance: number, hysteresis: number) => {
-      untrack(() => {
-        const level = lod.levels.find((l) => l.object === ref)
-        if (!level) return
+        return () => {
+          const i = lod.levels.findIndex((l) => l.object === ref)
+          if (i > -1) {
+            lod.levels.splice(i, 1)
+          }
+        }
+      })
+    })
+
+    $effect(() => {
+      const { ref } = args
+      const level = lod.levels.find((l) => l.object === ref)
+
+      if (level) {
         level.distance = distance
         level.hysteresis = hysteresis
-      })
-    }
-
-    observe.pre(
-      () => [ref, distance, hysteresis],
-      ([ref, distance, hysteresis]) => {
-        if (ref !== previousRef) {
-          // we remove the previous level
-          if (previousRef) removeLevel(previousRef)
-          // add the new level
-          if (ref) addLevel(ref, distance, hysteresis)
-          // and update the previous ref
-          previousRef = ref
-        }
-        if (ref && (distance !== previousDistance || hysteresis !== previousHysteresis)) {
-          mutateLevel(ref, distance, hysteresis)
-          previousDistance = distance
-          previousHysteresis = hysteresis
-        }
       }
-    )
-
-    onDestroy(() => {
-      if (ref) removeLevel(ref)
     })
 
     return {

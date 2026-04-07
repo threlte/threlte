@@ -1,6 +1,6 @@
 import { createSpritesheet, parseAseprite } from '@threejs-kit/instanced-sprite-mesh'
 import { getContext } from 'svelte'
-import type { InstancedSpriteUserCtx } from './types'
+import type { InstancedSpriteUserCtx } from './types.js'
 import { NearestFilter, RepeatWrapping, SRGBColorSpace, TextureLoader } from 'three'
 
 // todo move some of the types upstream to @threejs-kit

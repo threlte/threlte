@@ -5,7 +5,7 @@
 		*/
   import { T } from '@threlte/core'
   import { ReplaceStencilOp, AlwaysStencilFunc, Mesh } from 'three'
-  import type { MaskProps } from './types'
+  import type { MaskProps } from './types.js'
 
   let {
     id = 1,

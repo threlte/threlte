@@ -1,57 +1,54 @@
-<script lang="ts">
-  import { T, useTask } from '@threlte/core'
-  import { MeshLineGeometry, MeshLineMaterial } from '@threlte/extras'
-  import { Vector3 } from 'three'
-  import { spring } from 'svelte/motion'
-
-  export let cursorPosition: { x: number; z: number }
-  export let color: string
-  export let width: number
-  export let stiffness: number
-  export let damping: number
-
-  let sprungCursor = spring(
-    { x: 0, z: 0 },
-    {
-      stiffness,
-      damping
+<script
+  module
+  lang="ts"
+>
+  const createPoints = (count: number) => {
+    const points: Vector3[] = []
+    for (let i = 0; i < count; i += 1) {
+      points.push(new Vector3())
     }
-  )
-
-  let points: Vector3[] = []
-
-  for (let j = 0; j < 50; j++) {
-    points.push(new Vector3(0, 0, 0))
+    return points
   }
-
-  $: sprungCursor.set(cursorPosition)
-
-  $: {
-    points[0]?.set($sprungCursor.x, 0, $sprungCursor.z)
-    points = points
-  }
-
-  useTask((delta) => {
-    let [previousPoint] = points
-    points.forEach((point, i) => {
-      if (previousPoint && i > 0) {
-        point.lerp(previousPoint, Math.pow(0.000001, delta))
-        previousPoint = point
-      }
-    })
-    points = points
-  })
 </script>
 
-<T.Mesh {...$$restProps}>
-  <MeshLineGeometry
-    {points}
-    shape={'taper'}
-  />
-  <MeshLineMaterial
-    {width}
-    {color}
-    scaleDown={0.1}
-    attenuate={false}
-  />
+<script lang="ts">
+  import type { Props } from '@threlte/core'
+  import type { Vector3Tuple } from 'three'
+  import { type Mesh, Vector3 } from 'three'
+  import { T, useStage, useTask, useThrelte } from '@threlte/core'
+
+  type CursorLineProps = Props<Mesh, [Vector3[]]> & {
+    cursorPosition: Vector3Tuple
+  }
+
+  let { cursorPosition, children, ...props }: CursorLineProps = $props()
+
+  const { renderStage } = useThrelte()
+
+  const stage = useStage('cursor', {
+    after: renderStage
+  })
+
+  const count = 20
+  let front = $state.raw(createPoints(count))
+  let back = createPoints(count)
+
+  useTask(
+    () => {
+      back[0]?.fromArray(cursorPosition)
+
+      for (let i = 1; i < count; i += 1) {
+        back[i]?.copy(front[i - 1]!)
+      }
+
+      const temp = front
+      front = back
+      back = temp
+    },
+    { stage }
+  )
+</script>
+
+<T.Mesh {...props}>
+  {@render children?.(front)}
 </T.Mesh>

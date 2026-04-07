@@ -1,8 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-  import { isInstanceOf, T, useTask, useThrelte, watch } from '@threlte/core'
-  import { Portal } from '@threlte/extras'
+  import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
   import { onMount } from 'svelte'
   import {
     Color,
@@ -12,10 +11,10 @@
     WebGLRenderTarget,
     type Material
   } from 'three'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { fragmentShader } from './shader/fragment'
-  import { vertexShader } from './shader/vertex'
-  import { useObjectSelection } from './useObjectSelection.svelte'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { fragmentShader } from './shader/fragment.js'
+  import { vertexShader } from './shader/vertex.js'
+  import { useObjectSelection } from './useObjectSelection.svelte.js'
 
   const { invalidate } = useThrelte()
   const objectSelection = useObjectSelection()
@@ -23,12 +22,12 @@
 
   const { size, renderer, autoRenderTask, scene, camera } = useThrelte()
 
-  const renderTarget = new WebGLRenderTarget($size.width, $size.height, {
+  const renderTarget = new WebGLRenderTarget(size.current.width, size.current.height, {
     format: RGBAFormat
   })
 
-  watch(size, (size) => {
-    renderTarget.setSize(size.width, size.height)
+  $effect.pre(() => {
+    renderTarget.setSize(size.current.width, size.current.height)
   })
 
   const numberSeedToHexColor = (seed: number) => {
@@ -125,12 +124,12 @@
 
       let scaleX = getMesh().scale.x
       let scaleY = getMesh().scale.y
-      if (isInstanceOf($camera, 'PerspectiveCamera')) {
-        scaleY = Math.tan((($camera.fov * Math.PI) / 180) * 0.5) * 5 * 2 // 5 being the distance of the camera to the plane
-        scaleX = scaleY * $camera.aspect
-      } else if (isInstanceOf($camera, 'OrthographicCamera')) {
-        scaleY = ($camera.top - $camera.bottom) / $camera.zoom
-        scaleX = ($camera.right - $camera.left) / $camera.zoom
+      if (isInstanceOf(camera.current, 'PerspectiveCamera')) {
+        scaleY = Math.tan(((camera.current.fov * Math.PI) / 180) * 0.5) * 5 * 2 // 5 being the distance of the camera to the plane
+        scaleX = scaleY * camera.current.aspect
+      } else if (isInstanceOf(camera.current, 'OrthographicCamera')) {
+        scaleY = (camera.current.top - camera.current.bottom) / camera.current.zoom
+        scaleX = (camera.current.right - camera.current.left) / camera.current.zoom
       }
       if (scaleX !== getMesh().scale.x || scaleY !== getMesh().scale.y) {
         getMesh().scale.x = scaleX
@@ -151,32 +150,30 @@
   })
 </script>
 
-{#key $camera.uuid}
-  <Portal object={$camera}>
-    <T is={selectionMesh}>
-      <T.PlaneGeometry />
+{#key camera.current.uuid}
+  <T is={selectionMesh} attach={camera.current}>
+    <T.PlaneGeometry />
 
-      <T.ShaderMaterial
-        {fragmentShader}
-        {vertexShader}
-        uniforms={{
-          outlinedObjectsTexture: {
-            value: renderTarget.texture
-          },
-          lineWidth: {
-            value: 1.5
-          },
-          outlineColor: {
-            value: new Color('#FFFF00')
-          },
-          edgeFactor: {
-            value: 0.0001
-          }
-        }}
-        depthWrite={false}
-        depthTest={false}
-        transparent
-      />
-    </T>
-  </Portal>
+    <T.ShaderMaterial
+      {fragmentShader}
+      {vertexShader}
+      uniforms={{
+        outlinedObjectsTexture: {
+          value: renderTarget.texture
+        },
+        lineWidth: {
+          value: 1.5
+        },
+        outlineColor: {
+          value: new Color('#FFFF00')
+        },
+        edgeFactor: {
+          value: 0.0001
+        }
+      }}
+      depthWrite={false}
+      depthTest={false}
+      transparent
+    />
+  </T>
 {/key}

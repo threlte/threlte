@@ -1,7 +1,7 @@
 ---
-order: 7.13
 category: '@threlte/extras'
-name: <ContactShadows>
+group: 'Staging'
+title: <ContactShadows>
 sourcePath: 'packages/extras/src/lib/components/ContactShadows/ContactShadows.svelte'
 type: 'component'
 componentSignature:
@@ -9,17 +9,17 @@ componentSignature:
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
     props:
       [
-        { name: 'opacity', type: 'number', required: false },
-        { name: 'width', type: 'number', required: false },
-        { name: 'height', type: 'number', required: false },
-        { name: 'blur', type: 'number', required: false },
-        { name: 'far', type: 'number', required: false },
-        { name: 'smooth', type: 'boolean', required: false },
-        { name: 'resolution', type: 'number', required: false },
-        { name: 'frames', type: 'number', required: false },
-        { name: 'scale', type: 'number | [x: number, y: number]', required: false },
-        { name: 'color', type: 'THREE.ColorRepresentation', required: false },
-        { name: 'depthWrite', type: 'boolean', required: false }
+        { name: 'opacity', type: 'number' },
+        { name: 'width', type: 'number' },
+        { name: 'height', type: 'number' },
+        { name: 'blur', type: 'number' },
+        { name: 'far', type: 'number' },
+        { name: 'smooth', type: 'boolean' },
+        { name: 'resolution', type: 'number' },
+        { name: 'frames', type: 'number' },
+        { name: 'scale', type: 'number | [x: number, y: number]' },
+        { name: 'color', type: 'THREE.ColorRepresentation' },
+        { name: 'depthWrite', type: 'boolean' }
       ],
     exports: [{ name: 'refresh', type: '() => void' }]
   }

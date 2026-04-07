@@ -1,24 +1,18 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Float, useGltf, useSuspense } from '@threlte/extras'
-  import type { SpaceshipProps } from './Spaceship.svelte'
+  import { Float, useGltf } from '@threlte/extras'
+  import type { SpaceshipProps } from './types'
 
-  type $$Props = SpaceshipProps
+  let { name, ...rest }: SpaceshipProps = $props()
 
-  export let name: $$Props['name']
-
-  const suspend = useSuspense()
-
-  const gltf = suspend(useGltf(`/models/spaceships/${name}.gltf`))
+  const gltf = await useGltf(`/models/spaceships/${name}.gltf`)
 </script>
 
-{#await gltf then { scene }}
-  <T.Group {...$$restProps}>
-    <Float
-      floatIntensity={3}
-      speed={3}
-    >
-      <T is={scene} />
-    </Float>
-  </T.Group>
-{/await}
+<T.Group {...rest}>
+  <Float
+    floatIntensity={3}
+    speed={3}
+  >
+    <T is={gltf.scene} />
+  </Float>
+</T.Group>

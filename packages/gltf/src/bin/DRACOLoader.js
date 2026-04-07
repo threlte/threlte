@@ -1,9 +1,9 @@
-'use strict'
-import THREE from 'three'
+import * as THREE from 'three'
 import draco from 'draco3dgltf'
+
 const decoder = draco.createDecoderModule()
-const DRACOLoader = (THREE.DRACOLoader = function (t) {
-  ;(this.timeLoaded = 0),
+const DRACOLoader = function (t) {
+  ;((this.timeLoaded = 0),
     (this.manager = t || THREE.DefaultLoadingManager),
     (this.materials = null),
     (this.verbosity = 0),
@@ -14,17 +14,18 @@ const DRACOLoader = (THREE.DRACOLoader = function (t) {
       normal: 'NORMAL',
       color: 'COLOR',
       uv: 'TEX_COORD'
-    })
-})
+    }))
+}
 
-export default DRACOLoader
-
-THREE.DRACOLoader.prototype = {
-  constructor: THREE.DRACOLoader,
+DRACOLoader.prototype = {
+  constructor: DRACOLoader,
+  preload: function () {
+    return this
+  },
   load: function (t, e, r, o) {
     var i = this,
       n = new THREE.FileLoader(i.manager)
-    n.setPath(this.path),
+    ;(n.setPath(this.path),
       n.setResponseType('arraybuffer'),
       n.load(
         t,
@@ -33,20 +34,20 @@ THREE.DRACOLoader.prototype = {
         },
         r,
         o
-      )
+      ))
   },
   setPath: function (t) {
-    return (this.path = t), this
+    return ((this.path = t), this)
   },
   setVerbosity: function (t) {
-    return (this.verbosity = t), this
+    return ((this.verbosity = t), this)
   },
   setDrawMode: function (t) {
-    return (this.drawMode = t), this
+    return ((this.drawMode = t), this)
   },
   setSkipDequantization: function (t, e) {
     var r = !0
-    return void 0 !== e && (r = e), (this.getAttributeOptions(t).skipDequantization = r), this
+    return (void 0 !== e && (r = e), (this.getAttributeOptions(t).skipDequantization = r), this)
   },
   decodeDracoFile: function (t, e, r, o) {
     decoder.then((decoder) => this.decodeDracoFileInternal(t, decoder, e, r, o))
@@ -77,53 +78,53 @@ THREE.DRACOLoader.prototype = {
       l = r.num_points() * c
     switch (i) {
       case Float32Array:
-        ;(d = new t.DracoFloat32Array()),
+        ;((d = new t.DracoFloat32Array()),
           e.GetAttributeFloatForAllPoints(r, n, d),
           (s[o] = new Float32Array(l)),
-          (A = THREE.Float32BufferAttribute)
+          (A = THREE.Float32BufferAttribute))
         break
       case Int8Array:
-        ;(d = new t.DracoInt8Array()),
+        ;((d = new t.DracoInt8Array()),
           e.GetAttributeInt8ForAllPoints(r, n, d),
           (s[o] = new Int8Array(l)),
-          (A = THREE.Int8BufferAttribute)
+          (A = THREE.Int8BufferAttribute))
         break
       case Int16Array:
-        ;(d = new t.DracoInt16Array()),
+        ;((d = new t.DracoInt16Array()),
           e.GetAttributeInt16ForAllPoints(r, n, d),
           (s[o] = new Int16Array(l)),
-          (A = THREE.Int16BufferAttribute)
+          (A = THREE.Int16BufferAttribute))
         break
       case Int32Array:
-        ;(d = new t.DracoInt32Array()),
+        ;((d = new t.DracoInt32Array()),
           e.GetAttributeInt32ForAllPoints(r, n, d),
           (s[o] = new Int32Array(l)),
-          (A = THREE.Int32BufferAttribute)
+          (A = THREE.Int32BufferAttribute))
         break
       case Uint8Array:
-        ;(d = new t.DracoUInt8Array()),
+        ;((d = new t.DracoUInt8Array()),
           e.GetAttributeUInt8ForAllPoints(r, n, d),
           (s[o] = new Uint8Array(l)),
-          (A = THREE.Uint8BufferAttribute)
+          (A = THREE.Uint8BufferAttribute))
         break
       case Uint16Array:
-        ;(d = new t.DracoUInt16Array()),
+        ;((d = new t.DracoUInt16Array()),
           e.GetAttributeUInt16ForAllPoints(r, n, d),
           (s[o] = new Uint16Array(l)),
-          (A = THREE.Uint16BufferAttribute)
+          (A = THREE.Uint16BufferAttribute))
         break
       case Uint32Array:
-        ;(d = new t.DracoUInt32Array()),
+        ;((d = new t.DracoUInt32Array()),
           e.GetAttributeUInt32ForAllPoints(r, n, d),
           (s[o] = new Uint32Array(l)),
-          (A = THREE.Uint32BufferAttribute)
+          (A = THREE.Uint32BufferAttribute))
         break
       default:
         u = 'THREE.DRACOLoader: Unexpected attribute type.'
         throw (console.error(u), new Error(u))
     }
     for (var b = 0; b < l; b++) s[o][b] = d.GetValue(b)
-    a.setAttribute(o, new A(s[o], c)), t.destroy(d)
+    ;(a.setAttribute(o, new A(s[o], c)), t.destroy(d))
   },
   convertDracoGeometryTo3JS: function (t, e, r, o, i, n) {
     var a, s, u
@@ -139,11 +140,11 @@ THREE.DRACOLoader.prototype = {
       var d = 'THREE.DRACOLoader: Decoding failed: '
       throw ((d += s.error_msg()), console.error(d), t.destroy(e), t.destroy(a), new Error(d))
     }
-    t.destroy(o),
+    ;(t.destroy(o),
       r == t.TRIANGULAR_MESH
         ? ((u = a.num_faces()),
           this.verbosity > 0 && console.log('Number of faces loaded: ' + u.toString()))
-        : (u = 0)
+        : (u = 0))
     var A = a.num_points(),
       c = a.num_attributes()
     this.verbosity > 0 &&
@@ -187,28 +188,28 @@ THREE.DRACOLoader.prototype = {
         for (I = 0; I < u; ++I) {
           e.GetFaceFromMesh(a, I, D)
           var m = 3 * I
-          ;(f.indices[m] = D.GetValue(0)),
+          ;((f.indices[m] = D.GetValue(0)),
             (f.indices[m + 1] = D.GetValue(1)),
-            (f.indices[m + 2] = D.GetValue(2))
+            (f.indices[m + 2] = D.GetValue(2)))
         }
         t.destroy(D)
       }
-    ;(y.drawMode = this.drawMode),
+    ;((y.drawMode = this.drawMode),
       r == t.TRIANGULAR_MESH &&
         y.setIndex(
           new (f.indices.length > 65535
             ? THREE.Uint32BufferAttribute
             : THREE.Uint16BufferAttribute)(f.indices, 1)
-        )
+        ))
     var G = new t.AttributeQuantizationTransform()
     if (G.InitFromAttribute(b)) {
-      ;(y.attributes.position.isQuantized = !0),
+      ;((y.attributes.position.isQuantized = !0),
         (y.attributes.position.maxRange = G.range()),
         (y.attributes.position.numQuantizationBits = G.quantization_bits()),
-        (y.attributes.position.minValues = new Float32Array(3))
+        (y.attributes.position.minValues = new Float32Array(3)))
       for (I = 0; I < 3; ++I) y.attributes.position.minValues[I] = G.min_value(I)
     }
-    return t.destroy(G), t.destroy(e), t.destroy(a), y
+    return (t.destroy(G), t.destroy(e), t.destroy(a), y)
   },
   isVersionSupported: function (t, e) {
     e(decoder.isVersionSupported(t))
@@ -220,3 +221,5 @@ THREE.DRACOLoader.prototype = {
     )
   }
 }
+
+export { DRACOLoader }

@@ -1,7 +1,6 @@
-import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
-import { untrack } from 'svelte'
-import { usePointerControls } from './hook'
-import { events, type ThrelteXREvents } from './types'
+import { injectPlugin, isInstanceOf } from '@threlte/core'
+import { usePointerControls } from './hook.js'
+import { events, type ThrelteXREvents } from './types.js'
 
 export const injectPointerControlsPlugin = (): void => {
   injectPlugin('threlte-pointer-controls', (args) => {
@@ -15,13 +14,19 @@ export const injectPointerControlsPlugin = (): void => {
 
     const { addInteractiveObject, removeInteractiveObject } = usePointerControls()
 
-    observe.pre(
-      () => [args.ref],
-      ([ref]) => {
-        addInteractiveObject(ref, args.props)
-        return () => removeInteractiveObject(ref)
+    $effect.pre(() => {
+      const ref = args.ref
+      const props = args.props
+
+      const hasEventHandlers = events.some((eventName) => typeof props[eventName] === 'function')
+
+      if (!hasEventHandlers) return
+
+      addInteractiveObject(ref, props)
+      return () => {
+        removeInteractiveObject(ref)
       }
-    )
+    })
 
     return {
       pluginProps: events

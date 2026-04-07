@@ -1,5 +1,134 @@
 # @threlte/xr
 
+## 1.5.2
+
+### Patch Changes
+
+- b41ad7c: Delegate stopImmediatePropagation on synthetic events to the native DOM event, allowing handlers to block camera controls (e.g. OrbitControls) during drags.
+
+## 1.5.1
+
+### Patch Changes
+
+- c35e8d3: Fix: pointerControls duplicate events firing when parent and child are both registered
+- 9645321: Use correct key granularity for instanced or non instanced objects when deduping interactivity events
+- c35e8d3: Fix: pointerControls did not account for dynamic handler additions
+
+## 1.5.0
+
+### Minor Changes
+
+- 5cdc8de: Added handFactory and controllerFactory optional param to XR.svelte. These factories will be used in place of the default in setupHands/setupController respectively. This allows the user to prevent the default behavior of fetching from the online profiles repository, if for example their app is intended for offline use.
+
+## 1.4.0
+
+### Minor Changes
+
+- 395c9cd: Deprecate watch, which will be removed in Threlte 9, and recommend observe or $effect
+
+## 1.3.0
+
+### Minor Changes
+
+- d7203d0: Introduce the 'running' option for useTask
+
+## 1.2.0
+
+### Minor Changes
+
+- ffc74ea: update "module" and "moduleResolution" to "NodeNext" and adjust all relative imports
+
+## 1.1.1
+
+### Patch Changes
+
+- c351b20: Improve internal types
+
+## 1.1.0
+
+### Minor Changes
+
+- 40c52ae: Migrate internals to runes
+
+## 1.0.8
+
+### Patch Changes
+
+- 05a642f: Simplify internal components and replace deprecated svelte APIs
+
+## 1.0.7
+
+### Patch Changes
+
+- 774445e: Bump supported Three.js version to greater than 159
+
+## 1.0.6
+
+### Patch Changes
+
+- 183eb5a: Fix pointer controls still sending pointerdown/pointerup/click events when disabled
+
+## 1.0.5
+
+### Patch Changes
+
+- 3798493: Fix an issue where the XR session was left presenting after navigating away from the Threlte scene
+
+## 1.0.4
+
+### Patch Changes
+
+- d8392bf: Improve TS Configs
+
+## 1.0.3
+
+### Patch Changes
+
+- 4fdc0dc: Upgrade Eslint to v9
+
+## 1.0.2
+
+### Patch Changes
+
+- 0ba3ebe: update deps
+
+## 1.0.1
+
+### Patch Changes
+
+- fa5c4e9: Fixed a check for secure contexts that previously prevented WebXR apps from running on localhost
+
+## 1.0.0
+
+### Major Changes
+
+- f25685a: Experimental Svelte 5 compatibility
+
+### Patch Changes
+
+- b8ea70d: Fix teleport plugin
+- b7e6927: Adapt new core Attachment API
+- b7045f5: Svelte dependency update
+- 6016286: Adapt plugins to new plugin API
+- fa8a61c: Bump Svelte compiler version
+- 2ac3d48: Dependency updates
+- c9a65a3: Bump core dependency version
+- cec4b57: update deps
+- 7cc5701: Remove raw event dispatching
+- 995e592: Implement type guard utility, clean up
+- 36128d5: Replace events with callback props and slots with snippets
+- cc4ccf2: Update Three.js
+- 60fcc29: Bump dev dependencies
+- 2107848: Fix xr events and migrate remaining slots to snippets
+- f76d1e4: Migrate additional components to runes mode
+- a257643: Update Svelte + Three.js deps
+
+## 1.0.0-next.16
+
+### Patch Changes
+
+- b8ea70d: Fix teleport plugin
+
 ## 1.0.0-next.15
 
 ### Patch Changes
@@ -188,7 +317,7 @@
 
 - 3df22efc: - Stop duplicate events from firing for XR controllers.
   - Remove `useControllerEvent` and `useHandEvent` hooks.
-- 38f95de5: Fix `<Headset>`` position when teleporting and sync `<Headset>` with current camera when not presenting.
+- 38f95de5: Fix ` <Headset>`` position when teleporting and sync  `<Headset>` with current camera when not presenting.
 
 ## 0.0.4
 

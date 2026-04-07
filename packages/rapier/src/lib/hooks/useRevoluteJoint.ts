@@ -1,9 +1,8 @@
 import type { RevoluteImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Vector3 } from 'three'
-import { useJoint } from './useJoint'
-import { isVector3 } from './utils'
+import { useJoint } from './useJoint.js'
+import { isInstanceOf } from '@threlte/core'
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const useRevoluteJoint = (
   anchorA: Parameters<Vector3['set']> | Vector3,
   anchorB: Parameters<Vector3['set']> | Vector3,
@@ -11,15 +10,16 @@ export const useRevoluteJoint = (
   limits?: [min: number, max: number]
 ) => {
   return useJoint((rbA, rbB, { world, rapier }) => {
-    const jaA = isVector3(anchorA) ? anchorA : new Vector3(...anchorA)
-    const jaB = isVector3(anchorB) ? anchorB : new Vector3(...anchorB)
-    const jAxis = (isVector3(axis) ? axis : new Vector3(...axis)).normalize()
+    const jaA = isInstanceOf(anchorA, 'Vector3') ? anchorA : new Vector3(...anchorA)
+    const jaB = isInstanceOf(anchorB, 'Vector3') ? anchorB : new Vector3(...anchorB)
+    const jAxis = (isInstanceOf(axis, 'Vector3') ? axis : new Vector3(...axis)).normalize()
 
     const params = rapier.JointData.revolute(jaA, jaB, jAxis)
     if (limits) {
       params.limitsEnabled = true
       params.limits = limits
     }
+
     return world.createImpulseJoint(params, rbA, rbB, true) as RevoluteImpulseJoint
   })
 }

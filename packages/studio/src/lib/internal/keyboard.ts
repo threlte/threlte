@@ -5,6 +5,8 @@ const metaKeys = new Set(['ctrl', 'alt', 'shift', 'meta'])
 
 const keyDelimiter = '§§§'
 
+const ignoreInputOnActiveElementTagNames = ['INPUT', 'TEXTAREA', 'SELECT']
+
 /**
  * Creates a string representation from an array of keyboard keys with a
  * delimiter that is unlikely to be used in a keyboard shortcut. Flattened
@@ -84,14 +86,17 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       if (!keyOrKeyCombo) continue
       if (typeof keyOrKeyCombo === 'object' && !Array.isArray(keyOrKeyCombo)) {
         // object, so it's an up and/or down key
-        Object.entries(keyOrKeyCombo).forEach(([upOrDown, combo]) => {
-          const flattenedKeyCombo = flattenKeyCombo(combo)
-          if (upOrDown === 'up') {
-            upKeyCombos.set(flattenedKeyCombo, actionId)
-          } else {
-            downKeyCombos.set(flattenedKeyCombo, actionId)
-          }
-        })
+        const { up, down } = keyOrKeyCombo
+
+        if (up) {
+          const flattenedUp = flattenKeyCombo(up)
+          upKeyCombos.set(flattenedUp, actionId)
+        }
+
+        if (down) {
+          const flattenedDown = flattenKeyCombo(down)
+          downKeyCombos.set(flattenedDown, actionId)
+        }
       } else {
         // string or string[], so it's a down key automatically
         const flattenedKeyCombo = flattenKeyCombo(keyOrKeyCombo)
@@ -131,7 +136,20 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       if (shift) keys.push('shift')
     }
 
-    keys.push(e.key.toLowerCase())
+    if (e.code.startsWith('Key')) {
+      keys.push(e.code.replace('Key', '').toLowerCase())
+    } else {
+      keys.push(e.key.toLowerCase())
+    }
+
+    // Ignore keyboard actions if the active element is an input and keys array
+    // does not include 'meta' or 'ctrl'
+    checkActiveElement: if (!keys.includes('meta') && !keys.includes('ctrl')) {
+      const activeElement = document.activeElement
+      if (!activeElement) break checkActiveElement
+      const tagName = activeElement.tagName.toUpperCase()
+      if (activeElement && ignoreInputOnActiveElementTagNames.includes(tagName)) return
+    }
 
     const flattenedKeyCombo = flattenKeyCombo(keys)
     if (downKeyMap.current.has(flattenedKeyCombo)) {
@@ -139,7 +157,6 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       const action = downKeyMap.current.get(flattenedKeyCombo)
       if (!action) return
       // no need to await here
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       runAction(action.scope, action.actionId)
     }
   }
@@ -169,7 +186,6 @@ export const createKeyboardControls = (runAction: (scope: string, actionId: stri
       const action = upKeyMap.current.get(flattenedKeyCombo)
       if (!action) return
       // no need to await here
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
       runAction(action.scope, action.actionId)
     }
   }

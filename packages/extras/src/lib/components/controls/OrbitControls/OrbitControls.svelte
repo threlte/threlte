@@ -1,52 +1,56 @@
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-  import { useControlsContext } from '../useControlsContext'
-  import type { OrbitControlsProps } from './types'
+  import {
+    OrbitControls,
+    type OrbitControlsEventMap
+  } from 'three/examples/jsm/controls/OrbitControls.js'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { OrbitControlsProps } from './types.js'
   import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
-  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
+  let { camera, ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
+  const { dom, camera: defaultCamera, invalidate } = useThrelte()
   const parent = useParent()
-  const { renderer, invalidate } = useThrelte()
-
-  if (!isInstanceOf($parent, 'Camera')) {
-    throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
-  }
+  const resolvedCamera = $derived(
+    camera
+      ? camera
+      : isInstanceOf(parent.current, 'Camera')
+        ? parent.current
+        : defaultCamera.current
+  )
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeOrbitControls($parent, renderer.domElement.parentElement!)
+  const controls = new OrbitControls(
+    untrack(() => resolvedCamera),
+    dom
+  )
+  $effect.pre(() => {
+    controls.object = resolvedCamera
+  })
+
   const { orbitControls } = useControlsContext()
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       controls.update()
     },
     {
-      autoStart: false,
-      autoInvalidate: false
+      autoInvalidate: false,
+      running: () => props.autoRotate || props.enableDamping || false
     }
   )
 
-  $effect.pre(() => {
-    if (props.autoRotate || props.enableDamping) {
-      start()
-    } else {
-      stop()
-    }
-  })
+  const handleChange = (event: Event<keyof OrbitControlsEventMap, OrbitControls>) => {
+    invalidate()
+    props.onchange?.(event)
+  }
 
   $effect.pre(() => {
-    const handleChange = (event: Event) => {
-      invalidate()
-      props.onchange?.(event)
-    }
-
     orbitControls.set(controls)
-    controls.addEventListener('change', handleChange)
     return () => {
       orbitControls.set(undefined)
-      controls.removeEventListener('change', handleChange)
     }
   })
 </script>
@@ -55,6 +59,7 @@
   is={controls}
   bind:ref
   {...props}
+  onchange={handleChange}
 >
   {@render children?.({ ref: controls })}
 </T>

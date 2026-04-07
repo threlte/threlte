@@ -1,15 +1,15 @@
-import { useLoader, type AsyncWritable } from '@threlte/core'
+import { useLoader } from '@threlte/core'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import type { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import type { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js'
 import type { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js'
-import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph'
-import type { ThrelteGltf } from '../types/types'
+import { buildSceneGraph, type SceneGraph } from '../lib/buildSceneGraph.js'
+import type { ThrelteGltf } from '../types/types.js'
 
 type UseGltfOptions = {
-  dracoLoader?: DRACOLoader
-  meshoptDecoder?: typeof MeshoptDecoder
-  ktx2Loader?: KTX2Loader
+  dracoLoader?: DRACOLoader | undefined
+  meshoptDecoder?: typeof MeshoptDecoder | undefined
+  ktx2Loader?: KTX2Loader | undefined
 }
 
 export function useGltf(options?: UseGltfOptions): {
@@ -20,14 +20,14 @@ export function useGltf(options?: UseGltfOptions): {
     }
   >(
     url: string
-  ) => AsyncWritable<ThrelteGltf<Graph>>
+  ) => Promise<ThrelteGltf<Graph>>
 }
 export function useGltf<
   Graph extends SceneGraph = {
     nodes: Record<string, any>
     materials: Record<string, any>
   }
->(url: string, options?: UseGltfOptions): AsyncWritable<ThrelteGltf<Graph>>
+>(url: string, options?: UseGltfOptions): Promise<ThrelteGltf<Graph>>
 export function useGltf<
   Graph extends SceneGraph = {
     nodes: Record<string, any>
@@ -37,7 +37,7 @@ export function useGltf<
   urlOrOptions?: string | UseGltfOptions,
   options?: UseGltfOptions
 ):
-  | AsyncWritable<ThrelteGltf<Graph>>
+  | Promise<ThrelteGltf<Graph>>
   | {
       load: <
         Graph extends SceneGraph = {
@@ -46,9 +46,10 @@ export function useGltf<
         }
       >(
         url: string
-      ) => AsyncWritable<ThrelteGltf<Graph>>
+      ) => Promise<ThrelteGltf<Graph>>
     } {
   const opts = typeof urlOrOptions === 'string' ? options : urlOrOptions
+
   const loader = useLoader(GLTFLoader, {
     extend(loader) {
       if (opts?.dracoLoader) {

@@ -1,14 +1,5 @@
 <script lang="ts">
-  import {
-    asyncWritable,
-    type AsyncWritable,
-    isInstanceOf,
-    T,
-    useLoader,
-    useParent,
-    useTask,
-    watch
-  } from '@threlte/core'
+  import { isInstanceOf, T, useLoader, useParent, useTask } from '@threlte/core'
   import {
     DoubleSide,
     FileLoader,
@@ -20,9 +11,9 @@
     SpriteMaterial,
     type Texture
   } from 'three'
-  import { useTexture } from '../../hooks/useTexture'
-  import { useSuspense } from '../../suspense/useSuspense'
-  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types'
+  import { useTexture } from '../../hooks/useTexture.js'
+  import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types.js'
+  import { untrack } from 'svelte'
 
   let {
     textureUrl,
@@ -41,7 +32,7 @@
     rows = 1,
     columns = undefined,
     totalFrames = 0,
-    is = $bindable(),
+    is,
     ref = $bindable(),
 
     onload,
@@ -55,12 +46,15 @@
   const parent = useParent()
 
   const supportedDirections = ['forward', 'reverse'] as const
+
   const isSupportedDirection = (
     value: string | undefined
   ): value is (typeof supportedDirections)[number] => {
     const isSupported = supportedDirections.includes(value as (typeof supportedDirections)[number])
     if (!isSupported) {
-      console.warn(`Unsupported sprite animation direction "${value}"`)
+      console.warn(
+        `frame tag direction: "${value}" is not supported.${dataUrl != '' ? `\nsource dataURL: ${dataUrl}` : `\ntexture URL: ${textureUrl}`}`
+      )
     }
     return isSupported
   }
@@ -68,65 +62,47 @@
   let timerOffset = 0
   let currentFrame = startFrame
   let numFrames = 0
-  let flipOffset = flipX ? -1 : 1
+  let flipOffset = $derived(flipX ? -1 : 1)
   let frameWidth = 0
   let frameHeight = 0
-  let texture: Texture | undefined = $state()
+  let texture = $state<Texture>()
   let json: SpriteJsonHashData | undefined
   let frameNames: string[] = []
   let direction: (typeof supportedDirections)[number] = 'forward'
   let frameTag: FrameTag | undefined
   let spritesheetSize = { w: 0, h: 0 }
 
-  let fpsInterval = 0
-  let isMesh = $state(false)
+  let fpsInterval = $derived(1000 / fps)
 
-  $effect.pre(() => {
-    isMesh = $parent !== undefined && isInstanceOf($parent, 'Mesh')
+  const fileLoader = useLoader(FileLoader)
+
+  const texturePromise = useTexture(textureUrl, {
+    transform: (value: Texture) => {
+      value.matrixAutoUpdate = false
+      value.generateMipmaps = false
+      value.premultiplyAlpha = false
+      value.wrapS = value.wrapT = RepeatWrapping
+      value.magFilter = value.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
+      return value
+    }
   })
-  $effect.pre(() => {
-    fpsInterval = 1000 / fps
-  })
 
-  is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()
-
-  const suspend = useSuspense()
-
-  const textureStore = suspend(
-    useTexture(textureUrl, {
-      transform: (value: Texture) => {
-        value.matrixAutoUpdate = false
-        value.generateMipmaps = false
-        value.premultiplyAlpha = false
-        value.wrapS = value.wrapT = RepeatWrapping
-        value.magFilter = value.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
-        return value
-      }
-    })
-  )
-
-  const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = suspend(
-    dataUrl
-      ? useLoader(FileLoader).load(dataUrl, {
-          transform: (file) => {
-            if (typeof file !== 'string') return
-            try {
-              return JSON.parse(file)
-            } catch {
-              return
-            }
+  const jsonPromise: Promise<SpriteJsonHashData | undefined> = dataUrl
+    ? fileLoader.load(dataUrl, {
+        transform: (file) => {
+          if (typeof file !== 'string') return
+          try {
+            return JSON.parse(file)
+          } catch {
+            return
           }
-        })
-      : asyncWritable<SpriteJsonHashData>(
-          new Promise((resolve) => {
-            const unsub = textureStore.subscribe((value) => {
-              if (!value) return
-              unsub()
-              resolve(createData(value))
-            })
-          })
-        )
-  )
+        }
+      })
+    : texturePromise.then((value) => {
+        return createData(value)
+      })
+
+  const [nextTexture, nextJson] = await Promise.all([texturePromise, jsonPromise])
 
   /**
    * Creates metadata if no JSON file is supplied.
@@ -191,9 +167,13 @@
     if (!json) return
 
     frameTag = json?.meta.frameTags.find((tag) => tag.name === name)
-    direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
 
-    currentFrame = direction === 'forward' ? frameTag?.from ?? 0 : frameTag?.to ?? numFrames - 1
+    direction = 'forward'
+    if (frameTag?.direction) {
+      direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
+    }
+
+    currentFrame = direction === 'forward' ? (frameTag?.from ?? 0) : (frameTag?.to ?? numFrames - 1)
 
     setFrame(json.frames[frameNames[currentFrame]].frame)
 
@@ -201,16 +181,16 @@
   }
 
   let playQueued = false
+  let running = $state(false)
 
   /**
    * Plays the animation.
    */
   export const play = async () => {
     playQueued = true
-    await Promise.all([textureStore, jsonStore])
     if (!playQueued) return
     timerOffset = performance.now() - delay
-    start()
+    running = true
   }
 
   /**
@@ -218,10 +198,10 @@
    */
   export const pause = () => {
     playQueued = false
-    stop()
+    running = false
   }
 
-  const { start, stop } = useTask(
+  useTask(
     () => {
       if (!json) return
       const now = performance.now()
@@ -236,12 +216,12 @@
       // start and end are the first and last frames of the animation respectively
       const start =
         direction === 'forward'
-          ? frameTag?.from ?? startFrame ?? 0
-          : frameTag?.to ?? endFrame ?? numFrames - 1
+          ? (frameTag?.from ?? startFrame ?? 0)
+          : (frameTag?.to ?? endFrame ?? numFrames - 1)
       const end =
         direction === 'forward'
-          ? frameTag?.to ?? endFrame ?? numFrames - 1
-          : frameTag?.from ?? startFrame ?? 0
+          ? (frameTag?.to ?? endFrame ?? numFrames - 1)
+          : (frameTag?.from ?? startFrame ?? 0)
 
       setFrame(frame)
 
@@ -270,47 +250,44 @@
         }
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
-  watch([textureStore, jsonStore], ([nextTexture, nextJson]) => {
+  $effect(() => {
     if (nextTexture === undefined || nextJson === undefined) return
 
-    texture = nextTexture.clone()
-    json = nextJson
-    frameNames = Object.keys(json.frames)
-    numFrames = frameNames.length
-    spritesheetSize = json.meta.size
+    untrack(() => {
+      texture = nextTexture.clone()
+      json = nextJson
+      frameNames = Object.keys(json.frames)
+      numFrames = frameNames.length
+      spritesheetSize = json.meta.size
 
-    const { sourceSize } = Object.values(json.frames)[0]
-    frameWidth = sourceSize.w
-    frameHeight = sourceSize.h
+      const { sourceSize } = Object.values(json.frames)[0]
+      frameWidth = sourceSize.w
+      frameHeight = sourceSize.h
 
-    texture.repeat.set(
-      (1 * flipOffset) / (spritesheetSize.w / frameWidth),
-      1 / (spritesheetSize.h / frameHeight)
-    )
+      texture.repeat.set(
+        (1 * flipOffset) / (spritesheetSize.w / frameWidth),
+        1 / (spritesheetSize.h / frameHeight)
+      )
 
-    setAnimation(animation)
-
-    onload?.()
-
-    if (autoplay) {
-      play()
-    }
+      onload?.()
+    })
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     setAnimation(animation)
+
     if (autoplay) {
       play()
     }
   })
 </script>
 
-{#if texture && isMesh}
+{#if isInstanceOf(parent.current, 'Mesh')}
   <T
-    {is}
+    is={is ?? new MeshBasicMaterial()}
     bind:ref
     map={texture}
     toneMapped={false}
@@ -326,9 +303,9 @@
     map={texture}
     {alphaTest}
   />
-{:else if texture}
+{:else}
   <T
-    {is}
+    is={is ?? new SpriteMaterial()}
     bind:ref
     map={texture}
     toneMapped={false}

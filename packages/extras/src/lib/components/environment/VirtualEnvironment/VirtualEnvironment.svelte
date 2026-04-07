@@ -1,23 +1,23 @@
 <script lang="ts">
-  import type { VirtualEnvironmentProps } from './types'
+  import type { VirtualEnvironmentProps } from './types.js'
   import { createSceneContext, observe, T, useTask, useThrelte } from '@threlte/core'
-  import { useCubeCamera } from '../../../hooks/useCubeCamera.svelte'
-  import { useEnvironment } from '../utils/useEnvironment.svelte'
-
-  const ctx = useThrelte()
+  import { useCubeCamera } from '../../../hooks/useCubeCamera.svelte.js'
+  import { useEnvironment } from '../utils/useEnvironment.svelte.js'
 
   let {
     far = 1000,
     frames = Infinity,
-    isBackground,
+    isBackground = false,
     near = 0.1,
     onupdatestart,
     onupdatestop,
     resolution = 256,
-    scene: parentScene = ctx.scene,
+    scene: parentScene,
     visible,
     children
   }: VirtualEnvironmentProps = $props()
+
+  const { renderer, scene: defaultParentScene } = useThrelte()
 
   // Create a parent scene to render the virtual environment into
   const { scene } = createSceneContext()
@@ -28,42 +28,39 @@
     () => resolution
   )
 
-  useEnvironment({
-    texture: renderTarget.texture,
-    get scene() {
-      return parentScene
-    },
-    get isBackground() {
-      return isBackground
-    }
-  })
+  useEnvironment(
+    () => parentScene ?? defaultParentScene,
+    () => renderTarget.texture,
+    () => isBackground
+  )
 
   export const update = () => {
-    camera.update(ctx.renderer, scene)
+    camera.update(renderer, scene)
   }
 
+  let running = $state(false)
+
   let count = 0
-  const { start, stop, started } = useTask(
+  useTask(
     () => {
       // if frames === Infinity, the task will run indefinitely
       if (count < frames) {
         update()
         count += 1
       } else {
-        stop()
+        running = false
         onupdatestop?.()
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
   export const restart = () => {
-    if ($started) {
-      stop()
+    if (running) {
       onupdatestop?.()
     }
     count = 0
-    start()
+    running = true
     onupdatestart?.()
   }
 

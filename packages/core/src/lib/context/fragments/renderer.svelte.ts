@@ -1,61 +1,80 @@
-import { getContext, onDestroy, setContext } from 'svelte'
+import { getContext, setContext, untrack } from 'svelte'
 import {
   AgXToneMapping,
-  ColorManagement,
-  PCFSoftShadowMap,
+  PCFShadowMap,
+  SRGBColorSpace,
   WebGLRenderer,
   type ColorSpace,
-  type Renderer,
   type ShadowMapType,
-  type ToneMapping
+  type ToneMapping,
+  OrthographicCamera,
+  PerspectiveCamera
 } from 'three'
-import type { Task } from '../../frame-scheduling'
-import { useTask } from '../../hooks/useTask'
-import { currentWritable, watch, type CurrentWritable } from '../../utilities'
-import { useCamera } from './camera'
-import { useCanvas } from './canvas'
-import { useDisposal } from './disposal'
-import { useScene } from './scene'
-import { useScheduler } from './scheduler.svelte'
+import type { Task } from '../../frame-scheduling/index.js'
+import { useCamera } from './camera.svelte.js'
+import { useDOM } from './dom.svelte.js'
+import { useScene } from './scene.js'
+import { useScheduler } from './scheduler.svelte.js'
+import type { WebGPURenderer } from 'three/webgpu'
+import { devicePixelRatio } from 'svelte/reactivity/window'
+import { useMeasure } from '../../utilities/useMeasure.svelte.js'
+import { updateCamera } from '../../components/T/utils/useCamera.svelte.js'
+
+export type Renderer = WebGLRenderer | WebGPURenderer
 
 type CreateRenderer<T extends Renderer> = (canvas: HTMLCanvasElement) => T
 
-type RendererContext = {
-  renderer: Renderer
-  colorManagementEnabled: CurrentWritable<boolean>
-  colorSpace: CurrentWritable<ColorSpace>
-  toneMapping: CurrentWritable<ToneMapping>
-  shadows: CurrentWritable<boolean | ShadowMapType>
-  dpr: CurrentWritable<number>
+export interface RendererContext<T extends Renderer> {
+  renderer: T
+
+  colorSpace: {
+    current: ColorSpace
+    set(value: ColorSpace): void
+  }
+
+  toneMapping: {
+    current: ToneMapping
+    set(value: ToneMapping): void
+  }
+
+  shadows: {
+    current: boolean | ShadowMapType
+    set(value: boolean | ShadowMapType): void
+  }
+
+  dpr: {
+    current: number
+    set(value: number): void
+  }
+
   autoRenderTask: Task
 }
 
 export type CreateRendererContextOptions<T extends Renderer> = {
   createRenderer?: CreateRenderer<T>
+
   /**
-   * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources —
-   * each have an associated color space. Those not already in the Linear-sRGB working color
-   * space must be converted, and textures be given the correct texture.colorSpace assignment.
-   *
-   * Set to true for certain conversions (for hexadecimal and CSS colors in sRGB) to be made automatically.
-   *
-   * This property is not reactive and must be enabled before initializing colors.
+   * Enables THREE.Cache
    *
    * @default true
    */
-  colorManagementEnabled?: boolean
+  cache?: boolean
+
   /**
    * @default 'srgb'
    */
   colorSpace?: ColorSpace
+
   /**
    * @default AgXToneMapping
    */
   toneMapping?: ToneMapping
+
   /**
    * @default PCFSoftShadowMap
    */
   shadows?: boolean | ShadowMapType
+
   /**
    * @default window.devicePixelRatio
    */
@@ -63,137 +82,160 @@ export type CreateRendererContextOptions<T extends Renderer> = {
 }
 
 export const createRendererContext = <T extends Renderer>(
-  options: CreateRendererContextOptions<T>
-): RendererContext => {
-  const { dispose } = useDisposal()
-  const { camera } = useCamera()
+  options: () => CreateRendererContextOptions<T>
+): RendererContext<T> => {
+  const { camera, manual } = useCamera()
   const { scene } = useScene()
-  const { invalidate, renderStage, autoRender, scheduler, resetFrameInvalidation } = useScheduler()
-  const { canvas, size } = useCanvas()
+  const { invalidate, renderStage, autoRender, scheduler, frameInvalidated, mainStage } =
+    useScheduler()
+  const { canvas, dom } = useDOM()
+  const { shouldUpdateSize, size } = useMeasure(dom)
 
-  const renderer = options.createRenderer
-    ? options.createRenderer(canvas)
-    : new WebGLRenderer({
-        canvas,
-        powerPreference: 'high-performance',
-        antialias: true,
-        alpha: true
-      })
+  const opts = $derived(options())
+  const renderer = untrack(() =>
+    opts.createRenderer
+      ? opts.createRenderer(canvas)
+      : new WebGLRenderer({
+          canvas,
+          powerPreference: 'high-performance',
+          antialias: true,
+          alpha: true
+        })
+  )
+
+  const resizeStage = scheduler.createStage(Symbol('threlte-resize-stage'), {
+    before: mainStage
+  })
+
+  resizeStage.createTask(Symbol('threlte-resize-task'), () => {
+    if (renderer.xr.isPresenting) return
+    if (!shouldUpdateSize()) return
+
+    renderer.setSize(size.current.width, size.current.height)
+
+    if (!manual.current) {
+      updateCamera(
+        camera.current as PerspectiveCamera | OrthographicCamera,
+        size.current.width,
+        size.current.height
+      )
+    }
+
+    invalidate()
+  })
 
   const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), () => {
     renderer.render(scene, camera.current)
   })
 
-  const context: RendererContext = {
-    renderer: renderer,
-    colorManagementEnabled: currentWritable(options.colorManagementEnabled ?? true),
-    colorSpace: currentWritable(options.colorSpace ?? 'srgb'),
-    dpr: currentWritable(options.dpr ?? window.devicePixelRatio),
-    shadows: currentWritable(options.shadows ?? PCFSoftShadowMap),
-    toneMapping: currentWritable(options.toneMapping ?? AgXToneMapping),
+  const optsColorSpace = $derived(opts.colorSpace)
+  const optsDpr = $derived(opts.dpr)
+  const optsShadows = $derived(opts.shadows)
+  const optsToneMapping = $derived(opts.toneMapping)
+
+  // Seperate derived runes since users can set these values through the canvas or by .set()
+  let colorSpace = $derived<ColorSpace>(optsColorSpace ?? SRGBColorSpace)
+  let dpr = $derived(optsDpr ?? devicePixelRatio.current ?? window.devicePixelRatio)
+  let shadows = $derived(optsShadows ?? PCFShadowMap)
+  let toneMapping = $derived(optsToneMapping ?? AgXToneMapping)
+
+  const context: RendererContext<T> = {
+    renderer: renderer as T,
+    colorSpace: {
+      get current() {
+        return colorSpace
+      },
+      set(value) {
+        colorSpace = value
+      }
+    },
+    dpr: {
+      get current() {
+        return dpr
+      },
+      set(value) {
+        dpr = value
+      }
+    },
+    shadows: {
+      get current() {
+        return shadows
+      },
+      set(value) {
+        shadows = value
+      }
+    },
+    toneMapping: {
+      get current() {
+        return toneMapping
+      },
+      set(value) {
+        toneMapping = value
+      }
+    },
+
     autoRenderTask
   }
 
-  setContext<RendererContext>('threlte-renderer-context', context)
+  setContext<RendererContext<T>>('threlte-renderer-context', context)
 
-  watch([context.colorManagementEnabled], ([colorManagementEnabled]) => {
-    ColorManagement.enabled = colorManagementEnabled
+  $effect.pre(() => {
+    renderer.outputColorSpace = colorSpace
+    invalidate()
   })
 
-  watch([context.colorSpace], ([colorSpace]) => {
-    if ('outputColorSpace' in renderer) {
-      renderer.outputColorSpace = colorSpace
-    }
+  $effect.pre(() => {
+    renderer.setPixelRatio(dpr)
+    invalidate()
   })
 
-  watch([context.dpr], ([dpr]) => {
-    if ('setPixelRatio' in renderer) {
-      renderer.setPixelRatio(dpr)
-    }
-  })
+  $effect.pre(() => {
+    renderer.shadowMap.enabled = shadows !== false
 
-  // Resize the renderer when the size changes
-  const { start, stop } = useTask(
-    () => {
-      if (!('xr' in renderer) || renderer.xr?.isPresenting) return
-      renderer.setSize(size.current.width, size.current.height)
-      invalidate()
-      stop()
-    },
-    {
-      before: autoRenderTask,
-      autoStart: false,
-      autoInvalidate: false
-    }
-  )
-  watch([size], () => {
-    start()
-  })
-
-  watch([context.shadows], ([shadows]) => {
-    if (!('shadowMap' in renderer)) return
-
-    renderer.shadowMap.enabled = !!shadows
-    if (shadows && shadows !== true) {
+    // If shadows isn't a boolean, it's a shadowMap type
+    if (shadows !== false && shadows !== true) {
       renderer.shadowMap.type = shadows
     } else if (shadows === true) {
-      renderer.shadowMap.type = PCFSoftShadowMap
+      renderer.shadowMap.type = PCFShadowMap
     }
+    invalidate()
   })
 
-  watch([context.toneMapping], ([toneMapping]) => {
-    if (!('toneMapping' in renderer)) return
+  $effect.pre(() => {
     renderer.toneMapping = toneMapping
+    invalidate()
   })
 
-  watch([autoRender], ([autoRender]) => {
-    if (autoRender) {
+  $effect.pre(() => {
+    if (autoRender.current) {
       context.autoRenderTask.start()
     } else {
       context.autoRenderTask.stop()
     }
+    invalidate()
+
     return () => {
       context.autoRenderTask.stop()
     }
   })
 
-  if ('setAnimationLoop' in context.renderer) {
-    const renderer = context.renderer as WebGLRenderer
-    renderer.setAnimationLoop((time) => {
-      dispose()
-      scheduler.run(time)
-      resetFrameInvalidation()
-    })
-  }
+  renderer.setAnimationLoop((time) => {
+    scheduler.run(time)
+    frameInvalidated.current = false
+  })
 
-  onDestroy(() => {
-    if ('dispose' in context.renderer) {
-      const dispose = context.renderer.dispose as () => void
-      dispose()
+  $effect(() => {
+    return () => {
+      renderer.setAnimationLoop(null)
+      renderer.dispose()
     }
-  })
-
-  $effect(() => {
-    context.colorManagementEnabled.set(options.colorManagementEnabled ?? true)
-  })
-  $effect(() => {
-    context.colorSpace.set(options.colorSpace ?? 'srgb')
-  })
-  $effect(() => {
-    context.toneMapping.set(options.toneMapping ?? AgXToneMapping)
-  })
-  $effect(() => {
-    context.shadows.set(options.shadows ?? PCFSoftShadowMap)
-  })
-  $effect(() => {
-    context.dpr.set(options.dpr ?? window.devicePixelRatio)
   })
 
   return context
 }
 
-export const useRenderer = (): RendererContext => {
-  const context = getContext<RendererContext>('threlte-renderer-context')
+export const useRenderer = <T extends Renderer>(): RendererContext<T> => {
+  const context = getContext<RendererContext<T>>('threlte-renderer-context')
 
   if (!context) {
     throw new Error('useRenderer can only be used in a child component to <Canvas>.')

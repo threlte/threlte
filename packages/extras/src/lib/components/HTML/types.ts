@@ -1,10 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { Camera, Group, Object3D } from 'three'
 
-export type HTMLProps = Props<
-  Group,
-  [{ render(): void; startRendering(): void; stopRendering(): void }]
-> & {
+export type HTMLProps = Props<Group, [{ render(): void }]> & {
   /**
    * @default true
    */

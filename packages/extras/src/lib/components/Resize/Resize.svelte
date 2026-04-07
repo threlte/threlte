@@ -11,7 +11,7 @@
   import { type Plugin } from '@threlte/core'
   import { Box3, Group, Vector3 } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
-  import type { ResizeProps } from './types'
+  import type { ResizeProps } from './types.js'
 
   const { renderStage } = useThrelte()
 
@@ -27,6 +27,7 @@
     ...props
   }: ResizeProps = $props()
 
+  const group = new Group()
   const inner = new Group()
 
   const outer = new Group()
@@ -41,12 +42,18 @@
     onresize?.()
   }
 
-  const { start, stop } = useTask(
+  let running = $state(false)
+
+  const scheduleResizing = () => {
+    running = true
+  }
+
+  useTask(
     () => {
       doResize()
       stop()
     },
-    { autoStart: false, stage, autoInvalidate: false }
+    { stage, running: () => running }
   )
 
   /** Manually trigger resizing */
@@ -66,7 +73,8 @@
 </script>
 
 <T
-  is={ref}
+  is={group}
+  bind:ref
   {...props}
 >
   <T is={outer}>
@@ -75,7 +83,7 @@
         name="resize"
         {plugin}
       >
-        {@render children?.({ ref, resize })}
+        {@render children?.({ ref: group, resize: scheduleResizing })}
       </InjectPlugin>
     </T>
   </T>

@@ -4,96 +4,73 @@
 >
   const loaders: {
     exr?: EXRLoader
-    hdr?: RGBELoader
+    hdr?: HDRLoader
     tex?: TextureLoader
   } = {}
 </script>
 
 <script lang="ts">
-  import { T, useCache, useThrelte } from '@threlte/core'
+  import { T, useThrelte } from '@threlte/core'
   import { EquirectangularReflectionMapping, TextureLoader } from 'three'
-  import { EXRLoader, GroundedSkybox, RGBELoader } from 'three/examples/jsm/Addons.js'
-  import { useSuspense } from '../../../suspense/useSuspense'
-  import { useEnvironment } from '../utils/useEnvironment.svelte'
-  import type { EquirectangularEnvironmentProps } from './types'
-
-  const ctx = useThrelte()
+  import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js'
+  import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js'
+  import { useEnvironment } from '../utils/useEnvironment.svelte.js'
+  import type { EquirectangularEnvironmentProps } from './types.js'
+  import { HDRLoader } from 'three/examples/jsm/loaders/HDRLoader.js'
 
   let {
     skybox = $bindable(),
-    texture = $bindable(),
+    texture,
     ground = false,
     isBackground = false,
-    scene = ctx.scene,
+    scene,
     url
   }: EquirectangularEnvironmentProps = $props()
 
-  const suspend = useSuspense()
-  const cache = useCache()
-
-  useEnvironment({
-    get scene() {
-      return scene
-    },
-    get isBackground() {
-      return isBackground
-    },
-    get texture() {
-      return texture
-    }
-  })
-
-  const isEXR = $derived(url?.endsWith('exr') ?? false)
-  const isHDR = $derived(url?.endsWith('hdr') ?? false)
+  const { scene: defaultScene } = useThrelte()
 
   // defaults to `TextureLoader` if `url` is not provided
   const loader = $derived.by(() => {
     if (url === undefined) return
-    if (isEXR) {
+
+    if (url?.endsWith('exr')) {
       loaders.exr ??= new EXRLoader()
       return loaders.exr
-    } else if (isHDR) {
-      loaders.hdr ??= new RGBELoader()
+    } else if (url?.endsWith('hdr')) {
+      loaders.hdr ??= new HDRLoader()
       return loaders.hdr
     }
+
     loaders.tex ??= new TextureLoader()
     return loaders.tex
   })
 
+  const tex = $derived(texture ?? (await loader.loadAsync(url)))
+
+  $effect.pre(() => {
+    tex.mapping = EquirectangularReflectionMapping
+  })
+
   $effect(() => {
-    if (url !== undefined && loader !== undefined) {
-      const suspendedTexture = suspend(
-        cache.remember(() => {
-          return loader.loadAsync(url)
-        }, [url])
-      )
-
-      suspendedTexture.then((t) => {
-        t.mapping = EquirectangularReflectionMapping
-        texture = t
-      })
-
-      return () => {
-        suspendedTexture.then((texture) => {
-          texture.dispose()
-        })
-      }
+    return () => {
+      tex.dispose()
     }
   })
+
+  useEnvironment(
+    () => scene ?? defaultScene,
+    () => tex,
+    () => isBackground
+  )
 </script>
 
 {#if ground}
   {@const options = ground === true ? {} : ground}
-  {#if texture}
+  {#if tex}
     <T
       is={GroundedSkybox}
-      oncreate={() => {
-        return () => {
-          skybox = undefined
-        }
-      }}
       bind:ref={skybox}
-      args={[texture, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
+      args={[tex, options.height ?? 1, options.radius ?? 1, options.resolution ?? 128]}
     />
   {/if}
 {/if}

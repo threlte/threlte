@@ -54,9 +54,9 @@
       totalTime += delta
 
       // apply velocity
-      posX[i] += agent.velocity[0] * delta
-      posY[i] = agent.baseHeight + Math.sin(totalTime * 0.00005 + i)
-      posZ[i] += agent.velocity[1] * delta
+      posX[i]! += agent.velocity[0] * delta
+      posY[i]! = agent.baseHeight + Math.sin(totalTime * 0.00005 + i)
+      posZ[i]! += agent.velocity[1] * delta
 
       // roll new behaviour when time runs out or agent gets out of bounds
       if (i > 0) {

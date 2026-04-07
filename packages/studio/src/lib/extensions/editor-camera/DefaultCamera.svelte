@@ -10,12 +10,12 @@
     type PerspectiveCamera
   } from 'three'
   import Portal from '../../components/Portal.svelte'
-  import { useStudio } from '../../internal/extensions'
-  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte'
-  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types'
+  import { useStudio } from '../../internal/extensions.js'
+  import { useStudioObjectsRegistry } from '../studio-objects-registry/useStudioObjectsRegistry.svelte.js'
+  import { editorCameraScope, type EditorCameraActions, type EditorCameraState } from './types.js'
 
   const { useExtension } = useStudio()
-  const { renderer, scene, autoRenderTask, invalidate } = useThrelte()
+  const { renderer, canvas, scene, autoRenderTask, invalidate } = useThrelte()
 
   const editorCameraExtension = useExtension<EditorCameraState, EditorCameraActions, true>(
     editorCameraScope
@@ -130,7 +130,7 @@
       // draw to canvas
       context.clearRect(0, 0, width * dpr, height * dpr)
       context.drawImage(
-        renderer.domElement,
+        canvas,
         0,
         (size.y - height) * dpr,
         width * dpr,
@@ -160,7 +160,7 @@
     userExpandable={false}
     expanded
     resizable={false}
-    padding={'6px'}
+    padding='6px'
     storePositionLocally={false}
     x={99999}
     y={99999}
@@ -169,7 +169,7 @@
       <canvas
         bind:this={canvasEl}
         style="width: {width}px; height: {height}px; display: block"
-      />
+      ></canvas>
     </Element>
   </Pane>
 </Portal>

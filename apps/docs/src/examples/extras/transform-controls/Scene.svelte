@@ -1,31 +1,38 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, TrackballControls, TransformControls } from '@threlte/extras'
+  import {
+    CameraControls,
+    OrbitControls,
+    TrackballControls,
+    TransformControls
+  } from '@threlte/extras'
+  import { PerspectiveCamera } from 'three'
 
-  import { BoxGeometry, MeshStandardMaterial, PerspectiveCamera } from 'three'
-
-  export let controls: '<TrackballControls>' | '<OrbitControls>' = '<OrbitControls>'
-
-  let camera: PerspectiveCamera
-
-  $: if (camera && controls === '<OrbitControls>') {
-    // This snaps the camera back into a position that makes sense for OrbitControls
-    camera.up.set(0, 1, 0)
+  interface Props {
+    controls?: '<OrbitControls>' | '<TrackballControls>' | '<CameraControls>'
+    autoPauseControls?: boolean
   }
+
+  let { controls = '<OrbitControls>', autoPauseControls = true }: Props = $props()
+
+  let camera = $state.raw<PerspectiveCamera>()
 </script>
 
-<T.PerspectiveCamera
-  makeDefault
-  position={[10, 5, 10]}
-  lookAt.y={0.5}
-  bind:ref={camera}
->
-  {#if controls === '<TrackballControls>'}
-    <TrackballControls />
-  {:else if controls === '<OrbitControls>'}
-    <OrbitControls />
-  {/if}
-</T.PerspectiveCamera>
+{#key controls}
+  <T.PerspectiveCamera
+    makeDefault
+    position={[10, 5, 10]}
+    bind:ref={camera}
+  >
+    {#if controls === '<TrackballControls>'}
+      <TrackballControls />
+    {:else if controls === '<OrbitControls>'}
+      <OrbitControls />
+    {:else if controls === '<CameraControls>'}
+      <CameraControls />
+    {/if}
+  </T.PerspectiveCamera>
+{/key}
 
 <T.DirectionalLight
   position.y={10}
@@ -36,11 +43,12 @@
 <T.GridHelper args={[10, 10]} />
 
 <TransformControls
+  {autoPauseControls}
   translationSnap={1}
   position.y={1}
 >
-  <T.Mesh
-    geometry={new BoxGeometry(2, 2, 2)}
-    material={new MeshStandardMaterial()}
-  />
+  <T.Mesh>
+    <T.BoxGeometry args={[2, 2, 2]} />
+    <T.MeshStandardMaterial />
+  </T.Mesh>
 </TransformControls>

@@ -9,9 +9,11 @@ carefully inspect a model from every angle.
 For an alternative camera controller, see
 [`<OrbitControls>`](https://threlte.xyz/docs/reference/extras/orbit-controls).
 
-The component `<TrackballControls>` must be a direct child of a camera
-component and will mount itself to that camera. By default, damping is
-enabled. You can disable this by setting `staticMoving` to true.
+If placed as a child of a camera component, `<TrackballControls>` will
+attach to that camera. Otherwise, it attaches to the scene's default
+camera. A camera can also be passed explicitly via the `camera` prop.
+By default, damping is enabled. You can disable this by setting
+`staticMoving` to true.
 
 ## Usage
 
@@ -29,27 +31,35 @@ enabled. You can disable this by setting `staticMoving` to true.
 </T.PerspectiveCamera>
 ```
 
-`<TrackballControls>` is a light wrapper that will use its parent as the target camera and the DOM element the renderer is rendering to as the DOM element to listen to. It will also by demand invalidate the frame loop.
+`<TrackballControls>` is a light wrapper that will use its parent as the target camera and 
+the DOM element the renderer is rendering to as the DOM element to listen to. It will also 
+by demand invalidate the frame loop.
 -->
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
-  import { useControlsContext } from '../useControlsContext'
-  import type { TrackballControlsProps } from './types'
+  import { useControlsContext } from '../useControlsContext.js'
+  import type { TrackballControlsProps } from './types.js'
   import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
-  let { ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
+  let { onchange, camera, ref = $bindable(), children, ...props }: TrackballControlsProps = $props()
 
+  const { dom, camera: defaultCamera, invalidate, size } = useThrelte()
   const parent = useParent()
-  const { renderer, invalidate } = useThrelte()
-
-  if (!isInstanceOf($parent, 'Camera')) {
-    throw new Error('Parent missing: <TrackballControls> need to be a child of a <Camera>')
-  }
+  const resolvedCamera = $derived(
+    camera
+      ? camera
+      : isInstanceOf(parent.current, 'Camera')
+        ? parent.current
+        : defaultCamera.current
+  )
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeTrackballControls($parent, renderer.domElement.parentElement!)
-  const { trackballControls } = useControlsContext()
+  const controls = new ThreeTrackballControls(untrack(() => resolvedCamera))
+  $effect.pre(() => {
+    controls.object = resolvedCamera
+  })
 
   useTask(
     () => {
@@ -61,16 +71,30 @@ enabled. You can disable this by setting `staticMoving` to true.
   )
 
   $effect(() => {
-    const handleChange = (event: Event) => {
-      invalidate()
-      props.onchange?.(event)
+    controls.connect(dom)
+    return () => controls.disconnect()
+  })
+
+  $effect(() => {
+    if (size.current.width && size.current.height) {
+      controls.handleResize()
     }
+  })
+
+  const { trackballControls } = useControlsContext()
+
+  $effect.pre(() => {
+    const handleChange = (event: Event<any, ThreeTrackballControls>) => {
+      invalidate()
+      onchange?.(event)
+    }
+    const currentControls = controls
 
     trackballControls.set(controls)
-    controls.addEventListener('change', handleChange)
+    currentControls.addEventListener('change', handleChange)
     return () => {
       trackballControls.set(undefined)
-      controls.removeEventListener('change', handleChange)
+      currentControls.removeEventListener('change', handleChange)
     }
   })
 </script>

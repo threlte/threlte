@@ -9,7 +9,7 @@
 
   let { useGround = true }: Props = $props()
 
-  let skybox: GroundedSkybox | undefined = $state()
+  let skybox = $state.raw<GroundedSkybox>()
 
   const groundOptions = { height: 15, radius: 100 }
 
@@ -34,6 +34,8 @@
     <OrbitControls
       maxDistance={20}
       maxPolarAngle={0.5 * Math.PI}
+      enableDamping
+      enableZoom={false}
     />
   </T.PerspectiveCamera>
 

@@ -1,7 +1,7 @@
 ---
 import Code from '$components/Code/Code.astro'
 import { parse, type HTMLElement } from 'node-html-parser'
-import type { HtmlRendererOptions } from 'shiki'
+import type { TransformerCompactLineOption } from '@shikijs/transformers'
 
 interface Props {
   className?: string
@@ -35,7 +35,7 @@ const propFormatters: Partial<
 const language = (codeEl.attributes as any).class?.split(' ')[0].replace('language-', '')
 const metastring = (codeEl.attributes as any).metastring as string | undefined
 
-const lineOptions: HtmlRendererOptions['lineOptions'] = []
+const lineOptions: TransformerCompactLineOption[] = []
 
 if (metastring) {
   const elements = metastring.split(' ')

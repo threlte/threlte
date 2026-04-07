@@ -4,12 +4,15 @@
   import { Box } from '@threlte/flex'
   import Label from './Label.svelte'
 
-  let _class: string
-  export { _class as class }
-  export let z = 0
-  export let text = ''
-  export let order: number | undefined = undefined
-  export let onClick: () => void
+  interface Props {
+    class: string
+    z?: number
+    text?: string
+    order?: number | undefined
+    onClick: () => void
+  }
+
+  let { class: _class, z = 0, text = '', order, onClick }: Props = $props()
 
   const { hovering, onPointerEnter, onPointerLeave } = useCursor()
 </script>
@@ -32,7 +35,7 @@
         args={[width, height, 10]}
         radius={5}
       />
-      <T.MeshBasicMaterial color={$hovering ? '#9D9FA3' : '#404550'} />
+      <T.MeshBasicMaterial color={hovering.current ? '#9D9FA3' : '#404550'} />
 
       <Label
         z={5.1}

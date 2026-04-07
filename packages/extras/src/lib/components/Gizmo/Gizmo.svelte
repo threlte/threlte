@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-  import { useTask, useThrelte, useParent } from '@threlte/core'
+  import { useTask, useThrelte, useParent, observe } from '@threlte/core'
   import {
     NoToneMapping,
     Vector4,
@@ -14,7 +14,7 @@
     type PerspectiveCamera,
     type Event
   } from 'three'
-  import type { GizmoProps, Controls } from './types'
+  import type { GizmoProps, Controls } from './types.js'
   import { ViewportGizmo } from 'three-viewport-gizmo'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
@@ -30,13 +30,27 @@
   }: GizmoProps = $props()
 
   const parent = useParent()
-  const { camera, renderer, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
+  const { camera, renderer, dom, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
 
-  ref = new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer)
+  const gizmo = $derived.by(() => {
+    invalidate()
+    return new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer, {
+      container: dom,
+      placement: 'bottom-left',
+      size: 86,
+      ...rest
+    })
+  })
+
+  $effect.pre(() => {
+    if (ref !== gizmo) {
+      ref = gizmo
+    }
+  })
 
   const viewport = new Vector4()
 
-  const cameraControls = $derived(controls ?? ($parent as Controls))
+  const cameraControls = $derived(controls ?? (parent.current as Controls))
 
   useTask(
     renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
@@ -47,7 +61,7 @@
         renderer.getViewport(viewport)
         renderer.toneMapping = NoToneMapping
 
-        ref.render()
+        gizmo.render()
 
         renderer.setViewport(viewport)
         renderer.toneMapping = toneMapping
@@ -60,17 +74,17 @@
   )
 
   $effect.pre(() => {
-    ref.camera = $camera as PerspectiveCamera | OrthographicCamera
+    gizmo.camera = camera.current
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     if (!cameraControls) return
 
     if (cameraControls instanceof OrbitControls || cameraControls instanceof TrackballControls) {
-      ref.target = cameraControls.target
+      gizmo.target = cameraControls.target
 
       const handleChange = () => {
-        ref.update(false)
+        gizmo.update(false)
       }
 
       cameraControls.addEventListener('change', handleChange)
@@ -78,8 +92,8 @@
     } else {
       const handleUpdate = () => {
         if ('getTarget' in cameraControls && typeof cameraControls.getTarget == 'function') {
-          cameraControls.getTarget(ref.target)
-          ref.update()
+          cameraControls.getTarget(gizmo.target)
+          gizmo.update()
         }
       }
 
@@ -87,64 +101,50 @@
         cameraControls.setPosition(...camera.current.position.toArray())
       }
 
-      ref.addEventListener('change', handleChange)
+      gizmo.addEventListener('change', handleChange)
       cameraControls.addEventListener('update', handleUpdate)
       return () => {
-        ref.removeEventListener('change', handleChange)
+        gizmo.removeEventListener('change', handleChange)
         cameraControls.removeEventListener('update', handleUpdate)
       }
     }
   })
 
-  $effect(() => {
-    const handleStart = (event: Event<'start', ViewportGizmo>) => {
-      cameraControls.enabled = false
-      onstart?.(event)
-    }
-    ref.addEventListener('start', handleStart)
-    return () => ref.removeEventListener('start', handleStart)
-  })
+  const handleStart = (event: Event<'start', ViewportGizmo>) => {
+    cameraControls.enabled = false
+    onstart?.(event)
+  }
 
-  $effect(() => {
-    const handleChange = (event: Event<'change', ViewportGizmo>) => {
-      invalidate()
-      onchange?.(event)
-    }
-    ref.addEventListener('change', handleChange)
-    return () => ref.removeEventListener('change', handleChange)
-  })
+  const handleChange = (event: Event<'change', ViewportGizmo>) => {
+    invalidate()
+    onchange?.(event)
+  }
 
-  $effect(() => {
-    const handleEnd = (event: Event<'end', ViewportGizmo>) => {
-      cameraControls.enabled = true
-      onend?.(event)
-    }
-    ref.addEventListener('end', handleEnd)
-    return () => ref.removeEventListener('end', handleEnd)
-  })
+  const handleEnd = (event: Event<'end', ViewportGizmo>) => {
+    cameraControls.enabled = true
+    onend?.(event)
+  }
 
   $effect.pre(() => {
-    const container = renderer.domElement.parentElement
-
-    if (container) {
-      ref.dispose()
-      ref = new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer, {
-        container,
-        placement: 'bottom-left',
-        size: 86,
-        ...rest
-      })
-      invalidate()
+    gizmo.addEventListener('start', handleStart)
+    gizmo.addEventListener('change', handleChange)
+    gizmo.addEventListener('end', handleEnd)
+    return () => {
+      gizmo.removeEventListener('start', handleStart)
+      gizmo.removeEventListener('change', handleChange)
+      gizmo.removeEventListener('end', handleEnd)
     }
   })
 
-  $effect(() => {
-    $size
-    ref.update()
-    invalidate()
-  })
+  observe.pre(
+    () => [size],
+    () => {
+      gizmo.update()
+      invalidate()
+    }
+  )
 
-  $effect(() => {
-    return () => ref.dispose()
+  $effect.pre(() => {
+    return () => gizmo.dispose()
   })
 </script>

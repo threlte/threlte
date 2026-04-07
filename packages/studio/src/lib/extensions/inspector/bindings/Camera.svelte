@@ -1,8 +1,8 @@
 <script lang="ts">
   import * as CamerakitPlugin from '@tweakpane/plugin-camerakit'
-  import { type OrthographicCamera, type PerspectiveCamera } from 'three'
+  import { OrthographicCamera, PerspectiveCamera } from 'three'
   import TransactionalBinding from './TransactionalBinding.svelte'
-  import { areOfType } from './utils'
+  import { areOfType } from './utils.js'
 
   type Props = {
     objects: (PerspectiveCamera | OrthographicCamera)[]
@@ -47,7 +47,7 @@
   }}
 />
 
-{#if areOfType(objects, 'isPerspectiveCamera')}
+{#if areOfType<PerspectiveCamera>(objects, 'isPerspectiveCamera')}
   <TransactionalBinding
     {objects}
     key="fov"
@@ -57,7 +57,7 @@
       view: 'cameraring',
       min: 0,
       max: 180,
-      format: (n) => `${n}°`
+      format: (n: number) => `${n}°`
     }}
     on:change={() => {
       objects.forEach((object) => {
@@ -85,7 +85,7 @@
       })
     }}
   />
-{:else if areOfType(objects, 'isOrthographicCamera')}
+{:else if areOfType<OrthographicCamera>(objects, 'isOrthographicCamera')}
   {#each orthographicKeys as key (key)}
     <TransactionalBinding
       {objects}

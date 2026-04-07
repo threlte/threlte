@@ -1,14 +1,14 @@
 <script lang="ts">
-  import type { CubeCameraProps } from './types'
+  import type { CubeCameraProps } from './types.js'
   import { Group } from 'three'
   import { observe, T, useTask, useThrelte } from '@threlte/core'
-  import { useCubeCamera } from '../../hooks/useCubeCamera.svelte'
+  import { useCubeCamera } from '../../hooks/useCubeCamera.svelte.js'
 
   let {
     background = 'auto',
     far = 1000,
     fog = 'auto',
-    frames = Infinity,
+    frames = Number.POSITIVE_INFINITY,
     near = 0.1,
     onupdatestart,
     onupdatestop,
@@ -30,6 +30,7 @@
   const inner = new Group()
 
   let count = 0
+  let running = $state(false)
 
   export const update = () => {
     // if frames === Infinity, the task will run indefinitely
@@ -45,20 +46,20 @@
       inner.visible = true
       count += 1
     } else {
-      stop()
+      running = false
       onupdatestop?.()
     }
   }
 
-  const { start, stop, started } = useTask(update, { autoStart: false })
+  useTask(update, { running: () => running })
 
   export const restart = () => {
-    if ($started) {
-      stop()
+    if (running) {
       onupdatestop?.()
     }
+
     count = 0
-    start()
+    running = true
     onupdatestart?.()
   }
 

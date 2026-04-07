@@ -3,7 +3,11 @@
   import { T } from '@threlte/core'
   import { useGltf, InstancedMesh, Instance } from '@threlte/extras'
 
-  export let transformData: [number, number, number, number][] = []
+  interface Props {
+    transformData?: [number, number, number, number][]
+  }
+
+  let { transformData = [] }: Props = $props()
 
   type GLTFResult = {
     nodes: {
@@ -19,9 +23,12 @@
   )
 </script>
 
-{#if $gltf}
-  <InstancedMesh>
-    <T is={$gltf.nodes.Rock_2.geometry} />
+{#await gltf then { nodes }}
+  <InstancedMesh
+    castShadow
+    receiveShadow
+  >
+    <T is={nodes.Rock_2.geometry} />
     <T.MeshStandardMaterial color="grey" />
     {#each transformData as randomValues}
       {@const x = randomValues[0] * 20 - 10}
@@ -36,4 +43,4 @@
       />
     {/each}
   </InstancedMesh>
-{/if}
+{/await}

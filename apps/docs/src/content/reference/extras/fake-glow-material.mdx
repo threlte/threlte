@@ -1,7 +1,7 @@
 ---
-order: 9.3
 category: '@threlte/extras'
-name: '<FakeGlowMaterial>'
+group: 'Visual Effects'
+title: '<FakeGlowMaterial>'
 sourcePath: 'packages/extras/src/lib/components/FakeGlowMaterial/FakeGlowMaterial.svelte'
 type: 'component'
 componentSignature:
@@ -13,22 +13,20 @@ componentSignature:
       },
     props:
       [
-        { name: 'glowColor', type: 'ColorRepresentation', default: '"green"', required: false },
+        { name: 'glowColor', type: 'ColorRepresentation', default: '"green"' },
         {
           name: 'falloff',
           type: 'number',
           default: '0.1',
-          required: false,
           description: 'Controls the value of the Falloff effect. Ranges from 0.0 to 1.0.'
         },
         {
           name: 'glowInternalRadius',
           type: 'number',
           default: '6.0',
-          required: false,
           description: 'Controls the internal glow radius. Ranges from -1.0 to 1.0. Set a darker color to get the fresnel effect only.'
         },
-        { name: 'glowSharpness', type: 'number', default: '1.0', required: false }
+        { name: 'glowSharpness', type: 'number', default: '1.0' }
       ]
   }
 ---

@@ -1,38 +1,44 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { T } from '@threlte/core'
   import { Sky, useTexture } from '@threlte/extras'
-  import { BackSide, NearestFilter, RepeatWrapping } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { BackSide, NearestFilter, RepeatWrapping, MathUtils } from 'three'
   import TreeSpriteAtlas from './TreeSpriteAtlas.svelte'
   import DudeSprites from './DudeSprites.svelte'
 
-  export let billboarding = false
-  export let fps: number
+  interface Props {
+    billboarding?: boolean
+    fps: number
+    children?: Snippet
+  }
 
-  const grass = useTexture('/textures/sprites/pixel-grass.png', {
-    transform: (texture) => {
-      texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(100, 100)
-      texture.minFilter = NearestFilter
-      texture.magFilter = NearestFilter
-      texture.needsUpdate = true
-      return texture
-    }
-  })
+  let { billboarding = false, fps, children }: Props = $props()
 
-  const sky = useTexture('/textures/sprites/pixel-sky.png', {
-    transform: (texture) => {
-      texture.wrapS = texture.wrapT = RepeatWrapping
-      texture.repeat.set(10, 2)
-      texture.minFilter = NearestFilter
-      texture.magFilter = NearestFilter
-      texture.needsUpdate = true
-      return texture
-    }
-  })
+  const [grassTexture, skyTexture] = await Promise.all([
+    useTexture('/textures/sprites/pixel-grass.png', {
+      transform: (texture) => {
+        texture.wrapS = texture.wrapT = RepeatWrapping
+        texture.repeat.set(100, 100)
+        texture.minFilter = NearestFilter
+        texture.magFilter = NearestFilter
+        texture.needsUpdate = true
+        return texture
+      }
+    }),
+    useTexture('/textures/sprites/pixel-sky.png', {
+      transform: (texture) => {
+        texture.wrapS = texture.wrapT = RepeatWrapping
+        texture.repeat.set(10, 2)
+        texture.minFilter = NearestFilter
+        texture.magFilter = NearestFilter
+        texture.needsUpdate = true
+        return texture
+      }
+    })
+  ])
 </script>
 
-<slot />
+{@render children?.()}
 
 <!--
 	Dudes:
@@ -49,28 +55,24 @@
 
 <!-- SCENE SETUP: grass, sky, lights -->
 
-{#if $sky}
-  <T.Mesh
-    position.y={-10}
-    scale.y={0.5}
-  >
-    <T.SphereGeometry args={[110]} />
-    <T.MeshBasicMaterial
-      map={$sky}
-      side={BackSide}
-    />
-  </T.Mesh>
-{/if}
+<T.Mesh
+  position.y={-10}
+  scale.y={0.5}
+>
+  <T.SphereGeometry args={[110]} />
+  <T.MeshBasicMaterial
+    map={skyTexture}
+    side={BackSide}
+  />
+</T.Mesh>
 
-{#if $grass}
-  <T.Mesh
-    rotation.x={-DEG2RAD * 90}
-    receiveShadow
-  >
-    <T.CircleGeometry args={[110]} />
-    <T.MeshLambertMaterial map={$grass} />
-  </T.Mesh>
-{/if}
+<T.Mesh
+  rotation.x={MathUtils.DEG2RAD * -90}
+  receiveShadow
+>
+  <T.CircleGeometry args={[110]} />
+  <T.MeshLambertMaterial map={grassTexture} />
+</T.Mesh>
 
 <Sky elevation={13.35} />
 

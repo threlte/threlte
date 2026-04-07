@@ -3,7 +3,7 @@
   import { Grid, OrbitControls, Portal, PortalTarget } from '@threlte/extras'
   import { MathUtils } from 'three'
 
-  let posX = Math.sin(Date.now() / 1000) * 4
+  let posX = $state(Math.sin(Date.now() / 1000) * 4)
 
   useTask(() => {
     posX = Math.sin(Date.now() / 1000) * 4

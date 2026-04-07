@@ -1,6 +1,5 @@
+import type { MarchingPlaneAxis } from './types'
 import { Group } from 'three'
-
-export type MarchingPlaneAxis = 'x' | 'y' | 'z'
 
 export class MarchingPlane extends Group {
   constructor(

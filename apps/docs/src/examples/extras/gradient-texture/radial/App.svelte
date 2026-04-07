@@ -54,11 +54,11 @@
   let textureRepeatX = $state(1)
   let textureRepeatY = $state(1)
   let textureRotationDegrees = $state(0)
-  let textureWrapS: Wrapping = $state(ClampToEdgeWrapping)
-  let textureWrapT: Wrapping = $state(ClampToEdgeWrapping)
+  let textureWrapS = $state<Wrapping>(ClampToEdgeWrapping)
+  let textureWrapT = $state<Wrapping>(ClampToEdgeWrapping)
 
   let textureRotation = $derived((Math.PI / 180) * textureRotationDegrees)
-  let gradientOuterRadius = $derived(
+  let gradientOuterRadius = $derived<number | 'auto'>(
     gradientUseOuterRadiusAuto ? 'auto' : gradientOuterRadiusNumber
   )
 </script>
@@ -170,14 +170,13 @@
 </Pane>
 
 <div>
-  <Canvas>
+  <Canvas toneMapping={sceneToneMapping}>
     <Scene
       {gradientEndColor}
       {gradientInnerRadius}
       {gradientOuterRadius}
       {gradientStartColor}
       {sceneClearColor}
-      {sceneToneMapping}
       {textureCenterX}
       {textureCenterY}
       {textureOffsetX}

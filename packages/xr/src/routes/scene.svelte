@@ -1,19 +1,21 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { XR, Controller, Hand, Headset, useTeleport, useXR } from '$lib'
+  import { XR, Controller, Hand, Headset, useTeleport, useXR } from '$lib/index.js'
   import Gamepad from './Gamepad.svelte'
   import Teleport from './Teleport.svelte'
 
   const { isPresenting } = useXR()
   const teleport = useTeleport()
 
-  $: if ($isPresenting) teleport([0, 0, 5])
+  $effect.pre(() => {
+    if (isPresenting.current) teleport([0, 0, 5])
+  })
 
-  let listenToGamepad = false
+  let listenToGamepad = $state(false)
 </script>
 
 <svelte:window
-  on:keydown={(e) => {
+  onkeydown={(e) => {
     if (e.key === 'g') {
       listenToGamepad = !listenToGamepad
     }

@@ -1,47 +1,45 @@
 <script lang="ts">
-  import * as THREE from 'three'
+  import { type Mesh, type MeshStandardMaterial, RepeatWrapping } from 'three'
   import { T } from '@threlte/core'
   import { useGltf, useTexture, InstancedMesh, Instance } from '@threlte/extras'
 
-  export let transformData: number[][] = []
+  interface Props {
+    transformData?: [number, number, number, number][]
+  }
+
+  let { transformData = [] }: Props = $props()
 
   type GLTFResult = {
     nodes: {
-      Cube004: THREE.Mesh
-      Cube004_1: THREE.Mesh
+      Cube004: Mesh
+      Cube004_1: Mesh
     }
     materials: {
-      BirchTree_Bark: THREE.MeshStandardMaterial
-      BirchTree_Leaves: THREE.MeshStandardMaterial
+      BirchTree_Bark: MeshStandardMaterial
+      BirchTree_Leaves: MeshStandardMaterial
     }
   }
 
-  const gltf = useGltf<GLTFResult>(
-    'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/BirchTree_1.gltf'
-  )
-  const texture1 = useTexture(
-    'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Bark.png'
-  )
-  const normalMap1 = useTexture(
-    'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Bark_Normal.png'
-  )
-  const texture2 = useTexture(
-    'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Leaves.png'
-  )
-
-  const assets = Promise.all([gltf, texture1, texture2, normalMap1])
+  const assets = Promise.all([
+    useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/BirchTree_1.gltf'),
+    useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Bark.png'),
+    useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Leaves.png'),
+    useTexture(
+      'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Bark_Normal.png'
+    )
+  ])
 </script>
 
-{#await assets then _}
-  <InstancedMesh>
-    <T is={$gltf.nodes.Cube004.geometry} />
+{#await assets then [gltf, texture1, texture2, normalMap]}
+  <InstancedMesh castShadow>
+    <T is={gltf.nodes.Cube004.geometry} />
     <T.MeshStandardMaterial
-      map={$texture1}
-      map.wrapS={THREE.RepeatWrapping}
-      map.wrapT={THREE.RepeatWrapping}
-      normalMap={$normalMap1}
-      normalMap.wrapS={THREE.RepeatWrapping}
-      normalMap.wrapT={THREE.RepeatWrapping}
+      map={texture1}
+      map.wrapS={RepeatWrapping}
+      map.wrapT={RepeatWrapping}
+      {normalMap}
+      normalMap.wrapS={RepeatWrapping}
+      normalMap.wrapT={RepeatWrapping}
     />
     {#each transformData as randomValues}
       {@const x = randomValues[0] * 20 - 10}
@@ -56,11 +54,11 @@
       />
     {/each}
   </InstancedMesh>
-  <InstancedMesh>
-    <T is={$gltf.nodes.Cube004_1.geometry} />
+
+  <InstancedMesh castShadow>
+    <T is={gltf.nodes.Cube004_1.geometry} />
     <T.MeshStandardMaterial
-      map={$texture2}
-      side={THREE.DoubleSide}
+      map={texture2}
       alphaTest={0.5}
     />
     {#each transformData as randomValues}

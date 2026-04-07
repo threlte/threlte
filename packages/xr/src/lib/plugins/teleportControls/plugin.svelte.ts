@@ -1,5 +1,5 @@
-import { injectPlugin, isInstanceOf, observe } from '@threlte/core'
-import { useTeleportControls } from './context'
+import { injectPlugin, isInstanceOf } from '@threlte/core'
+import { useTeleportControls } from './context.js'
 
 /**
  * Registers T components with "teleportSurface" or "teleportBlocker" attributes.
@@ -7,32 +7,43 @@ import { useTeleportControls } from './context'
 export const injectTeleportControlsPlugin = (): void => {
   injectPlugin('threlte-teleport-controls', (args) => {
     if (!isInstanceOf(args.ref, 'Mesh')) return
+    if (!('teleportSurface' in args.props)) return
 
-    const isSurface = $derived('teleportSurface' in args.props && !!args.props.teleportSurface)
-    const isBlocker = $derived('teleportBlocker' in args.props && !!args.props.teleportBlocker)
+    const { addSurface, removeSurface } = useTeleportControls()
 
-    const surfaceRef = $derived(isSurface ? args.ref : undefined)
-    const blockerRef = $derived(isBlocker ? args.ref : undefined)
+    $effect(() => {
+      const { ref } = args
 
-    if (!isSurface && !isBlocker) return
-
-    const { addBlocker, addSurface, removeBlocker, removeSurface } = useTeleportControls()
-
-    observe.pre(
-      () => [surfaceRef, blockerRef],
-      ([surfaceRef, blockerRef]) => {
-        if (surfaceRef) {
-          addSurface(surfaceRef, args.props)
-          return removeSurface(surfaceRef)
-        } else if (blockerRef) {
-          addBlocker(blockerRef)
-          return removeBlocker(blockerRef)
-        }
+      if (args.props.isSurface) {
+        addSurface(ref, args.props)
       }
-    )
+
+      return () => removeSurface(ref)
+    })
 
     return {
-      pluginProps: ['teleportSurface', 'teleportBlocker']
+      pluginProps: ['teleportSurface']
+    }
+  })
+
+  injectPlugin('threlte-teleport-controls-blockers', (args) => {
+    if (!isInstanceOf(args.ref, 'Mesh')) return
+    if (!('teleportBlocker' in args.props)) return
+
+    const { addBlocker, removeBlocker } = useTeleportControls()
+
+    $effect(() => {
+      const { ref } = args
+
+      if (args.props.isBlocker) {
+        addBlocker(ref)
+      }
+
+      return () => removeBlocker(ref)
+    })
+
+    return {
+      pluginProps: ['teleportBlocker']
     }
   })
 }

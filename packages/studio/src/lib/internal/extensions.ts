@@ -1,15 +1,9 @@
 import { getContext, onDestroy, setContext } from 'svelte'
-import { createActions } from './actions'
-import { createKeyboardControls, hotkeyFns } from './keyboard'
-import { createState } from './state.svelte'
-import { beforeUnload } from './useBeforeUnload'
-
-type ExtensionAction = <ExtensionState extends Record<string, unknown>>(
-  state: ExtensionState,
-  ...args: any[]
-) => Promise<void> | void
-
-type ExtensionActions = Record<string, ExtensionAction>
+import { createActions } from './actions.js'
+import { createKeyboardControls, hotkeyFns } from './keyboard.js'
+import { createState } from './state.svelte.js'
+import { beforeUnload } from './useBeforeUnload.js'
+import type { ExtensionActions } from './types.js'
 
 export const createRootContext = (namespace: string, transient: boolean) => {
   const state = createState(namespace, transient)
@@ -74,7 +68,10 @@ export const createRootContext = (namespace: string, transient: boolean) => {
     }
   }) => {
     state.addExtensionState(options.scope, options.state)
-    actions.addExtensionActions(options.scope, options.actions as unknown as ExtensionActions)
+    actions.addExtensionActions(
+      options.scope,
+      options.actions as unknown as ExtensionActions<State>
+    )
     if (options.keyMap) {
       const keyMap = options.keyMap(hotkeyFns)
       keyboardControls.addKeys(options.scope, keyMap)

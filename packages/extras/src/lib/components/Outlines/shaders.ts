@@ -1,5 +1,3 @@
-import { revision } from '../../lib/revision'
-
 export const vertexShader = `
 #include <common>
 #include <morphtarget_pars_vertex>
@@ -45,6 +43,6 @@ uniform float opacity;
 void main(){
   gl_FragColor = vec4(color, opacity);
   #include <tonemapping_fragment>
-  #include <${revision >= 154 ? 'colorspace_fragment' : 'encodings_fragment'}>
+  #include <colorspace_fragment>
 }
 `

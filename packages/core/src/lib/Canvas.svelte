@@ -1,24 +1,29 @@
 <script lang="ts">
-  import { type Snippet } from 'svelte'
-  import type { Renderer } from 'three'
+  import { Cache } from 'three'
+  import type { Snippet } from 'svelte'
   import Context from './components/Context/Context.svelte'
-  import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte'
+  import type { CreateThrelteContextOptions } from './context/createThrelteContext.svelte.js'
+  import type { Renderer } from './context/fragments/renderer.svelte.js'
 
-  type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'wrapper'> & {
+  type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'dom'> & {
     children?: Snippet
   }
 
   let { children, ...rest }: Props = $props()
 
-  let canvas = $state<HTMLCanvasElement>()
-  let wrapper = $state<HTMLDivElement>()
+  $effect.pre(() => {
+    Cache.enabled = rest.cache ?? true
+  })
+
+  let canvas = $state.raw<HTMLCanvasElement>()
+  let dom = $state.raw<HTMLDivElement>()
 </script>
 
-<div bind:this={wrapper}>
+<div bind:this={dom}>
   <canvas bind:this={canvas}>
-    {#if canvas && wrapper}
+    {#if canvas && dom}
       <Context
-        {wrapper}
+        {dom}
         {canvas}
         {...rest}
       >
@@ -33,6 +38,7 @@
     position: relative;
     width: 100%;
     height: 100%;
+    overflow: hidden;
   }
 
   canvas {

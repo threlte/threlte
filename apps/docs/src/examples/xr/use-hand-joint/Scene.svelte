@@ -25,7 +25,7 @@
     onpinchend={() => (debug = !debug)}
   />
 
-  {#if $isHandTracking}
+  {#if isHandTracking.current}
     {#each { length: 25 } as _, jointIndex}
       <JointCollider
         {jointIndex}

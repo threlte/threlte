@@ -1,0 +1,263 @@
+@reference "./app.css";
+
+/*
+The majority of this file comes from the starlight markdown styles:
+https://github.com/withastro/starlight/blob/main/packages/starlight/style/markdown.css
+*/
+@layer base {
+  html {
+    scroll-padding-top: calc(var(--docs-navbar-height) + 1.5rem);
+  }
+
+  .markdown-content
+    :not(a, strong, em, del, span, input, code, br)
+    + :not(a, strong, em, del, span, input, code, br, :where(.not-content *)) {
+    margin-top: 1rem;
+  }
+
+  /* Headings after non-headings have more spacing. */
+  .markdown-content
+    :not(h1, h2, h3, h4, h5, h6)
+    + :is(h1, h2, h3, h4, h5, h6):not(:where(.not-content *)) {
+    margin-top: 1.5em;
+    /* Create the styling to show the link for headings */
+    a {
+      ::before {
+        content: '#';
+        @apply absolute inline-block -translate-x-full pr-2 text-white/50 opacity-0 transition-opacity;
+      }
+    }
+
+    &:hover {
+      a {
+        ::before {
+          @apply opacity-100;
+        }
+      }
+    }
+  }
+  /* lists */
+  .markdown-content ul:not(:where(.not-content *)) {
+    list-style-type: disc;
+    padding-left: calc(var(--spacing, 0.25rem /* 4px */) * 6) /* 1.5rem = 24px */;
+
+    ::marker {
+      color: #4b5563;
+    }
+  }
+
+  .markdown-content li + li:not(:where(.not-content *)),
+  .markdown-content dt + dt:not(:where(.not-content *)),
+  .markdown-content dt + dd:not(:where(.not-content *)),
+  .markdown-content dd + dd:not(:where(.not-content *)) {
+    margin-top: 0.25rem;
+  }
+
+  .markdown-content li:not(:where(.not-content *)) {
+    overflow-wrap: anywhere;
+  }
+
+  .markdown-content
+	li
+	> :is(
+		:last-child:not(
+				li,
+				ul,
+				ol,
+				a,
+				strong,
+				em,
+				del,
+				span,
+				input,
+				code,
+				br,
+				script,
+				:where(.not-content *)
+			),
+			/**
+			 * For list items ending with 1 or multiple script elements (`:has(~ script:last-child)`), we
+			 * need to style the last non-script element (`:not(script)`) that doesn't have a subsequent
+			 * sibling that is not a script (`:not(:has(~ :not(script)))`).
+			 */
+		:not(script):has(~ script:last-child):not(:has(~ :not(script)))
+	) {
+    margin-bottom: 1.25rem;
+  }
+
+  .markdown-content dt:not(:where(.not-content *)) {
+    font-weight: 700;
+  }
+  .markdown-content dd:not(:where(.not-content *)) {
+    padding-inline-start: 1rem;
+  }
+
+  .markdown-content :is(h1, h2, h3, h4, h5, h6):not(:where(.not-content *)) {
+    color: var(--color-white);
+    /* line-height: var(--sl-line-height-headings); */
+    font-weight: 600;
+  }
+
+  .markdown-content :is(img, picture, video, canvas, svg, iframe):not(:where(.not-content *)) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .markdown-content h1:not(:where(.not-content *)) {
+    font-size: var(--text-4xl);
+    @apply mt-0! font-bold;
+  }
+  .markdown-content h2:not(:where(.not-content *)) {
+    font-size: var(--text-2xl);
+  }
+  .markdown-content h3:not(:where(.not-content *)) {
+    font-size: var(--text-xl);
+  }
+  .markdown-content h4:not(:where(.not-content *)) {
+    font-size: var(--text-lg);
+  }
+  .markdown-content h5:not(:where(.not-content *)) {
+    font-size: var(--text-lg);
+  }
+  .markdown-content h6:not(:where(.not-content *)) {
+    color: color-mix(in oklab, var(--color-white) /* #fff = #ffffff */ 60%, transparent);
+    font-size: var(--text-lg);
+    @apply text-faded text-sm font-bold;
+  }
+
+  .markdown-content a:not(:where(.not-content *)) {
+    color: var(--color-orange);
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+  }
+  .markdown-content a:hover:not(:where(.not-content *)) {
+    color: var(--color-white);
+  }
+
+  .markdown-content code:not(:where(.not-content *)) {
+    /* background-color: var(--sl-color-bg-inline-code); */
+    margin-block: -0.125rem;
+    padding: 0.125rem 0.375rem;
+    font-size: var(--text-sm);
+  }
+  .markdown-content :is(h1, h2, h3, h4, h5, h6) code {
+    font-size: inherit;
+  }
+
+  .markdown-content pre:not(:where(.not-content *)) {
+    border: 1px solid var(--color-gray);
+    padding: 0.75rem 1rem;
+    /* font-size: var(--sl-text-code); */
+    tab-size: 2;
+  }
+
+  .markdown-content pre code:not(:where(.not-content *)) {
+    all: unset;
+    font-family: var(--font-mono);
+  }
+
+  .markdown-content blockquote:not(:where(.not-content *)) {
+    border-inline-start: 1px solid var(--color-gray);
+    padding-inline-start: 1rem;
+  }
+
+  /* Table styling */
+  .markdown-content table:not(:where(.not-content *)) {
+    display: block;
+    overflow: auto;
+    border-spacing: 0;
+  }
+  .markdown-content :is(th, td):not(:where(.not-content *)) {
+    border-bottom: 1px solid var(--color-gray);
+    padding: 0.5rem 1rem;
+    /* Align text to the top of the row in multiline tables. */
+    vertical-align: baseline;
+  }
+  .markdown-content :is(th:first-child, td:first-child):not(:where(.not-content *)) {
+    padding-inline-start: 0;
+  }
+  .markdown-content :is(th:last-child, td:last-child):not(:where(.not-content *)) {
+    padding-inline-end: 0;
+  }
+  .markdown-content th:not(:where(.not-content *)) {
+    color: var(--color-white);
+    font-weight: 600;
+  }
+  /* Align headings to the start of the line unless set by the `align` attribute. */
+  .markdown-content th:not([align]):not(:where(.not-content *)) {
+    text-align: start;
+  }
+
+  .markdown-content hr:not(:where(.not-content *)) {
+    border: 0;
+    /* border-bottom: 1px solid var(--sl-color-hairline); */
+  }
+
+  /* <details> and <summary> styles */
+  .markdown-content details:not(:where(.not-content *)) {
+    --markdown-details-border-color: var(--color-gray-500);
+    --markdown-details-border-color--hover: var(--color-orange-600);
+
+    border-inline-start: 2px solid var(--markdown-details-border-color);
+    padding-inline-start: 1rem;
+    @apply rounded-md bg-blue-700/20 px-4 py-2;
+  }
+  .markdown-content details:not([open]):hover:not(:where(.not-content *)),
+  .markdown-content details:has(> summary:hover):not(:where(.not-content *)) {
+    border-color: var(--markdown-details-border-color--hover);
+  }
+  .markdown-content summary:not(:where(.not-content *)) {
+    color: var(--color-white);
+    cursor: pointer;
+    display: block; /* Needed to hide the default marker in some browsers. */
+    font-weight: 600;
+    /* Expand the outline so that the marker cannot distort it. */
+    margin-inline-start: -0.5rem;
+    padding-inline-start: 0.5rem;
+  }
+  .markdown-content details[open] > summary:not(:where(.not-content *)) {
+    margin-bottom: 1rem;
+  }
+
+  /* <summary> marker styles */
+  .markdown-content summary:not(:where(.not-content *))::marker,
+  .markdown-content summary:not(:where(.not-content *))::-webkit-details-marker {
+    display: none;
+  }
+  .markdown-content summary:not(:where(.not-content *))::before {
+    --markdown-details-marker-size: 1.25rem;
+
+    background-color: currentColor;
+    content: '';
+    display: inline-block;
+    height: var(--markdown-details-marker-size);
+    width: var(--markdown-details-marker-size);
+    margin-inline: calc((var(--markdown-details-marker-size) / 4) * -1) 0.25rem;
+    vertical-align: middle;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.8 11.3 10.6 7a1 1 0 1 0-1.4 1.5l3.5 3.5-3.5 3.5a1 1 0 0 0 0 1.4 1 1 0 0 0 .7.3 1 1 0 0 0 .7-.3l4.2-4.2a1 1 0 0 0 0-1.4Z'/%3E%3C/svg%3E%0A");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.8 11.3 10.6 7a1 1 0 1 0-1.4 1.5l3.5 3.5-3.5 3.5a1 1 0 0 0 0 1.4 1 1 0 0 0 .7.3 1 1 0 0 0 .7-.3l4.2-4.2a1 1 0 0 0 0-1.4Z'/%3E%3C/svg%3E%0A");
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .markdown-content summary:not(:where(.not-content *))::before {
+      transition: transform 0.2s ease-in-out;
+    }
+  }
+  .markdown-content details[open] > summary:not(:where(.not-content *))::before {
+    transform: rotateZ(90deg);
+  }
+  [dir='rtl'] .markdown-content summary:not(:where(.not-content *))::before,
+  .markdown-content [dir='rtl'] summary:not(:where(.not-content *))::before {
+    transform: rotateZ(180deg);
+  }
+  /* <summary> with only a paragraph automatically added when using MDX */
+  .markdown-content summary:not(:where(.not-content *)) p:only-child {
+    display: inline;
+  }
+
+  .markdown-content p {
+    line-height: 28px;
+  }
+}

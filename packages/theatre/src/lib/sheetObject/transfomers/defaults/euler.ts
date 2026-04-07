@@ -1,6 +1,6 @@
 import { DEG2RAD, RAD2DEG } from 'three/src/math/MathUtils.js'
-import { createTransformer } from '../createTransformer'
-import { types } from '../../../theatre'
+import { createTransformer } from '../createTransformer.js'
+import { types } from '../../../theatre.js'
 
 export const euler = createTransformer({
   transform(value) {

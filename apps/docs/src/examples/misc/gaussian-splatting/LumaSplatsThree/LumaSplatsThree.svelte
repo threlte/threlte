@@ -1,94 +1,79 @@
 <script lang="ts">
-  import { LumaSplatsThree, type LumaSplatsSource } from '@lumaai/luma-web'
-  import { T, asyncWritable, useCache, useTask, useThrelte } from '@threlte/core'
-  import { useSuspense } from '@threlte/extras'
-  import { onDestroy } from 'svelte'
-  import type { CubeTexture, Scene } from 'three'
+  import { LumaSplatsThree } from '@lumaai/luma-web'
+  import { T, useTask, useThrelte, useCache } from '@threlte/core'
 
-  export let source: LumaSplatsSource
-  export let mode: 'object' | 'object-env' | 'env' = 'object'
-  export let loadingAnimationEnabled = false
-  export let particleRevealEnabled = false
-  export let enableThreeShaderIntegration = true
+  import type { CubeTexture } from 'three'
+  import type { LumaSplatsThreeProps } from './types'
+  import { CubeEnvironment } from '@threlte/extras'
 
-  const { invalidate, renderer, scene } = useThrelte()
+  let {
+    source,
+    mode = 'object',
+    loadingAnimationEnabled = false,
+    particleRevealEnabled = false,
+    enableThreeShaderIntegration = true,
+    children,
+    ...rest
+  }: LumaSplatsThreeProps = $props()
 
+  const { renderer, scene } = useThrelte()
   const { remember } = useCache()
-  const suspend = useSuspense()
 
   const captureCubemap = mode === 'env' || mode === 'object-env'
 
-  const splats = suspend(
-    asyncWritable(
-      remember(() => {
-        return new Promise<[LumaSplatsThree, CubeTexture | undefined]>((resolve) => {
-          const splats = new LumaSplatsThree({
-            source,
-            loadingAnimationEnabled,
-            particleRevealEnabled,
-            enableThreeShaderIntegration
-          })
+  const splats = await remember(typeof source === 'string' ? source : (source.src ?? ''), () => {
+    return new Promise<[LumaSplatsThree, CubeTexture | undefined]>((resolve) => {
+      const splats = new LumaSplatsThree({
+        source,
+        loadingAnimationEnabled,
+        particleRevealEnabled,
+        enableThreeShaderIntegration
+      })
 
-          splats.onLoad = async () => {
-            if (captureCubemap) {
-              splats.captureCubemap(renderer).then((cubemap) => {
-                resolve([splats, cubemap])
-              })
-            } else {
-              resolve([splats, undefined])
-            }
-          }
-        })
-      }, [source])
-    )
-  )
+      splats.onLoad = async () => {
+        if (captureCubemap) {
+          splats.captureCubemap(renderer).then((cubemap) => {
+            resolve([splats, cubemap])
+          })
+        } else {
+          resolve([splats, undefined])
+        }
+      }
+    })
+  })
 
   let preheat =
     particleRevealEnabled && loadingAnimationEnabled ? 400 : loadingAnimationEnabled ? 100 : 10
   let frame = 0
-  const { start, stop } = useTask(
+
+  let running = $state(false)
+  useTask(
     () => {
       frame++
       if (frame >= preheat) {
-        stop()
+        running = false
         frame = 0
       }
     },
-    { autoStart: false }
+    { running: () => running }
   )
 
-  let previousEnvironment: Scene['environment']
-  let previousBackground: Scene['background']
-  let previousBackgroundBluriness: Scene['backgroundBlurriness']
-  $: if ($splats && $splats[1]) {
-    previousEnvironment = scene.environment
-    previousBackground = scene.background
-    previousBackgroundBluriness = scene.backgroundBlurriness
-    scene.environment = $splats[1]
-    scene.background = $splats[1]
-    scene.backgroundBlurriness = 0.5
-    invalidate()
-  }
-
-  onDestroy(() => {
-    if (captureCubemap) {
-      scene.environment = previousEnvironment
-      scene.background = previousBackground
-      scene.backgroundBlurriness = previousBackgroundBluriness
-      invalidate()
-    }
-  })
+  scene.backgroundBlurriness = 0.5
 </script>
 
-{#if (mode === 'object' || mode === 'object-env') && $splats && $splats[0]}
+{#if (mode === 'object' || mode === 'object-env') && splats?.[0]}
   <T
-    dispose={false}
-    is={$splats[0]}
+    is={splats[0]}
     oncreate={() => {
-      start()
+      running = true
     }}
-    {...$$restProps}
+    {...rest}
+    dispose={false}
   >
-    <slot ref={$splats[0]} />
+    {@render children?.({ ref: splats[0] })}
   </T>
+{/if}
+
+{#if splats[1]}
+  <CubeEnvironment texture={splats[1]} />
 {/if}

@@ -1,5 +1,5 @@
 import type { Node } from 'yoga-layout'
-import { isTopLevelChildNode } from './isTopLevelChildNode'
+import { isTopLevelChildNode } from './isTopLevelChildNode.js'
 
 /** @returns [mainAxisShift, crossAxisShift] */
 export const getRootShift = (rootWidth: number, rootHeight: number, node: Node) => {

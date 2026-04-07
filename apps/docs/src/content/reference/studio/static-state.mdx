@@ -1,0 +1,148 @@
+---
+category: '@threlte/studio'
+title: Static State
+order: 101
+---
+
+Extend the `StaticState` class to create a new class that holds scene
+configuration or any other static values **that won't change in production**
+(i.e. are _static_). Properties added within such a class are automatically
+integrated into the Studio UI, allowing for **easy manipulation and
+visualization**. Changes to these properties will **automatically be reflected
+in the scene** and **written back to the disk**.
+
+<Tip type="info">
+  This feature is available for classes defined in `*.svelte`, `*.svelte.ts` and `*.svelte.js`
+  files.
+</Tip>
+
+For example, you can create a class `SceneConfig` that extends `StaticState` and
+define various properties like `directionalLightIntensity`,
+`ambientLightIntensity`, `color`, `opacity`, and `showBox`. These properties will then be
+available in the Studio UI for configuration.
+
+Here is an example:
+
+```ts
+class SceneConfig extends StaticState {
+  /**
+   * @min 0
+   * @max 10
+   * @step 0.1
+   */
+  directionalLightIntensity = $state(3.1)
+  /**
+   * @min 0
+   * @max 1
+   */
+  ambientLightIntensity = $state(0.13)
+  color = $state('#fe3d00')
+  /**
+   * @min 0
+   * @max 1
+   */
+  opacity = $state(1)
+  showBox = $state(true)
+}
+```
+
+Using it in your scene yields the following UI:
+
+<Example
+  path="studio/static-state"
+  hideStackblitz
+  showFile="Scene.svelte"
+/>
+
+## Example
+
+### Scenario
+
+You want to create a scene that hosts three objects and you want to dial in the
+gap between the objects.
+
+```svelte title="Scene.svelte"
+<script>
+  import Icosahedron from './Icosahedron.svelte'
+  import Sphere from './Sphere.svelte'
+  import Box from './Box.svelte'
+</script>
+
+<Icosahedron position={[-2, 0, 0]} />
+<Sphere position={[0, 0, 0]} />
+<Box position={[2, 0, 0]} />
+```
+
+### Implementation
+
+#### Create a State Container
+
+Create a new class `SceneConfig` that extends `StaticState` and define a
+`gap` property. It must use `$state` to be reactive in order for the
+changes to be reflected in the scene.
+
+```svelte title="Scene.svelte" {2,7-9}+
+<script>
+  import { StaticState } from '@threlte/studio'
+  import Icosahedron from './Icosahedron.svelte'
+  import Sphere from './Sphere.svelte'
+  import Box from './Box.svelte'
+
+  class SceneConfig extends StaticState {
+    gap = $state(1.5)
+  }
+</script>
+
+<Icosahedron position={[-2, 0, 0]} />
+<Sphere position={[0, 0, 0]} />
+<Box position={[2, 0, 0]} />
+```
+
+#### Create an Instance
+
+Create a new instance of `SceneConfig` and use it to update the position of the
+objects.
+
+```svelte title="Scene.svelte" {11}+ {14-18}m
+<script>
+  import { StaticState } from '@threlte/studio'
+  import Icosahedron from './Icosahedron.svelte'
+  import Sphere from './Sphere.svelte'
+  import { StaticState } from '@threlte/studio'
+
+  class SceneConfig extends StaticState {
+    gap = $state(1.5)
+  }
+
+  const sceneConfig = new SceneConfig()
+</script>
+
+<Icosahedron position={[-sceneConfig.gap, 0, 0]} />
+<Sphere position={[0, 0, 0]} />
+<Box position={[sceneConfig.gap, 0, 0]} />
+```
+
+#### Bonus: Use UI Modifiers
+
+To tweak the resulting UI, you can use JSDoc tags to add modifiers. For example,
+you can add `@min` and `@max` to the `gap` property to restrict the range of
+values that can be entered. This will yield a slider in the Studio UI.
+
+```ts {2-5}+
+class SceneConfig extends StaticState {
+  /**
+   * @min 1.5
+   * @max 5
+   */
+  gap = $state(2)
+}
+```
+
+You're done! Changes to the `gap` property in the Studio UI will automatically be
+reflected in the scene and written back to the disk.
+
+<Example
+  path="studio/static-state-gap"
+  hideStackblitz
+  showFile="Scene.svelte"
+/>

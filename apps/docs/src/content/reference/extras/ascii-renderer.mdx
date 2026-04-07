@@ -1,8 +1,8 @@
 ---
-order: 9.10
 category: '@threlte/extras'
+group: 'Visual Effects'
 sourcePath: 'packages/extras/src/lib/components/AsciiRenderer/AsciiRenderer.svelte'
-name: <AsciiRenderer>
+title: <AsciiRenderer>
 type: 'component'
 componentSignature:
   {
@@ -22,60 +22,51 @@ componentSignature:
           default: 'useThrelte().camera.current',
           description: 'the camera to use when renderering',
           name: 'camera',
-          required: false,
           type: THREE.Camera
         },
         {
           default: 'useThrelte().scene',
           description: 'the scene to use when renderering',
           name: 'scene',
-          required: false,
           type: THREE.Scene
         },
         {
           default: 'true',
           description: 'whether to automatically run the render task',
           name: 'autoRender',
-          required: false,
           type: 'boolean'
         },
         {
           name: 'characters',
           default: "' .:-+*=%@#'",
           description: 'character set used by the renderer. Sorted left-to-right from least to most opaque',
-          required: false,
           type: 'string'
         },
         {
           default: "'#000000'",
           description: 'background color used when `options.color` is set to `false`',
           name: 'bgColor',
-          required: false,
           type: 'string'
         },
         {
           default: "'#ffffff'",
           description: 'text color used when `options.color` is set to `false`',
           name: 'fgColor',
-          required: false,
           type: 'string'
         },
         {
           default: '{}',
           description: "object passed to the effect's constructor. because the effect doesn't support adjusting individual option props, whenever an option prop changes, the effect must be recreated",
           name: 'options',
-          required: false,
           type: 'Three.AsciiEffectOptions'
         },
         {
           name: 'onstart',
-          required: false,
           type: '() => void',
           description: 'function to call anytime the renderer has been started'
         },
         {
           name: 'onstop',
-          required: false,
           type: '() => void',
           description: 'function to call anytime the renderer has been stopped'
         }
@@ -143,7 +134,7 @@ Because the effect doesn't support dynamically updating options, any time an `op
 <Tip type="info">
   A new `AsciiEffect` instance must be created anytime `options` changes because an effect can not
   have it options changed after it has been created. This is a limitation of the `AsciiEffect` addon
-  from ThreeJS.
+  from Three.js.
 </Tip>
 
 ## Disabling the Render Task

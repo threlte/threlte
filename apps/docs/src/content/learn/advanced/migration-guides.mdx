@@ -1,5 +1,5 @@
 ---
-category: Advanced
+category: More
 title: Migration Guides
 order: 2
 ---
@@ -809,7 +809,7 @@ const { actions } = useGltfAnimations(gltf)
 // this animation will play when the gltf store has been populated
 // and the actions store has been set, effectively replacing the
 // callback.
-$: $actions.Greet?.play()
+$: actions.current.Greet?.play()
 ```
 
 Check out the [hooks documentation](/docs/reference/extras/use-gltf-animations) for more information.

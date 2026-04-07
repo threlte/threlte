@@ -1,27 +1,21 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, PositionalAudio, useAudioListener, useCursor, useGltf } from '@threlte/extras'
-  import { spring, tweened } from 'svelte/motion'
-  import {
-    BufferGeometry,
-    CylinderGeometry,
-    DoubleSide,
-    Mesh,
-    MeshStandardMaterial,
-    PositionalAudio as ThreePositionalAudio,
-    MathUtils
-  } from 'three'
+  import { Spring, Tween } from 'svelte/motion'
+  import { DoubleSide, Mesh, PositionalAudio as ThreePositionalAudio, MathUtils } from 'three'
   import Button from './Button.svelte'
   import Disc from './Disc.svelte'
+  import type { TurntableProps } from './types'
 
-  let discSpeed = tweened(0, {
+  let { isPlaying = $bindable(false), volume = $bindable(0), ...rest }: TurntableProps = $props()
+
+  let discSpeed = new Tween(0, {
     duration: 1e3
   })
 
-  let armPos = spring(0)
+  let armPos = new Spring(0)
 
-  let started = false
-  export let isPlaying = false
+  let started = $state(false)
 
   export const toggle = async () => {
     if (!started) {
@@ -39,12 +33,14 @@
     }
   }
 
-  let audio: ThreePositionalAudio
+  let audio = $state.raw<ThreePositionalAudio>()
+
   const { context } = useAudioListener()
   const analyser = context.createAnalyser()
-  $: if (audio) audio.getOutput().connect(analyser)
+  $effect(() => {
+    if (audio) audio.getOutput().connect(analyser)
+  })
   const pcmData = new Float32Array(analyser.fftSize)
-  export let volume = 0
   useTask(() => {
     if (!audio) return
     analyser.getFloatTimeDomainData(pcmData)
@@ -57,39 +53,36 @@
 
   let sideA = '/audio/side_a.mp3'
   let sideB = '/audio/side_b.mp3'
-  let source = sideA
+  let source = $state(sideA)
   const changeSide = () => {
     source = source === sideA ? sideB : sideA
   }
 
-  let coverOpen = false
-  const coverAngle = spring(0)
-  $: {
+  let coverOpen = $state(false)
+  const coverAngle = new Spring(0)
+  $effect(() => {
     if (coverOpen) coverAngle.set(80)
     else coverAngle.set(0)
-  }
+  })
 
   const { onPointerEnter, onPointerLeave } = useCursor()
 
-  const gltf = useGltf<{
+  const gltf = await useGltf<{
     nodes: {
       Cover: Mesh
     }
     materials: {}
   }>('/models/turntable/cover.glb')
-  let coverGeometry: BufferGeometry | undefined
-  $: if ($gltf) {
-    const coverMesh = $gltf.nodes.Cover as Mesh
-    coverGeometry = coverMesh.geometry
-  }
+
+  const coverGeometry = $derived(gltf?.nodes.Cover.geometry)
 </script>
 
-<T.Group {...$$restProps}>
+<T.Group {...rest}>
   <!-- DISC -->
   <Disc
     position.x={0.5}
     position.y={1.01}
-    discSpeed={$discSpeed}
+    discSpeed={discSpeed.current}
   />
 
   <!-- CASE -->
@@ -110,7 +103,7 @@
   <T.Group
     position.y={1}
     position.z={-2.2}
-    rotation.x={-$coverAngle * MathUtils.DEG2RAD}
+    rotation.x={-coverAngle.current * MathUtils.DEG2RAD}
   >
     {#if coverGeometry}
       <T.Mesh
@@ -154,14 +147,10 @@
   <T.Group
     position={[2.5, 1.55, -1.8]}
     rotation.z={MathUtils.DEG2RAD * 90}
-    rotation.y={MathUtils.DEG2RAD * 90 - $armPos * 0.3}
+    rotation.y={MathUtils.DEG2RAD * 90 - armPos.current * 0.3}
   >
     <T.Mesh
       castShadow
-      material={new MeshStandardMaterial({
-        color: 0xffffff
-      })}
-      geometry={new CylinderGeometry(0.1, 0.1, 3, 12)}
       position.y={1.5}
     >
       <T.CylinderGeometry args={[0.1, 0.1, 3, 12]} />
@@ -179,7 +168,7 @@
       bind:ref={audio}
       refDistance={15}
       loop
-      playbackRate={$discSpeed}
+      playbackRate={discSpeed.current}
       src={source}
       directionalCone={{
         coneInnerAngle: 90,

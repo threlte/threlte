@@ -20,18 +20,19 @@
   // convert curve to an array of 100 points
   const points = curve.getPoints(100)
 
-  let width = 0.5
-  let dashOffset = 0
-  let color = new Color()
+  let width = $state(0.5)
+  let dashOffset = $state(0)
+  let color = $state('#fe3d00')
   const orange = new Color('#fe3d00')
   const purple = new Color('#9800fe')
+  const c = new Color()
 
   useTask((delta) => {
     // every frame we:
     // increase the dash offset
     dashOffset += delta / 2
     // transition between two colors
-    color.lerpColors(orange, purple, Math.sin(dashOffset * 2) / 2 + 0.5)
+    color = `#${c.lerpColors(orange, purple, Math.sin(dashOffset * 2) / 2 + 0.5).getHexString()}`
     // shrink and grow the line width
     width = Math.sin(dashOffset * 2) / 5 + 0.3
   })

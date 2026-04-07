@@ -1,36 +1,42 @@
-import { type Renderer } from 'three'
-import { createCacheContext } from './fragments/cache'
-import { createCameraContext } from './fragments/camera'
-import { createCanvasContext, type CreateCanvasContextOptions } from './fragments/canvas'
-import { createDisposalContext } from './fragments/disposal'
-import { createParentContext } from './fragments/parent'
-import { createRootParentObject3DContext } from './fragments/parentObject3D'
+import { createParent } from '../components/T/utils/useParent.svelte.js'
+import { createParentObject3D } from '../components/T/utils/useParentObject3D.svelte.js'
+import { createCacheContext } from './fragments/cache.js'
+import { createCameraContext } from './fragments/camera.svelte.js'
+import { createDisposalContext } from './fragments/disposal.svelte.js'
+import { createDOMContext, type CreateDOMContextOptions } from './fragments/dom.svelte.js'
 import {
   createRendererContext,
-  type CreateRendererContextOptions
-} from './fragments/renderer.svelte'
-import { createSceneContext } from './fragments/scene'
+  type CreateRendererContextOptions,
+  type Renderer
+} from './fragments/renderer.svelte.js'
+import { createSceneContext } from './fragments/scene.js'
 import {
   createSchedulerContext,
   type CreateSchedulerContextOptions
-} from './fragments/scheduler.svelte'
-import { createUserContext } from './fragments/user'
+} from './fragments/scheduler.svelte.js'
+import { createUserContext } from './fragments/user.js'
 
 export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererContextOptions<T> &
-  CreateCanvasContextOptions &
+  CreateDOMContextOptions &
   CreateSchedulerContextOptions
 
 export const createThrelteContext = <T extends Renderer>(
-  options: CreateThrelteContextOptions<T>
+  options: CreateThrelteContextOptions<T> | (() => CreateThrelteContextOptions<T>)
 ) => {
-  createCanvasContext(options)
-  createCacheContext()
   const { scene } = createSceneContext()
-  createParentContext(scene)
-  createRootParentObject3DContext(scene)
-  createDisposalContext()
-  createSchedulerContext(options)
-  createCameraContext()
-  createRendererContext(options)
-  createUserContext()
+
+  const opts = typeof options === 'function' ? options : () => options
+
+  return {
+    scene,
+    ...createDOMContext(opts),
+    ...createCacheContext(),
+    ...createParent(() => scene),
+    ...createParentObject3D(() => scene),
+    ...createDisposalContext(),
+    ...createSchedulerContext(opts),
+    ...createCameraContext(),
+    ...createRendererContext(opts),
+    ...createUserContext()
+  }
 }

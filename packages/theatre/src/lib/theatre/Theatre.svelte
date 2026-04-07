@@ -1,19 +1,24 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import type { IProjectConfig } from '@theatre/core'
-  import { Project, Sheet, Studio } from '..'
+  import { Project, Sheet, Studio } from '../index.js'
 
-  export let studio: {
-    enabled?: boolean
-    hide?: boolean
-  } = {}
+  interface Props {
+    studio?: {
+      enabled?: boolean
+      hide?: boolean
+    }
+    config?: IProjectConfig | undefined
+    children?: Snippet
+  }
 
-  export let config: IProjectConfig | undefined = undefined
+  let { studio = {}, config = undefined, children }: Props = $props()
 </script>
 
 <Studio {...studio}>
   <Project {config}>
     <Sheet>
-      <slot />
+      {@render children?.()}
     </Sheet>
   </Project>
 </Studio>

@@ -1,7 +1,13 @@
 <script lang="ts">
-  import { Pane, List, ThemeUtils } from 'svelte-tweakpane-ui'
+  import { Pane, List, Checkbox, ThemeUtils } from 'svelte-tweakpane-ui'
 
-  export let controls: '<TrackballControls>' | '<OrbitControls>' = '<OrbitControls>'
+  interface Props {
+    controls?: '<OrbitControls>' | '<TrackballControls>' | '<CameraControls>'
+    autoPauseControls?: boolean
+  }
+
+  let { controls = $bindable('<OrbitControls>'), autoPauseControls = $bindable(true) }: Props =
+    $props()
 </script>
 
 <Pane
@@ -13,8 +19,13 @@
     label="Camera Controls"
     bind:value={controls}
     options={{
+      '<OrbitControls>': '<OrbitControls>',
       '<TrackballControls>': '<TrackballControls>',
-      '<OrbitControls>': '<OrbitControls>'
+      '<CameraControls>': '<CameraControls>'
     }}
+  />
+  <Checkbox
+    label="autoPauseControls"
+    bind:value={autoPauseControls}
   />
 </Pane>

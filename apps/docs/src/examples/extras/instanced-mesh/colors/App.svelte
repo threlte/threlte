@@ -1,16 +1,23 @@
 <script lang="ts">
-  import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core'
+  import { Slider, Pane } from 'svelte-tweakpane-ui'
+
+  let size = $state(10)
 </script>
 
-<div>
-  <Canvas>
-    <Scene />
-  </Canvas>
-</div>
+<Pane
+  position="fixed"
+  title="Instanced Colors"
+>
+  <Slider
+    min={10}
+    max={50}
+    step={10}
+    bind:value={size}
+  />
+</Pane>
 
-<style>
-  div {
-    height: 100%;
-  }
-</style>
+<Canvas>
+  <Scene {size} />
+</Canvas>

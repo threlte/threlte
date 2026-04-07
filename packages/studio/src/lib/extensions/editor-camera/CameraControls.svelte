@@ -22,10 +22,10 @@
 </script>
 
 <script lang="ts">
-  import { useCanvas, useTask, useThrelte } from '@threlte/core'
+  import { useTask, useThrelte } from '@threlte/core'
   import { onMount, tick } from 'svelte'
-  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte'
-  import { useTransformControls } from '../transform-controls/useTransformControls'
+  import { useObjectSelection } from '../object-selection/useObjectSelection.svelte.js'
+  import { useTransformControls } from '../transform-controls/useTransformControls.js'
   import { Gizmo } from '@threlte/extras'
 
   if (!installed) {
@@ -56,10 +56,9 @@
 
   const { camera, initialPosition, initialTarget, cc, rest }: Props = $props()
 
-  const { renderer, invalidate } = useThrelte()
-  const { wrapper } = useCanvas()
+  const { dom, invalidate } = useThrelte()
 
-  const cameraControls = new CameraControls(camera, wrapper)
+  const cameraControls = new CameraControls(camera, dom)
   cameraControls.smoothTime = 0.05
   cameraControls.draggingSmoothTime = 0.05
   cameraControls.dollyToCursor = true

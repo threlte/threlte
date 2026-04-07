@@ -1,19 +1,18 @@
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
-  import { useSuspense } from '@threlte/extras'
-  import { fromStore } from 'svelte/store'
-
-  const suspended = fromStore(useSuspense().suspended)
 
   const { renderer } = useThrelte()
 
   $effect(() => {
-    if (!suspended.current) {
-      renderer.shadowMap.autoUpdate = false
-      renderer.shadowMap.needsUpdate = true
-    }
+    if ($effect.pending() > 0) return
+
+    const { autoUpdate } = renderer.shadowMap
+
+    renderer.shadowMap.autoUpdate = false
+    renderer.shadowMap.needsUpdate = true
+
     return () => {
-      renderer.shadowMap.autoUpdate = true
+      renderer.shadowMap.autoUpdate = autoUpdate
       renderer.shadowMap.needsUpdate = true
     }
   })

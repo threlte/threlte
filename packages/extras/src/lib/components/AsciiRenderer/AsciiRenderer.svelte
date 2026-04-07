@@ -1,8 +1,8 @@
 <script lang="ts">
-  import type { AsciiRendererProps } from './types'
-  import { AsciiEffect } from 'three/examples/jsm/Addons.js'
-  import { fromStore } from 'svelte/store'
+  import type { AsciiRendererProps } from './types.js'
+  import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
   import { useTask, useThrelte } from '@threlte/core'
+  import { untrack } from 'svelte'
 
   const defaultCharacters = ' .:-+*=%@#'
 
@@ -12,8 +12,6 @@
     camera,
     characters = defaultCharacters,
     fgColor = '#ffffff',
-    onstart,
-    onstop,
     options = {},
     scene,
     children
@@ -24,6 +22,8 @@
     camera: defaultCamera,
     renderStage,
     renderer,
+    canvas,
+    dom,
     scene: defaultScene,
     size
   } = useThrelte()
@@ -43,10 +43,8 @@
 
   export const getEffect = () => asciiEffect
 
-  const sizeStore = fromStore(size)
-
   $effect.pre(() => {
-    asciiEffect.setSize(sizeStore.current.width, sizeStore.current.height)
+    asciiEffect.setSize(size.current.width, size.current.height)
   })
 
   $effect.pre(() => {
@@ -58,48 +56,34 @@
   })
 
   $effect(() => {
-    renderer.domElement.style.opacity = '0'
+    canvas.style.opacity = '0'
     const last = asciiEffect.domElement
-    renderer.domElement.parentNode?.appendChild(last)
+    dom.appendChild(last)
     return () => {
-      renderer.domElement.style.opacity = '1'
-      renderer.domElement.parentNode?.removeChild(last)
+      canvas.style.opacity = '1'
+      dom.removeChild(last)
     }
   })
 
-  const { start: startRendering, stop: stopRendering } = useTask(
+  useTask(
     () => {
       asciiEffect.render(scene ?? defaultScene, camera ?? defaultCamera.current)
     },
-    { autoInvalidate: false, autoStart: false, stage: renderStage }
+    {
+      autoInvalidate: false,
+      stage: renderStage,
+      running: () => autoRender
+    }
   )
 
-  export const start = () => {
-    startRendering()
-    onstart?.()
-  }
-
-  export const stop = () => {
-    stopRendering()
-    onstop?.()
-  }
-
   $effect(() => {
-    if (autoRender) {
-      start()
+    return untrack(() => {
+      const lastAutoRender = threlteAutoRender.current
+      threlteAutoRender.set(false)
       return () => {
-        // this should stop the task on unmount as well
-        stop()
+        threlteAutoRender.set(lastAutoRender)
       }
-    }
-  })
-
-  $effect(() => {
-    const lastAutoRender = threlteAutoRender.current
-    threlteAutoRender.set(!autoRender)
-    return () => {
-      threlteAutoRender.set(lastAutoRender)
-    }
+    })
   })
 </script>
 

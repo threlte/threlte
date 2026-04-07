@@ -14,11 +14,11 @@
 </script>
 
 <script lang="ts">
-  import { T, useLoader, useTask } from '@threlte/core'
+  import type { Group } from 'three'
   import { CubeCamera, Environment, Grid, OrbitControls } from '@threlte/extras'
-  import type { Vector3Tuple } from 'three'
   import { EquirectangularReflectionMapping } from 'three'
   import { RGBELoader } from 'three/examples/jsm/Addons.js'
+  import { T, useLoader, useTask } from '@threlte/core'
 
   type SceneProps = {
     frames?: number
@@ -43,9 +43,15 @@
   const increment = (2 * Math.PI) / colors.length
   const radius = 3
 
-  let time = $state(0)
+  let time = 0
+  const groups: Group[] = []
   useTask((delta) => {
     time += delta
+    let i = 0
+    for (const group of groups) {
+      group.position.setY(2 * Math.sin(time + i))
+      i += 1
+    }
   })
 
   const hdrPath = '/textures/equirectangular/hdr/'
@@ -56,12 +62,14 @@
     }
   })
 
-  const backgrounds = loader.load(hdrs, {
+  const backgrounds = await loader.load(hdrs, {
     transform(texture) {
       texture.mapping = EquirectangularReflectionMapping
       return texture
     }
   })
+
+  const background = $derived(isHdrKey(hdr) ? backgrounds[hdr] : hdr)
 </script>
 
 <T.PerspectiveCamera
@@ -87,26 +95,28 @@
   cellColor="#fff"
 />
 
-{#await backgrounds then backgroundMap}
-  {@const background = isHdrKey(hdr) ? backgroundMap[hdr] : hdr}
-  {#each colors as color, i}
-    {@const r = increment * i}
-    <T.Mesh
-      position.x={radius * Math.cos(r)}
-      position.y={i}
-      position.z={radius * Math.sin(r)}
-    >
-      <T.MeshStandardMaterial {color} />
-      <T.SphereGeometry />
-    </T.Mesh>
-  {/each}
+{#each colors as color, i}
+  {@const r = increment * i}
+  <T.Mesh
+    position.x={radius * Math.cos(r)}
+    position.y={i}
+    position.z={radius * Math.sin(r)}
+  >
+    <T.MeshStandardMaterial {color} />
+    <T.SphereGeometry />
+  </T.Mesh>
+{/each}
 
-  {#each Array(colors.length) as _, i}
-    {@const r = Math.PI + increment * i}
+{#each Array(colors.length), i}
+  {@const r = Math.PI + increment * i}
+  <T.Group
+    position.x={radius * Math.cos(r)}
+    position.z={radius * Math.sin(r)}
+    oncreate={(ref) => {
+      groups.push(ref)
+    }}
+  >
     <CubeCamera
-      position.x={radius * Math.cos(r)}
-      position.y={2 * Math.sin(time + i)}
-      position.z={radius * Math.sin(r)}
       {background}
       {frames}
       {near}
@@ -123,5 +133,5 @@
         </T.Mesh>
       {/snippet}
     </CubeCamera>
-  {/each}
-{/await}
+  </T.Group>
+{/each}
