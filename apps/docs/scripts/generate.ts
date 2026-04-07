@@ -7,8 +7,14 @@ import { ComponentParser } from 'sveld'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 const PACKAGES_DIR = resolve(__dirname, '../../../packages')
-const IGNORED_PACKAGES = ['core', 'gltf', 'studio', 'theatre', 'xr', 'flex', 'rapier', 'sv']
-const parser = new ComponentParser()
+const IGNORED_PACKAGES = ['extras', 'gltf', 'studio', 'theatre', 'xr', 'flex', 'rapier', 'sv']
+const CANVAS_PATHS = [
+  '/core/src/lib/context/createThrelteContext.svelte.ts',
+  '/core/src/lib/context/fragments/renderer.svelte.ts',
+  '/core/src/lib/context/fragments/scheduler.svelte.ts',
+  '/core/src/lib/context/fragments/dom.ts'
+]
+const sveldParser = new ComponentParser()
 
 interface PropInfo {
   name: string
@@ -84,6 +90,9 @@ function collectPackageNames(packagesDir: string, ignored: string[]): string[] {
   })
 }
 
+/**
+ * Only looks for the `.svelte` exports within the top level `index.ts` file of a package
+ */
 function collectComponents(packageName: string): string[] {
   const srcIndex = resolve(PACKAGES_DIR, packageName, 'src', 'lib', 'index.ts')
 
@@ -98,15 +107,16 @@ function collectComponents(packageName: string): string[] {
     filepaths.push(fullPath)
   }
 
-  // core is weird too? lets add T for funzies
   if (packageName === 'core') {
-    // hardcoded because we can
-    const fullPath = resolve(__dirname, `../../../packages/core/src/lib/components/T/T.svelte`)
-    filepaths.push(fullPath)
+    return [resolve(__dirname, `../../../packages/core/src/lib/Canvas.svelte`)]
   }
+
   return filepaths
 }
 
+/**
+ * looks for a `types.ts` file within the same directory as the given svelte component path
+ */
 function findTypesFile(componentPath: string) {
   const dir = dirname(componentPath)
   const typesPath = join(dir, 'types.ts')
@@ -116,10 +126,6 @@ function findTypesFile(componentPath: string) {
   return undefined
 }
 
-/**
- *
- * we use both the .svelte file convertered into tsx and we look into the surrounding types.ts files
- */
 function getDataFromSources(params: { name: string; path: string }) {
   const { name, path } = params
 
@@ -128,8 +134,12 @@ function getDataFromSources(params: { name: string; path: string }) {
 
   // canvas is a special case
   if (name === 'Canvas') {
-    typesFileData = extractCanvasData({ name, path })
+    return getCanvasData()
   }
+
+  // console.log(svelteFileData)
+  // console.log('-------------------------')
+  // console.log(typesFileData)
 
   return mergeData(svelteFileData, typesFileData)
 }
@@ -174,7 +184,14 @@ function getDataFromJSDocs(prop: Symbol) {
       const jsDocs = declaration.getJsDocs()
       for (const jsDoc of jsDocs) {
         description = jsDoc.getDescription().trim() || undefined
+        if (prop.getName() === 'colorManagementEnabled') {
+          writeFileSync(
+            resolve(__dirname, 'description.json'),
+            JSON.stringify({ description }, null, 2)
+          )
+        }
         // easy edit to remove \n 's
+        description = description?.replaceAll(/(\r\n)+/g, ' ')
         description = description?.replaceAll(/\n+/g, '. ')
         for (const tag of jsDoc.getTags()) {
           if (tag.getTagName() === 'default') {
@@ -182,12 +199,6 @@ function getDataFromJSDocs(prop: Symbol) {
             defaultValue = typeof comment === 'string' ? comment.trim() : undefined
           }
         }
-        // if (tag.getTagName() === 'default') {
-        //       const comment = tag.getComment()
-        //       if (typeof comment === 'string' && comment.trim()) {
-        //         defaultMap.set(prop.getName(), comment.trim())
-        //       }
-        //     }
       }
     }
   }
@@ -199,7 +210,7 @@ function dataFromSvelteFile(params: { name: string; path: string }) {
 
   const src = readFileSync(path, 'utf-8')
 
-  const parsedComponent = parser.parseSvelteComponent(src, {
+  const parsedComponent = sveldParser.parseSvelteComponent(src, {
     filePath: path,
     moduleName: name
   })
@@ -327,10 +338,6 @@ function mergeData(
   const finalExports: ExportInfo[] =
     svelteDataSource.exports.length > 0 ? svelteDataSource.exports : []
 
-  // console.log(svelteDataSource)
-  // console.log('-------------------------')
-  // console.log(typesDataSource)
-
   for (const prop of svelteDataSource.props) {
     const { name } = prop
 
@@ -370,64 +377,44 @@ function mergeData(
   return merged
 }
 
-function extractCanvasData(params: { name: string; path: string }) {
-  const { name, path } = params
-
-  // const typeAliases = project.getSourceFiles().flatMap((file) => file.getTypeAliases())
-  // const contextAlias = typeAliases.find((t) => t.getName() === 'CreateThrelteContextOptions')
-
-  // if (!contextAlias) {
-  //   throw 'No CreateThrelteContextOptions type alias found'
-  // }
-
-  // const defaultMap = collectDefaults(typeAliases)
-
-  // const data = contextAlias
-  //   .getType()
-  //   .getApparentProperties()
-  //   .filter((prop) => !['canvas', 'dom'].includes(prop.getName()))
-  //   .map((prop) => {
-  //     const typeText = prop.getTypeAtLocation(contextAlias).getText()
-  //     return {
-  //       name: prop.getName(),
-  //       type: typeText,
-  //       default: defaultMap[prop.getName()]
-  //     }
-  //   })
-
-  // propsData.push(
-  //   ...options.map((o) => ({
-  //     name: o.name,
-  //     type: o.type,
-  //     default: o.default,
-  //     description: undefined
-  //   }))
-  // )
-
-  return { props: [], events: [] } //data
-}
-
-function collectDefaults(typeAliases: Array<ReturnType<SourceFile['getTypeAliases']>[number]>) {
-  const aliases = [
-    'CreateRendererContextOptions',
-    'CreateSchedulerContextOptions',
-    'CreateDOMContextOptions'
-  ]
-  const defaultMap: Record<string, string> = {}
-
-  for (const name of aliases) {
-    const alias = typeAliases.find((t) => t.getName() === name)
-    if (!alias) continue
-
-    for (const prop of alias.getType().getProperties()) {
-      let { description } = getDataFromJSDocs(prop)
-      if (description) {
-        defaultMap[prop.getName()] = description
-      }
-    }
+function getCanvasData() {
+  const project = new Project()
+  for (const path of CANVAS_PATHS) {
+    project.addSourceFileAtPath(join(PACKAGES_DIR, path))
   }
 
-  return defaultMap
+  const typeAliases = project.getSourceFiles().flatMap((file) => file.getTypeAliases())
+  const contextAlias = typeAliases.find((t) => t.getName() === 'CreateThrelteContextOptions')
+
+  if (!contextAlias) {
+    throw 'No CreateThrelteContextOptions type alias found'
+  }
+
+  const data = contextAlias
+    .getType()
+    .getApparentProperties()
+    .filter((prop) => !['canvas', 'dom'].includes(prop.getName()))
+    .map((prop) => {
+      const typeText = prop.getTypeAtLocation(contextAlias).getText()
+      const { description, defaultValue } = getDataFromJSDocs(prop)
+      let temp: PropInfo = {
+        name: prop.getName(),
+        type: updateTypeText(typeText)
+      }
+      if (description) {
+        temp.description = description
+      }
+      if (defaultValue) {
+        temp.default = defaultValue
+      }
+      // hardcoded solution to make it easy on ourselves
+      if (prop.getName() === 'createRenderer') {
+        temp.type = '(canvas: HTMLCanvasElement) => THREE.Renderer'
+      }
+      return temp
+    })
+
+  return { props: data }
 }
 
 main().catch((e) => {
