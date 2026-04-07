@@ -8,13 +8,13 @@ describe('pointermove', () => {
   it('fires onpointermove when moving over a mesh', async () => {
     const onpointermoveA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointermoveA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // The first pointermove in a frame is processed immediately
@@ -27,13 +27,13 @@ describe('pointermove', () => {
   it('does not fire onpointermove when moving over empty space', async () => {
     const onpointermoveA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointermoveA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // The first pointermove in a frame is processed immediately
@@ -46,13 +46,13 @@ describe('pointermove', () => {
   it('processes the first pointermove immediately and coalesces the rest', async () => {
     const onpointermoveA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointermoveA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // The first pointermove in a frame is processed immediately for responsive

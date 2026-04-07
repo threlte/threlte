@@ -8,11 +8,11 @@ describe('pointerenter', () => {
   it('fires onpointerenter when the pointer enters a mesh', async () => {
     const onpointerenterA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointerenterA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First pointermove in a frame is processed immediately
@@ -25,11 +25,11 @@ describe('pointerenter', () => {
   it('does not fire onpointerenter again on subsequent moves within the mesh', async () => {
     const onpointerenterA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointerenterA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, fires onpointerenter

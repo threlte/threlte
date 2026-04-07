@@ -63,6 +63,14 @@ export const useCamera = (
 
     return () => {
       makeDefaultCameras.delete(currentCamera)
+      // If the unmounted camera was the active default, fall back to
+      // another makeDefault camera. The size === 0 fallback in
+      // camera.svelte.ts handles the case where no makeDefault cameras remain.
+      const next = makeDefaultCameras.values().next().value
+      if (defaultCamera.current === currentCamera && next) {
+        defaultCamera.set(next)
+        invalidate()
+      }
     }
   })
 

@@ -10,13 +10,13 @@ describe('contextmenu', () => {
   it('fires oncontextmenu when a mesh is right-clicked', async () => {
     const oncontextmenuA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         oncontextmenuA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits mesh A
@@ -33,13 +33,13 @@ describe('contextmenu', () => {
   it('does not fire oncontextmenu when right-clicking empty space', async () => {
     const oncontextmenuA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         oncontextmenuA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown in empty space → hits nothing

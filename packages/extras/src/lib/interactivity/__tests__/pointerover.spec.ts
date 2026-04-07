@@ -8,11 +8,11 @@ describe('pointerover', () => {
   it('fires onpointerover when the pointer moves over a mesh', async () => {
     const onpointeroverA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointeroverA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First pointermove in a frame is processed immediately
@@ -25,11 +25,11 @@ describe('pointerover', () => {
   it('does not fire onpointerover again on subsequent moves over the same mesh', async () => {
     const onpointeroverA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointeroverA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, fires onpointerover

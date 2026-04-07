@@ -10,14 +10,14 @@ describe('event propagation', () => {
     const onpointerdownChild = vi.fn()
     const onpointerdownParent = vi.fn()
 
-    const { context, container } = render(PropagationScene, {
+    const { context } = render(PropagationScene, {
       props: {
         onpointerdownChild,
         onpointerdownParent
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits Child, bubbles to Parent
@@ -33,14 +33,14 @@ describe('event propagation', () => {
     const onpointerdownChild = vi.fn(() => callOrder.push('child'))
     const onpointerdownParent = vi.fn(() => callOrder.push('parent'))
 
-    const { context, container } = render(PropagationScene, {
+    const { context } = render(PropagationScene, {
       props: {
         onpointerdownChild,
         onpointerdownParent
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits Child, bubbles to Parent
@@ -55,14 +55,14 @@ describe('event propagation', () => {
     const onpointerdownFront = vi.fn(() => callOrder.push('front'))
     const onpointerdownBack = vi.fn(() => callOrder.push('back'))
 
-    const { context, container } = render(OverlappingScene, {
+    const { context } = render(OverlappingScene, {
       props: {
         onpointerdownFront,
         onpointerdownBack
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits both Front (z=-3) and Back (z=-7)
@@ -79,14 +79,14 @@ describe('event propagation', () => {
     const onpointerdownFront = vi.fn()
     const onpointerdownBack = vi.fn()
 
-    const { context, container } = render(OverlappingScene, {
+    const { context } = render(OverlappingScene, {
       props: {
         onpointerdownFront,
         onpointerdownBack
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits both overlapping meshes
@@ -103,14 +103,14 @@ describe('event propagation', () => {
     const onpointerdownFront = vi.fn((e) => e.stopPropagation())
     const onpointerdownBack = vi.fn()
 
-    const { context, container } = render(OverlappingScene, {
+    const { context } = render(OverlappingScene, {
       props: {
         onpointerdownFront,
         onpointerdownBack
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits both, but Front calls stopPropagation
@@ -127,7 +127,7 @@ describe('event propagation', () => {
     const onpointeroutBack = vi.fn()
     const onpointermoveFront = vi.fn()
 
-    const { context, container } = render(OverlappingScene, {
+    const { context } = render(OverlappingScene, {
       props: {
         onpointeroverBack,
         onpointeroutBack,
@@ -135,7 +135,7 @@ describe('event propagation', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hover both objects (no stopPropagation)

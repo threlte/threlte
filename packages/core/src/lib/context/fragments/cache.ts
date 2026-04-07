@@ -49,8 +49,10 @@ export const createCacheContext = () => {
 
     const promise = callback()
 
-    // If the promise rejects, remove the cache entry so that retries can be made
-    promise.catch((error) => {
+    // If the promise rejects, remove the cache entry so that retries can be made.
+    // The caller holds the original `promise` and will see the rejection through
+    // it — re-throwing here would create a separate unhandled rejected promise.
+    promise.catch(() => {
       for (let i = 0; i < items.length; i++) {
         const entry = items[i]
         if (shallowEqualArrays(keys, entry.keys)) {
@@ -58,8 +60,6 @@ export const createCacheContext = () => {
           break
         }
       }
-
-      throw error
     })
 
     // If no match was found, create a new entry

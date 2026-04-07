@@ -9,13 +9,13 @@ describe('event data', () => {
   it('extends the native Three.js intersection with interactivity properties', async () => {
     const onpointerdownA = vi.fn()
 
-    const { context, container, scene } = render(Scene, {
+    const { context, scene } = render(Scene, {
       props: {
         onpointerdownA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // Perform a manual raycast to get the native Three.js intersection
