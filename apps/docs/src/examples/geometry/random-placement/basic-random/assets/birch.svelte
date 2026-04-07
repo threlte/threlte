@@ -54,7 +54,7 @@
       />
     {/each}
   </InstancedMesh>
-  <InstancedMesh>
+  <InstancedMesh castShadow>
     <T is={$gltf.nodes.Cube004_1.geometry} />
     <T.MeshStandardMaterial
       map={$texture2}

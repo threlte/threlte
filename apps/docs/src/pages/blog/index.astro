@@ -35,7 +35,7 @@ const entries = collection
               <div>
                 <a
                   class="group mb-5 block"
-                  href={`/blog/${entry.slug}`}
+                  href={`${import.meta.env.BASE_URL}blog/${entry.slug}`}
                 >
                   <h2 class="mb-0 text-[2.25rem] leading-tight font-bold decoration-dashed decoration-2 underline-offset-4 group-hover:underline">
                     {entry.title}

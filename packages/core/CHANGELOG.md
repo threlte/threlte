@@ -1,5 +1,53 @@
 # @threlte/core
 
+## 8.5.7
+
+### Patch Changes
+
+- bd14893: resolvePropertyPath logs a descriptive error instead of crashing on null segments
+- bd14893: Fix: DAG phantom node removal no longer corrupts ordering constraints
+- bd14893: Fix: memoizedProps cleared on instance change to prevent memory leak
+- bd14893: Removed duplicate ResizeObserver — renderer now uses DOM context's instance
+- bd14893: Fix autoRender/renderMode options reactivity
+
+## 8.5.6
+
+### Patch Changes
+
+- d6cd393: Reduce garbage generation in DAG caused by intermediate arrays
+- d6cd393: Improve DAG sort performance by removing redundant array searches
+- d6cd393: Remove mitt runtime dependency by using a smaller internal event emitter
+- d6cd393: Improve DAG performance by using Maps
+- a0e83d5: Fix: useLoader "loader" prop is undefined before calling load
+
+## 8.5.5
+
+### Patch Changes
+
+- 1c778ba: Use reactive devicePixelRatio to account for browser zoom
+- 3054b68: Resolve all state_referenced_locally warnings
+- bc2215b: Fix: `useTask` leaks `fn` in `autoInvalidations` on unmount
+- dc8b512: Prevent flickering when resizing viewport
+- 9215d09: Defer disposal until unmount when `<T>` is given multiple instances via the `is` property
+
+## 8.5.4
+
+### Patch Changes
+
+- d9ad8f1: Fix case where `useTask`'s running option would run even if set to false
+
+## 8.5.3
+
+### Patch Changes
+
+- 761ab03: Remove barrel export files
+
+## 8.5.2
+
+### Patch Changes
+
+- 3ef48f4: Fix useCache so that rejected promises are not indefinitely cached
+
 ## 8.5.1
 
 ### Patch Changes

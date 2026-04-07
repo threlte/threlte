@@ -1,5 +1,25 @@
 # @threlte/xr
 
+## 1.5.2
+
+### Patch Changes
+
+- b41ad7c: Delegate stopImmediatePropagation on synthetic events to the native DOM event, allowing handlers to block camera controls (e.g. OrbitControls) during drags.
+
+## 1.5.1
+
+### Patch Changes
+
+- c35e8d3: Fix: pointerControls duplicate events firing when parent and child are both registered
+- 9645321: Use correct key granularity for instanced or non instanced objects when deduping interactivity events
+- c35e8d3: Fix: pointerControls did not account for dynamic handler additions
+
+## 1.5.0
+
+### Minor Changes
+
+- 5cdc8de: Added handFactory and controllerFactory optional param to XR.svelte. These factories will be used in place of the default in setupHands/setupController respectively. This allows the user to prevent the default behavior of fetching from the online profiles repository, if for example their app is intended for offline use.
+
 ## 1.4.0
 
 ### Minor Changes

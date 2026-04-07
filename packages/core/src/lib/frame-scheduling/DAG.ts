@@ -1,5 +1,3 @@
-import mitt, { type Emitter } from 'mitt'
-
 type Vertex<T> = { value: T | undefined; previous: Set<Key>; next: Set<Key> }
 
 export type Key = string | symbol
@@ -9,42 +7,61 @@ export type AddNodeOptions<T> = {
   after?: (Key | T) | (Key | T)[] | undefined
 }
 
-type Events<T> = {
+type DAGEventType = 'node:added' | 'node:removed'
+
+type DAGEvents<T> = {
   'node:added': { key: Key; value: T; type: 'isolated' | 'connected' }
   'node:removed': { key: Key; type: 'isolated' | 'connected' }
 }
 
 export class DAG<T extends { key: Key }> {
-  private allVertices: Record<Key, Vertex<T>> = {}
+  private allVertices: Map<Key, Vertex<T>> = new Map()
 
   /** Nodes that are fully unlinked */
-  private isolatedVertices: Record<Key, Vertex<T>> = {}
-  private connectedVertices: Record<Key, Vertex<T>> = {}
+  private isolatedVertices: Map<Key, Vertex<T>> = new Map()
+  private connectedVertices: Map<Key, Vertex<T>> = new Map()
 
   private sortedConnectedValues: T[] = []
   private needsSort = false
 
-  private emitter: Emitter<Events<T>> = mitt<Events<T>>()
-  private emit: Emitter<Events<T>>['emit'] = this.emitter.emit.bind(this.emitter)
-  public on: Emitter<Events<T>>['on'] = this.emitter.on.bind(this.emitter)
-  public off: Emitter<Events<T>>['off'] = this.emitter.off.bind(this.emitter)
+  private listeners = new Map<DAGEventType, Set<(data: any) => void>>()
+
+  private emit<K extends DAGEventType>(type: K, data: DAGEvents<T>[K]) {
+    const set = this.listeners.get(type)
+    if (set) {
+      for (const handler of set) handler(data)
+    }
+  }
+
+  public on<K extends DAGEventType>(type: K, handler: (data: DAGEvents<T>[K]) => void) {
+    let set = this.listeners.get(type)
+    if (!set) {
+      set = new Set()
+      this.listeners.set(type, set)
+    }
+    set.add(handler)
+  }
+
+  public off<K extends DAGEventType>(type: K, handler: (data: DAGEvents<T>[K]) => void) {
+    this.listeners.get(type)?.delete(handler)
+  }
 
   protected get sortedVertices(): T[] {
     return this.mapNodes((value) => value)
   }
 
   private moveToIsolated(key: Key) {
-    const vertex = this.connectedVertices[key]
+    const vertex = this.connectedVertices.get(key)
     if (!vertex) return
-    this.isolatedVertices[key] = vertex
-    delete this.connectedVertices[key]
+    this.isolatedVertices.set(key, vertex)
+    this.connectedVertices.delete(key)
   }
 
   private moveToConnected(key: Key) {
-    const vertex = this.isolatedVertices[key]
+    const vertex = this.isolatedVertices.get(key)
     if (!vertex) return
-    this.connectedVertices[key] = vertex
-    delete this.isolatedVertices[key]
+    this.connectedVertices.set(key, vertex)
+    this.isolatedVertices.delete(key)
   }
 
   private getKey = (v: T | Key): Key => {
@@ -55,11 +72,11 @@ export class DAG<T extends { key: Key }> {
   }
 
   protected add(key: Key, value: T, options?: AddNodeOptions<T>) {
-    if (this.allVertices[key] && this.allVertices[key].value !== undefined) {
+    let vertex = this.allVertices.get(key)
+
+    if (vertex && vertex.value !== undefined) {
       throw new Error(`A node with the key ${key.toString()} already exists`)
     }
-
-    let vertex = this.allVertices[key]
 
     if (!vertex) {
       vertex = {
@@ -68,7 +85,7 @@ export class DAG<T extends { key: Key }> {
         next: new Set()
       }
       // add the vertex to the list of all vertices
-      this.allVertices[key] = vertex
+      this.allVertices.set(key, vertex)
     } else if (vertex.value === undefined) {
       vertex.value = value
     }
@@ -78,7 +95,7 @@ export class DAG<T extends { key: Key }> {
 
     if (!options?.after && !options?.before && !hasEdges) {
       // the node we're about to add is fully unlinked
-      this.isolatedVertices[key] = vertex
+      this.isolatedVertices.set(key, vertex)
       this.emit('node:added', {
         key,
         type: 'isolated',
@@ -86,60 +103,62 @@ export class DAG<T extends { key: Key }> {
       })
       return
     } else {
-      this.connectedVertices[key] = vertex
+      this.connectedVertices.set(key, vertex)
     }
 
     if (options?.after) {
       const afterArr = Array.isArray(options.after) ? options.after : [options.after]
       // we need to update the vertex to include the new "after" nodes
-      afterArr.forEach((after) => {
+      for (const after of afterArr) {
         vertex.previous.add(this.getKey(after))
-      })
-      afterArr.forEach((after) => {
+      }
+      for (const after of afterArr) {
         const afterKey = this.getKey(after)
         // we get the vertex from the list of all vertices
-        const linkedAfter = this.allVertices[afterKey]
+        const linkedAfter = this.allVertices.get(afterKey)
         if (!linkedAfter) {
           // if it doesn't exist, we create it
-          this.allVertices[afterKey] = {
+          const newVertex: Vertex<T> = {
             value: undefined, // uninitialized
             previous: new Set(),
             next: new Set([key])
           }
-          this.connectedVertices[afterKey] = this.allVertices[afterKey]
+          this.allVertices.set(afterKey, newVertex)
+          this.connectedVertices.set(afterKey, newVertex)
         } else {
           // if it does exist, we update it
           linkedAfter.next.add(key)
           // we might need to move the vertex from isolated to connected
           this.moveToConnected(afterKey)
         }
-      })
+      }
     }
     if (options?.before) {
       const beforeArr = Array.isArray(options.before) ? options.before : [options.before]
       // we need to update the vertex to include the new "before" nodes
-      beforeArr.forEach((before) => {
+      for (const before of beforeArr) {
         vertex.next.add(this.getKey(before))
-      })
-      beforeArr.forEach((before) => {
+      }
+      for (const before of beforeArr) {
         const beforeKey = this.getKey(before)
         // we get the vertex from the list of all vertices
-        const linkedBefore = this.allVertices[beforeKey]
+        const linkedBefore = this.allVertices.get(beforeKey)
         if (!linkedBefore) {
           // if it doesn't exist, we create it
-          this.allVertices[beforeKey] = {
+          const newVertex: Vertex<T> = {
             value: undefined, // uninitialized
             previous: new Set([key]),
             next: new Set()
           }
-          this.connectedVertices[beforeKey] = this.allVertices[beforeKey]
+          this.allVertices.set(beforeKey, newVertex)
+          this.connectedVertices.set(beforeKey, newVertex)
         } else {
           // if it does exist, we update it
           linkedBefore.previous.add(key)
           // we might need to move the vertex from isolated to connected
           this.moveToConnected(beforeKey)
         }
-      })
+      }
     }
 
     this.emit('node:added', {
@@ -155,10 +174,10 @@ export class DAG<T extends { key: Key }> {
   protected remove(key: Key | T) {
     const removeKey = this.getKey(key)
     // check if it's an unlinked vertex
-    const unlinkedVertex = this.isolatedVertices[removeKey]
+    const unlinkedVertex = this.isolatedVertices.get(removeKey)
     if (unlinkedVertex) {
-      delete this.isolatedVertices[removeKey]
-      delete this.allVertices[removeKey]
+      this.isolatedVertices.delete(removeKey)
+      this.allVertices.delete(removeKey)
       this.emit('node:removed', {
         key: removeKey,
         type: 'isolated'
@@ -167,38 +186,40 @@ export class DAG<T extends { key: Key }> {
     }
 
     // if it's not, it's a bit more complicated
-    const linkedVertex = this.connectedVertices[removeKey]
+    const linkedVertex = this.connectedVertices.get(removeKey)
 
-    if (!linkedVertex) {
-      // The node does not exist in the graph.
+    if (!linkedVertex || linkedVertex.value === undefined) {
+      // The node does not exist in the graph, or is a phantom placeholder
+      // created by another node's before/after constraint. Don't remove
+      // phantoms — they hold ordering edges for the real node when it arrives.
       return
     }
 
     // Update the 'next' nodes that this node points to
-    linkedVertex.next.forEach((nextKey) => {
-      const nextVertex = this.connectedVertices[nextKey]
+    for (const nextKey of linkedVertex.next) {
+      const nextVertex = this.connectedVertices.get(nextKey)
       if (nextVertex) {
         nextVertex.previous.delete(removeKey)
         if (nextVertex.previous.size === 0 && nextVertex.next.size === 0) {
           this.moveToIsolated(nextKey)
         }
       }
-    })
+    }
 
     // Update the 'previous' nodes that point to this node
-    linkedVertex.previous.forEach((prevKey) => {
-      const prevVertex = this.connectedVertices[prevKey]
+    for (const prevKey of linkedVertex.previous) {
+      const prevVertex = this.connectedVertices.get(prevKey)
       if (prevVertex) {
         prevVertex.next.delete(removeKey)
         if (prevVertex.previous.size === 0 && prevVertex.next.size === 0) {
           this.moveToIsolated(prevKey)
         }
       }
-    })
+    }
 
     // Finally, remove the node from the graph
-    delete this.connectedVertices[removeKey]
-    delete this.allVertices[removeKey]
+    this.connectedVertices.delete(removeKey)
+    this.allVertices.delete(removeKey)
 
     this.emit('node:removed', {
       key: removeKey,
@@ -228,25 +249,13 @@ export class DAG<T extends { key: Key }> {
     for (; index < this.sortedConnectedValues.length; index++) {
       callback(this.sortedConnectedValues[index], index)
     }
-    Reflect.ownKeys(this.isolatedVertices).forEach((key) => {
-      const vertex = this.isolatedVertices[key]
+    for (const [, vertex] of this.isolatedVertices) {
       if (vertex.value !== undefined) callback(vertex.value, index++)
-    })
+    }
   }
 
   protected getValueByKey(key: Key): T | undefined {
-    return this.allVertices[key]?.value
-  }
-
-  protected getKeyByValue(value: T): Key | undefined {
-    return (
-      Reflect.ownKeys(this.connectedVertices).find(
-        (key) => this.connectedVertices[key].value === value
-      ) ??
-      Reflect.ownKeys(this.isolatedVertices).find(
-        (key) => this.isolatedVertices[key].value === value
-      )
-    )
+    return this.allVertices.get(key)?.value
   }
 
   private sort() {
@@ -254,70 +263,67 @@ export class DAG<T extends { key: Key }> {
     const zeroInDegreeQueue: Key[] = []
     const result: Key[] = []
 
-    // we're only interested in vertices that have a value
-    const connectedVertexKeysWithValues = Reflect.ownKeys(this.connectedVertices).filter((key) => {
-      const vertex = this.connectedVertices[key]
-      return vertex.value !== undefined
-    })
-
-    // Initialize inDegree (count of incoming edges) for each vertex
-    connectedVertexKeysWithValues.forEach((vertex) => {
-      inDegree.set(vertex, 0)
-    })
+    // Initialize inDegree for connected vertices that have a value
+    for (const [key, vertex] of this.connectedVertices) {
+      if (vertex.value !== undefined) {
+        inDegree.set(key, 0)
+      }
+    }
 
     // Calculate inDegree for each vertex
-    connectedVertexKeysWithValues.forEach((vertexKey) => {
-      const vertex = this.connectedVertices[vertexKey]
-      vertex.next.forEach((next) => {
-        // check if "next" vertex has a value
-        const nextVertex = this.connectedVertices[next]
-        if (!nextVertex) return
-        inDegree.set(next, (inDegree.get(next) || 0) + 1)
-      })
-    })
+    for (const [vertexKey] of inDegree) {
+      const vertex = this.connectedVertices.get(vertexKey)!
+      for (const next of vertex.next) {
+        if (inDegree.has(next)) {
+          inDegree.set(next, inDegree.get(next)! + 1)
+        }
+      }
+    }
 
     // Enqueue vertices with inDegree 0
-    inDegree.forEach((degree, value) => {
+    for (const [key, degree] of inDegree) {
       if (degree === 0) {
-        zeroInDegreeQueue.push(value)
+        zeroInDegreeQueue.push(key)
       }
-    })
+    }
 
     // Process vertices with inDegree 0 and decrease inDegree of adjacent vertices
-    while (zeroInDegreeQueue.length > 0) {
-      const vertexKey = zeroInDegreeQueue.shift()!
+    let queueIndex = 0
+    while (queueIndex < zeroInDegreeQueue.length) {
+      const vertexKey = zeroInDegreeQueue[queueIndex++]
       result.push(vertexKey)
 
-      const v = connectedVertexKeysWithValues.find((key) => key === vertexKey)
-
-      if (v) {
-        this.connectedVertices[v]?.next.forEach((adjVertex) => {
+      const nextSet = this.connectedVertices.get(vertexKey)?.next
+      if (nextSet) {
+        for (const adjVertex of nextSet) {
           const adjVertexInDegree = (inDegree.get(adjVertex) || 0) - 1
           inDegree.set(adjVertex, adjVertexInDegree)
           if (adjVertexInDegree === 0) {
             zeroInDegreeQueue.push(adjVertex)
           }
-        })
+        }
       }
     }
 
     // Check for cycles in the graph
-    if (result.length !== connectedVertexKeysWithValues.length) {
+    if (result.length !== inDegree.size) {
       throw new Error('The graph contains a cycle, and thus can not be sorted topologically.')
     }
 
-    const filterUndefined = <T>(value: T | undefined): value is T => value !== undefined
-
-    this.sortedConnectedValues = result
-      .map((key) => this.connectedVertices[key].value)
-      .filter(filterUndefined)
+    this.sortedConnectedValues.length = 0
+    for (let i = 0; i < result.length; i++) {
+      const value = this.connectedVertices.get(result[i])!.value
+      if (value !== undefined) {
+        this.sortedConnectedValues.push(value)
+      }
+    }
     this.needsSort = false
   }
 
   protected clear() {
-    this.allVertices = {}
-    this.isolatedVertices = {}
-    this.connectedVertices = {}
+    this.allVertices.clear()
+    this.isolatedVertices.clear()
+    this.connectedVertices.clear()
     this.sortedConnectedValues = []
     this.needsSort = false
   }

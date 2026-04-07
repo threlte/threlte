@@ -3,12 +3,12 @@
   module
 >
   const urls: string[] = [
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Caravaggio_-_Boy_Bitten_by_a_Lizard.jpg/762px-Caravaggio_-_Boy_Bitten_by_a_Lizard.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/The_Large_Plane_Trees_%28Road_Menders_at_Saint-R%C3%A9my%29%2C_by_Vincent_van_Gogh%2C_Cleveland_Museum_of_Art%2C_1947.209.jpg/963px-The_Large_Plane_Trees_%28Road_Menders_at_Saint-R%C3%A9my%29%2C_by_Vincent_van_Gogh%2C_Cleveland_Museum_of_Art%2C_1947.209.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/KlimtDieJungfrau.jpg/803px-KlimtDieJungfrau.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/The_Denial_of_St._Peter_-_Gerard_Seghers_-_Google_Cultural_Institute.jpg/1024px-The_Denial_of_St._Peter_-_Gerard_Seghers_-_Google_Cultural_Institute.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Antoine_Vollon_-_Mound_of_Butter_-_National_Gallery_of_Art.jpg/935px-Antoine_Vollon_-_Mound_of_Butter_-_National_Gallery_of_Art.jpg',
-    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/De_bedreigde_zwaan_Rijksmuseum_SK-A-4.jpeg/911px-De_bedreigde_zwaan_Rijksmuseum_SK-A-4.jpeg'
+    '/textures/paintings/caravaggio.jpg',
+    '/textures/paintings/vangogh.jpg',
+    '/textures/paintings/klimt.jpg',
+    '/textures/paintings/seghers.jpg',
+    '/textures/paintings/vollon.jpg',
+    '/textures/paintings/swan.jpg'
   ]
   const count = 5 // 4 for each channel + 1 for the texture of all channels
   const names: string[] = ['Hue(R)', 'Saturation(G)', 'Lightness(B)', 'Alpha(A)']
@@ -74,11 +74,7 @@
   const radius = 1.4
   const TAU = 2 * Math.PI
 
-  const cards = $derived(
-    urls.map((url) => {
-      return new Card(url)
-    })
-  )
+  const cards = $derived(urls.map((url) => new Card(url)))
 
   const uTime = new Uniform(0)
   const uAlphaTexture = new Uniform<Texture | null>(null)
@@ -130,6 +126,7 @@
     autoRotate
     enableDamping
     enableZoom={false}
+    enablePan={false}
   />
 </T>
 
@@ -146,8 +143,8 @@
 <HUD>
   <T.OrthographicCamera
     makeDefault
-    position.z={5}
-    zoom={120}
+    position.z={10}
+    zoom={100}
   />
   <T.Group
     position.x={-1 * $viewport.width + 1}

@@ -12,19 +12,17 @@
 
   let { attached = true, dispose, plugin }: Props = $props()
 
-  if (plugin) {
-    injectPlugin('plugin-name', (args) => {
-      plugin.fn(args)
+  injectPlugin('plugin-name', (args) => {
+    plugin?.fn(args)
 
-      if (plugin.props) {
-        return {
-          pluginProps: plugin.props
-        }
+    if (plugin?.props) {
+      return {
+        pluginProps: plugin.props
       }
+    }
 
-      return
-    })
-  }
+    return
+  })
 </script>
 
 {#if attached}

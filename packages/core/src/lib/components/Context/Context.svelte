@@ -9,7 +9,7 @@
   let { children, ...rest }: CreateThrelteContextOptions<Renderer> & { children: Snippet } =
     $props()
 
-  createThrelteContext(rest)
+  createThrelteContext(() => rest)
 </script>
 
 {@render children()}

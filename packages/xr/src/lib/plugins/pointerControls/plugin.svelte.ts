@@ -14,6 +14,20 @@ export const injectPointerControlsPlugin = (): void => {
 
     const { addInteractiveObject, removeInteractiveObject } = usePointerControls()
 
+    $effect.pre(() => {
+      const ref = args.ref
+      const props = args.props
+
+      const hasEventHandlers = events.some((eventName) => typeof props[eventName] === 'function')
+
+      if (!hasEventHandlers) return
+
+      addInteractiveObject(ref, props)
+      return () => {
+        removeInteractiveObject(ref)
+      }
+    })
+
     observe.pre(
       () => [args.ref],
       ([ref]) => {

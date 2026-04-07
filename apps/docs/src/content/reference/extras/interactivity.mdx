@@ -52,7 +52,7 @@ The following interaction events are available:
   onpointerenter={(e) => console.log('enter')}
   onpointerleave={(e) => console.log('leave')}
   onpointermove={(e) => console.log('move')}
-  onpointermissed={() => console.log('missed')}
+  onpointermissed={(e) => console.log('missed')}
 />
 ```
 
@@ -62,15 +62,23 @@ All interaction events contain the following data:
 
 ```typescript
 type Event = THREE.Intersection & {
-  intersections: THREE.Intersection[] // The first intersection of each intersected object
+  // Inherited from THREE.Intersection:
   object: THREE.Object3D // The object that was actually hit
+  distance: number // Distance from the ray origin to the intersection
+  point: THREE.Vector3 // The intersection point in world coordinates
+  face: THREE.Face | null // The intersected face
+  // ... and other THREE.Intersection properties (uv, normal, instanceId, etc.)
+
+  // Added by interactivity:
   eventObject: THREE.Object3D // The object that registered the event
+  intersections: Intersection[] // All intersections, including the eventObject that registered each handler
   camera: THREE.Camera // The camera used for raycasting
-  delta: THREE.Vector2 //  Distance between mouse down and mouse up event in pixels
+  delta: number // Distance in pixels between the pointerdown position and this event's position (0 for non-click events)
   nativeEvent: MouseEvent | PointerEvent | WheelEvent // The native browser event
   pointer: Vector2 // The pointer position in normalized device coordinates
   ray: THREE.Ray // The ray used for raycasting
-  stopPropagation: () => void // Function to stop propagation of the event
+  stopPropagation: () => void // Stops the event from being delivered to farther objects
+  stopImmediatePropagation: () => void // Delegates to the native DOM event, blocking all further listeners (e.g. OrbitControls)
   stopped: boolean // Whether the event propagation has been stopped
 }
 ```
@@ -98,6 +106,36 @@ an object to block pointer events from objects behind it, it needs to have an ev
 even if you don't want this object to respond to the pointer event. If you do want to handle the
 event as well as using `stopPropagation()`, remember that the `pointerout` events will happen during
 the `stopPropagation()` call. You probably want your other event handling to happen after this.
+
+## Touch interactions
+
+On touch devices, the browser may cancel `pointermove` events mid-gesture when it decides to
+use the touch for its own navigation (scrolling, pinch-zoom, swipe-back, etc.). This is
+controlled by the CSS [`touch-action`](https://developer.mozilla.org/en-US/docs/Web/CSS/touch-action)
+property. When the browser takes over a touch, it fires a
+[`pointercancel`](https://developer.mozilla.org/en-US/docs/Web/API/Element/pointercancel_event)
+event and stops delivering `pointermove` updates — meaning `onpointermove` handlers on your
+3D objects will stop receiving events during touch-and-drag interactions.
+
+If your canvas is the primary interaction surface (e.g. a fullscreen 3D experience or a
+dedicated viewport), you can fix this by setting `touch-action: none` on a parent element
+wrapping the `<Canvas>` component. This tells the browser not to intercept any touch gestures,
+ensuring pointer events fire reliably throughout the entire interaction.
+
+```svelte title="App.svelte"
+<div style="touch-action: none;">
+  <Canvas>
+    <Scene />
+  </Canvas>
+</div>
+```
+
+<Tip type="warning">
+  Only use `touch-action: none` when the canvas is the primary interaction surface. For canvases
+  embedded in scrollable pages, this will prevent users from scrolling past the canvas with touch.
+  In that case, consider more targeted values like `touch-action: pan-y` (allows vertical scrolling
+  but captures horizontal gestures) or handle the trade-off in your application logic.
+</Tip>
 
 ## Event targets
 
@@ -208,6 +246,8 @@ export type State = {
   interactiveObjects: THREE.Object3D[]
   compute: ComputeFunction
   filter?: FilterFunction
+  clickDistanceThreshold: number
+  clickTimeThreshold: number
 }
 ```
 

@@ -1,5 +1,5 @@
 import { useCache } from '../context/fragments/cache.js'
-import { asyncWritable, type AsyncWritable } from '../utilities/index.js'
+import { asyncWritable, type AsyncWritable } from '../utilities/asyncWritable.js'
 
 type AsyncLoader = {
   loadAsync: (url: string, onProgress?: (event: ProgressEvent) => void) => Promise<any>
@@ -110,22 +110,12 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
 ): ThrelteUseLoader<InstanceType<Proto>> {
   const { remember, clear: clearCacheItem } = useCache()
 
-  let loader: InstanceType<Proto> | undefined
-
-  const initializeLoader = (): InstanceType<Proto> => {
-    // Type-wrestling galore
-    const lazyLoader = new Proto(...(((options as any)?.args as []) ?? [])) as InstanceType<Proto>
-    // extend the loader if necessary
-    options?.extend?.(lazyLoader)
-    return lazyLoader
-  }
+  const loader = new Proto(...(options?.args ?? [])) as InstanceType<Proto>
+  options?.extend?.(loader)
 
   const load: ThrelteUseLoader<InstanceType<Proto>>['load'] = (input, options) => {
     // Allow Async and Sync loaders
     const loadResource = async (url: string) => {
-      if (!loader) {
-        loader = initializeLoader()
-      }
       if ('loadAsync' in loader) {
         const result = await loader.loadAsync(url, options?.onProgress)
         return options?.transform?.(result) ?? result
@@ -179,8 +169,8 @@ export function useLoader<Proto extends LoaderProtoWithoutArgs>(
     } else if (typeof input === 'string') {
       clearCacheItem([Proto, input])
     } else {
-      Object.entries(input).forEach(([key, url]) => {
-        clearCacheItem([Proto, key, url])
+      Object.entries(input).forEach(([, url]) => {
+        clearCacheItem([Proto, url])
       })
     }
   }

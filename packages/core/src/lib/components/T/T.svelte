@@ -5,12 +5,12 @@
   import type { TProps } from './types.js'
   import { useAttach } from './utils/useAttach.svelte.js'
   import { useCamera } from './utils/useCamera.svelte.js'
-  import { isDisposableObject, useDispose, useSetDispose } from './utils/useDispose.svelte.js'
+  import { useDispose } from './utils/useDispose.svelte.js'
   import { useIs } from './utils/useIs.js'
   import { usePlugins } from './utils/usePlugins.js'
   import { useProps } from './utils/useProps.svelte.js'
   import { determineRef } from './utils/utils.js'
-  import { isInstanceOf } from '../../utilities/index.js'
+  import { isInstanceOf } from '../../utilities/isInstanceOf.js'
   import { untrack } from 'svelte'
 
   let {
@@ -90,13 +90,10 @@
   })
 
   // Disposal
-  useSetDispose(() => dispose)
-
-  $effect.pre(() => {
-    if (isDisposableObject(internalRef)) {
-      useDispose(() => internalRef)
-    }
-  })
+  useDispose(
+    () => internalRef,
+    () => dispose
+  )
 
   /**
    * oncreate needs to be called after all other hooks

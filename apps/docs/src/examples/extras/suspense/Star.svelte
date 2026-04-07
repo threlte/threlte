@@ -1,8 +1,5 @@
 <script lang="ts">
   import { useTask } from '@threlte/core'
-
-  // your script goes here
-
   import { Instance } from '@threlte/extras'
   import { Color } from 'three'
 

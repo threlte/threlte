@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Environment, Grid, OrbitControls, SoftShadows, transitions } from '@threlte/extras'
+  import { Environment, Grid, OrbitControls, ShadowAlpha, transitions } from '@threlte/extras'
   import { fade, scale } from './transitions'
 
   transitions()
@@ -20,6 +20,7 @@
       transparent
       color="red"
     />
+    <ShadowAlpha />
   </T.Mesh>
 {/if}
 
@@ -35,11 +36,11 @@
       transition={fade()}
       color="blue"
     />
+    <ShadowAlpha />
   </T.Mesh>
 {/if}
 
 <!-- Environment -->
-<SoftShadows />
 <Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
 <!-- Camera -->

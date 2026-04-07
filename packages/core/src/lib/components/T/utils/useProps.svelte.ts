@@ -1,6 +1,6 @@
 import { EventDispatcher } from 'three'
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { resolvePropertyPath } from '../../../utilities/index.js'
+import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import { untrack } from 'svelte'
 
 const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
@@ -124,6 +124,10 @@ export const useProps = <Type>(
     const _object = object()
     const _props = props()
     const _pluginProps = pluginProps()
+
+    // Clear memoized props when the instance or props reference changes,
+    // preventing unbounded growth from previous instances.
+    memoizedProps.clear()
 
     untrack(() => {
       for (const key in _props) {

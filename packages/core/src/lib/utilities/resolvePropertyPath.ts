@@ -18,6 +18,10 @@ export const resolvePropertyPath = (target: any, propertyPath: string) => {
     const key = path.pop() as string
     for (let i = 0; i < path.length; i += 1) {
       target = target[path[i]]
+      if (target == null) {
+        console.error(`Cannot resolve property path "${propertyPath}": "${path[i]}" is ${target}`)
+        return { target: {}, key: '' }
+      }
     }
     return {
       target,

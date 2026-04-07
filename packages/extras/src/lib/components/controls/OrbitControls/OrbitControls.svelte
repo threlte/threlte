@@ -1,21 +1,30 @@
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+  import {
+    OrbitControls,
+    type OrbitControlsEventMap
+  } from 'three/examples/jsm/controls/OrbitControls.js'
   import { useControlsContext } from '../useControlsContext.js'
   import type { OrbitControlsProps } from './types.js'
   import type { Event } from 'three'
+  import { untrack } from 'svelte'
 
-  let { ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
+  let { camera, ref = $bindable(), children, ...props }: OrbitControlsProps = $props()
 
+  const { dom, camera: defaultCamera, invalidate } = useThrelte()
   const parent = useParent()
-  const { dom, invalidate } = useThrelte()
-
-  if (!isInstanceOf($parent, 'Camera')) {
-    throw new Error('Parent missing: <OrbitControls> need to be a child of a <Camera>')
-  }
+  const resolvedCamera = $derived(
+    camera ? camera : isInstanceOf($parent, 'Camera') ? $parent : $defaultCamera
+  )
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
-  const controls = new ThreeOrbitControls($parent, dom)
+  const controls = new OrbitControls(
+    untrack(() => resolvedCamera),
+    dom
+  )
+  $effect.pre(() => {
+    controls.object = resolvedCamera
+  })
 
   const { orbitControls } = useControlsContext()
 
@@ -24,21 +33,20 @@
       controls.update()
     },
     {
-      running: () => props.autoRotate ?? props.enableDamping ?? false
+      autoInvalidate: false,
+      running: () => props.autoRotate || props.enableDamping || false
     }
   )
 
-  $effect.pre(() => {
-    const handleChange = (event: Event<any, ThreeOrbitControls>) => {
-      invalidate()
-      props.onchange?.(event)
-    }
+  const handleChange = (event: Event<keyof OrbitControlsEventMap, OrbitControls>) => {
+    invalidate()
+    props.onchange?.(event)
+  }
 
+  $effect.pre(() => {
     orbitControls.set(controls)
-    controls.addEventListener('change', handleChange)
     return () => {
       orbitControls.set(undefined)
-      controls.removeEventListener('change', handleChange)
     }
   })
 </script>
@@ -47,6 +55,7 @@
   is={controls}
   bind:ref
   {...props}
+  onchange={handleChange}
 >
   {@render children?.({ ref: controls })}
 </T>

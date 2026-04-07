@@ -3,7 +3,7 @@ import { getLeftSidebarMenu } from '$components/Menu/LeftSidebar/getLeftSidebarM
 
 const sidebarMenu = await getLeftSidebarMenu()
 
-let pathname = Astro.url.pathname
+let pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/')
 pathname = pathname.startsWith('/') ? pathname.slice(1) : pathname
 pathname = pathname.endsWith('/') ? pathname.slice(0, -1) : pathname
 
@@ -16,6 +16,7 @@ const section = pathnameItems[0] as 'learn' | 'reference'
 const allMenuItems = sidebarMenu[section].categories
   .flat()
   .flatMap((category) => category.menuItems)
+  .filter((item) => !item.isDivider)
 
 const currentMenuItemIndex = allMenuItems.findIndex((menuItem) => pathname.endsWith(menuItem.slug))
 
@@ -32,7 +33,7 @@ const nextMenuItemCategory = nextMenuItem
   : undefined
 
 const makeHref = (menuItem: LeftSidebarMenuItem, category: LeftSidebarMenuCategory) => {
-  return `${category.urlPrefix}/${menuItem.slug}`
+  return `${import.meta.env.BASE_URL}${category.urlPrefix.substring(1)}/${menuItem.slug}`
 }
 ---
 

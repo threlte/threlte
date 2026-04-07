@@ -5,7 +5,8 @@ import {
   createParentObject3DContext,
   useParentObject3D
 } from '../../../context/fragments/parentObject3D.js'
-import { isInstanceOf, resolvePropertyPath } from '../../../utilities/index.js'
+import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
+import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import type { BaseProps, MaybeInstance } from '../types.js'
 
 const isObject = (ref: unknown): ref is Record<string, any> => {
@@ -29,6 +30,8 @@ export const useAttach = <T extends MaybeInstance<any>>(
 
     if (isInstanceOf(ref, 'Object3D')) {
       object3D.set(ref)
+    } else {
+      object3D.set(undefined)
     }
 
     invalidate()
@@ -42,10 +45,11 @@ export const useAttach = <T extends MaybeInstance<any>>(
 
     // Most common: auto-attach to parent Object3D
     if (attach === undefined && isInstanceOf(current, 'Object3D')) {
-      parentObject3D.current?.add(current)
+      const currentParent = parentObject3D.current
+      currentParent?.add(current)
       return () => {
         invalidate()
-        parentObject3D.current?.remove(current)
+        currentParent?.remove(current)
       }
     }
 

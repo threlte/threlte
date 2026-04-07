@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.4
+
+### Patch Changes
+
+- 2ee022d: Fix `--output` option being silently ignored
+
 ## 3.0.3
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@threlte/core",
-  "version": "8.5.1",
+  "version": "8.5.7",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "A 3D framework for the web, built on top of Svelte and Three.js",
@@ -8,7 +8,7 @@
     "dev": "vite dev",
     "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
     "prepare": "svelte-kit sync",
-    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "check": "svelte-check --tsconfig ./tsconfig.json --fail-on-warnings",
     "check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
     "lint": "prettier --check . && eslint .",
     "format": "prettier --write .",
@@ -22,15 +22,18 @@
     "@sveltejs/kit": "catalog:",
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
-    "@threlte/test": "^1.0.0",
+    "@threlte/test": "catalog:",
     "@types/bun": "^1.2.12",
     "@types/node": "catalog:",
     "@types/three": "catalog:",
+    "@vitest/browser-playwright": "^4.1.2",
+    "@vitest/coverage-v8": "^4.1.2",
     "@yushijinhun/three-minifier-rollup": "catalog:",
     "eslint": "catalog:",
     "eslint-plugin-svelte": "catalog:",
     "globals": "catalog:",
     "happy-dom": "^18.0.1",
+    "playwright": "^1.58.2",
     "prettier": "catalog:",
     "prettier-plugin-svelte": "catalog:",
     "publint": "catalog:",
@@ -43,9 +46,6 @@
     "typescript-eslint": "catalog:",
     "vite": "catalog:",
     "vitest": "catalog:"
-  },
-  "dependencies": {
-    "mitt": "^3.0.1"
   },
   "peerDependencies": {
     "svelte": ">=5",

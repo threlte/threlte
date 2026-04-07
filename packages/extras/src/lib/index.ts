@@ -8,9 +8,17 @@ export { useGltfAnimations } from './hooks/useGltfAnimations.js'
 export { useProgress } from './hooks/useProgress.js'
 export { useTexture } from './hooks/useTexture.js'
 export { useFBO } from './hooks/useFBO.svelte.js'
-export { useGamepad, type StandardGamepadEvent } from './hooks/useGamepad.svelte.js'
+export {
+  useGamepad,
+  type StandardGamepadEvent,
+  type StandardGamepad,
+  type StandardXRGamepad
+} from './hooks/useGamepad.svelte.js'
+export { useKeyboard } from './hooks/useKeyboard.svelte.js'
+export { useInputMap } from './hooks/useInputMap.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
+export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'
 export { meshBounds } from './utilities/meshBounds.js'
 
 // abstractions
@@ -52,6 +60,7 @@ export { default as Align } from './components/Align/Align.svelte'
 export { default as CSM } from './components/CSM/CSM.svelte'
 export { default as Billboard } from './components/Billboard/Billboard.svelte'
 export { default as FakeGlowMaterial } from './components/FakeGlowMaterial/FakeGlowMaterial.svelte'
+export { default as ShadowAlpha } from './components/ShadowAlpha/ShadowAlpha.svelte'
 export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMaterial.svelte'
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as SVG } from './components/Svg/Svg.svelte'

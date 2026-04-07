@@ -12,7 +12,7 @@
 <T.PerspectiveCamera
   name="Camera"
   makeDefault
-  position={[0, 1.5, 8.9958]}
+  position={[0, 1, 8.9958]}
   fov={33.25}
 />
 
@@ -50,6 +50,7 @@
   name="Torus"
   position={[1.2, 0.8556, 0.75]}
   castShadow
+  rotation={[1.8326, 0, 0]}
 >
   <T.TorusKnotGeometry args={[0.5, 0.15, 100, 12, 2, 3]} />
   <T.MeshStandardMaterial

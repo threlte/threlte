@@ -1,8 +1,6 @@
 import { getContext, setContext } from 'svelte'
 
-type Tuple<T = unknown> = [T] | T[]
-
-type Keys = Tuple<unknown>
+type Keys = unknown[]
 
 type CacheItem = {
   // The promise that is being cached
@@ -49,9 +47,24 @@ export const createCacheContext = () => {
       }
     }
 
+    const promise = callback()
+
+    // If the promise rejects, remove the cache entry so that retries can be made.
+    // The caller holds the original `promise` and will see the rejection through
+    // it — re-throwing here would create a separate unhandled rejected promise.
+    promise.catch(() => {
+      for (let i = 0; i < items.length; i++) {
+        const entry = items[i]
+        if (shallowEqualArrays(keys, entry.keys)) {
+          items.splice(i, 1)
+          break
+        }
+      }
+    })
+
     // If no match was found, create a new entry
     const entry: CacheItem = {
-      promise: callback(),
+      promise,
       keys
     }
 
@@ -84,8 +97,8 @@ export const createCacheContext = () => {
  *
  * This hook is used to access the cache. It returns a `remember` function that
  * can be used to cache a promise based on the provided keys. The `remember`
- * function will return the cached value if the promise has already been
- * resolved and the keys match.
+ * function will return the cached promise when the keys match, so repeated
+ * calls share the same in-flight or resolved result.
  *
  * @example
  * ```ts

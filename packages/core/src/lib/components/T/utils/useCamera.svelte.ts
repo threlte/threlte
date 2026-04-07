@@ -1,6 +1,7 @@
 import { fromStore } from 'svelte/store'
+import { useCamera as useDefaultCamera } from '../../../context/fragments/camera.svelte.js'
 import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { isInstanceOf } from '../../../utilities/index.js'
+import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 
 const updateProjectionMatrixKeys = new Set([
@@ -17,7 +18,23 @@ const updateProjectionMatrixKeys = new Set([
   'filmOffset'
 ])
 
-const defaultCameras = new Set()
+export const updateCamera = (
+  camera: PerspectiveCamera | OrthographicCamera,
+  width: number,
+  height: number
+) => {
+  if (isInstanceOf(camera, 'PerspectiveCamera')) {
+    camera.aspect = width / height
+  } else if (isInstanceOf(camera, 'OrthographicCamera')) {
+    camera.left = width / -2
+    camera.right = width / 2
+    camera.top = height / 2
+    camera.bottom = height / -2
+  }
+
+  camera.updateProjectionMatrix()
+  camera.updateMatrixWorld()
+}
 
 export const useCamera = (
   getCamera: () => PerspectiveCamera | OrthographicCamera,
@@ -25,7 +42,8 @@ export const useCamera = (
   getMakeDefault: () => boolean,
   props: () => Record<string, unknown>
 ) => {
-  const { invalidate, size: sizeStore, camera: defaultCamera } = useThrelte()
+  const { camera: defaultCamera, manual: defaultManual, makeDefaultCameras } = useDefaultCamera()
+  const { invalidate, size: sizeStore } = useThrelte()
 
   const camera = $derived(getCamera())
   const manual = $derived(getManual())
@@ -36,16 +54,21 @@ export const useCamera = (
       return
     }
 
-    const current = camera
+    const currentCamera = camera
 
-    defaultCameras.add(current)
-    defaultCamera.set(current)
+    makeDefaultCameras.add(currentCamera)
+    defaultCamera.set(currentCamera)
+    defaultManual.set(manual)
     invalidate()
 
     return () => {
-      defaultCameras.delete(current)
-      if (defaultCameras.size === 0) {
-        defaultCamera.set(undefined!)
+      makeDefaultCameras.delete(currentCamera)
+      // If the unmounted camera was the active default, fall back to
+      // another makeDefault camera. The size === 0 fallback in
+      // camera.svelte.ts handles the case where no makeDefault cameras remain.
+      const next = makeDefaultCameras.values().next().value
+      if (defaultCamera.current === currentCamera && next) {
+        defaultCamera.set(next)
         invalidate()
       }
     }
@@ -70,19 +93,6 @@ export const useCamera = (
       return
     }
 
-    const { width, height } = size.current
-
-    if (isInstanceOf(camera, 'PerspectiveCamera')) {
-      camera.aspect = width / height
-    } else if (isInstanceOf(camera, 'OrthographicCamera')) {
-      camera.left = width / -2
-      camera.right = width / 2
-      camera.top = height / 2
-      camera.bottom = height / -2
-    }
-
-    camera.updateProjectionMatrix()
-    camera.updateMatrixWorld()
-    invalidate()
+    updateCamera(camera, size.current.width, size.current.height)
   })
 }
