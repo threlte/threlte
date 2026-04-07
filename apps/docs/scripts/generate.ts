@@ -56,7 +56,6 @@ async function main() {
     const components = collectComponents(packageName)
 
     for (const componentPath of components) {
-      console.log('Processing:', componentPath)
       const name = basename(componentPath, '.svelte')
 
       const srcData = getDataFromSources({
@@ -75,7 +74,6 @@ async function main() {
       }
 
       allComponents.push(data)
-      break
     }
   }
 
