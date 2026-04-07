@@ -484,8 +484,11 @@ export function parse(fileName, gltf, options = {}) {
   // 2nd pass to eliminate hard to swat left-overs
   const scene = printThrelte(gltf.scene)
 
+  const hasDraco = gltf.parser?.json?.extensionsUsed?.includes('KHR_draco_mesh_compression') ||
+    gltf.parser?.json?.extensionsRequired?.includes('KHR_draco_mesh_compression')
+
   const useGltfOptions = {
-    draco: options.transform || options.draco
+    draco: options.transform || options.draco || hasDraco
   }
 
   const imports = `
