@@ -47,7 +47,7 @@ jobs:
       - name: Check
         run: pnpm run check
 
-  test:
+  test-core:
     runs-on: ubuntu-latest
 
     steps:
@@ -65,7 +65,30 @@ jobs:
           run_install: true
 
       - name: Install Playwright Browsers
-        run: pnpm --filter @threlte/core --filter @threlte/extras exec playwright install --with-deps chromium
+        run: pnpm --filter @threlte/core exec playwright install --with-deps chromium
 
-      - name: Test
-        run: pnpm run test
+      - name: Test core
+        run: pnpm --filter @threlte/core exec vitest run --browser=chromium
+
+  test-extras:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install pnpm 🔧
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
+
+      - name: Install Playwright Browsers
+        run: pnpm --filter @threlte/extras exec playwright install --with-deps chromium
+
+      - name: Test extras
+        run: pnpm --filter @threlte/extras exec vitest run --browser=chromium
