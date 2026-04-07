@@ -133,6 +133,12 @@ function getDataFromSources(params: { name: string; path: string }) {
   const svelteFileData = dataFromSvelteFile({ name, path })
   const typesFileData = dataFromTypesFile({ name, path })
 
+  if (svelteFileData.props.length < typesFileData.props.length) {
+    // TODO-DefinitelyMaybe: check out these cases
+    // Extras to check
+    // AsciiRenderer, Gizmo, VirtualEnvironment, ImageMaterial, Instance, View, Text, InstancedSprite
+  }
+
   // canvas is a special case
   if (name === 'Canvas') {
     return getCanvasData()
