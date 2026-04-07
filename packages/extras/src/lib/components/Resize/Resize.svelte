@@ -21,16 +21,16 @@
     box = _box,
     precise = false,
     onresize,
-    stage = useStage('<Resize>', { before: renderStage }),
     ref = $bindable(new Group()),
     children,
     ...props
   }: ResizeProps = $props()
 
-  const group = new Group()
   const inner = new Group()
 
   const outer = new Group()
+
+  let running = $state(false)
 
   const doResize = () => {
     outer.matrixWorld.identity()
@@ -40,41 +40,33 @@
       1 / (axis === 'max' ? Math.max(..._diff) : axis === 'min' ? Math.min(..._diff) : _diff[axis])
     outer.scale.setScalar(scale)
     onresize?.()
+    running = false
   }
 
-  let running = $state(false)
+  const stage = useStage('<Resize>', { before: renderStage })
 
-  const scheduleResizing = () => {
+  /** Manually trigger resizing */
+  export const resize = () => {
     running = true
   }
 
-  useTask(
-    () => {
-      doResize()
-      stop()
-    },
-    { stage, running: () => running }
-  )
-
-  /** Manually trigger resizing */
-  export const resize = start
+  useTask(doResize, { stage, running: () => running })
 
   observe(() => [axis, precise], resize)
 
   const plugin: Plugin = (args) => {
     $effect(() => {
       if (!isInstanceOf(args.ref, 'Object3D')) return
-      resize()
+      if (auto) resize()
       return () => {
-        resize()
+        if (auto) resize()
       }
     })
   }
 </script>
 
 <T
-  is={group}
-  bind:ref
+  is={ref}
   {...props}
 >
   <T is={outer}>
@@ -83,7 +75,7 @@
         name="resize"
         {plugin}
       >
-        {@render children?.({ ref: group, resize: scheduleResizing })}
+        {@render children?.({ ref, resize })}
       </InjectPlugin>
     </T>
   </T>

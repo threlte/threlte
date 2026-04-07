@@ -52,6 +52,9 @@
   <Resize
     stage={resizeStage}
     {auto}
+    onresize={() => {
+      console.log('hello')
+    }}
   >
     <T.Mesh>
       <T.MeshStandardMaterial color="hotpink" />

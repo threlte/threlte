@@ -19,21 +19,14 @@ componentSignature:
         {
           description: 'Specifies which axis to constrain. If not provided, the maximum axis is used.',
           name: 'axis',
-          type: "'x' | 'y' | 'z'",
-          default: 'undefined'
+          type: "'x' | 'y' | 'z' | 'max' | 'min'",
+          default: 'max'
         },
         {
-          default: 'false',
+          default: 'true',
           description: 'When true, will automatically resize when children are added or removed.',
           name: 'auto',
           type: 'boolean'
-        },
-        {
-          name: 'stage',
-          type: 'Stage',
-          default: 'useStage("<Resize>", { before: renderStage })',
-          description: 'Bring your own stage to control when resizing occurs. If not provided, resizing will occur before the main render stage.',
-
         },
         {
           default: 'undefined',
@@ -50,7 +43,7 @@ componentSignature:
         {
           description: 'If true, use precise bounding box calculation when resizing',
           name: 'precise',
-          default: 'undefined',
+          default: 'false',
           type: 'boolean'
         }
       ]
