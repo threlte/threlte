@@ -23,17 +23,18 @@
   `
 
   class PointsMaterial extends ThreePointsMaterial {
-    override alphaToCoverage = true
-
-    override onBeforeCompile(
-      parameters: WebGLProgramParametersWithUniforms,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      _renderer: WebGLRenderer
-    ) {
-      parameters.fragmentShader = parameters.fragmentShader.replace(
-        `#include <opaque_fragment>`,
-        fragment
-      )
+    constructor() {
+      super()
+      this.alphaToCoverage = true
+      this.onBeforeCompile = (
+        parameters: WebGLProgramParametersWithUniforms,
+        _renderer: WebGLRenderer
+      ) => {
+        parameters.fragmentShader = parameters.fragmentShader.replace(
+          `#include <opaque_fragment>`,
+          fragment
+        )
+      }
     }
   }
 </script>
