@@ -80,7 +80,10 @@
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
     "files": [
-      "dist"
+      "dist",
+      "!dist/**/__tests__",
+      "!dist/**/*.test.*",
+      "!dist/**/*.spec.*"
     ],
     "svelte": "./dist/index.js",
     "exports": {
