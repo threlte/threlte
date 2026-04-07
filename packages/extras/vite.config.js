@@ -20,6 +20,15 @@ export default defineConfig(({ mode }) => ({
       ? {
           fs: {
             allow: [workspaceRoot, packageRoot]
+          },
+          // Warm the browser-mode module graph once at server startup instead of
+          // re-importing a heavy setup file before every suite.
+          warmup: {
+            clientFiles: [
+              'src/lib/interactivity/__tests__/helpers.ts',
+              'src/lib/interactivity/__tests__/__fixtures__/*.svelte',
+              '../core/src/lib/index.ts'
+            ]
           }
         }
       : undefined,
@@ -33,7 +42,6 @@ export default defineConfig(({ mode }) => ({
       : undefined,
   test: {
     include: ['**/*.{test,spec}.ts', '**/*.{test,spec}.svelte.ts'],
-    setupFiles: ['src/lib/interactivity/__tests__/setup.ts'],
     coverage: { include: ['src'] },
     mockReset: true,
     unstubGlobals: true,
