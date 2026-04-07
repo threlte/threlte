@@ -131,11 +131,10 @@ ensuring pointer events fire reliably throughout the entire interaction.
 ```
 
 <Tip type="warning">
-  Only use `touch-action: none` when the canvas is the primary interaction surface. For
-  canvases embedded in scrollable pages, this will prevent users from scrolling past the
-  canvas with touch. In that case, consider more targeted values like `touch-action: pan-y`
-  (allows vertical scrolling but captures horizontal gestures) or handle the trade-off in
-  your application logic.
+  Only use `touch-action: none` when the canvas is the primary interaction surface. For canvases
+  embedded in scrollable pages, this will prevent users from scrolling past the canvas with touch.
+  In that case, consider more targeted values like `touch-action: pan-y` (allows vertical scrolling
+  but captures horizontal gestures) or handle the trade-off in your application logic.
 </Tip>
 
 ## Event targets
