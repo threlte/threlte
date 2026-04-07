@@ -8,13 +8,13 @@ describe('pointerup', () => {
   it('fires onpointerup when releasing over a mesh', async () => {
     const onpointerupA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointerupA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // Release pointer at center — ray hits mesh A directly in front of the camera
@@ -27,13 +27,13 @@ describe('pointerup', () => {
   it('does not fire onpointerup when releasing over empty space', async () => {
     const onpointerupA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointerupA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // Release pointer at top-left corner — ray misses all meshes

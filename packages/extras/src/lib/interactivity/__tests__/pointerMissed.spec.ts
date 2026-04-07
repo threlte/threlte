@@ -11,7 +11,7 @@ describe('pointerMissed', () => {
     const onpointermissedB = vi.fn()
     const onpointermissedC = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onclickA,
         onpointermissedA,
@@ -20,7 +20,7 @@ describe('pointerMissed', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits mesh A
@@ -42,7 +42,7 @@ describe('pointerMissed', () => {
     const onpointermissedB = vi.fn()
     const onpointermissedC = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointermissedA,
         onpointermissedB,
@@ -50,7 +50,7 @@ describe('pointerMissed', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown in empty space → hits nothing
@@ -70,14 +70,14 @@ describe('pointerMissed', () => {
     const onclickA = vi.fn()
     const onpointermissedB = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onclickA,
         onpointermissedB
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center
@@ -97,7 +97,7 @@ describe('pointerMissed', () => {
     const onpointermissedA = vi.fn()
     const onpointermissedB = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onclickA,
         onpointermissedA,
@@ -105,7 +105,7 @@ describe('pointerMissed', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center
@@ -126,7 +126,7 @@ describe('pointerMissed', () => {
     const onpointermissedA = vi.fn()
     const onpointermissedB = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onclickA,
         onpointermissedA,
@@ -135,7 +135,7 @@ describe('pointerMissed', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // Stub performance.now to control time deterministically.
@@ -161,7 +161,7 @@ describe('pointerMissed', () => {
     const onpointermissedA = vi.fn()
     const onpointermissedB = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onclickA,
         onclickB,
@@ -170,7 +170,7 @@ describe('pointerMissed', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown on mesh A

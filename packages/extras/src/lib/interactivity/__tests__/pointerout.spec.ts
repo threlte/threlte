@@ -8,11 +8,11 @@ describe('pointerout', () => {
   it('fires onpointerout when the pointer moves off a mesh', async () => {
     const onpointeroutA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointeroutA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hovers mesh A
@@ -30,11 +30,11 @@ describe('pointerout', () => {
   it('does not fire onpointerout if pointer stays on the mesh', async () => {
     const onpointeroutA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointeroutA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hovers mesh A
