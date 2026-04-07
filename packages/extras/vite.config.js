@@ -11,9 +11,7 @@ const workspaceRoot = searchForWorkspaceRoot(packageRoot)
 
 export default defineConfig(({ mode }) => ({
   root: packageRoot,
-  plugins: [
-    mode === 'test' ? [...svelte()] : [...sveltekit(), { ...threeMinifier(), enforce: 'pre' }]
-  ],
+  plugins: [mode === 'test' ? svelte() : sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
   resolve: {
     conditions: mode === 'test' ? ['browser'] : undefined
   },
