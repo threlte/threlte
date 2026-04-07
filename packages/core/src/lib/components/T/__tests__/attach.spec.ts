@@ -1,4 +1,4 @@
-import { DirectionalLight, Group, Mesh, MeshBasicMaterial, OrthographicCamera } from 'three'
+import { DirectionalLight, Group, Mesh, MeshBasicMaterial } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
