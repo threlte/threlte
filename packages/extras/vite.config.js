@@ -33,6 +33,7 @@ export default defineConfig(({ mode }) => ({
       : undefined,
   test: {
     include: ['**/*.{test,spec}.ts', '**/*.{test,spec}.svelte.ts'],
+    setupFiles: ['src/lib/interactivity/__tests__/setup.ts'],
     coverage: { include: ['src'] },
     mockReset: true,
     unstubGlobals: true,
