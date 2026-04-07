@@ -17,7 +17,7 @@
 
   let {
     axis = 'max',
-    auto = false,
+    auto = true,
     box = _box,
     precise = false,
     onresize,

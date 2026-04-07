@@ -3,14 +3,13 @@ import type { Box3, Group } from 'three'
 
 export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
   /**
-   * If true, will automatically resize when children or added or removed
-   * @default false
+   * Whether to automatically resize when children are added or removed and when children references update
+   * @default true
    */
   auto?: boolean
   /**
-   * Specifies which axis to constrain. If not provided, the maximum axis is
-   * used
-   * @default 'max'
+   * Specifies which axis to constrain.
+   * @default 'max' the maximum axis
    */
   axis?: 'x' | 'y' | 'z' | 'min' | 'max'
   /**
@@ -18,7 +17,7 @@ export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
    */
   box?: Box3
   /**
-   * If true, use precise bounding box calculation which is less performant but more accurate
+   * Whether to use precise bounding box calculation which is less performant but more accurate
    * @default false
    */
   precise?: boolean
@@ -28,7 +27,7 @@ export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
    */
   stage?: Stage
   /**
-   * A callback function to run whenever resizing is done
+   * A callback function to run whenever resizing has completed
    */
   onresize?: () => void
 }
