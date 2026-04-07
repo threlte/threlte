@@ -7,7 +7,7 @@ import { ComponentParser } from 'sveld'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 const PACKAGES_DIR = resolve(__dirname, '../../../packages')
-const IGNORED_PACKAGES = ['extras', 'gltf', 'studio', 'theatre', 'xr', 'flex', 'rapier', 'sv']
+const IGNORED_PACKAGES = ['core', 'gltf', 'studio', 'theatre', 'xr', 'flex', 'rapier', 'sv']
 const CANVAS_PATHS = [
   '/core/src/lib/context/createThrelteContext.svelte.ts',
   '/core/src/lib/context/fragments/renderer.svelte.ts',
@@ -107,6 +107,7 @@ function collectComponents(packageName: string): string[] {
     filepaths.push(fullPath)
   }
 
+  // Core is a special case. We only want Canvas.
   if (packageName === 'core') {
     return [resolve(__dirname, `../../../packages/core/src/lib/Canvas.svelte`)]
   }
@@ -130,16 +131,12 @@ function getDataFromSources(params: { name: string; path: string }) {
   const { name, path } = params
 
   const svelteFileData = dataFromSvelteFile({ name, path })
-  let typesFileData = dataFromTypesFile({ name, path })
+  const typesFileData = dataFromTypesFile({ name, path })
 
   // canvas is a special case
   if (name === 'Canvas') {
     return getCanvasData()
   }
-
-  // console.log(svelteFileData)
-  // console.log('-------------------------')
-  // console.log(typesFileData)
 
   return mergeData(svelteFileData, typesFileData)
 }
@@ -184,14 +181,9 @@ function getDataFromJSDocs(prop: Symbol) {
       const jsDocs = declaration.getJsDocs()
       for (const jsDoc of jsDocs) {
         description = jsDoc.getDescription().trim() || undefined
-        if (prop.getName() === 'colorManagementEnabled') {
-          writeFileSync(
-            resolve(__dirname, 'description.json'),
-            JSON.stringify({ description }, null, 2)
-          )
-        }
-        // easy edit to remove \n 's
+        // firstly replacing all \r\n occurances with " " as that's a common case for jsDocs
         description = description?.replaceAll(/(\r\n)+/g, ' ')
+        // any remaining \n 's are assumed to be ends of sentences
         description = description?.replaceAll(/\n+/g, '. ')
         for (const tag of jsDoc.getTags()) {
           if (tag.getTagName() === 'default') {
@@ -410,6 +402,8 @@ function getCanvasData() {
       // hardcoded solution to make it easy on ourselves
       if (prop.getName() === 'createRenderer') {
         temp.type = '(canvas: HTMLCanvasElement) => THREE.Renderer'
+        temp.description =
+          'To set up a custom renderer, pass a function that returns a new renderer instance.'
       }
       return temp
     })
