@@ -2,6 +2,7 @@ import 'jsdom-global'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import * as prettier from 'prettier'
+import * as prettierPluginSvelte from 'prettier-plugin-svelte'
 import { transform } from './utils/transform.js'
 import { parse } from './utils/parser.js'
 import { GLTFLoader } from './bin/GLTFLoader.js'
@@ -40,7 +41,7 @@ export default async function (file, output, options) {
     semi: false,
     printWidth: 100,
     parser: 'svelte',
-    plugins: ['prettier-plugin-svelte'],
+    plugins: [prettierPluginSvelte],
     overrides: [
       {
         files: '*.svelte',
