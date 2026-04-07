@@ -28,6 +28,13 @@ componentSignature:
           name: 'auto',
           type: 'boolean'
         },
+ {
+          name: 'stage',
+          type: 'Stage',
+          default: 'useStage("<Resize>", { before: renderStage })',
+          description: 'Bring your own stage to control when resizing occurs. If not provided, resizing will occur before the main render stage.',
+
+        },
         {
           default: 'undefined',
           description: 'A callback function to run whenever resizing is done.',

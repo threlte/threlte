@@ -1,4 +1,4 @@
-import type { Props } from '@threlte/core'
+import type { Props, Stage } from '@threlte/core'
 import type { Box3, Group } from 'three'
 
 export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
@@ -21,6 +21,11 @@ export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
    * @default false
    */
   precise?: boolean
+  /**
+   * Bring your own stage to control when resizing occurs. If not provided,
+   * resizing will occur before the main render stage.
+   */
+  stage?: Stage
   /**
    * A callback function to run whenever resizing has completed
    */

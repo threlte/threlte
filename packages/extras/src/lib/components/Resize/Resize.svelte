@@ -23,6 +23,7 @@
     onresize,
     ref = $bindable(new Group()),
     children,
+    stage = useStage('<Resize>', { before: renderStage }),
     ...props
   }: ResizeProps = $props()
 
@@ -42,8 +43,6 @@
     onresize?.()
     running = false
   }
-
-  const stage = useStage('<Resize>', { before: renderStage })
 
   /** Manually trigger resizing */
   export const resize = () => {
