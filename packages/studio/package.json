@@ -91,6 +91,9 @@
     "types": "./dist/index.d.ts",
     "files": [
       "dist",
+      "!dist/**/__tests__",
+      "!dist/**/*.test.*",
+      "!dist/**/*.spec.*",
       "vite"
     ],
     "svelte": "./dist/index.js",
