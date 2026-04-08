@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.5.9
+
+### Patch Changes
+
+- c99afe5: WebGPURenderer no longer crashes during HMR when dispose is called before async initialization completes
+
 ## 8.5.8
 
 ### Patch Changes
