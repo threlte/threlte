@@ -1,5 +1,27 @@
 import { readFileSync, statSync, readdirSync, writeFileSync, existsSync } from 'fs'
-import * as ts from 'typescript'
+import {
+  createProgram,
+  ScriptTarget,
+  ModuleKind,
+  ModuleResolutionKind,
+  getJSDocCommentsAndTags,
+  forEachChild,
+  isTypeAliasDeclaration,
+  isInterfaceDeclaration,
+  isTypeLiteralNode,
+  isPropertySignature,
+  isIntersectionTypeNode,
+  isUnionTypeNode,
+  isParenthesizedTypeNode,
+  type Program,
+  type TypeChecker,
+  type Symbol,
+  type CompilerOptions,
+  type PropertySignature,
+  type TypeNode,
+  type TypeAliasDeclaration,
+  type InterfaceDeclaration
+} from 'typescript'
 import { join, resolve, basename, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { ComponentParser } from 'sveld'
@@ -15,32 +37,53 @@ const CANVAS_PATHS = [
   '/core/src/lib/context/fragments/dom.ts'
 ]
 const sveldParser = new ComponentParser()
-let sharedTypeProgram: ts.Program | undefined
-let sharedTypeChecker: ts.TypeChecker | undefined
+let sharedTypeProgram: Program | undefined
+let sharedTypeChecker: TypeChecker | undefined
 let sharedTypeProgramFiles: string[] = []
-const sharedAliasCache = new Map<
-  string,
-  ts.TypeAliasDeclaration | ts.InterfaceDeclaration | undefined
->()
+const sharedAliasCache = new Map<string, TypeAliasDeclaration | InterfaceDeclaration | undefined>()
 
 function normalizePaths(paths: string[]) {
   return [...new Set(paths)].sort()
 }
 
-function getCompilerOptions(): ts.CompilerOptions {
-  return {
+function getCompilerOptions(componentPath?: string): CompilerOptions {
+  const defaultOptions: CompilerOptions = {
     noEmit: true,
     skipLibCheck: true,
     strict: false,
-    target: ts.ScriptTarget.ES2020,
-    module: ts.ModuleKind.ESNext,
-    moduleResolution: ts.ModuleResolutionKind.NodeJs,
+    target: ScriptTarget.ES2020,
+    module: ModuleKind.ESNext,
+    moduleResolution: ModuleResolutionKind.NodeJs,
     allowSyntheticDefaultImports: true,
     esModuleInterop: true,
     baseUrl: resolve(__dirname, '../../..'),
     paths: {
       '@threlte/*': ['packages/*/src/lib/index.ts']
     }
+  }
+
+  if (!componentPath) return defaultOptions
+
+  // Extract package directory from path
+  const packageMatch = componentPath.match(/packages\/([^/]+)/)
+  if (!packageMatch) return defaultOptions
+
+  const packageDir = resolve(PACKAGES_DIR, packageMatch[1])
+  const tsconfigPath = join(packageDir, 'tsconfig.json')
+
+  if (!existsSync(tsconfigPath)) return defaultOptions
+
+  try {
+    const tsconfigContent = readFileSync(tsconfigPath, 'utf-8')
+    const tsconfig = JSON.parse(tsconfigContent)
+
+    // Merge tsconfig options with defaults
+    return {
+      ...defaultOptions,
+      ...(tsconfig.compilerOptions || {})
+    }
+  } catch (error) {
+    return defaultOptions
   }
 }
 
@@ -57,7 +100,7 @@ function initSharedTypeChecker(typeFiles: string[]) {
 
   sharedTypeProgramFiles = normalizedFiles
   sharedAliasCache.clear()
-  sharedTypeProgram = ts.createProgram(normalizedFiles, getCompilerOptions())
+  sharedTypeProgram = createProgram(normalizedFiles, getCompilerOptions(normalizedFiles[0]))
   sharedTypeChecker = sharedTypeProgram.getTypeChecker()
 }
 
@@ -218,13 +261,13 @@ function updateTypeText(text: string) {
   return text
 }
 
-function getDataFromJSDocsTS(prop: ts.Symbol, checker: ts.TypeChecker) {
+function getDataFromJSDocsTS(prop: Symbol) {
   let description: string | undefined
   let defaultValue: string | undefined
   const declarations = prop.getDeclarations()
   if (declarations) {
     for (const declaration of declarations) {
-      const jsDocs = ts.getJSDocCommentsAndTags(declaration)
+      const jsDocs = getJSDocCommentsAndTags(declaration)
       for (const jsDoc of jsDocs) {
         if (jsDoc.comment) {
           description = jsDoc.comment.trim() || undefined
@@ -245,10 +288,10 @@ function getDataFromJSDocsTS(prop: ts.Symbol, checker: ts.TypeChecker) {
   return { description, defaultValue }
 }
 
-function getDataFromJSDocsPropertySignature(prop: ts.PropertySignature, sourceFile: ts.SourceFile) {
+function getDataFromJSDocsPropertySignature(prop: PropertySignature) {
   let description: string | undefined
   let defaultValue: string | undefined
-  const jsDocs = ts.getJSDocCommentsAndTags(prop)
+  const jsDocs = getJSDocCommentsAndTags(prop)
   for (const jsDoc of jsDocs) {
     if (jsDoc.comment) {
       description = jsDoc.comment.trim() || undefined
@@ -265,26 +308,26 @@ function getDataFromJSDocsPropertySignature(prop: ts.PropertySignature, sourceFi
   return { description, defaultValue }
 }
 
-function collectTypeLiteralProperties(typeNode: ts.TypeNode | undefined): ts.PropertySignature[] {
-  const properties: ts.PropertySignature[] = []
+function collectTypeLiteralProperties(typeNode: TypeNode | undefined): PropertySignature[] {
+  const properties: PropertySignature[] = []
 
-  const collect = (node: ts.TypeNode | undefined) => {
+  const collect = (node: TypeNode | undefined) => {
     if (!node) return
-    if (ts.isTypeLiteralNode(node)) {
+    if (isTypeLiteralNode(node)) {
       for (const member of node.members) {
-        if (ts.isPropertySignature(member)) {
+        if (isPropertySignature(member)) {
           properties.push(member)
         }
       }
       return
     }
-    if (ts.isIntersectionTypeNode(node) || ts.isUnionTypeNode(node)) {
+    if (isIntersectionTypeNode(node) || isUnionTypeNode(node)) {
       for (const child of node.types) {
         collect(child)
       }
       return
     }
-    if (ts.isParenthesizedTypeNode(node)) {
+    if (isParenthesizedTypeNode(node)) {
       collect(node.type)
       return
     }
@@ -295,11 +338,11 @@ function collectTypeLiteralProperties(typeNode: ts.TypeNode | undefined): ts.Pro
 }
 
 function collectInterfaceProperties(
-  interfaceDeclaration: ts.InterfaceDeclaration
-): ts.PropertySignature[] {
-  const properties: ts.PropertySignature[] = []
+  interfaceDeclaration: InterfaceDeclaration
+): PropertySignature[] {
+  const properties: PropertySignature[] = []
   for (const member of interfaceDeclaration.members) {
-    if (ts.isPropertySignature(member)) {
+    if (isPropertySignature(member)) {
       properties.push(member)
     }
   }
@@ -391,8 +434,8 @@ function dataFromTypesFile(params: { name: string; path: string }) {
   let alias = sharedAliasCache.get(cacheKey)
   if (alias === undefined) {
     alias = undefined
-    ts.forEachChild(sourceFile, (node) => {
-      if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) {
+    forEachChild(sourceFile, (node) => {
+      if (isTypeAliasDeclaration(node) || isInterfaceDeclaration(node)) {
         const aliasName = node.name.text
         if (aliasName === name + 'Props' || aliasName === 'Props' || aliasName.includes('Props')) {
           alias = node
@@ -404,7 +447,7 @@ function dataFromTypesFile(params: { name: string; path: string }) {
 
   if (!alias) return { props: [], events: [] }
 
-  const propertySignatures = ts.isTypeAliasDeclaration(alias)
+  const propertySignatures = isTypeAliasDeclaration(alias)
     ? collectTypeLiteralProperties(alias.type)
     : collectInterfaceProperties(alias)
 
@@ -498,15 +541,15 @@ function mergeData(
 
 function getCanvasData() {
   const rootFiles = CANVAS_PATHS.map((path) => join(PACKAGES_DIR, path))
-  const program = ts.createProgram(rootFiles, getCompilerOptions())
+  const program = createProgram(rootFiles, getCompilerOptions(rootFiles[0]))
 
   const checker = program.getTypeChecker()
   const sourceFiles = program.getSourceFiles()
 
-  let contextAlias: ts.TypeAliasDeclaration | undefined
+  let contextAlias: TypeAliasDeclaration | undefined
   for (const sourceFile of sourceFiles) {
-    ts.forEachChild(sourceFile, (node) => {
-      if (ts.isTypeAliasDeclaration(node) && node.name.text === 'CreateThrelteContextOptions') {
+    forEachChild(sourceFile, (node) => {
+      if (isTypeAliasDeclaration(node) && node.name.text === 'CreateThrelteContextOptions') {
         contextAlias = node
       }
     })
