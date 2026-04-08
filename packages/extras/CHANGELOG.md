@@ -1,5 +1,13 @@
 # @threlte/extras
 
+## 9.14.5
+
+### Patch Changes
+
+- 97a34a5: Fix PointsMaterial build error from override keyword in Svelte module script
+- bfd06cd: Exclude test files and **tests** directories from published packages
+- 7ba9fe0: Stop InstancedMesh from invalidating every frame when update is false
+
 ## 9.14.4
 
 ### Patch Changes

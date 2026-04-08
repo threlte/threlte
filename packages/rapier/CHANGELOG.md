@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.4.2
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
 ## 3.4.1
 
 ### Patch Changes

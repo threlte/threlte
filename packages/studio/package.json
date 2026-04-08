@@ -1,6 +1,6 @@
 {
   "name": "@threlte/studio",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "repository": {
@@ -91,6 +91,9 @@
     "types": "./dist/index.d.ts",
     "files": [
       "dist",
+      "!dist/**/__tests__",
+      "!dist/**/*.test.*",
+      "!dist/**/*.spec.*",
       "vite"
     ],
     "svelte": "./dist/index.js",

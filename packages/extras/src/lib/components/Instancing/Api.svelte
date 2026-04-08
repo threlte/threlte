@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
+  import { T, useThrelte, useTask } from '@threlte/core'
   import type { Snippet } from 'svelte'
   import type { InstancedMesh } from 'three'
   import { DynamicDrawUsage, Matrix4, Quaternion, Vector3 } from 'three'
@@ -31,34 +31,43 @@
   const rotation = new Quaternion()
   const scale = new Vector3()
 
+  const { invalidate } = useThrelte()
+
   let initialUpdateDone = false
 
-  useTask(() => {
-    instancedMesh.updateMatrix()
+  function updateInstances() {
+    instancedMesh.updateMatrixWorld()
+    parentMatrix.copy(instancedMesh.matrixWorld).invert()
 
-    if (update || !initialUpdateDone) {
-      instancedMesh.updateMatrixWorld()
-      parentMatrix.copy(instancedMesh.matrixWorld).invert()
-
-      // update the transform matrices and colors
-      if (instancedMesh.instanceColor) {
-        instancedMesh.instanceColor!.needsUpdate = true
-      }
-      instancedMesh.instanceMatrix.needsUpdate = true
-
-      for (let i = 0, l = instances.current.length; i < l; i++) {
-        const instance = instances.current[i]
-        // Multiply the inverse of the InstancedMesh world matrix or else
-        // Instances will be double-transformed if <Instances> isn't at identity
-        instance.matrixWorld.decompose(translation, rotation, scale)
-        instanceMatrix.compose(translation, rotation, scale).premultiply(parentMatrix)
-        instanceMatrix.toArray(matrices, i * 16)
-        instance.color.toArray(colors, i * 3)
-      }
-
-      initialUpdateDone = true
+    if (instancedMesh.instanceColor) {
+      instancedMesh.instanceColor!.needsUpdate = true
     }
-  })
+    instancedMesh.instanceMatrix.needsUpdate = true
+
+    for (let i = 0, l = instances.current.length; i < l; i++) {
+      const instance = instances.current[i]
+      // Multiply the inverse of the InstancedMesh world matrix or else
+      // Instances will be double-transformed if <Instances> isn't at identity
+      instance.matrixWorld.decompose(translation, rotation, scale)
+      instanceMatrix.compose(translation, rotation, scale).premultiply(parentMatrix)
+      instanceMatrix.toArray(matrices, i * 16)
+      instance.color.toArray(colors, i * 3)
+    }
+
+    initialUpdateDone = true
+    invalidate()
+  }
+
+  useTask(
+    () => {
+      instancedMesh.updateMatrix()
+
+      if (update || !initialUpdateDone) {
+        updateInstances()
+      }
+    },
+    { autoInvalidate: false }
+  )
 
   $effect.pre(() => {
     const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
