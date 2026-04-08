@@ -3,7 +3,6 @@ import { defineAddon, defineAddonOptions } from 'sv'
 const versionTag = 'latest'
 const dimforgeVersion = '^0.16.2'
 const theatreVersion = '^0.7.2'
-const webxrTypesVersion = '^0.5.14'
 
 const packages = [
   {
@@ -96,7 +95,7 @@ export default defineAddon({
       }
 
       if (pkgId === 'xr' && options.types) {
-        sv.devDependency('@types/webxr', webxrTypesVersion)
+        sv.devDependency('@types/webxr', versionTag)
       }
     }
   }
