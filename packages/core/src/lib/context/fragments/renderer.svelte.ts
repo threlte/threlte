@@ -218,7 +218,11 @@ export const createRendererContext = <T extends Renderer>(
   $effect(() => {
     return () => {
       renderer.setAnimationLoop(null)
-      renderer.dispose()
+      try {
+        renderer.dispose()
+      } catch {
+        // WebGPURenderer.dispose() throws if async init() hasn't completed (e.g. during HMR)
+      }
     }
   })
 
