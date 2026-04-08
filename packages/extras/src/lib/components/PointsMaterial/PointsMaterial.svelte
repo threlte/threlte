@@ -28,6 +28,7 @@
       this.alphaToCoverage = true
       this.onBeforeCompile = (
         parameters: WebGLProgramParametersWithUniforms,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         _renderer: WebGLRenderer
       ) => {
         parameters.fragmentShader = parameters.fragmentShader.replace(
