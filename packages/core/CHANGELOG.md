@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.5.8
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
 ## 8.5.7
 
 ### Patch Changes

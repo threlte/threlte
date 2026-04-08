@@ -1,5 +1,12 @@
 # @threlte/gltf
 
+## 3.0.5
+
+### Patch Changes
+
+- bd24a8a: Fix prettier-plugin-svelte resolution error when running via npx
+- 3c951cc: Auto-detect Draco compression from GLTF metadata and include useDraco() in generated components automatically
+
 ## 3.0.4
 
 ### Patch Changes
