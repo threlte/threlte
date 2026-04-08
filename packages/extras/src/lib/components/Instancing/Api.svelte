@@ -36,7 +36,6 @@
   let initialUpdateDone = false
 
   function updateInstances() {
-    instancedMesh.updateMatrix()
     instancedMesh.updateMatrixWorld()
     parentMatrix.copy(instancedMesh.matrixWorld).invert()
 
@@ -59,10 +58,16 @@
     invalidate()
   }
 
-  useTask(() => updateInstances(), {
-    autoInvalidate: false,
-    running: () => update || !initialUpdateDone
-  })
+  useTask(
+    () => {
+      instancedMesh.updateMatrix()
+
+      if (update || !initialUpdateDone) {
+        updateInstances()
+      }
+    },
+    { autoInvalidate: false }
+  )
 
   $effect.pre(() => {
     const updateRange = Math.min(limit, range !== undefined ? range : limit, $instances.length)
