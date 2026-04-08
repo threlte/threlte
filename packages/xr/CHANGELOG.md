@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.5.3
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
 ## 1.5.2
 
 ### Patch Changes

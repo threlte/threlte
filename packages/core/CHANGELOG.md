@@ -1,5 +1,37 @@
 # @threlte/core
 
+## 8.5.9
+
+### Patch Changes
+
+- c99afe5: WebGPURenderer no longer crashes during HMR when dispose is called before async initialization completes
+
+## 8.5.8
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
+## 8.5.7
+
+### Patch Changes
+
+- bd14893: resolvePropertyPath logs a descriptive error instead of crashing on null segments
+- bd14893: Fix: DAG phantom node removal no longer corrupts ordering constraints
+- bd14893: Fix: memoizedProps cleared on instance change to prevent memory leak
+- bd14893: Removed duplicate ResizeObserver — renderer now uses DOM context's instance
+- bd14893: Fix autoRender/renderMode options reactivity
+
+## 8.5.6
+
+### Patch Changes
+
+- d6cd393: Reduce garbage generation in DAG caused by intermediate arrays
+- d6cd393: Improve DAG sort performance by removing redundant array searches
+- d6cd393: Remove mitt runtime dependency by using a smaller internal event emitter
+- d6cd393: Improve DAG performance by using Maps
+- a0e83d5: Fix: useLoader "loader" prop is undefined before calling load
+
 ## 8.5.5
 
 ### Patch Changes

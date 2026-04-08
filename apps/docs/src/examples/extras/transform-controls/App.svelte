@@ -4,16 +4,25 @@
   import Scene from './Scene.svelte'
   import Settings from './Settings.svelte'
 
-  let controls: '<TrackballControls>' | '<OrbitControls>' = '<OrbitControls>'
+  let controls = $state<'<OrbitControls>' | '<TrackballControls>' | '<CameraControls>'>(
+    '<OrbitControls>'
+  )
+  let autoPauseControls = $state(true)
 </script>
 
 <div>
   <Canvas>
-    <Scene />
+    <Scene
+      {controls}
+      {autoPauseControls}
+    />
   </Canvas>
 </div>
 
-<Settings bind:controls />
+<Settings
+  bind:controls
+  bind:autoPauseControls
+/>
 
 <style>
   div {

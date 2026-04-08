@@ -25,7 +25,6 @@ import { useScheduler } from './scheduler.svelte.js'
 import type { WebGPURenderer } from 'three/webgpu'
 import { fromStore } from 'svelte/store'
 import { devicePixelRatio } from 'svelte/reactivity/window'
-import { useMeasure } from '../../utilities/useMeasure.svelte.js'
 import { updateCamera } from '../../components/T/utils/useCamera.svelte.js'
 
 export type Renderer = WebGLRenderer | WebGPURenderer
@@ -93,8 +92,7 @@ export const createRendererContext = <T extends Renderer>(
     scheduler,
     frameInvalidated
   } = useScheduler()
-  const { canvas, dom } = useDOM()
-  const { shouldUpdateSize, size } = useMeasure(dom)
+  const { canvas, size, shouldUpdateSize } = useDOM()
 
   const opts = $derived(options())
   const renderer = untrack(() =>
@@ -220,7 +218,11 @@ export const createRendererContext = <T extends Renderer>(
   $effect(() => {
     return () => {
       renderer.setAnimationLoop(null)
-      renderer.dispose()
+      try {
+        renderer.dispose()
+      } catch {
+        // WebGPURenderer.dispose() throws if async init() hasn't completed (e.g. during HMR)
+      }
     }
   })
 

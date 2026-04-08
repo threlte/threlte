@@ -1,6 +1,6 @@
 {
   "name": "@threlte/theatre",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Threlte Components for Theatre, an animation library with a professional motion design toolset",
@@ -79,7 +79,10 @@
   "svelte": "./src/lib/index.ts",
   "publishOverrides": {
     "files": [
-      "dist"
+      "dist",
+      "!dist/**/__tests__",
+      "!dist/**/*.test.*",
+      "!dist/**/*.spec.*"
     ],
     "svelte": "./dist/index.js",
     "exports": {

@@ -1,5 +1,11 @@
 # @threlte/flex
 
+## 2.2.2
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
 ## 2.2.1
 
 ### Patch Changes
