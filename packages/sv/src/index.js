@@ -54,7 +54,7 @@ const packages = [
 const options = defineAddonOptions()
   .add('types', {
     type: 'boolean',
-    question: 'Would you like the types for autocompletion & hints?',
+    question: 'Add types for autocompletion and hints?',
     default: true
   })
   .add('packages', {
