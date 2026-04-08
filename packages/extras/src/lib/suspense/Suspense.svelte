@@ -1,7 +1,8 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { tick, type Snippet } from 'svelte'
+  import { type Snippet } from 'svelte'
   import { Group } from 'three'
+  import InnerSuspense from './InnerSuspense.svelte'
 
   interface Props {
     children?: Snippet<[{ suspended: boolean }]>
@@ -13,27 +14,26 @@
     onsuspend?: () => void
   }
 
-  let { onload, onsuspend, onerror, error, fallback, children }: Props = $props()
-
-  $effect(() => {
-    if ($effect.pending() > 0) {
-      onsuspend?.()
-    } else {
-      onload?.()
-    }
-  })
+  let { onload, onsuspend, onerror, error, fallback, children: c }: Props = $props()
 
   const group = new Group()
 </script>
 
 <svelte:boundary {onerror}>
-  <!-- Block the graph from mounting to the parent -->
-  <T
-    is={group}
-    attach={$effect.pending() > 0 ? false : undefined}
+  <InnerSuspense
+    {onsuspend}
+    {onload}
   >
-    {@render children?.({ suspended: $effect.pending() > 0 })}
-  </T>
+    {#snippet children(suspended: boolean)}
+      <!-- Block the graph from mounting to the parent -->
+      <T
+        is={group}
+        attach={suspended ? false : undefined}
+      >
+        {@render c?.({ suspended: suspended })}
+      </T>
+    {/snippet}
+  </InnerSuspense>
 
   {#snippet pending()}
     {@render fallback?.()}

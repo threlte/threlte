@@ -45,7 +45,7 @@
   const outlineEffectPass = new EffectPass(undefined, outlineEffect)
   composer.addPass(outlineEffectPass)
 
-  $effect(() => {
+  $effect.pre(() => {
     renderPass.mainCamera = camera.current
     outlineEffect.mainCamera = camera.current
     outlineEffectPass.mainCamera = camera.current

@@ -17,7 +17,7 @@
  * is revealed.
  */
 export const onReveal = (callback: () => (() => void) | void): void => {
-  $effect.pre(() => {
+  $effect(() => {
     if ($effect.pending() === 0) {
       return callback()
     }

@@ -10,7 +10,7 @@
  * is suspended.
  */
 export const onSuspend = (callback: () => void): void => {
-  $effect.pre(() => {
+  $effect(() => {
     if ($effect.pending() > 0) {
       callback()
     }
