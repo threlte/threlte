@@ -14,7 +14,7 @@ import { useScheduler, type SchedulerContext } from '../fragments/scheduler.svel
 export interface ThrelteContext<T extends Renderer>
   extends
     Omit<CameraContext, 'manual' | 'makeDefaultCameras'>,
-    DOMContext,
+    Omit<DOMContext, 'shouldUpdateSize'>,
     RendererContext<T>,
     SceneContext,
     Omit<SchedulerContext, 'frameInvalidated' | 'autoInvalidations' | 'resetFrameInvalidation'> {}

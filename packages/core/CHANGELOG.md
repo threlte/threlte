@@ -1,5 +1,21 @@
 # @threlte/core
 
+## 8.5.8
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
+## 8.5.7
+
+### Patch Changes
+
+- bd14893: resolvePropertyPath logs a descriptive error instead of crashing on null segments
+- bd14893: Fix: DAG phantom node removal no longer corrupts ordering constraints
+- bd14893: Fix: memoizedProps cleared on instance change to prevent memory leak
+- bd14893: Removed duplicate ResizeObserver — renderer now uses DOM context's instance
+- bd14893: Fix autoRender/renderMode options reactivity
+
 ## 8.5.6
 
 ### Patch Changes

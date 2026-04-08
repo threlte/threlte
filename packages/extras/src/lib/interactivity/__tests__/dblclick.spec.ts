@@ -10,11 +10,11 @@ describe('ondblclick', () => {
   it('fires ondblclick when a mesh is double-clicked', async () => {
     const ondblclickA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { ondblclickA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center — records initialHits so dblclick knows what was under the pointer
@@ -31,11 +31,11 @@ describe('ondblclick', () => {
   it('does not fire ondblclick when double-clicking empty space', async () => {
     const ondblclickA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { ondblclickA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown in empty space (0,0) — no mesh under the pointer

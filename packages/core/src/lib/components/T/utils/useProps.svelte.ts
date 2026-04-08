@@ -121,6 +121,10 @@ export const useProps = <Type>(
     const _props = props()
     const _pluginProps = pluginProps()
 
+    // Clear memoized props when the instance or props reference changes,
+    // preventing unbounded growth from previous instances.
+    memoizedProps.clear()
+
     untrack(() => {
       for (const key in _props) {
         $effect.pre(() => {

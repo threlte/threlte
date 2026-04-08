@@ -73,8 +73,8 @@ export const createSchedulerContext = (
   const mainStage = scheduler.createStage(Symbol('threlte-main-stage'))
 
   const opts = $derived(options())
-  const optsAutoRender = $state(opts.autoRender)
-  const optsRenderMode = $state(opts.renderMode)
+  const optsAutoRender = $derived(opts.autoRender)
+  const optsRenderMode = $derived(opts.renderMode)
 
   let autoRender = $derived(optsAutoRender ?? true)
   let renderMode = $derived(optsRenderMode ?? 'on-demand')

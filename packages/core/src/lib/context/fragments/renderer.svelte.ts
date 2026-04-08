@@ -17,7 +17,6 @@ import { useScene } from './scene.js'
 import { useScheduler } from './scheduler.svelte.js'
 import type { WebGPURenderer } from 'three/webgpu'
 import { devicePixelRatio } from 'svelte/reactivity/window'
-import { useMeasure } from '../../utilities/useMeasure.svelte.js'
 import { updateCamera } from '../../components/T/utils/useCamera.svelte.js'
 
 export type Renderer = WebGLRenderer | WebGPURenderer
@@ -86,10 +85,9 @@ export const createRendererContext = <T extends Renderer>(
 ): RendererContext<T> => {
   const { camera, manual } = useCamera()
   const { scene } = useScene()
-  const { invalidate, renderStage, autoRender, scheduler, frameInvalidated, mainStage } =
+  const { invalidate, mainStage, renderStage, autoRender, scheduler, frameInvalidated } =
     useScheduler()
-  const { canvas, dom } = useDOM()
-  const { shouldUpdateSize, size } = useMeasure(dom)
+  const { canvas, size, shouldUpdateSize } = useDOM()
 
   const opts = $derived(options())
   const renderer = untrack(() =>
