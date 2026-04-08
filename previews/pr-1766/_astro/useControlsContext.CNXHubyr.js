@@ -1,0 +1,1 @@
+import"./disclose-version.DsnmJJEf.js";import{w as o}from"./index.ujCWyV9u.js";/* empty css                                                      */import"./observe.svelte.CIPfzpQV.js";import{u as t}from"./useThrelteUserContext.D5LJ01r1.js";const n=()=>t("threlte-controls",{orbitControls:o(void 0),trackballControls:o(void 0),cameraControls:o(void 0)});export{n as u};

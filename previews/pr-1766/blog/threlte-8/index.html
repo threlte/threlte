@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-[#0A0F19]">
+  <head>
+    <script>(function(){const base = "/previews/pr-1766/";
+
+      if (base !== '/' && 'serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register(base + 'sw-base-rewrite.js', { scope: base })
+          .then((reg) => {
+            // On first visit the SW isn't active yet — reload once it takes control
+            // so all asset requests go through the rewriter
+            if (!navigator.serviceWorker.controller) {
+              navigator.serviceWorker.addEventListener(
+                'controllerchange',
+                () => {
+                  window.location.reload()
+                },
+                { once: true }
+              )
+            }
+          })
+      }
+    })();</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Threlte 8</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900" rel="stylesheet">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/previews/pr-1766/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/previews/pr-1766/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/previews/pr-1766/icons/favicon-16x16.png">
+    <link rel="manifest" href="/previews/pr-1766/icons/site.webmanifest">
+    <link rel="mask-icon" href="/previews/pr-1766/icons/safari-pinned-tab.svg" color="#fe3d00">
+    <link rel="shortcut icon" href="/previews/pr-1766/icons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="msapplication-config" content="/previews/pr-1766/icons/browserconfig.xml">
+    <meta name="theme-color" content="#0a0F19">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:title" content="Threlte">
+    <meta property="og:type" content="website">
+    <meta name="description" content="Threlte - Rapidly build interactive 3D apps for the web">
+    <meta property="og:description" content="Threlte - Rapidly build interactive 3D apps for the web">
+    <meta property="og:image" content="https://threlte.xyz/threlte-social-preview-v2.jpg">
+    <meta property="og:image:secure_url" content="https://threlte.xyz/threlte-social-preview-v2.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Threlte - Rapidly build interactive 3D apps for the web">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Threlte - Rapidly build interactive 3D apps for the web">
+    <meta name="twitter:description" content="Threlte is a 3D framework for Svelte that lets you rapidly build interactive 3D apps for the web">
+    <meta property="og:site_name" content="Threlte">
+  <link rel="stylesheet" href="/previews/pr-1766/_astro/index.BUk9QW6a.css">
+<link rel="stylesheet" href="/previews/pr-1766/_astro/index.Czy7AHkm.css"><script type="module" src="/previews/pr-1766/_astro/page.CrCnOucz.js"></script><style>div.svelte-gxmq7n{height:100%}
+</style><style>div.svelte-3r4zw5{height:100%}
+</style><style>div.svelte-ld8u6l{height:100%}
+</style><style>div.svelte-1n91emp{height:100%}
+</style><style>div.svelte-4o2t2z{height:100%}
+</style><style>div.main.svelte-4pk8hi{height:100%}.wrapper.svelte-4pk8hi{position:absolute;width:100%;height:100%;top:0;left:0;background-color:#fff;display:flex;flex-direction:column;gap:.25rem;align-items:center;justify-content:center;color:#000}.loading.svelte-4pk8hi{font-size:.875rem;line-height:1.25rem}.bar-wrapper.svelte-4pk8hi{width:33.333333%;height:10px;border:1px solid black;position:relative}.bar.svelte-4pk8hi{height:100%;background-color:#000}
+</style><style>div.svelte-bj2lai{height:100%}
+</style><style>div.svelte-19nd957{height:100%}
+</style><style>div.svelte-1iuc4dd{height:100%}
+</style><style>div.svelte-udjrf2{height:100%}
+</style><style>div.svelte-sicln5{height:100%}
+</style><style>div.svelte-bzxr12{height:100%}
+</style><style>div.svelte-1ny4ou2{position:relative;height:100%;width:100%;background-color:#0e1625}
+</style><style>body{margin:0;padding:0}main.svelte-7ydbqw{height:100dvh;position:relative}div.threlte.svelte-7ydbqw,canvas.svelte-7ydbqw{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+</style><style>div.svelte-oaetmq{height:100%}
+</style><style>div.svelte-ffwhky{height:100%}
+</style><style>div.svelte-7vt3kd{height:100%}
+</style><style>div.svelte-szon0s{height:100%}
+</style><style>div.svelte-m36z7k{height:100%}
+</style><style>div.svelte-13jbsu2{height:100%}
+</style><style>div.svelte-j90y4n{height:100%}
+</style><style>div.svelte-xzpdhd{height:100%}
+</style><style>div.svelte-1wli36w{position:relative;height:100%;width:100%;background-color:#0e1625}
+</style><style>div.svelte-twwxjv{height:100%}
+</style><style>div#container.svelte-luatu6{height:100%;background:#fff}div#content.svelte-luatu6{position:relative;z-index:1;height:100%;overflow-y:scroll}div#item.svelte-luatu6{margin:1rem;display:inline-block;padding:1rem;box-shadow:#0000 0 0,#0000 0 0,#0000001a 0 4px 6px -1px,#0000001a 0 2px 4px -2px}div#item.svelte-luatu6>div:where(.svelte-luatu6):first-child{height:200px;width:200px}div#item.svelte-luatu6>div:where(.svelte-luatu6):last-child{margin-top:.5rem;color:#888}
+</style><style>div.svelte-wxxwad{height:100%}
+</style><style>div.svelte-lsiaqh{height:100%}
+</style><style>div.svelte-w9m2ll{height:100%}
+</style><style>div.svelte-4dc7o1{background-color:#000;width:100%;height:100%}
+</style><style>body{margin:0}div.svelte-pnjodv{width:100%;height:100%}
+</style><style>div.svelte-jsx3w{height:100%;background-color:#18181b}
+</style><style>div.svelte-3o2v7e{height:100%}
+</style><style>div.svelte-yp35xk{height:100%}
+</style><style>div.svelte-1251pa0{height:100%}
+</style><style>div.svelte-1aw5pjd{height:100%;background-color:#2f7dc633}
+</style><style>div.svelte-11ei1hx{height:100%}
+</style><style>div.svelte-6y5ftj{height:100%}
+</style><style>div.svelte-z3h3sq{height:100%}
+</style><style>div.svelte-3ve4t3{height:100%}
+</style><style>div.svelte-16jmgpt{background-color:#000;width:100%;height:100%}
+</style><style>div.svelte-1hzh7ni{height:100%}
+</style><style>div.svelte-1a3kg3r{height:100%}p.svelte-1a3kg3r{font-size:.75rem;line-height:1rem}
+</style><style>div.svelte-wzi0vm{height:100%}p.svelte-wzi0vm{font-size:.75rem;line-height:1rem}
+</style><style>div.svelte-ontf5w{height:100%}
+</style><style>div.svelte-1adkchw{height:100%}
+</style><style>div.svelte-k28fcg{height:100%}
+</style><style>div.wrapper.svelte-154msl2{height:100%}div.description.svelte-154msl2{position:absolute;bottom:10px;left:10px;z-index:10;color:#fe3d00}
+</style><style>div.svelte-5q980c{height:100%}
+</style><style>div.svelte-1eec8dd{height:100%}
+</style><style>div.svelte-cdq2bk{height:100%}
+</style><style>div.svelte-m07gkj{height:100%}
+</style><style>div.svelte-1xaa5am{height:100%}
+</style><style>div#main.svelte-kty2yi{height:100%}#css-renderer-target.svelte-kty2yi{left:0;pointer-events:none;position:absolute;top:0}
+</style><style>div.svelte-1gmf4hi{height:100%}
+</style><style>div.svelte-hjwkwl{height:100%}
+</style><style>div.svelte-64b11e{height:100%}
+</style><style>div.svelte-b6iyyr{height:100%}
+</style><style>div.svelte-y24kuv{height:100%}
+</style><style>body{margin:0}div.svelte-24sbeu{width:100%;height:100%}
+</style><style>div.svelte-afn7ej{height:100%}
+</style><style>div.svelte-d49794{height:100%}
+</style><style>div.svelte-1pjovse{height:100%}
+</style><style>div.svelte-g2xv6i{height:100%}
+</style><style>div.svelte-18zqepm{height:100%}
+</style><style>body{margin:0;padding:0}main.svelte-1xezx6{position:absolute;top:0;left:0;width:100%;height:100%}
+</style><style>div.svelte-1km6vwo{height:100%}
+</style><style>div.svelte-1vvw5va{height:100%}
+</style><style>div.svelte-p9f57s{height:100%}
+</style><style>div.svelte-1tcrzz0{width:100%;height:100%}
+</style><style>body{margin:0}div.svelte-16a42l4{width:100%;height:100%}
+</style><style>div.svelte-15kvdhb{height:100%}
+</style><style>div.svelte-1be9xw{height:100%}
+</style><style>ul.svelte-urpjyu{position:absolute;top:1rem;left:1rem}div.svelte-urpjyu{height:100%}
+</style><style>body{margin:0}div.svelte-dwpacw{width:100%;height:100%}
+</style><style>div.svelte-r1kx2h{height:100%}
+</style><style>div.svelte-1trzhqc{height:100%}
+</style><style>div.svelte-1tk154p{position:relative;height:100%;width:100%;background-color:#0e1625}
+</style><style>div.svelte-98s0lw{height:100%}
+</style><style>body{margin:0}nav.svelte-ybv480{padding:20px;position:relative}.split-view.svelte-ybv480{width:100vw;display:flex;flex-direction:row}.split-view.svelte-ybv480>:where(.svelte-ybv480){flex:1}.split-view.svelte-ybv480>:where(.svelte-ybv480):nth-child(2){border-left:1px solid #404550}.example-view.svelte-ybv480{position:absolute;top:0;height:100vh}.threlte.svelte-ybv480{height:100%}.dom.svelte-ybv480{display:flex;flex-direction:row;justify-content:center;align-items:center}
+</style><style>div.svelte-1xihyh8{width:100%;height:100%}
+</style><style>div.svelte-c6mur5{height:100%}
+</style><style>div.svelte-trn93v{height:100%}
+</style><style>div.svelte-126k993{height:100%}
+</style><style>div.svelte-13d2969{height:100%}
+</style><style>div.svelte-xb9tzx{height:100%}p.svelte-xb9tzx{font-size:.75rem;line-height:1rem}
+</style><style>div.svelte-1y7v4qq{height:100%}
+</style><style>div.svelte-x45mvq{background-color:#000;height:100%}
+</style><style>div.svelte-164m0gr{height:100%}
+</style><style>div.svelte-1td2klh{height:100%}
+</style><style>div.svelte-1oi5yyl{height:100%}
+</style><style>div.svelte-1rmxzrm{height:100%}
+</style><style>div.svelte-1vcgpcw{height:100%}
+</style><style>div.svelte-v4ynlc{height:100%;background-color:#fe3d0033}
+</style><style>div.svelte-1nla0m7{height:100%;background-color:#20222b}
+</style><style>div.svelte-1p2s2a{height:100%}
+</style><style>div.svelte-8tqggz{height:100%}
+</style><style>div.svelte-1mjiarj{height:100%}
+</style><style>div.svelte-sui09f{height:100%;background-color:#ffffffe6}
+</style><style>div.svelte-r82h4v{height:100%;background-color:#000}
+</style><style>div.svelte-nd29p6{height:100%}
+</style><style>div.svelte-ugyq5w{height:100%}
+</style><style>div.svelte-11064p7{height:100%}
+</style><style>div.svelte-1vjrfz2{height:100%}
+</style><style>div.svelte-w4b2v6{height:100%}
+</style><style>div.svelte-ktribg{height:100%}
+</style><style>div.svelte-1vk6mqh{position:relative;height:100%;width:100%}
+</style><style>div.svelte-1hg6hor{height:100%}
+</style><style>div.svelte-1pp5xo7{height:100%;background-color:#2f7dc633}
+</style><style>div.svelte-hzhwms{height:100%}
+</style><style>div.svelte-yylpk5{height:100%}
+</style><style>div.svelte-1jzkr2l{height:100%}
+</style><style>div.svelte-m4zdg2{position:relative;height:100%;width:100%;background-color:#0e1625}
+</style><style>div.svelte-1hpub4w{height:100%}
+</style><style>div.svelte-xbc9r2{background-color:#000;width:100%;height:100%}
+</style><style>body{margin:0;padding:0}main.svelte-1e2szb4{position:absolute;top:0;left:0;width:100%;height:100%}
+</style><style>div.svelte-1b3n14m{height:100%}
+</style><style>div.svelte-1s5ce7j{height:100%}
+</style><style>div.svelte-eemh0z{height:100%}
+</style><style>div.svelte-l0u03h{height:100%}
+</style><style>div.svelte-rwxibv{height:100%}
+</style><style>div.svelte-1s6xdpi{height:100%}
+</style><style>body{margin:0}div.svelte-z26yb{width:100%;height:100%}
+</style><style>div.svelte-1hnsa7w{height:100%}
+</style><style>div.svelte-1l09yde{height:100%}
+</style><style>div.svelte-abqnfb{height:100%}
+</style><style>div.svelte-o25lz8{height:100%}
+</style><style>div.svelte-3amngw{height:100%}
+</style><style>div.svelte-1n4y4s2{position:relative;height:100%;width:100%}
+</style><style>div.svelte-js744j{height:100%}
+</style><style>p.svelte-j2duob{color:#fff;position:fixed;padding:.5rem}
+</style><style>div.svelte-1ap86em{height:100%}
+</style><style>div.svelte-1xiz80p{position:relative;width:100%;height:100%;overflow:hidden}canvas.svelte-1xiz80p{display:block;position:relative;width:100%;height:100%}
+</style><style>div.svelte-i8qao2{padding:.25rem 4px;font-family:monospace;font-size:11px;color:var(--lbl-fg)}ul.svelte-i8qao2{padding:0 1rem;margin:.25rem 0}
+</style><style>menu.svelte-163kzrl{position:absolute;top:0;width:100%;display:flex;flex-flow:row;align-items:center;gap:1rem;padding:1rem;color:#fff;font-weight:700}menu.svelte-163kzrl svg{fill:#fff;width:24px;height:24px}menu.svelte-163kzrl div:where(.svelte-163kzrl){width:50px;min-width:50px}menu.svelte-163kzrl input:where(.svelte-163kzrl){flex-grow:1}
+</style><style>.tooltip.svelte-ehryoo{display:none;width:max-content;position:fixed;top:0;left:0;background:#222;color:#fff;padding:4px;border-radius:3px;font-size:11px;font-family:monospace;z-index:1000}.arrow.svelte-ehryoo{position:absolute;background:#222;width:8px;height:8px;transform:rotate(45deg);border-bottom-right-radius:999px}
+</style><style>div.element.svelte-1u3ccye{padding-right:var(--cnt-hp);padding-left:var(--cnt-hp)}div.element-container.svelte-1u3ccye{overflow:hidden;border-radius:var(--bld-br)}div.reset.svelte-1u3ccye{all:initial}
+</style><style>div.svelte-tweakpane-ui div.tp-lblv_l{overflow:hidden;padding-right:var(--cnt-hp);text-overflow:ellipsis}div.svelte-tweakpane-ui div.tp-rotv_t{overflow:hidden;text-overflow:ellipsis}
+</style><style>div.svelte-pntu1q{display:flex;flex-direction:row;gap:1px}div.svelte-pntu1q button{border-radius:0!important}div.svelte-pntu1q>*:first-child button{border-top-left-radius:var(--bs-br)!important;border-bottom-left-radius:var(--bs-br)!important}div.svelte-pntu1q>*:last-child button{border-top-right-radius:var(--bs-br)!important;border-bottom-right-radius:var(--bs-br)!important}
+</style><style>button.svelte-4msxwq{display:grid;place-content:center;width:1.5rem;height:1.5rem;border:0;padding:0;margin:0;background-color:var(--background-color);color:var(--text-color);border-radius:var(--bs-br);position:relative;cursor:pointer}button.svelte-4msxwq:disabled{cursor:not-allowed;opacity:.7}button.svelte-4msxwq:after{content:"";position:absolute;top:-2px;right:-2px;width:8px;height:8px;background-color:var(--activityColor);border-radius:1000px;z-index:1}button.svelte-4msxwq:not(:disabled):hover{background-color:var(--background-color-hover)}button.svelte-4msxwq:not(:disabled):focus{background-color:var(--background-color-focus)}button.svelte-4msxwq:not(:disabled):active{background-color:var(--background-color-active)}
+</style><style>svg.svelte-w0dxgi{transform:rotate(var(--r, 0deg)) scale(var(--sx, 1),var(--sy, 1))}path.svelte-w0dxgi{fill:currentColor}@keyframes svelte-w0dxgi-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.spin.svelte-w0dxgi{animation:svelte-w0dxgi-spin 1s linear infinite}
+</style><style>.states.svelte-tammd5{min-height:24px;display:grid;justify-items:center;font-family:Inter,system-ui,sans-serif;user-select:none;pointer-events:none}.badge.svelte-tammd5{grid-row:1;grid-column:1;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;color:#fff;white-space:nowrap}.just-pressed.svelte-tammd5{background:#00c850b3}.just-released.svelte-tammd5{background:#c85000b3}
+</style><style>.states.svelte-1d9og33{min-height:24px;display:grid;justify-items:center;font-family:Inter,system-ui,sans-serif;user-select:none;pointer-events:none}.badge.svelte-1d9og33{grid-row:1;grid-column:1;font-size:11px;padding:2px 8px;border-radius:4px;font-weight:600;color:#fff;white-space:nowrap}.just-pressed.svelte-1d9og33{background:#00c850b3}.just-released.svelte-1d9og33{background:#c85000b3}
+</style><style>.phone-wrapper.svelte-1xfvjhu{height:848px;width:420px;border-radius:63px;overflow:hidden;border:1px solid rgba(0,0,0,.1)}
+</style><style>.overlay.svelte-oh7d7l{font-family:Inter,system-ui,sans-serif;color:#fff;text-align:center;user-select:none;pointer-events:none;width:260px}.hint.svelte-oh7d7l{font-size:12px;opacity:.6;margin:0 0 8px}.info.svelte-oh7d7l{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px}.label.svelte-oh7d7l{opacity:.5;font-weight:600}.value.svelte-oh7d7l{font-family:JetBrains Mono,monospace}.badge.svelte-oh7d7l{display:inline-block;margin-top:6px;font-size:11px;padding:2px 10px;border-radius:4px;font-weight:600;background:#ffffff26}.sprint.svelte-oh7d7l{background:#ff3e00cc}.walk.svelte-oh7d7l{background:#4a90d9cc}
+</style><style>div.svelte-3p0bpc{height:100%;display:flex;place-items:center;justify-content:center}button.svelte-3p0bpc{background-color:#fff;padding:.5rem;border-radius:.5rem;height:fit-content}
+</style><style>.selectBox{border:1px solid #3662e3;background-color:#3661e339;position:fixed}
+</style><style>div.svelte-1ndj2wl{padding:.25rem 4px;font-family:monospace;font-size:11px;color:var(--lbl-fg)}
+</style><style>div.ssr-tab-page.svelte-10tuliv:not(:first-child){overflow:hidden;display:none}
+</style><style>#toolbar-items-wrapper.svelte-1g2l7di{display:flex;gap:.25rem;align-items:stretch;justify-content:space-between;padding:2px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}#toolbar-items-wrapper.svelte-1g2l7di::-webkit-scrollbar{display:none}.toolbar-items.svelte-1g2l7di>*+*{display:block!important;border-left:1px solid #444548;padding-left:.5rem;margin-left:.25rem}#toolbar-items-wrapper.svelte-1g2l7di .toolbar-items-center:where(.svelte-1g2l7di){justify-content:center}#toolbar-items-wrapper.svelte-1g2l7di .toolbar-items-right:where(.svelte-1g2l7di){justify-content:flex-end}#toolbar-items-wrapper.svelte-1g2l7di div:where(.svelte-1g2l7di){flex-shrink:0;flex-grow:1;display:flex;gap:.25rem;align-items:stretch}.tp-lblv_v:has(.tp-ckbv){width:auto!important}
+</style><style>.tooltip.svelte-o814g6{display:none;width:max-content;position:absolute;top:0;left:0;background:#222;color:#fff;padding:4px;border-radius:3px;font-size:11px;font-family:monospace;z-index:1000}.arrow.svelte-o814g6{position:absolute;background:#222;width:8px;height:8px;transform:rotate(45deg)}
+</style><style>[data-astro-transition-scope="astro-kyllinzg-1"] { view-transition-name: astro-kyllinzg-1; }</style></head>
+  <body class="relative bg-[#0A0F19] font-sans text-white" data-astro-transition-scope="astro-kyllinzg-1">
+    
+  
+  <div class="fixed top-0 left-0 z-5 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]">
+    <!-- bottom gradient -->
+    <div class="pointer-events-none absolute top-full left-0 h-[10svh] w-full bg-linear-to-b from-[#0A0F19] to-transparent">
+    </div>
+  </div>
+
+  <header class="fixed z-10 hidden h-[var(--docs-navbar-height)] w-screen flex-row items-center justify-between border-b border-blue-900/0 px-6 md:flex">
+    <!-- Header Left -->
+    <div class="flex flex-row items-center gap-12">
+      <a href="/previews/pr-1766/">
+        
+<img src="/previews/pr-1766/_astro/threlte-logo.aie8bfXx_1NgiYq.webp" alt="threlte logo" loading="lazy" decoding="async" fetchpriority="auto" width="152" height="37" class="h-[37px] w-auto">
+      </a>
+
+      <nav class="text-faded flex translate-y-px flex-row gap-5">
+        <!-- Implement as soon as there are showcase entries -->
+        <!-- <a href="/showcase">Showcase</a> -->
+        <a class="hover:text-white" href="/previews/pr-1766/docs/learn/getting-started/introduction">Documentation</a>
+        <a class="hover:text-white text-orange" href="/previews/pr-1766/blog">Blog</a>
+      </nav>
+    </div>
+
+    <!-- Header Right -->
+    <div class="flex flex-row gap-5">
+      <div class="flex flex-row items-center gap-3 text-white">
+  <!-- GITHUB -->
+  <a aria-label="Threlte Github" href="https://github.com/threlte/threlte" target="_blank">
+        <svg height="26" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10.0343 23.9272C10.0343 24.0482 9.89516 24.145 9.71976 24.145C9.52016 24.1631 9.38105 24.0664 9.38105 23.9272C9.38105 23.8063 9.52016 23.7095 9.69556 23.7095C9.87702 23.6914 10.0343 23.7881 10.0343 23.9272ZM8.15323 23.6551C8.11089 23.776 8.23185 23.9152 8.41331 23.9514C8.57056 24.0119 8.75202 23.9514 8.78831 23.8305C8.8246 23.7095 8.70968 23.5704 8.52823 23.516C8.37097 23.4736 8.19556 23.5341 8.15323 23.6551ZM10.8266 23.5523C10.6512 23.5946 10.5302 23.7095 10.5484 23.8486C10.5665 23.9696 10.7238 24.0482 10.9052 24.0059C11.0806 23.9635 11.2016 23.8486 11.1835 23.7277C11.1653 23.6127 11.002 23.5341 10.8266 23.5523ZM14.8065 0.374817C6.41734 0.374817 0 6.74377 0 15.1329C0 21.8406 4.22177 27.5805 10.252 29.6006C11.0262 29.7398 11.2984 29.2619 11.2984 28.8688C11.2984 28.4938 11.2802 26.4252 11.2802 25.1551C11.2802 25.1551 7.04637 26.0623 6.15726 23.3527C6.15726 23.3527 5.46774 21.5926 4.47581 21.1389C4.47581 21.1389 3.09073 20.1893 4.57258 20.2075C4.57258 20.2075 6.07863 20.3285 6.90726 21.768C8.23185 24.1027 10.4516 23.4313 11.3165 23.0321C11.4556 22.0643 11.8488 21.393 12.2843 20.9938C8.90323 20.6188 5.49194 20.1289 5.49194 14.3103C5.49194 12.647 5.95161 11.8123 6.91935 10.7478C6.7621 10.3547 6.24798 8.73369 7.07661 6.64095C8.34073 6.2478 11.25 8.27402 11.25 8.27402C12.4597 7.93531 13.7601 7.7599 15.0484 7.7599C16.3367 7.7599 17.6371 7.93531 18.8468 8.27402C18.8468 8.27402 21.756 6.24176 23.0202 6.64095C23.8488 8.73974 23.3347 10.3547 23.1774 10.7478C24.1452 11.8184 24.7379 12.653 24.7379 14.3103C24.7379 20.147 21.1754 20.6127 17.7944 20.9938C18.3508 21.4716 18.8226 22.3789 18.8226 23.8002C18.8226 25.8385 18.8044 28.3607 18.8044 28.8567C18.8044 29.2498 19.0827 29.7277 19.8508 29.5885C25.8992 27.5805 30 21.8406 30 15.1329C30 6.74377 23.1956 0.374817 14.8065 0.374817ZM5.87903 21.2357C5.8004 21.2962 5.81855 21.4353 5.92137 21.5502C6.01815 21.647 6.15726 21.6893 6.23589 21.6107C6.31452 21.5502 6.29637 21.4111 6.19355 21.2962C6.09677 21.1994 5.95766 21.1571 5.87903 21.2357ZM5.22581 20.7458C5.18347 20.8244 5.24395 20.9212 5.36492 20.9817C5.46169 21.0422 5.58266 21.024 5.625 20.9393C5.66734 20.8607 5.60685 20.7639 5.48589 20.7035C5.36492 20.6672 5.26815 20.6853 5.22581 20.7458ZM7.18548 22.899C7.08871 22.9777 7.125 23.1591 7.26411 23.274C7.40323 23.4131 7.57863 23.4313 7.65726 23.3345C7.73589 23.2559 7.6996 23.0744 7.57863 22.9595C7.44556 22.8204 7.26411 22.8022 7.18548 22.899ZM6.49597 22.0099C6.39919 22.0704 6.39919 22.2277 6.49597 22.3668C6.59274 22.5059 6.75605 22.5664 6.83468 22.5059C6.93145 22.4272 6.93145 22.27 6.83468 22.1309C6.75 21.9918 6.59274 21.9313 6.49597 22.0099Z" class="fill-current"></path>
+        </svg>
+      </a>
+
+  <!-- DISCORD -->
+  <a aria-label="Threlte Discord" href="https://discord.gg/EqUBCfCaGm" target="_blank">
+        <svg viewBox="0 0 16 16" aria-hidden="true" height="32" astro-icon="social/discord">
+          <path fill="currentColor" d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"></path>
+        </svg>
+      </a>
+
+  <!-- TWITTER -->
+  <a aria-label="Threlte Twitter" href="https://twitter.com/threlte" target="_blank">
+        <svg height="26" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M26.9163 6.88959C26.9354 7.15607 26.9354 7.42261 26.9354 7.6891C26.9354 15.8173 20.7488 25.1828 9.44166 25.1828C5.95813 25.1828 2.7221 24.1739 0 22.4227C0.494943 22.4797 0.970785 22.4988 1.48477 22.4988C4.3591 22.4988 7.00509 21.528 9.11804 19.8719C6.41499 19.8148 4.14974 18.0445 3.36927 15.6079C3.75001 15.665 4.1307 15.7031 4.53049 15.7031C5.0825 15.7031 5.63457 15.6269 6.1485 15.4937C3.33124 14.9226 1.21823 12.448 1.21823 9.4594V9.38328C2.03673 9.84014 2.98859 10.1257 3.9974 10.1637C2.3413 9.05961 1.25631 7.17511 1.25631 5.04311C1.25631 3.901 1.56083 2.85404 2.09386 1.94033C5.12053 5.6713 9.67006 8.10781 14.7715 8.37436C14.6764 7.9175 14.6193 7.44166 14.6193 6.96576C14.6193 3.57739 17.3604 0.817261 20.7678 0.817261C22.5381 0.817261 24.137 1.55965 25.2602 2.75889C26.6497 2.4924 27.9822 1.97842 29.1625 1.27412C28.7055 2.70182 27.7348 3.90106 26.4594 4.66243C27.6967 4.52925 28.896 4.18653 30 3.71069C29.1626 4.92891 28.1156 6.0139 26.9163 6.88959Z" class="fill-current"></path>
+        </svg>
+      </a>
+</div>
+    </div>
+  </header>
+
+  
+  <style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var e=async t=>{await(await t())()};(self.Astro||(self.Astro={})).load=e;window.dispatchEvent(new Event("astro:load"));})();</script><script>(()=>{var A=Object.defineProperty;var g=(i,o,a)=>o in i?A(i,o,{enumerable:!0,configurable:!0,writable:!0,value:a}):i[o]=a;var d=(i,o,a)=>g(i,typeof o!="symbol"?o+"":o,a);{let i={0:t=>m(t),1:t=>a(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(a(t)),5:t=>new Set(a(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t),11:t=>1/0*t},o=t=>{let[l,e]=t;return l in i?i[l](e):void 0},a=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([l,e])=>[l,o(e)]));class y extends HTMLElement{constructor(){super(...arguments);d(this,"Component");d(this,"hydrator");d(this,"hydrate",async()=>{var b;if(!this.hydrator||!this.isConnected)return;let e=(b=this.parentElement)==null?void 0:b.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let c=this.querySelectorAll("astro-slot"),n={},h=this.querySelectorAll("template[data-astro-template]");for(let r of h){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(let r of c){let s=r.closest(this.tagName);s!=null&&s.isSameNode(this)&&(n[r.getAttribute("name")||"default"]=r.innerHTML)}let p;try{p=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(r){let s=this.getAttribute("component-url")||"<unknown>",v=this.getAttribute("component-export");throw v&&(s+=` (export ${v})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),r),r}let u;await this.hydrator(this)(this.Component,p,n,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});d(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),c.disconnect(),this.childrenConnectedCallback()},c=new MutationObserver(()=>{var n;((n=this.lastChild)==null?void 0:n.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});c.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}async start(){let e=JSON.parse(this.getAttribute("opts")),c=this.getAttribute("client");if(Astro[c]===void 0){window.addEventListener(`astro:${c}`,()=>this.start(),{once:!0});return}try{await Astro[c](async()=>{let n=this.getAttribute("renderer-url"),[h,{default:p}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),u=this.getAttribute("component-export")||"default";if(!u.includes("."))this.Component=h[u];else{this.Component=h;for(let f of u.split("."))this.Component=this.Component[f]}return this.hydrator=p,this.hydrate},e,this)}catch(n){console.error(`[astro-island] Error hydrating ${this.getAttribute("component-url")}`,n)}}attributeChangedCallback(){this.hydrate()}}d(y,"observedAttributes",["props"]),customElements.get("astro-island")||customElements.define("astro-island",y)}})();</script><astro-island uid="Znhkth" component-url="/previews/pr-1766/_astro/MobileMainNav.CboUNv_S.js" component-export="default" renderer-url="/previews/pr-1766/_astro/client.svelte.DqXQx3Y_.js" props="{}" ssr client="load" opts="{&quot;name&quot;:&quot;MobileMainNav&quot;,&quot;value&quot;:true}" await-children><!--[--><div class="fixed top-0 left-0 z-40 flex max-h-screen w-full flex-col md:hidden"><header class="flex h-[var(--docs-navbar-height)] w-full shrink-0 flex-row items-center justify-between border-b bg-[#0A0F19] px-6 py-2 border-b-orange/25"><div><!--[--><a href="/previews/pr-1766/"><!--[--><astro-slot name="logo">
+<img src="/previews/pr-1766/_astro/threlte-logo.aie8bfXx_1NgiYq.webp" slot="logo" alt="threlte logo" loading="lazy" decoding="async" fetchpriority="auto" width="152" height="37" class="h-[37px] w-auto"></astro-slot><!--]--></a><!--]--></div> <div class="max-w-[30%]"></div> <div class="flex flex-row items-center justify-end gap-4"><div><!--[--><!--]--></div> <button aria-label="Show navigation menu" aria-expanded="false"><!--[!--><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg><!--]--></button><!----></div></header> <!--[!--><!--]--></div> <div class="h-[var(--docs-navbar-height)]"></div><!--]--><template data-astro-template="socials"><div class="flex flex-row items-center gap-3 text-white">
+  <!-- GITHUB -->
+  <a aria-label="Threlte Github" href="https://github.com/threlte/threlte" target="_blank">
+        <svg height="26" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M10.0343 23.9272C10.0343 24.0482 9.89516 24.145 9.71976 24.145C9.52016 24.1631 9.38105 24.0664 9.38105 23.9272C9.38105 23.8063 9.52016 23.7095 9.69556 23.7095C9.87702 23.6914 10.0343 23.7881 10.0343 23.9272ZM8.15323 23.6551C8.11089 23.776 8.23185 23.9152 8.41331 23.9514C8.57056 24.0119 8.75202 23.9514 8.78831 23.8305C8.8246 23.7095 8.70968 23.5704 8.52823 23.516C8.37097 23.4736 8.19556 23.5341 8.15323 23.6551ZM10.8266 23.5523C10.6512 23.5946 10.5302 23.7095 10.5484 23.8486C10.5665 23.9696 10.7238 24.0482 10.9052 24.0059C11.0806 23.9635 11.2016 23.8486 11.1835 23.7277C11.1653 23.6127 11.002 23.5341 10.8266 23.5523ZM14.8065 0.374817C6.41734 0.374817 0 6.74377 0 15.1329C0 21.8406 4.22177 27.5805 10.252 29.6006C11.0262 29.7398 11.2984 29.2619 11.2984 28.8688C11.2984 28.4938 11.2802 26.4252 11.2802 25.1551C11.2802 25.1551 7.04637 26.0623 6.15726 23.3527C6.15726 23.3527 5.46774 21.5926 4.47581 21.1389C4.47581 21.1389 3.09073 20.1893 4.57258 20.2075C4.57258 20.2075 6.07863 20.3285 6.90726 21.768C8.23185 24.1027 10.4516 23.4313 11.3165 23.0321C11.4556 22.0643 11.8488 21.393 12.2843 20.9938C8.90323 20.6188 5.49194 20.1289 5.49194 14.3103C5.49194 12.647 5.95161 11.8123 6.91935 10.7478C6.7621 10.3547 6.24798 8.73369 7.07661 6.64095C8.34073 6.2478 11.25 8.27402 11.25 8.27402C12.4597 7.93531 13.7601 7.7599 15.0484 7.7599C16.3367 7.7599 17.6371 7.93531 18.8468 8.27402C18.8468 8.27402 21.756 6.24176 23.0202 6.64095C23.8488 8.73974 23.3347 10.3547 23.1774 10.7478C24.1452 11.8184 24.7379 12.653 24.7379 14.3103C24.7379 20.147 21.1754 20.6127 17.7944 20.9938C18.3508 21.4716 18.8226 22.3789 18.8226 23.8002C18.8226 25.8385 18.8044 28.3607 18.8044 28.8567C18.8044 29.2498 19.0827 29.7277 19.8508 29.5885C25.8992 27.5805 30 21.8406 30 15.1329C30 6.74377 23.1956 0.374817 14.8065 0.374817ZM5.87903 21.2357C5.8004 21.2962 5.81855 21.4353 5.92137 21.5502C6.01815 21.647 6.15726 21.6893 6.23589 21.6107C6.31452 21.5502 6.29637 21.4111 6.19355 21.2962C6.09677 21.1994 5.95766 21.1571 5.87903 21.2357ZM5.22581 20.7458C5.18347 20.8244 5.24395 20.9212 5.36492 20.9817C5.46169 21.0422 5.58266 21.024 5.625 20.9393C5.66734 20.8607 5.60685 20.7639 5.48589 20.7035C5.36492 20.6672 5.26815 20.6853 5.22581 20.7458ZM7.18548 22.899C7.08871 22.9777 7.125 23.1591 7.26411 23.274C7.40323 23.4131 7.57863 23.4313 7.65726 23.3345C7.73589 23.2559 7.6996 23.0744 7.57863 22.9595C7.44556 22.8204 7.26411 22.8022 7.18548 22.899ZM6.49597 22.0099C6.39919 22.0704 6.39919 22.2277 6.49597 22.3668C6.59274 22.5059 6.75605 22.5664 6.83468 22.5059C6.93145 22.4272 6.93145 22.27 6.83468 22.1309C6.75 21.9918 6.59274 21.9313 6.49597 22.0099Z" class="fill-current"></path>
+        </svg>
+      </a>
+
+  <!-- DISCORD -->
+  <a aria-label="Threlte Discord" href="https://discord.gg/EqUBCfCaGm" target="_blank">
+        <svg viewBox="0 0 16 16" aria-hidden="true" height="32" astro-icon="social/discord">
+          <path fill="currentColor" d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"></path>
+        </svg>
+      </a>
+
+  <!-- TWITTER -->
+  <a aria-label="Threlte Twitter" href="https://twitter.com/threlte" target="_blank">
+        <svg height="26" viewBox="0 0 30 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M26.9163 6.88959C26.9354 7.15607 26.9354 7.42261 26.9354 7.6891C26.9354 15.8173 20.7488 25.1828 9.44166 25.1828C5.95813 25.1828 2.7221 24.1739 0 22.4227C0.494943 22.4797 0.970785 22.4988 1.48477 22.4988C4.3591 22.4988 7.00509 21.528 9.11804 19.8719C6.41499 19.8148 4.14974 18.0445 3.36927 15.6079C3.75001 15.665 4.1307 15.7031 4.53049 15.7031C5.0825 15.7031 5.63457 15.6269 6.1485 15.4937C3.33124 14.9226 1.21823 12.448 1.21823 9.4594V9.38328C2.03673 9.84014 2.98859 10.1257 3.9974 10.1637C2.3413 9.05961 1.25631 7.17511 1.25631 5.04311C1.25631 3.901 1.56083 2.85404 2.09386 1.94033C5.12053 5.6713 9.67006 8.10781 14.7715 8.37436C14.6764 7.9175 14.6193 7.44166 14.6193 6.96576C14.6193 3.57739 17.3604 0.817261 20.7678 0.817261C22.5381 0.817261 24.137 1.55965 25.2602 2.75889C26.6497 2.4924 27.9822 1.97842 29.1625 1.27412C28.7055 2.70182 27.7348 3.90106 26.4594 4.66243C27.6967 4.52925 28.896 4.18653 30 3.71069C29.1626 4.92891 28.1156 6.0139 26.9163 6.88959Z" class="fill-current"></path>
+        </svg>
+      </a>
+</div></template><!--astro:end--></astro-island>
+
+  
+
+  <main class="mx-auto max-w-7xl px-6 pt-[10svh] pb-12">
+    
+  <div class="w-full pt-6 pb-12">
+    <div class="mx-auto max-w-5xl">
+      <div class="mb-5 block">
+        <h2 class="mb-0 text-[3rem] leading-tight font-bold">
+          Threlte 8
+        </h2>
+        <h3 class="text-faded text-xl">The next major release of Threlte</h3>
+      </div>
+
+      <div class="mt-6">
+        <p class="text-faded text-xs uppercase">
+  <a class="text-orange decoration-dashed underline-offset-4 hover:underline" href="https://threlte.xyz" target="_blank" rel="noopener noreferrer">
+    Threlte Team
+  </a>
+  Jan 20, 2025
+</p>
+      </div>
+
+      <article class="[&_p]:text-faded [&_li]:text-faded markdown-content mt-12 w-full max-w-full">
+        <p>Today we are releasing <strong>Threlte 8</strong>, a significant milestone that marks a leap
+forward in performance, flexibility, and developer experience. This release has
+been cooking for the last 6 months. We’re super excited about the potential it
+unlocks for the next chapter of 3D graphics on the web.</p>
+<p>The new features of <strong>Svelte 5</strong> are groundbreaking for us as developers and
+embracing it was also an opportunity to refine the existing APIs. Furthermore, a
+lot has been happening within the world of <strong>Three.js</strong>. We’ve carved the path
+for Threlte to take advantage of those developments too.</p>
+<h2 id="whats-new-in-threlte-8"><a aria-hidden="true" tabindex="-1" href="#whats-new-in-threlte-8"><span class="icon icon-link"></span></a>What’s new in Threlte 8?</h2>
+<p>Threlte 8 is packed with enhancements in <code>@threlte/core</code> and updates in all our
+other packages. Here are the highlights:</p>
+<h3 id="all-new-t-component"><a aria-hidden="true" tabindex="-1" href="#all-new-t-component"><span class="icon icon-link"></span></a>All-new <code>&lt;T&gt;</code> component</h3>
+<p>The universal <a href="/docs/reference/core/t"><code>&lt;T&gt;</code> component</a> has been <strong>reduced in
+complexity</strong> all while <strong>adding features and flexibility</strong> that were just not
+possible before.</p>
+<ul>
+<li>Props are now evaluated individually</li>
+<li><a href="/docs/learn/advanced/migration-guides#attach-api--trait-components"><code>attach</code> got a lot more
+powerful</a></li>
+<li><a href="docs/learn/advanced/migration-guides#automatic-disposal">Automatic disposal is more
+transparent</a> and</li>
+<li><a href="/docs/learn/advanced/migration-guides#events">Events have been algined with svelte 5</a></li>
+</ul>
+<h3 id="new-threlteextras-components"><a aria-hidden="true" tabindex="-1" href="#new-threlteextras-components"><span class="icon icon-link"></span></a>New <code>@threlte/extras</code> components</h3>
+<p>We’ve added a lot of new things to play around with in <code>@threlte/extras</code> including:
+<a href="/docs/reference/extras/ascii-renderer"><code>&lt;AsciiRenderer&gt;</code></a>,
+<a href="/docs/reference/extras/cube-camera"><code>&lt;CubeCamera&gt;</code></a>,
+<a href="/docs/reference/extras/discard-material"><code>&lt;MeshDiscardMaterial&gt;</code></a>,
+<a href="/docs/reference/extras/radial-gradient-texture"><code>&lt;RadialGradientTexture&gt;</code></a>,
+<a href="/docs/reference/extras/linear-gradient-texture"><code>&lt;LinearGradientTexture&gt;</code></a>,
+<a href="/docs/reference/extras/use-viewport"><code>useViewport</code></a>,
+<a href="/docs/reference/extras/hud"><code>&lt;HUD&gt;</code></a>,
+<a href="/docs/reference/extras/resize"><code>&lt;Resize&gt;</code></a>,
+<a href="/docs/reference/extras/mesh-bounds"><code>&lt;meshBounds&gt;</code></a>,
+<a href="/docs/reference/extras/detailed"><code>&lt;Detailed&gt;</code></a> and
+<a href="/docs/reference/extras/view"><code>&lt;View&gt;</code></a>.</p>
+<h3 id="custom-type-support-for-t"><a aria-hidden="true" tabindex="-1" href="#custom-type-support-for-t"><span class="icon icon-link"></span></a>Custom type support for <code>&lt;T&gt;</code></h3>
+<p>Plugins such as
+<a href="/docs/reference/extras/interactivity#prop-types"><code>interactivity</code></a> now expose
+types which can be added to your ambient type definitions for the <code>&lt;T&gt;</code>
+component to pick up. Event handlers and custom <code>&lt;T&gt;</code> component objects are now
+type-safe.</p>
+<h3 id="fixed-frame-physics"><a aria-hidden="true" tabindex="-1" href="#fixed-frame-physics"><span class="icon icon-link"></span></a>Fixed frame physics</h3>
+<p><code>@threlte/rapier</code> now supports <a href="/docs/reference/rapier/framerate">fixed frame
+physics</a> letting you craft simulations with
+predictability and consistency.</p>
+<h3 id="threlte-plugin-api"><a aria-hidden="true" tabindex="-1" href="#threlte-plugin-api"><span class="icon icon-link"></span></a>Threlte plugin API</h3>
+<p>The <strong>Plugin API</strong> got an update to <a href="/docs/learn/advanced/migration-guides#plugin-api">fully embrace Svelte 5’s reactivity
+model</a>. The doc page also
+had an update to better introduce the API’s capabilities.</p>
+<h3 id="this-is-the-webgpu-way"><a aria-hidden="true" tabindex="-1" href="#this-is-the-webgpu-way"><span class="icon icon-link"></span></a>This is the <em>WebGPU</em> way</h3>
+<p>Threlte 8 introduces a clear path for <a href="/docs/learn/advanced/webgpu">using
+WebGPU</a>. Threlte requires minimal changes to
+projects in order to start using three.js’s new WebGPU renderer and we’ve also
+outlined how to get started with <a href="https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language">three’s new shading
+language</a> -
+TSL.</p>
+<h3 id="a-new-package-appears"><a aria-hidden="true" tabindex="-1" href="#a-new-package-appears"><span class="icon icon-link"></span></a>A new package appears</h3>
+<p>An alpha release of <a href="/docs/reference/studio/getting-started">Threlte Studio</a> is
+part of this release 🎉 It’s a step towards visual editing; letting you tweak
+values in browser and then automatically having those changes written into your
+code. Theres a guided tour to help you get started. We hope it helps get things
+where you want them 🚀😀</p>
+<h2 id="how-to-migrate-to-threlte-8"><a aria-hidden="true" tabindex="-1" href="#how-to-migrate-to-threlte-8"><span class="icon icon-link"></span></a>How to migrate to Threlte 8</h2>
+<p>There are breaking changes. Threlte 8 is not backward-compatible but we’ve
+tried our best to cover the details within our <a href="/docs/learn/advanced/migration-guides#threlte-8">migration
+guide</a>. For further help,
+reach out to us on discord.</p>
+<h2 id="built-with-the-community-for-the-community"><a aria-hidden="true" tabindex="-1" href="#built-with-the-community-for-the-community"><span class="icon icon-link"></span></a>Built with the community, for the community</h2>
+<img width="200" src="/threlte-8-diff.png" alt="THrelte8Diff"/>
+<p>This rewrite was a team effort with great contributions from the community.
+Thank you to everyone who tested out any of our <code>@next</code> releases. We’re immensely
+grateful for the time, talent, and passion of our community. You guys rock 😃</p>
+<h2 id="whats-next"><a aria-hidden="true" tabindex="-1" href="#whats-next"><span class="icon icon-link"></span></a>What’s next?</h2>
+<p>We decided to deprecate the <code>npm create threlte</code> command. We’re excited about
+Svelte’s new <code>sv</code> CLI to incorporate third party packages and we’re going to
+offer Threlte as a package to be installed with <code>sv</code> in the near future.</p>
+<p>We’d love to hear about what everyone makes with Threlte 8! Take it for a spin,
+explore the new documentation, and start building your next 3D application with
+the super powers of Threlte 8 🎉</p>
+<div class="mt-12 flex justify-center"><a href="/docs/learn/getting-started/introduction" class="bg-orange glow-orange hover:glow-orange-400 group flex w-fit flex-row gap-3 rounded-md px-7 py-4 text-center hover:bg-orange-400 hover:no-underline"><p class="my-0 text-lg text-white! no-underline!">Start Building →</p></a></div>
+      </article>
+    </div>
+  </div>
+
+  </main>
+
+  <footer class="grid grid-cols-1 gap-6 text-sm md:grid-cols-3 mx-auto border-t border-white/20 px-6 py-12">
+  <div class="flex flex-col gap-6">
+    
+<img src="/previews/pr-1766/_astro/threlte-logo-only.DL6OLNuj_5UGw3.webp" alt="Threlte logo" loading="lazy" decoding="async" fetchpriority="auto" width="37" height="35" class="w-[37px]">
+    <p class="text-faded">
+      Threlte is a 3D framework for Svelte.<br>
+      &copy; 2025
+    </p>
+  </div>
+
+  <div class="grid grid-cols-2">
+    <ul>
+      <li class="mb-4 font-bold uppercase">Get Started</li>
+      <li>
+        <a class="text-faded block py-2 hover:text-white" href="/previews/pr-1766/docs/learn/getting-started/installation">Install</a>
+      </li>
+      <li>
+        <a class="text-faded block py-2 hover:text-white" href="/previews/pr-1766/docs/learn/getting-started/your-first-scene">Concepts</a>
+      </li>
+      <li>
+        <a class="text-faded block py-2 hover:text-white" href="/previews/pr-1766/docs/reference/core/getting-started">Reference</a>
+      </li>
+    </ul>
+    <ul>
+      <li class="mb-4 font-bold uppercase">Community</li>
+      <li>
+        <a href="https://twitter.com/threlte" target="_blank" rel="noopener noreferrer" class="text-faded block py-2 hover:text-white">
+          Twitter
+        </a>
+      </li>
+      <li>
+        <a href="http://chat.threlte.xyz" target="_blank" rel="noopener noreferrer" class="text-faded block py-2 hover:text-white">
+          Discord
+        </a>
+      </li>
+      <li>
+        <a href="https://github.com/threlte/threlte" target="_blank" rel="noopener noreferrer" class="text-faded block py-2 hover:text-white">
+          GitHub
+        </a>
+      </li>
+    </ul>
+  </div>
+</footer>
+
+  </body></html>
