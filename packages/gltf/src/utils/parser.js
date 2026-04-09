@@ -21,6 +21,9 @@ export function parse(fileName, gltf, options = {}) {
   const objects = []
   gltf.scene.traverse((child) => objects.push(child))
 
+  // Detect skinned meshes — these need per-instance cloning
+  const hasSkinnedMeshes = objects.some((o) => o.isSkinnedMesh)
+
   // Browse for duplicates
   const duplicates = {
     names: {},
@@ -184,14 +187,15 @@ export function parse(fileName, gltf, options = {}) {
         else result += `material={gltf.${node}.material} `
       }
 
-      if (obj.skeleton) result += `skeleton={gltf.${node}.skeleton} `
+      if (obj.skeleton)
+        result += `skeleton={${hasSkinnedMeshes ? `clonedNodes${sanitizeName(obj.name)}` : `gltf.${node}`}.skeleton} `
       if (obj.visible === false) result += `visible={false} `
       if (obj.castShadow === true) result += `castShadow `
       if (obj.receiveShadow === true) result += `receiveShadow `
       if (obj.morphTargetDictionary)
-        result += `morphTargetDictionary={gltf.${node}.morphTargetDictionary} `
+        result += `morphTargetDictionary={${hasSkinnedMeshes ? `clonedNodes${sanitizeName(obj.name)}` : `gltf.${node}`}.morphTargetDictionary} `
       if (obj.morphTargetInfluences)
-        result += `morphTargetInfluences={gltf.${node}.morphTargetInfluences} `
+        result += `morphTargetInfluences={${hasSkinnedMeshes ? `clonedNodes${sanitizeName(obj.name)}` : `gltf.${node}`}.morphTargetInfluences} `
       if (obj.intensity && rNbr(obj.intensity)) result += `intensity={${rNbr(obj.intensity)}} `
       //if (obj.power && obj.power !== 4 * Math.PI) result += `power={${rNbr(obj.power)}} `
       if (obj.angle && obj.angle !== Math.PI / 3) result += `angle={${rDeg(obj.angle)}} `
@@ -402,7 +406,7 @@ export function parse(fileName, gltf, options = {}) {
 
     // Bail out on lights and bones
     if (type === 'bone') {
-      return `<T is={gltf.${node}} />\n`
+      return `<T is={${hasSkinnedMeshes ? `clonedNodes${sanitizeName(obj.name)}` : `gltf.${node}`}} />\n`
     }
 
     // Collect children
@@ -495,6 +499,7 @@ export function parse(fileName, gltf, options = {}) {
   const imports = `
 	${options.types ? `\nimport type * as THREE from 'three'` : ''}
 	${hasAnimations ? `import { Group } from 'three'` : ''}
+  ${hasSkinnedMeshes ? `import { clone as cloneSkeleton } from 'three/examples/jsm/utils/SkeletonUtils.js'` : ''}
   ${options.types ? `import type { Snippet } from 'svelte'` : ''}
         import { ${['T', options.types && !options.isolated ? 'type Props' : '']
           .filter(Boolean)
@@ -576,6 +581,19 @@ ${
         ${!options.preload ? `const gltf = ${useGltf}` : 'const gltf = load()'}
 
     ${
+      hasSkinnedMeshes
+        ? `function cloneScene(scene${options.types ? ': THREE.Group' : ''}) {
+      const clone = cloneSkeleton(scene)
+      const nodes${options.types ? ': Record<string, THREE.Object3D>' : ''} = {}
+      clone.traverse((child) => {
+        if (child.name) nodes[child.name] = child
+      })
+      return nodes${options.types ? ' as unknown as GLTFResult["nodes"]' : ''}
+    }`
+        : ''
+    }
+
+    ${
       hasAnimations
         ? `export const { actions, mixer } = useGltfAnimations${
             options.types ? '<ActionName>' : ''
@@ -588,6 +606,7 @@ ${
 			{#await gltf}
         {@render fallback?.()}
 			{:then gltf}
+				${hasSkinnedMeshes ? '{@const clonedNodes = cloneScene(gltf.scene)}' : ''}
 				${scene}
 			{:catch err}
         {@render error?.({ error: err })}
