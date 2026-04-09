@@ -324,7 +324,7 @@ materials from the cache:
 
 ```svelte
 {:then gltf}
-  {@const { nodes: clonedNodes } = cloneScene(gltf.scene)}
+  {@const clonedNodes = cloneScene(gltf.scene)}
   <T is={clonedNodes.Hips} />
   <T.SkinnedMesh
     geometry={gltf.nodes.Body.geometry}
