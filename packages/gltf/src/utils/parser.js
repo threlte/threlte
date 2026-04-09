@@ -187,7 +187,8 @@ export function parse(fileName, gltf, options = {}) {
         else result += `material={gltf.${node}.material} `
       }
 
-      if (obj.skeleton) result += `skeleton={${hasSkinnedMeshes ? `clonedNodes${sanitizeName(obj.name)}` : `gltf.${node}`}.skeleton} `
+      if (obj.skeleton)
+        result += `skeleton={${hasSkinnedMeshes ? `clonedNodes${sanitizeName(obj.name)}` : `gltf.${node}`}.skeleton} `
       if (obj.visible === false) result += `visible={false} `
       if (obj.castShadow === true) result += `castShadow `
       if (obj.receiveShadow === true) result += `receiveShadow `
