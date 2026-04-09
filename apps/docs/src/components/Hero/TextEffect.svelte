@@ -2,25 +2,37 @@
   import anime from 'animejs'
   import { clamp, mapLinear } from 'three/src/math/MathUtils.js'
 
-  export let type: 'fade-up-skew-individual' | 'fade' | 'fade-individual' | 'fade-up' = 'fade'
-  export let progress: number
-
-  export let id: string
-  let _in: {
-    start: number
-    end: number
+  interface Props {
+    type?: 'fade-up-skew-individual' | 'fade' | 'fade-individual' | 'fade-up'
+    progress: number
+    id: string
+    in: {
+      start: number
+      end: number
+    }
+    out?:
+      | {
+          start: number
+          end: number
+        }
+      | undefined
+    children?: import('svelte').Snippet
+    [key: string]: any
   }
-  let _out:
-    | {
-        start: number
-        end: number
-      }
-    | undefined = undefined
-  export { _in as in, _out as out }
 
-  let timeline: anime.AnimeTimelineInstance | undefined
+  let {
+    type = 'fade',
+    progress,
+    id,
+    in: _in,
+    out: _out = undefined,
+    children,
+    ...rest
+  }: Props = $props()
 
-  let completeDuration = 0
+  let timeline: anime.AnimeTimelineInstance | undefined = $state()
+
+  let completeDuration = $state(0)
 
   const initializeTimeline = () => {
     timeline = anime.timeline({ autoplay: false })
@@ -84,19 +96,21 @@
     }
   }
 
-  $: if (timeline)
-    timeline.seek(
-      clamp(mapLinear(progress, _in.start, _in.end, 0, completeDuration), 0, completeDuration)
-    )
+  $effect(() => {
+    if (timeline)
+      timeline.seek(
+        clamp(mapLinear(progress, _in.start, _in.end, 0, completeDuration), 0, completeDuration)
+      )
+  })
 
-  $: opacity = _out ? clamp(mapLinear(progress, _out.start, _out.end, 1, 0), 0, 1) : 1
+  let opacity = $derived(_out ? clamp(mapLinear(progress, _out.start, _out.end, 1, 0), 0, 1) : 1)
 </script>
 
 <div
   {id}
-  {...$$restProps}
+  {...rest}
   use:transform
   style="opacity: {opacity}"
 >
-  <slot />
+  {@render children?.()}
 </div>

@@ -9,8 +9,14 @@ Title: duck floaty
 
 <script lang="ts">
   import type * as THREE from 'three'
+  import type { Snippet } from 'svelte'
   import { T } from '@threlte/core'
   import { useGltf, InstancedMeshes, useDraco } from '@threlte/extras'
+  interface Props {
+    fallback?: Snippet
+  }
+
+  let { fallback }: Props = $props()
 
   type GLTFResult = {
     nodes: {
@@ -34,10 +40,10 @@ Title: duck floaty
   frustumCulled={false}
 >
   {#await gltf}
-    <slot name="fallback" />
+    {@render fallback?.()}
   {:then gltf}
     <InstancedMeshes meshes={gltf.nodes}>
-      {#snippet children({ components: { Object_4, Object_6 } })}
+      {#snippet children({ components: { Object_4, Object_6 } as any })}
         {#each { length: 200 } as _}
           {@const posX = Math.random() * duckSpread - duckSpread / 2}
           {@const posZ = Math.random() * duckSpread - 300}

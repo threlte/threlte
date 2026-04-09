@@ -156,8 +156,8 @@
 </script>
 
 <svelte:window
-  on:keydown={onKeyDown}
-  on:keyup={onKeyUp}
+  onkeydown={onKeyDown}
+  onkeyup={onKeyUp}
 />
 
 <T.Scene

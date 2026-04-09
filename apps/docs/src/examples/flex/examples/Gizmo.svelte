@@ -1,15 +1,26 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { MathUtils } from 'three'
 
-  export let size = 1
-  export let thickness = 0.02
-  export let arrows = false
-  export let hideX = false
-  export let hideY = false
-  export let hideZ = false
+  interface Props {
+    size?: number
+    thickness?: number
+    arrows?: boolean
+    hideX?: boolean
+    hideY?: boolean
+    hideZ?: boolean
+  }
 
-  $: showAny = !hideX || !hideY || !hideZ
+  let {
+    size = 1,
+    thickness = 0.02,
+    arrows = false,
+    hideX = false,
+    hideY = false,
+    hideZ = false
+  }: Props = $props()
+
+  let showAny = $derived(!hideX || !hideY || !hideZ)
 </script>
 
 {#if showAny}
@@ -25,7 +36,7 @@
     <T.CylinderGeometry
       args={[thickness, thickness, size]}
       oncreate={(ref) => {
-        ref.rotateZ(90 * DEG2RAD)
+        ref.rotateZ(90 * MathUtils.DEG2RAD)
       }}
     />
     <T.MeshBasicMaterial color="red" />
@@ -35,7 +46,7 @@
         <T.ConeGeometry
           args={[thickness * 3, thickness * 6]}
           oncreate={(ref) => {
-            ref.rotateZ(-90 * DEG2RAD)
+            ref.rotateZ(-90 * MathUtils.DEG2RAD)
           }}
         />
         <T.MeshBasicMaterial color="red" />
@@ -65,7 +76,7 @@
     <T.CylinderGeometry
       args={[thickness, thickness, size]}
       oncreate={(ref) => {
-        ref.rotateX(90 * DEG2RAD)
+        ref.rotateX(90 * MathUtils.DEG2RAD)
       }}
     />
     <T.MeshBasicMaterial color="blue" />
@@ -75,7 +86,7 @@
         <T.ConeGeometry
           args={[thickness * 3, thickness * 6]}
           oncreate={(ref) => {
-            ref.rotateX(90 * DEG2RAD)
+            ref.rotateX(90 * MathUtils.DEG2RAD)
           }}
         />
         <T.MeshBasicMaterial color="blue" />

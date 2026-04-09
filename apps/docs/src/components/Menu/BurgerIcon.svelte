@@ -1,13 +1,17 @@
 <script lang="ts">
-  export let showMenu = false
+  interface Props {
+    showMenu?: boolean
+  }
 
-  $: text = showMenu ? 'Hide' : 'Show'
+  let { showMenu = $bindable(false) }: Props = $props()
+
+  let text = $derived(showMenu ? 'Hide' : 'Show')
 </script>
 
 <button
   aria-label="{text} navigation menu"
   aria-expanded={showMenu}
-  on:click={() => (showMenu = !showMenu)}
+  onclick={() => (showMenu = !showMenu)}
 >
   {#if showMenu}
     <svg

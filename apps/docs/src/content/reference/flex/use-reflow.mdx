@@ -27,11 +27,11 @@ it's safe to call it from multiple components at a time.
 ```
 
 ```svelte title="Label.svelte"
-<script lang="ts">
+<script>
   import { Text } from '@threlte/extras'
   import { useReflow } from '@threlte/flex/hooks'
 
-  export let text: string
+  let { text } = $props()
 
   const reflow = useReflow()
 </script>

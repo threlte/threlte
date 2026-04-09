@@ -1,5 +1,6 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
+  import { untrack } from 'svelte'
   import {
     BufferGeometry,
     Float32BufferAttribute,
@@ -8,34 +9,51 @@
     type WebGLProgramParametersWithUniforms
   } from 'three'
 
-  export let amount = 100
-  export let radius = 100
-  export let color = '#ffffff'
-  export let opacity = 1
-  export let size = 0.1
-  export let speed = 1
-  export let direction: [number, number, number] = [0, 0, 1]
+  interface Props {
+    amount?: number
+    radius?: number
+    color?: string
+    opacity?: number
+    size?: number
+    speed?: number
+    direction?: [number, number, number]
+  }
+
+  let {
+    amount = 100,
+    radius = 100,
+    color = '#ffffff',
+    opacity = 1,
+    size = 0.1,
+    speed = 1,
+    direction = [0, 0, 1]
+  }: Props = $props()
 
   const geometry = new BufferGeometry()
 
-  const diameter = radius * 2
-  const vertices = []
-  for (let i = 0; i < amount; i++) {
-    const x = Math.random() * diameter - radius
-    const y = Math.random() * diameter - radius
-    const z = Math.random() * diameter - radius
-    vertices.push(x, y, z)
-  }
+  const diameter = $derived(radius * 2)
 
-  geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3))
+  $effect(() => {
+    const vertices = []
+    for (let i = 0; i < amount; i++) {
+      const x = Math.random() * diameter - radius
+      const y = Math.random() * diameter - radius
+      const z = Math.random() * diameter - radius
+      vertices.push(x, y, z)
+    }
 
-  const material = new PointsMaterial({
-    transparent: true
+    geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3))
   })
+
+  const material = $state(
+    new PointsMaterial({
+      transparent: true
+    })
+  )
 
   const settings = {
     elapsedTime: 0,
-    direction: new Vector3(direction[0], direction[1], direction[2]).normalize()
+    direction: new Vector3().fromArray(untrack(() => direction)).normalize()
   }
 
   const onBeforeCompile = (shader: WebGLProgramParametersWithUniforms) => {

@@ -4,7 +4,9 @@
   const gamepad = useGamepad()
   const { connected } = gamepad
 
-  $: console.log('$connected: ', $connected)
+  $effect(() => {
+    console.log('$connected: ', $connected)
+  })
 
   const onPress = () => {
     console.log('pressed')

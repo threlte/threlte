@@ -809,7 +809,9 @@ const { actions } = useGltfAnimations(gltf)
 // this animation will play when the gltf store has been populated
 // and the actions store has been set, effectively replacing the
 // callback.
-$: $actions.Greet?.play()
+$effect(() => {
+  $actions.Greet?.play()
+})
 ```
 
 Check out the [hooks documentation](/docs/reference/extras/use-gltf-animations) for more information.
