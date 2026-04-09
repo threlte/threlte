@@ -33,7 +33,7 @@
 
   const diameter = $derived(radius * 2)
 
-  $effect(() => {
+  untrack(() => {
     const vertices = []
     for (let i = 0; i < amount; i++) {
       const x = Math.random() * diameter - radius
