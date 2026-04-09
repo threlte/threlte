@@ -1,5 +1,13 @@
 # @threlte/gltf
 
+## 3.0.6
+
+### Patch Changes
+
+- 766701b: Fixed -p flag collision between --printwidth and --precision
+- 766701b: Fixed --printwidth flag being ignored
+- 766701b: Fixed ReferenceError crash when using --degrade flag
+
 ## 3.0.5
 
 ### Patch Changes
