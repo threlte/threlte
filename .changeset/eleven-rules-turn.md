@@ -2,4 +2,4 @@
 "@threlte/gltf": patch
 ---
 
-Add SkinnedMesh support
+Add multiple SkinnedMesh support
