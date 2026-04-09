@@ -8,17 +8,22 @@
 
   let { files }: Props = $props()
 
-  const projectFiles: Record<string, string> = {}
-  for (const path in files) {
-    const newPath = `src/example/${path}`
-    projectFiles[newPath] = files[path] as string
-  }
+  const projectFiles = $derived.by(() => {
+    const results: Record<string, string> = {}
+
+    for (const path in files) {
+      const newPath = `src/example/${path}`
+      results[newPath] = files[path] as string
+    }
+
+    return results
+  })
 
   const onclick = () => {
     sdk.openProject(
       {
-        title: 'Some title',
-        description: 'Some description',
+        title: 'Threlte example',
+        description: '',
         files: {
           ...projectTemplate,
           ...projectFiles
