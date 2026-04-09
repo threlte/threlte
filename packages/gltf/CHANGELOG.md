@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.0.7
+
+### Patch Changes
+
+- e854fb5: Add multiple SkinnedMesh support
+
 ## 3.0.6
 
 ### Patch Changes
