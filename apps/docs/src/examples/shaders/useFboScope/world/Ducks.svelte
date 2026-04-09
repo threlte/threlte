@@ -43,7 +43,7 @@ Title: duck floaty
     {@render fallback?.()}
   {:then gltf}
     <InstancedMeshes meshes={gltf.nodes}>
-      {#snippet children({ components: { Object_4, Object_6 } as any })}
+      {#snippet children({ components: { Object_4, Object_6 } })}
         {#each { length: 200 } as _}
           {@const posX = Math.random() * duckSpread - duckSpread / 2}
           {@const posZ = Math.random() * duckSpread - 300}
