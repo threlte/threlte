@@ -19,4 +19,14 @@ export type Options = {
   ratio?: number
   error?: number
   debug?: boolean
+  keepmeshes?: boolean
+  keepmaterials?: boolean
+  format?: string
+  degrade?: string
+  degraderesolution?: number
+  console?: boolean
+  header?: string
+  showLog?: (log: string) => void
+  timeout?: number
+  delay?: number
 }

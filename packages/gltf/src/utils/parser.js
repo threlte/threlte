@@ -53,7 +53,7 @@ export function parse(fileName, gltf, options = {}) {
     }
 
     if (child.geometry) {
-      const key = child.geometry.uuid + child.material?.name ?? ''
+      const key = child.geometry.uuid + (child.material?.name ?? '')
       if (!duplicates.geometries[key]) {
         let name = (child.name || 'Part').replace(/[^a-zA-Z]/g, '')
         name = name.charAt(0).toUpperCase() + name.slice(1)
@@ -77,7 +77,7 @@ export function parse(fileName, gltf, options = {}) {
   }
 
   function sanitizeName(name) {
-    return isVarName(name) ? `.${name}` : `['${name}']`
+    return isVarName(name) ? `.${name}` : `['${name.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}']`
   }
 
   const rNbr = (number) => {
@@ -528,7 +528,7 @@ ${parseExtras(gltf.parser.json.asset && gltf.parser.json.asset.extras)}-->
 ${
   options.preload
     ? `
-<script context="module"${options.types ? ' lang="ts"' : ''}>
+<script module${options.types ? ' lang="ts"' : ''}>
 	${imports}
 
 	${options.types ? printThrelteTypes(objects, animations) : ''}
