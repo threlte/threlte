@@ -39,7 +39,7 @@ export default async function (file, output, options) {
     singleQuote: true,
     trailingComma: 'es5',
     semi: false,
-    printWidth: 100,
+    printWidth: options.printwidth ?? 100,
     parser: 'svelte',
     plugins: [prettierPluginSvelte],
     overrides: [
