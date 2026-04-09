@@ -304,6 +304,47 @@ const onEvent = () => {
 }
 ```
 
+## Skinned Meshes
+
+`useGltf` caches results by URL. This means all instances of a generated
+component share the same geometry, materials, skeletons, and bones. For regular
+meshes this is ideal — geometry and materials can be shared across instances
+without duplicating GPU memory.
+
+However, `SkinnedMesh` bones and skeletons are `Object3D` instances that can
+only have one parent at a time. If you mount multiple instances of a component
+that contains skinned meshes, only the last one will render correctly because it
+"steals" the shared bones from previous instances.
+
+`@threlte/gltf` handles this automatically. When your model contains skinned
+meshes, the generated component uses
+[`SkeletonUtils.clone`](https://threejs.org/docs/#examples/en/utils/SkeletonUtils)
+to clone the bone hierarchy per instance while still sharing geometry and
+materials from the cache:
+
+```svelte
+{:then gltf}
+  {@const { nodes: clonedNodes } = cloneScene(gltf.scene)}
+  <T is={clonedNodes.Hips} />
+  <T.SkinnedMesh
+    geometry={gltf.nodes.Body.geometry}
+    material={gltf.materials.Skin}
+    skeleton={clonedNodes.Body.skeleton}
+  />
+{/then}
+```
+
+This gives each component instance its own skeleton and bones, while geometry and
+materials remain shared — no duplicated GPU memory.
+
+<Example path="gltf/skinned-meshes" />
+
+<small>
+  Model:
+  [RobotExpressive](https://github.com/mrdoob/three.js/tree/dev/examples/models/gltf/RobotExpressive)
+  from the Three.js examples
+</small>
+
 ## Suspense
 
 If you want to use the component [`<Suspense>`](/docs/reference/extras/suspense)
