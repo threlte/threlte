@@ -9,6 +9,15 @@
   } from '@threlte/extras'
   import { Vector3, CatmullRomCurve3, Color } from 'three'
 
+  let {
+    width = 0.5,
+    opacity = 1,
+    dashArray = 0.5,
+    dashRatio = 0.5,
+    attenuate = true,
+    scaleDown = 0
+  } = $props()
+
   // create a smooth curve from 4 points
   const curve = new CatmullRomCurve3([
     new Vector3(-3, 0, 0),
@@ -20,12 +29,12 @@
   // convert curve to an array of 100 points
   const points = curve.getPoints(100)
 
-  let width = $state(0.5)
   let dashOffset = $state(0)
   let color = $state('#fe3d00')
   const orange = new Color('#fe3d00')
   const purple = new Color('#9800fe')
   const c = new Color()
+  c.lerpColors(orange, purple, 0.5)
 
   useTask((delta) => {
     // every frame we:
@@ -47,9 +56,12 @@
   <MeshLineMaterial
     {width}
     {color}
-    dashArray={0.5}
-    dashRatio={0.5}
+    {opacity}
+    {dashArray}
+    {dashRatio}
     {dashOffset}
+    {attenuate}
+    {scaleDown}
     transparent
     depthTest={false}
   />
@@ -65,6 +77,7 @@
     autoRotate={true}
     autoRotateSpeed={2}
     enableDamping
+    enableZoom={false}
     target.y={2}
   />
 </T.PerspectiveCamera>

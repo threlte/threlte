@@ -34,27 +34,29 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
   const side = $derived(new BufferAttribute(new Float32Array(pointCount * 2), 1))
   const width = $derived(new BufferAttribute(new Float32Array(pointCount * 2), 1))
   const uv = $derived(new BufferAttribute(new Float32Array(pointCount * 4), 2))
-  const indices = $derived(new BufferAttribute(new Uint16Array(pointCount * 6), 1))
+  const indices = $derived(new BufferAttribute(new Uint32Array(pointCount * 6), 1))
 
   const shapeFunction = $derived(
-    shape === 'taper' ? (p: number) => 1 * Math.pow(4 * p * (1 - p), 1) : shapeFn
+    shape === 'taper' ? (p: number) => 4 * p * (1 - p) : shapeFn
   )
 
   const geometry = new BufferGeometry()
 
   $effect.pre(() => {
+    const lastIndex = pointCount - 1 || 1
+
     for (let i = 0, i2 = 0, i3 = 0; i < pointCount; i += 1, i2 += 2, i3 += 6) {
-      counters.setX(i2, i / points.length)
-      counters.setX(i2 + 1, i / points.length)
+      counters.setX(i2, i / pointCount)
+      counters.setX(i2 + 1, i / pointCount)
 
       side.setX(i2, 1)
       side.setX(i2 + 1, -1)
 
-      const w = shape === 'none' ? 1 : shapeFunction(i / (pointCount - 1))
+      const w = shape === 'none' ? 1 : shapeFunction(i / lastIndex)
       width.setX(i2, w)
       width.setX(i2 + 1, w)
 
-      uv.setXYZW(i2, i / (pointCount - 1), 0, i / (pointCount - 1), 1)
+      uv.setXYZW(i2, i / lastIndex, 0, i / lastIndex, 1)
 
       if (i < pointCount - 1) {
         const n = i * 2
@@ -75,6 +77,9 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
     geometry.setAttribute('width', width)
     geometry.setAttribute('uv', uv)
     geometry.setIndex(indices)
+
+    width.needsUpdate = true
+    invalidate()
   })
 
   $effect.pre(() => {
@@ -107,7 +112,7 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
         previousIndex += 1
       }
 
-      if (i > 0 && i + 1 <= pointCount) {
+      if (i > 0) {
         next.setXYZ(nextIndex, p.x, p.y, p.z)
         nextIndex += 1
 
