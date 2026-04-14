@@ -1,5 +1,13 @@
 # @threlte/extras
 
+## 9.14.6
+
+### Patch Changes
+
+- b24ac4f: Fix Align component stopping async resource loading in child components
+- 1d86e68: Fix reactivity for MeshLineGeometry shape property
+- 1d86e68: Simplify colorspace fragment in MeshLineMaterial
+
 ## 9.14.5
 
 ### Patch Changes
