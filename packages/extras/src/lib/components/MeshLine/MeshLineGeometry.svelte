@@ -36,9 +36,7 @@ https://github.com/lume/three-meshline/blob/main/src/MeshLineGeometry.ts
   const uv = $derived(new BufferAttribute(new Float32Array(pointCount * 4), 2))
   const indices = $derived(new BufferAttribute(new Uint32Array(pointCount * 6), 1))
 
-  const shapeFunction = $derived(
-    shape === 'taper' ? (p: number) => 4 * p * (1 - p) : shapeFn
-  )
+  const shapeFunction = $derived(shape === 'taper' ? (p: number) => 4 * p * (1 - p) : shapeFn)
 
   const geometry = new BufferGeometry()
 
