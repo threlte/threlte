@@ -27,15 +27,12 @@
     materials: {
       Material_MR: MeshStandardMaterial
     }
-  }>(
-    'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/suzanne-high-poly/model.gltf',
-    { dracoLoader }
-  )
+  }>('/models/Suzanne.glb', { dracoLoader })
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position.z={30}
+  position.z={20}
   fov={20}
 />
 
@@ -77,7 +74,7 @@
       />
       <Outlines
         color="white"
-        thickness={0.02}
+        thickness={0.04}
       />
     </T.Mesh>
   {/if}
@@ -87,18 +84,13 @@
   <T.Group
     rotation.y={rotation}
     position.x={3}
-    position.y={-1}
   >
-    <T.Mesh
-      geometry={$suziGltf.nodes['Suzanne'].geometry}
-      scale={1.2}
-    >
-      <T.MeshStandardMaterial color="turquoise" />
+    <T.Mesh geometry={$suziGltf.nodes['Suzanne'].geometry}>
+      <T.MeshToonMaterial color="turquoise" />
       <Outlines
         color="white"
         screenspace
-        thickness={2}
-        angle={0.001}
+        thickness={3}
       />
     </T.Mesh>
   </T.Group>
