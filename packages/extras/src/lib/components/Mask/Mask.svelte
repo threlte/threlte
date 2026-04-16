@@ -5,7 +5,7 @@
 		*/
   import { T } from '@threlte/core'
   import { ReplaceStencilOp, AlwaysStencilFunc, Mesh } from 'three'
-  import type { MaskProps } from './types.js'
+  import type { MaskProps, Spread } from './types.js'
 
   let {
     id = 1,
@@ -18,19 +18,20 @@
 
   const mesh = new Mesh()
 
+  const spread: Spread = $derived({
+    colorWrite,
+    depthWrite,
+    stencilFail: ReplaceStencilOp,
+    stencilFunc: AlwaysStencilFunc,
+    stencilRef: id,
+    stencilWrite: true,
+    stencilZFail: ReplaceStencilOp,
+    stencilZPass: ReplaceStencilOp
+  })
+
   $effect(() => {
-    const { material } = mesh
-
-    if (Array.isArray(material)) return
-
-    material.colorWrite = colorWrite
-    material.depthWrite = depthWrite
-    material.stencilWrite = true
-    material.stencilRef = id
-    material.stencilFunc = AlwaysStencilFunc
-    material.stencilFail = ReplaceStencilOp
-    material.stencilZFail = ReplaceStencilOp
-    material.stencilZPass = ReplaceStencilOp
+    if (Array.isArray(mesh.material)) return
+    Object.assign(mesh.material, spread)
   })
 </script>
 
@@ -40,5 +41,5 @@
   renderOrder={-id}
   {...props}
 >
-  {@render children?.({ ref: mesh })}
+  {@render children?.({ ref: mesh, getSpread: () => spread })}
 </T>
