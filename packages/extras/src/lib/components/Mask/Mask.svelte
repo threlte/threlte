@@ -5,7 +5,7 @@
 		*/
   import { T } from '@threlte/core'
   import { ReplaceStencilOp, AlwaysStencilFunc, Mesh } from 'three'
-  import type { MaskProps, Spread } from './types.js'
+  import type { MaskProps, MaskSpread } from './types.js'
 
   let {
     id = 1,
@@ -18,7 +18,7 @@
 
   const mesh = new Mesh()
 
-  const spread: Spread = $derived({
+  const spread: MaskSpread = $derived({
     colorWrite,
     depthWrite,
     stencilFail: ReplaceStencilOp,

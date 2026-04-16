@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { Material, Mesh } from 'three'
 
-export type Spread = Pick<
+export type MaskSpread = Pick<
   Material,
   | 'colorWrite'
   | 'depthWrite'
@@ -13,7 +13,7 @@ export type Spread = Pick<
   | 'stencilZPass'
 >
 
-export type MaskProps = Props<Mesh, [{ ref: Mesh; getSpread: () => Spread }]> & {
+export type MaskProps = Props<Mesh, [{ ref: Mesh; getSpread: () => MaskSpread }]> & {
   /**
    * Each mask must have an id, you can have compound masks referring to the same id
    * @default 1
