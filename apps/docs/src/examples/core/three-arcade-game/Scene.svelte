@@ -4,6 +4,7 @@
   import ArcadeScene from './arcade/Scene.svelte'
   import GameScene from './game/Scene.svelte'
   import { game } from './game/Game.svelte'
+  import { provideArcadeControls } from './game/controls.svelte'
   import CustomRendering from './Renderer.svelte'
 
   $effect(() => {
@@ -14,6 +15,7 @@
   })
 
   interactivity()
+  provideArcadeControls()
 </script>
 
 {#if game.debug}

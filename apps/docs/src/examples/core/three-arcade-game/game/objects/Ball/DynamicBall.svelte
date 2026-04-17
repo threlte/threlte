@@ -23,7 +23,7 @@
   }
 
   const ballSpeed = $derived.by(() => {
-    return map(game.levelIndex, 0, 9, 0.1, 0.3)
+    return map(game.levelIndex, 0, 9, 4, 11)
   })
 
   let ballIsSpawned = false

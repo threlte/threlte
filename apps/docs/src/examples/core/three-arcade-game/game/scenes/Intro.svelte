@@ -6,8 +6,18 @@
   import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import type { ArcadeAudio } from '../sound'
   import { useTimeout } from '../hooks/useTimeout'
+  import { useArcadeControls } from '../controls.svelte'
   import { game } from '../Game.svelte'
   import ThrelteLogo from '../objects/ThrelteLogo.svelte'
+
+  const controls = useArcadeControls()
+  const left = controls.action('left')
+  const right = controls.action('right')
+
+  $effect(() => {
+    if (left.justPressed) direction = -1
+    else if (right.justPressed) direction = 1
+  })
 
   const { timeout } = useTimeout()
   let audio: ArcadeAudio | undefined = undefined
@@ -50,20 +60,10 @@
     clearInterval(intervalHandler)
   })
 
-  const onkeydown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      direction = -1
-    } else if (e.key === 'ArrowRight') {
-      direction = 1
-    }
-  }
-
   onDestroy(() => {
     audio?.source.stop()
   })
 </script>
-
-<svelte:window {onkeydown} />
 
 <T.Group position.z={-0.35}>
   <ThrelteLogo

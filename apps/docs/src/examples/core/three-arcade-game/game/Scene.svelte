@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
   import { Tween } from 'svelte/motion'
   import { BackSide, Color, MathUtils } from 'three'
   import Arena from './objects/Arena.svelte'
@@ -9,33 +9,36 @@
   import Level from './scenes/Level.svelte'
   import Outro from './scenes/Outro.svelte'
   import Player from './objects/Player.svelte'
+  import { useArcadeControls } from './controls.svelte'
   import { game } from './Game.svelte'
   import GUI from './GUI.svelte'
 
-  const onkeypress = (e: KeyboardEvent) => {
-    if (e.key === 'd') {
-      game.debug = !game.debug
-    }
-    if (e.key === 'o') {
-      game.orbitControls = !game.orbitControls
-    }
-    if (e.key !== ' ' || game.state === 'level-loading') return
-    e.preventDefault()
+  const controls = useArcadeControls()
 
-    if (game.state === 'await-intro-skip') {
-      game.startGame()
-    } else if (game.state === 'game-over') {
-      game.restart()
-    } else if (game.state === 'menu') {
-      game.startGame()
-    } else if (game.state === 'level-complete') {
-      game.nextLevel()
-    } else if (game.state === 'await-ball-spawn') {
-      game.state = 'playing'
-    } else if (game.state === 'outro') {
-      game.reset()
-    }
-  }
+  useTask(
+    () => {
+      if (controls.action('toggleDebug').justPressed) game.debug = !game.debug
+      if (controls.action('toggleOrbit').justPressed) game.orbitControls = !game.orbitControls
+
+      if (!controls.action('advance').justPressed) return
+      if (game.state === 'level-loading') return
+
+      if (game.state === 'await-intro-skip') {
+        game.startGame()
+      } else if (game.state === 'game-over') {
+        game.restart()
+      } else if (game.state === 'menu') {
+        game.startGame()
+      } else if (game.state === 'level-complete') {
+        game.nextLevel()
+      } else if (game.state === 'await-ball-spawn') {
+        game.state = 'playing'
+      } else if (game.state === 'outro') {
+        game.reset()
+      }
+    },
+    { after: controls.task }
+  )
 
   let showLevel = $derived(
     game.state === 'level-loading' ||
@@ -58,8 +61,6 @@
     tweenedBackgroundColor.set(new Color(backgroundColor))
   })
 </script>
-
-<svelte:window {onkeypress} />
 
 <Renderer />
 

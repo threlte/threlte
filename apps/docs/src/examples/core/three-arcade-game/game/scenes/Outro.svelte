@@ -6,11 +6,21 @@
   import { Tween } from 'svelte/motion'
   import type { ArcadeAudio } from '../sound'
   import { useTimeout } from '../hooks/useTimeout'
+  import { useArcadeControls } from '../controls.svelte'
   import { game } from '../Game.svelte'
   import ThrelteLogo from '../objects/ThrelteLogo.svelte'
 
   const { timeout } = useTimeout()
+  const controls = useArcadeControls()
+  const left = controls.action('left')
+  const right = controls.action('right')
+
   let direction = $state<1 | -1>(1)
+
+  $effect(() => {
+    if (left.justPressed) direction = -1
+    else if (right.justPressed) direction = 1
+  })
   const logoScale = new Tween(0)
   timeout(() => {
     logoScale.set(1)
@@ -48,16 +58,7 @@
     audio?.source.stop()
   })
 
-  const onkeydown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      direction = -1
-    } else if (e.key === 'ArrowRight') {
-      direction = 1
-    }
-  }
 </script>
-
-<svelte:window {onkeydown} />
 
 <T.Group position.z={-0.35}>
   <ThrelteLogo
