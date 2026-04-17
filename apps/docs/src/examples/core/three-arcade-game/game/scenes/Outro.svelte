@@ -57,7 +57,6 @@
   onDestroy(() => {
     audio?.source.stop()
   })
-
 </script>
 
 <T.Group position.z={-0.35}>
