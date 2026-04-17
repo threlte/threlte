@@ -1,5 +1,12 @@
 import type { EventListener, XRTargetRaySpace } from 'three'
 import { currentWritable, useTask, useThrelte } from '@threlte/core'
+import {
+  readButton,
+  readHatDirections,
+  readStick,
+  resolveMapping,
+  type GamepadMappings
+} from './useGamepad.mappings.js'
 
 type UseGamepadOptions =
   | {
@@ -7,6 +14,17 @@ type UseGamepadOptions =
       axisDeadzone?: number
       /** An optional gamepad index, if multiple gamepads are used. */
       index?: number
+      /**
+       * Custom mappings for non-standard controllers, keyed by a `vvvv:pppp`
+       * signature (hex USB vendor:product, lowercase) parsed from `Gamepad.id`.
+       * Custom entries override the built-in table for the same signature.
+       */
+      mappings?: GamepadMappings
+      /**
+       * When `false`, skip the built-in mapping table and only use entries
+       * provided via `mappings`. Default `true`.
+       */
+      useBuiltinMappings?: boolean
       xr?: never
       hand?: never
     }
@@ -16,6 +34,17 @@ type UseGamepadOptions =
       xr: true
       hand: 'left' | 'right'
     }
+
+const warnedGamepadIds = new Set<string>()
+const warnUnknownGamepad = (id: string): void => {
+  if (warnedGamepadIds.has(id)) return
+  warnedGamepadIds.add(id)
+  console.warn(
+    `[threlte useGamepad] Connected gamepad reports a non-standard mapping and ` +
+      `no remap is registered for it: "${id}". Button and axis positions may be ` +
+      `incorrect. Add a custom mapping via useGamepad({ mappings: { ... } }).`
+  )
+}
 
 const standardButtons = [
   'clusterBottom',
@@ -419,7 +448,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
 
         processAxis(
           'touchpad',
-          gamepad.touchpad,
+          gamepad.stick('touchpad'),
           allEvents,
           events[6],
           axisDeadzone,
@@ -428,7 +457,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
         )
         processAxis(
           'thumbstick',
-          gamepad.thumbstick,
+          gamepad.stick('thumbstick'),
           allEvents,
           events[7],
           axisDeadzone,
@@ -497,7 +526,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
       })
     }
 
-    $effect.pre(() => {
+    $effect(() => {
       for (const index of [0, 1]) {
         const controller = xr.getController(index)
         controller.addEventListener('connected', handleConnected)
@@ -519,8 +548,13 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
       events.push({})
     }
 
-    const { index: gamepadIndex = 0 } = options
+    const { index: gamepadIndex = 0, mappings: userMappings, useBuiltinMappings = true } = options
     const gamepad = createStandard(allEvents, events)
+
+    // Cache the resolved remap per-pad so the lookup only runs when the
+    // connected controller's id changes (e.g. user swaps gamepads).
+    let cachedMappingForId: string | null = null
+    let cachedMapping: ReturnType<typeof resolveMapping> = null
 
     const processSnapshot = () => {
       /**
@@ -530,29 +564,74 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
       const pad = navigator.getGamepads()[gamepadIndex]
       gamepad.raw = pad
 
-      const { buttons = [], axes = [] } = pad ?? {}
+      if (!pad) {
+        // Clear transient button/axis state by feeding empty sources.
+        for (let i = 0; i < standardButtons.length; i += 1) {
+          processButton(standardButtons[i], gamepad[standardButtons[i]], allEvents, events[i])
+        }
+        processAxis('leftStick', gamepad.leftStick, allEvents, events[17], axisDeadzone, 0, 0)
+        processAxis('rightStick', gamepad.rightStick, allEvents, events[18], axisDeadzone, 0, 0)
+        return
+      }
 
-      standardButtons.forEach((name, index) =>
-        processButton(name, gamepad[name], allEvents, events[index], buttons[index])
-      )
+      if (pad.id !== cachedMappingForId) {
+        cachedMappingForId = pad.id
+        cachedMapping = resolveMapping(pad, userMappings, useBuiltinMappings)
+        if (pad.mapping !== 'standard' && !cachedMapping) {
+          warnUnknownGamepad(pad.id)
+        }
+      }
+
+      const mapping = cachedMapping
+      const hatDirs = mapping?.dpad ? readHatDirections(pad, mapping.dpad) : undefined
+
+      for (let i = 0; i < standardButtons.length; i += 1) {
+        const name = standardButtons[i]
+        let source: GamepadButton | undefined
+
+        if (
+          hatDirs &&
+          (name === 'directionalTop' ||
+            name === 'directionalRight' ||
+            name === 'directionalBottom' ||
+            name === 'directionalLeft')
+        ) {
+          const pressed =
+            name === 'directionalTop'
+              ? hatDirs.up
+              : name === 'directionalRight'
+                ? hatDirs.right
+                : name === 'directionalBottom'
+                  ? hatDirs.down
+                  : hatDirs.left
+          source = { pressed, touched: pressed, value: pressed ? 1 : 0 }
+        } else {
+          source = readButton(pad, mapping?.buttons?.[name], i)
+        }
+
+        processButton(name, gamepad[name], allEvents, events[i], source)
+      }
+
+      const leftStickVals = readStick(pad, mapping?.leftStick, 0, 1)
+      const rightStickVals = readStick(pad, mapping?.rightStick, 2, 3)
 
       processAxis(
         'leftStick',
-        gamepad.leftStick,
+        gamepad.stick('leftStick'),
         allEvents,
         events[17],
         axisDeadzone,
-        axes[0],
-        axes[1]
+        leftStickVals.x,
+        leftStickVals.y
       )
       processAxis(
         'rightStick',
-        gamepad.rightStick,
+        gamepad.stick('rightStick'),
         allEvents,
         events[18],
         axisDeadzone,
-        axes[2],
-        axes[3]
+        rightStickVals.x,
+        rightStickVals.y
       )
     }
 
