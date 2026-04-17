@@ -1,6 +1,6 @@
 import { useTask } from '@threlte/core'
 import type { UseKeyboardReturn } from './useKeyboard.svelte.js'
-import type { StandardGamepad, StandardXRGamepad } from './useGamepad.svelte.js'
+import type { StandardGamepad, StandardXRGamepad } from './useGamepad/useGamepad.svelte.js'
 
 interface KeyboardBinding {
   type: 'keyboard'

@@ -141,7 +141,7 @@ export const parseGamepadSignature = (id: string): string | null => {
 }
 
 /**
- * Hat values reported on `axes[9]` by Chromium-family browsers for controllers
+ * Hat values reported on `axes[9]` by Chromium browsers for controllers
  * that use the W3C "POV hat" convention. Values go clockwise from North (-1.0)
  * in steps of 2/7 ≈ 0.2857; idle is any value outside the match tolerance
  * (commonly ~3.28 on Chromium, but we just don't match any direction there).
@@ -159,7 +159,7 @@ const chromiumHat = {
  *
  * Every browser/OS/connection combination can potentially report a controller
  * differently, so these entries target the most widely reported configurations
- * (Chromium-family browsers on recent macOS/Windows/Linux, USB and Bluetooth).
+ * (Chromium browsers on recent macOS/Windows/Linux, USB and Bluetooth).
  * Users with different setups can override any entry by passing `mappings` to
  * `useGamepad`.
  *
@@ -173,7 +173,7 @@ export const builtinMappings: GamepadMappings = {
   /**
    * Nintendo Switch Pro Controller
    *
-   * Vendor 057e (Nintendo) / Product 2009. Reports `mapping: ""` on Chromium
+   * Vendor 057e. Reports `mapping: ""` on Chromium
    * when connected over Bluetooth on macOS, and on Chromium versions that
    * predate the platform-specific Nintendo remap table. Layout below follows
    * the HID report descriptor order used by Chromium's native mapping code:
@@ -181,7 +181,7 @@ export const builtinMappings: GamepadMappings = {
    *   buttons: B A Y X L R ZL ZR - + Lstick Rstick Home Capture
    *   axes:    leftX leftY rightX rightY [unused ...] hat
    *
-   * Position-based names in threlte's API map as follows:
+   * Position-based names in Threlte's API map as follows:
    *
    *   clusterBottom (south) = B = index 0
    *   clusterRight  (east)  = A = index 1
@@ -213,7 +213,7 @@ export const builtinMappings: GamepadMappings = {
   /**
    * Nintendo Switch Online SNES Controller
    *
-   * Vendor 057e / Product 2017. The front face has the classic SNES layout
+   * Vendor 057e. The front face has the classic SNES layout
    * (Y X / B A + d-pad + Select + Start + L + R shoulders) and the back
    * adds two small ZL / ZR triggers above the shoulder buttons.
    *
@@ -245,7 +245,7 @@ export const builtinMappings: GamepadMappings = {
   /**
    * Nintendo Joy-Con (L)
    *
-   * Vendor 057e / Product 2006. Used on its own (sideways) the Joy-Con exposes
+   * Vendor 057e. Used on its own (sideways) the Joy-Con exposes
    * its arrow pad as four face buttons rather than a D-pad. Sticks are mapped
    * to the left stick only; there is no second analog stick.
    */
@@ -269,7 +269,7 @@ export const builtinMappings: GamepadMappings = {
   /**
    * Nintendo Joy-Con (R)
    *
-   * Vendor 057e / Product 2007. Mirrors the (L) layout on the other hand.
+   * Vendor 057e. Mirrors the (L) layout on the other hand.
    */
   '057e:2007': {
     name: 'Nintendo Joy-Con (R)',
@@ -302,7 +302,9 @@ export const resolveMapping = (
   if (pad.mapping === 'standard') return null
   const signature = parseGamepadSignature(pad.id)
   if (!signature) return null
-  return userMappings?.[signature] ?? (includeBuiltins ? builtinMappings[signature] : undefined) ?? null
+  return (
+    userMappings?.[signature] ?? (includeBuiltins ? builtinMappings[signature] : undefined) ?? null
+  )
 }
 
 /**

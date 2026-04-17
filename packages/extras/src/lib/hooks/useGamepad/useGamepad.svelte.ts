@@ -6,7 +6,7 @@ import {
   readStick,
   resolveMapping,
   type GamepadMappings
-} from './useGamepad.mappings.js'
+} from './mappings.js'
 
 type UseGamepadOptions =
   | {
