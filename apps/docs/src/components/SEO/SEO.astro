@@ -28,8 +28,11 @@ const {
   article
 } = Astro.props
 
-const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString()
-const imageUrl = image.startsWith('http') ? image : new URL(image, Astro.site ?? Astro.url.origin).toString()
+const canonicalUrl =
+  canonical ?? new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString()
+const imageUrl = image.startsWith('http')
+  ? image
+  : new URL(image, Astro.site ?? Astro.url.origin).toString()
 ---
 
 <title>{title}</title>
