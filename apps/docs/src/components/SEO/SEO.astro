@@ -15,7 +15,7 @@ export interface Props {
 
 const DEFAULT_DESCRIPTION =
   'Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js.'
-const DEFAULT_IMAGE = 'https://threlte.xyz/threlte-social-preview-v2.jpg'
+const DEFAULT_IMAGE = '/threlte-social-preview-v2.jpg'
 const SITE_NAME = 'Threlte'
 
 const {
@@ -28,11 +28,19 @@ const {
   article
 } = Astro.props
 
-const canonicalUrl =
-  canonical ?? new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString()
-const imageUrl = image.startsWith('http')
-  ? image
-  : new URL(image, Astro.site ?? Astro.url.origin).toString()
+const base = import.meta.env.BASE_URL
+const origin = Astro.site ?? new URL(Astro.url.origin)
+
+// Root-relative paths must be rewritten under BASE_URL for subpath (BASE_PATH) deploys.
+const toAbsolute = (path: string) => {
+  if (/^https?:\/\//.test(path)) return path
+  if (path.startsWith(base)) return new URL(path.slice(1), origin).toString()
+  const rel = path.startsWith('/') ? path.slice(1) : path
+  return new URL(base.replace(/^\//, '') + rel, origin).toString()
+}
+
+const canonicalUrl = canonical ?? toAbsolute(Astro.url.pathname)
+const imageUrl = toAbsolute(image)
 ---
 
 <title>{title}</title>

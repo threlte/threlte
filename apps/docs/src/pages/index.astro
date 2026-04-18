@@ -13,25 +13,33 @@ import PluginsExample from '$components/Intro/PluginsExample.txt?raw'
 import Button from '$components/Button/Button.astro'
 import Testimonials from '$components/Testimonials/Testimonials.astro'
 
+const base = import.meta.env.BASE_URL
+const origin = Astro.site ?? new URL(Astro.url.origin)
+const siteUrl = new URL(base, origin).toString().replace(/\/$/, '')
+const logoUrl = new URL(
+  `${base}logo/threlte-logo.png`.replace(/\/+/g, '/').replace(/^\//, ''),
+  origin
+).toString()
+
 const siteLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://threlte.xyz/#organization',
+      '@id': `${siteUrl}/#organization`,
       name: 'Threlte',
-      url: 'https://threlte.xyz',
-      logo: 'https://threlte.xyz/logo/threlte-logo.png',
+      url: siteUrl,
+      logo: logoUrl,
       sameAs: ['https://github.com/threlte/threlte', 'https://twitter.com/threlte']
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://threlte.xyz/#website',
-      url: 'https://threlte.xyz',
+      '@id': `${siteUrl}/#website`,
+      url: siteUrl,
       name: 'Threlte',
       description:
         'Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js.',
-      publisher: { '@id': 'https://threlte.xyz/#organization' }
+      publisher: { '@id': `${siteUrl}/#organization` }
     }
   ]
 }
