@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.14.8
+
+### Patch Changes
+
+- 8c55241: Ensure correct task ordering when accepting gamepad and keyboard input
+- 8c55241: Create unique task labels per useGamepad call
+
 ## 9.14.7
 
 ### Patch Changes
