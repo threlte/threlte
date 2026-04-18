@@ -78,7 +78,7 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
    * cleared at the start of the next frame before new events are applied.
    */
   const { task } = useTask(
-    'useKeyboard',
+    Symbol('useKeyboard'),
     () => {
       // Clear last frame's transient states
       for (const [, state] of keys) {

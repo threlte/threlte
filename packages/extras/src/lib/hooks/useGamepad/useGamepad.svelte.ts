@@ -1,5 +1,5 @@
 import type { EventListener, XRTargetRaySpace } from 'three'
-import { currentWritable, useTask, useThrelte } from '@threlte/core'
+import { currentWritable, useTask, useThrelte, type Task } from '@threlte/core'
 import {
   readButton,
   readHatDirections,
@@ -413,8 +413,8 @@ const processAxis = (
 
 type StandardGamepadButton = ReturnType<typeof createButton>
 type StandardGamepadStick = ReturnType<typeof createAxis>
-export type StandardGamepad = ReturnType<typeof createStandard>
-export type StandardXRGamepad = ReturnType<typeof createXrStandard>
+export type StandardGamepad = ReturnType<typeof createStandard> & { task: Task }
+export type StandardXRGamepad = ReturnType<typeof createXrStandard> & { task: Task }
 
 export function useGamepad(): StandardGamepad
 export function useGamepad(options: UseGamepadOptions & { xr?: never }): StandardGamepad
@@ -469,7 +469,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
 
     let running = $state(false)
 
-    const { task } = useTask('useGamepad', processSnapshot, {
+    const { task } = useTask(Symbol('useGamepad'), processSnapshot, {
       autoInvalidate: false,
       running: () => running
     })
@@ -637,7 +637,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
 
     let running = $state(false)
 
-    const { task } = useTask('useGamepad', processSnapshot, {
+    const { task } = useTask(Symbol('useGamepad'), processSnapshot, {
       autoInvalidate: false,
       running: () => running
     })

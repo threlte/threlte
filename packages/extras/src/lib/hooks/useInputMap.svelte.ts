@@ -142,12 +142,12 @@ export function useInputMap<T extends ActionDefinitions>(
   }
 
   /**
-   * Process all action states once per frame, after the keyboard task
-   * has finished processing its buffered events. The definitions function
-   * is called each frame so reactive dependencies are picked up.
+   * Process all action states once per frame, after both the keyboard and
+   * gamepad tasks have populated their state for the frame. The definitions
+   * function is called each frame so reactive dependencies are picked up.
    */
   const { task } = useTask(
-    'useInputMap',
+    Symbol('useInputMap'),
     () => {
       const actions = definitionsFn(bindingHelpers)
 
@@ -174,7 +174,10 @@ export function useInputMap<T extends ActionDefinitions>(
         previousPressed.set(name, isPressed)
       }
     },
-    { after: keyboard.task, autoInvalidate: false }
+    {
+      after: gamepad ? [keyboard.task, gamepad.task] : keyboard.task,
+      autoInvalidate: false
+    }
   )
 
   /** Get the current state of a named action. */
