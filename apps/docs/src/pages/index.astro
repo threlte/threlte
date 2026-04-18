@@ -12,9 +12,41 @@ import PluginsExample from '$components/Intro/PluginsExample.txt?raw'
 
 import Button from '$components/Button/Button.astro'
 import Testimonials from '$components/Testimonials/Testimonials.astro'
+
+const siteLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://threlte.xyz/#organization',
+      name: 'Threlte',
+      url: 'https://threlte.xyz',
+      logo: 'https://threlte.xyz/logo/threlte-logo.png',
+      sameAs: ['https://github.com/threlte/threlte', 'https://twitter.com/threlte']
+    },
+    {
+      '@type': 'WebSite',
+      '@id': 'https://threlte.xyz/#website',
+      url: 'https://threlte.xyz',
+      name: 'Threlte',
+      description:
+        'Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js.',
+      publisher: { '@id': 'https://threlte.xyz/#organization' }
+    }
+  ]
+}
 ---
 
-<MainLayout title="Welcome to Threlte.">
+<MainLayout
+  title="Threlte — Rapidly build 3D apps for the web with Svelte"
+  description="Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js."
+>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(siteLd)}
+  />
   <HeroWrapper client:load />
 
   <div class="flex flex-col gap-14 py-24">

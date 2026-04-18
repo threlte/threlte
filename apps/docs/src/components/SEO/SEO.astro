@@ -1,0 +1,142 @@
+---
+export interface Props {
+  title: string
+  description?: string
+  image?: string
+  canonical?: string
+  type?: 'website' | 'article'
+  noindex?: boolean
+  article?: {
+    publishedTime?: string
+    modifiedTime?: string
+    author?: string
+  }
+}
+
+const DEFAULT_DESCRIPTION =
+  'Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js.'
+const DEFAULT_IMAGE = 'https://threlte.xyz/threlte-social-preview-v2.jpg'
+const SITE_NAME = 'Threlte'
+
+const {
+  title,
+  description = DEFAULT_DESCRIPTION,
+  image = DEFAULT_IMAGE,
+  canonical,
+  type = 'website',
+  noindex = false,
+  article
+} = Astro.props
+
+const canonicalUrl = canonical ?? new URL(Astro.url.pathname, Astro.site ?? Astro.url.origin).toString()
+const imageUrl = image.startsWith('http') ? image : new URL(image, Astro.site ?? Astro.url.origin).toString()
+---
+
+<title>{title}</title>
+<meta
+  name="description"
+  content={description}
+/>
+<link
+  rel="canonical"
+  href={canonicalUrl}
+/>
+{
+  noindex && (
+    <meta
+      name="robots"
+      content="noindex, nofollow"
+    />
+  )
+}
+
+<meta
+  property="og:site_name"
+  content={SITE_NAME}
+/>
+<meta
+  property="og:title"
+  content={title}
+/>
+<meta
+  property="og:description"
+  content={description}
+/>
+<meta
+  property="og:type"
+  content={type}
+/>
+<meta
+  property="og:url"
+  content={canonicalUrl}
+/>
+<meta
+  property="og:image"
+  content={imageUrl}
+/>
+<meta
+  property="og:image:secure_url"
+  content={imageUrl}
+/>
+<meta
+  property="og:image:width"
+  content="1200"
+/>
+<meta
+  property="og:image:height"
+  content="630"
+/>
+<meta
+  property="og:image:alt"
+  content={title}
+/>
+
+{
+  type === 'article' && article?.publishedTime && (
+    <meta
+      property="article:published_time"
+      content={article.publishedTime}
+    />
+  )
+}
+{
+  type === 'article' && article?.modifiedTime && (
+    <meta
+      property="article:modified_time"
+      content={article.modifiedTime}
+    />
+  )
+}
+{
+  type === 'article' && article?.author && (
+    <meta
+      property="article:author"
+      content={article.author}
+    />
+  )
+}
+
+<meta
+  name="twitter:card"
+  content="summary_large_image"
+/>
+<meta
+  name="twitter:site"
+  content="@threlte"
+/>
+<meta
+  name="twitter:title"
+  content={title}
+/>
+<meta
+  name="twitter:description"
+  content={description}
+/>
+<meta
+  name="twitter:image"
+  content={imageUrl}
+/>
+<meta
+  name="twitter:image:alt"
+  content={title}
+/>

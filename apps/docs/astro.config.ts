@@ -10,6 +10,7 @@ import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
+import sitemap from '@astrojs/sitemap'
 import { cpus } from 'os'
 
 const CPU_COUNT = cpus().length
@@ -22,6 +23,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://threlte.xyz',
   // TODO: Remove base once threlte.xyz custom domain is linked
   base: process.env.BASE_PATH ? `/${process.env.BASE_PATH.replace(/^\/|\/$/g, '')}/` : '/',
   compressHTML: false,
@@ -42,7 +44,11 @@ export default defineConfig({
     mdx({
       rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
-    preact({ compat: true, include: ['**/*.tsx'] })
+    preact({ compat: true, include: ['**/*.tsx'] }),
+    sitemap({
+      // `/examples/*` are iframe runtimes with no indexable content; keep `/docs/examples/*`.
+      filter: (page) => !new URL(page).pathname.startsWith('/examples/')
+    })
   ],
   output: 'static',
   vite: {
