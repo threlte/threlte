@@ -60,7 +60,11 @@ If a `namespace` is provided, the hook returns a derived store.
 ```
 
 By default, when a context is set at a given namespace, setting it again will be ignored.
-You can override this behaviour:
+You can override this behaviour by passing an `existing` option, which accepts one of three values:
+
+- `'skip'` (default) — keep the existing entry; the new value is ignored.
+- `'merge'` — shallow-merge the new value into the existing entry.
+- `'replace'` — overwrite the existing entry with the new value.
 
 ```svelte
 <script>
@@ -72,7 +76,7 @@ You can override this behaviour:
     }
   }
 
-  const ctx = useThrelteUserContext('some-context', getCtx, { exising: 'merge' })
+  const ctx = useThrelteUserContext('some-context', getCtx, { existing: 'merge' })
   console.log(ctx) // -> { foo: 'bar' }
 </script>
 ```
