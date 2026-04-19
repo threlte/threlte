@@ -4,13 +4,7 @@ import { getCollection, type CollectionEntry } from 'astro:content'
 const TAGLINE =
   'Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js.'
 
-const LEARN_CATEGORIES = [
-  'Getting Started',
-  'Basics',
-  'Advanced',
-  'More',
-  'Preprocessing'
-] as const
+const LEARN_CATEGORIES = ['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing'] as const
 
 const REFERENCE_PACKAGES = [
   '@threlte/core',
