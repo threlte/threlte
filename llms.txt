@@ -1,6 +1,8 @@
-# Threlte
+# Threlte 8
 
 > Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js.
+
+These docs describe Threlte 8, the current stable major version. Threlte 7 docs are archived at https://v7.threlte.xyz.
 
 ## Learn
 
