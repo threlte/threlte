@@ -2,10 +2,8 @@
   import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { Edges, Text } from '@threlte/extras'
-  import { onDestroy } from 'svelte'
   import { Tween } from 'svelte/motion'
-  import type { ArcadeAudio } from '../sound'
-  import { useTimeout } from '../hooks/useTimeout'
+  import { useTimeout } from '../hooks/useTimeout.svelte'
   import { useArcadeControls } from '../controls.svelte'
   import { game } from '../Game.svelte'
   import ThrelteLogo from '../objects/ThrelteLogo.svelte'
@@ -41,21 +39,20 @@
     showPressSpaceToStart = true
   }, 5e3)
 
-  let intervalHandler = setInterval(() => {
-    if (!showPressSpaceToStart) return
-    blinkClock = blinkClock ? 0 : 1
-  }, 500)
-  onDestroy(() => {
-    clearInterval(intervalHandler)
+  $effect(() => {
+    const intervalHandler = setInterval(() => {
+      if (!showPressSpaceToStart) return
+      blinkClock = blinkClock ? 0 : 1
+    }, 500)
+    return () => {
+      clearInterval(intervalHandler)
+      audio?.source.stop()
+    }
   })
 
-  let audio: ArcadeAudio | undefined = undefined
-  audio = game.sound.play('intro', {
+  let audio = game.sound.play('intro', {
     loop: true,
     volume: 1
-  })
-  onDestroy(() => {
-    audio?.source.stop()
   })
 </script>
 
@@ -68,7 +65,7 @@
   <T.Group
     scale={textScale.current}
     position.z={1.3}
-    rotation.x={-90 * MathUtils.DEG2RAD}
+    rotation.x={MathUtils.degToRad(-90)}
     rotation.z={textRotation}
   >
     <T.Mesh position.y={-0.05}>
@@ -95,7 +92,7 @@
   <T.Group
     scale={textScale.current}
     position.z={3.3}
-    rotation.x={-90 * MathUtils.DEG2RAD}
+    rotation.x={MathUtils.degToRad(-90)}
     visible={!!blinkClock}
   >
     <Text

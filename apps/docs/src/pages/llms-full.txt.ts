@@ -35,7 +35,12 @@ export const GET: APIRoute = async ({ site }) => {
     getCollection('reference', (e) => !e.data.isDivider && e.data.showInSidebar !== false)
   ])
 
-  const sections: string[] = [`# Threlte\n\n> ${TAGLINE}\n`]
+  const sections: string[] = [
+    `# Threlte 8\n\n` +
+      `> ${TAGLINE}\n\n` +
+      `These docs describe Threlte 8, the current stable major version. ` +
+      `Threlte 7 docs are archived at https://v7.threlte.xyz.\n`
+  ]
 
   sections.push(`\n# Learn\n`)
   for (const e of (learn as CollectionEntry<'learn'>[]).slice().sort(byOrder)) {

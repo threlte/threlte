@@ -42,7 +42,11 @@ export const GET: APIRoute = async ({ site }) => {
     getCollection('examples')
   ])
 
-  let out = `# Threlte\n\n> ${TAGLINE}\n\n`
+  let out =
+    `# Threlte 8\n\n` +
+    `> ${TAGLINE}\n\n` +
+    `These docs describe Threlte 8, the current stable major version. ` +
+    `Threlte 7 docs are archived at https://v7.threlte.xyz.\n\n`
 
   out += `## Learn\n\n`
   for (const cat of LEARN_CATEGORIES) {

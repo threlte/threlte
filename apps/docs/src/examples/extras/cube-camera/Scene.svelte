@@ -20,7 +20,7 @@
   import { RGBELoader } from 'three/examples/jsm/Addons.js'
   import { T, useLoader, useTask } from '@threlte/core'
 
-  type SceneProps = {
+  interface Props {
     frames?: number
     hdr?: 'auto' | keyof typeof hdrs
     metalness?: number
@@ -36,7 +36,7 @@
     near = 0.1,
     resolution = 256,
     roughness = 0
-  }: SceneProps = $props()
+  }: Props = $props()
 
   const colors = ['#ff00ff', '#ffff00', '#00ffff'] as const
 

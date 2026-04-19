@@ -17,8 +17,13 @@
 
   useTask(
     () => {
-      if (controls.action('toggleDebug').justPressed) game.debug = !game.debug
-      if (controls.action('toggleOrbit').justPressed) game.orbitControls = !game.orbitControls
+      if (controls.action('toggleDebug').justPressed) {
+        game.debug = !game.debug
+      }
+
+      if (controls.action('toggleOrbit').justPressed) {
+        game.orbitControls = !game.orbitControls
+      }
 
       if (!controls.action('advance').justPressed) return
       if (game.state === 'level-loading') return

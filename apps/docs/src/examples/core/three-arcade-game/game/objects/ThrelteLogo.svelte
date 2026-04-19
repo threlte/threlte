@@ -4,11 +4,12 @@
   import { BoxGeometry, MeshBasicMaterial, MathUtils } from 'three'
   import { game } from '../Game.svelte'
 
-  type Props = {
+  interface Props {
     scale?: number
     positionZ?: number
     direction?: 1 | -1
   }
+
   let { scale = 1, positionZ = 0, direction = 1 }: Props = $props()
 
   const geometry = new BoxGeometry(1, 1, 1)

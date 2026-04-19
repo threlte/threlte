@@ -19,12 +19,7 @@
   let isHovering = $state(false)
   let isPointerDown = $state(false)
 
-  let htmlPosZ = new Spring(0)
-  $effect(() => {
-    htmlPosZ.set(isPointerDown ? -0.15 : isHovering ? -0.075 : 0, {
-      hard: isPointerDown
-    })
-  })
+  const htmlPosZ = Spring.of(() => (isPointerDown ? -0.15 : isHovering ? -0.075 : 0))
 </script>
 
 <T.PerspectiveCamera
@@ -73,7 +68,7 @@
         isPointerDown = false
         isHovering = false
       }}
-      class="rounded-full bg-orange-500 px-3 text-white hover:opacity-90 active:opacity-70"
+      class="cursor-pointer rounded-full bg-orange-500 px-3 text-white hover:opacity-90 active:opacity-70"
     >
       I'm a regular HTML button
     </button>

@@ -34,10 +34,12 @@ export type ArcadeControls = ReturnType<typeof provideArcadeControls>
 
 export const useArcadeControls = (): ArcadeControls => {
   const controls = getContext<ArcadeControls | undefined>(CONTROLS_KEY)
+
   if (!controls) {
     throw new Error(
       'useArcadeControls(): no arcade controls in context. Did you forget to call provideArcadeControls() in a parent component?'
     )
   }
+
   return controls
 }

@@ -1,14 +1,11 @@
 <script>
   import { T } from '@threlte/core'
   import { BoxGeometry, MeshBasicMaterial, Mesh, MathUtils, Group } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import { useTimeout } from '../../hooks/useTimeout'
+  import { useTimeout } from '../../hooks/useTimeout.svelte'
   import { game } from '../../Game.svelte'
 
   const geometry = new BoxGeometry(1, 0.01, 0.1)
-  const material = new MeshBasicMaterial({
-    color: 'red'
-  })
+  const material = new MeshBasicMaterial({ color: 'red' })
 
   const { timeout } = useTimeout()
 
@@ -22,14 +19,14 @@
   visible={!game.blinkClock || noBlink}
   position.z={game.ballPosition.z}
   position.x={game.ballPosition.x}
-  rotation.y={MathUtils.DEG2RAD * 45}
+  rotation.y={MathUtils.degToRad(45)}
 >
   <T.Mesh>
     <T is={geometry} />
     <T is={material} />
   </T.Mesh>
 
-  <T.Mesh rotation.y={MathUtils.DEG2RAD * 90}>
+  <T.Mesh rotation.y={MathUtils.degToRad(90)}>
     <T is={geometry} />
     <T is={material} />
   </T.Mesh>
