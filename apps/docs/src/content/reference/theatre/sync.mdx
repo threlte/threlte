@@ -4,7 +4,18 @@ category: '@threlte/theatre'
 sourcePath: 'packages/theatre/src/lib/sheetObject/sync/Sync.svelte'
 title: '<Sync>'
 type: 'component'
-componentSignature: { props: [{ name: type, type: 'any' }] }
+componentSignature:
+  {
+    pretext: 'In addition to the props listed below, <code>&lt;Sync&gt;</code> accepts any property of its parent Three.js object as a prop, with a value of <code>boolean | string | ComplexProp</code>.',
+    props:
+      [
+        {
+          name: 'type',
+          type: 'typeof Parent',
+          description: 'Optional type annotation of the parent object for autocomplete and type checking.'
+        }
+      ]
+  }
 ---
 
 Use the component `<Sync>` from the [`<SheetObject>`](./sheet-object) slot prop to automatically pick up properties from its parent.

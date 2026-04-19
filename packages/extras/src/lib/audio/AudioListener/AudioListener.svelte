@@ -3,9 +3,17 @@
   import { onDestroy } from 'svelte'
   import { AudioListener as ThreeAudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio.js'
+  import { acquireAutoResume } from './autoResume.js'
   import type { AudioListenerProps } from './types.js'
 
-  let { id, masterVolume, ref = $bindable(), children, ...props }: AudioListenerProps = $props()
+  let {
+    id,
+    masterVolume,
+    autoResume,
+    ref = $bindable(),
+    children,
+    ...props
+  }: AudioListenerProps = $props()
 
   const listener = new ThreeAudioListener()
 
@@ -16,6 +24,11 @@
     if (masterVolume !== undefined) {
       listener.setMasterVolume(masterVolume)
     }
+  })
+
+  $effect(() => {
+    if (!autoResume) return
+    return acquireAutoResume(listener.context)
   })
 
   const { addAudioListener, removeAudioListener } = useThrelteAudio()

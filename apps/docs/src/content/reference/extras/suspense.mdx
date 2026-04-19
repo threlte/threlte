@@ -13,20 +13,21 @@ componentSignature:
           type: 'boolean',
           default: 'false',
           description: 'If final is set to true, components cannot re-suspend the suspended state.'
-        }
-      ],
-    events:
-      [
-        {
-          name: 'load',
-          description: 'Fires when all child components wrapped in `suspend` have finished loading.',
-          payload: 'void'
         },
-        { name: 'suspend', description: 'Fires when a child component suspends.', payload: 'void' },
         {
-          name: 'error',
-          description: 'Fires when an error is thrown in a child component wrapped in `suspend`.',
-          payload: 'Error'
+          name: 'onload',
+          type: 'Function',
+          description: 'Fires when all child components wrapped in `suspend` have finished loading.'
+        },
+        {
+          name: 'onsuspend',
+          type: 'Function',
+          description: 'Fires when a child component suspends.'
+        },
+        {
+          name: 'onerror',
+          type: 'Function',
+          description: 'Fires when an error is thrown in a child component wrapped in `suspend`.'
         }
       ]
   }
