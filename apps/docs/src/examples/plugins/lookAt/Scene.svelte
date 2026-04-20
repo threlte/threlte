@@ -2,9 +2,8 @@
   import { MathUtils } from 'three'
   import { T, useTask } from '@threlte/core'
   import { injectLookAtPlugin } from './lookAtPlugin.svelte'
-  import type { LookAt } from './lookAtPlugin.svelte'
 
-  let cubePos: LookAt = $state.raw([0, 0.8, 0])
+  let cubePos: [number, number, number] = $state.raw([0, 0.8, 0])
 
   let time = 0
 

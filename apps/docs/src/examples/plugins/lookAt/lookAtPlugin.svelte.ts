@@ -1,11 +1,8 @@
 import { injectPlugin, isInstanceOf, useThrelte } from '@threlte/core'
-import type { Object3D } from 'three'
-
-export type LookAt = Parameters<Object3D['lookAt']>
 
 export const injectLookAtPlugin = () => {
   injectPlugin<{
-    lookAt: LookAt
+    lookAt: [number, number, number]
   }>('lookAt', (args) => {
     // skip injection if ref is not an Object3D
     if (!isInstanceOf(args.ref, 'Object3D')) return
