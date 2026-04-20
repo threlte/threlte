@@ -11,17 +11,18 @@ const DEFAULT_RESOLUTION = 256
  * the camera's `renderTarget` is disposed when the component unmounts.
  */
 export const useCubeCamera = (
-  near: () => number = () => DEFAULT_FAR,
-  far: () => number = () => DEFAULT_FAR,
-  resolution: () => number = () => DEFAULT_RESOLUTION
-) => {
-  const renderTarget = new WebGLCubeRenderTarget(resolution())
-  const camera = new CubeCamera(DEFAULT_NEAR, DEFAULT_FAR, renderTarget)
+  near = () => DEFAULT_FAR,
+  far = () => DEFAULT_FAR,
+  resolution = () => DEFAULT_RESOLUTION
+): { camera: CubeCamera; renderTarget: WebGLCubeRenderTarget } => {
+  const renderTarget = new WebGLCubeRenderTarget(DEFAULT_RESOLUTION)
 
   $effect(() => {
     const _resolution = resolution()
     renderTarget.setSize(_resolution, _resolution)
   })
+
+  const camera = new CubeCamera(DEFAULT_NEAR, DEFAULT_FAR, renderTarget)
 
   $effect(() => {
     const _near = near()
