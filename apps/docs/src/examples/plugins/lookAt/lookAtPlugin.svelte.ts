@@ -12,7 +12,7 @@ export const injectLookAtPlugin = () => {
 
     $effect(() => {
       if (!args.props.lookAt) return
-      args.ref.lookAt(args.props.lookAt[0], args.props.lookAt[1], args.props.lookAt[2])
+      args.ref.lookAt(...args.props.lookAt)
       invalidate()
     })
 
