@@ -13,6 +13,8 @@ import {
   isIntersectionTypeNode,
   isUnionTypeNode,
   isParenthesizedTypeNode,
+  sys,
+  parseJsonConfigFileContent,
   type Program,
   type TypeChecker,
   type Symbol,
@@ -29,7 +31,7 @@ import { ComponentParser } from 'sveld'
 const __dirname = fileURLToPath(new URL('.', import.meta.url))
 
 const PACKAGES_DIR = resolve(__dirname, '../../../packages')
-const IGNORED_PACKAGES = ['core', 'gltf', 'studio', 'theatre', 'xr', 'flex', 'rapier', 'sv']
+const IGNORED_PACKAGES = ['gltf', 'sv']
 const CANVAS_PATHS = [
   '/core/src/lib/context/createThrelteContext.svelte.ts',
   '/core/src/lib/context/fragments/renderer.svelte.ts',
@@ -41,68 +43,6 @@ let sharedTypeProgram: Program | undefined
 let sharedTypeChecker: TypeChecker | undefined
 let sharedTypeProgramFiles: string[] = []
 const sharedAliasCache = new Map<string, TypeAliasDeclaration | InterfaceDeclaration | undefined>()
-
-function normalizePaths(paths: string[]) {
-  return [...new Set(paths)].sort()
-}
-
-function getCompilerOptions(componentPath?: string): CompilerOptions {
-  const defaultOptions: CompilerOptions = {
-    noEmit: true,
-    skipLibCheck: true,
-    strict: false,
-    target: ScriptTarget.ES2020,
-    module: ModuleKind.ESNext,
-    moduleResolution: ModuleResolutionKind.NodeJs,
-    allowSyntheticDefaultImports: true,
-    esModuleInterop: true,
-    baseUrl: resolve(__dirname, '../../..'),
-    paths: {
-      '@threlte/*': ['packages/*/src/lib/index.ts']
-    }
-  }
-
-  if (!componentPath) return defaultOptions
-
-  // Extract package directory from path
-  const packageMatch = componentPath.match(/packages\/([^/]+)/)
-  if (!packageMatch) return defaultOptions
-
-  const packageDir = resolve(PACKAGES_DIR, packageMatch[1])
-  const tsconfigPath = join(packageDir, 'tsconfig.json')
-
-  if (!existsSync(tsconfigPath)) return defaultOptions
-
-  try {
-    const tsconfigContent = readFileSync(tsconfigPath, 'utf-8')
-    const tsconfig = JSON.parse(tsconfigContent)
-
-    // Merge tsconfig options with defaults
-    return {
-      ...defaultOptions,
-      ...(tsconfig.compilerOptions || {})
-    }
-  } catch (error) {
-    return defaultOptions
-  }
-}
-
-function initSharedTypeChecker(typeFiles: string[]) {
-  const normalizedFiles = normalizePaths(typeFiles)
-  if (
-    sharedTypeProgram &&
-    sharedTypeChecker &&
-    sharedTypeProgramFiles.length === normalizedFiles.length &&
-    sharedTypeProgramFiles.every((value, index) => value === normalizedFiles[index])
-  ) {
-    return
-  }
-
-  sharedTypeProgramFiles = normalizedFiles
-  sharedAliasCache.clear()
-  sharedTypeProgram = createProgram(normalizedFiles, getCompilerOptions(normalizedFiles[0]))
-  sharedTypeChecker = sharedTypeProgram.getTypeChecker()
-}
 
 interface PropInfo {
   name: string
@@ -124,7 +64,7 @@ interface ExportInfo {
   description?: string
 }
 
-interface ComponentData {
+export interface ComponentData {
   name: string
   package: string
   props?: PropInfo[]
@@ -149,7 +89,7 @@ async function main() {
     initSharedTypeChecker(allTypesPaths)
   }
 
-  const allComponents: ComponentData[] = []
+  const allComponents: Record<string, ComponentData> = {}
 
   for (const { packageName, components } of packageComponents) {
     console.log('\nProcessing package:', packageName)
@@ -172,12 +112,15 @@ async function main() {
         data[key] = srcData[key]
       }
 
-      allComponents.push(data)
+      allComponents[data.name] = data
     }
   }
 
-  writeFileSync(resolve(__dirname, 'component-data.json'), JSON.stringify(allComponents, null, 2))
-  console.log('\nComponent data written to component-data.json')
+  writeFileSync(
+    resolve(__dirname, 'component-signatures-generated.json'),
+    JSON.stringify(allComponents, null, 2)
+  )
+  console.log('\nComponent data written to component-signatures-generated.json')
 }
 
 function collectPackageNames(packagesDir: string, ignored: string[]): string[] {
@@ -593,6 +536,69 @@ function getCanvasData() {
     })
 
   return { props: data }
+}
+
+function normalizePaths(paths: string[]) {
+  return [...new Set(paths)].sort()
+}
+
+function getCompilerOptions(componentPath?: string): CompilerOptions {
+  const defaultOptions: CompilerOptions = {
+    noEmit: true,
+    skipLibCheck: true,
+    strict: false,
+    target: ScriptTarget.ESNext,
+    module: ModuleKind.ESNext,
+    moduleResolution: ModuleResolutionKind.NodeNext,
+    allowSyntheticDefaultImports: true,
+    esModuleInterop: true,
+    baseUrl: resolve(__dirname, '../../..'),
+    paths: {
+      '@threlte/*': ['packages/*/src/lib/index.ts']
+    }
+  }
+
+  if (!componentPath) return defaultOptions
+
+  // Extract package directory from path
+  const packageMatch = componentPath.match(/packages\/([^/]+)/)
+  if (!packageMatch) return defaultOptions
+
+  const packageDir = resolve(PACKAGES_DIR, packageMatch[1])
+  const tsconfigPath = join(packageDir, 'tsconfig.json')
+
+  if (!existsSync(tsconfigPath)) return defaultOptions
+
+  try {
+    const tsconfigContent = readFileSync(tsconfigPath, 'utf-8')
+    const tsconfig = JSON.parse(tsconfigContent)
+    const parsed = parseJsonConfigFileContent(tsconfig, sys, packageDir)
+
+    // Merge tsconfig options with defaults
+    return {
+      ...defaultOptions,
+      ...parsed.options
+    }
+  } catch (error) {
+    return defaultOptions
+  }
+}
+
+function initSharedTypeChecker(typeFiles: string[]) {
+  const normalizedFiles = normalizePaths(typeFiles)
+  if (
+    sharedTypeProgram &&
+    sharedTypeChecker &&
+    sharedTypeProgramFiles.length === normalizedFiles.length &&
+    sharedTypeProgramFiles.every((value, index) => value === normalizedFiles[index])
+  ) {
+    return
+  }
+
+  sharedTypeProgramFiles = normalizedFiles
+  sharedAliasCache.clear()
+  sharedTypeProgram = createProgram(normalizedFiles, getCompilerOptions(normalizedFiles[0]))
+  sharedTypeChecker = sharedTypeProgram.getTypeChecker()
 }
 
 main().catch((e) => {
