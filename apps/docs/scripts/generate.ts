@@ -168,8 +168,8 @@ async function main() {
       }
 
       for (const key in srcData) {
-        const element = srcData[key]
-        data[key] = element
+        // @ts-ignore
+        data[key] = srcData[key]
       }
 
       allComponents.push(data)
