@@ -112,9 +112,7 @@
   const moveX = $derived(input.axis('moveLeft', 'moveRight'))
   const moveY = $derived(input.axis('moveForward', 'moveBack'))
   const moving = $derived(moveX !== 0 || moveY !== 0)
-  const action = $derived<'idle' | 'run' | 'walk'>(
-    moving ? (sprinting ? 'run' : 'walk') : 'idle'
-  )
+  const action = $derived<'idle' | 'run' | 'walk'>(moving ? (sprinting ? 'run' : 'walk') : 'idle')
 
   const walkSpeed = 2
   const runSpeed = 4.5
