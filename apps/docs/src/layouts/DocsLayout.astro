@@ -19,10 +19,13 @@ import Markprompt from '$components/Search/Markprompt'
 
 export interface Props {
   title: string
+  description?: string
+  image?: string
+  canonical?: string
   entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
 }
 
-const title = Astro.props.title
+const { title, description, image, canonical } = Astro.props
 
 const sidebarMenu = await getLeftSidebarMenu()
 
@@ -38,7 +41,16 @@ const linkStyles = 'flex items-center gap-1 rounded-md text-faded hover:text-whi
 const activeLinkStyles = 'text-orange!'
 ---
 
-<AppLayout {title}>
+<AppLayout
+  {title}
+  {description}
+  {image}
+  {canonical}
+>
+  <slot
+    name="head"
+    slot="head"
+  />
   <Markprompt client:only="preact" />
   <header
     class="border-b-orange/25 fixed z-40 mx-auto hidden h-[var(--docs-navbar-height)] w-full flex-row items-center justify-between gap-6 border-b bg-[#0A0F19] px-6 md:flex"

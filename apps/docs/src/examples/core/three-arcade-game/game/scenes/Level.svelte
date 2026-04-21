@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { onDestroy } from 'svelte'
   import type { ArcadeAudio } from '../sound'
   import { arenaBorderWidth, arenaHeight, arenaWidth, blockGap } from '../config'
-  import { useTimeout } from '../hooks/useTimeout'
+  import { useTimeout } from '../hooks/useTimeout.svelte'
   import { levels } from './levels'
   import { game } from '../Game.svelte'
   import Block from '../objects/Block.svelte'
@@ -20,19 +19,17 @@
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
   }
 
-  const playLevelSound = () => {
+  $effect(() => {
     levelBackgroundAudio = game.sound.play('levelSlow', {
       loop: true,
       volume: bgVolume,
       playbackRate: map(game.levelIndex, 0, levels.length - 1, 1.0, 2)
     })
-  }
 
-  playLevelSound()
-
-  onDestroy(() => {
-    if (levelBackgroundAudio) {
-      levelBackgroundAudio.source.stop()
+    return () => {
+      if (levelBackgroundAudio) {
+        levelBackgroundAudio.source.stop()
+      }
     }
   })
 
@@ -110,7 +107,11 @@
         }
       })
     }, 1e3)
-    if (levelBackgroundAudio) levelBackgroundAudio.fade(0, 300)
+
+    if (levelBackgroundAudio) {
+      levelBackgroundAudio.fade(0, 300)
+    }
+
     game.sound.play('gameOver2', { volume: 0.5 })?.onEnded()
   }
 

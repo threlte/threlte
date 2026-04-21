@@ -3,14 +3,18 @@
   import { T, useTask, type Task } from '@threlte/core'
   import { BufferGeometry, DoubleSide, Group, Mesh, Vector3 } from 'three'
 
-  export let origin: Vector
-  export let impulse: Vector
-  export let length: number | undefined = undefined
-  export let color: string | undefined = undefined
-  export let multiplier: number | undefined = undefined
-  export let afterTask: Task | undefined
+  interface Props {
+    origin: Vector
+    impulse: Vector
+    length?: number | undefined
+    color?: string | undefined
+    multiplier?: number | undefined
+    afterTask: Task | undefined
+  }
 
-  $: combinedColor = color ?? 'red'
+  let { origin, impulse, length, color, multiplier, afterTask }: Props = $props()
+
+  let combinedColor = $derived(color ?? 'red')
 
   const geometry = new BufferGeometry()
 

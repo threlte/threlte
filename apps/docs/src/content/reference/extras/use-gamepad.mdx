@@ -168,6 +168,18 @@ The minimum axis value before change events fire. Defaults to `0.05`.
 const gamepad = useGamepad({ axisDeadzone: 0.1 })
 ```
 
+### `mappings`
+
+A table of per-controller remap overrides. Custom
+entries take precedence over the built-in mappings. See
+[Non-Standard Controllers](#non-standard-controllers) for the full shape and
+examples.
+
+### `useBuiltinMappings`
+
+When `false`, skip the built-in mapping table and use only the entries
+provided via `mappings`. Defaults to `true`.
+
 ## Connection Status
 
 The `connected` property is a `currentWritable` that updates when a gamepad
@@ -207,6 +219,52 @@ The gamepad maps 17 standard buttons and 2 sticks:
 **Sticks:**
 
 - `leftStick`, `rightStick`
+
+## Non-Standard Controllers
+
+Xbox and PlayStation pads usually report `Gamepad.mapping === "standard"` and
+line up with the [standard gamepad
+layout](https://w3c.github.io/gamepad/#remapping). Many other controllers
+don't — most Nintendo pads report an empty mapping string and hand the browser
+their buttons in a different order. That's why `clusterBottom` can end up
+firing on the wrong press, or why buttons look stuck at rest on a pad that's
+sitting idle.
+
+To keep position-based names like `clusterBottom` meaning "the south face
+button" regardless of brand, `@threlte/extras` ships a small built-in remap
+table and applies it automatically to non-standard pads it recognises.
+Currently covered:
+
+- Nintendo Switch Pro Controller
+- Nintendo Switch Online SNES Controller
+- Nintendo Joy-Con (L) and Joy-Con (R)
+
+Non-standard pads that aren't in the table log a one-time warning with their
+`Gamepad.id` and read through the standard indices, which will usually be
+wrong.
+
+### Adding your own mapping
+
+Pass a `mappings` object keyed by `vvvv:pppp` — the USB vendor and product
+IDs parsed from `Gamepad.id`, lowercase. Anything you leave unset falls back
+to the standard layout, so you only need to describe the inputs that differ
+on your hardware.
+
+```ts
+const gamepad = useGamepad({
+  mappings: {
+    '2dc8:3106': {
+      buttons: { rightTrigger: { button: 15 } }
+    }
+  }
+})
+```
+
+A mapping entry can remap buttons (`{ button: n }`, or `{ axis: n, range: 'signed' }`
+for triggers that come through as an axis), sticks (`{ xAxis, yAxis }` with
+optional `invertX` / `invertY`), and — for pads that expose the d-pad as a
+single hat axis — a `dpad` entry listing which axis values correspond to
+each direction.
 
 ## XR Gamepad
 

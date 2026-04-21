@@ -1,5 +1,26 @@
 # @threlte/extras
 
+## 9.14.8
+
+### Patch Changes
+
+- 8c55241: Ensure correct task ordering when accepting gamepad and keyboard input
+- 8c55241: Create unique task labels per useGamepad call
+
+## 9.14.7
+
+### Patch Changes
+
+- 8b0b6ee: useGamepad: support non-standard gamepad mappings, such as nintendo controllers
+
+## 9.14.6
+
+### Patch Changes
+
+- b24ac4f: Fix Align component stopping async resource loading in child components
+- 1d86e68: Fix reactivity for MeshLineGeometry shape property
+- 1d86e68: Simplify colorspace fragment in MeshLineMaterial
+
 ## 9.14.5
 
 ### Patch Changes

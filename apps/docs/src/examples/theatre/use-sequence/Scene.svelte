@@ -18,7 +18,7 @@
       maximumFractionDigits: 1
     })
 
-  $: time = format($position)
+  let time = $derived(format($position))
 
   play()
 </script>

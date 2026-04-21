@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useTask } from '@threlte/core'
   import { Edges, useGltf } from '@threlte/extras'
-  import { Color, Mesh, MeshStandardMaterial, MathUtils } from 'three'
+  import { Mesh, MeshStandardMaterial, MathUtils } from 'three'
 
   let rotation = $state(0)
   useTask((delta) => {
@@ -33,7 +33,7 @@
       geometry={helmetGeometry}
     >
       <T.MeshBasicMaterial
-        color={new Color(0xff3e00)}
+        color={0xff3e00}
         toneMapped={false}
       />
       <Edges

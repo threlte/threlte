@@ -13,6 +13,7 @@
   <OrbitControls
     autoRotate
     enableDamping
+    enableZoom={false}
   />
 </T.PerspectiveCamera>
 

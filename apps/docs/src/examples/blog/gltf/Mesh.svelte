@@ -1,8 +1,15 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { DoubleSide } from 'three'
+  import { BufferGeometry, DoubleSide, Texture } from 'three'
 
-  let { geometry, texture, visible, wireframe } = $props()
+  interface Props {
+    geometry: BufferGeometry
+    texture: Texture
+    visible: boolean
+    wireframe: boolean
+  }
+
+  let { geometry, texture, visible, wireframe }: Props = $props()
 </script>
 
 <T.Mesh

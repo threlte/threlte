@@ -179,12 +179,12 @@ use from `three/webgpu`. You can then use `<T>`'s
   import { T } from '@threlte/core'
   import { MeshPhysicalNodeMaterial } from 'three/webgpu'
 
-	const material = new MeshPhysicalNodeMaterial()
+  const material = new MeshPhysicalNodeMaterial()
 </script>
 
 <T.Mesh>
-	<T.BoxGeometry>
-	<T is={material}>
+  <T.BoxGeometry />
+  <T is={material} />
 </T.Mesh>
 ```
 

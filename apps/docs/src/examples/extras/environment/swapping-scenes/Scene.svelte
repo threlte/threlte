@@ -1,11 +1,11 @@
 <script lang="ts">
   import { Environment } from '@threlte/extras'
   import { Color, PerspectiveCamera, Scene } from 'three'
-  import { T, observe, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
 
   type Side = 'left' | 'right'
 
-  type Props = {
+  interface Props {
     side?: Side
     useEnvironment?: boolean
     isBackground?: boolean
@@ -29,15 +29,6 @@
   const camera = new PerspectiveCamera()
   camera.position.setZ(10)
 
-  // we don't need to run this in the task since we can observe the size store
-  observe(
-    () => [size],
-    ([size]) => {
-      camera.aspect = 0.5 * (size.width / size.height)
-      camera.updateProjectionMatrix()
-    }
-  )
-
   useTask(
     () => {
       const halfWidth = 0.5 * size.current.width
@@ -50,6 +41,11 @@
     },
     { autoInvalidate: false, stage: renderStage }
   )
+
+  $effect(() => {
+    camera.aspect = 0.5 * ($size.width / $size.height)
+    camera.updateProjectionMatrix()
+  })
 
   $effect(() => {
     const lastAutoRender = autoRender.current
