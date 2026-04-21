@@ -49,7 +49,14 @@
 <script lang="ts">
   install()
 
-  let { ref = $bindable(), camera: userCamera, children, ...rest }: CameraControlsProps = $props()
+  let {
+    ref = $bindable(),
+    camera: userCamera,
+    pointerLock = false,
+    pointerLockSensitivity = 0.003,
+    children,
+    ...rest
+  }: CameraControlsProps = $props()
 
   const { dom, camera: defaultCamera, invalidate } = useThrelte()
   const { cameraControls } = useControlsContext()
@@ -93,6 +100,46 @@
       autoInvalidate: false
     }
   )
+
+  $effect(() => {
+    if (!pointerLock) return
+
+    const savedButtons = { ...controls.mouseButtons }
+    controls.mouseButtons.left = CameraControls.ACTION.NONE
+    controls.mouseButtons.middle = CameraControls.ACTION.NONE
+    controls.mouseButtons.right = CameraControls.ACTION.NONE
+
+    let locked = false
+
+    const onLockChange = () => {
+      locked = document.pointerLockElement === dom
+    }
+    const onPointerMove = (event: PointerEvent) => {
+      if (!locked) return
+      controls.rotate(
+        -event.movementX * pointerLockSensitivity,
+        -event.movementY * pointerLockSensitivity,
+        false
+      )
+    }
+    const onClick = () => {
+      if (document.pointerLockElement !== dom) dom.requestPointerLock()
+    }
+
+    dom.addEventListener('click', onClick)
+    document.addEventListener('pointerlockchange', onLockChange)
+    document.addEventListener('pointermove', onPointerMove)
+
+    return () => {
+      dom.removeEventListener('click', onClick)
+      document.removeEventListener('pointerlockchange', onLockChange)
+      document.removeEventListener('pointermove', onPointerMove)
+      if (document.pointerLockElement === dom) document.exitPointerLock()
+      controls.mouseButtons.left = savedButtons.left
+      controls.mouseButtons.middle = savedButtons.middle
+      controls.mouseButtons.right = savedButtons.right
+    }
+  })
 </script>
 
 <T

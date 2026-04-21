@@ -16,6 +16,7 @@ export {
 } from './hooks/useGamepad/useGamepad.svelte.js'
 export { useKeyboard } from './hooks/useKeyboard.svelte.js'
 export { useInputMap } from './hooks/useInputMap.svelte.js'
+export { useFollow } from './hooks/useFollow.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
 export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'
@@ -28,7 +29,7 @@ export { default as BackdropGeometry } from './components/BackdropGeometry/Backd
 export { default as Decal } from './components/Decal/Decal.svelte'
 export {
   default as CameraControls,
-  type CameraControlsRef
+  CameraControlsRef
 } from './components/CameraControls/CameraControls.svelte'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'

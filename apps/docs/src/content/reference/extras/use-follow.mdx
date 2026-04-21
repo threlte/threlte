@@ -1,0 +1,348 @@
+---
+category: '@threlte/extras'
+group: 'Interaction'
+sourcePath: 'packages/extras/src/lib/hooks/useFollow.svelte.ts'
+title: useFollow
+type: 'hook'
+---
+
+`useFollow` teaches a [`<CameraControls>`](/docs/reference/extras/camera-controls)
+instance to track a moving target — the missing gameplay layer on top of an
+orbit camera. The component handles orbit, zoom, touch input, collision
+avoidance, and damping. The hook handles the follow: it updates the
+controls' target to match your character (or vehicle, or any `Object3D`)
+each frame, and adds follow-specific behaviors like `lookAtOffset`, dead
+zones, and look-ahead.
+
+<Example path="extras/use-follow" />
+
+```svelte
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { CameraControls, useFollow, type CameraControlsRef } from '@threlte/extras'
+
+  let controls = $state<CameraControlsRef>()
+  let character = $state<Group>()
+
+  const follow = useFollow(() => ({
+    controls,
+    lookAtOffset: [0, 1, 0]
+  }))
+
+  $effect(() => {
+    if (character) follow.follow(character)
+  })
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[0, 3, 6]}
+/>
+
+<CameraControls bind:ref={controls} />
+
+<T.Group bind:ref={character}>
+  <!-- character mesh -->
+</T.Group>
+```
+
+## Target
+
+Call `follow.follow(target)` to start tracking. The target can be any of:
+
+- An `Object3D` directly
+- A ref-like object with a `current` property
+- A getter function that returns an `Object3D | null | undefined`
+
+`follow.follow` is also usable as an `oncreate` handler on a `<T>` component:
+
+```svelte
+<T.Group oncreate={follow.follow}>
+  <!-- character mesh -->
+</T.Group>
+```
+
+Call `follow.unfollow()` to stop.
+
+## Options Belong Where They Live
+
+Because `useFollow` is a layer on `<CameraControls>`, **camera behavior is
+configured on the component, follow behavior on the hook.**
+
+| Belongs on `<CameraControls>`            | Belongs on `useFollow`   |
+| ---------------------------------------- | ------------------------ |
+| `smoothTime` (orbit/zoom damping)        | `lookAtOffset`           |
+| `minDistance` / `maxDistance` (zoom)     | `deadZone`               |
+| `minPolarAngle` / `maxPolarAngle`        | `lookAhead`              |
+| `minAzimuthAngle` / `maxAzimuthAngle`    | `followSmoothTime`       |
+| `colliderMeshes` (collision)             | target via `follow()`    |
+| `pointerLock` (input mode)               |                          |
+
+Everything on the left is already documented on
+[`<CameraControls>`](/docs/reference/extras/camera-controls) — set it as a
+prop and `useFollow` will cooperate.
+
+## lookAtOffset
+
+Offset added to the target's world position before it's sent to the
+controls. Use it to look at the character's head or chest rather than their
+feet:
+
+```ts
+const follow = useFollow(() => ({
+  controls,
+  lookAtOffset: [0, 1.6, 0]
+}))
+```
+
+## Dead Zone
+
+The target may drift this far from the currently tracked position (in
+camera-space right/up axes) before the camera starts to follow. Any axis
+left at `0` has no dead zone on that axis.
+
+```ts
+const follow = useFollow(() => ({
+  controls,
+  deadZone: { x: 0.5, y: 0.3 }
+}))
+```
+
+## Look-Ahead
+
+Shift the tracked point in the target's direction of motion, expressed in
+seconds of preview. `0.3` means "place the camera where the target will be
+in 300 ms at its current velocity."
+
+```ts
+const follow = useFollow(() => ({
+  controls,
+  lookAhead: 0.3
+}))
+```
+
+## followSmoothTime
+
+Seconds of lag between the character's movement and the camera's position,
+for a trailing / cinematic follow. `0` (the default) snaps the camera
+lock-step with the character.
+
+Only the character-motion contribution to the camera's position is smoothed.
+`CameraControls`' orbit pivot stays exactly on the character, and the
+camera's look-at direction updates instantly, so:
+
+- Rotating while moving pivots on the character, not on a lagged ghost.
+- Adjusting `lookAtOffset` at runtime is snappy — the camera reorients
+  without drift.
+- User orbit/zoom input still smooths via `CameraControls`' own
+  `smoothTime`.
+
+```ts
+const follow = useFollow(() => ({
+  controls,
+  followSmoothTime: 0.2
+}))
+```
+
+## getInputDirection
+
+A helper that projects a 2D input onto the camera's horizontal basis — call
+it from your movement task to make `WASD` / stick input always feel correct
+regardless of how the user has orbited.
+
+```ts
+follow.getInputDirection(right, forward, out)
+```
+
+- `right` — sideways input amount (positive = to camera's right).
+- `forward` — forward input amount (positive = away from the camera).
+- `out` — a `Vector3` you allocate once and reuse. Writes the world-space
+  direction into it and returns it. Length of the vector reflects the
+  magnitude of `(right, forward)`, so diagonal input gives a diagonal world
+  direction.
+
+```ts
+const worldMove = new Vector3()
+
+useTask((delta) => {
+  const move = input.vector('moveLeft', 'moveRight', 'moveForward', 'moveBack')
+  follow.getInputDirection(move.x, -move.y, worldMove)
+  character.position.addScaledVector(worldMove, speed * delta)
+})
+```
+
+`useInputMap`'s `input.vector` returns `y = -1` when "forward" is pressed, so
+pass `-move.y` as the forward amount.
+
+## Reactive State
+
+The returned object exposes two reactive properties:
+
+| Property    | Type      | Description                                              |
+| ----------- | --------- | -------------------------------------------------------- |
+| `following` | `boolean` | Whether a target is currently being followed             |
+| `distance`  | `number`  | Current distance from the camera's world position to the target |
+
+```svelte
+<p>{follow.following ? `Tracking (${follow.distance.toFixed(1)}m)` : 'Idle'}</p>
+```
+
+## Task Ordering
+
+`useFollow` runs its update in a named task. For a character controller,
+schedule it **after** movement so the camera sees the final target position
+for the frame:
+
+```ts
+const follow = useFollow(() => ({ controls, lookAtOffset: [0, 1.6, 0] }))
+
+useTask(
+  () => {
+    // run your movement
+  },
+  { before: follow.task }
+)
+```
+
+## Composition Patterns
+
+### Third-person character
+
+Mouse orbit + zoom handled by `<CameraControls>`; WASD moves the character;
+`useFollow` keeps the camera aimed at the character's head.
+
+Movement needs to be **camera-relative** so `W` always means "away from
+camera" regardless of how the user has orbited. Use
+[`follow.getInputDirection`](#getinputdirection) to convert the 2D input
+vector into a world-space direction aligned with the camera's horizontal
+basis.
+
+```svelte
+<script lang="ts">
+  import { Vector3, type Group } from 'three'
+  import { T, useTask } from '@threlte/core'
+  import {
+    CameraControls,
+    useFollow,
+    useInputMap,
+    useKeyboard,
+    type CameraControlsRef
+  } from '@threlte/extras'
+
+  let controls = $state<CameraControlsRef>()
+  let character = $state<Group>()
+
+  const keyboard = useKeyboard()
+  const input = useInputMap(
+    ({ key }) => ({
+      moveLeft: [key('a')],
+      moveRight: [key('d')],
+      moveForward: [key('w')],
+      moveBack: [key('s')]
+    }),
+    { keyboard }
+  )
+
+  const follow = useFollow(() => ({
+    controls,
+    lookAtOffset: [0, 1, 0]
+  }))
+
+  $effect(() => {
+    if (character) follow.follow(character)
+  })
+
+  const worldMove = new Vector3()
+
+  useTask(
+    (delta) => {
+      if (!character) return
+      const move = input.vector('moveLeft', 'moveRight', 'moveForward', 'moveBack')
+      follow.getInputDirection(move.x, -move.y, worldMove)
+      character.position.addScaledVector(worldMove, 5 * delta)
+    },
+    { after: input.task, before: follow.task }
+  )
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[0, 3, 6]}
+/>
+
+<CameraControls
+  bind:ref={controls}
+  minDistance={2}
+  maxDistance={10}
+  minPolarAngle={0.3}
+  maxPolarAngle={1.5}
+/>
+
+<T.Group bind:ref={character}>
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial color="orange" />
+  </T.Mesh>
+</T.Group>
+```
+
+### Top-down
+
+Lock the polar and azimuth angles on `<CameraControls>` and the camera
+becomes a pure top-down follower. Orbit input still works within whatever
+limits you allow.
+
+```svelte
+<CameraControls
+  bind:ref={controls}
+  minPolarAngle={0.01}
+  maxPolarAngle={0.01}
+  minAzimuthAngle={0}
+  maxAzimuthAngle={0}
+  minDistance={10}
+  maxDistance={20}
+/>
+```
+
+### Collision avoidance
+
+`<CameraControls>` does a swept collision test against any meshes you hand
+it. Pass the obstacles as `colliderMeshes`:
+
+```svelte
+<script lang="ts">
+  import type { Mesh } from 'three'
+  let walls = $state<Mesh[]>([])
+</script>
+
+<CameraControls
+  bind:ref={controls}
+  colliderMeshes={walls}
+/>
+
+{#each wallData as data, i}
+  <T.Mesh bind:ref={walls[i]}>
+    ...
+  </T.Mesh>
+{/each}
+```
+
+No option on `useFollow` is needed — collision is entirely a `CameraControls`
+concern.
+
+### Pointer lock
+
+By default `<CameraControls>` uses click-and-drag to rotate. Flip
+`pointerLock` on the component to switch to mouse-look: one click locks the
+pointer, subsequent movement rotates the camera directly, and `Escape`
+releases the lock. The wheel continues to zoom.
+
+```svelte
+<CameraControls
+  bind:ref={controls}
+  pointerLock
+/>
+```
+
+Tune rotation speed with `pointerLockSensitivity` (radians per pixel, default
+`0.003`).
