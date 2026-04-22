@@ -102,14 +102,37 @@ async function main() {
         path: componentPath
       })
 
-      const data: ComponentData = {
+      // : ComponentData
+      const data = {
         name,
         package: packageName
       }
 
       for (const key in srcData) {
         // @ts-ignore
-        data[key] = srcData[key]
+        // data[key] = srcData[key]
+        if (key == 'props') {
+          data.props = {}
+          for (let i = 0; i < srcData.props.length; i++) {
+            const element = srcData.props[i]
+            if (typeof element.type === 'object' && 'name' in element.type) {
+              element.type = element.type.name
+            }
+            data.props[element.name] = element
+          }
+        } else if (key == 'events') {
+          data.events = {}
+          for (let i = 0; i < srcData.events.length; i++) {
+            const element = srcData.events[i]
+            data.events[element.name] = element
+          }
+        } else if (key == 'exports') {
+          data.exports = {}
+          for (let i = 0; i < srcData.exports.length; i++) {
+            const element = srcData.exports[i]
+            data.exports[element.name] = element
+          }
+        }
       }
 
       allComponents[data.name] = data

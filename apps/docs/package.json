@@ -16,6 +16,7 @@
     "cleanup": "rimraf .astro node_modules",
     "generate:signatures": "tsx ./scripts/generate.ts",
     "collect:signatures": "tsx ./scripts/collect-signatures.ts",
+    "compare:signatures": "tsx ./scripts/compare-signatures.js",
     "create:example": "tsx ./scripts/createExample",
     "create:example-page": "tsx ./scripts/createExamplePage",
     "lint": "prettier --check .",

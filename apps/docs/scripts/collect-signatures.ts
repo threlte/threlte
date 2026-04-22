@@ -40,18 +40,33 @@ function collectSignatures() {
 
       if (data.componentSignature) {
         const { name, packageName } = getNameAndPackage(data)
-        let x: ComponentData = {
+        let x = {
           name,
           package: packageName
         }
         if ('props' in data.componentSignature) {
-          x['props'] = data.componentSignature.props
+          x.props = {}
+          for (let i = 0; i < data.componentSignature.props.length; i++) {
+            const element = data.componentSignature.props[i]
+            if (typeof element.type === 'object' && 'name' in element.type) {
+              element.type = element.type.name
+            }
+            x.props[element.name] = element
+          }
         }
         if ('events' in data.componentSignature) {
-          x['events'] = data.componentSignature.events
+          x.events = {}
+          for (let i = 0; i < data.componentSignature.events.length; i++) {
+            const element = data.componentSignature.events[i]
+            x.events[element.name] = element
+          }
         }
         if ('exports' in data.componentSignature) {
-          x['exports'] = data.componentSignature.exports
+          x.exports = {}
+          for (let i = 0; i < data.componentSignature.exports.length; i++) {
+            const element = data.componentSignature.exports[i]
+            x.exports[element.name] = element
+          }
         }
 
         signatures[x.name] = x
