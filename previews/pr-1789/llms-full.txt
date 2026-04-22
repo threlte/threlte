@@ -15276,8 +15276,7 @@ Package: @threlte/extras
 URL: https://threlte.xyz/previews/pr-1789/docs/reference/extras/use-follow
 
 `useFollow` teaches a [`<CameraControls>`](/docs/reference/extras/camera-controls)
-instance to track a moving target — the missing gameplay layer on top of an
-orbit camera. The component handles orbit, zoom, touch input, collision
+instance to track a moving target. The `<CameraControls>` handles orbiting, collision
 avoidance, and damping. The hook handles the follow: it updates the
 controls' target to match your character (or vehicle, or any `Object3D`)
 each frame, and adds follow-specific behaviors like `lookAtOffset`, dead
@@ -15338,14 +15337,14 @@ Call `follow.unfollow()` to stop.
 Because `useFollow` is a layer on `<CameraControls>`, **camera behavior is
 configured on the component, follow behavior on the hook.**
 
-| Belongs on `<CameraControls>`            | Belongs on `useFollow`   |
-| ---------------------------------------- | ------------------------ |
-| `smoothTime` (orbit/zoom damping)        | `lookAtOffset`           |
-| `minDistance` / `maxDistance` (zoom)     | `deadZone`               |
-| `minPolarAngle` / `maxPolarAngle`        | `lookAhead`              |
-| `minAzimuthAngle` / `maxAzimuthAngle`    | `followSmoothTime`       |
-| `colliderMeshes` (collision)             | target via `follow()`    |
-| `pointerLock` (input mode)               |                          |
+| Belongs on `<CameraControls>`         | Belongs on `useFollow` |
+| ------------------------------------- | ---------------------- |
+| `smoothTime` (orbit/zoom damping)     | `lookAtOffset`         |
+| `minDistance` / `maxDistance` (zoom)  | `deadZone`             |
+| `minPolarAngle` / `maxPolarAngle`     | `lookAhead`            |
+| `minAzimuthAngle` / `maxAzimuthAngle` | `followSmoothTime`     |
+| `colliderMeshes` (collision)          | target via `follow()`  |
+| `pointerLock` (input mode)            |                        |
 
 Everything on the left is already documented on
 [`<CameraControls>`](/docs/reference/extras/camera-controls) — set it as a
@@ -15447,9 +15446,9 @@ pass `-move.y` as the forward amount.
 
 The returned object exposes two reactive properties:
 
-| Property    | Type      | Description                                              |
-| ----------- | --------- | -------------------------------------------------------- |
-| `following` | `boolean` | Whether a target is currently being followed             |
+| Property    | Type      | Description                                                     |
+| ----------- | --------- | --------------------------------------------------------------- |
+| `following` | `boolean` | Whether a target is currently being followed                    |
 | `distance`  | `number`  | Current distance from the camera's world position to the target |
 
 ```svelte
@@ -15590,9 +15589,7 @@ it. Pass the obstacles as `colliderMeshes`:
 />
 
 {#each wallData as data, i}
-  <T.Mesh bind:ref={walls[i]}>
-    ...
-  </T.Mesh>
+  <T.Mesh bind:ref={walls[i]}>...</T.Mesh>
 {/each}
 ```
 
