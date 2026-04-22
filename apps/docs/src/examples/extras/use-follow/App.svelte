@@ -14,6 +14,7 @@
     azimuthLocked: boolean
     azimuthAngle: number
     pointerLock: boolean
+    wheelZoom: boolean
     lookAtOffsetX: number
     lookAtOffsetY: number
     lookAtOffsetZ: number
@@ -37,6 +38,7 @@
       azimuthLocked: false,
       azimuthAngle: 0,
       pointerLock: true,
+      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 1,
       lookAtOffsetZ: 0,
@@ -47,15 +49,16 @@
     },
     'Top-Down': {
       smoothTime: 0.2,
-      minDistance: 14,
-      maxDistance: 14,
-      distance: 14,
+      minDistance: 9,
+      maxDistance: 9,
+      distance: 9,
       minPolarAngle: 0.01,
       maxPolarAngle: 0.01,
       polarAngle: 0.01,
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
+      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 0,
       lookAtOffsetZ: 0,
@@ -66,15 +69,16 @@
     },
     Sidescroller: {
       smoothTime: 0.25,
-      minDistance: 12,
-      maxDistance: 12,
-      distance: 12,
+      minDistance: 7,
+      maxDistance: 7,
+      distance: 7,
       minPolarAngle: HALF_PI,
       maxPolarAngle: HALF_PI,
       polarAngle: HALF_PI,
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
+      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 1,
       lookAtOffsetZ: 0,
@@ -94,6 +98,7 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
+      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 0.8,
       lookAtOffsetZ: 0,
@@ -104,15 +109,16 @@
     },
     Cinematic: {
       smoothTime: 0.6,
-      minDistance: 10,
-      maxDistance: 10,
-      distance: 10,
+      minDistance: 14,
+      maxDistance: 14,
+      distance: 14,
       minPolarAngle: 0.8,
       maxPolarAngle: 0.8,
       polarAngle: 0.8,
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
+      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 1.2,
       lookAtOffsetZ: 0,
@@ -141,6 +147,7 @@
   let azimuthLocked = $state(false)
   let azimuthAngle = $state(0)
   let pointerLock = $state(true)
+  let wheelZoom = $state(false)
   let lookAtOffsetX = $state(0)
   let lookAtOffsetY = $state(1)
   let lookAtOffsetZ = $state(0)
@@ -162,6 +169,7 @@
     azimuthLocked = p.azimuthLocked
     azimuthAngle = p.azimuthAngle
     pointerLock = p.pointerLock
+    wheelZoom = p.wheelZoom
     lookAtOffsetX = p.lookAtOffsetX
     lookAtOffsetY = p.lookAtOffsetY
     lookAtOffsetZ = p.lookAtOffsetZ
@@ -228,6 +236,10 @@
     <Checkbox
       label="pointer lock"
       bind:value={pointerLock}
+    />
+    <Checkbox
+      label="wheel zoom"
+      bind:value={wheelZoom}
     />
     <Checkbox
       label="collision"
@@ -312,6 +324,7 @@
       {azimuthLocked}
       {azimuthAngle}
       {pointerLock}
+      {wheelZoom}
       {lookAtOffsetX}
       {lookAtOffsetY}
       {lookAtOffsetZ}

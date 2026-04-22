@@ -34,6 +34,14 @@ export interface UseFollowOptions {
    */
   lookAhead?: number
   /**
+   * Smoothing time in seconds for the velocity that drives `lookAhead`.
+   * Prevents the look-ahead offset from snapping to full magnitude the
+   * instant a character starts or stops moving — it ramps in and out over
+   * this duration instead.
+   * @default 0.15
+   */
+  lookAheadSmoothTime?: number
+  /**
    * Smoothing time in seconds for the camera position's translation. The
    * camera's position lags the character's movement by this much, producing
    * a trailing / cinematic follow. Only the character-motion contribution
@@ -68,6 +76,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const targetWorld = new Vector3()
   const lastTargetWorld = new Vector3()
   const velocity = new Vector3()
+  const smoothedVelocity = new Vector3()
   const trackedTarget = new Vector3()
   const lookAtPoint = new Vector3()
   const tempDiff = new Vector3()
@@ -106,8 +115,12 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
 
       if (initialized && delta > 0) {
         velocity.subVectors(targetWorld, lastTargetWorld).divideScalar(delta)
+        const lookAheadSmoothTime = Math.max(0.001, options.lookAheadSmoothTime ?? 0.15)
+        const velT = 1 - Math.exp(-delta / lookAheadSmoothTime)
+        smoothedVelocity.lerp(velocity, velT)
       } else {
         velocity.set(0, 0, 0)
+        smoothedVelocity.set(0, 0, 0)
       }
       lastTargetWorld.copy(targetWorld)
 
@@ -160,8 +173,8 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
       }
 
       const lookAhead = options.lookAhead ?? 0
-      if (lookAhead !== 0 && velocity.lengthSq() > EPSILON) {
-        lookAtPoint.addScaledVector(velocity, lookAhead)
+      if (lookAhead !== 0 && smoothedVelocity.lengthSq() > EPSILON) {
+        lookAtPoint.addScaledVector(smoothedVelocity, lookAhead)
       }
 
       controls.moveTo(lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, false)

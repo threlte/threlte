@@ -23,6 +23,7 @@
     azimuthLocked: boolean
     azimuthAngle: number
     pointerLock: boolean
+    wheelZoom: boolean
     lookAtOffsetX: number
     lookAtOffsetY: number
     lookAtOffsetZ: number
@@ -45,6 +46,7 @@
     azimuthLocked,
     azimuthAngle,
     pointerLock,
+    wheelZoom,
     lookAtOffsetX,
     lookAtOffsetY,
     lookAtOffsetZ,
@@ -97,9 +99,10 @@
 
   $effect(() => {
     if (!controls) return
-    controls.mouseButtons.wheel = distanceLocked
-      ? CameraControlsRef.ACTION.NONE
-      : CameraControlsRef.ACTION.DOLLY
+    controls.mouseButtons.wheel =
+      wheelZoom && !distanceLocked
+        ? CameraControlsRef.ACTION.DOLLY
+        : CameraControlsRef.ACTION.NONE
   })
 
   $effect(() => {
