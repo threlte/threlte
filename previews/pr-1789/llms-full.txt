@@ -15389,6 +15389,20 @@ const follow = useFollow(() => ({
 }))
 ```
 
+The velocity that drives `lookAhead` is itself smoothed (default time
+constant `0.15` s) so the offset ramps in when the character starts moving
+and eases out when they stop, instead of snapping. Tune it with
+`lookAheadSmoothTime` — lower for a snappier response, higher for a softer
+ease.
+
+```ts
+const follow = useFollow(() => ({
+  controls,
+  lookAhead: 0.4,
+  lookAheadSmoothTime: 0.25
+}))
+```
+
 ## followSmoothTime
 
 Seconds of lag between the character's movement and the camera's position,
