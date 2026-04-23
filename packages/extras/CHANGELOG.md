@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.14.9
+
+### Patch Changes
+
+- 4a54cf7: Fix: interactivity hover now keys plain meshes by uuid, so sweeping across faces no longer spams pointerenter/pointerleave
+
 ## 9.14.8
 
 ### Patch Changes
