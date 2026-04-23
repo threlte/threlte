@@ -74,7 +74,6 @@ export interface ComponentData {
 
 async function main() {
   const packages = collectPackageNames(PACKAGES_DIR, IGNORED_PACKAGES)
-  console.log('Collected Packages:', packages)
 
   const packageComponents = packages.map((packageName) => {
     const components = collectComponents(packageName)
@@ -92,7 +91,7 @@ async function main() {
   const allComponents: Record<string, ComponentData> = {}
 
   for (const { packageName, components } of packageComponents) {
-    console.log('\nProcessing package:', packageName)
+    console.log('Processing package:', packageName)
 
     for (const componentPath of components) {
       const name = basename(componentPath, '.svelte')
@@ -211,19 +210,21 @@ function getDataFromSources(params: { name: string; path: string }) {
 }
 
 function updateTypeText(text: string) {
-  const regex = /import\(.+?\)\./g
-  let match
-  while ((match = regex.exec(text)) !== null) {
-    if (match[0].includes('constants')) {
-      text = text.replace(regex, 'THREE.')
-    } else if (match[0].includes('packages')) {
-      text = text.replace(regex, '')
-    } else {
-      text = text.replace(regex, '')
-    }
-  }
-  // easy edit for quirky quotes "'
-  text = text.replaceAll(/"/g, "'")
+  // TODO-DefinitelyMaybe: clean up
+  // console.log(text)
+  // const regex = /import\(.+?\)\./g
+  // let match
+  // while ((match = regex.exec(text)) !== null) {
+  //   if (match[0].includes('constants')) {
+  //     text = text.replace(regex, 'THREE.')
+  //   } else if (match[0].includes('packages')) {
+  //     text = text.replace(regex, '')
+  //   } else {
+  //     text = text.replace(regex, '')
+  //   }
+  // }
+  // // easy edit for quirky quotes "'
+  // text = text.replaceAll(/"/g, "'")
   return text
 }
 
@@ -326,13 +327,17 @@ function dataFromSvelteFile(params: { name: string; path: string }) {
   })
 
   const exports: ExportInfo[] = parsedComponent.props
-    .filter((value) => value.constant) // TODO-DefinitelyMaybe: check the assumption here
+    .filter((value) => value.constant)
     .map((value) => {
-      return {
+      let x = {
         name: value.name,
         type: value.type,
         description: value.description
       } as ExportInfo
+      if (x.type === '(...args: any[]) => any') {
+        x.type = '() => void'
+      }
+      return x
     })
 
   const ignoredProps = ['ref', 'is']
@@ -356,7 +361,7 @@ function dataFromSvelteFile(params: { name: string; path: string }) {
       if (value.description) {
         data.description = value.description
       }
-      if (value.value && value.value != 'undefined') {
+      if (value.value && value.value != 'undefined' && value.value != "''") {
         data.default = value.value
       }
       return data
