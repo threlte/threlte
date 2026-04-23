@@ -15286,11 +15286,13 @@ zones, and look-ahead.
 
 ```svelte
 <script lang="ts">
+  import { Group } from 'three'
   import { T } from '@threlte/core'
   import { CameraControls, useFollow, type CameraControlsRef } from '@threlte/extras'
 
-  let controls = $state<CameraControlsRef>()
-  let character = $state<Group>()
+  let controls = $state.raw<CameraControlsRef>()
+
+  let character = new Group()
 
   const follow = useFollow(() => ({
     controls,
@@ -15298,7 +15300,8 @@ zones, and look-ahead.
   }))
 
   $effect(() => {
-    if (character) follow.start(character)
+    follow.start(character)
+    return () => follow.stop()
   })
 </script>
 
@@ -15309,9 +15312,9 @@ zones, and look-ahead.
 
 <CameraControls bind:ref={controls} />
 
-<T.Group bind:ref={character}>
+<T is={group}>
   <!-- character mesh -->
-</T.Group>
+</T>
 ```
 
 ## Target
@@ -15525,7 +15528,7 @@ basis.
 
 ```svelte
 <script lang="ts">
-  import { Vector3, type Group } from 'three'
+  import { Vector3, Group } from 'three'
   import { T, useTask } from '@threlte/core'
   import {
     CameraControls,
@@ -15535,8 +15538,9 @@ basis.
     type CameraControlsRef
   } from '@threlte/extras'
 
-  let controls = $state<CameraControlsRef>()
-  let character = $state<Group>()
+  let controls = $state.raw<CameraControlsRef>()
+
+  let character = new Group()
 
   const keyboard = useKeyboard()
   const input = useInputMap(
@@ -15555,7 +15559,8 @@ basis.
   }))
 
   $effect(() => {
-    if (character) follow.start(character)
+    follow.start(character)
+    return () => follow.stop()
   })
 
   const worldMove = new Vector3()
@@ -15584,12 +15589,12 @@ basis.
   maxPolarAngle={1.5}
 />
 
-<T.Group bind:ref={character}>
+<T is={group}>
   <T.Mesh>
     <T.BoxGeometry />
     <T.MeshStandardMaterial color="orange" />
   </T.Mesh>
-</T.Group>
+</T>
 ```
 
 ### Top-down
@@ -15639,7 +15644,7 @@ concern.
 By default `<CameraControls>` uses click-and-drag to rotate. Flip
 `pointerLock` on the component to switch to mouse-look: one click locks the
 pointer, subsequent movement rotates the camera directly, and `Escape`
-releases the lock. The wheel continues to zoom.
+releases the lock.
 
 ```svelte
 <CameraControls
