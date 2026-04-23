@@ -1,5 +1,15 @@
 # @threlte/xr
 
+## 1.5.4
+
+### Patch Changes
+
+- eb55046: Fix pointer/teleport splice(-1) array corruption
+- eb55046: Fix stale originalRenderMode capture
+- eb55046: Fix stale event-map cleanup
+- eb55046: Fix stale joint reference
+- eb55046: Fix isHandTracking not initialized on session start
+
 ## 1.5.3
 
 ### Patch Changes
