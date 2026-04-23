@@ -15298,7 +15298,7 @@ zones, and look-ahead.
   }))
 
   $effect(() => {
-    if (character) follow.follow(character)
+    if (character) follow.start(character)
   })
 </script>
 
@@ -15316,23 +15316,23 @@ zones, and look-ahead.
 
 ## Target
 
-Call `follow.follow(target)` to start tracking. The target can be any of:
+Call `follow.start(target)` to start tracking. The target can be any of:
 
 - An `Object3D` directly
 - A ref-like object with a `current` property
 - A getter function that returns an `Object3D | null | undefined`
 
-`follow.follow` is also usable as an `oncreate` handler on a `<T>` component:
+`follow.start` is also usable as an `oncreate` handler on a `<T>` component:
 
 ```svelte
-<T.Group oncreate={follow.follow}>
+<T.Group oncreate={follow.start}>
   <!-- character mesh -->
 </T.Group>
 ```
 
-Call `follow.unfollow()` to stop.
+Call `follow.stop()` to stop.
 
-## Options Belong Where They Live
+## Options
 
 Because `useFollow` is a layer on `<CameraControls>`, **camera behavior is
 configured on the component, follow behavior on the hook.**
@@ -15343,8 +15343,8 @@ configured on the component, follow behavior on the hook.**
 | `minDistance` / `maxDistance` (zoom)  | `deadZone`             |
 | `minPolarAngle` / `maxPolarAngle`     | `lookAhead`            |
 | `minAzimuthAngle` / `maxAzimuthAngle` | `followSmoothTime`     |
-| `colliderMeshes` (collision)          | target via `follow()`  |
-| `pointerLock` (input mode)            |                        |
+| `colliderMeshes` (collision)          | `trackRotation`        |
+| `pointerLock` (input mode)            | target via `start()`   |
 
 Everything on the left is already documented on
 [`<CameraControls>`](/docs/reference/extras/camera-controls) — set it as a
@@ -15363,7 +15363,7 @@ const follow = useFollow(() => ({
 }))
 ```
 
-## Dead Zone
+## Dead zone
 
 The target may drift this far from the currently tracked position (in
 camera-space right/up axes) before the camera starts to follow. Any axis
@@ -15426,6 +15426,30 @@ const follow = useFollow(() => ({
 }))
 ```
 
+## trackRotation
+
+Drive the `CameraControls` azimuth from the target's Y-axis world rotation so
+the camera turns with the character — the same behaviour as Ecctrl's
+`FixedCamera` mode. User orbit input on the horizontal axis is effectively
+overridden while this is on; polar orbit and zoom still work.
+
+```ts
+const follow = useFollow(() => ({
+  controls,
+  trackRotation: true,
+  trackRotationSmoothTime: 0.25
+}))
+```
+
+`trackRotationSmoothTime` tunes how quickly the camera eases into the
+character's heading. `0` (the default) locks the azimuth to the target's
+yaw every frame; higher values ramp the rotation in, matching the feel of
+Ecctrl's `fixedCamRotMult` but expressed as a time-constant rather than a
+multiplier.
+
+Don't combine `trackRotation` with `minAzimuthAngle`/`maxAzimuthAngle`
+limits on `<CameraControls>` — the tracker will fight the limits each frame.
+
 ## getInputDirection
 
 A helper that projects a 2D input onto the camera's horizontal basis — call
@@ -15456,7 +15480,7 @@ useTask((delta) => {
 `useInputMap`'s `input.vector` returns `y = -1` when "forward" is pressed, so
 pass `-move.y` as the forward amount.
 
-## Reactive State
+## Reactive state
 
 The returned object exposes two reactive properties:
 
@@ -15469,7 +15493,7 @@ The returned object exposes two reactive properties:
 <p>{follow.following ? `Tracking (${follow.distance.toFixed(1)}m)` : 'Idle'}</p>
 ```
 
-## Task Ordering
+## Task ordering
 
 `useFollow` runs its update in a named task. For a character controller,
 schedule it **after** movement so the camera sees the final target position
@@ -15486,7 +15510,7 @@ useTask(
 )
 ```
 
-## Composition Patterns
+## Common patterns
 
 ### Third-person character
 
@@ -15531,7 +15555,7 @@ basis.
   }))
 
   $effect(() => {
-    if (character) follow.follow(character)
+    if (character) follow.start(character)
   })
 
   const worldMove = new Vector3()
