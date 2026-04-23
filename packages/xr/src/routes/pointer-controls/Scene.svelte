@@ -20,8 +20,7 @@
   const hovering = $state({ left: false, right: false, desktop: false })
   const happy = $derived(hovering.left || hovering.right || hovering.desktop)
 
-  const sourceOf = (event: { handedness?: 'left' | 'right' }) =>
-    event.handedness ?? 'desktop'
+  const sourceOf = (event: { handedness?: 'left' | 'right' }) => event.handedness ?? 'desktop'
 
   const mesh = new Mesh()
 
