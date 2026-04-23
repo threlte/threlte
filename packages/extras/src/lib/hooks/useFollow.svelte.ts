@@ -74,6 +74,14 @@ export interface UseFollowOptions {
    * @default 0
    */
   trackRotationSmoothTime?: number
+  /**
+   * Additional azimuth offset (radians) applied after rotation tracking.
+   * Set to `Math.PI` to sit the camera behind a character whose local `+Z`
+   * axis is its forward, or `0` for a character whose local `-Z` is
+   * forward.
+   * @default 0
+   */
+  trackRotationOffset?: number
 }
 
 const EPSILON = 1e-6
@@ -119,6 +127,8 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const smoothedLookAt = new Vector3()
   const targetQuat = new Quaternion()
   const trackEuler = new Euler(0, 0, 0, 'YXZ')
+  const targetForward = new Vector3()
+  const targetRight = new Vector3()
 
   const { task } = useTask(
     Symbol('useFollow'),
@@ -211,8 +221,9 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
       if (options.trackRotation) {
         obj.getWorldQuaternion(targetQuat)
         trackEuler.setFromQuaternion(targetQuat, 'YXZ')
+        const targetAzimuth = trackEuler.y + (options.trackRotationOffset ?? 0)
         const current = controls.azimuthAngle
-        let arc = trackEuler.y - current
+        let arc = targetAzimuth - current
         arc = Math.atan2(Math.sin(arc), Math.cos(arc))
         const rotSmooth = Math.max(0, options.trackRotationSmoothTime ?? 0)
         const rotT = rotSmooth <= EPSILON ? 1 : 1 - Math.exp(-delta / rotSmooth)
@@ -284,6 +295,20 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     return out.addScaledVector(inputRight, right).addScaledVector(inputForward, forward)
   }
 
+  const getTargetDirection = (right: number, forward: number, out: Vector3): Vector3 => {
+    out.set(0, 0, 0)
+    const target = resolveTarget(currentTarget)
+    if (!target) return out
+    targetRight.setFromMatrixColumn(target.matrixWorld, 0)
+    targetForward.setFromMatrixColumn(target.matrixWorld, 2)
+    targetRight.y = 0
+    targetForward.y = 0
+    if (targetForward.lengthSq() < EPSILON) return out
+    targetRight.normalize()
+    targetForward.normalize()
+    return out.addScaledVector(targetRight, right).addScaledVector(targetForward, forward)
+  }
+
   return {
     /** Internal task, exposed for ordering other tasks via `after`/`before`. */
     task,
@@ -301,6 +326,17 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
      * user has orbited the camera: `W` always means "away from camera".
      */
     getInputDirection,
+    /**
+     * Project a 2D input into a world-space direction aligned with the
+     * target's own horizontal basis — `forward` follows the target's local
+     * `+Z` axis, `right` follows its local `+X`. Writes to `out` and returns
+     * it.
+     *
+     * Use this instead of `getInputDirection` when `trackRotation` is on:
+     * camera-relative input combined with rotation tracking creates a
+     * feedback loop and the character will spin.
+     */
+    getTargetDirection,
     /** Whether a target is currently being followed. */
     get following() {
       return _following

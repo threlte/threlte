@@ -24,6 +24,7 @@
     followSmoothTime: number
     trackRotation: boolean
     trackRotationSmoothTime: number
+    trackRotationOffset: number
   }
 
   const HALF_PI = Math.PI / 2
@@ -49,7 +50,8 @@
       lookAhead: 0,
       followSmoothTime: 0.15,
       trackRotation: false,
-      trackRotationSmoothTime: 0
+      trackRotationSmoothTime: 0,
+      trackRotationOffset: 0
     },
     Fixed: {
       smoothTime: 0.2,
@@ -71,7 +73,8 @@
       lookAhead: 0,
       followSmoothTime: 0,
       trackRotation: true,
-      trackRotationSmoothTime: 0.25
+      trackRotationSmoothTime: 0.25,
+      trackRotationOffset: Math.PI
     },
     'Top-Down': {
       smoothTime: 0.2,
@@ -93,7 +96,8 @@
       lookAhead: 0,
       followSmoothTime: 0,
       trackRotation: false,
-      trackRotationSmoothTime: 0
+      trackRotationSmoothTime: 0,
+      trackRotationOffset: 0
     },
     Sidescroller: {
       smoothTime: 0.25,
@@ -115,7 +119,8 @@
       lookAhead: 0,
       followSmoothTime: 0.1,
       trackRotation: false,
-      trackRotationSmoothTime: 0
+      trackRotationSmoothTime: 0,
+      trackRotationOffset: 0
     },
     Racing: {
       smoothTime: 0.08,
@@ -137,7 +142,8 @@
       lookAhead: 0.4,
       followSmoothTime: 0.05,
       trackRotation: false,
-      trackRotationSmoothTime: 0
+      trackRotationSmoothTime: 0,
+      trackRotationOffset: 0
     },
     Cinematic: {
       smoothTime: 0.6,
@@ -159,7 +165,8 @@
       lookAhead: 0,
       followSmoothTime: 0.5,
       trackRotation: false,
-      trackRotationSmoothTime: 0
+      trackRotationSmoothTime: 0,
+      trackRotationOffset: 0
     }
   } satisfies Record<string, Preset>
 
@@ -191,6 +198,7 @@
   let followSmoothTime = $state(0.15)
   let trackRotation = $state(false)
   let trackRotationSmoothTime = $state(0)
+  let trackRotationOffset = $state(0)
   let collision = $state(true)
   let following = $state(true)
 
@@ -215,6 +223,7 @@
     followSmoothTime = p.followSmoothTime
     trackRotation = p.trackRotation
     trackRotationSmoothTime = p.trackRotationSmoothTime
+    trackRotationOffset = p.trackRotationOffset
   }
 
   $effect(() => {
@@ -349,6 +358,13 @@
       max={1}
       step={0.01}
     />
+    <Slider
+      label="trackRotationOffset"
+      bind:value={trackRotationOffset}
+      min={-Math.PI}
+      max={Math.PI}
+      step={0.01}
+    />
     <Checkbox
       label="following"
       bind:value={following}
@@ -383,6 +399,7 @@
       {followSmoothTime}
       {trackRotation}
       {trackRotationSmoothTime}
+      {trackRotationOffset}
       {collision}
       {following}
     />

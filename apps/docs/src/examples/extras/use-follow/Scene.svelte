@@ -33,6 +33,7 @@
     followSmoothTime: number
     trackRotation: boolean
     trackRotationSmoothTime: number
+    trackRotationOffset: number
     collision: boolean
     following: boolean
   }
@@ -58,6 +59,7 @@
     followSmoothTime,
     trackRotation,
     trackRotationSmoothTime,
+    trackRotationOffset,
     collision,
     following
   }: Props = $props()
@@ -89,7 +91,8 @@
     lookAhead,
     followSmoothTime,
     trackRotation,
-    trackRotationSmoothTime
+    trackRotationSmoothTime,
+    trackRotationOffset
   }))
 
   $effect(() => {
@@ -119,30 +122,39 @@
   const sprinting = $derived(input.action('sprint').pressed)
   const moveX = $derived(input.axis('moveLeft', 'moveRight'))
   const moveY = $derived(input.axis('moveForward', 'moveBack'))
-  const moving = $derived(moveX !== 0 || moveY !== 0)
-  const action = $derived<'idle' | 'run' | 'walk'>(moving ? (sprinting ? 'run' : 'walk') : 'idle')
+  const translating = $derived(trackRotation ? moveY !== 0 : moveX !== 0 || moveY !== 0)
+  const action = $derived<'idle' | 'run' | 'walk'>(
+    translating ? (sprinting ? 'run' : 'walk') : 'idle'
+  )
 
   const walkSpeed = 2
   const runSpeed = 4.5
   const rotationSpeed = 10
+  const turnSpeed = 2.5
   const worldMove = new Vector3()
   let targetRotation = 0
 
   useTask(
     (delta) => {
       if (!character) return
-
-      follow.getInputDirection(moveX, -moveY, worldMove)
       const speed = sprinting ? runSpeed : walkSpeed
-      character.position.addScaledVector(worldMove, speed * delta)
 
-      if (moving) {
-        targetRotation = Math.atan2(worldMove.x, worldMove.z)
+      if (trackRotation) {
+        rotation += moveX * turnSpeed * delta
+        follow.getTargetDirection(0, -moveY, worldMove)
+        character.position.addScaledVector(worldMove, speed * delta)
+      } else {
+        follow.getInputDirection(moveX, -moveY, worldMove)
+        character.position.addScaledVector(worldMove, speed * delta)
+
+        if (translating) {
+          targetRotation = Math.atan2(worldMove.x, worldMove.z)
+        }
+
+        let diff = targetRotation - rotation
+        diff = MathUtils.euclideanModulo(diff + Math.PI, Math.PI * 2) - Math.PI
+        rotation += diff * Math.min(1, rotationSpeed * delta)
       }
-
-      let diff = targetRotation - rotation
-      diff = MathUtils.euclideanModulo(diff + Math.PI, Math.PI * 2) - Math.PI
-      rotation += diff * Math.min(1, rotationSpeed * delta)
     },
     { after: input.task, before: follow.task }
   )
@@ -221,7 +233,9 @@
     >
       <div class="overlay">
         <p class="hint">
-          WASD to move · Shift to sprint{pointerLock ? ' · click to look' : ''}
+          {trackRotation ? 'W/S move · A/D turn' : 'WASD to move'} · Shift to sprint{pointerLock
+            ? ' · click to look'
+            : ''}
         </p>
         <div class="stats">
           <span>distance</span>
