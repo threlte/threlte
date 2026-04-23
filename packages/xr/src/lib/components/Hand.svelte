@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Group } from 'three'
-  import { T, useThrelte, useTask } from '@threlte/core'
+  import { T, useThrelte, useTask, useStage } from '@threlte/core'
   import type { XRHandEvents } from '../types.js'
   import { isHandTracking, handEvents } from '../internal/state.svelte.js'
   import { hands } from '../hooks/useHand.svelte.js'
@@ -45,12 +45,13 @@
     wrist
   }: Props = $props()
 
-  const { scene, renderer, scheduler, renderStage } = useThrelte()
+  const { scene, renderer, renderStage } = useThrelte()
 
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
 
   $effect.pre(() => {
-    handEvents[handedness] = {
+    const key = handedness
+    handEvents[key] = {
       onconnected,
       ondisconnected,
       onpinchend,
@@ -58,9 +59,11 @@
     }
 
     return () => {
-      handEvents[handedness] = undefined
+      handEvents[key] = undefined
     }
   })
+
+  const stage = useStage(Symbol('xr-hand-stage'), { before: renderStage })
 
   const group = new Group()
 
@@ -90,7 +93,7 @@
       group.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
     },
     {
-      stage: scheduler.createStage(Symbol('xr-hand-stage'), { before: renderStage }),
+      stage,
       running: () =>
         isHandTracking.current &&
         (wrist !== undefined || children !== undefined) &&

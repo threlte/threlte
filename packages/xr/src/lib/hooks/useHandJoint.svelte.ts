@@ -13,17 +13,20 @@ export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) =>
 
   let jointSpace = $state.raw<XRJointSpace>()
 
-  useTask(
-    () => {
-      const space = xrhand?.hand.joints[joint]
-      // The joint radius is a good indicator that the joint is ready
-      if (space?.jointRadius !== undefined) {
+  useTask(() => {
+    const space = xrhand?.hand.joints[joint]
+    // The joint radius is a good indicator that the joint is ready.
+    // Re-check each frame so we pick up reconnects and clear on disconnect.
+    if (space?.jointRadius !== undefined) {
+      if (jointSpace !== space) {
         jointSpace = space
         invalidate()
       }
-    },
-    { running: () => jointSpace === undefined }
-  )
+    } else if (jointSpace !== undefined) {
+      jointSpace = undefined
+      invalidate()
+    }
+  })
 
   return toCurrentReadable(() => jointSpace)
 }
