@@ -63,8 +63,4 @@ for (const comp of allComps) {
 
 output += 'Comparison complete.'
 
-console.log(output)
-writeFileSync(join(__dirname, 'comparison-output.txt'), output)
-
-console.log(output)
 writeFileSync(join(__dirname, 'comparison-output.txt'), output)
