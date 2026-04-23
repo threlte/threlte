@@ -1,4 +1,4 @@
-import { Object3D, Vector3, type Vector3Tuple } from 'three'
+import { Euler, Object3D, Quaternion, Vector3, type Vector3Tuple } from 'three'
 import { useTask, useThrelte } from '@threlte/core'
 import type CameraControls from 'camera-controls'
 
@@ -54,9 +54,36 @@ export interface UseFollowOptions {
    * @default 0
    */
   followSmoothTime?: number
+  /**
+   * When `true`, drive the camera's azimuth from the target's Y-axis world
+   * rotation each frame, so the camera turns with the character (Ecctrl's
+   * "FixedCamera" mode). User orbit input on the horizontal axis is
+   * effectively overridden while this is on; polar orbit and zoom still
+   * work.
+   *
+   * Don't pair with `minAzimuthAngle`/`maxAzimuthAngle` limits on
+   * `<CameraControls>` — the tracker will fight the limits.
+   * @default false
+   */
+  trackRotation?: boolean
+  /**
+   * Smoothing time in seconds for rotation tracking. `0` (the default)
+   * snaps the camera's azimuth to the target's yaw each frame (like
+   * Ecctrl's `fixedCamRotMult` at its ceiling). Higher values ease the
+   * camera into the character's facing direction.
+   * @default 0
+   */
+  trackRotationSmoothTime?: number
 }
 
 const EPSILON = 1e-6
+
+const resolveTarget = (raw: FollowTarget | null | undefined): Object3D | null => {
+  if (!raw) return null
+  if (raw instanceof Object3D) return raw
+  if (typeof raw === 'function') return raw() ?? null
+  return raw.current ?? null
+}
 
 export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const { invalidate, scheduler, mainStage, renderStage } = useThrelte()
@@ -69,9 +96,10 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   let _following = $state(false)
   let _distance = $state(0)
 
-  let target: FollowTarget | null = null
+  let currentTarget: FollowTarget | null = null
   let initialized = false
   let smoothingInitialized = false
+  let prevTarget: Object3D | null = null
 
   const targetWorld = new Vector3()
   const lastTargetWorld = new Vector3()
@@ -89,20 +117,21 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const smoothedTracked = new Vector3()
   const lag = new Vector3()
   const smoothedLookAt = new Vector3()
-
-  const resolveTarget = (): Object3D | null => {
-    if (target === null) return null
-    if (target instanceof Object3D) return target
-    if (typeof target === 'function') return target() ?? null
-    return target.current ?? null
-  }
+  const targetQuat = new Quaternion()
+  const trackEuler = new Euler(0, 0, 0, 'YXZ')
 
   const { task } = useTask(
     Symbol('useFollow'),
     (delta) => {
       const options = optionsFn?.() ?? {}
       const controls = options.controls
-      const obj = resolveTarget()
+      const obj = resolveTarget(currentTarget)
+
+      if (obj !== prevTarget) {
+        initialized = false
+        smoothingInitialized = false
+        prevTarget = obj
+      }
 
       if (!controls || obj === null) {
         if (_following) _following = false
@@ -178,6 +207,18 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
       }
 
       controls.moveTo(lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, false)
+
+      if (options.trackRotation) {
+        obj.getWorldQuaternion(targetQuat)
+        trackEuler.setFromQuaternion(targetQuat, 'YXZ')
+        const current = controls.azimuthAngle
+        let arc = trackEuler.y - current
+        arc = Math.atan2(Math.sin(arc), Math.cos(arc))
+        const rotSmooth = Math.max(0, options.trackRotationSmoothTime ?? 0)
+        const rotT = rotSmooth <= EPSILON ? 1 : 1 - Math.exp(-delta / rotSmooth)
+        controls.azimuthAngle = current + arc * rotT
+      }
+
       initialized = true
 
       controls.camera.getWorldPosition(cameraPos)
@@ -221,10 +262,13 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     { stage: postStage, autoInvalidate: false }
   )
 
-  const follow = (next: FollowTarget | null) => {
-    target = next
-    initialized = false
-    smoothingInitialized = false
+  const start = (target: FollowTarget) => {
+    currentTarget = target
+    invalidate()
+  }
+
+  const stop = () => {
+    currentTarget = null
     invalidate()
   }
 
@@ -243,14 +287,10 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   return {
     /** Internal task, exposed for ordering other tasks via `after`/`before`. */
     task,
-    /**
-     * Start following a target. Accepts an `Object3D`, a `{ current }` ref, a
-     * getter function, or `null` to stop. Usable directly as an `oncreate`
-     * handler: `<T.Group oncreate={follow.follow}>`.
-     */
-    follow,
-    /** Stop following. Equivalent to `follow(null)`. */
-    unfollow: () => follow(null),
+    /** Start following an `Object3D` (or `{ current }` ref, or getter). */
+    start,
+    /** Stop following the current target. */
+    stop,
     /**
      * Project a 2D input into a world-space direction aligned with the
      * camera's horizontal basis. `right` maps to the camera's right axis,

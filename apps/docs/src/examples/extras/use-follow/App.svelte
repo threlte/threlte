@@ -22,6 +22,8 @@
     deadZoneY: number
     lookAhead: number
     followSmoothTime: number
+    trackRotation: boolean
+    trackRotationSmoothTime: number
   }
 
   const HALF_PI = Math.PI / 2
@@ -45,7 +47,31 @@
       deadZoneX: 0,
       deadZoneY: 0,
       lookAhead: 0,
-      followSmoothTime: 0.15
+      followSmoothTime: 0.15,
+      trackRotation: false,
+      trackRotationSmoothTime: 0
+    },
+    Fixed: {
+      smoothTime: 0.2,
+      minDistance: 5,
+      maxDistance: 5,
+      distance: 5,
+      minPolarAngle: 0.4,
+      maxPolarAngle: 1.4,
+      polarAngle: 1.1,
+      azimuthLocked: false,
+      azimuthAngle: 0,
+      pointerLock: false,
+      wheelZoom: false,
+      lookAtOffsetX: 0,
+      lookAtOffsetY: 1,
+      lookAtOffsetZ: 0,
+      deadZoneX: 0,
+      deadZoneY: 0,
+      lookAhead: 0,
+      followSmoothTime: 0,
+      trackRotation: true,
+      trackRotationSmoothTime: 0.25
     },
     'Top-Down': {
       smoothTime: 0.2,
@@ -65,7 +91,9 @@
       deadZoneX: 0,
       deadZoneY: 0,
       lookAhead: 0,
-      followSmoothTime: 0
+      followSmoothTime: 0,
+      trackRotation: false,
+      trackRotationSmoothTime: 0
     },
     Sidescroller: {
       smoothTime: 0.25,
@@ -85,7 +113,9 @@
       deadZoneX: 1.5,
       deadZoneY: 0.5,
       lookAhead: 0,
-      followSmoothTime: 0.1
+      followSmoothTime: 0.1,
+      trackRotation: false,
+      trackRotationSmoothTime: 0
     },
     Racing: {
       smoothTime: 0.08,
@@ -105,7 +135,9 @@
       deadZoneX: 0,
       deadZoneY: 0,
       lookAhead: 0.4,
-      followSmoothTime: 0.05
+      followSmoothTime: 0.05,
+      trackRotation: false,
+      trackRotationSmoothTime: 0
     },
     Cinematic: {
       smoothTime: 0.6,
@@ -125,7 +157,9 @@
       deadZoneX: 0,
       deadZoneY: 0,
       lookAhead: 0,
-      followSmoothTime: 0.5
+      followSmoothTime: 0.5,
+      trackRotation: false,
+      trackRotationSmoothTime: 0
     }
   } satisfies Record<string, Preset>
 
@@ -155,6 +189,8 @@
   let deadZoneY = $state(0)
   let lookAhead = $state(0)
   let followSmoothTime = $state(0.15)
+  let trackRotation = $state(false)
+  let trackRotationSmoothTime = $state(0)
   let collision = $state(true)
   let following = $state(true)
 
@@ -177,6 +213,8 @@
     deadZoneY = p.deadZoneY
     lookAhead = p.lookAhead
     followSmoothTime = p.followSmoothTime
+    trackRotation = p.trackRotation
+    trackRotationSmoothTime = p.trackRotationSmoothTime
   }
 
   $effect(() => {
@@ -301,6 +339,17 @@
       step={0.01}
     />
     <Checkbox
+      label="trackRotation"
+      bind:value={trackRotation}
+    />
+    <Slider
+      label="trackRotationSmoothTime"
+      bind:value={trackRotationSmoothTime}
+      min={0}
+      max={1}
+      step={0.01}
+    />
+    <Checkbox
       label="following"
       bind:value={following}
     />
@@ -332,6 +381,8 @@
       {deadZoneY}
       {lookAhead}
       {followSmoothTime}
+      {trackRotation}
+      {trackRotationSmoothTime}
       {collision}
       {following}
     />

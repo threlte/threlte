@@ -31,6 +31,8 @@
     deadZoneY: number
     lookAhead: number
     followSmoothTime: number
+    trackRotation: boolean
+    trackRotationSmoothTime: number
     collision: boolean
     following: boolean
   }
@@ -54,6 +56,8 @@
     deadZoneY,
     lookAhead,
     followSmoothTime,
+    trackRotation,
+    trackRotationSmoothTime,
     collision,
     following
   }: Props = $props()
@@ -83,13 +87,14 @@
     lookAtOffset: [lookAtOffsetX, lookAtOffsetY, lookAtOffsetZ],
     deadZone: { x: deadZoneX, y: deadZoneY },
     lookAhead,
-    followSmoothTime
+    followSmoothTime,
+    trackRotation,
+    trackRotationSmoothTime
   }))
 
   $effect(() => {
-    if (!character) return
-    if (following) follow.follow(character)
-    else follow.unfollow()
+    if (following && character) follow.start(character)
+    else follow.stop()
   })
 
   const colliderMeshes = $derived(collision ? pillarMeshes.filter(Boolean) : [])
