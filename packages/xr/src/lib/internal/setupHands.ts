@@ -55,7 +55,10 @@ export const setupHands = (factory?: XRHandModelFactory) => {
 
     const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
       dispatch(event)
-      hands[event.data.handedness as 'left' | 'right'] = undefined
+      const { handedness } = event.data
+      if (handedness === 'left' || handedness === 'right') {
+        hands[handedness] = undefined
+      }
     }
 
     for (const handSpace of handSpaces) {

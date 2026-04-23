@@ -21,7 +21,7 @@ This should be placed within a Threlte `<Canvas />`.
   import type { EventListener, WebXRManager, Event as ThreeEvent } from 'three'
   import type { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
   import type { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
-  import type { Snippet } from 'svelte'
+  import { untrack, type Snippet } from 'svelte'
   import { useThrelte } from '@threlte/core'
   import {
     isHandTracking,
@@ -78,6 +78,9 @@ This should be placed within a Threlte `<Canvas />`.
 
     /** Called when available inputsources change */
     oninputsourceschange?: (event: XRSessionEvent) => void
+
+    /** Called when the session frame rate changes. */
+    onframeratechange?: (event: XRSessionEvent) => void
   }
 
   let {
@@ -88,6 +91,7 @@ This should be placed within a Threlte `<Canvas />`.
     onsessionend,
     onvisibilitychange,
     oninputsourceschange,
+    onframeratechange,
     fallback,
     children,
     handFactory,
@@ -96,8 +100,6 @@ This should be placed within a Threlte `<Canvas />`.
 
   const { renderer, renderMode } = useThrelte()
 
-  let originalRenderMode = $renderMode
-
   setupRaf()
   setupHeadset()
   setupControllers(controllerFactory)
@@ -105,12 +107,19 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart: EventListener<object, 'sessionstart', WebXRManager> = (event) => {
     isPresenting.current = true
+    const currentSession = renderer.xr.getSession()
+    if (currentSession !== null) {
+      isHandTracking.current = Array.from(currentSession.inputSources).some(
+        (source) => source.hand !== undefined
+      )
+    }
     onsessionstart?.(event)
   }
 
   const handleSessionEnd = (event: XRSessionEvent) => {
     onsessionend?.(event)
     isPresenting.current = false
+    isHandTracking.current = false
     session.current = undefined
   }
 
@@ -124,7 +133,7 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const handleFramerateChange = (event: XRSessionEvent) => {
-    onvisibilitychange?.(event)
+    onframeratechange?.(event)
   }
 
   $effect(() => {
@@ -148,11 +157,15 @@ This should be placed within a Threlte `<Canvas />`.
   })
 
   $effect.pre(() => {
-    if (isPresenting.current) {
-      originalRenderMode = renderMode.current
-      renderMode.set('always')
-    } else {
-      renderMode.set(originalRenderMode)
+    if (!isPresenting.current) return
+
+    // Capture the mode from before we forced 'always' so it survives
+    // any manual renderMode changes made during the session.
+    const saved = untrack(() => renderMode.current)
+    renderMode.set('always')
+
+    return () => {
+      renderMode.set(saved)
     }
   })
 
