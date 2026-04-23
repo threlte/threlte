@@ -15450,6 +15450,18 @@ yaw every frame; higher values ramp the rotation in, matching the feel of
 Ecctrl's `fixedCamRotMult` but expressed as a time-constant rather than a
 multiplier.
 
+`trackRotationOffset` shifts the azimuth after the target's yaw is applied.
+Use `Math.PI` to sit the camera behind a character whose local `+Z` axis is
+its forward (the common convention, e.g. when
+`character.rotation.y = Math.atan2(velocity.x, velocity.z)`). Use `0` for a
+character whose local `-Z` is forward.
+
+**Use `getTargetDirection`, not `getInputDirection`, with `trackRotation`.**
+Camera-relative input (`W = away from camera`) combined with rotation tracking
+forms a feedback loop — the character tries to face away from the camera,
+the camera follows the character, "away from camera" is now a new direction,
+and the character spins. See [getTargetDirection](#gettargetdirection).
+
 Don't combine `trackRotation` with `minAzimuthAngle`/`maxAzimuthAngle`
 limits on `<CameraControls>` — the tracker will fight the limits each frame.
 
@@ -15482,6 +15494,31 @@ useTask((delta) => {
 
 `useInputMap`'s `input.vector` returns `y = -1` when "forward" is pressed, so
 pass `-move.y` as the forward amount.
+
+## getTargetDirection
+
+The target-relative counterpart to `getInputDirection` — projects a 2D input
+onto the target's own horizontal basis (`forward` follows the target's local
+`+Z` axis, `right` follows its local `+X`). Use this for tank-style controls,
+or whenever `trackRotation` is on:
+
+```ts
+follow.getTargetDirection(right, forward, out)
+```
+
+With `trackRotation`, a typical tank input loop looks like:
+
+```ts
+useTask((delta) => {
+  // A/D directly rotate the character…
+  character.rotation.y += input.axis('moveLeft', 'moveRight') * turnSpeed * delta
+  // …W/S translate along the character's current forward.
+  follow.getTargetDirection(0, -input.axis('moveForward', 'moveBack'), worldMove)
+  character.position.addScaledVector(worldMove, speed * delta)
+})
+```
+
+No yaw feedback, because the input no longer depends on the camera.
 
 ## Reactive state
 
