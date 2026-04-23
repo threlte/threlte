@@ -43,6 +43,7 @@
     return effect
   })
 
+  /** Getter for the underlying AsciiEffect instance */
   export const getEffect = () => asciiEffect
 
   const sizeStore = fromStore(size)

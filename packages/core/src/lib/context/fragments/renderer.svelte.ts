@@ -59,7 +59,7 @@ export type CreateRendererContextOptions<T extends Renderer> = {
   colorManagementEnabled?: boolean
 
   /**
-   * @default 'srgb'
+   * @default "srgb"
    */
   colorSpace?: ColorSpace
 

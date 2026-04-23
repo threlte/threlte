@@ -84,7 +84,7 @@
     { stage, running: () => scheduleAligning }
   )
 
-  /** Manually trigger aligning */
+  /** Manually trigger an alignment. */
   export const align = () => (scheduleAligning = true)
 
   observe(

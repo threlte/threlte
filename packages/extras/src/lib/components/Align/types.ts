@@ -21,7 +21,7 @@ export type AlignProps = Props<Group, [{ align: () => void; ref: Group }]> & {
   z?: false | number
 
   /**
-   * @see https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject
+   * See [setFromObject](https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject)
    * @default false
    */
   precise?: boolean
@@ -32,31 +32,25 @@ export type AlignProps = Props<Group, [{ align: () => void; ref: Group }]> & {
    */
   auto?: boolean
 
-  onalign?: (event: AlignEventData) => void
+  /**
+   * Fires when the child objects have been aligned.
+   */
+  onalign?: (event: {
+    container: Object3D
+    width: number
+    height: number
+    depth: number
+    boundingBox: Box3
+    boundingSphere: Sphere
+    align: Vector3
+    verticalAlignment: number
+    horizontalAlignment: number
+    depthAlignment: number
+  }) => void
 
   /**
+   * Bring your own stage to control when aligning occurs. If not provided, aligning will occur before the main render stage.
    * @default useStage('<Align'>, { before: useThrelte().renderStage })
    */
   stage?: Stage
-}
-
-type AlignEventData = {
-  /** The outmost container group of the <Align> component */
-  container: Object3D
-  /** The width of the bounding box */
-  width: number
-  /** The height of the bounding box */
-  height: number
-  /** The depth of the bounding box */
-  depth: number
-  boundingBox: Box3
-  boundingSphere: Sphere
-  center: Vector3
-  verticalAlignment: number
-  horizontalAlignment: number
-  depthAlignment: number
-}
-
-export type AlignExports = {
-  align: () => void
 }
