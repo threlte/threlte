@@ -63,19 +63,19 @@ Call `follow.start(target)` to start tracking. The target can be any of:
 
 Call `follow.stop()` to stop.
 
-## Options Belong Where They Live
+## Options
 
 Because `useFollow` is a layer on `<CameraControls>`, **camera behavior is
 configured on the component, follow behavior on the hook.**
 
-| Belongs on `<CameraControls>`         | Belongs on `useFollow`      |
-| ------------------------------------- | --------------------------- |
-| `smoothTime` (orbit/zoom damping)     | `lookAtOffset`              |
-| `minDistance` / `maxDistance` (zoom)  | `deadZone`                  |
-| `minPolarAngle` / `maxPolarAngle`     | `lookAhead`                 |
-| `minAzimuthAngle` / `maxAzimuthAngle` | `followSmoothTime`          |
-| `colliderMeshes` (collision)          | `trackRotation`             |
-| `pointerLock` (input mode)            | target via `start()`        |
+| Belongs on `<CameraControls>`         | Belongs on `useFollow` |
+| ------------------------------------- | ---------------------- |
+| `smoothTime` (orbit/zoom damping)     | `lookAtOffset`         |
+| `minDistance` / `maxDistance` (zoom)  | `deadZone`             |
+| `minPolarAngle` / `maxPolarAngle`     | `lookAhead`            |
+| `minAzimuthAngle` / `maxAzimuthAngle` | `followSmoothTime`     |
+| `colliderMeshes` (collision)          | `trackRotation`        |
+| `pointerLock` (input mode)            | target via `start()`   |
 
 Everything on the left is already documented on
 [`<CameraControls>`](/docs/reference/extras/camera-controls) — set it as a
@@ -211,7 +211,7 @@ useTask((delta) => {
 `useInputMap`'s `input.vector` returns `y = -1` when "forward" is pressed, so
 pass `-move.y` as the forward amount.
 
-## Reactive State
+## Reactive state
 
 The returned object exposes two reactive properties:
 
@@ -224,7 +224,7 @@ The returned object exposes two reactive properties:
 <p>{follow.following ? `Tracking (${follow.distance.toFixed(1)}m)` : 'Idle'}</p>
 ```
 
-## Task Ordering
+## Task ordering
 
 `useFollow` runs its update in a named task. For a character controller,
 schedule it **after** movement so the camera sees the final target position
@@ -241,7 +241,7 @@ useTask(
 )
 ```
 
-## Composition Patterns
+## Common patterns
 
 ### Third-person character
 
