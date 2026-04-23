@@ -21,6 +21,7 @@
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@threlte/core": "workspace:*",
+    "@threlte/extras": "workspace:*",
     "@types/three": "catalog:",
     "@types/webxr": "catalog:",
     "autoprefixer": "^10.4.19",

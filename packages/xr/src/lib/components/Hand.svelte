@@ -117,7 +117,10 @@
   </T>
 
   {#if targetRay !== undefined}
-    <T is={xrHand.targetRay}>
+    <T
+      is={xrHand.targetRay}
+      attach={scene}
+    >
       {@render targetRay()}
     </T>
   {/if}

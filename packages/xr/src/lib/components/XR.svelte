@@ -128,7 +128,7 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const handleInputSourcesChange = (event: XRInputSourcesChangeEvent) => {
-    isHandTracking.current = Object.values(event.session.inputSources).some((source) => source.hand)
+    isHandTracking.current = Array.from(event.session.inputSources).some((source) => source.hand)
     oninputsourceschange?.(event)
   }
 

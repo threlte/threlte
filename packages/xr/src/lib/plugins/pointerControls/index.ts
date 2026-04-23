@@ -13,8 +13,6 @@ import {
 import type { FilterFunction, HandContext } from './types.js'
 import { pointerState } from '../../internal/state.svelte.js'
 
-let controlsCounter = 0
-
 export type PointerControlsOptions = {
   enabled?: boolean
   /**
@@ -78,8 +76,7 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
   observe.pre(
     () => [handContext.enabled],
     ([enabled]) => {
-      controlsCounter += enabled ? 1 : -1
-      pointerState[handedness].enabled = controlsCounter > 0
+      pointerState[handedness].enabled = enabled
     }
   )
 

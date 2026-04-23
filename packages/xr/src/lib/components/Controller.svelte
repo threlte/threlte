@@ -117,7 +117,10 @@
   {/if}
 
   {#if targetRay}
-    <T is={targetRay}>
+    <T
+      is={targetRay}
+      attach={scene}
+    >
       {@render targetRaySnippet?.()}
 
       {#if hasPointerControls || hasTeleportControls}

@@ -11,8 +11,6 @@ import { setHandContext } from './context.js'
 import { setupTeleportControls } from './setup.svelte.js'
 import { teleportState } from '../../internal/state.svelte.js'
 
-let controlsCounter = 0
-
 export interface TeleportControlsOptions {
   enabled?: boolean
 
@@ -44,8 +42,6 @@ export const teleportControls = (
   if (getHandContext(handedness) === undefined) {
     const enabled = options?.enabled ?? true
 
-    controlsCounter += enabled ? 1 : -1
-
     const ctx: HandContext = {
       hand: handedness,
       active: currentWritable(false),
@@ -63,8 +59,7 @@ export const teleportControls = (
   observe.pre(
     () => [handContext.enabled],
     ([enabled]) => {
-      controlsCounter += enabled ? 1 : -1
-      teleportState[handedness].enabled = controlsCounter > 0
+      teleportState[handedness].enabled = enabled
     }
   )
 

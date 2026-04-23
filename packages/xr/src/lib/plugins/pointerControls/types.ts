@@ -24,6 +24,8 @@ export interface IntersectionEvent extends Intersection {
   eventObject: Object3D
   /** An array of intersections */
   intersections: Intersection[]
+  /** Which hand dispatched this event. Each controller/hand fires enter/leave/etc. independently. */
+  handedness: 'left' | 'right'
   /** Normalized event coordinates */
   pointer: Vector3
   /** Delta between first click and this event */
@@ -91,5 +93,6 @@ export const events: (keyof ThrelteXREvents)[] = [
   'onpointerout',
   'onpointerenter',
   'onpointerleave',
-  'onpointermove'
+  'onpointermove',
+  'onpointermissed'
 ]
