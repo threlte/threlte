@@ -1,0 +1,1 @@
+import{t as r,x as s,s as n,i as e,a}from"./compute.Dae_e6_r.js";const i=()=>({isPresenting:r(()=>a.current),isHandTracking:r(()=>e.current),session:r(()=>n.current),xr:r(()=>s.current)});export{i as u};
