@@ -4,6 +4,7 @@ import type { Context, HandContext } from './context.js'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
+const origin = new Vector3()
 const forward = new Vector3()
 
 export const defaultComputeFunction = (context: Context, handContext: HandContext) => {
@@ -11,7 +12,13 @@ export const defaultComputeFunction = (context: Context, handContext: HandContex
 
   if (targetRay === undefined) return
 
-  forward.set(0, 0, -1).applyQuaternion(targetRay.quaternion)
+  // Use the world matrix so the ray matches the visibly-rendered controller
+  // even when <Controller> is nested in a parent transform (e.g. a dolly rig).
+  // Force-update because this runs before the frame's scene.updateMatrixWorld.
+  targetRay.updateWorldMatrix(true, false)
 
-  context.raycaster.set(targetRay.position, forward)
+  origin.setFromMatrixPosition(targetRay.matrixWorld)
+  forward.set(0, 0, -1).transformDirection(targetRay.matrixWorld)
+
+  context.raycaster.set(origin, forward)
 }

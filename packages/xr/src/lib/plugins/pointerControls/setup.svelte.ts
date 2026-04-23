@@ -34,6 +34,7 @@ export const setupPointerControls = (
   let hits: Intersection[] = []
 
   const lastPosition = new Vector3()
+  const currentPosition = new Vector3()
 
   const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
@@ -251,11 +252,15 @@ export const setupPointerControls = (
 
       if (targetRay === undefined) return
 
-      if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
+      // Use world position so motion is detected even when the controller
+      // is nested inside a moving parent (e.g. a dolly rig).
+      targetRay.getWorldPosition(currentPosition)
+
+      if (currentPosition.distanceTo(lastPosition) > EPSILON) {
         handleEvent('onpointermove')
       }
 
-      lastPosition.copy(targetRay.position)
+      lastPosition.copy(currentPosition)
     },
     {
       fixedStep,
