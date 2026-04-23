@@ -29,7 +29,7 @@
 
   const ref = new Group()
 
-  const SURFACE_OFFSET = 0.005
+  const SURFACE_OFFSET = 0.002
 
   useTask(
     () => {

@@ -20,10 +20,10 @@ export const toggleXRSession = async (
   if (force === 'enter' && hasSession) return currentSession
   if (force === 'exit' && !hasSession) return
 
-  // Exit a session if entered
+  // Exit a session if entered. `session.current` is cleared by XR.svelte's
+  // `handleSessionEnd` when the 'end' event fires — don't duplicate that here.
   if (hasSession) {
     await currentSession.end()
-    session.current = undefined
     return
   }
 

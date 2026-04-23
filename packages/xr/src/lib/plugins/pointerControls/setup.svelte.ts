@@ -15,8 +15,19 @@ import { isPresenting, pointerIntersection } from '../../internal/state.svelte.j
 
 type PointerEventName = (typeof events)[number]
 
+// Hover identity must match the dedup key used in `getHits`, otherwise the ID
+// changes mid-hover (e.g. the hit's face index changes as the ray sweeps a
+// plain mesh) and the object flickers between pointerout/pointerenter every
+// frame.
 const getIntersectionId = (intersection: Intersection) => {
-  return `${(intersection.eventObject || intersection.object).uuid}|${intersection.index}|${intersection.instanceId}`
+  const target = intersection.eventObject ?? intersection.object
+  if (intersection.instanceId !== undefined) {
+    return `${target.uuid}|${intersection.instanceId}`
+  }
+  if ((intersection.object as Points).isPoints) {
+    return `${target.uuid}|${intersection.index}`
+  }
+  return target.uuid
 }
 
 const EPSILON = 0.0001
@@ -34,7 +45,6 @@ export const setupPointerControls = (
   let hits: Intersection[] = []
 
   const lastPosition = new Vector3()
-  const currentPosition = new Vector3()
 
   const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
@@ -53,32 +63,21 @@ export const setupPointerControls = (
   }
 
   const handleClick = (event: Event) => {
-    // If a click yields no results, pass it back to the user as a miss
-    // Missed events have to come first in order to establish user-land side-effect clean up
-    if (hits.length === 0) {
-      pointerMissed(context.interactiveObjects, event)
-    }
-
     handleEvent('onclick', event)
   }
 
   function cancelPointer(intersections: Intersection[]) {
     if (handContext.hovered.size === 0) return
 
+    const currentIds = new Set<string>()
+    for (const hit of intersections) {
+      currentIds.add(getIntersectionId(hit))
+    }
+
     const toRemove: [string, IntersectionEvent][] = []
 
     for (const [id, hoveredObj] of handContext.hovered) {
-      // When no objects were hit or the hovered object wasn't found underneath the cursor
-      // we call pointerout and delete the object from the hovered elements map
-      if (
-        intersections.length === 0 ||
-        !intersections.some(
-          (hit) =>
-            hit.object === hoveredObj.object &&
-            hit.index === hoveredObj.index &&
-            hit.instanceId === hoveredObj.instanceId
-        )
-      ) {
+      if (!currentIds.has(id)) {
         toRemove.push([id, hoveredObj])
       }
     }
@@ -161,7 +160,17 @@ export const setupPointerControls = (
     const isPointerMove = name === 'onpointermove'
     const isClickEvent = name === 'onclick' || name === 'oncontextmenu'
 
-    // Take care of unhover
+    // Fire pointermissed for objects that were not under the pointer at pointerdown.
+    // Must come before the dispatch loop so user-land cleanup runs first.
+    if (isClickEvent) {
+      pointerMissed(
+        context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
+        event
+      )
+    }
+
+    // Update hover state before dispatch so that pointerout/pointerleave fire
+    // before pointerover/pointerenter on newly hit objects.
     if (isPointerMove) cancelPointer(hits)
 
     let stopped = false
@@ -176,6 +185,7 @@ export const setupPointerControls = (
         stopped,
         ...hit,
         intersections: hits,
+        handedness,
         stopPropagation() {
           stopped = true
           intersectionEvent.stopped = true
@@ -221,23 +231,11 @@ export const setupPointerControls = (
 
         // Call pointer move
         events.onpointermove?.(intersectionEvent)
-      } else if (
-        (!isClickEvent || handContext.initialHits.includes(hit.eventObject)) &&
-        events[name] !== undefined
-      ) {
-        // Missed events have to come first
-        pointerMissed(
-          context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
-          event
-        )
-
-        // Call the event
-        events[name]?.(intersectionEvent)
-      } else if (isClickEvent && handContext.initialHits.includes(hit.eventObject)) {
-        pointerMissed(
-          context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
-          event
-        )
+      } else if (events[name] !== undefined) {
+        // All other events
+        if (!isClickEvent || handContext.initialHits.includes(hit.eventObject)) {
+          events[name]?.(intersectionEvent)
+        }
       }
 
       if (stopped) break dispatchEvents
@@ -252,15 +250,11 @@ export const setupPointerControls = (
 
       if (targetRay === undefined) return
 
-      // Use world position so motion is detected even when the controller
-      // is nested inside a moving parent (e.g. a dolly rig).
-      targetRay.getWorldPosition(currentPosition)
-
-      if (currentPosition.distanceTo(lastPosition) > EPSILON) {
+      if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
         handleEvent('onpointermove')
       }
 
-      lastPosition.copy(currentPosition)
+      lastPosition.copy(targetRay.position)
     },
     {
       fixedStep,
@@ -271,23 +265,16 @@ export const setupPointerControls = (
   observe.pre(
     () => [controller, handContext.enabled],
     ([controller, $enabled]) => {
-      if (controller === undefined) return
+      if (controller === undefined || !$enabled) return
 
-      const removeHandlers = () => {
+      controller.targetRay.addEventListener('selectstart', handlePointerDown)
+      controller.targetRay.addEventListener('selectend', handlePointerUp)
+      controller.targetRay.addEventListener('select', handleClick)
+
+      return () => {
         controller.targetRay.removeEventListener('selectstart', handlePointerDown)
         controller.targetRay.removeEventListener('selectend', handlePointerUp)
         controller.targetRay.removeEventListener('select', handleClick)
-      }
-
-      if ($enabled) {
-        controller.targetRay.addEventListener('selectstart', handlePointerDown)
-        controller.targetRay.addEventListener('selectend', handlePointerUp)
-        controller.targetRay.addEventListener('select', handleClick)
-
-        return removeHandlers
-      } else {
-        removeHandlers()
-        return
       }
     }
   )
@@ -295,23 +282,16 @@ export const setupPointerControls = (
   observe.pre(
     () => [hand, handContext.enabled],
     ([input, enabled]) => {
-      if (input === undefined) return
+      if (input === undefined || !enabled) return
 
-      const removeHandlers = () => {
+      input.hand.addEventListener('pinchstart', handlePointerDown)
+      input.hand.addEventListener('pinchend', handlePointerUp)
+      input.hand.addEventListener('pinchend', handleClick)
+
+      return () => {
         input.hand.removeEventListener('pinchstart', handlePointerDown)
         input.hand.removeEventListener('pinchend', handlePointerUp)
         input.hand.removeEventListener('pinchend', handleClick)
-      }
-
-      if (enabled) {
-        input.hand.addEventListener('pinchstart', handlePointerDown)
-        input.hand.addEventListener('pinchend', handlePointerUp)
-        input.hand.addEventListener('pinchend', handleClick)
-
-        return removeHandlers
-      } else {
-        removeHandlers()
-        return
       }
     }
   )

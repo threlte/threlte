@@ -4,7 +4,6 @@ import type { Context, HandContext } from './context.js'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
-const origin = new Vector3()
 const forward = new Vector3()
 
 export const defaultComputeFunction = (context: Context, handContext: HandContext) => {
@@ -12,13 +11,11 @@ export const defaultComputeFunction = (context: Context, handContext: HandContex
 
   if (targetRay === undefined) return
 
-  // Use the world matrix so the ray matches the visibly-rendered controller
-  // even when <Controller> is nested in a parent transform (e.g. a dolly rig).
-  // Force-update because this runs before the frame's scene.updateMatrixWorld.
-  targetRay.updateWorldMatrix(true, false)
+  // `<Controller>` attaches targetRay to the scene root so local === world;
+  // we can read `.position`/`.quaternion` directly without a matrixWorld
+  // roundtrip (which would force-recompose the matrix three.js writes from
+  // the XR pose and introduce a drift against the visible render).
+  forward.set(0, 0, -1).applyQuaternion(targetRay.quaternion)
 
-  origin.setFromMatrixPosition(targetRay.matrixWorld)
-  forward.set(0, 0, -1).transformDirection(targetRay.matrixWorld)
-
-  context.raycaster.set(origin, forward)
+  context.raycaster.set(targetRay.position, forward)
 }
