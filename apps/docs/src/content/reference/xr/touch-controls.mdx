@@ -44,13 +44,13 @@ Call the plugin once per handedness:
 
 ## Options
 
-| Option        | Default             | Description                                                                 |
-| ------------- | ------------------- | --------------------------------------------------------------------------- |
-| `enabled`     | `true`              | Whether the plugin is active for this hand.                                 |
-| `joint`       | `'index-finger-tip'`| Which hand joint to track. Any [`HandJoints`](/docs/reference/xr/hand-joints) name. |
-| `hoverRadius` | `0.03` (3 cm)       | Distance at which an object starts receiving hover events.                  |
-| `downRadius`  | `0.01` (1 cm)       | Distance below which a hover transitions to `pointerdown`.                  |
-| `fixedStep`   | `1 / 40`            | Interval at which joint positions are polled and intersections are recomputed. |
+| Option        | Default              | Description                                                                         |
+| ------------- | -------------------- | ----------------------------------------------------------------------------------- |
+| `enabled`     | `true`               | Whether the plugin is active for this hand.                                         |
+| `joint`       | `'index-finger-tip'` | Which hand joint to track. Any [`HandJoints`](/docs/reference/xr/hand-joints) name. |
+| `hoverRadius` | `0.03` (3 cm)        | Distance at which an object starts receiving hover events.                          |
+| `downRadius`  | `0.01` (1 cm)        | Distance below which a hover transitions to `pointerdown`.                          |
+| `fixedStep`   | `1 / 40`             | Interval at which joint positions are polled and intersections are recomputed.      |
 
 ```svelte
 <script>

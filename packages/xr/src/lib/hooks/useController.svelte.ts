@@ -1,5 +1,8 @@
 import type { XRController } from '../types.js'
-import { getControllerState, type XRControllerSourceState } from '../internal/inputSources.svelte.js'
+import {
+  getControllerState,
+  type XRControllerSourceState
+} from '../internal/inputSources.svelte.js'
 import { runeToCurrentReadable, type CurrentReadable } from './currentReadable.svelte.js'
 
 const controllerObjects = new WeakMap<XRControllerSourceState, XRController>()

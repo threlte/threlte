@@ -6,12 +6,8 @@ import {
   type XRJointSpace,
   type XRTargetRaySpace
 } from 'three'
-import {
-  XRControllerModelFactory
-} from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
-import {
-  XRHandModelFactory
-} from 'three/examples/jsm/webxr/XRHandModelFactory.js'
+import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
+import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
 import { useTask, useThrelte } from '@threlte/core'
 import {
   createInputSourceEvent,
@@ -130,7 +126,11 @@ const updateSpacePose = (
   space.matrixWorldNeedsUpdate = true
   space.visible = true
 
-  if ('linearVelocity' in pose && pose.linearVelocity !== null && pose.linearVelocity !== undefined) {
+  if (
+    'linearVelocity' in pose &&
+    pose.linearVelocity !== null &&
+    pose.linearVelocity !== undefined
+  ) {
     ;(space as XRSpaceWithVelocity).hasLinearVelocity = true
     ;(space as XRSpaceWithVelocity).linearVelocity.copy(pose.linearVelocity)
   } else {
@@ -263,7 +263,10 @@ const updateXRInputSourceState = (
       updateXRHandState(state, frame, referenceSpace)
       break
     default:
-      updateSpacePose(state.targetRay, frame.getPose(state.inputSource.targetRaySpace, referenceSpace))
+      updateSpacePose(
+        state.targetRay,
+        frame.getPose(state.inputSource.targetRaySpace, referenceSpace)
+      )
       break
   }
 }
@@ -365,7 +368,9 @@ const createSyncXRInputSourceStates = (
       if (added == null) continue
 
       for (const inputSource of added) {
-        if (target.some((state) => state.isPrimary === isPrimary && state.inputSource === inputSource)) {
+        if (
+          target.some((state) => state.isPrimary === isPrimary && state.inputSource === inputSource)
+        ) {
           continue
         }
 
@@ -438,16 +443,14 @@ const createBindToSession = (
 
     session.addEventListener('inputsourceschange', onInputSourcesChange)
 
-    inputSources.current = syncXRInputSourceStates(session, [], [
-      { isPrimary: true, added: session.inputSources }
-    ])
+    inputSources.current = syncXRInputSourceStates(
+      session,
+      [],
+      [{ isPrimary: true, added: session.inputSources }]
+    )
 
     cleanupSession = () => {
-      inputSources.current = syncXRInputSourceStates(
-        session,
-        inputSources.current,
-        'remove-all'
-      )
+      inputSources.current = syncXRInputSourceStates(session, inputSources.current, 'remove-all')
       session.removeEventListener('inputsourceschange', onInputSourcesChange)
     }
   }

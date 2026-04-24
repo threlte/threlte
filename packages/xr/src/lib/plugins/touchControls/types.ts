@@ -1,10 +1,4 @@
-import type {
-  Intersection as ThreeIntersection,
-  Object3D,
-  Vector3,
-  Ray,
-  Event
-} from 'three'
+import type { Intersection as ThreeIntersection, Object3D, Vector3, Ray, Event } from 'three'
 import type { CurrentWritable } from '@threlte/core'
 import type { ComputeFunction } from './compute.js'
 import type { HandJoints } from '../../lib/handJoints.js'

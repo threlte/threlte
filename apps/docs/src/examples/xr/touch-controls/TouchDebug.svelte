@@ -14,11 +14,7 @@ can see exactly when each threshold is crossed while tuning radii.
     downRadius?: number
   }
 
-  const {
-    joint = 'index-finger-tip',
-    hoverRadius = 0.03,
-    downRadius = 0.01
-  }: Props = $props()
+  const { joint = 'index-finger-tip', hoverRadius = 0.03, downRadius = 0.01 }: Props = $props()
 
   const leftHand = useHand('left')
   const rightHand = useHand('right')
@@ -51,11 +47,7 @@ can see exactly when each threshold is crossed while tuning radii.
 
   const origin = new Vector3()
 
-  const update = (
-    hand: ReturnType<typeof useHand>,
-    hoverMesh: Mesh,
-    downMesh: Mesh
-  ) => {
+  const update = (hand: ReturnType<typeof useHand>, hoverMesh: Mesh, downMesh: Mesh) => {
     const space = hand.current?.hand.joints[joint]
     if (space === undefined || space.jointRadius === undefined) {
       hoverMesh.visible = false

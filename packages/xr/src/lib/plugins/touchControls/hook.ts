@@ -6,9 +6,7 @@ export const useTouchControls = () => {
   const { dispatchers } = getInternalContext()
 
   if (!context) {
-    throw new Error(
-      'No touch controls context found. Did you forget to implement touchControls()?'
-    )
+    throw new Error('No touch controls context found. Did you forget to implement touchControls()?')
   }
 
   const addInteractiveObject = (
