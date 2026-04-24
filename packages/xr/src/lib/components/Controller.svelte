@@ -4,13 +4,8 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
   import { controllers } from '../hooks/useController.svelte.js'
-  import {
-    isHandTracking,
-    pointerState,
-    teleportState,
-    controllerEvents
-  } from '../internal/state.svelte.js'
-  import { useXROrigin } from '../hooks/useXROrigin.js'
+  import { pointerState, teleportState, controllerEvents } from '../internal/state.svelte.js'
+  import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
   import type { XRControllerEvents } from '../types.js'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -72,8 +67,7 @@
   }: Props = $props()
 
   const { scene } = useThrelte()
-  const origin = useXROrigin()
-  const attachTarget = origin ?? scene
+  const attachTarget = $derived(xrOrigin.current ?? scene)
 
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
 
@@ -104,37 +98,35 @@
   const hasTeleportControls = $derived(teleportState[handedness].enabled)
 </script>
 
-{#if !isHandTracking.current}
-  {#if grip}
-    <T
-      is={grip}
-      attach={attachTarget}
-    >
-      {#if children}
-        {@render children?.()}
-      {:else}
-        <T is={model} />
-      {/if}
+{#if grip}
+  <T
+    is={grip}
+    attach={attachTarget}
+  >
+    {#if children}
+      {@render children?.()}
+    {:else}
+      <T is={model} />
+    {/if}
 
-      {@render gripSnippet?.()}
-    </T>
-  {/if}
+    {@render gripSnippet?.()}
+  </T>
+{/if}
 
-  {#if targetRay}
-    <T
-      is={targetRay}
-      attach={attachTarget}
-    >
-      {@render targetRaySnippet?.()}
+{#if targetRay}
+  <T
+    is={targetRay}
+    attach={attachTarget}
+  >
+    {@render targetRaySnippet?.()}
 
-      {#if hasPointerControls || hasTeleportControls}
-        <ShortRay
-          {handedness}
-          children={pointerRaySnippet}
-        />
-      {/if}
-    </T>
-  {/if}
+    {#if hasPointerControls || hasTeleportControls}
+      <ShortRay
+        {handedness}
+        children={pointerRaySnippet}
+      />
+    {/if}
+  </T>
 {/if}
 
 {#if hasPointerControls}

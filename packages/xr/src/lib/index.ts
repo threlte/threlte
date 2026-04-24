@@ -25,7 +25,7 @@ export { useHeadset } from './hooks/useHeadset.js'
 export { useHitTest } from './hooks/useHitTest.svelte.js'
 export { useTeleport } from './hooks/useTeleport.js'
 export { useXR } from './hooks/useXR.js'
-export { useXROrigin } from './hooks/useXROrigin.js'
+export { useXROrigin } from './hooks/useXROrigin.svelte.js'
 
 // Types
 export type {

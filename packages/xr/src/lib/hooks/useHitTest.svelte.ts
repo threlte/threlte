@@ -1,6 +1,7 @@
 import { Matrix4 } from 'three'
 import { useThrelte, useTask } from '@threlte/core'
 import { controllers } from './useController.svelte.js'
+import { xrOrigin } from './useXROrigin.svelte.js'
 import { isPresenting, session } from '../internal/state.svelte.js'
 
 export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
@@ -108,6 +109,13 @@ export const useHitTest = (
       }
 
       hitMatrix.fromArray(pose.transform.matrix)
+
+      const origin = xrOrigin.current
+      if (origin !== undefined) {
+        origin.updateWorldMatrix(true, false)
+        hitMatrix.premultiply(origin.matrixWorld)
+      }
+
       hitTestCallback(hitMatrix, hit)
     },
     { running: () => isPresenting.current && hitTestSource !== undefined }

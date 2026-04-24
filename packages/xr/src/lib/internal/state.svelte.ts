@@ -27,6 +27,11 @@ class XR {
   current = $state.raw<WebXRManager>()
 }
 
+class LastSessionRequest {
+  mode = $state.raw<XRSessionMode>()
+  sessionInit = $state.raw<XRSessionInit & { domOverlay?: { root: HTMLElement } }>()
+}
+
 class PointerState {
   enabled = $state(false)
   hovering = $state(false)
@@ -42,6 +47,7 @@ export const isHandTracking = new IsHandTracking()
 export const session = new Session()
 export const referenceSpaceType = new ReferenceSpaceType()
 export const xr = new XR()
+export const lastSessionRequest = new LastSessionRequest()
 export const controllerEvents: ControllerEvents = {
   left: new Set(),
   right: new Set(),

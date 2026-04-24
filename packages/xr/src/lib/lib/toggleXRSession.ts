@@ -1,4 +1,9 @@
-import { session, referenceSpaceType, xr } from '../internal/state.svelte.js'
+import {
+  lastSessionRequest,
+  referenceSpaceType,
+  session,
+  xr
+} from '../internal/state.svelte.js'
 import { getXRSessionOptions } from './getXRSessionOptions.js'
 
 let pending: Promise<XRSession | undefined> | undefined
@@ -43,7 +48,8 @@ const run = async (
     return
   }
 
-  if (xr.current === undefined) {
+  const manager = xr.current
+  if (manager === undefined) {
     throw new Error('An <XR> component was not created when attempting to toggle a session.')
   }
 
@@ -51,8 +57,10 @@ const run = async (
   const options = getXRSessionOptions(referenceSpaceType.current, sessionInit)
   const nextSession = await navigator.xr!.requestSession(sessionMode, options)
 
-  await xr.current.setSession(nextSession)
+  await manager.setSession(nextSession)
 
+  lastSessionRequest.mode = sessionMode
+  lastSessionRequest.sessionInit = sessionInit
   session.current = nextSession
   return nextSession
 }

@@ -21,7 +21,7 @@ scene root (existing behaviour, unchanged).
   import { Group } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import type { Snippet } from 'svelte'
-  import { setXROriginContext } from '../hooks/useXROrigin.js'
+  import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
   import { isPresenting } from '../internal/state.svelte.js'
 
   interface Props {
@@ -37,7 +37,12 @@ scene root (existing behaviour, unchanged).
   const group = new Group()
   ref = group
 
-  setXROriginContext(group)
+  $effect(() => {
+    xrOrigin.current = group
+    return () => {
+      xrOrigin.current = undefined
+    }
+  })
 
   // Parent the XR camera to this group so its matrixWorld reflects our
   // transform. When this component unmounts (or the session ends), return the

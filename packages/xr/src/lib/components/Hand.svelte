@@ -4,7 +4,7 @@
   import type { XRHandEvents } from '../types.js'
   import { handEvents } from '../internal/state.svelte.js'
   import { hands } from '../hooks/useHand.svelte.js'
-  import { useXROrigin } from '../hooks/useXROrigin.js'
+  import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
   import type { Snippet } from 'svelte'
 
   type Props = {
@@ -47,8 +47,7 @@
   }: Props = $props()
 
   const { scene, renderer, renderStage } = useThrelte()
-  const origin = useXROrigin()
-  const attachTarget = origin ?? scene
+  const attachTarget = $derived(xrOrigin.current ?? scene)
 
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
 
@@ -66,6 +65,10 @@
       handEvents[handedness].delete(events)
     }
   })
+
+  const xrHand = $derived(hands[handedness])
+  const inputSource = $derived(xrHand?.inputSource)
+  const model = $derived(xrHand?.model)
 
   const stage = useStage(Symbol('xr-hand-stage'), { before: renderStage })
 
@@ -98,14 +101,9 @@
     },
     {
       stage,
-      running: () =>
-        inputSource !== undefined && (wrist !== undefined || children !== undefined)
+      running: () => inputSource !== undefined && (wrist !== undefined || children !== undefined)
     }
   )
-
-  const xrHand = $derived(hands[handedness])
-  const inputSource = $derived(xrHand?.inputSource)
-  const model = $derived(xrHand?.model)
 </script>
 
 {#if xrHand?.hand}
