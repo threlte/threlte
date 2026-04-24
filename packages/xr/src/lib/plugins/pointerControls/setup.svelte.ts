@@ -8,7 +8,7 @@ import type {
   events
 } from './types.js'
 import { getInternalContext } from './context.js'
-import { controllers } from '../../hooks/useController.svelte.js'
+import { useController } from '../../hooks/useController.svelte.js'
 import { useHand } from '../../hooks/useHand.svelte.js'
 import { useFixed } from '../../internal/useFixed.js'
 import { isPresenting, pointerIntersection } from '../../internal/state.svelte.js'
@@ -44,7 +44,8 @@ export const setupPointerControls = (
 ) => {
   const handedness = handContext.hand
   const pointerId = nextPointerId++
-  const controller = $derived(controllers[handedness])
+  const controllerStore = useController(handedness)
+  const controller = $derived(controllerStore.current)
   const hand = useHand(handedness)
   const { dispatchers } = getInternalContext()
 

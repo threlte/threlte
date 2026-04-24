@@ -1,9 +1,4 @@
-import {
-  lastSessionRequest,
-  referenceSpaceType,
-  session,
-  xr
-} from '../internal/state.svelte.js'
+import { lastSessionRequest, referenceSpaceType, session, xr } from '../internal/state.svelte.js'
 import { getXRSessionOptions } from './getXRSessionOptions.js'
 
 let pending: Promise<XRSession | undefined> | undefined

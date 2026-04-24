@@ -45,12 +45,22 @@ This should be placed within a Threlte `<Canvas />`.
   } from '../internal/state.svelte.js'
   import { setupRaf } from '../internal/setupRaf.svelte.js'
   import { setupHeadset } from '../internal/setupHeadset.svelte.js'
-  import { setupControllers } from '../internal/setupControllers.js'
-  import { setupHands } from '../internal/setupHands.js'
+  import { setupInputSources } from '../internal/setupInputSources.js'
+  import {
+    dispatchEvent as dispatchSubscriberEvent,
+    getInputSourceState
+  } from '../internal/inputSources.svelte.js'
   import { defaultFeatures } from '../internal/defaultFeatures.js'
-  import { controllers } from '../hooks/useController.svelte.js'
-  import { hands } from '../hooks/useHand.svelte.js'
   import { toggleXRSession } from '../lib/toggleXRSession.js'
+
+  const INPUT_SOURCE_EVENTS = [
+    'select',
+    'selectstart',
+    'selectend',
+    'squeeze',
+    'squeezestart',
+    'squeezeend'
+  ] as const
 
   interface Props {
     /**
@@ -138,8 +148,7 @@ This should be placed within a Threlte `<Canvas />`.
 
   setupRaf()
   setupHeadset()
-  setupControllers(controllerFactory)
-  setupHands(handFactory)
+  const bindInputSources = setupInputSources(controllerFactory, handFactory)
 
   const handleSessionStart: EventListener<object, 'sessionstart', WebXRManager> = (event) => {
     isPresenting.current = true
@@ -150,11 +159,6 @@ This should be placed within a Threlte `<Canvas />`.
     onsessionend?.(event)
     isPresenting.current = false
     session.current = undefined
-    controllers.left = undefined
-    controllers.right = undefined
-    controllers.none = undefined
-    hands.left = undefined
-    hands.right = undefined
     pointerIntersection.left = undefined
     pointerIntersection.right = undefined
     teleportIntersection.left = undefined
@@ -173,23 +177,58 @@ This should be placed within a Threlte `<Canvas />`.
     onframeratechange?.(event)
   }
 
+  const handleXRInputEvent = (event: XRInputSourceEvent) => {
+    const state = getInputSourceState(event.inputSource)
+    if (state === undefined) return
+
+    const inputEvent = {
+      type: event.type,
+      data: event.inputSource,
+      inputSource: event.inputSource,
+      frame: event.frame,
+      target: state.type === 'hand' ? state.hand : state.targetRay
+    }
+
+    state.targetRay.dispatchEvent(inputEvent as any)
+
+    if (state.type === 'controller') {
+      state.grip.dispatchEvent(inputEvent as any)
+    }
+
+    if (state.type === 'hand') {
+      state.hand.dispatchEvent(inputEvent as any)
+    }
+
+    dispatchSubscriberEvent(state, event.type, inputEvent)
+  }
+
   $effect(() => {
     const currentSession = session.current
 
     if (currentSession === undefined) {
+      bindInputSources(undefined)
       return
     }
+
+    bindInputSources(currentSession)
 
     currentSession.addEventListener('visibilitychange', handleVisibilityChange)
     currentSession.addEventListener('inputsourceschange', handleInputSourcesChange)
     currentSession.addEventListener('frameratechange', handleFramerateChange)
     currentSession.addEventListener('end', handleSessionEnd)
+    for (const type of INPUT_SOURCE_EVENTS) {
+      currentSession.addEventListener(type, handleXRInputEvent)
+    }
 
     return () => {
       currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
       currentSession.removeEventListener('inputsourceschange', handleInputSourcesChange)
       currentSession.removeEventListener('frameratechange', handleFramerateChange)
       currentSession.removeEventListener('end', handleSessionEnd)
+      for (const type of INPUT_SOURCE_EVENTS) {
+        currentSession.removeEventListener(type, handleXRInputEvent)
+      }
+      bindInputSources(undefined)
     }
   })
 

@@ -1,6 +1,6 @@
 import { Matrix4 } from 'three'
 import { useThrelte, useTask } from '@threlte/core'
-import { controllers } from './useController.svelte.js'
+import { useController } from './useController.svelte.js'
 import { xrOrigin } from './useXROrigin.svelte.js'
 import { isPresenting, session } from '../internal/state.svelte.js'
 
@@ -64,10 +64,10 @@ export const useHitTest = (
       }
     })
   } else {
-    const controller = $derived(controllers[source === 'leftInput' ? 'left' : 'right'])
+    const controller = useController(source === 'leftInput' ? 'left' : 'right')
     $effect.pre(() => {
       const currentSession = session.current
-      const space = controller?.inputSource.targetRaySpace
+      const space = controller.current?.inputSource.targetRaySpace
       if (currentSession === undefined || space === undefined) return
 
       let cancelled = false

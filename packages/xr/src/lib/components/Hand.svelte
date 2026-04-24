@@ -2,8 +2,8 @@
   import { Group } from 'three'
   import { T, useThrelte, useTask, useStage } from '@threlte/core'
   import type { XRHandEvents } from '../types.js'
-  import { handEvents } from '../internal/state.svelte.js'
-  import { hands } from '../hooks/useHand.svelte.js'
+  import { addSubscriber } from '../internal/inputSources.svelte.js'
+  import { useHand } from '../hooks/useHand.svelte.js'
   import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
   import type { Snippet } from 'svelte'
 
@@ -48,25 +48,18 @@
 
   const { scene, renderer, renderStage } = useThrelte()
   const attachTarget = $derived(xrOrigin.current ?? scene)
-
-  const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
+  const handedness: 'left' | 'right' = left ? 'left' : right ? 'right' : (hand ?? 'left')
+  const handStore = useHand(handedness)
 
   $effect.pre(() => {
-    const events: XRHandEvents = {
-      onconnected,
-      ondisconnected,
-      onpinchend,
-      onpinchstart
-    }
-
-    handEvents[handedness].add(events)
-
-    return () => {
-      handEvents[handedness].delete(events)
-    }
+    return addSubscriber({
+      type: 'hand',
+      handedness,
+      callbacks: { onconnected, ondisconnected, onpinchend, onpinchstart }
+    })
   })
 
-  const xrHand = $derived(hands[handedness])
+  const xrHand = $derived($handStore)
   const inputSource = $derived(xrHand?.inputSource)
   const model = $derived(xrHand?.model)
 

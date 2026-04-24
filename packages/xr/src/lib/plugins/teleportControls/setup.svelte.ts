@@ -1,6 +1,6 @@
 import { observe } from '@threlte/core'
 import type { Context, HandContext } from './context.js'
-import { controllers } from '../../hooks/useController.svelte.js'
+import { useController } from '../../hooks/useController.svelte.js'
 import { useTeleport } from '../../hooks/useTeleport.js'
 import { useFixed } from '../../internal/useFixed.js'
 import { isPresenting, teleportIntersection } from '../../internal/state.svelte.js'
@@ -11,7 +11,8 @@ export const setupTeleportControls = (
   fixedStep = 1 / 40
 ) => {
   const handedness = handContext.hand
-  const controller = $derived(controllers[handedness])
+  const controllerStore = useController(handedness)
+  const controller = $derived(controllerStore.current)
   const teleport = useTeleport()
 
   const handleHoverEnd = () => {

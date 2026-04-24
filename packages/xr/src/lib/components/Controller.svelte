@@ -3,8 +3,9 @@
 -->
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { controllers } from '../hooks/useController.svelte.js'
-  import { pointerState, teleportState, controllerEvents } from '../internal/state.svelte.js'
+  import { useController } from '../hooks/useController.svelte.js'
+  import { pointerState, teleportState } from '../internal/state.svelte.js'
+  import { addSubscriber } from '../internal/inputSources.svelte.js'
   import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
   import type { XRControllerEvents } from '../types.js'
   import PointerCursor from './internal/PointerCursor.svelte'
@@ -68,34 +69,35 @@
 
   const { scene } = useThrelte()
   const attachTarget = $derived(xrOrigin.current ?? scene)
-
-  const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
+  const handedness: 'left' | 'right' = left ? 'left' : right ? 'right' : (hand ?? 'left')
+  const controller = useController(handedness)
 
   $effect.pre(() => {
-    const events: XRControllerEvents = {
-      onconnected,
-      ondisconnected,
-      onselect,
-      onselectend,
-      onselectstart,
-      onsqueeze,
-      onsqueezeend,
-      onsqueezestart
-    }
-
-    controllerEvents[handedness].add(events)
-
-    return () => {
-      controllerEvents[handedness].delete(events)
-    }
+    return addSubscriber({
+      type: 'controller',
+      handedness,
+      callbacks: {
+        onconnected,
+        ondisconnected,
+        onselect,
+        onselectend,
+        onselectstart,
+        onsqueeze,
+        onsqueezeend,
+        onsqueezestart
+      }
+    })
   })
 
-  const xrController = $derived(controllers[handedness])
-  const grip = $derived(xrController?.grip)
-  const targetRay = $derived(xrController?.targetRay)
-  const model = $derived(xrController?.model)
-  const hasPointerControls = $derived(pointerState[handedness].enabled)
-  const hasTeleportControls = $derived(teleportState[handedness].enabled)
+  const grip = $derived($controller?.grip)
+  const targetRay = $derived($controller?.targetRay)
+  const model = $derived($controller?.model)
+  const hasPointerControls = $derived.by(() =>
+    handedness === 'left' ? pointerState.left.enabled : pointerState.right.enabled
+  )
+  const hasTeleportControls = $derived.by(() =>
+    handedness === 'left' ? teleportState.left.enabled : teleportState.right.enabled
+  )
 </script>
 
 {#if grip}
