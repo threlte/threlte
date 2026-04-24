@@ -3,6 +3,7 @@ import { useThrelte, useTask } from '@threlte/core'
 import { useController } from './useController.svelte.js'
 import { xrOrigin } from './useXROrigin.svelte.js'
 import { isPresenting, session } from '../internal/state.svelte.js'
+import { fromStore } from 'svelte/store'
 
 export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
 
@@ -64,7 +65,8 @@ export const useHitTest = (
       }
     })
   } else {
-    const controller = useController(source === 'leftInput' ? 'left' : 'right')
+    const controller = fromStore(useController(source === 'leftInput' ? 'left' : 'right'))
+
     $effect.pre(() => {
       const currentSession = session.current
       const space = controller.current?.inputSource.targetRaySpace
