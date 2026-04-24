@@ -274,7 +274,7 @@ This should be placed within a Threlte `<Canvas />`.
       }
 
       for (const mode of allowed) {
-        if (await navigator.xr!.isSessionSupported(mode).catch(() => false)) {
+        if (await navigator.xr?.isSessionSupported(mode).catch(() => false)) {
           toggleXRSession(mode, { ...defaultFeatures }, 'enter').catch(() => {})
           return
         }

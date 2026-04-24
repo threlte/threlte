@@ -65,6 +65,7 @@
   <InstancedMesh
     limit={STARS_COUNT}
     range={STARS_COUNT}
+    frustumCulled={false}
   >
     <T.PlaneGeometry args={[1, 0.05]} />
     <T.MeshBasicMaterial

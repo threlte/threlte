@@ -50,7 +50,11 @@ const run = async (
 
   // Otherwise enter a session
   const options = getXRSessionOptions(referenceSpaceType.current, sessionInit)
-  const nextSession = await navigator.xr!.requestSession(sessionMode, options)
+  const nextSession = await navigator.xr?.requestSession(sessionMode, options)
+
+  if (nextSession === undefined) {
+    throw new Error('A session was not able to be created.')
+  }
 
   await manager.setSession(nextSession)
 
