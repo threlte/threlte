@@ -1,31 +1,41 @@
 import { Quaternion, type Vector3, type Vector3Tuple } from 'three'
 import { useThrelte } from '@threlte/core'
-
-const quaternion = new Quaternion()
-const offset = { x: 0, y: 0, z: 0 }
+import { useXROrigin } from './useXROrigin.js'
 
 /**
- * Returns a callback to teleport the player from the world origin to a position and optional orientation.
+ * Returns a callback that teleports the player to a target position and optional orientation.
+ *
+ * When used inside an `<XROrigin>` subtree, the origin group is translated directly — the
+ * user's feet end up at the target, and their room-scale offset from the origin is preserved.
+ *
+ * When used outside `<XROrigin>`, the underlying `XRReferenceSpace` is mutated to compensate
+ * for the viewer's current position so the feet end up at the target regardless of where the
+ * user has walked in their physical space.
  *
  * @example
  * const teleport = useTeleport()
- * const vec3 = new THREE.Vector3()
- *
- * vec3.set(5, 0, 5)
- *
- * teleport(vec3)
+ * teleport([5, 0, 5])
  *
  * const quat = new THREE.Quaternion()
- *
- * teleport(vec3, quat)
+ * teleport(new THREE.Vector3(5, 0, 5), quat)
  */
 export const useTeleport = () => {
   const { xr } = useThrelte().renderer
+  const origin = useXROrigin()
+  const defaultOrientation = new Quaternion()
+  const offset = { x: 0, y: 0, z: 0 }
 
-  /**
-   * Teleports a player from the world origin to a position and optional orientation.
-   */
-  return (position: Vector3 | Vector3Tuple, orientation = quaternion) => {
+  return (position: Vector3 | Vector3Tuple, orientation = defaultOrientation) => {
+    if (origin !== undefined) {
+      if (Array.isArray(position)) {
+        origin.position.set(position[0], position[1], position[2])
+      } else {
+        origin.position.copy(position)
+      }
+      origin.quaternion.copy(orientation)
+      return
+    }
+
     const space = xr.getReferenceSpace()
 
     if (space === null) return

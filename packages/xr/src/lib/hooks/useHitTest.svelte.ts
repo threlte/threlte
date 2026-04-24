@@ -35,24 +35,60 @@ export const useHitTest = (
 
   let hitTestSource = $state.raw<XRHitTestSource>()
 
-  const getHitTestSource = async (space?: XRSpace) => {
-    if (space === undefined) {
-      return
-    }
-
-    hitTestSource = await session.current?.requestHitTestSource?.({ space })
-  }
-
   if (source === 'viewer') {
     $effect.pre(() => {
-      session.current?.requestReferenceSpace('viewer').then((space) => {
-        getHitTestSource(space)
-      })
+      const currentSession = session.current
+      if (currentSession === undefined) return
+
+      let cancelled = false
+      let created: XRHitTestSource | undefined
+
+      currentSession
+        .requestReferenceSpace('viewer')
+        .then((space) => currentSession.requestHitTestSource?.({ space }))
+        .then((src) => {
+          if (cancelled || src === undefined) {
+            src?.cancel()
+            return
+          }
+          created = src
+          hitTestSource = src
+        })
+        .catch(console.error)
+
+      return () => {
+        cancelled = true
+        created?.cancel()
+        if (hitTestSource === created) hitTestSource = undefined
+      }
     })
   } else {
     const controller = $derived(controllers[source === 'leftInput' ? 'left' : 'right'])
     $effect.pre(() => {
-      getHitTestSource(controller?.inputSource.targetRaySpace)
+      const currentSession = session.current
+      const space = controller?.inputSource.targetRaySpace
+      if (currentSession === undefined || space === undefined) return
+
+      let cancelled = false
+      let created: XRHitTestSource | undefined
+
+      currentSession
+        .requestHitTestSource?.({ space })
+        ?.then((src) => {
+          if (cancelled || src === undefined) {
+            src?.cancel()
+            return
+          }
+          created = src
+          hitTestSource = src
+        })
+        .catch(console.error)
+
+      return () => {
+        cancelled = true
+        created?.cancel()
+        if (hitTestSource === created) hitTestSource = undefined
+      }
     })
   }
 

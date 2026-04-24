@@ -24,16 +24,19 @@ This should be placed within a Threlte `<Canvas />`.
   import { untrack, type Snippet } from 'svelte'
   import { useThrelte } from '@threlte/core'
   import {
-    isHandTracking,
     isPresenting,
+    pointerIntersection,
     referenceSpaceType,
     session,
+    teleportIntersection,
     xr
   } from '../internal/state.svelte.js'
   import { setupRaf } from '../internal/setupRaf.svelte.js'
   import { setupHeadset } from '../internal/setupHeadset.svelte.js'
   import { setupControllers } from '../internal/setupControllers.js'
   import { setupHands } from '../internal/setupHands.js'
+  import { controllers } from '../hooks/useController.svelte.js'
+  import { hands } from '../hooks/useHand.svelte.js'
 
   interface Props {
     /**
@@ -107,20 +110,22 @@ This should be placed within a Threlte `<Canvas />`.
 
   const handleSessionStart: EventListener<object, 'sessionstart', WebXRManager> = (event) => {
     isPresenting.current = true
-    const currentSession = renderer.xr.getSession()
-    if (currentSession !== null) {
-      isHandTracking.current = Array.from(currentSession.inputSources).some(
-        (source) => source.hand !== undefined
-      )
-    }
     onsessionstart?.(event)
   }
 
   const handleSessionEnd = (event: XRSessionEvent) => {
     onsessionend?.(event)
     isPresenting.current = false
-    isHandTracking.current = false
     session.current = undefined
+    controllers.left = undefined
+    controllers.right = undefined
+    controllers.none = undefined
+    hands.left = undefined
+    hands.right = undefined
+    pointerIntersection.left = undefined
+    pointerIntersection.right = undefined
+    teleportIntersection.left = undefined
+    teleportIntersection.right = undefined
   }
 
   const handleVisibilityChange = (event: XRSessionEvent) => {
@@ -128,7 +133,6 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const handleInputSourcesChange = (event: XRInputSourcesChangeEvent) => {
-    isHandTracking.current = Array.from(event.session.inputSources).some((source) => source.hand)
     oninputsourceschange?.(event)
   }
 
@@ -170,8 +174,6 @@ This should be placed within a Threlte `<Canvas />`.
   })
 
   $effect.pre(() => {
-    const currentSession = session.current
-
     xr.current = renderer.xr
     renderer.xr.enabled = true
     renderer.xr.addEventListener('sessionstart', handleSessionStart)
@@ -182,7 +184,9 @@ This should be placed within a Threlte `<Canvas />`.
       renderer.xr.removeEventListener('sessionstart', handleSessionStart)
 
       // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
-      currentSession?.end()
+      untrack(() => session.current)
+        ?.end()
+        .catch(() => {})
     }
   })
 

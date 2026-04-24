@@ -10,6 +10,7 @@
     teleportState,
     controllerEvents
   } from '../internal/state.svelte.js'
+  import { useXROrigin } from '../hooks/useXROrigin.js'
   import type { XRControllerEvents } from '../types.js'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -71,12 +72,13 @@
   }: Props = $props()
 
   const { scene } = useThrelte()
+  const origin = useXROrigin()
+  const attachTarget = origin ?? scene
 
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
 
   $effect.pre(() => {
-    const key = handedness
-    controllerEvents[key] = {
+    const events: XRControllerEvents = {
       onconnected,
       ondisconnected,
       onselect,
@@ -87,8 +89,10 @@
       onsqueezestart
     }
 
+    controllerEvents[handedness].add(events)
+
     return () => {
-      controllerEvents[key] = undefined
+      controllerEvents[handedness].delete(events)
     }
   })
 
@@ -104,7 +108,7 @@
   {#if grip}
     <T
       is={grip}
-      attach={scene}
+      attach={attachTarget}
     >
       {#if children}
         {@render children?.()}
@@ -119,7 +123,7 @@
   {#if targetRay}
     <T
       is={targetRay}
-      attach={scene}
+      attach={attachTarget}
     >
       {@render targetRaySnippet?.()}
 

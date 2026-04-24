@@ -32,12 +32,18 @@ const getIntersectionId = (intersection: Intersection) => {
 
 const EPSILON = 0.0001
 
+// Starts high enough to stay clear of browser-assigned DOM pointerIds in the
+// same session. Incremented per setupPointerControls call so each hand — and
+// each reconnect — gets a distinct id.
+let nextPointerId = 1001
+
 export const setupPointerControls = (
   context: ControlsContext,
   handContext: HandContext,
   fixedStep = 1 / 40
 ) => {
   const handedness = handContext.hand
+  const pointerId = nextPointerId++
   const controller = $derived(controllers[handedness])
   const hand = useHand(handedness)
   const { dispatchers } = getInternalContext()
@@ -186,6 +192,7 @@ export const setupPointerControls = (
         ...hit,
         intersections: hits,
         handedness,
+        pointerId,
         stopPropagation() {
           stopped = true
           intersectionEvent.stopped = true

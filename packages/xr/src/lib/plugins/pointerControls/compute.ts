@@ -4,6 +4,7 @@ import { controllers } from '../../hooks/useController.svelte.js'
 
 export type ComputeFunction = (state: ControlsContext, handState: HandContext) => void
 
+const origin = new Vector3()
 const forward = new Vector3()
 
 export const defaultComputeFunction: ComputeFunction = (
@@ -14,11 +15,13 @@ export const defaultComputeFunction: ComputeFunction = (
 
   if (targetRay === undefined) return
 
-  // `<Controller>` attaches targetRay to the scene root so local === world;
-  // we can read `.position`/`.quaternion` directly without a matrixWorld
-  // roundtrip (which would force-recompose the matrix three.js writes from
-  // the XR pose and introduce a drift against the visible render).
-  forward.set(0, 0, -1).applyQuaternion(targetRay.quaternion)
+  // Read origin/direction from matrixWorld so the ray is in real world space,
+  // even when an ancestor (e.g. <XROrigin>) has a non-identity transform.
+  // Force an update because this runs before the frame's scene.updateMatrixWorld.
+  targetRay.updateWorldMatrix(true, false)
 
-  context.raycaster.set(targetRay.position, forward)
+  origin.setFromMatrixPosition(targetRay.matrixWorld)
+  forward.set(0, 0, -1).transformDirection(targetRay.matrixWorld)
+
+  context.raycaster.set(origin, forward)
 }

@@ -1,6 +1,8 @@
 import { session, referenceSpaceType, xr } from '../internal/state.svelte.js'
 import { getXRSessionOptions } from './getXRSessionOptions.js'
 
+let pending: Promise<XRSession | undefined> | undefined
+
 /**
  * Starts / ends an XR session.
  *
@@ -9,7 +11,21 @@ import { getXRSessionOptions } from './getXRSessionOptions.js'
  * @param force Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways
  * @returns
  */
-export const toggleXRSession = async (
+export const toggleXRSession = (
+  sessionMode: XRSessionMode,
+  sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } },
+  force?: 'enter' | 'exit'
+): Promise<XRSession | undefined> => {
+  if (pending !== undefined) return pending
+
+  pending = run(sessionMode, sessionInit, force).finally(() => {
+    pending = undefined
+  })
+
+  return pending
+}
+
+const run = async (
   sessionMode: XRSessionMode,
   sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } },
   force?: 'enter' | 'exit'

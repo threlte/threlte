@@ -6,6 +6,7 @@ export { default as Controller } from './components/Controller.svelte'
 export { default as Hand } from './components/Hand.svelte'
 export { default as Headset } from './components/Headset.svelte'
 export { default as XR } from './components/XR.svelte'
+export { default as XROrigin } from './components/XROrigin.svelte'
 
 // Utilities
 export { getXRSupportState } from './lib/getXRSupportState.js'
@@ -24,6 +25,7 @@ export { useHeadset } from './hooks/useHeadset.js'
 export { useHitTest } from './hooks/useHitTest.svelte.js'
 export { useTeleport } from './hooks/useTeleport.js'
 export { useXR } from './hooks/useXR.js'
+export { useXROrigin } from './hooks/useXROrigin.js'
 
 // Types
 export type {

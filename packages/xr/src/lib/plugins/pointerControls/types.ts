@@ -26,6 +26,9 @@ export interface IntersectionEvent extends Intersection {
   intersections: Intersection[]
   /** Which hand dispatched this event. Each controller/hand fires enter/leave/etc. independently. */
   handedness: 'left' | 'right'
+  /** Stable identifier for this pointer source. Mirrors DOM PointerEvent.pointerId so downstream
+   * consumers that key per-pointer state by id can distinguish hands / reconnects. */
+  pointerId: number
   /** Normalized event coordinates */
   pointer: Vector3
   /** Delta between first click and this event */

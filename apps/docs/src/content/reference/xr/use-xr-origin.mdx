@@ -1,0 +1,29 @@
+---
+order: 18
+category: '@threlte/xr'
+title: 'useXROrigin'
+type: 'hook'
+---
+
+Returns the nearest ancestor `<XROrigin>` group, or `undefined` when no origin is in scope.
+
+```svelte
+<script>
+  import { useXROrigin } from '@threlte/xr'
+
+  const origin = useXROrigin()
+
+  if (origin !== undefined) {
+    origin.position.set(0, 0, 5)
+  }
+</script>
+```
+
+Primarily useful for libraries or custom hooks that need to reason about whether a user is inside an `<XROrigin>` subtree (e.g. to decide between moving the origin vs. mutating the XR reference space). Most application code should place `<XROrigin>` directly in the tree and transform it via props.
+
+### Signature
+
+```ts
+// THREE.Group | undefined
+const origin = useXROrigin()
+```

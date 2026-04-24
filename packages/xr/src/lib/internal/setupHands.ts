@@ -3,13 +3,11 @@ import { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
 import { hands } from '../hooks/useHand.svelte.js'
-import { useHandTrackingState } from './useHandTrackingState.js'
 import type { XRHandEvent, XRHandEvents } from '../types.js'
 import { handEvents } from './state.svelte.js'
 
 export const setupHands = (factory?: XRHandModelFactory) => {
   const { xr } = useThrelte().renderer
-  const hasHands = useHandTrackingState()
   const handSpaces = [xr.getHand(0), xr.getHand(1)]
   const map = new Map()
   const modelFactory = factory ?? new XRHandModelFactory()
@@ -24,13 +22,15 @@ export const setupHands = (factory?: XRHandModelFactory) => {
 
   onMount(() => {
     const dispatch = (event: Event) => {
-      if (!hasHands()) return
       const handEvent = event as unknown as
         | { handedness: 'left' | 'right' }
         | { data: { handedness: 'left' | 'right' } }
       const handedness =
         'handedness' in handEvent ? handEvent.handedness : handEvent.data.handedness
-      handEvents[handedness]?.[`on${event.type}` as keyof XRHandEvents]?.(event as any)
+      const key = `on${event.type}` as keyof XRHandEvents
+      for (const events of handEvents[handedness]) {
+        events[key]?.(event as any)
+      }
     }
 
     function handleConnected(this: XRHandSpace, event: XRHandEvent<'connected'>) {

@@ -3,7 +3,7 @@ import { useTask, useThrelte } from '@threlte/core'
 import type { HandJoints } from '../lib/handJoints.js'
 import { hands } from './useHand.svelte.js'
 import { isPresenting } from '../internal/state.svelte.js'
-import { toCurrentReadable } from './currentReadable.svelte.js'
+import { runeToCurrentReadable } from './currentReadable.svelte.js'
 
 /**
  * Provides a reference to a requested hand joint, once available.
@@ -32,5 +32,5 @@ export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) =>
     { running: () => isPresenting.current }
   )
 
-  return toCurrentReadable(() => jointSpace)
+  return runeToCurrentReadable(() => jointSpace)
 }

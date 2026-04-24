@@ -2,14 +2,12 @@ import type { XRTargetRaySpace, Event } from 'three'
 import { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
 import { useThrelte } from '@threlte/core'
 import { onMount } from 'svelte'
-import { useHandTrackingState } from './useHandTrackingState.js'
 import type { XRControllerEvent, XRControllerEvents } from '../types.js'
 import { controllers } from '../hooks/useController.svelte.js'
 import { controllerEvents } from './state.svelte.js'
 
 export const setupControllers = (factory?: XRControllerModelFactory) => {
   const { xr } = useThrelte().renderer
-  const hasHands = useHandTrackingState()
   const targetRaySpaces = [xr.getController(0), xr.getController(1)]
   const indexMap = new Map()
   const modelFactory = factory ?? new XRControllerModelFactory()
@@ -24,11 +22,12 @@ export const setupControllers = (factory?: XRControllerModelFactory) => {
 
   onMount(() => {
     const dispatch = (event: Event) => {
-      if (hasHands()) return
-      const { data } = event as unknown as { data: { handedness: 'left' | 'right' } }
-      controllerEvents[data.handedness]?.[`on${event.type}` as keyof XRControllerEvents]?.(
-        event as any
-      )
+      const { data } = event as unknown as { data: XRInputSource }
+      if (data.hand !== undefined) return
+      const key = `on${event.type}` as keyof XRControllerEvents
+      for (const events of controllerEvents[data.handedness]) {
+        events[key]?.(event as any)
+      }
     }
 
     function handleConnected(this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {

@@ -1,0 +1,58 @@
+---
+category: '@threlte/xr'
+title: '<XROrigin>'
+order: 2
+type: 'component'
+componentSignature: {}
+---
+
+`<XROrigin />` represents the position of the XR user's feet in the scene. The XR camera is parented to the origin, and any `<Controller>` / `<Hand>` components nested inside attach here instead of the scene root. Transforming the origin (position, rotation, scale) transforms the user — useful for teleportation, dolly rigs, and resizing the user.
+
+```svelte
+<script>
+  import { XR, XROrigin, Controller, Hand } from '@threlte/xr'
+</script>
+
+<XR>
+  <XROrigin position={[0, 0, 5]} rotation.y={Math.PI}>
+    <Controller left />
+    <Controller right />
+    <Hand left />
+    <Hand right />
+  </XROrigin>
+</XR>
+```
+
+Without `<XROrigin>`, controllers and hands continue to attach to the scene root — existing code works unchanged.
+
+## Dolly rig
+
+Because `<XROrigin>` is a regular Svelte component, it can be placed inside any transformed parent. Moving that parent moves the user:
+
+```svelte
+<T.Group bind:ref={dolly}>
+  <XROrigin>
+    <Controller left />
+    <Controller right />
+  </XROrigin>
+</T.Group>
+```
+
+## Resizing
+
+Scaling the origin scales the user relative to the scene.
+
+```svelte
+<XROrigin scale={miniature ? 0.1 : 1}>
+  <Controller left />
+  <Controller right />
+</XROrigin>
+```
+
+## Interaction with `useTeleport`
+
+When used inside `<XROrigin>`, [`useTeleport`](/docs/reference/xr/use-teleport) translates the origin group directly. When used without an origin, it falls back to mutating the underlying `XRReferenceSpace`.
+
+## Accessing the origin
+
+Use [`useXROrigin`](/docs/reference/xr/use-xr-origin) to read the current origin `Group` from a child component.

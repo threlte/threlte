@@ -2,8 +2,9 @@
   import { Group } from 'three'
   import { T, useThrelte, useTask, useStage } from '@threlte/core'
   import type { XRHandEvents } from '../types.js'
-  import { isHandTracking, handEvents } from '../internal/state.svelte.js'
+  import { handEvents } from '../internal/state.svelte.js'
   import { hands } from '../hooks/useHand.svelte.js'
+  import { useXROrigin } from '../hooks/useXROrigin.js'
   import type { Snippet } from 'svelte'
 
   type Props = {
@@ -46,20 +47,23 @@
   }: Props = $props()
 
   const { scene, renderer, renderStage } = useThrelte()
+  const origin = useXROrigin()
+  const attachTarget = origin ?? scene
 
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
 
   $effect.pre(() => {
-    const key = handedness
-    handEvents[key] = {
+    const events: XRHandEvents = {
       onconnected,
       ondisconnected,
       onpinchend,
       onpinchstart
     }
 
+    handEvents[handedness].add(events)
+
     return () => {
-      handEvents[key] = undefined
+      handEvents[handedness].delete(events)
     }
   })
 
@@ -95,9 +99,7 @@
     {
       stage,
       running: () =>
-        isHandTracking.current &&
-        (wrist !== undefined || children !== undefined) &&
-        inputSource !== undefined
+        inputSource !== undefined && (wrist !== undefined || children !== undefined)
     }
   )
 
@@ -106,10 +108,10 @@
   const model = $derived(xrHand?.model)
 </script>
 
-{#if xrHand?.hand && isHandTracking.current}
+{#if xrHand?.hand}
   <T
     is={xrHand.hand}
-    attach={scene}
+    attach={attachTarget}
   >
     {#if children === undefined}
       <T is={model} />
@@ -119,17 +121,15 @@
   {#if targetRay !== undefined}
     <T
       is={xrHand.targetRay}
-      attach={scene}
+      attach={attachTarget}
     >
       {@render targetRay()}
     </T>
   {/if}
-{/if}
 
-{#if isHandTracking.current}
   <T
     is={group}
-    attach={scene}
+    attach={attachTarget}
   >
     {@render wrist?.()}
     {@render children?.()}
