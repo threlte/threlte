@@ -46,10 +46,7 @@ This should be placed within a Threlte `<Canvas />`.
   import { setupRaf } from '../internal/setupRaf.svelte.js'
   import { setupHeadset } from '../internal/setupHeadset.svelte.js'
   import { setupInputSources } from '../internal/setupInputSources.js'
-  import {
-    dispatchEvent as dispatchSubscriberEvent,
-    getInputSourceState
-  } from '../internal/inputSources.svelte.js'
+  import { dispatchXRInputSourceEvent } from '../internal/inputSources.svelte.js'
   import { defaultFeatures } from '../internal/defaultFeatures.js'
   import { toggleXRSession } from '../lib/toggleXRSession.js'
 
@@ -178,28 +175,7 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const handleXRInputEvent = (event: XRInputSourceEvent) => {
-    const state = getInputSourceState(event.inputSource)
-    if (state === undefined) return
-
-    const inputEvent = {
-      type: event.type,
-      data: event.inputSource,
-      inputSource: event.inputSource,
-      frame: event.frame,
-      target: state.type === 'hand' ? state.hand : state.targetRay
-    }
-
-    state.targetRay.dispatchEvent(inputEvent as any)
-
-    if (state.type === 'controller') {
-      state.grip.dispatchEvent(inputEvent as any)
-    }
-
-    if (state.type === 'hand') {
-      state.hand.dispatchEvent(inputEvent as any)
-    }
-
-    dispatchSubscriberEvent(state, event.type, inputEvent)
+    dispatchXRInputSourceEvent(event)
   }
 
   $effect(() => {
@@ -305,9 +281,9 @@ This should be placed within a Threlte `<Canvas />`.
       }
     }
 
-    navigator.xr!.addEventListener('sessiongranted', listener)
+    navigator.xr?.addEventListener('sessiongranted', listener)
     return () => {
-      navigator.xr!.removeEventListener('sessiongranted', listener)
+      navigator.xr?.removeEventListener('sessiongranted', listener)
     }
   })
 
@@ -324,8 +300,8 @@ This should be placed within a Threlte `<Canvas />`.
     const run = async () => {
       let mode: XRSessionMode
       if (offerSession === true) {
-        const arSupported = await navigator
-          .xr!.isSessionSupported('immersive-ar')
+        const arSupported = await navigator.xr
+          ?.isSessionSupported('immersive-ar')
           .catch(() => false)
         mode = arSupported ? 'immersive-ar' : 'immersive-vr'
       } else {

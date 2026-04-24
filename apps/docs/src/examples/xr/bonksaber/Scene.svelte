@@ -2,7 +2,7 @@
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { Text, Grid, Outlines, VirtualEnvironment, Stars } from '@threlte/extras'
-  import { XR, useXR } from '@threlte/xr'
+  import { XR, useXR, teleportControls } from '@threlte/xr'
   import Sabers from './Sabers.svelte'
   import Blocks from './Blocks.svelte'
   import Mountains from './Mountains.svelte'
@@ -13,6 +13,9 @@
 
   scene.environmentIntensity = 2
   scene.background = new Color('#0e1625')
+
+  teleportControls('left')
+  teleportControls('right')
 
   const spring = new Spring(1, { stiffness: 0.1, damping: 0.5 })
 
@@ -62,7 +65,7 @@
 />
 
 <!-- floor -->
-<T.Mesh>
+<T.Mesh teleportSurface>
   <T.CylinderGeometry args={[2, 2, 0.1, 128]} />
   <T.MeshStandardMaterial
     color="white"

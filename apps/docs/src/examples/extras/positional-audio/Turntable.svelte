@@ -96,6 +96,7 @@
     <Edges
       scale={1.001}
       color="black"
+      raycast={() => null}
     />
   </T.Mesh>
 

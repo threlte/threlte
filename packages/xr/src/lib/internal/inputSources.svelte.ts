@@ -10,7 +10,6 @@ export type XRInputSourceStateBase = {
   inputSource: XRInputSource
   handedness: XRHandedness
   isPrimary: boolean
-  events: ReadonlyArray<XRInputSourceEvent>
   targetRay: XRTargetRaySpace
 }
 
@@ -43,7 +42,6 @@ class InputSourcesState {
 }
 
 export const inputSources = new InputSourcesState()
-export const inputSourceStates = inputSources
 
 export type ControllerSubscriber = {
   type: 'controller'
@@ -61,6 +59,20 @@ export type Subscriber = ControllerSubscriber | HandSubscriber
 
 const subscribers = new Set<Subscriber>()
 
+/**
+ * Registers callbacks with the module-level XR input-source dispatcher.
+ *
+ * This does not subscribe to a specific `XRInputSource`, `XRSession`, or
+ * Three.js object. Instead, the subscriber is stored in the internal
+ * `subscribers` set and receives events for whichever current input-source
+ * state matches its `type` and `handedness`.
+ *
+ * For example, a `{ type: 'controller', handedness: 'left' }` subscriber will
+ * receive forwarded events for the current left controller, even if the
+ * underlying `XRInputSource` instance disconnects and reconnects.
+ *
+ * Returns a cleanup function that removes the subscriber from the dispatcher.
+ */
 export const addSubscriber = (sub: Subscriber) => {
   subscribers.add(sub)
   return () => {
@@ -76,6 +88,45 @@ export const dispatchEvent = (state: XRInputSourceState, eventType: string, even
     const cb = (sub.callbacks as Record<string, ((e: unknown) => void) | undefined>)[key]
     cb?.(event)
   }
+}
+
+const dispatchSpaceEvent = (state: XRInputSourceState, event: unknown) => {
+  state.targetRay.dispatchEvent(event as any)
+
+  if (state.type === 'controller') {
+    state.grip.dispatchEvent(event as any)
+  }
+
+  if (state.type === 'hand') {
+    state.hand.dispatchEvent(event as any)
+  }
+}
+
+export const createInputSourceEvent = (
+  state: XRInputSourceState,
+  type: string,
+  extra: Record<string, unknown> = {}
+) => {
+  return {
+    type,
+    data: state.inputSource,
+    inputSource: state.inputSource,
+    target: state.type === 'hand' ? state.hand : state.targetRay,
+    ...extra
+  }
+}
+
+export const dispatchInputSourceStateEvent = (
+  state: XRInputSourceState,
+  eventType: string,
+  event: unknown,
+  options: { dispatchSpaces?: boolean } = {}
+) => {
+  if (options.dispatchSpaces !== false) {
+    dispatchSpaceEvent(state, event)
+  }
+
+  dispatchEvent(state, eventType, event)
 }
 
 type ResolveOptions = {
@@ -130,5 +181,16 @@ export const dispatchInputSourceEvent = (
 ) => {
   const state = getInputSourceState(inputSource)
   if (state === undefined) return
-  dispatchEvent(state, eventType, event)
+  dispatchInputSourceStateEvent(state, eventType, event)
+}
+
+export const dispatchXRInputSourceEvent = (event: XRInputSourceEvent) => {
+  const state = getInputSourceState(event.inputSource)
+  if (state === undefined) return
+
+  dispatchInputSourceStateEvent(
+    state,
+    event.type,
+    createInputSourceEvent(state, event.type, { frame: event.frame })
+  )
 }

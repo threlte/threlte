@@ -1,0 +1,123 @@
+---
+category: '@threlte/xr'
+title: 'touchControls'
+order: 4
+type: 'plugin'
+---
+
+The `touchControls` plugin adds proximity-based pointer events driven by a hand joint — "poke to press" interactions, as opposed to the ray-based `pointerControls`. When the tracked joint (by default the index fingertip) enters an object's bounding volume, hover events fire; when it gets closer than a down-radius threshold, pointerdown/pointerup events fire. Hand tracking only.
+
+<Example path="xr/touch-controls" />
+
+```svelte
+<script>
+  import { touchControls } from '@threlte/xr'
+  touchControls('left' | 'right')
+</script>
+```
+
+Any mesh **within this component and all child components** will receive touch-style pointer events when the hand's index fingertip is within the hover radius.
+
+```svelte
+<T.Mesh
+  onpointerenter={() => console.log('finger near')}
+  onpointerleave={() => console.log('finger away')}
+  onpointerdown={() => console.log('touching')}
+  onclick={() => console.log('pressed and released')}
+>
+  <T.BoxGeometry args={[0.1, 0.1, 0.1]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+## Both hands
+
+Call the plugin once per handedness:
+
+```svelte
+<script>
+  import { touchControls } from '@threlte/xr'
+  touchControls('left')
+  touchControls('right')
+</script>
+```
+
+## Options
+
+| Option        | Default             | Description                                                                 |
+| ------------- | ------------------- | --------------------------------------------------------------------------- |
+| `enabled`     | `true`              | Whether the plugin is active for this hand.                                 |
+| `joint`       | `'index-finger-tip'`| Which hand joint to track. Any [`HandJoints`](/docs/reference/xr/hand-joints) name. |
+| `hoverRadius` | `0.03` (3 cm)       | Distance at which an object starts receiving hover events.                  |
+| `downRadius`  | `0.01` (1 cm)       | Distance below which a hover transitions to `pointerdown`.                  |
+| `fixedStep`   | `1 / 40`            | Interval at which joint positions are polled and intersections are recomputed. |
+
+```svelte
+<script>
+  import { touchControls } from '@threlte/xr'
+  const { enabled } = touchControls('right', {
+    joint: 'thumb-tip',
+    hoverRadius: 0.05,
+    downRadius: 0.015
+  })
+</script>
+```
+
+## Available events
+
+```svelte
+<T.Mesh
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerup={(e) => console.log('up')}
+  onpointermove={(e) => console.log('move')}
+  onclick={(e) => console.log('click')}
+  onpointermissed={(e) => console.log('missed')}
+/>
+```
+
+- `pointerenter` / `pointerleave` fire when the joint crosses the `hoverRadius` threshold for an object.
+- `pointerdown` / `pointerup` fire when the joint crosses the `downRadius` threshold.
+- `click` fires immediately after every `pointerup` — there's no distance or time threshold beyond crossing back above the down radius.
+- `pointermove` fires every tick while hovering.
+- `pointermissed` fires on click for any interactive object not hit at down time.
+
+Each hand fires events independently — same semantics as `pointerControls`. See the handedness aggregation pattern in [pointerControls](/docs/reference/xr/pointer-controls#available-events).
+
+## Intersection model
+
+Each tick, for every interactive mesh:
+
+1. **Broad phase**: reject if the joint is further than `hoverRadius + boundingSphere.radius` from the object's world-space bounding sphere center.
+2. **Narrow phase**: transform the joint into the mesh's local space, clamp to the local AABB (`boundingBox.clampPoint`), project back to world, and measure distance. This respects rotation and non-uniform scale exactly.
+
+The reported `event.point` is the closest point on the mesh's oriented bounding box. For very concave meshes consider wrapping interactive children in simpler colliders.
+
+### Pointer capture
+
+`pointerdown` captures the pressed object. `pointerup` and `click` always fire on that captured target, even if the finger moves off the object before release.
+
+## Composing with other plugins
+
+`touchControls` can coexist with `pointerControls` and `teleportControls`. A single mesh with `onpointerenter` will be interactive to all active plugins — each fires its own events independently.
+
+```svelte
+<script>
+  import { pointerControls, touchControls } from '@threlte/xr'
+  pointerControls('left')
+  pointerControls('right')
+  touchControls('left')
+  touchControls('right')
+</script>
+```
+
+## Accessing the pointer
+
+Like `pointerControls`, the returned object exposes:
+
+```ts
+const { enabled, hovered } = touchControls('left')
+// enabled — currentWritable(boolean)
+// hovered — Map<string, IntersectionEvent>  (internal hover tracking)
+```

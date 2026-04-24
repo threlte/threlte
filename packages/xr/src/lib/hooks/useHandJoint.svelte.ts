@@ -4,20 +4,20 @@ import type { HandJoints } from '../lib/handJoints.js'
 import { useHand } from './useHand.svelte.js'
 import { isPresenting } from '../internal/state.svelte.js'
 import { runeToCurrentReadable } from './currentReadable.svelte.js'
+import { fromStore } from 'svelte/store'
 
 /**
  * Provides a reference to a requested hand joint, once available.
  */
 export const useHandJoint = (handedness: 'left' | 'right', joint: HandJoints) => {
   const { invalidate } = useThrelte()
-  const handStore = useHand(handedness)
-  const xrhand = $derived(handStore.current)
+  const hand = fromStore(useHand(handedness))
 
   let jointSpace = $state.raw<XRJointSpace>()
 
   useTask(
     () => {
-      const space = xrhand?.hand.joints[joint]
+      const space = hand.current?.hand.joints[joint]
       // The joint radius is a good indicator that the joint is ready.
       // Re-check each frame so we pick up reconnects and clear on disconnect.
       if (space?.jointRadius !== undefined) {

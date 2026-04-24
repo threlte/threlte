@@ -14,7 +14,8 @@ import {
 } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
 import { useTask, useThrelte } from '@threlte/core'
 import {
-  dispatchEvent as dispatchSubscriberEvent,
+  createInputSourceEvent,
+  dispatchInputSourceStateEvent,
   inputSources,
   type XRControllerSourceState,
   type XRHandInputSource,
@@ -72,45 +73,6 @@ const createHandSpace = () => {
   hand.joints = {}
   hand.inputState = { pinching: false }
   return hand
-}
-
-const createEvent = (
-  state: XRInputSourceState,
-  type: string,
-  extra: Record<string, unknown> = {}
-) => {
-  return {
-    type,
-    data: state.inputSource,
-    inputSource: state.inputSource,
-    target: state.type === 'hand' ? state.hand : state.targetRay,
-    __threlteSynthetic: true,
-    ...extra
-  }
-}
-
-const dispatchSpaceEvent = (state: XRInputSourceState, event: Record<string, unknown>) => {
-  state.targetRay.dispatchEvent(event as any)
-
-  if (state.type === 'controller') {
-    state.grip.dispatchEvent(event as any)
-  }
-
-  if (state.type === 'hand') {
-    state.hand.dispatchEvent(event as any)
-  }
-}
-
-const dispatchStateEvent = (
-  state: XRInputSourceState,
-  type: string,
-  event: Record<string, unknown>,
-  options: { dispatchSpaces?: boolean } = {}
-) => {
-  if (options.dispatchSpaces !== false) {
-    dispatchSpaceEvent(state, event)
-  }
-  dispatchSubscriberEvent(state, type, event)
 }
 
 const hideState = (state: XRInputSourceState) => {
@@ -196,11 +158,12 @@ const updatePinchState = (state: XRHandSourceState) => {
   if (indexTip === undefined || thumbTip === undefined || !indexTip.visible || !thumbTip.visible) {
     if (inputState.pinching) {
       inputState.pinching = false
-      const event = createEvent(state, 'pinchend', {
+      const event = createInputSourceEvent(state, 'pinchend', {
         handedness: state.handedness,
-        target: hand
+        target: hand,
+        __threlteSynthetic: true
       })
-      dispatchStateEvent(state, 'pinchend', event)
+      dispatchInputSourceStateEvent(state, 'pinchend', event)
     }
     return
   }
@@ -209,18 +172,20 @@ const updatePinchState = (state: XRHandSourceState) => {
 
   if (inputState.pinching && distance > PINCH_DISTANCE + PINCH_THRESHOLD) {
     inputState.pinching = false
-    const event = createEvent(state, 'pinchend', {
+    const event = createInputSourceEvent(state, 'pinchend', {
       handedness: state.handedness,
-      target: hand
+      target: hand,
+      __threlteSynthetic: true
     })
-    dispatchStateEvent(state, 'pinchend', event)
+    dispatchInputSourceStateEvent(state, 'pinchend', event)
   } else if (!inputState.pinching && distance <= PINCH_DISTANCE - PINCH_THRESHOLD) {
     inputState.pinching = true
-    const event = createEvent(state, 'pinchstart', {
+    const event = createInputSourceEvent(state, 'pinchstart', {
       handedness: state.handedness,
-      target: hand
+      target: hand,
+      __threlteSynthetic: true
     })
-    dispatchStateEvent(state, 'pinchstart', event)
+    dispatchInputSourceStateEvent(state, 'pinchstart', event)
   }
 }
 
@@ -303,30 +268,11 @@ const updateXRInputSourceState = (
   }
 }
 
-const setupEvents = (session: XRSession, events: Array<XRInputSourceEvent>): (() => void) => {
-  const listener = (event: XRInputSourceEvent) => events.push(event)
-  session.addEventListener('selectstart', listener)
-  session.addEventListener('selectend', listener)
-  session.addEventListener('select', listener)
-  session.addEventListener('squeeze', listener)
-  session.addEventListener('squeezestart', listener)
-  session.addEventListener('squeezeend', listener)
-  return () => {
-    session.removeEventListener('selectstart', listener)
-    session.removeEventListener('selectend', listener)
-    session.removeEventListener('select', listener)
-    session.removeEventListener('squeeze', listener)
-    session.removeEventListener('squeezestart', listener)
-    session.removeEventListener('squeezeend', listener)
-  }
-}
-
 let idCounter = 0
 
 const createXRInputSourceState = (
   id: string,
   inputSource: XRInputSource,
-  events: ReadonlyArray<XRInputSourceEvent>,
   isPrimary: boolean,
   controllerModelFactory: XRControllerModelFactory,
   handModelFactory: XRHandModelFactory
@@ -336,7 +282,6 @@ const createXRInputSourceState = (
     inputSource,
     handedness: inputSource.handedness,
     isPrimary,
-    events,
     targetRay: createTargetRaySpace()
   }
 
@@ -379,20 +324,19 @@ const createSyncXRInputSourceStates = (
   controllerModelFactory: XRControllerModelFactory,
   handModelFactory: XRHandModelFactory
 ) => {
-  const cleanupMap = new Map<XRInputSource, () => void>()
   const idMap = new Map<string, string>()
 
   return (
-    session: XRSession,
+    _session: XRSession,
     current: ReadonlyArray<XRInputSourceState>,
     changes: InputSourceChanges
   ): ReadonlyArray<XRInputSourceState> => {
     if (changes === 'remove-all') {
       for (const state of current) {
-        cleanupMap.get(state.inputSource)?.()
-        cleanupMap.delete(state.inputSource)
-        const event = createEvent(state, 'disconnected')
-        dispatchStateEvent(state, 'disconnected', event)
+        const event = createInputSourceEvent(state, 'disconnected', {
+          __threlteSynthetic: true
+        })
+        dispatchInputSourceStateEvent(state, 'disconnected', event)
         hideState(state)
       }
       return []
@@ -409,11 +353,11 @@ const createSyncXRInputSourceStates = (
           if (index === -1) continue
 
           const [state] = target.splice(index, 1)
-          cleanupMap.get(inputSource)?.()
-          cleanupMap.delete(inputSource)
 
-          const event = createEvent(state, 'disconnected')
-          dispatchStateEvent(state, 'disconnected', event)
+          const event = createInputSourceEvent(state, 'disconnected', {
+            __threlteSynthetic: true
+          })
+          dispatchInputSourceStateEvent(state, 'disconnected', event)
           hideState(state)
         }
       }
@@ -425,8 +369,6 @@ const createSyncXRInputSourceStates = (
           continue
         }
 
-        const events: Array<XRInputSourceEvent> = []
-        const cleanup = setupEvents(session, events)
         const key = makeId(inputSource)
 
         let id = idMap.get(key)
@@ -438,22 +380,21 @@ const createSyncXRInputSourceStates = (
         const state = createXRInputSourceState(
           id,
           inputSource,
-          events,
           isPrimary,
           controllerModelFactory,
           handModelFactory
         )
 
         if (state === undefined) {
-          cleanup()
           continue
         }
 
-        cleanupMap.set(inputSource, cleanup)
         target.push(state)
 
-        const event = createEvent(state, 'connected')
-        dispatchStateEvent(state, 'connected', event)
+        const event = createInputSourceEvent(state, 'connected', {
+          __threlteSynthetic: true
+        })
+        dispatchInputSourceStateEvent(state, 'connected', event)
       }
     }
 

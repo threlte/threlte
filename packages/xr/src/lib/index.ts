@@ -16,6 +16,7 @@ export { handJoints } from './lib/handJoints.js'
 // Plugins
 export { pointerControls } from './plugins/pointerControls/index.js'
 export { teleportControls } from './plugins/teleportControls/index.js'
+export { touchControls } from './plugins/touchControls/index.js'
 
 // Hooks
 export { useController } from './hooks/useController.svelte.js'
@@ -37,3 +38,4 @@ export type {
   XRHandObject,
   XRHandEvent
 } from './types.js'
+export type { HandJoints } from './lib/handJoints.js'
