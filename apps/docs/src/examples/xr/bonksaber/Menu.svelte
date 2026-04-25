@@ -1,9 +1,8 @@
 <script lang="ts">
   import { T } from '@threlte/core'
   import { Text as TitleText } from '@threlte/extras'
-  import { Container, Content, Text } from 'threlte-uikit'
+  import { Container, Content, Text, type VanillaContent } from 'threlte-uikit'
   import { Button } from 'threlte-uikit/kit'
-  import type { Content as VanillaContent } from '@pmndrs/uikit'
 
   interface Props {
     onstart: () => void
@@ -56,7 +55,7 @@
       <Text
         text="Start"
         fontSize={22}
-        color="white"
+        color="#555"
       />
     </Button>
   </Container>

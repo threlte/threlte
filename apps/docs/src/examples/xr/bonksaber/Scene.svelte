@@ -2,7 +2,15 @@
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { Text, Grid, Outlines, VirtualEnvironment, Stars } from '@threlte/extras'
-  import { XR, useXR, teleportControls, pointerControls, touchControls } from '@threlte/xr'
+  import {
+    XR,
+    useXR,
+    teleportControls,
+    pointerControls,
+    touchControls,
+    Controller,
+    Hand
+  } from '@threlte/xr'
   import Sabers from './Sabers.svelte'
   import Blocks from './Blocks.svelte'
   import Mountains from './Mountains.svelte'
@@ -29,7 +37,14 @@
 </script>
 
 <XR>
-  <Sabers />
+  {#if playing}
+    <Sabers />
+  {:else}
+    <Controller left />
+    <Controller right />
+    <Hand left />
+    <Hand right />
+  {/if}
   <Blocks
     {playing}
     oncomplete={() => (playing = false)}
