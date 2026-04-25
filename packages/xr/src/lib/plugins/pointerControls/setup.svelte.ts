@@ -8,7 +8,6 @@ import type {
   events
 } from './types.js'
 import { getInternalContext } from './context.js'
-import { useController } from '../../hooks/useController.svelte.js'
 import { addSubscriber } from '../../internal/inputSources.svelte.js'
 import { useFixed } from '../../internal/useFixed.js'
 import { isPresenting, pointerIntersection } from '../../internal/state.svelte.js'
@@ -44,13 +43,13 @@ export const setupPointerControls = (
 ) => {
   const handedness = handContext.hand
   const pointerId = nextPointerId++
-  const controller = fromStore(useController(handedness))
   const enabled = fromStore(handContext.enabled)
   const { dispatchers } = getInternalContext()
 
   let hits: Intersection[] = []
 
-  const lastPosition = new Vector3()
+  const lastRayOrigin = new Vector3()
+  const lastRayDirection = new Vector3()
 
   const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
@@ -153,7 +152,7 @@ export const setupPointerControls = (
 
   function pointerMissed(objects: Object3D[], event?: Event | undefined) {
     for (const object of objects) {
-      dispatchers.get(object)?.pointermissed?.(event)
+      dispatchers.get(object)?.onpointermissed?.(event)
     }
   }
 
@@ -253,15 +252,17 @@ export const setupPointerControls = (
     () => {
       hits = processHits()
 
-      const targetRay = controller.current?.targetRay
+      const ray = handContext.raycaster.ray
 
-      if (targetRay === undefined) return
-
-      if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
+      if (
+        ray.origin.distanceToSquared(lastRayOrigin) > EPSILON * EPSILON ||
+        1 - ray.direction.dot(lastRayDirection) > EPSILON
+      ) {
         handleEvent('onpointermove')
       }
 
-      lastPosition.copy(targetRay.position)
+      lastRayOrigin.copy(ray.origin)
+      lastRayDirection.copy(ray.direction)
     },
     {
       fixedStep,

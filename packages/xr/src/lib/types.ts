@@ -59,7 +59,7 @@ export interface XRHandObject {
 export type XRHandEvent<Type = XRHandEventType> = Type extends 'connected' | 'disconnected'
   ? { type: Type; target: XRHandSpace; data: XRInputSource }
   : Type extends 'pinchstart' | 'pinchend'
-    ? { type: Type; handedness: 'left' | 'right'; target: null }
+    ? { type: Type; handedness: 'left' | 'right'; target: XRHandSpace }
     : never
 
 export type XRHandEventCallback<Type> = (event: XRHandEvent<Type>) => void

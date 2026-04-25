@@ -55,7 +55,7 @@ export const setupTeleportControls = (
         return
       }
 
-      if (intersect !== undefined && context.blockers.has(intersect.object.uuid)) {
+      if (context.blockers.has(intersect.object.uuid)) {
         if (handContext.hovered.current !== undefined) {
           handleHoverEnd()
         }

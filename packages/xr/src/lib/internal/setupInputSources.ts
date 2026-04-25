@@ -160,8 +160,7 @@ const updatePinchState = (state: XRHandSourceState) => {
       inputState.pinching = false
       const event = createInputSourceEvent(state, 'pinchend', {
         handedness: state.handedness,
-        target: hand,
-        __threlteSynthetic: true
+        target: hand
       })
       dispatchInputSourceStateEvent(state, 'pinchend', event)
     }
@@ -174,16 +173,14 @@ const updatePinchState = (state: XRHandSourceState) => {
     inputState.pinching = false
     const event = createInputSourceEvent(state, 'pinchend', {
       handedness: state.handedness,
-      target: hand,
-      __threlteSynthetic: true
+      target: hand
     })
     dispatchInputSourceStateEvent(state, 'pinchend', event)
   } else if (!inputState.pinching && distance <= PINCH_DISTANCE - PINCH_THRESHOLD) {
     inputState.pinching = true
     const event = createInputSourceEvent(state, 'pinchstart', {
       handedness: state.handedness,
-      target: hand,
-      __threlteSynthetic: true
+      target: hand
     })
     dispatchInputSourceStateEvent(state, 'pinchstart', event)
   }
@@ -336,9 +333,7 @@ const createSyncXRInputSourceStates = (
   ): ReadonlyArray<XRInputSourceState> => {
     if (changes === 'remove-all') {
       for (const state of current) {
-        const event = createInputSourceEvent(state, 'disconnected', {
-          __threlteSynthetic: true
-        })
+        const event = createInputSourceEvent(state, 'disconnected')
         dispatchInputSourceStateEvent(state, 'disconnected', event)
         hideState(state)
       }
@@ -357,9 +352,7 @@ const createSyncXRInputSourceStates = (
 
           const [state] = target.splice(index, 1)
 
-          const event = createInputSourceEvent(state, 'disconnected', {
-            __threlteSynthetic: true
-          })
+          const event = createInputSourceEvent(state, 'disconnected')
           dispatchInputSourceStateEvent(state, 'disconnected', event)
           hideState(state)
         }
@@ -396,9 +389,7 @@ const createSyncXRInputSourceStates = (
 
         target.push(state)
 
-        const event = createInputSourceEvent(state, 'connected', {
-          __threlteSynthetic: true
-        })
+        const event = createInputSourceEvent(state, 'connected')
         dispatchInputSourceStateEvent(state, 'connected', event)
       }
     }

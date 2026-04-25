@@ -138,6 +138,11 @@ export const setupTouchControls = (
     }
   }
 
+  // Unlike `pointerControls`, this plugin doesn't publish a per-hand
+  // `pointerIntersection` global. There's no on-screen cursor for touch — the
+  // tracked joint is the cursor — so nothing internal needs to subscribe to
+  // the closest hit. Consumers that want hover state from outside event
+  // handlers can read the returned `hovered` Map.
   const getHits = (): Intersection[] => {
     if (!handContext.originValid) return []
 
@@ -172,7 +177,7 @@ export const setupTouchControls = (
 
   function pointerMissed(objects: Object3D[], event?: Event | undefined) {
     for (const object of objects) {
-      dispatchers.get(object)?.pointermissed?.(event)
+      dispatchers.get(object)?.onpointermissed?.(event)
     }
   }
 

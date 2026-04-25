@@ -40,7 +40,9 @@ scene root (existing behaviour, unchanged).
 
   $effect.pre(() => {
     if (origin.current !== undefined && origin.current !== group) {
-      throw new Error('Only one <XROrigin> may be mounted within a single <XR>.')
+      console.warn(
+        'Only one <XROrigin> may be mounted within a single <XR>. The newer instance will take over.'
+      )
     }
 
     origin.current = group
