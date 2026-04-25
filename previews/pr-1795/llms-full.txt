@@ -6227,11 +6227,11 @@ URL: https://threlte.xyz/previews/pr-1795/docs/reference/xr/xr-origin
 </XR>
 ```
 
-Without `<XROrigin>`, controllers and hands continue to attach to the scene root — existing code works unchanged.
+Without `<XROrigin>`, controllers and hands continue to attach to the scene root.
 
 ## Dolly rig
 
-Because `<XROrigin>` is a regular Svelte component, it can be placed inside any transformed parent. Moving that parent moves the user:
+Because `<XROrigin>` contains a regular `THREE.Group`, it can be placed inside any transformed parent. Moving that parent moves the user:
 
 ```svelte
 <T.Group bind:ref={dolly}>
@@ -6521,14 +6521,16 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 Package: @threlte/xr  
 URL: https://threlte.xyz/previews/pr-1795/docs/reference/xr/touch-controls
 
-The `touchControls` plugin adds proximity-based pointer events driven by a hand joint — "poke to press" interactions, as opposed to the ray-based `pointerControls`. When the tracked joint (by default the index fingertip) enters an object's bounding volume, hover events fire; when it gets closer than a down-radius threshold, pointerdown/pointerup events fire. Hand tracking only.
+The `touchControls` plugin adds proximity-based pointer events driven by a hand joint — "poke to press" interactions, as opposed to the ray-based `pointerControls`. When the tracked joint (by default the index fingertip) enters an object's bounding volume, hover events fire; when it gets closer than a down-radius threshold, pointerdown/pointerup events fire. This plugin only works with `<Hands>`.
 
 <Example path="xr/touch-controls" />
 
 ```svelte
 <script>
   import { touchControls } from '@threlte/xr'
-  touchControls('left' | 'right')
+
+  touchControls('left')
+  touchControls('right')
 </script>
 ```
 
@@ -6546,18 +6548,6 @@ Any mesh **within this component and all child components** will receive touch-s
 </T.Mesh>
 ```
 
-## Both hands
-
-Call the plugin once per handedness:
-
-```svelte
-<script>
-  import { touchControls } from '@threlte/xr'
-  touchControls('left')
-  touchControls('right')
-</script>
-```
-
 ## Options
 
 | Option        | Default              | Description                                                                         |
@@ -6571,6 +6561,7 @@ Call the plugin once per handedness:
 ```svelte
 <script>
   import { touchControls } from '@threlte/xr'
+
   const { enabled } = touchControls('right', {
     joint: 'thumb-tip',
     hoverRadius: 0.05,
@@ -6599,11 +6590,11 @@ Call the plugin once per handedness:
 - `pointermove` fires every tick while hovering.
 - `pointermissed` fires on click for any interactive object not hit at down time.
 
-Each hand fires events independently — same semantics as `pointerControls`. See the handedness aggregation pattern in [pointerControls](/docs/reference/xr/pointer-controls#available-events).
+Each hand fires events independently — just like `pointerControls`. See the pattern in [pointerControls](/docs/reference/xr/pointer-controls#available-events).
 
 ## Intersection model
 
-Each tick, for every interactive mesh:
+Internally, touchControls is calculating during each tick, for every interactive mesh:
 
 1. **Broad phase**: reject if the joint is further than `hoverRadius + boundingSphere.radius` from the object's world-space bounding sphere center.
 2. **Narrow phase**: transform the joint into the mesh's local space, clamp to the local AABB (`boundingBox.clampPoint`), project back to world, and measure distance. This respects rotation and non-uniform scale exactly.
@@ -6621,6 +6612,7 @@ The reported `event.point` is the closest point on the mesh's oriented bounding 
 ```svelte
 <script>
   import { pointerControls, touchControls } from '@threlte/xr'
+
   pointerControls('left')
   pointerControls('right')
   touchControls('left')
@@ -9266,7 +9258,7 @@ useTask((delta) => {
 
 ### Interaction with `<XROrigin>`
 
-When `useTeleport` is called inside an [`<XROrigin>`](/docs/reference/xr/xr-origin) subtree, the origin group is translated directly — the user's feet land at the target position, and their room-scale offset from the origin is preserved.
+When `useTeleport` is called inside [`<XROrigin>`](/docs/reference/xr/xr-origin), the origin group is translated directly — the user's feet land at the target position, and their room-scale offset from the origin is preserved.
 
 Without an `<XROrigin>`, the underlying `XRReferenceSpace` is mutated to compensate for the viewer's current position so the feet land at the target regardless of where the user has walked in their physical space.
 
@@ -9277,7 +9269,7 @@ Without an `<XROrigin>`, the underlying `XRReferenceSpace` is mutated to compens
 Package: @threlte/xr  
 URL: https://threlte.xyz/previews/pr-1795/docs/reference/xr/use-xr-origin
 
-Returns the nearest ancestor `<XROrigin>` group, or `undefined` when no origin is in scope.
+Returns the nearest parent `<XROrigin>` group, or `undefined` when no `<XROrigin>` exists.
 
 ```svelte
 <script>
@@ -9291,7 +9283,7 @@ Returns the nearest ancestor `<XROrigin>` group, or `undefined` when no origin i
 </script>
 ```
 
-Primarily useful for libraries or custom hooks that need to reason about whether a user is inside an `<XROrigin>` subtree (e.g. to decide between moving the origin vs. mutating the XR reference space). Most application code should place `<XROrigin>` directly in the tree and transform it via props.
+Primarily useful for libraries or custom hooks that need to reason about whether a user is inside an `<XROrigin>` (e.g. to decide between moving the origin vs. mutating the XR reference space).
 
 ### Signature
 
