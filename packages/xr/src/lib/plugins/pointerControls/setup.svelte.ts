@@ -10,7 +10,7 @@ import type {
 import { getInternalContext } from './context.js'
 import { addSubscriber } from '../../internal/inputSources.svelte.js'
 import { useFixed } from '../../internal/useFixed.js'
-import { isPresenting, pointerIntersection } from '../../internal/state.svelte.js'
+import { isPresenting } from '../../internal/state.svelte.js'
 
 type PointerEventName = (typeof events)[number]
 
@@ -102,6 +102,8 @@ export const setupPointerControls = (
     if (handContext.hovered.size === 0) {
       handContext.pointerOverTarget.set(false)
     }
+
+    handContext.syncSharedState()
   }
 
   const getHits = (): Intersection[] => {
@@ -131,8 +133,8 @@ export const setupPointerControls = (
     })
     const filtered =
       handContext.filter === undefined ? hits : handContext.filter(hits, context, handContext)
-
-    pointerIntersection[handedness] = filtered[0]
+    handContext.currentIntersection = filtered[0]
+    handContext.syncSharedState()
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
@@ -229,6 +231,7 @@ export const setupPointerControls = (
 
             events.onpointerenter?.(intersectionEvent)
             handContext.pointerOverTarget.set(true)
+            handContext.syncSharedState()
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
             intersectionEvent.stopPropagation()
@@ -275,10 +278,15 @@ export const setupPointerControls = (
       start()
     } else {
       stop()
+      hits = []
+      handContext.currentIntersection = undefined
+      cancelPointer([])
+      handContext.syncSharedState()
     }
   })
 
   $effect.pre(() => {
+    if (handContext.sourceType !== 'controller') return
     if (!enabled.current) return
     return addSubscriber({
       type: 'controller',
@@ -292,6 +300,7 @@ export const setupPointerControls = (
   })
 
   $effect.pre(() => {
+    if (handContext.sourceType !== 'hand') return
     if (!enabled.current) return
     return addSubscriber({
       type: 'hand',

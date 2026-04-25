@@ -33,7 +33,7 @@ scene root (existing behaviour, unchanged).
 
   let { ref = $bindable(), children, ...rest }: XROriginProps = $props()
 
-  const { renderer, scene } = useThrelte()
+  const { camera, scene } = useThrelte()
 
   const group = new Group()
   const origin = useXROrigin()
@@ -53,18 +53,22 @@ scene root (existing behaviour, unchanged).
     }
   })
 
-  // Parent the XR camera to this group so its matrixWorld reflects our
-  // transform. When this component unmounts (or the session ends), return the
-  // camera to the scene root so non-XR rendering keeps working.
+  // Parent the active scene camera to this group so its `parent.matrixWorld`
+  // reflects our transform. Three's `WebXRManager` reads `camera.parent` (where
+  // `camera` is the camera passed to `renderer.render(scene, camera)`) — NOT
+  // `renderer.xr.getCamera().parent` — when composing the XR view matrices, so
+  // reparenting the XR camera itself has no effect. When this component
+  // unmounts (or the active camera changes) the camera returns to its previous
+  // parent so non-XR rendering keeps working.
   $effect.pre(() => {
     if (!isPresenting.current) return
 
-    const camera = renderer.xr.getCamera()
-    const previousParent = camera.parent ?? scene
-    group.add(camera)
+    const userCamera = $camera
+    const previousParent = userCamera.parent ?? scene
+    group.add(userCamera)
 
     return () => {
-      previousParent.add(camera)
+      previousParent.add(userCamera)
     }
   })
 </script>

@@ -48,8 +48,8 @@ This should be placed within a Threlte `<Canvas />`.
   import { setupInputSources } from '../internal/setupInputSources.js'
   import { dispatchXRInputSourceEvent } from '../internal/inputSources.svelte.js'
   import { defaultFeatures } from '../internal/defaultFeatures.js'
+  import { getXRSessionOptions } from '../lib/getXRSessionOptions.js'
   import { toggleXRSession } from '../lib/toggleXRSession.js'
-  import { provideXROrigin } from '../hooks/useXROrigin.svelte.js'
 
   const INPUT_SOURCE_EVENTS = [
     'select',
@@ -144,7 +144,6 @@ This should be placed within a Threlte `<Canvas />`.
 
   const { renderer, renderMode } = useThrelte()
 
-  provideXROrigin()
   setupRaf()
   setupHeadset()
   const bindInputSources = setupInputSources(controllerFactory, handFactory)
@@ -310,7 +309,11 @@ This should be placed within a Threlte `<Canvas />`.
         mode = offerSession
       }
 
-      const init = lastSessionRequest.sessionInit ?? { ...defaultFeatures }
+      const init = getXRSessionOptions(
+        referenceSpaceType.current,
+        lastSessionRequest.sessionInit,
+        defaultFeatures
+      )
 
       try {
         const nextSession = await navigator.xr?.offerSession?.(mode, init)

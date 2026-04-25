@@ -25,7 +25,7 @@ class XR {
 
 class LastSessionRequest {
   mode = $state.raw<XRSessionMode>()
-  sessionInit = $state.raw<XRSessionInit & { domOverlay?: { root: HTMLElement } }>()
+  sessionInit = $state.raw<XRSessionInit & { domOverlay?: { root: Element } }>()
 }
 
 class PointerState {

@@ -1,7 +1,6 @@
 import { Vector3 } from 'three'
 import type { ControlsContext, HandContext } from './types.js'
-import { controllers } from '../../hooks/useController.svelte.js'
-import { hands } from '../../hooks/useHand.svelte.js'
+import { getControllerState, getHandState } from '../../internal/inputSources.svelte.js'
 
 export type ComputeFunction = (state: ControlsContext, handState: HandContext) => void
 
@@ -12,7 +11,11 @@ export const defaultComputeFunction: ComputeFunction = (
   _context: ControlsContext,
   handContext: HandContext
 ) => {
-  const targetRay = controllers[handContext.hand]?.targetRay ?? hands[handContext.hand]?.targetRay
+  const state =
+    handContext.sourceType === 'controller'
+      ? getControllerState(handContext.hand)
+      : getHandState(handContext.hand)
+  const targetRay = state?.targetRay
 
   if (targetRay === undefined) return
 

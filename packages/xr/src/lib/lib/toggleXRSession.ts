@@ -13,7 +13,7 @@ let pending: Promise<XRSession | undefined> | undefined
  */
 export const toggleXRSession = (
   sessionMode: XRSessionMode,
-  sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } },
+  sessionInit?: XRSessionInit & { domOverlay?: { root: Element } },
   force?: 'enter' | 'exit'
 ): Promise<XRSession | undefined> => {
   if (pending !== undefined) return pending
@@ -27,7 +27,7 @@ export const toggleXRSession = (
 
 const run = async (
   sessionMode: XRSessionMode,
-  sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } },
+  sessionInit?: XRSessionInit & { domOverlay?: { root: Element } },
   force?: 'enter' | 'exit'
 ): Promise<XRSession | undefined> => {
   const currentSession = session.current
