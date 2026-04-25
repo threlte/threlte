@@ -7,16 +7,26 @@ interface Context {
   current: Group | undefined
 }
 
-export const provideXROrigin = (ref: () => Group): void => {
-  setContext<Context>(key, {
-    get current() {
-      return ref()
-    }
-  })
+class XROriginState {
+  current = $state.raw<Group>()
+}
+
+export const provideXROrigin = (): void => {
+  setContext<Context>(key, new XROriginState())
 }
 
 /**
- * Returns the nearest parent `<XROrigin>` group, or `undefined` when no
- * `<XROrigin>` exists in the current component ancestry.
+ * Returns XR-scoped origin state for the current `<XR>` tree. `current` is the
+ * mounted `<XROrigin>` group when present, otherwise `undefined`.
  */
-export const useXROrigin = (): Context => getContext<Context>(key) ?? { current: undefined }
+export const useXROrigin = (): Context => {
+  const context = getContext<Context>(key)
+
+  if (!context) {
+    throw new Error(
+      'useXROrigin(): No XR origin context found. Did you forget to call this within an `<XR>` component tree?'
+    )
+  }
+
+  return context
+}

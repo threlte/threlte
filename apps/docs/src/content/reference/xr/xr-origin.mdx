@@ -8,6 +8,8 @@ componentSignature: {}
 
 `<XROrigin />` represents the position of the XR user's feet in the scene. The XR camera is parented to the origin, and any `<Controller>` / `<Hand>` components nested inside attach here instead of the scene root. Transforming the origin (position, rotation, scale) transforms the user — useful for teleportation, dolly rigs, and resizing the user.
 
+Only one `<XROrigin>` may be mounted within a given [`<XR>`](/docs/reference/xr/xr). Mounting multiple origins in the same XR tree throws.
+
 ```svelte
 <script>
   import { XR, XROrigin, Controller, Hand } from '@threlte/xr'
@@ -58,4 +60,4 @@ When used inside `<XROrigin>`, [`useTeleport`](/docs/reference/xr/use-teleport) 
 
 ## Accessing the origin
 
-Use [`useXROrigin`](/docs/reference/xr/use-xr-origin) to read the current origin `Group` from a child component.
+Use [`useXROrigin`](/docs/reference/xr/use-xr-origin) to read the current XR tree's origin state from a child component.

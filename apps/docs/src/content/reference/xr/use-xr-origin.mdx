@@ -5,7 +5,11 @@ title: 'useXROrigin'
 type: 'hook'
 ---
 
-Returns the nearest parent `<XROrigin>` group, or `undefined` when no `<XROrigin>` exists.
+Returns XR-scoped origin state for the current `<XR>` tree.
+
+`origin.current` is the mounted `<XROrigin>` group when one exists, otherwise `undefined`.
+
+This hook must be called within a descendant of [`<XR>`](/docs/reference/xr/xr).
 
 ```svelte
 <script>
@@ -19,7 +23,7 @@ Returns the nearest parent `<XROrigin>` group, or `undefined` when no `<XROrigin
 </script>
 ```
 
-Primarily useful for libraries or custom hooks that need to reason about whether a user is inside an `<XROrigin>` (e.g. to decide between moving the origin vs. mutating the XR reference space).
+Primarily useful for libraries or custom hooks that need to reason about whether the current XR tree has an active `<XROrigin>` (e.g. to decide between moving the origin vs. mutating the XR reference space).
 
 ### Signature
 

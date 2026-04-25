@@ -49,6 +49,7 @@ This should be placed within a Threlte `<Canvas />`.
   import { dispatchXRInputSourceEvent } from '../internal/inputSources.svelte.js'
   import { defaultFeatures } from '../internal/defaultFeatures.js'
   import { toggleXRSession } from '../lib/toggleXRSession.js'
+  import { provideXROrigin } from '../hooks/useXROrigin.svelte.js'
 
   const INPUT_SOURCE_EVENTS = [
     'select',
@@ -143,6 +144,7 @@ This should be placed within a Threlte `<Canvas />`.
 
   const { renderer, renderMode } = useThrelte()
 
+  provideXROrigin()
   setupRaf()
   setupHeadset()
   const bindInputSources = setupInputSources(controllerFactory, handFactory)

@@ -5,6 +5,8 @@ components nested inside attach here instead of the scene root. Transforming
 the origin (position, rotation, scale) transforms the user in the scene —
 useful for teleportation, dolly rigs, and resizing the user.
 
+Only one `<XROrigin>` may be mounted within a given `<XR>`.
+
 ```svelte
 <XROrigin position={[0, 0, 5]} rotation.y={Math.PI}>
   <Controller left />
@@ -19,23 +21,35 @@ scene root (existing behaviour, unchanged).
 -->
 <script lang="ts">
   import { Group } from 'three'
-  import { T, useThrelte } from '@threlte/core'
+  import { T, useThrelte, type Props } from '@threlte/core'
   import type { Snippet } from 'svelte'
-  import { provideXROrigin } from '../hooks/useXROrigin.svelte.js'
+  import { useXROrigin } from '../hooks/useXROrigin.svelte.js'
   import { isPresenting } from '../internal/state.svelte.js'
 
-  interface Props {
+  interface XROriginProps extends Props<Group> {
     ref?: Group
     children?: Snippet<[{ ref: Group }]>
-    [key: string]: unknown
   }
 
-  let { ref = $bindable(), children, ...rest }: Props = $props()
+  let { ref = $bindable(), children, ...rest }: XROriginProps = $props()
 
   const { renderer, scene } = useThrelte()
 
   const group = new Group()
-  provideXROrigin(() => group)
+  const origin = useXROrigin()
+
+  $effect.pre(() => {
+    if (origin.current !== undefined && origin.current !== group) {
+      throw new Error('Only one <XROrigin> may be mounted within a single <XR>.')
+    }
+
+    origin.current = group
+    return () => {
+      if (origin.current === group) {
+        origin.current = undefined
+      }
+    }
+  })
 
   // Parent the XR camera to this group so its matrixWorld reflects our
   // transform. When this component unmounts (or the session ends), return the
@@ -44,10 +58,11 @@ scene root (existing behaviour, unchanged).
     if (!isPresenting.current) return
 
     const camera = renderer.xr.getCamera()
+    const previousParent = camera.parent ?? scene
     group.add(camera)
 
     return () => {
-      scene.add(camera)
+      previousParent.add(camera)
     }
   })
 </script>
@@ -55,7 +70,6 @@ scene root (existing behaviour, unchanged).
 <T
   is={group}
   bind:ref
-  attach={scene}
   {...rest}
 >
   {@render children?.({ ref: group })}
