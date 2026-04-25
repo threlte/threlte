@@ -1,8 +1,6 @@
 import { type Mesh, Raycaster, type Intersection } from 'three'
 import { getContext, setContext } from 'svelte'
 import type { CurrentWritable } from '@threlte/core'
-import { defaultComputeFunction } from './compute.js'
-import type { TeleportControlsOptions } from './index.js'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
@@ -13,8 +11,6 @@ export interface Context {
   surfaces: Map<string, Mesh>
   blockers: Map<string, Mesh>
   dispatchers: WeakMap<Mesh, Record<string, (arg: unknown) => void>>
-  raycaster: Raycaster
-  compute: ComputeFunction
   addBlocker: (mesh: Mesh) => void
   removeBlocker: (mesh: Mesh) => void
   addSurface: (mesh: Mesh, events: TeleportEvents) => void
@@ -26,6 +22,9 @@ export interface HandContext {
   enabled: CurrentWritable<boolean>
   active: CurrentWritable<boolean>
   hovered: CurrentWritable<Intersection | undefined>
+  /** Per-hand raycaster — keeps intersection state isolated between hands. */
+  raycaster: Raycaster
+  compute: ComputeFunction
 }
 
 const handContextKeys = {
@@ -47,7 +46,7 @@ export const useTeleportControls = () => {
   return getContext<Context>(contextKey)
 }
 
-export const createTeleportContext = (compute: TeleportControlsOptions['compute']) => {
+export const createTeleportContext = () => {
   const addSurface = (mesh: Mesh, events: TeleportEvents) => {
     // check if the object is already in the list
     if (context.interactiveObjects.indexOf(mesh) > -1) {
@@ -89,8 +88,6 @@ export const createTeleportContext = (compute: TeleportControlsOptions['compute'
     surfaces: new Map(),
     blockers: new Map(),
     dispatchers: new WeakMap(),
-    raycaster: new Raycaster(),
-    compute: compute ?? defaultComputeFunction,
     addBlocker,
     removeBlocker,
     addSurface,

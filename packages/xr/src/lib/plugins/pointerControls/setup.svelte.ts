@@ -107,7 +107,7 @@ export const setupPointerControls = (
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const rawHits = context.raycaster.intersectObjects(
+    const rawHits = handContext.raycaster.intersectObjects(
       context.interactiveObjects,
       true
     ) as Intersection[]
@@ -131,7 +131,7 @@ export const setupPointerControls = (
       return true
     })
     const filtered =
-      context.filter === undefined ? hits : context.filter(hits, context, handContext)
+      handContext.filter === undefined ? hits : handContext.filter(hits, context, handContext)
 
     pointerIntersection[handedness] = filtered[0]
 
@@ -158,7 +158,7 @@ export const setupPointerControls = (
   }
 
   function processHits() {
-    context.compute(context, handContext)
+    handContext.compute(context, handContext)
     return getHits()
   }
 
@@ -208,7 +208,7 @@ export const setupPointerControls = (
         delta: 0,
         nativeEvent: event,
         pointer: handContext.pointer.current,
-        ray: context.raycaster.ray
+        ray: handContext.raycaster.ray
       }
 
       if (isPointerMove) {

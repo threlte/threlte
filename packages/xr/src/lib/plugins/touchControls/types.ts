@@ -33,14 +33,6 @@ export type FilterFunction = (
 
 export type ControlsContext = {
   interactiveObjects: Object3D[]
-  /** Distance at which an object starts receiving hover events. */
-  hoverRadius: number
-  /** Distance at which hover transitions to pointerdown. */
-  downRadius: number
-  /** Which joint to track. Defaults to `index-finger-tip`. */
-  joint: HandJoints
-  compute: ComputeFunction
-  filter?: FilterFunction | undefined
 }
 
 export type HandContext = {
@@ -58,6 +50,14 @@ export type HandContext = {
   hovered: Map<string, IntersectionEvent>
   /** Whether the joint is currently past the downRadius threshold. */
   down: boolean
+  /** Which joint to track for this hand. */
+  joint: HandJoints
+  /** Distance at which an object starts receiving hover events for this hand. */
+  hoverRadius: number
+  /** Distance at which hover transitions to pointerdown for this hand. */
+  downRadius: number
+  compute: ComputeFunction
+  filter?: FilterFunction | undefined
 }
 
 export type ThrelteXREvents = {

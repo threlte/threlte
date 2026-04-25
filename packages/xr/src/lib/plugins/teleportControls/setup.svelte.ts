@@ -44,9 +44,9 @@ export const setupTeleportControls = (
         return
       }
 
-      context.compute(context, handContext)
+      handContext.compute(context, handContext)
 
-      const [intersect] = context.raycaster.intersectObjects(context.interactiveObjects, true)
+      const [intersect] = handContext.raycaster.intersectObjects(context.interactiveObjects, true)
 
       if (intersect === undefined) {
         if (handContext.hovered.current !== undefined) {

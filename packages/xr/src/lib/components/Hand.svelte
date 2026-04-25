@@ -4,7 +4,7 @@
   import type { XRHandEvents } from '../types.js'
   import { addSubscriber } from '../internal/inputSources.svelte.js'
   import { useHand } from '../hooks/useHand.svelte.js'
-  import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
+  import { useXROrigin } from '../hooks/useXROrigin.svelte.js'
   import type { Snippet } from 'svelte'
 
   type Props = {
@@ -47,6 +47,7 @@
   }: Props = $props()
 
   const { scene, renderer, renderStage } = useThrelte()
+  const xrOrigin = useXROrigin()
   const attachTarget = $derived(xrOrigin.current ?? scene)
   const handedness: 'left' | 'right' = left ? 'left' : right ? 'right' : (hand ?? 'left')
   const handStore = useHand(handedness)

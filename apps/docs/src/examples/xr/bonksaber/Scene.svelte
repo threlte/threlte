@@ -33,7 +33,6 @@
   let playing = $state(false)
 
   const spring = Spring.of(() => ($isPresenting ? 0 : 1), { stiffness: 0.1, damping: 0.5 })
-  console.log('hi')
 </script>
 
 <XR>

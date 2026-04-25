@@ -3,13 +3,13 @@ import type { ControlsContext, HandContext } from './types.js'
 
 export type ComputeFunction = (context: ControlsContext, handContext: HandContext) => void
 
-export const defaultComputeFunction: ComputeFunction = (context, handContext) => {
+export const defaultComputeFunction: ComputeFunction = (_context, handContext) => {
   handContext.originValid = false
 
   const xrhand = hands[handContext.hand]
   if (xrhand === undefined) return
 
-  const jointSpace = xrhand.hand.joints[context.joint]
+  const jointSpace = xrhand.hand.joints[handContext.joint]
   if (jointSpace === undefined || jointSpace.jointRadius === undefined) return
 
   jointSpace.updateWorldMatrix(true, false)

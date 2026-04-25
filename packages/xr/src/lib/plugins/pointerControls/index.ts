@@ -39,31 +39,25 @@ export type PointerControlsOptions = {
 export const pointerControls = (handedness: 'left' | 'right', options?: PointerControlsOptions) => {
   if (getControlsContext() === undefined) {
     injectPointerControlsPlugin()
-
     setInternalContext()
-
-    setControlsContext({
-      interactiveObjects: [],
-      raycaster: new Raycaster(),
-      compute: options?.compute ?? defaultComputeFunction,
-      filter: options?.filter
-    })
+    setControlsContext({ interactiveObjects: [] })
   }
 
   const context = getControlsContext()
 
   if (getHandContext(handedness) === undefined) {
-    const enabled = options?.enabled ?? true
-
     const ctx: HandContext = {
       hand: handedness,
-      enabled: currentWritable(enabled),
+      enabled: currentWritable(options?.enabled ?? true),
       pointer: currentWritable(new Vector3()),
       pointerOverTarget: currentWritable(false),
       lastEvent: undefined,
       initialClick: [0, 0, 0],
       initialHits: [],
-      hovered: new Map()
+      hovered: new Map(),
+      raycaster: new Raycaster(),
+      compute: options?.compute ?? defaultComputeFunction,
+      filter: options?.filter
     }
 
     setHandContext(handedness, ctx)

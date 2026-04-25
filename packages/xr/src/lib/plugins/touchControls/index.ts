@@ -22,13 +22,13 @@ export type TouchControlsOptions = {
   joint?: HandJoints
   /**
    * Distance at which an object starts receiving hover events.
-   * @default 0.1
+   * @default 0.03
    */
   hoverRadius?: number
   /**
    * Distance below which a hover transitions to `pointerdown` (and crossing back up fires
    * `pointerup` + `click`).
-   * @default 0.03
+   * @default 0.01
    */
   downRadius?: number
   compute?: ComputeFunction
@@ -43,27 +43,16 @@ export type TouchControlsOptions = {
 export const touchControls = (handedness: 'left' | 'right', options?: TouchControlsOptions) => {
   if (getControlsContext() === undefined) {
     injectTouchControlsPlugin()
-
     setInternalContext()
-
-    setControlsContext({
-      interactiveObjects: [],
-      hoverRadius: options?.hoverRadius ?? 0.03,
-      downRadius: options?.downRadius ?? 0.01,
-      joint: options?.joint ?? 'index-finger-tip',
-      compute: options?.compute ?? defaultComputeFunction,
-      filter: options?.filter
-    })
+    setControlsContext({ interactiveObjects: [] })
   }
 
   const context = getControlsContext()
 
   if (getHandContext(handedness) === undefined) {
-    const enabled = options?.enabled ?? true
-
     const ctx: HandContext = {
       hand: handedness,
-      enabled: currentWritable(enabled),
+      enabled: currentWritable(options?.enabled ?? true),
       pointer: currentWritable(new Vector3()),
       pointerOverTarget: currentWritable(false),
       origin: new Vector3(),
@@ -72,7 +61,12 @@ export const touchControls = (handedness: 'left' | 'right', options?: TouchContr
       initialClick: [0, 0, 0],
       initialHits: [],
       hovered: new Map(),
-      down: false
+      down: false,
+      joint: options?.joint ?? 'index-finger-tip',
+      hoverRadius: options?.hoverRadius ?? 0.03,
+      downRadius: options?.downRadius ?? 0.01,
+      compute: options?.compute ?? defaultComputeFunction,
+      filter: options?.filter
     }
 
     setHandContext(handedness, ctx)

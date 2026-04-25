@@ -8,7 +8,7 @@ export type ComputeFunction = (context: Context, handContext: HandContext) => vo
 const origin = new Vector3()
 const forward = new Vector3()
 
-export const defaultComputeFunction = (context: Context, handContext: HandContext) => {
+export const defaultComputeFunction = (_context: Context, handContext: HandContext) => {
   const targetRay = controllers[handContext.hand]?.targetRay ?? hands[handContext.hand]?.targetRay
 
   if (targetRay === undefined) return
@@ -21,5 +21,5 @@ export const defaultComputeFunction = (context: Context, handContext: HandContex
   origin.setFromMatrixPosition(targetRay.matrixWorld)
   forward.set(0, 0, -1).transformDirection(targetRay.matrixWorld)
 
-  context.raycaster.set(origin, forward)
+  handContext.raycaster.set(origin, forward)
 }

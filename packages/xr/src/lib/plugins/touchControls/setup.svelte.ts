@@ -49,6 +49,63 @@ export const setupTouchControls = (
 
   let hits: Intersection[] = []
 
+  const pushHit = (
+    raw: Intersection[],
+    origin: Vector3,
+    reachSquared: number,
+    object: Object3D
+  ) => {
+    const mesh = object as Mesh
+    const geometry = mesh.geometry
+    if (geometry === undefined) return
+
+    if (geometry.boundingSphere === null) geometry.computeBoundingSphere()
+    if (geometry.boundingBox === null) geometry.computeBoundingBox()
+    if (geometry.boundingSphere === null || geometry.boundingBox === null) return
+
+    mesh.updateWorldMatrix(true, false)
+
+    // Broad-phase: world-space bounding sphere reject.
+    worldSphere.copy(geometry.boundingSphere).applyMatrix4(mesh.matrixWorld)
+    const broad = handContext.hoverRadius + worldSphere.radius
+    if (origin.distanceToSquared(worldSphere.center) > broad * broad) return
+
+    // Narrow-phase: closest point on the local-space AABB (so rotation /
+    // scale are handled exactly), projected back to world.
+    invMatrix.copy(mesh.matrixWorld).invert()
+    localOrigin.copy(origin).applyMatrix4(invMatrix)
+    geometry.boundingBox.clampPoint(localOrigin, localClamped)
+    surfacePoint.copy(localClamped).applyMatrix4(mesh.matrixWorld)
+
+    const distSq = origin.distanceToSquared(surfacePoint)
+    if (distSq > reachSquared) return
+
+    raw.push({
+      distance: Math.sqrt(distSq),
+      point: surfacePoint.clone(),
+      object: mesh,
+      eventObject: mesh,
+      face: null
+    } as unknown as Intersection)
+  }
+
+  const collectHits = (
+    raw: Intersection[],
+    origin: Vector3,
+    reachSquared: number,
+    object: Object3D,
+    seen: Set<string>
+  ) => {
+    if (seen.has(object.uuid)) return
+    seen.add(object.uuid)
+
+    pushHit(raw, origin, reachSquared, object)
+
+    for (const child of object.children) {
+      collectHits(raw, origin, reachSquared, child, seen)
+    }
+  }
+
   function cancelPointer(intersections: Intersection[]) {
     if (handContext.hovered.size === 0) return
 
@@ -85,50 +142,19 @@ export const setupTouchControls = (
     if (!handContext.originValid) return []
 
     const origin = handContext.origin
-    const reach = context.hoverRadius
+    const reach = handContext.hoverRadius
     const reachSquared = reach * reach
     const raw: Intersection[] = []
+    const seen = new Set<string>()
 
     for (const obj of context.interactiveObjects) {
-      const mesh = obj as Mesh
-      const geometry = mesh.geometry
-      if (geometry === undefined) continue
-
-      if (geometry.boundingSphere === null) geometry.computeBoundingSphere()
-      if (geometry.boundingBox === null) geometry.computeBoundingBox()
-      if (geometry.boundingSphere === null || geometry.boundingBox === null) continue
-
-      mesh.updateWorldMatrix(true, false)
-
-      // Broad-phase: world-space bounding sphere reject.
-      worldSphere.copy(geometry.boundingSphere).applyMatrix4(mesh.matrixWorld)
-      const broad = reach + worldSphere.radius
-      if (origin.distanceToSquared(worldSphere.center) > broad * broad) continue
-
-      // Narrow-phase: closest point on the local-space AABB (so rotation /
-      // scale are handled exactly), projected back to world.
-      invMatrix.copy(mesh.matrixWorld).invert()
-      localOrigin.copy(origin).applyMatrix4(invMatrix)
-      geometry.boundingBox.clampPoint(localOrigin, localClamped)
-      surfacePoint.copy(localClamped).applyMatrix4(mesh.matrixWorld)
-
-      const distSq = origin.distanceToSquared(surfacePoint)
-      if (distSq > reachSquared) continue
-
-      const hit = {
-        distance: Math.sqrt(distSq),
-        point: surfacePoint.clone(),
-        object: mesh,
-        eventObject: mesh,
-        face: null
-      } as unknown as Intersection
-
-      raw.push(hit)
+      collectHits(raw, origin, reachSquared, obj, seen)
     }
 
     raw.sort((a, b) => a.distance - b.distance)
 
-    const filtered = context.filter === undefined ? raw : context.filter(raw, context, handContext)
+    const filtered =
+      handContext.filter === undefined ? raw : handContext.filter(raw, context, handContext)
 
     const intersections: Intersection[] = []
     for (const hit of filtered) {
@@ -243,7 +269,7 @@ export const setupTouchControls = (
 
   const { start, stop } = useFixed(
     () => {
-      context.compute(context, handContext)
+      handContext.compute(context, handContext)
       hits = getHits()
 
       // Hover / move every tick — the joint moves continuously, so there is
@@ -251,7 +277,7 @@ export const setupTouchControls = (
       handleEvent('onpointermove')
 
       const closest = hits[0]
-      const shouldBeDown = closest !== undefined && closest.distance < context.downRadius
+      const shouldBeDown = closest !== undefined && closest.distance < handContext.downRadius
 
       if (shouldBeDown && !handContext.down) {
         handContext.down = true

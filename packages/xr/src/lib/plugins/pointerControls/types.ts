@@ -52,9 +52,6 @@ export type FilterFunction = (
 // State that can be shared among hands / controllers
 export type ControlsContext = {
   interactiveObjects: Object3D[]
-  raycaster: Raycaster
-  compute: ComputeFunction
-  filter?: FilterFunction | undefined
 }
 
 // State attached to a left / right hand or controller
@@ -67,6 +64,11 @@ export type HandContext = {
   initialClick: [x: number, y: number, z: number]
   initialHits: Object3D[]
   hovered: Map<string, IntersectionEvent>
+  /** Per-hand raycaster — keeps `intersectionEvent.ray` consistent across the
+   * tick even when the other hand also raycasts. */
+  raycaster: Raycaster
+  compute: ComputeFunction
+  filter?: FilterFunction | undefined
 }
 
 export interface PointerCaptureTarget {

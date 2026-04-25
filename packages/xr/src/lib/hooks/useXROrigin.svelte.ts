@@ -1,13 +1,22 @@
+import { getContext, setContext } from 'svelte'
 import type { Group } from 'three'
 
-class XROriginState {
-  current = $state.raw<Group>()
+const key = Symbol('xr-origin-context')
+
+interface Context {
+  current: Group | undefined
 }
 
-export const xrOrigin = new XROriginState()
+export const provideXROrigin = (ref: () => Group): void => {
+  setContext<Context>(key, {
+    get current() {
+      return ref()
+    }
+  })
+}
 
 /**
- * Returns the currently mounted `<XROrigin>` group, or `undefined` when no
- * XROrigin is mounted.
+ * Returns the nearest parent `<XROrigin>` group, or `undefined` when no
+ * `<XROrigin>` exists in the current component ancestry.
  */
-export const useXROrigin = (): Group | undefined => xrOrigin.current
+export const useXROrigin = (): Context => getContext<Context>(key) ?? { current: undefined }

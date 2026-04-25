@@ -1,7 +1,7 @@
 import { Matrix4 } from 'three'
 import { useThrelte, useTask } from '@threlte/core'
 import { useController } from './useController.svelte.js'
-import { xrOrigin } from './useXROrigin.svelte.js'
+import { useXROrigin } from './useXROrigin.svelte.js'
 import { isPresenting, session } from '../internal/state.svelte.js'
 import { fromStore } from 'svelte/store'
 
@@ -33,6 +33,7 @@ export const useHitTest = (
 ): void => {
   const source = options.source ?? 'viewer'
   const { xr } = useThrelte().renderer
+  const xrOrigin = useXROrigin()
   const hitMatrix = new Matrix4()
 
   let hitTestSource = $state.raw<XRHitTestSource>()
@@ -112,10 +113,10 @@ export const useHitTest = (
 
       hitMatrix.fromArray(pose.transform.matrix)
 
-      const origin = xrOrigin.current
-      if (origin !== undefined) {
-        origin.updateWorldMatrix(true, false)
-        hitMatrix.premultiply(origin.matrixWorld)
+      const currentOrigin = xrOrigin.current
+      if (currentOrigin !== undefined) {
+        currentOrigin.updateWorldMatrix(true, false)
+        hitMatrix.premultiply(currentOrigin.matrixWorld)
       }
 
       hitTestCallback(hitMatrix, hit)

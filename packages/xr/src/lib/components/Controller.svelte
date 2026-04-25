@@ -6,7 +6,7 @@
   import { useController } from '../hooks/useController.svelte.js'
   import { pointerState, teleportState } from '../internal/state.svelte.js'
   import { addSubscriber } from '../internal/inputSources.svelte.js'
-  import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
+  import { useXROrigin } from '../hooks/useXROrigin.svelte.js'
   import type { XRControllerEvents } from '../types.js'
   import PointerCursor from './internal/PointerCursor.svelte'
   import ShortRay from './internal/ShortRay.svelte'
@@ -68,6 +68,7 @@
   }: Props = $props()
 
   const { scene } = useThrelte()
+  const xrOrigin = useXROrigin()
   const attachTarget = $derived(xrOrigin.current ?? scene)
   const handedness: 'left' | 'right' = left ? 'left' : right ? 'right' : (hand ?? 'left')
   const controller = useController(handedness)

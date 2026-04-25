@@ -1,6 +1,6 @@
 import { Quaternion, type Vector3, type Vector3Tuple } from 'three'
 import { useThrelte } from '@threlte/core'
-import { xrOrigin } from './useXROrigin.svelte.js'
+import { useXROrigin } from './useXROrigin.svelte.js'
 
 /**
  * Returns a callback that teleports the player to a target position and optional orientation.
@@ -21,18 +21,19 @@ import { xrOrigin } from './useXROrigin.svelte.js'
  */
 export const useTeleport = () => {
   const { xr } = useThrelte().renderer
+  const xrOrigin = useXROrigin()
   const defaultOrientation = new Quaternion()
   const offset = { x: 0, y: 0, z: 0 }
 
   return (position: Vector3 | Vector3Tuple, orientation = defaultOrientation) => {
-    const origin = xrOrigin.current
-    if (origin !== undefined) {
+    const currentOrigin = xrOrigin.current
+    if (currentOrigin !== undefined) {
       if (Array.isArray(position)) {
-        origin.position.set(position[0], position[1], position[2])
+        currentOrigin.position.set(position[0], position[1], position[2])
       } else {
-        origin.position.copy(position)
+        currentOrigin.position.copy(position)
       }
-      origin.quaternion.copy(orientation)
+      currentOrigin.quaternion.copy(orientation)
       return
     }
 

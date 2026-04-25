@@ -1,7 +1,7 @@
 import { Group, Matrix4, Vector3 } from 'three'
 import { useThrelte, useTask, useStage } from '@threlte/core'
 import { isPresenting } from './state.svelte.js'
-import { xrOrigin } from '../hooks/useXROrigin.svelte.js'
+import { useXROrigin } from '../hooks/useXROrigin.svelte.js'
 
 export const headset = new Group()
 
@@ -11,6 +11,7 @@ const tempScale = new Vector3()
 export const setupHeadset = () => {
   const { renderer, camera, renderStage } = useThrelte()
   const stage = useStage(Symbol('xr-headset-stage'), { before: renderStage })
+  const xrOrigin = useXROrigin()
 
   const { xr } = renderer
 
