@@ -1,7 +1,7 @@
 <!--
 Debug visualization for the touchControls example. Draws a wireframe hover
 sphere and a smaller down sphere around each hand's tracked joint, so you
-can see exactly when each threshold is crossed while tuning radii.
+can see exactly when each threshold is crossed while tuning size.
 -->
 <script lang="ts">
   import { Mesh, MeshBasicMaterial, SphereGeometry, Vector3 } from 'three'
@@ -20,30 +20,30 @@ can see exactly when each threshold is crossed while tuning radii.
   const rightHand = useHand('right')
 
   const sphereGeometry = new SphereGeometry(1, 16, 12)
-  const hoverMat = new MeshBasicMaterial({
+  const hoverMaterial = new MeshBasicMaterial({
     color: '#facc15',
     wireframe: true,
     transparent: true,
     opacity: 0.3
   })
-  const downMat = new MeshBasicMaterial({
+  const downMaterial = new MeshBasicMaterial({
     color: '#ef4444',
     wireframe: true,
     transparent: true,
     opacity: 0.5
   })
 
-  const makeSphere = (material: MeshBasicMaterial) => {
+  const createSphere = (material: MeshBasicMaterial) => {
     const mesh = new Mesh(sphereGeometry, material)
     mesh.matrixAutoUpdate = false
     mesh.visible = false
     return mesh
   }
 
-  const leftHover = makeSphere(hoverMat)
-  const leftDown = makeSphere(downMat)
-  const rightHover = makeSphere(hoverMat)
-  const rightDown = makeSphere(downMat)
+  const leftHover = createSphere(hoverMaterial)
+  const leftDown = createSphere(downMaterial)
+  const rightHover = createSphere(hoverMaterial)
+  const rightDown = createSphere(downMaterial)
 
   const origin = new Vector3()
 

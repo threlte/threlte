@@ -7,8 +7,6 @@
   import Speaker from '../../extras/positional-audio/Speaker.svelte'
   import Microphone from './Microphone.svelte'
 
-  let turntable = $state.raw<Turntable>()
-
   let volume = $state(0)
 
   interactivity()
@@ -49,10 +47,7 @@
   position={[0, 0.6, -0.5]}
   scale={0.08}
 >
-  <Turntable
-    bind:this={turntable}
-    bind:volume
-  />
+  <Turntable bind:volume />
   <Speaker
     position.x={6}
     rotation.y={MathUtils.DEG2RAD * -7}

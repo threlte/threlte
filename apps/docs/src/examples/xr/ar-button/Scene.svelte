@@ -1,17 +1,10 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask } from '@threlte/core'
+  import { VirtualEnvironment } from '@threlte/extras'
   import { XR, Controller, Hand, pointerControls } from '@threlte/xr'
-  import {
-    type Group,
-    MeshStandardMaterial,
-    PMREMGenerator,
-    Vector3,
-    WebGLRenderTarget
-  } from 'three'
+  import { type Group, Vector3 } from 'three'
   import Spaceship from './models/spaceship.svelte'
   import Stars from './Stars.svelte'
-
-  const { scene, renderer } = useThrelte()
 
   pointerControls('left')
   pointerControls('right')
@@ -23,8 +16,6 @@
   let intersectionPoint: Vector3 | undefined
   let translAccelleration = 0
   let angleAccelleration = 0
-  const pmrem = new PMREMGenerator(renderer)
-  let envMapRT: WebGLRenderTarget
 
   let spaceShipRef = $state<Group>()
   let translY = $state(0)
@@ -35,39 +26,20 @@
   const pivot = new Vector3()
 
   useTask(() => {
-    if (intersectionPoint) {
-      const targetY = intersectionPoint.y - home.y
-      translAccelleration += (targetY - translY) * 0.01
-      translAccelleration *= 0.92
-      translY += translAccelleration
+    if (intersectionPoint === undefined) return
 
-      pivot.set(home.x, home.y + translY, home.z)
-      dir.copy(intersectionPoint).sub(pivot).normalize()
-      const dirCos = dir.dot(up)
-      const angle = Math.acos(dirCos) - Math.PI * 0.5
-      angleAccelleration += (angle - angleZ) * 0.02
-      angleAccelleration *= 0.9
-      angleZ += angleAccelleration
-    }
+    const targetY = intersectionPoint.y - home.y
+    translAccelleration += (targetY - translY) * 0.01
+    translAccelleration *= 0.92
+    translY += translAccelleration
 
-    if (envMapRT) envMapRT.dispose()
-
-    if (spaceShipRef) {
-      spaceShipRef.visible = false
-      envMapRT = pmrem.fromScene(scene, 0, 0.1, 1000)
-      spaceShipRef.visible = true
-
-      spaceShipRef.traverse((child) => {
-        if ('material' in child) {
-          const material = child.material as MeshStandardMaterial
-          if ('envMapIntensity' in material) {
-            material.envMap = envMapRT.texture
-            material.envMapIntensity = 100
-            material.normalScale.set(0.3, 0.3)
-          }
-        }
-      })
-    }
+    pivot.set(home.x, home.y + translY, home.z)
+    dir.copy(intersectionPoint).sub(pivot).normalize()
+    const dirCos = dir.dot(up)
+    const angle = Math.acos(dirCos) - Math.PI * 0.5
+    angleAccelleration += (angle - angleZ) * 0.02
+    angleAccelleration *= 0.9
+    angleZ += angleAccelleration
   })
 </script>
 
@@ -94,8 +66,8 @@
   shadow.bias={-0.0001}
 />
 
-<!-- Invisible ray-target plane. Controller and hand rays all hit
-     this and drive the spaceship's motion via event.point. -->
+<!-- Invisible ray-target plane. Controller and hand rays drive the
+     spaceship's motion via event.point. -->
 <T.Mesh
   position.x={home.x}
   position.y={home.y}
@@ -116,4 +88,8 @@
   rotation={[angleZ, 0, angleZ, 'ZXY']}
 />
 
-<Stars />
+<!-- Stars are both visible in the main scene and captured into the cube
+     map that lights the spaceship's reflections. -->
+<VirtualEnvironment visible>
+  <Stars />
+</VirtualEnvironment>

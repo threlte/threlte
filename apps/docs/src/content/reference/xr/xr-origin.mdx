@@ -26,11 +26,11 @@ componentSignature: {}
 </XR>
 ```
 
-Without `<XROrigin>`, controllers and hands continue to attach to the scene root — existing code works unchanged.
+Without `<XROrigin>`, controllers and hands continue to attach to the scene root.
 
 ## Dolly rig
 
-Because `<XROrigin>` is a regular Svelte component, it can be placed inside any transformed parent. Moving that parent moves the user:
+Because `<XROrigin>` contains a regular `THREE.Group`, it can be placed inside any transformed parent. Moving that parent moves the user:
 
 ```svelte
 <T.Group bind:ref={dolly}>

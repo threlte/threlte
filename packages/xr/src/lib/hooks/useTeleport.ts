@@ -5,7 +5,7 @@ import { xrOrigin } from './useXROrigin.svelte.js'
 /**
  * Returns a callback that teleports the player to a target position and optional orientation.
  *
- * When used inside an `<XROrigin>` subtree, the origin group is translated directly — the
+ * When used inside `<XROrigin>`, the origin group is translated directly — the
  * user's feet end up at the target, and their room-scale offset from the origin is preserved.
  *
  * When used outside `<XROrigin>`, the underlying `XRReferenceSpace` is mutated to compensate

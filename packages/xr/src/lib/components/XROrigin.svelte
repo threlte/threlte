@@ -35,9 +35,8 @@ scene root (existing behaviour, unchanged).
   const { renderer, scene } = useThrelte()
 
   const group = new Group()
-  ref = group
 
-  $effect(() => {
+  $effect.pre(() => {
     xrOrigin.current = group
     return () => {
       xrOrigin.current = undefined
@@ -47,7 +46,7 @@ scene root (existing behaviour, unchanged).
   // Parent the XR camera to this group so its matrixWorld reflects our
   // transform. When this component unmounts (or the session ends), return the
   // camera to the scene root so non-XR rendering keeps working.
-  $effect(() => {
+  $effect.pre(() => {
     if (!isPresenting.current) return
 
     const camera = renderer.xr.getCamera()
@@ -61,6 +60,7 @@ scene root (existing behaviour, unchanged).
 
 <T
   is={group}
+  bind:ref
   attach={scene}
   {...rest}
 >
