@@ -2,10 +2,11 @@
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { Text, Grid, Outlines, VirtualEnvironment, Stars } from '@threlte/extras'
-  import { XR, useXR, teleportControls } from '@threlte/xr'
+  import { XR, useXR, teleportControls, pointerControls, touchControls } from '@threlte/xr'
   import Sabers from './Sabers.svelte'
   import Blocks from './Blocks.svelte'
   import Mountains from './Mountains.svelte'
+  import Menu from './Menu.svelte'
   import { Spring } from 'svelte/motion'
 
   const { scene } = useThrelte()
@@ -16,17 +17,23 @@
 
   teleportControls('left')
   teleportControls('right')
+  pointerControls('left')
+  pointerControls('right')
+  touchControls('left')
+  touchControls('right')
 
-  const spring = new Spring(1, { stiffness: 0.1, damping: 0.5 })
+  let playing = $state(false)
 
-  $effect.pre(() => {
-    spring.set($isPresenting ? 0 : 1)
-  })
+  const spring = Spring.of(() => ($isPresenting ? 0 : 1), { stiffness: 0.1, damping: 0.5 })
+  console.log('hi')
 </script>
 
 <XR>
   <Sabers />
-  <Blocks />
+  <Blocks
+    {playing}
+    oncomplete={() => (playing = false)}
+  />
 
   {#snippet fallback()}
     <T.PerspectiveCamera
@@ -38,6 +45,10 @@
     />
   {/snippet}
 </XR>
+
+{#if $isPresenting && !playing}
+  <Menu onstart={() => (playing = true)} />
+{/if}
 
 <Text
   anchorX="center"
