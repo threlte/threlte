@@ -78,10 +78,11 @@ export const pointerControls = (handedness: 'left' | 'right', options?: PointerC
       hovered.set(`hand:${id}`, event)
     }
 
-    pointerState[handedness].hovering =
-      controllerContext.pointerOverTarget.current || handContext.pointerOverTarget.current
-    pointerIntersection[handedness] =
-      controllerContext.currentIntersection ?? handContext.currentIntersection
+    // Shared handedness-level pointer visuals are currently controller-only:
+    // <Controller /> renders the cursor/ray from these globals, while hand
+    // pointer events are dispatched independently without a matching visual.
+    pointerState[handedness].hovering = controllerContext.pointerOverTarget.current
+    pointerIntersection[handedness] = controllerContext.currentIntersection
   }
 
   const createContext = (sourceType: PointerSourceType): HandContext => ({
