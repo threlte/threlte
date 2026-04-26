@@ -40,7 +40,10 @@
       if (face) {
         normalMatrix.getNormalMatrix(object.matrixWorld)
         worldNormal.copy(face.normal).applyMatrix3(normalMatrix).normalize()
-        ref.lookAt(vec3.addVectors(point, worldNormal))
+        // lookAt from the lerped position (matches PointerCursor) — using the
+        // raw hit point here causes orientation to wobble while position is
+        // still easing toward the target.
+        ref.lookAt(vec3.addVectors(ref.position, worldNormal))
       }
     },
     {

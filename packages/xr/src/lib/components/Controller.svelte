@@ -75,7 +75,8 @@
   const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
 
   $effect.pre(() => {
-    controllerEvents[handedness] = {
+    const key = handedness
+    controllerEvents[key] = {
       onconnected,
       ondisconnected,
       onselect,
@@ -87,7 +88,7 @@
     }
 
     return () => {
-      controllerEvents[handedness] = undefined
+      controllerEvents[key] = undefined
     }
   })
 
@@ -116,7 +117,10 @@
   {/if}
 
   {#if targetRay}
-    <T is={targetRay}>
+    <T
+      is={targetRay}
+      attach={scene}
+    >
       {@render targetRaySnippet?.()}
 
       {#if hasPointerControls || hasTeleportControls}

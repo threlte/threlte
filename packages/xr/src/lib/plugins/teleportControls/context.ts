@@ -61,6 +61,7 @@ export const createTeleportContext = (compute: TeleportControlsOptions['compute'
 
   const removeSurface = (mesh: Mesh) => {
     const index = context.interactiveObjects.indexOf(mesh)
+    if (index === -1) return
     context.interactiveObjects.splice(index, 1)
     context.surfaces.delete(mesh.uuid)
     context.dispatchers.delete(mesh)
@@ -78,6 +79,7 @@ export const createTeleportContext = (compute: TeleportControlsOptions['compute'
 
   const removeBlocker = (mesh: Mesh) => {
     const index = context.interactiveObjects.indexOf(mesh)
+    if (index === -1) return
     context.interactiveObjects.splice(index, 1)
     context.blockers.delete(mesh.uuid)
   }

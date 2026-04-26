@@ -1,5 +1,27 @@
 # @threlte/xr
 
+## 1.5.5
+
+### Patch Changes
+
+- 6c97e76: Fix: controllers slot populated by hand-tracking input sources
+- f85e071: Add handedness to XR event payloads
+- 6c97e76: Fix: useHandJoint task ran every frame, now gated by isPresenting
+- 2f7a8d1: Fix pointerControls: raycast origin now comes from matrixWorld instead of local position / rotation
+- 6c97e76: Fix: redundant removeHandlers() in observe else branches
+- 6c97e76: Fix: pointerMissed fired per hit instead of per event (aligned to interactivity pattern)
+- f85e071: Fix: Hover identity keys plain meshes by uuid only, so sweeping across faces no longer spams pointerenter/pointerleave.
+
+## 1.5.4
+
+### Patch Changes
+
+- eb55046: Fix pointer/teleport splice(-1) array corruption
+- eb55046: Fix stale originalRenderMode capture
+- eb55046: Fix stale event-map cleanup
+- eb55046: Fix stale joint reference
+- eb55046: Fix isHandTracking not initialized on session start
+
 ## 1.5.3
 
 ### Patch Changes
