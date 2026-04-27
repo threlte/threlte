@@ -215,11 +215,11 @@
       step={0.01}
     />
     <Checkbox
-      label="azimuth locked"
+      label="azimuthLocked"
       bind:value={azimuthLocked}
     />
     <Checkbox
-      label="pointer lock"
+      label="pointerLock"
       bind:value={pointerLock}
     />
     <Checkbox

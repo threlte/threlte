@@ -1,4 +1,11 @@
-import { Euler, Object3D, Quaternion, Vector3, type Vector3Tuple } from 'three'
+import {
+  Euler,
+  Object3D,
+  Quaternion,
+  Vector3,
+  type Vector2Tuple,
+  type Vector3Tuple
+} from 'three'
 import { useTask, useThrelte } from '@threlte/core'
 import type CameraControls from 'camera-controls'
 
@@ -18,14 +25,15 @@ export interface UseFollowOptions {
    * or some other part of the rig rather than the origin.
    * @default [0, 0, 0]
    */
-  lookAtOffset?: Vector3 | Vector3Tuple
+  lookAtOffset?: Vector3Tuple
 
   /**
    * Dead zone in camera-space right/up axes. The target may drift this far
    * from the currently tracked position before the camera starts following.
    * Axes left at `0` have no dead zone on that axis.
+   * @default [0, 0]
    */
-  deadZone?: { x?: number; y?: number }
+  deadZone?: Vector2Tuple
 
   /**
    * Shift the tracked point in the target's direction of motion, expressed
@@ -44,12 +52,12 @@ export interface UseFollowOptions {
   lookAheadSmoothTime?: number
 
   /**
-   * Smoothing time in seconds for the camera position's translation. The
-   * camera's position lags the character's movement by this much, producing
-   * a trailing / cinematic follow. Only the character-motion contribution
-   * is smoothed — `CameraControls`' orbit pivot stays exactly on the
-   * character and the camera's look-at direction updates instantly, so
-   * rotating while moving and tweaking `lookAtOffset` both feel snappy.
+   * Smoothing time in seconds for the camera position's translation,
+   * producing a trailing / cinematic follow. Only the tracked base position
+   * is smoothed; `lookAtOffset` and `lookAhead` are added unsmoothed on top,
+   * so tweaking `lookAtOffset` feels snappy. The smoothed target is passed
+   * to `CameraControls` before its update runs, so collision and other
+   * `CameraControls` features apply to the smoothed pose.
    *
    * `0` (the default) disables follow smoothing. Rotation/zoom input still
    * smooths via `CameraControls`' own `smoothTime`.
@@ -104,8 +112,8 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     trackRotationSmoothTime = 0,
     followSmoothTime = 0
   } = $derived(optionsFn?.() ?? {})
-  const deadZoneX = $derived(deadZone?.x ?? 0)
-  const deadZoneY = $derived(deadZone?.y ?? 0)
+  const deadZoneX = $derived(deadZone?.[0] ?? 0)
+  const deadZoneY = $derived(deadZone?.[1] ?? 0)
 
   const postStage = scheduler.createStage(Symbol('useFollow-post'), {
     after: mainStage,
@@ -214,20 +222,31 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
 
       lookAtPoint.copy(trackedTarget)
       if (lookAtOffset) {
-        if (Array.isArray(lookAtOffset)) {
-          lookAtPoint.x += lookAtOffset[0] ?? 0
-          lookAtPoint.y += lookAtOffset[1] ?? 0
-          lookAtPoint.z += lookAtOffset[2] ?? 0
-        } else {
-          lookAtPoint.add(lookAtOffset)
-        }
+        lookAtPoint.x += lookAtOffset[0] ?? 0
+        lookAtPoint.y += lookAtOffset[1] ?? 0
+        lookAtPoint.z += lookAtOffset[2] ?? 0
       }
 
       if (lookAhead !== 0 && smoothedVelocity.lengthSq() > EPSILON) {
         lookAtPoint.addScaledVector(smoothedVelocity, lookAhead)
       }
 
-      controls.moveTo(lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, false)
+      if (!smoothingInitialized) {
+        smoothedTracked.copy(trackedTarget)
+        smoothingInitialized = true
+      }
+
+      if (followSmoothTime > EPSILON) {
+        const t = 1 - Math.exp(-delta / followSmoothTime)
+        smoothedTracked.lerp(trackedTarget, t)
+
+        lag.subVectors(smoothedTracked, trackedTarget)
+        smoothedLookAt.copy(lookAtPoint).add(lag)
+        controls.moveTo(smoothedLookAt.x, smoothedLookAt.y, smoothedLookAt.z, false)
+      } else {
+        smoothedTracked.copy(trackedTarget)
+        controls.moveTo(lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, false)
+      }
 
       if (trackRotation) {
         trackEuler.setFromQuaternion(targetQuat, 'YXZ')
@@ -247,33 +266,10 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     { autoInvalidate: false }
   )
 
-  const { task: smoothTask } = useTask(
-    Symbol('useFollow-smooth'),
-    (delta) => {
+  const { task: postTask } = useTask(
+    Symbol('useFollow-post'),
+    () => {
       if (!controls || !following) return
-
-      const scaledFollowSmoothTime = Math.max(0, followSmoothTime)
-
-      if (!smoothingInitialized) {
-        smoothedTracked.copy(trackedTarget)
-        smoothingInitialized = true
-      }
-
-      if (scaledFollowSmoothTime > EPSILON) {
-        const t = 1 - Math.exp(-delta / scaledFollowSmoothTime)
-        smoothedTracked.lerp(trackedTarget, t)
-
-        lag.subVectors(smoothedTracked, trackedTarget)
-        if (lag.lengthSq() >= EPSILON) {
-          const cam = controls.camera
-          cam.position.add(lag)
-          smoothedLookAt.copy(lookAtPoint).add(lag)
-          cam.lookAt(smoothedLookAt)
-        }
-      } else {
-        smoothedTracked.copy(trackedTarget)
-      }
-
       controls.camera.getWorldPosition(cameraPos)
       distance = cameraPos.distanceTo(targetWorld)
     },
@@ -313,18 +309,16 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
 
     /**
      * Post-update task that runs after `<CameraControls>`' update, in a
-     * dedicated stage between `mainStage` and `renderStage`. Applies
-     * `followSmoothTime` lag to the camera's position and rebuilds the
-     * camera's `lookAt` for the frame.
+     * dedicated stage between `mainStage` and `renderStage`.
      *
      * Exposed as an ordering anchor for hooks that decorate the camera
      * after follow's writes (e.g. a camera shake):
      *
      * ```ts
-     * const shake = useShake(() => ({ after: follow.smoothTask }))
+     * const shake = useShake(() => ({ after: follow.postTask }))
      * ```
      */
-    smoothTask,
+    postTask,
 
     /**
      * Project a 2D input into a world-space direction aligned with the
