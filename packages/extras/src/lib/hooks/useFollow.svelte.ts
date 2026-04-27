@@ -98,7 +98,7 @@ export interface UseFollowOptions {
 const EPSILON = 1e-6
 
 export const useFollow = (optionsFn?: () => UseFollowOptions) => {
-  const { invalidate, scheduler, mainStage, renderStage } = useThrelte()
+  const { invalidate } = useThrelte()
 
   const {
     target,
@@ -115,14 +115,6 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const deadZoneX = $derived(deadZone?.[0] ?? 0)
   const deadZoneY = $derived(deadZone?.[1] ?? 0)
 
-  const postStage = scheduler.createStage(Symbol('useFollow-post'), {
-    after: mainStage,
-    before: renderStage
-  })
-
-  let following = $state(false)
-  let distance = $state(0)
-
   let initialized = false
   let smoothingInitialized = false
   let prevTarget: Object3D | null = null
@@ -137,7 +129,6 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const cameraRight = new Vector3()
   const cameraUp = new Vector3()
   const cameraForward = new Vector3()
-  const cameraPos = new Vector3()
   const inputForward = new Vector3()
   const inputRight = new Vector3()
   const smoothedTracked = new Vector3()
@@ -158,14 +149,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
         prevTarget = target ?? null
       }
 
-      if (!controls || !target) {
-        if (following) following = false
-        return
-      }
-
-      if (!following) {
-        following = true
-      }
+      if (!controls || !target) return
 
       target.updateWorldMatrix(true, false)
       if (trackRotation) {
@@ -266,16 +250,6 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     { autoInvalidate: false }
   )
 
-  const { task: postTask } = useTask(
-    Symbol('useFollow-post'),
-    () => {
-      if (!controls || !following) return
-      controls.camera.getWorldPosition(cameraPos)
-      distance = cameraPos.distanceTo(targetWorld)
-    },
-    { stage: postStage, autoInvalidate: false }
-  )
-
   const getInputDirection = (right: number, forward: number, out: Vector3): Vector3 => {
     const cam = controls?.camera
     out.set(0, 0, 0)
@@ -308,19 +282,6 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     task,
 
     /**
-     * Post-update task that runs after `<CameraControls>`' update, in a
-     * dedicated stage between `mainStage` and `renderStage`.
-     *
-     * Exposed as an ordering anchor for hooks that decorate the camera
-     * after follow's writes (e.g. a camera shake):
-     *
-     * ```ts
-     * const shake = useShake(() => ({ after: follow.postTask }))
-     * ```
-     */
-    postTask,
-
-    /**
      * Project a 2D input into a world-space direction aligned with the
      * camera's horizontal basis. `right` maps to the camera's right axis,
      * `forward` to its forward axis (both flattened to the XZ plane). Writes
@@ -341,17 +302,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
      * camera-relative input combined with rotation tracking creates a
      * feedback loop and the character will spin.
      */
-    getTargetDirection,
-
-    /** Whether a target is currently being followed. */
-    get following() {
-      return following
-    },
-
-    /** Current distance from the camera's world position to the target. */
-    get distance() {
-      return distance
-    }
+    getTargetDirection
   }
 }
 
