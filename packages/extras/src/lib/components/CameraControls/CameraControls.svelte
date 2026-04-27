@@ -121,7 +121,7 @@
     }
 
     const onPointerMove = (event: PointerEvent) => {
-      if (!locked) return
+      if (!locked || !controls.enabled) return
       controls.rotate(
         -event.movementX * pointerLockSensitivity,
         -event.movementY * pointerLockSensitivity,
@@ -131,6 +131,7 @@
     }
 
     const onClick = () => {
+      if (!controls.enabled) return
       if (document.pointerLockElement !== dom) {
         dom.requestPointerLock()
       }

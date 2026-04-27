@@ -139,6 +139,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const trackEuler = new Euler(0, 0, 0, 'YXZ')
   const targetForward = new Vector3()
   const targetRight = new Vector3()
+  const scratchScale = new Vector3()
 
   const { task } = useTask(
     Symbol('useFollow'),
@@ -158,9 +159,14 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
         following = true
       }
 
-      target.getWorldPosition(targetWorld)
+      target.updateWorldMatrix(true, false)
+      if (trackRotation) {
+        target.matrixWorld.decompose(targetWorld, targetQuat, scratchScale)
+      } else {
+        targetWorld.setFromMatrixPosition(target.matrixWorld)
+      }
 
-      if (initialized && delta > 0) {
+      if (lookAhead !== 0 && initialized && delta > 0) {
         velocity.subVectors(targetWorld, lastTargetWorld).divideScalar(delta)
         const scaledLookAheadSmoothTime = Math.max(0.001, lookAheadSmoothTime)
         const velT = 1 - Math.exp(-delta / scaledLookAheadSmoothTime)
@@ -224,7 +230,6 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
       controls.moveTo(lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, false)
 
       if (trackRotation) {
-        target.getWorldQuaternion(targetQuat)
         trackEuler.setFromQuaternion(targetQuat, 'YXZ')
         const targetAzimuth = trackEuler.y + trackRotationOffset
         const current = controls.azimuthAngle
