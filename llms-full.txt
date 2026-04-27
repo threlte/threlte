@@ -11772,8 +11772,8 @@ The grid type can be selected by setting the `type` parameter. The available gri
 
 - `grid`: represents a standard box grid. It does not require any additional properties. (default)
 - `lines`: grid consisting of lines that align along a single world axis. You specify this axis by providing either `x`, `y` or `z` to the `axis` property.
-- `circular`: grid formed of concentric circles. It includes a `maxRadius` property that sets the maximum growth extent for the grid. A value of `0` removes this limit, allowing the grid to occupy the entire geometry, even if it results in incomplete circles.
-- `polar`: similar to the circular type, but it also features lines that subdivide the concentric circles. It too has a `maxRadius` property. Additionally, it has two properties for specifying dividers: `cellDivider` and `sectionDivider`. These determine how many lines will segment the circle into various sectors. For example, 2 lines result in 4 segments at 90° each, while 6 lines create 12 sectors at 30° apiece.
+- `circular`: grid formed of concentric circles. It includes a `maxRadius` property that sets the maximum world-space radius for the grid. A value of `0` removes this limit, allowing the grid to occupy the entire geometry, even if it results in incomplete circles.
+- `polar`: similar to the circular type, but it also features lines that subdivide the concentric circles. It too has a `maxRadius` property. Additionally, it has two properties for specifying dividers: `cellDividers` and `sectionDividers`. These determine how many lines will segment the circle into various sectors. For example, 2 lines result in 4 segments at 90° each, while 6 lines create 12 sectors at 30° apiece.
 
 | Grid                                               | Lines                                               | Circular                                               | Polar                                               |
 | -------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
@@ -16834,9 +16834,9 @@ URL: https://threlte.xyz/docs/reference/extras/wireframe
 
 <Example path="extras/wireframe" />
 
-`<Wireframe>` uses barycentric coordinates to generate the wireframe, which requires a non-indexed geometry to create.
+`<Wireframe>` uses barycentric coordinates to generate the wireframe, which requires a non-indexed geometry.
 
-This means that any geometry with a `<Wireframe>` that has indices will be converted to a non-indexed version.
+This means that any geometry with a `<Wireframe>` that has indices will use a cloned, non-indexed version while `<Wireframe>` is mounted.
 
 ## Basic Example
 
