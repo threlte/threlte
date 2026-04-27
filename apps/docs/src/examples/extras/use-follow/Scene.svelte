@@ -22,11 +22,8 @@
     azimuthLocked: boolean
     azimuthAngle: number
     pointerLock: boolean
-    lookAtOffsetX: number
-    lookAtOffsetY: number
-    lookAtOffsetZ: number
-    deadZoneX: number
-    deadZoneY: number
+    lookAtOffset: [number, number, number]
+    deadZone: [number, number]
     lookAhead: number
     followSmoothTime: number
     trackRotation: boolean
@@ -45,11 +42,8 @@
     azimuthLocked,
     azimuthAngle,
     pointerLock,
-    lookAtOffsetX,
-    lookAtOffsetY,
-    lookAtOffsetZ,
-    deadZoneX,
-    deadZoneY,
+    lookAtOffset,
+    deadZone,
     lookAhead,
     followSmoothTime,
     trackRotation,
@@ -104,8 +98,8 @@
   const follow = useFollow(() => ({
     target: following ? character : undefined,
     controls,
-    lookAtOffset: [lookAtOffsetX, lookAtOffsetY, lookAtOffsetZ],
-    deadZone: { x: deadZoneX, y: deadZoneY },
+    lookAtOffset,
+    deadZone,
     lookAhead,
     followSmoothTime,
     trackRotation,

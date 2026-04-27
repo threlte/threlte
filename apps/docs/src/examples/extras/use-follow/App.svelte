@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
-  import { Pane, Slider, Checkbox, Button, Folder, List } from 'svelte-tweakpane-ui'
+  import { Pane, Slider, Checkbox, Button, Folder, List, Point } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
 
   interface Preset {
@@ -12,11 +12,8 @@
     azimuthLocked: boolean
     azimuthAngle: number
     pointerLock: boolean
-    lookAtOffsetX: number
-    lookAtOffsetY: number
-    lookAtOffsetZ: number
-    deadZoneX: number
-    deadZoneY: number
+    lookAtOffset: [number, number, number]
+    deadZone: [number, number]
     lookAhead: number
     followSmoothTime: number
     trackRotation: boolean
@@ -34,11 +31,8 @@
       azimuthLocked: false,
       azimuthAngle: 0,
       pointerLock: true,
-      lookAtOffsetX: 0,
-      lookAtOffsetY: 1,
-      lookAtOffsetZ: 0,
-      deadZoneX: 0,
-      deadZoneY: 0,
+      lookAtOffset: [0, 1, 0],
+      deadZone: [0, 0],
       lookAhead: 0,
       followSmoothTime: 0.15,
       trackRotation: false,
@@ -54,11 +48,8 @@
       azimuthLocked: false,
       azimuthAngle: 0,
       pointerLock: false,
-      lookAtOffsetX: 0,
-      lookAtOffsetY: 1,
-      lookAtOffsetZ: 0,
-      deadZoneX: 0,
-      deadZoneY: 0,
+      lookAtOffset: [0, 1, 0],
+      deadZone: [0, 0],
       lookAhead: 0,
       followSmoothTime: 0,
       trackRotation: true,
@@ -74,11 +65,8 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      lookAtOffsetX: 0,
-      lookAtOffsetY: 0,
-      lookAtOffsetZ: 0,
-      deadZoneX: 0,
-      deadZoneY: 0,
+      lookAtOffset: [0, 0, 0],
+      deadZone: [0, 0],
       lookAhead: 0,
       followSmoothTime: 0,
       trackRotation: false,
@@ -94,11 +82,8 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      lookAtOffsetX: 0,
-      lookAtOffsetY: 1,
-      lookAtOffsetZ: 0,
-      deadZoneX: 1.5,
-      deadZoneY: 0.5,
+      lookAtOffset: [0, 1, 0],
+      deadZone: [1.5, 0.5],
       lookAhead: 0,
       followSmoothTime: 0.1,
       trackRotation: false,
@@ -114,11 +99,8 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      lookAtOffsetX: 0,
-      lookAtOffsetY: 0.8,
-      lookAtOffsetZ: 0,
-      deadZoneX: 0,
-      deadZoneY: 0,
+      lookAtOffset: [0, 0.8, 0],
+      deadZone: [0, 0],
       lookAhead: 0.4,
       followSmoothTime: 0.05,
       trackRotation: false,
@@ -134,11 +116,8 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      lookAtOffsetX: 0,
-      lookAtOffsetY: 1.2,
-      lookAtOffsetZ: 0,
-      deadZoneX: 0,
-      deadZoneY: 0,
+      lookAtOffset: [0, 1.2, 0],
+      deadZone: [0, 0],
       lookAhead: 0,
       followSmoothTime: 0.5,
       trackRotation: false,
@@ -163,11 +142,8 @@
   let azimuthLocked = $state(false)
   let azimuthAngle = $state(0)
   let pointerLock = $state(true)
-  let lookAtOffsetX = $state(0)
-  let lookAtOffsetY = $state(1)
-  let lookAtOffsetZ = $state(0)
-  let deadZoneX = $state(0)
-  let deadZoneY = $state(0)
+  let lookAtOffset = $state<[number, number, number]>([0, 1, 0])
+  let deadZone = $state<[number, number]>([0, 0])
   let lookAhead = $state(0)
   let followSmoothTime = $state(0.15)
   let trackRotation = $state(false)
@@ -185,11 +161,8 @@
     azimuthLocked = preset.azimuthLocked
     azimuthAngle = preset.azimuthAngle
     pointerLock = preset.pointerLock
-    lookAtOffsetX = preset.lookAtOffsetX
-    lookAtOffsetY = preset.lookAtOffsetY
-    lookAtOffsetZ = preset.lookAtOffsetZ
-    deadZoneX = preset.deadZoneX
-    deadZoneY = preset.deadZoneY
+    lookAtOffset = preset.lookAtOffset
+    deadZone = preset.deadZone
     lookAhead = preset.lookAhead
     followSmoothTime = preset.followSmoothTime
     trackRotation = preset.trackRotation
@@ -255,45 +228,20 @@
     />
   </Folder>
   <Folder title="useFollow">
-    <Folder title="lookAtOffset">
-      <Slider
-        label="x"
-        bind:value={lookAtOffsetX}
-        min={-3}
-        max={3}
-        step={0.05}
-      />
-      <Slider
-        label="y"
-        bind:value={lookAtOffsetY}
-        min={-2}
-        max={3}
-        step={0.05}
-      />
-      <Slider
-        label="z"
-        bind:value={lookAtOffsetZ}
-        min={-3}
-        max={3}
-        step={0.05}
-      />
-    </Folder>
-    <Folder title="deadZone">
-      <Slider
-        label="x"
-        bind:value={deadZoneX}
-        min={0}
-        max={3}
-        step={0.05}
-      />
-      <Slider
-        label="y"
-        bind:value={deadZoneY}
-        min={0}
-        max={3}
-        step={0.05}
-      />
-    </Folder>
+    <Point
+      label="lookAtOffset"
+      bind:value={lookAtOffset}
+      min={-3}
+      max={3}
+      step={0.05}
+    />
+    <Point
+      label="deadZone"
+      bind:value={deadZone}
+      min={0}
+      max={3}
+      step={0.05}
+    />
     <Slider
       label="lookAhead"
       bind:value={lookAhead}
@@ -348,11 +296,8 @@
       {azimuthLocked}
       {azimuthAngle}
       {pointerLock}
-      {lookAtOffsetX}
-      {lookAtOffsetY}
-      {lookAtOffsetZ}
-      {deadZoneX}
-      {deadZoneY}
+      {lookAtOffset}
+      {deadZone}
       {lookAhead}
       {followSmoothTime}
       {trackRotation}
