@@ -1,0 +1,1 @@
+import"./disclose-version.DsnmJJEf.js";import{g as o,u as p}from"./runtime.QwcowWmd.js";import{s as a,r as i}from"./props.DGdK2eRS.js";import{X as m,d as n}from"./compute.QPvMbeq3.js";function l(s,e){let r=i(e,["$$slots","$$events","$$legacy"]);{let t=p(()=>({...n}));m(s,a({get sessionInit(){return o(t)}},()=>r,{mode:"immersive-vr"}))}}export{l as V};

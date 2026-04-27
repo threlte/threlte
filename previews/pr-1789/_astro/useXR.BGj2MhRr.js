@@ -1,0 +1,1 @@
+import{t as r,x as s,s as n,i as e,a}from"./compute.QPvMbeq3.js";const i=()=>({isPresenting:r(()=>a.current),isHandTracking:r(()=>e.current),session:r(()=>n.current),xr:r(()=>s.current)});export{i as u};
