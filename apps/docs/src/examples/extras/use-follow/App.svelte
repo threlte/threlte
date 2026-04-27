@@ -70,7 +70,7 @@
       distance: 11,
       minPolarAngle: 0.6,
       maxPolarAngle: 0.6,
-      polarAngle: 0.06,
+      polarAngle: 0.6,
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,

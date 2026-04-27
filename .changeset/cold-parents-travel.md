@@ -1,6 +1,5 @@
 ---
-"@threlte/extras": patch
-"@threlte/docs": patch
+"@threlte/extras": minor
 ---
 
 Add `useFollow` hook

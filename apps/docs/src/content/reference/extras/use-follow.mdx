@@ -39,7 +39,7 @@ zones, and look-ahead.
 
 <CameraControls bind:ref={controls} />
 
-<T is={group}>
+<T is={character}>
   <!-- character mesh -->
 </T>
 ```
@@ -56,7 +56,7 @@ configured on the component, follow behavior on the hook.**
 | `minPolarAngle` / `maxPolarAngle`     | `lookAhead`            |
 | `minAzimuthAngle` / `maxAzimuthAngle` | `followSmoothTime`     |
 | `colliderMeshes` (collision)          | `trackRotation`        |
-| `pointerLock` (input mode)            | target via `start()`   |
+| `pointerLock` (input mode)            | `target`               |
 
 Everything on the left is already documented on
 [`<CameraControls>`](/docs/reference/extras/camera-controls) — set it as a
@@ -246,9 +246,15 @@ The returned object exposes two reactive properties:
 
 ## Task ordering
 
-`useFollow` runs its update in a named task. For a character controller,
-schedule it **after** movement so the camera sees the final target position
-for the frame:
+`useFollow` runs its update in two named tasks:
+
+- `task` — the main update, in `mainStage`. Sets the controls target and
+  azimuth from the current target position. Schedule movement **before** this
+  so the camera sees the final target position for the frame.
+- `smoothTask` — runs after `<CameraControls>`' own update, in a dedicated
+  stage between `mainStage` and `renderStage`. Applies `followSmoothTime`
+  lag and rebuilds the camera's `lookAt`. Schedule camera-decorating work
+  (e.g. a camera shake) **after** this so it isn't overwritten.
 
 ```ts
 const follow = useFollow(() => ({
@@ -337,7 +343,7 @@ basis.
   maxPolarAngle={1.5}
 />
 
-<T is={group}>
+<T is={character}>
   <T.Mesh>
     <T.BoxGeometry />
     <T.MeshStandardMaterial color="orange" />

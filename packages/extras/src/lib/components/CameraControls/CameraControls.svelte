@@ -18,6 +18,7 @@
   import type { CameraControlsProps } from './types.js'
   import CameraControls from 'camera-controls'
   import { useControlsContext } from '../controls/useControlsContext.js'
+  import { untrack } from 'svelte'
 
   export { default as CameraControlsRef } from 'camera-controls'
 
@@ -73,8 +74,12 @@
 
     return $defaultCamera as PerspectiveCamera
   })
-  // svelte-ignore state_referenced_locally
-  const controls = new CameraControls(camera, dom)
+
+  const controls = new CameraControls(
+    untrack(() => camera),
+    dom
+  )
+
   $effect.pre(() => {
     controls.camera = camera
   })
@@ -114,6 +119,7 @@
     const onLockChange = () => {
       locked = document.pointerLockElement === dom
     }
+
     const onPointerMove = (event: PointerEvent) => {
       if (!locked) return
       controls.rotate(
@@ -121,9 +127,13 @@
         -event.movementY * pointerLockSensitivity,
         false
       )
+      invalidate()
     }
+
     const onClick = () => {
-      if (document.pointerLockElement !== dom) dom.requestPointerLock()
+      if (document.pointerLockElement !== dom) {
+        dom.requestPointerLock()
+      }
     }
 
     dom.addEventListener('click', onClick)

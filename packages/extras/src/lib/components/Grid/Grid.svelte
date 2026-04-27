@@ -182,7 +182,7 @@
         worldCamProjPosition.value
       )
       if (!fadeOrigin) {
-        uFadeOrigin.value = projectedPoint
+        uFadeOrigin.value.copy(projectedPoint)
       }
       if (followCamera) {
         worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)

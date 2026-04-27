@@ -9,7 +9,7 @@
     activeDevice = $bindable('keyboard')
   }: { sprintKey?: string; activeDevice?: string } = $props()
 
-  const keyboard = useKeyboard()
+  const keyboard = useKeyboard(() => ({ capture: true }))
   const gamepad = useGamepad()
 
   const input = useInputMap(

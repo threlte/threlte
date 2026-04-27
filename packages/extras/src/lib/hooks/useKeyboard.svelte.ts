@@ -15,6 +15,13 @@ export interface UseKeyboardOptions {
    * @default window
    */
   target?: EventTarget
+
+  /**
+   * Listen during the capture phase instead of the bubble phase. Use this
+   * when keyboard input must run before descendants can stop propagation.
+   * @default false
+   */
+  capture?: boolean
 }
 
 type KeyboardEventType = 'keydown' | 'keyup'
@@ -34,7 +41,6 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   const keys = new Map<string, KeyState>()
   const pendingDown = new Set<string>()
   const pendingUp = new Set<string>()
-  const listenerOptions = { capture: true }
 
   const listeners: Record<KeyboardEventType, Set<KeyboardEventHandler>> = {
     keydown: new Set(),
@@ -113,7 +119,8 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   )
 
   $effect.pre(() => {
-    const { target = window } = optionsFn?.() ?? {}
+    const { target = window, capture = false } = optionsFn?.() ?? {}
+    const listenerOptions = { capture }
 
     target.addEventListener('keydown', handleKeyDown, listenerOptions)
     target.addEventListener('keyup', handleKeyUp, listenerOptions)

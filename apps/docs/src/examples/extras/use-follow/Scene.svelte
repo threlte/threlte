@@ -59,7 +59,7 @@
     following
   }: Props = $props()
 
-  const keyboard = useKeyboard()
+  const keyboard = useKeyboard(() => ({ capture: true }))
   const gamepad = useGamepad()
   const input = useInputMap(
     ({ key, gamepadButton, gamepadAxis }) => ({

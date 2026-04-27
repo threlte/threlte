@@ -237,15 +237,12 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
 
       initialized = true
 
-      controls.camera.getWorldPosition(cameraPos)
-      distance = cameraPos.distanceTo(targetWorld)
-
       invalidate()
     },
     { autoInvalidate: false }
   )
 
-  useTask(
+  const { task: smoothTask } = useTask(
     Symbol('useFollow-smooth'),
     (delta) => {
       if (!controls || !following) return
@@ -257,21 +254,23 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
         smoothingInitialized = true
       }
 
-      if (scaledFollowSmoothTime <= EPSILON) {
+      if (scaledFollowSmoothTime > EPSILON) {
+        const t = 1 - Math.exp(-delta / scaledFollowSmoothTime)
+        smoothedTracked.lerp(trackedTarget, t)
+
+        lag.subVectors(smoothedTracked, trackedTarget)
+        if (lag.lengthSq() >= EPSILON) {
+          const cam = controls.camera
+          cam.position.add(lag)
+          smoothedLookAt.copy(lookAtPoint).add(lag)
+          cam.lookAt(smoothedLookAt)
+        }
+      } else {
         smoothedTracked.copy(trackedTarget)
-        return
       }
 
-      const t = 1 - Math.exp(-delta / scaledFollowSmoothTime)
-      smoothedTracked.lerp(trackedTarget, t)
-
-      lag.subVectors(smoothedTracked, trackedTarget)
-      if (lag.lengthSq() < EPSILON) return
-
-      const cam = controls.camera
-      cam.position.add(lag)
-      smoothedLookAt.copy(lookAtPoint).add(lag)
-      cam.lookAt(smoothedLookAt)
+      controls.camera.getWorldPosition(cameraPos)
+      distance = cameraPos.distanceTo(targetWorld)
     },
     { stage: postStage, autoInvalidate: false }
   )
@@ -292,6 +291,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     out.set(0, 0, 0)
 
     if (!target) return out
+    target.updateWorldMatrix(true, false)
     targetRight.setFromMatrixColumn(target.matrixWorld, 0)
     targetForward.setFromMatrixColumn(target.matrixWorld, 2)
     targetRight.y = 0
@@ -305,6 +305,21 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   return {
     /** Internal task, exposed for ordering other tasks via `after`/`before`. */
     task,
+
+    /**
+     * Post-update task that runs after `<CameraControls>`' update, in a
+     * dedicated stage between `mainStage` and `renderStage`. Applies
+     * `followSmoothTime` lag to the camera's position and rebuilds the
+     * camera's `lookAt` for the frame.
+     *
+     * Exposed as an ordering anchor for hooks that decorate the camera
+     * after follow's writes (e.g. a camera shake):
+     *
+     * ```ts
+     * const shake = useShake(() => ({ after: follow.smoothTask }))
+     * ```
+     */
+    smoothTask,
 
     /**
      * Project a 2D input into a world-space direction aligned with the
