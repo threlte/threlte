@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /previews/pr-1789/
-Disallow: /previews/pr-1789/examples/
-
-Sitemap: https://threlte.xyz/previews/pr-1789/sitemap-index.xml
