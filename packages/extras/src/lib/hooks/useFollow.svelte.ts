@@ -1,11 +1,4 @@
-import {
-  Euler,
-  Object3D,
-  Quaternion,
-  Vector3,
-  type Vector2Tuple,
-  type Vector3Tuple
-} from 'three'
+import { Euler, Object3D, Quaternion, Vector3, type Vector2Tuple, type Vector3Tuple } from 'three'
 import { useTask, useThrelte } from '@threlte/core'
 import type CameraControls from 'camera-controls'
 
