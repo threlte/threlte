@@ -1,0 +1,249 @@
+# Threlte 8
+
+> Threlte is an open-source 3D framework for Svelte. Build interactive 3D apps for the web with declarative, reactive components powered by Three.js.
+
+These docs describe Threlte 8, the current stable major version. Threlte 7 docs are archived at https://v7.threlte.xyz.
+
+## Learn
+
+### Getting Started
+
+- [Introduction](https://threlte.xyz/previews/pr-1796/docs/learn/getting-started/introduction)
+- [Installation](https://threlte.xyz/previews/pr-1796/docs/learn/getting-started/installation)
+- [Your First Scene](https://threlte.xyz/previews/pr-1796/docs/learn/getting-started/your-first-scene)
+
+### Basics
+
+- [App Structure](https://threlte.xyz/previews/pr-1796/docs/learn/basics/app-structure)
+- [Loading Assets](https://threlte.xyz/previews/pr-1796/docs/learn/basics/loading-assets)
+- [Handling Events](https://threlte.xyz/previews/pr-1796/docs/learn/basics/handling-events)
+- [Scheduling Tasks](https://threlte.xyz/previews/pr-1796/docs/learn/basics/scheduling-tasks)
+- [Render Modes](https://threlte.xyz/previews/pr-1796/docs/learn/basics/render-modes)
+- [Disposing Objects](https://threlte.xyz/previews/pr-1796/docs/learn/basics/disposing-objects)
+
+### Advanced
+
+- [Plugins](https://threlte.xyz/previews/pr-1796/docs/learn/advanced/plugins)
+- [Custom Abstractions](https://threlte.xyz/previews/pr-1796/docs/learn/advanced/custom-abstractions)
+- [WebGPU and TSL](https://threlte.xyz/previews/pr-1796/docs/learn/advanced/webgpu)
+
+### More
+
+- [Migration Guides](https://threlte.xyz/previews/pr-1796/docs/learn/advanced/migration-guides)
+- [Resources](https://threlte.xyz/previews/pr-1796/docs/learn/more/resources)
+
+## Reference
+
+### @threlte/core
+
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/core/getting-started)
+- [<Canvas>](https://threlte.xyz/previews/pr-1796/docs/reference/core/canvas)
+- [<T>](https://threlte.xyz/previews/pr-1796/docs/reference/core/t)
+- [useThrelte](https://threlte.xyz/previews/pr-1796/docs/reference/core/use-threlte)
+- [useStage](https://threlte.xyz/previews/pr-1796/docs/reference/core/use-stage)
+- [useTask](https://threlte.xyz/previews/pr-1796/docs/reference/core/use-task)
+- [useLoader](https://threlte.xyz/previews/pr-1796/docs/reference/core/use-loader)
+- [useThrelteUserContext](https://threlte.xyz/previews/pr-1796/docs/reference/core/use-threlte-user-context)
+- [Plugins](https://threlte.xyz/previews/pr-1796/docs/reference/core/plugins)
+- [Utilities](https://threlte.xyz/previews/pr-1796/docs/reference/core/utilities)
+
+### @threlte/extras
+
+- [<Align>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/align)
+- [<AnimatedSpriteMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/animated-sprite-material)
+- [<AsciiRenderer>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/ascii-renderer)
+- [<Audio>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/audio)
+- [<AudioListener>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/audio-listener)
+- [<BackdropGeometry>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/backdrop-geometry)
+- [<BakeShadows>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/bake-shadows)
+- [<Billboard>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/billboard)
+- [<Bounds>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/bounds)
+- [bvh](https://threlte.xyz/previews/pr-1796/docs/reference/extras/bvh)
+- [<CameraControls>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/camera-controls)
+- [<ContactShadows>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/contact-shadows)
+- [<CSM>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/csm)
+- [<CubeCamera>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/cube-camera)
+- [<CubeEnvironment>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/cube-environment)
+- [<Decal>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/decal)
+- [<Detailed>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/detailed)
+- [<Edges>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/edges)
+- [<Environment>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/environment)
+- [<FakeGlowMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/fake-glow-material)
+- [<Float>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/float)
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/extras/getting-started)
+- [<Gizmo>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/gizmo)
+- [<GLTF>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/gltf)
+- [<Grid>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/grid)
+- [<HTML>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/html)
+- [<HUD>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/hud)
+- [<ImageMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/image-material)
+- [<Instance>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/instance)
+- [<InstancedMesh>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/instanced-mesh)
+- [<InstancedMeshes>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/instanced-meshes)
+- [<InstancedSprite>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/instanced-sprite)
+- [interactivity](https://threlte.xyz/previews/pr-1796/docs/reference/extras/interactivity)
+- [layers](https://threlte.xyz/previews/pr-1796/docs/reference/extras/layers)
+- [<LinearGradientTexture>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/linear-gradient-texture)
+- [<Mask>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/mask)
+- [meshBounds](https://threlte.xyz/previews/pr-1796/docs/reference/extras/mesh-bounds)
+- [<MeshDiscardMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/mesh-discard-material)
+- [<MeshLineGeometry>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/mesh-line-geometry)
+- [<MeshLineMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/mesh-line-material)
+- [<MeshRefractionMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/mesh-refraction-material)
+- [onReveal](https://threlte.xyz/previews/pr-1796/docs/reference/extras/onreveal)
+- [onSuspend](https://threlte.xyz/previews/pr-1796/docs/reference/extras/onsuspend)
+- [<OrbitControls>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/orbit-controls)
+- [<Outlines>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/outlines)
+- [<PerfMonitor>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/perf-monitor)
+- [<PointsMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/points-material)
+- [<Portal>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/portal)
+- [<PortalTarget>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/portal-target)
+- [<PositionalAudio>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/positional-audio)
+- [<RadialGradientTexture>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/radial-gradient-texture)
+- [<Resize>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/resize)
+- [<RoundedBoxGeometry>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/rounded-box-geometry)
+- [<ShadowAlpha>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/shadow-alpha)
+- [<ShadowMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/shadow-material)
+- [<Sky>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/sky)
+- [<SoftShadows>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/soft-shadows)
+- [<Sparkles>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/sparkles)
+- [<Stars>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/stars)
+- [<Suspense>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/suspense)
+- [<SVG>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/svg)
+- [<Text>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/text)
+- [<Text3DGeometry>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/text-3d-geometry)
+- [<TrackballControls>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/trackball-controls)
+- [<TransformControls>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/transform-controls)
+- [transitions](https://threlte.xyz/previews/pr-1796/docs/reference/extras/transitions)
+- [useAudioListener](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-audio-listener)
+- [useCursor](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-cursor)
+- [useFBO](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-fbo)
+- [useGamepad](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-gamepad)
+- [useGltf](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-gltf)
+- [useGltfAnimations](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-gltf-animations)
+- [useInputMap](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-input-map)
+- [useKeyboard](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-keyboard)
+- [useProgress](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-progress)
+- [useSuspense](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-suspense)
+- [useTexture](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-texture)
+- [useThrelteAudio](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-threlte-audio)
+- [useTrailTexture](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-trail-texture)
+- [useViewport](https://threlte.xyz/previews/pr-1796/docs/reference/extras/use-viewport)
+- [<UvMaterial>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/uv-material)
+- [<View>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/view)
+- [<VirtualEnvironment>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/virtual-environment)
+- [<Wireframe>](https://threlte.xyz/previews/pr-1796/docs/reference/extras/wireframe)
+
+### @threlte/rapier
+
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/getting-started)
+- [Physics Framerate](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/framerate)
+- [<World>](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/world)
+- [<RigidBody>](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/rigid-body)
+- [<Collider>](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/collider)
+- [<AutoColliders>](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/auto-colliders)
+- [<CollisionGroups>](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/collision-groups)
+- [<Attractor>](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/attractor)
+- [<Debug>](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/debug)
+- [useRapier](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-rapier)
+- [usePhysicsTask](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-physics-task)
+- [useCollisionGroups](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-collision-groups)
+- [useRigidBody](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-rigid-body)
+- [About Joints](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/about-joints)
+- [useJoint](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-joint)
+- [useFixedJoint](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-fixed-joint)
+- [useRevoluteJoint](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-revolute-joint)
+- [useRopeJoint](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-rope-joint)
+- [useSphericalJoint](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-spherical-joint)
+- [usePrismaticJoint](https://threlte.xyz/previews/pr-1796/docs/reference/rapier/use-prismatic-joint)
+
+### @threlte/theatre
+
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/getting-started)
+- [<Theatre>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/theatre)
+- [<Project>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/project)
+- [<Sheet>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/sheet)
+- [<Sequence>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/sequence)
+- [<Studio>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/studio)
+- [<SheetObject>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/sheet-object)
+- [<Sync>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/sync)
+- [<Transform>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/transform)
+- [<Declare>](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/declare)
+- [useStudio](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/use-studio)
+- [useSequence](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/use-sequence)
+- [sheetObjectAction](https://threlte.xyz/previews/pr-1796/docs/reference/theatre/sheet-object-action)
+
+### @threlte/gltf
+
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/gltf/getting-started)
+
+### @threlte/xr
+
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/xr/getting-started)
+- [<XR>](https://threlte.xyz/previews/pr-1796/docs/reference/xr/xr)
+- [<VRButton>](https://threlte.xyz/previews/pr-1796/docs/reference/xr/button-vr)
+- [<ARButton>](https://threlte.xyz/previews/pr-1796/docs/reference/xr/button-ar)
+- [<XRButton>](https://threlte.xyz/previews/pr-1796/docs/reference/xr/button-xr)
+- [<Controller>](https://threlte.xyz/previews/pr-1796/docs/reference/xr/controller)
+- [<Hand>](https://threlte.xyz/previews/pr-1796/docs/reference/xr/hand)
+- [<Headset>](https://threlte.xyz/previews/pr-1796/docs/reference/xr/headset)
+- [pointerControls](https://threlte.xyz/previews/pr-1796/docs/reference/xr/pointer-controls)
+- [teleportControls](https://threlte.xyz/previews/pr-1796/docs/reference/xr/teleport-controls)
+- [useXR](https://threlte.xyz/previews/pr-1796/docs/reference/xr/use-xr)
+- [useController](https://threlte.xyz/previews/pr-1796/docs/reference/xr/use-controller)
+- [useHand](https://threlte.xyz/previews/pr-1796/docs/reference/xr/use-hand)
+- [useHandJoint](https://threlte.xyz/previews/pr-1796/docs/reference/xr/use-hand-joint)
+- [useHeadset](https://threlte.xyz/previews/pr-1796/docs/reference/xr/use-headset)
+- [useHitTest](https://threlte.xyz/previews/pr-1796/docs/reference/xr/use-hit-test)
+- [useTeleport](https://threlte.xyz/previews/pr-1796/docs/reference/xr/use-teleport)
+
+### @threlte/flex
+
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/flex/getting-started)
+- [Examples](https://threlte.xyz/previews/pr-1796/docs/reference/flex/examples)
+- [<Flex>](https://threlte.xyz/previews/pr-1796/docs/reference/flex/flex)
+- [<Box>](https://threlte.xyz/previews/pr-1796/docs/reference/flex/box)
+- [createClassParser](https://threlte.xyz/previews/pr-1796/docs/reference/flex/create-class-parser)
+- [tailwindParser](https://threlte.xyz/previews/pr-1796/docs/reference/flex/tailwind-parser)
+- [useReflow](https://threlte.xyz/previews/pr-1796/docs/reference/flex/use-reflow)
+- [useDimensions](https://threlte.xyz/previews/pr-1796/docs/reference/flex/use-dimensions)
+
+### @threlte/studio
+
+- [Getting Started](https://threlte.xyz/previews/pr-1796/docs/reference/studio/getting-started)
+- [Deploying To Production](https://threlte.xyz/previews/pr-1796/docs/reference/studio/deploying-to-production)
+- [<Studio>](https://threlte.xyz/previews/pr-1796/docs/reference/studio/studio)
+- [Authoring Extensions](https://threlte.xyz/previews/pr-1796/docs/reference/studio/authoring-extensions)
+- [Static State](https://threlte.xyz/previews/pr-1796/docs/reference/studio/static-state)
+- [useObjectSelection](https://threlte.xyz/previews/pr-1796/docs/reference/studio/use-object-selection)
+- [useStudioObjectsRegistry](https://threlte.xyz/previews/pr-1796/docs/reference/studio/use-studio-objects-registry)
+- [useTransactions](https://threlte.xyz/previews/pr-1796/docs/reference/studio/use-transactions)
+- [useSpace](https://threlte.xyz/previews/pr-1796/docs/reference/studio/use-space)
+- [useSnapping](https://threlte.xyz/previews/pr-1796/docs/reference/studio/use-snapping)
+- [useTransformControls](https://threlte.xyz/previews/pr-1796/docs/reference/studio/use-transform-controls)
+
+### Documentation
+
+- [Writing Documentation](https://threlte.xyz/previews/pr-1796/docs/reference/docs/docs)
+
+## Examples
+
+- [Animation Transitions](https://threlte.xyz/previews/pr-1796/docs/examples/animation/animation-transitions)
+- [Complex Sprite Scene](https://threlte.xyz/previews/pr-1796/docs/examples/animation/complex-sprite-scene)
+- [Examples](https://threlte.xyz/previews/pr-1796/docs/examples/examples)
+- [Arcade Machine](https://threlte.xyz/previews/pr-1796/docs/examples/games/arcade-machine)
+- [Random Placement](https://threlte.xyz/previews/pr-1796/docs/examples/geometry/random-placement)
+- [Rendering Points](https://threlte.xyz/previews/pr-1796/docs/examples/geometry/rendering-points)
+- [Terrain With 3d Noise](https://threlte.xyz/previews/pr-1796/docs/examples/geometry/terrain-with-3d-noise)
+- [Terrain With Rapier Physics](https://threlte.xyz/previews/pr-1796/docs/examples/geometry/terrain-with-rapier-physics)
+- [Lavalamp](https://threlte.xyz/previews/pr-1796/docs/examples/marching-cubes/lavalamp)
+- [Cursor Lines](https://threlte.xyz/previews/pr-1796/docs/examples/meshline/cursor-lines)
+- [Gaussian Splatting](https://threlte.xyz/previews/pr-1796/docs/examples/misc/gaussian-splatting)
+- [Fullscreenquad](https://threlte.xyz/previews/pr-1796/docs/examples/postprocessing/fullscreenquad)
+- [Outlines](https://threlte.xyz/previews/pr-1796/docs/examples/postprocessing/outlines)
+- [Css2drenderer Overlay](https://threlte.xyz/previews/pr-1796/docs/examples/renderers/css2drenderer-overlay)
+- [Interactive Shader](https://threlte.xyz/previews/pr-1796/docs/examples/shaders/interactive-shader)
+- [Scope With Zoom](https://threlte.xyz/previews/pr-1796/docs/examples/shaders/scope-with-zoom)
+- [Shadowmesh](https://threlte.xyz/previews/pr-1796/docs/examples/shadows/shadowmesh)
+- [Animating A Spaceship](https://threlte.xyz/previews/pr-1796/docs/examples/tutorials/animating-a-spaceship)
+
