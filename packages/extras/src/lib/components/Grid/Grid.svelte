@@ -1,6 +1,6 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
   import { Color, DoubleSide, Plane, Vector3, Mesh, type ShaderMaterial, type Uniform } from 'three'
   import type { GridProps } from './types.js'
   import { fragmentShader, vertexShader } from './gridShaders.js'
@@ -177,7 +177,11 @@
   })
   $effect.pre(() => {
     if (fadeOrigin) {
-      uniforms.fadeOrigin.value = fadeOrigin
+      if (isInstanceOf(fadeOrigin, 'Vector3')) {
+        uniforms.fadeOrigin.value.copy(fadeOrigin)
+      } else {
+        uniforms.fadeOrigin.value.fromArray(fadeOrigin)
+      }
       invalidate()
     }
   })

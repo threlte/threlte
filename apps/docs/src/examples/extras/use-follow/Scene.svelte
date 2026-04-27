@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MathUtils, Vector3, type Group, type Mesh } from 'three'
+  import { Group, MathUtils, Vector3, type Mesh } from 'three'
   import { T, useTask } from '@threlte/core'
   import {
     CameraControls,
@@ -7,15 +7,14 @@
     Grid,
     HTML,
     useFollow,
+    useGamepad,
     useInputMap,
     useKeyboard
   } from '@threlte/extras'
   import Character from './Character.svelte'
 
-  type Props = {
+  interface Props {
     smoothTime: number
-    minDistance: number
-    maxDistance: number
     distance: number
     minPolarAngle: number
     maxPolarAngle: number
@@ -23,7 +22,6 @@
     azimuthLocked: boolean
     azimuthAngle: number
     pointerLock: boolean
-    wheelZoom: boolean
     lookAtOffsetX: number
     lookAtOffsetY: number
     lookAtOffsetZ: number
@@ -40,8 +38,6 @@
 
   const {
     smoothTime,
-    minDistance,
-    maxDistance,
     distance,
     minPolarAngle,
     maxPolarAngle,
@@ -49,7 +45,6 @@
     azimuthLocked,
     azimuthAngle,
     pointerLock,
-    wheelZoom,
     lookAtOffsetX,
     lookAtOffsetY,
     lookAtOffsetZ,
@@ -65,26 +60,49 @@
   }: Props = $props()
 
   const keyboard = useKeyboard()
+  const gamepad = useGamepad()
   const input = useInputMap(
-    ({ key }) => ({
-      moveLeft: [key('a'), key('ArrowLeft')],
-      moveRight: [key('d'), key('ArrowRight')],
-      moveForward: [key('w'), key('ArrowUp')],
-      moveBack: [key('s'), key('ArrowDown')],
-      sprint: [key('Shift')]
+    ({ key, gamepadButton, gamepadAxis }) => ({
+      moveLeft: [
+        key('a'),
+        key('ArrowLeft'),
+        gamepadButton('directionalLeft'),
+        gamepadAxis('leftStick', 'x', -1)
+      ],
+      moveRight: [
+        key('d'),
+        key('ArrowRight'),
+        gamepadButton('directionalRight'),
+        gamepadAxis('leftStick', 'x', 1)
+      ],
+      moveForward: [
+        key('w'),
+        key('ArrowUp'),
+        gamepadButton('directionalTop'),
+        gamepadAxis('leftStick', 'y', -1)
+      ],
+      moveBack: [
+        key('s'),
+        key('ArrowDown'),
+        gamepadButton('directionalBottom'),
+        gamepadAxis('leftStick', 'y', 1)
+      ],
+      sprint: [key('Shift'), gamepadButton('leftBumper')]
     }),
-    { keyboard }
+    { keyboard, gamepad }
   )
   keyboard.on('keydown', (e) => {
     if (e.key.startsWith('Arrow')) e.preventDefault()
   })
 
-  let controls = $state<CameraControlsRef>()
-  let character = $state<Group>()
+  const character = new Group()
+
+  let controls = $state.raw<CameraControlsRef>()
   let pillarMeshes = $state<Mesh[]>([])
   let rotation = $state(0)
 
   const follow = useFollow(() => ({
+    target: following ? character : undefined,
     controls,
     lookAtOffset: [lookAtOffsetX, lookAtOffsetY, lookAtOffsetZ],
     deadZone: { x: deadZoneX, y: deadZoneY },
@@ -95,23 +113,9 @@
     trackRotationOffset
   }))
 
-  $effect(() => {
-    if (following && character) follow.start(character)
-    else follow.stop()
-  })
-
   const colliderMeshes = $derived(collision ? pillarMeshes.filter(Boolean) : [])
   const azimuthMin = $derived(azimuthLocked ? 0 : -Infinity)
   const azimuthMax = $derived(azimuthLocked ? 0 : Infinity)
-  const distanceLocked = $derived(Math.abs(maxDistance - minDistance) < 0.001)
-
-  $effect(() => {
-    if (!controls) return
-    controls.mouseButtons.wheel =
-      wheelZoom && !distanceLocked
-        ? CameraControlsRef.ACTION.DOLLY
-        : CameraControlsRef.ACTION.NONE
-  })
 
   $effect(() => {
     if (!controls) return
@@ -136,7 +140,6 @@
 
   useTask(
     (delta) => {
-      if (!character) return
       const speed = sprinting ? runSpeed : walkSpeed
 
       if (trackRotation) {
@@ -159,6 +162,23 @@
     { after: input.task, before: follow.task }
   )
 
+  const rightStick = gamepad.stick('rightStick')
+
+  const orbitSpeed = 2.8 // radians/sec at full stick
+
+  useTask(
+    (delta) => {
+      if (!controls || trackRotation) return
+
+      const { x, y } = rightStick
+
+      if (x === 0 && y === 0) return
+
+      controls.rotate(-x * orbitSpeed * delta, -y * orbitSpeed * delta, true)
+    },
+    { after: [gamepad.task, follow.task] }
+  )
+
   const pillars: [number, number][] = Array.from({ length: 8 }, (_, i) => {
     const angle = ((i + 0.5) * Math.PI * 2) / 8
     return [Math.cos(angle) * 5, Math.sin(angle) * 5]
@@ -175,13 +195,13 @@
   bind:ref={controls}
   {pointerLock}
   {smoothTime}
-  {minDistance}
-  {maxDistance}
+  {distance}
   {minPolarAngle}
   {maxPolarAngle}
   minAzimuthAngle={azimuthMin}
   maxAzimuthAngle={azimuthMax}
   {colliderMeshes}
+  mouseButtons.wheel={CameraControlsRef.ACTION.NONE}
 />
 
 <T.DirectionalLight
@@ -197,7 +217,9 @@
   sectionSize={5}
   cellSize={1}
   gridSize={[30, 30]}
-  fadeDistance={40}
+  fadeDistance={15}
+  infiniteGrid
+  fadeOrigin={[0, 0, 0]}
 />
 
 <T.Mesh
@@ -221,8 +243,8 @@
   </T.Mesh>
 {/each}
 
-<T.Group
-  bind:ref={character}
+<T
+  is={character}
   rotation.y={rotation}
 >
   <Character {action} />
@@ -250,7 +272,7 @@
       </div>
     </HTML>
   </T.Group>
-</T.Group>
+</T>
 
 <style>
   .overlay {

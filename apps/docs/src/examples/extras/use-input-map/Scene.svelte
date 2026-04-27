@@ -110,7 +110,9 @@
   sectionSize={5}
   cellSize={1}
   gridSize={[20, 20]}
-  fadeDistance={25}
+  fadeDistance={10}
+  fadeOrigin={[0, 0, 0]}
+  infiniteGrid
 />
 
 <T.Mesh

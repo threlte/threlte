@@ -3,10 +3,8 @@
   import { Pane, Slider, Checkbox, Button, Folder, List } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
 
-  type Preset = {
+  interface Preset {
     smoothTime: number
-    minDistance: number
-    maxDistance: number
     distance: number
     minPolarAngle: number
     maxPolarAngle: number
@@ -14,7 +12,6 @@
     azimuthLocked: boolean
     azimuthAngle: number
     pointerLock: boolean
-    wheelZoom: boolean
     lookAtOffsetX: number
     lookAtOffsetY: number
     lookAtOffsetZ: number
@@ -27,13 +24,9 @@
     trackRotationOffset: number
   }
 
-  const HALF_PI = Math.PI / 2
-
   const presets = {
     'Third Person': {
       smoothTime: 0.2,
-      minDistance: 3,
-      maxDistance: 10,
       distance: 6,
       minPolarAngle: 0.3,
       maxPolarAngle: 1.5,
@@ -41,7 +34,6 @@
       azimuthLocked: false,
       azimuthAngle: 0,
       pointerLock: true,
-      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 1,
       lookAtOffsetZ: 0,
@@ -55,8 +47,6 @@
     },
     Fixed: {
       smoothTime: 0.2,
-      minDistance: 5,
-      maxDistance: 5,
       distance: 5,
       minPolarAngle: 0.4,
       maxPolarAngle: 1.4,
@@ -64,7 +54,6 @@
       azimuthLocked: false,
       azimuthAngle: 0,
       pointerLock: false,
-      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 1,
       lookAtOffsetZ: 0,
@@ -78,8 +67,6 @@
     },
     'Top-Down': {
       smoothTime: 0.2,
-      minDistance: 9,
-      maxDistance: 9,
       distance: 9,
       minPolarAngle: 0.01,
       maxPolarAngle: 0.01,
@@ -87,7 +74,6 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 0,
       lookAtOffsetZ: 0,
@@ -101,16 +87,13 @@
     },
     Sidescroller: {
       smoothTime: 0.25,
-      minDistance: 7,
-      maxDistance: 7,
       distance: 7,
-      minPolarAngle: HALF_PI,
-      maxPolarAngle: HALF_PI,
-      polarAngle: HALF_PI,
+      minPolarAngle: Math.PI / 2,
+      maxPolarAngle: Math.PI / 2,
+      polarAngle: Math.PI / 2,
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 1,
       lookAtOffsetZ: 0,
@@ -124,8 +107,6 @@
     },
     Racing: {
       smoothTime: 0.08,
-      minDistance: 6,
-      maxDistance: 6,
       distance: 6,
       minPolarAngle: 1,
       maxPolarAngle: 1,
@@ -133,7 +114,6 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 0.8,
       lookAtOffsetZ: 0,
@@ -147,8 +127,6 @@
     },
     Cinematic: {
       smoothTime: 0.6,
-      minDistance: 14,
-      maxDistance: 14,
       distance: 14,
       minPolarAngle: 0.8,
       maxPolarAngle: 0.8,
@@ -156,7 +134,6 @@
       azimuthLocked: true,
       azimuthAngle: 0,
       pointerLock: false,
-      wheelZoom: false,
       lookAtOffsetX: 0,
       lookAtOffsetY: 1.2,
       lookAtOffsetZ: 0,
@@ -179,8 +156,6 @@
   let preset = $state<PresetName>('Third Person')
 
   let smoothTime = $state(0.2)
-  let minDistance = $state(3)
-  let maxDistance = $state(10)
   let distance = $state(6)
   let minPolarAngle = $state(0.3)
   let maxPolarAngle = $state(1.5)
@@ -188,7 +163,6 @@
   let azimuthLocked = $state(false)
   let azimuthAngle = $state(0)
   let pointerLock = $state(true)
-  let wheelZoom = $state(false)
   let lookAtOffsetX = $state(0)
   let lookAtOffsetY = $state(1)
   let lookAtOffsetZ = $state(0)
@@ -202,28 +176,25 @@
   let collision = $state(true)
   let following = $state(true)
 
-  const apply = (p: Preset) => {
-    smoothTime = p.smoothTime
-    minDistance = p.minDistance
-    maxDistance = p.maxDistance
-    distance = p.distance
-    minPolarAngle = p.minPolarAngle
-    maxPolarAngle = p.maxPolarAngle
-    polarAngle = p.polarAngle
-    azimuthLocked = p.azimuthLocked
-    azimuthAngle = p.azimuthAngle
-    pointerLock = p.pointerLock
-    wheelZoom = p.wheelZoom
-    lookAtOffsetX = p.lookAtOffsetX
-    lookAtOffsetY = p.lookAtOffsetY
-    lookAtOffsetZ = p.lookAtOffsetZ
-    deadZoneX = p.deadZoneX
-    deadZoneY = p.deadZoneY
-    lookAhead = p.lookAhead
-    followSmoothTime = p.followSmoothTime
-    trackRotation = p.trackRotation
-    trackRotationSmoothTime = p.trackRotationSmoothTime
-    trackRotationOffset = p.trackRotationOffset
+  const apply = (preset: Preset) => {
+    smoothTime = preset.smoothTime
+    distance = preset.distance
+    minPolarAngle = preset.minPolarAngle
+    maxPolarAngle = preset.maxPolarAngle
+    polarAngle = preset.polarAngle
+    azimuthLocked = preset.azimuthLocked
+    azimuthAngle = preset.azimuthAngle
+    pointerLock = preset.pointerLock
+    lookAtOffsetX = preset.lookAtOffsetX
+    lookAtOffsetY = preset.lookAtOffsetY
+    lookAtOffsetZ = preset.lookAtOffsetZ
+    deadZoneX = preset.deadZoneX
+    deadZoneY = preset.deadZoneY
+    lookAhead = preset.lookAhead
+    followSmoothTime = preset.followSmoothTime
+    trackRotation = preset.trackRotation
+    trackRotationSmoothTime = preset.trackRotationSmoothTime
+    trackRotationOffset = preset.trackRotationOffset
   }
 
   $effect(() => {
@@ -232,7 +203,7 @@
 </script>
 
 <Pane
-  title="useFollow"
+  title=""
   position="fixed"
 >
   <List
@@ -249,19 +220,13 @@
       step={0.01}
     />
     <Slider
-      label="minDistance"
-      bind:value={minDistance}
+      label="distance"
+      bind:value={distance}
       min={1}
       max={20}
       step={0.1}
     />
-    <Slider
-      label="maxDistance"
-      bind:value={maxDistance}
-      min={1}
-      max={20}
-      step={0.1}
-    />
+
     <Slider
       label="minPolarAngle"
       bind:value={minPolarAngle}
@@ -283,10 +248,6 @@
     <Checkbox
       label="pointer lock"
       bind:value={pointerLock}
-    />
-    <Checkbox
-      label="wheel zoom"
-      bind:value={wheelZoom}
     />
     <Checkbox
       label="collision"
@@ -380,8 +341,6 @@
   <Canvas>
     <Scene
       {smoothTime}
-      {minDistance}
-      {maxDistance}
       {distance}
       {minPolarAngle}
       {maxPolarAngle}
@@ -389,7 +348,6 @@
       {azimuthLocked}
       {azimuthAngle}
       {pointerLock}
-      {wheelZoom}
       {lookAtOffsetX}
       {lookAtOffsetY}
       {lookAtOffsetZ}

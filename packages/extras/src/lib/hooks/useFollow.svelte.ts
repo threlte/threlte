@@ -8,12 +8,15 @@ export type FollowTarget =
   | (() => Object3D | null | undefined)
 
 export interface UseFollowOptions {
+  target?: Object3D | undefined | null
+
   /**
    * The `CameraControls` instance from `<CameraControls>` that the follow
    * behavior is attached to. The hook is a no-op while this is falsy, so
    * it's safe to pass a ref that hasn't mounted yet.
    */
   controls?: CameraControls | null
+
   /**
    * Offset added to the target's world position when setting the
    * `CameraControls` target — used to look at the character's head, chest,
@@ -21,18 +24,21 @@ export interface UseFollowOptions {
    * @default [0, 0, 0]
    */
   lookAtOffset?: Vector3 | Vector3Tuple
+
   /**
    * Dead zone in camera-space right/up axes. The target may drift this far
    * from the currently tracked position before the camera starts following.
    * Axes left at `0` have no dead zone on that axis.
    */
   deadZone?: { x?: number; y?: number }
+
   /**
    * Shift the tracked point in the target's direction of motion, expressed
    * as seconds of preview (`velocity * lookAhead`). `0` disables look-ahead.
    * @default 0
    */
   lookAhead?: number
+
   /**
    * Smoothing time in seconds for the velocity that drives `lookAhead`.
    * Prevents the look-ahead offset from snapping to full magnitude the
@@ -41,6 +47,7 @@ export interface UseFollowOptions {
    * @default 0.15
    */
   lookAheadSmoothTime?: number
+
   /**
    * Smoothing time in seconds for the camera position's translation. The
    * camera's position lags the character's movement by this much, producing
@@ -54,6 +61,7 @@ export interface UseFollowOptions {
    * @default 0
    */
   followSmoothTime?: number
+
   /**
    * When `true`, drive the camera's azimuth from the target's Y-axis world
    * rotation each frame, so the camera turns with the character (Ecctrl's
@@ -66,6 +74,7 @@ export interface UseFollowOptions {
    * @default false
    */
   trackRotation?: boolean
+
   /**
    * Smoothing time in seconds for rotation tracking. `0` (the default)
    * snaps the camera's azimuth to the target's yaw each frame (like
@@ -74,6 +83,7 @@ export interface UseFollowOptions {
    * @default 0
    */
   trackRotationSmoothTime?: number
+
   /**
    * Additional azimuth offset (radians) applied after rotation tracking.
    * Set to `Math.PI` to sit the camera behind a character whose local `+Z`
@@ -86,25 +96,32 @@ export interface UseFollowOptions {
 
 const EPSILON = 1e-6
 
-const resolveTarget = (raw: FollowTarget | null | undefined): Object3D | null => {
-  if (!raw) return null
-  if (raw instanceof Object3D) return raw
-  if (typeof raw === 'function') return raw() ?? null
-  return raw.current ?? null
-}
-
 export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const { invalidate, scheduler, mainStage, renderStage } = useThrelte()
+
+  const {
+    target,
+    controls,
+    deadZone,
+    lookAtOffset,
+    lookAheadSmoothTime = 0.15,
+    lookAhead = 0,
+    trackRotation = false,
+    trackRotationOffset = 0,
+    trackRotationSmoothTime = 0,
+    followSmoothTime = 0
+  } = $derived(optionsFn?.() ?? {})
+  const deadZoneX = $derived(deadZone?.x ?? 0)
+  const deadZoneY = $derived(deadZone?.y ?? 0)
 
   const postStage = scheduler.createStage(Symbol('useFollow-post'), {
     after: mainStage,
     before: renderStage
   })
 
-  let _following = $state(false)
-  let _distance = $state(0)
+  let following = $state(false)
+  let distance = $state(0)
 
-  let currentTarget: FollowTarget | null = null
   let initialized = false
   let smoothingInitialized = false
   let prevTarget: Object3D | null = null
@@ -133,38 +150,32 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   const { task } = useTask(
     Symbol('useFollow'),
     (delta) => {
-      const options = optionsFn?.() ?? {}
-      const controls = options.controls
-      const obj = resolveTarget(currentTarget)
-
-      if (obj !== prevTarget) {
+      if (target !== prevTarget) {
         initialized = false
         smoothingInitialized = false
-        prevTarget = obj
+        prevTarget = target ?? null
       }
 
-      if (!controls || obj === null) {
-        if (_following) _following = false
+      if (!controls || !target) {
+        if (following) following = false
         return
       }
 
-      if (!_following) _following = true
+      if (!following) following = true
 
-      obj.getWorldPosition(targetWorld)
+      target.getWorldPosition(targetWorld)
 
       if (initialized && delta > 0) {
         velocity.subVectors(targetWorld, lastTargetWorld).divideScalar(delta)
-        const lookAheadSmoothTime = Math.max(0.001, options.lookAheadSmoothTime ?? 0.15)
-        const velT = 1 - Math.exp(-delta / lookAheadSmoothTime)
+        const scaledLookAheadSmoothTime = Math.max(0.001, lookAheadSmoothTime)
+        const velT = 1 - Math.exp(-delta / scaledLookAheadSmoothTime)
         smoothedVelocity.lerp(velocity, velT)
       } else {
         velocity.set(0, 0, 0)
         smoothedVelocity.set(0, 0, 0)
       }
-      lastTargetWorld.copy(targetWorld)
 
-      const deadZoneX = options.deadZone?.x ?? 0
-      const deadZoneY = options.deadZone?.y ?? 0
+      lastTargetWorld.copy(targetWorld)
 
       if (!initialized) {
         trackedTarget.copy(targetWorld)
@@ -201,31 +212,30 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
       }
 
       lookAtPoint.copy(trackedTarget)
-      if (options.lookAtOffset) {
-        if (Array.isArray(options.lookAtOffset)) {
-          lookAtPoint.x += options.lookAtOffset[0] ?? 0
-          lookAtPoint.y += options.lookAtOffset[1] ?? 0
-          lookAtPoint.z += options.lookAtOffset[2] ?? 0
+      if (lookAtOffset) {
+        if (Array.isArray(lookAtOffset)) {
+          lookAtPoint.x += lookAtOffset[0] ?? 0
+          lookAtPoint.y += lookAtOffset[1] ?? 0
+          lookAtPoint.z += lookAtOffset[2] ?? 0
         } else {
-          lookAtPoint.add(options.lookAtOffset)
+          lookAtPoint.add(lookAtOffset)
         }
       }
 
-      const lookAhead = options.lookAhead ?? 0
       if (lookAhead !== 0 && smoothedVelocity.lengthSq() > EPSILON) {
         lookAtPoint.addScaledVector(smoothedVelocity, lookAhead)
       }
 
       controls.moveTo(lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, false)
 
-      if (options.trackRotation) {
-        obj.getWorldQuaternion(targetQuat)
+      if (trackRotation) {
+        target.getWorldQuaternion(targetQuat)
         trackEuler.setFromQuaternion(targetQuat, 'YXZ')
-        const targetAzimuth = trackEuler.y + (options.trackRotationOffset ?? 0)
+        const targetAzimuth = trackEuler.y + trackRotationOffset
         const current = controls.azimuthAngle
         let arc = targetAzimuth - current
         arc = Math.atan2(Math.sin(arc), Math.cos(arc))
-        const rotSmooth = Math.max(0, options.trackRotationSmoothTime ?? 0)
+        const rotSmooth = Math.max(0, trackRotationSmoothTime)
         const rotT = rotSmooth <= EPSILON ? 1 : 1 - Math.exp(-delta / rotSmooth)
         controls.azimuthAngle = current + arc * rotT
       }
@@ -233,7 +243,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
       initialized = true
 
       controls.camera.getWorldPosition(cameraPos)
-      _distance = cameraPos.distanceTo(targetWorld)
+      distance = cameraPos.distanceTo(targetWorld)
 
       invalidate()
     },
@@ -243,23 +253,21 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   useTask(
     Symbol('useFollow-smooth'),
     (delta) => {
-      const options = optionsFn?.() ?? {}
-      const controls = options.controls
-      if (!controls || !_following) return
+      if (!controls || !following) return
 
-      const followSmoothTime = Math.max(0, options.followSmoothTime ?? 0)
+      const scaledFollowSmoothTime = Math.max(0, followSmoothTime)
 
       if (!smoothingInitialized) {
         smoothedTracked.copy(trackedTarget)
         smoothingInitialized = true
       }
 
-      if (followSmoothTime <= EPSILON) {
+      if (scaledFollowSmoothTime <= EPSILON) {
         smoothedTracked.copy(trackedTarget)
         return
       }
 
-      const t = 1 - Math.exp(-delta / followSmoothTime)
+      const t = 1 - Math.exp(-delta / scaledFollowSmoothTime)
       smoothedTracked.lerp(trackedTarget, t)
 
       lag.subVectors(smoothedTracked, trackedTarget)
@@ -273,18 +281,8 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
     { stage: postStage, autoInvalidate: false }
   )
 
-  const start = (target: FollowTarget) => {
-    currentTarget = target
-    invalidate()
-  }
-
-  const stop = () => {
-    currentTarget = null
-    invalidate()
-  }
-
   const getInputDirection = (right: number, forward: number, out: Vector3): Vector3 => {
-    const cam = optionsFn?.().controls?.camera
+    const cam = controls?.camera
     out.set(0, 0, 0)
     if (!cam) return out
     cam.getWorldDirection(inputForward)
@@ -297,7 +295,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
 
   const getTargetDirection = (right: number, forward: number, out: Vector3): Vector3 => {
     out.set(0, 0, 0)
-    const target = resolveTarget(currentTarget)
+
     if (!target) return out
     targetRight.setFromMatrixColumn(target.matrixWorld, 0)
     targetForward.setFromMatrixColumn(target.matrixWorld, 2)
@@ -312,10 +310,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
   return {
     /** Internal task, exposed for ordering other tasks via `after`/`before`. */
     task,
-    /** Start following an `Object3D` (or `{ current }` ref, or getter). */
-    start,
-    /** Stop following the current target. */
-    stop,
+
     /**
      * Project a 2D input into a world-space direction aligned with the
      * camera's horizontal basis. `right` maps to the camera's right axis,
@@ -326,6 +321,7 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
      * user has orbited the camera: `W` always means "away from camera".
      */
     getInputDirection,
+
     /**
      * Project a 2D input into a world-space direction aligned with the
      * target's own horizontal basis — `forward` follows the target's local
@@ -337,13 +333,15 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
      * feedback loop and the character will spin.
      */
     getTargetDirection,
+
     /** Whether a target is currently being followed. */
     get following() {
-      return _following
+      return following
     },
+
     /** Current distance from the camera's world position to the target. */
     get distance() {
-      return _distance
+      return distance
     }
   }
 }
