@@ -15322,7 +15322,7 @@ zones, and look-ahead.
 
 <CameraControls bind:ref={controls} />
 
-<T is={group}>
+<T is={character}>
   <!-- character mesh -->
 </T>
 ```
@@ -15339,7 +15339,7 @@ configured on the component, follow behavior on the hook.**
 | `minPolarAngle` / `maxPolarAngle`     | `lookAhead`            |
 | `minAzimuthAngle` / `maxAzimuthAngle` | `followSmoothTime`     |
 | `colliderMeshes` (collision)          | `trackRotation`        |
-| `pointerLock` (input mode)            | target via `start()`   |
+| `pointerLock` (input mode)            | `target`               |
 
 Everything on the left is already documented on
 [`<CameraControls>`](/docs/reference/extras/camera-controls) — set it as a
@@ -15408,13 +15408,14 @@ Seconds of lag between the character's movement and the camera's position,
 for a trailing / cinematic follow. `0` (the default) snaps the camera
 lock-step with the character.
 
-Only the character-motion contribution to the camera's position is smoothed.
-`CameraControls`' orbit pivot stays exactly on the character, and the
-camera's look-at direction updates instantly, so:
+Only the tracked base position is smoothed — `lookAtOffset` and `lookAhead`
+are added unsmoothed on top, and the smoothed target is passed to
+`CameraControls` before its own update runs, so:
 
-- Rotating while moving pivots on the character, not on a lagged ghost.
-- Adjusting `lookAtOffset` at runtime is snappy — the camera reorients
-  without drift.
+- Adjusting `lookAtOffset` at runtime is snappy — the offset applies
+  instantly without dragging through the smoothing window.
+- Collision (`colliderMeshes`), zoom limits, and other `CameraControls`
+  features apply correctly to the smoothed pose.
 - User orbit/zoom input still smooths via `CameraControls`' own
   `smoothTime`.
 
@@ -15529,9 +15530,15 @@ The returned object exposes two reactive properties:
 
 ## Task ordering
 
-`useFollow` runs its update in a named task. For a character controller,
-schedule it **after** movement so the camera sees the final target position
-for the frame:
+`useFollow` runs its update in two named tasks:
+
+- `task` — the main update, in `mainStage`. Sets the controls target (with
+  `followSmoothTime` smoothing baked in) and azimuth. Schedule movement
+  **before** this so the camera sees the final target position for the frame.
+- `postTask` — runs after `<CameraControls>`' own update, in a dedicated
+  stage between `mainStage` and `renderStage`. Reads the final camera pose to
+  update reactive state. Schedule camera-decorating work (e.g. a camera shake)
+  **after** this.
 
 ```ts
 const follow = useFollow(() => ({
@@ -15620,7 +15627,7 @@ basis.
   maxPolarAngle={1.5}
 />
 
-<T is={group}>
+<T is={character}>
   <T.Mesh>
     <T.BoxGeometry />
     <T.MeshStandardMaterial color="orange" />
@@ -16701,7 +16708,7 @@ useTask(
 
 ### `target`
 
-The DOM element to listen on. Defaults to `window`, which captures keyboard input
+The DOM element to listen on. Defaults to `window`, which receives keyboard input
 globally regardless of focus. Pass a specific element if you want scoped input:
 
 ```ts
@@ -16709,6 +16716,16 @@ import { useThrelte } from '@threlte/core'
 
 const { dom } = useThrelte()
 const keyboard = useKeyboard(() => ({ target: dom }))
+```
+
+### `capture`
+
+Set to `true` to listen during the capture phase. The default is `false`, so
+focused inputs, overlays, or other descendants can still isolate keyboard
+events with `stopPropagation()`.
+
+```ts
+const keyboard = useKeyboard(() => ({ capture: true }))
 ```
 
 ## Focus Handling

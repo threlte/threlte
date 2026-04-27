@@ -1,1 +1,0 @@
-import"./disclose-version.DsnmJJEf.js";/* empty css                                                      */import"./observe.svelte.xONaORci.js";import{u as o}from"./useTask.svelte.CmJ2DNhI.js";const a=(r,i)=>{let e=0;const t=i.fixedStep??1/60;return o(m=>{for(e+=m;e>=t;)e-=t,r(t)},i)};export{a as u};
