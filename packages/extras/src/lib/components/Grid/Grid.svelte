@@ -1,26 +1,26 @@
 <!-- Credits to Fyrestar for the https://github.com/Fyrestar/THREE.InfiniteGridHelper  -->
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { Color, DoubleSide, Plane, Vector3, Mesh, type ShaderMaterial, type Uniform } from 'three'
+  import { Color, DoubleSide, Plane, Uniform, Vector3, Mesh, type ShaderMaterial } from 'three'
   import type { GridProps } from './types.js'
   import { fragmentShader, vertexShader } from './gridShaders.js'
 
   let {
+    cellSize = 1,
+    sectionSize = 10,
     cellColor = '#000000',
     sectionColor = '#0000ee',
-    cellSize = 1,
     backgroundColor = '#dadada',
     backgroundOpacity = 0,
-    sectionSize = 10,
+    fadeDistance = 100,
+    fadeStrength = 1,
+    cellThickness = 1,
+    sectionThickness = 2,
     plane = 'xz',
     gridSize = [20, 20],
     followCamera = false,
     infiniteGrid = false,
-    fadeDistance = 100,
-    fadeStrength = 1,
     fadeOrigin = undefined,
-    cellThickness = 1,
-    sectionThickness = 2,
     side = DoubleSide,
     type = 'grid',
     axis = 'x',
@@ -37,7 +37,7 @@
   const { invalidate, camera } = useThrelte()
 
   const gridPlane = new Plane()
-  const upVector = new Vector3(0, 1, 0)
+  const gridPlaneNormal = new Vector3(0, 1, 0)
   const zeroVector = new Vector3(0, 0, 0)
 
   const axisToInt = {
@@ -46,10 +46,10 @@
     z: 2
   } as const
 
-  const planeToAxes = {
-    xz: 'xzy',
-    xy: 'xyz',
-    zy: 'zyx'
+  const planeConfig = {
+    xz: { axes: 'xzy', normal: [0, 1, 0] },
+    xy: { axes: 'xyz', normal: [0, 0, 1] },
+    zy: { axes: 'zyx', normal: [1, 0, 0] }
   } as const
 
   const gridType = {
@@ -60,86 +60,41 @@
   } as const
 
   const uniforms = {
-    cellSize: {
-      value: cellSize
-    },
-    sectionSize: {
-      value: sectionSize
-    },
-    cellColor: {
-      value: new Color(cellColor)
-    },
-    sectionColor: {
-      value: new Color(sectionColor)
-    },
-    backgroundColor: {
-      value: new Color(backgroundColor)
-    },
-    backgroundOpacity: {
-      value: backgroundOpacity
-    },
-    fadeDistance: {
-      value: fadeDistance
-    },
-    fadeStrength: {
-      value: fadeStrength
-    },
-    fadeOrigin: {
-      value: new Vector3()
-    },
-    cellThickness: {
-      value: cellThickness
-    },
-    sectionThickness: {
-      value: sectionThickness
-    },
-    infiniteGrid: {
-      value: infiniteGrid
-    },
-    followCamera: {
-      value: followCamera
-    },
-    coord0: {
-      value: 0
-    },
-    coord1: {
-      value: 2
-    },
-    coord2: {
-      value: 1
-    },
-    gridType: {
-      value: gridType.grid as number
-    },
-    lineGridCoord: {
-      value: axisToInt[axis as 'x' | 'y' | 'z']
-    },
-    circleGridMaxRadius: {
-      value: maxRadius
-    },
-    polarCellDividers: {
-      value: cellDividers
-    },
-    polarSectionDividers: {
-      value: sectionDividers
-    },
-    worldCamProjPosition: {
-      value: new Vector3()
-    },
-    worldPlanePosition: {
-      value: new Vector3()
-    }
+    cellSize: new Uniform(1),
+    sectionSize: new Uniform(10),
+    cellColor: new Uniform(new Color('#000000')),
+    sectionColor: new Uniform(new Color('#0000ee')),
+    backgroundColor: new Uniform(new Color('#dadada')),
+    backgroundOpacity: new Uniform(0),
+    fadeDistance: new Uniform(100),
+    fadeStrength: new Uniform(1),
+    fadeOrigin: new Uniform(new Vector3()),
+    cellThickness: new Uniform(1),
+    sectionThickness: new Uniform(2),
+    infiniteGrid: new Uniform(false),
+    followCamera: new Uniform(false),
+    coord0: new Uniform(0),
+    coord1: new Uniform(2),
+    coord2: new Uniform(1),
+    gridType: new Uniform<number>(gridType.grid),
+    lineGridCoord: new Uniform<number>(axisToInt.x),
+    circleGridMaxRadius: new Uniform(0),
+    polarCellDividers: new Uniform(6),
+    polarSectionDividers: new Uniform(2),
+    worldCamProjPosition: new Uniform(new Vector3()),
+    worldPlanePosition: new Uniform(new Vector3())
   }
 
   $effect.pre(() => {
     // convert axis string to int indexes xzy = [0,2,1]
-    const axes = planeToAxes[plane]
+    const { axes, normal } = planeConfig[plane]
     const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
     const c1 = axes.charAt(1) as 'x' | 'y' | 'z'
     const c2 = axes.charAt(2) as 'x' | 'y' | 'z'
     uniforms.coord0.value = axisToInt[c0]
     uniforms.coord1.value = axisToInt[c1]
     uniforms.coord2.value = axisToInt[c2]
+    gridPlaneNormal.set(normal[0], normal[1], normal[2])
     invalidate()
   })
 
@@ -178,8 +133,8 @@
   $effect.pre(() => {
     if (fadeOrigin) {
       uniforms.fadeOrigin.value = fadeOrigin
-      invalidate()
     }
+    invalidate()
   })
   $effect.pre(() => {
     uniforms.cellThickness.value = cellThickness
@@ -199,35 +154,19 @@
   })
 
   $effect.pre(() => {
-    switch (type) {
-      case 'grid': {
-        uniforms.gridType.value = gridType.grid
-        break
-      }
-      case 'lines': {
-        uniforms.gridType.value = gridType.lines
-        uniforms.lineGridCoord.value = axisToInt[axis as 'x' | 'y' | 'z']
-        break
-      }
-      case 'circular': {
-        uniforms.gridType.value = gridType.circular
-        uniforms.circleGridMaxRadius.value = maxRadius
-        break
-      }
-      case 'polar': {
-        uniforms.gridType.value = gridType.polar
-        uniforms.circleGridMaxRadius.value = maxRadius
-        uniforms.polarCellDividers.value = cellDividers
-        uniforms.polarSectionDividers.value = sectionDividers
-        break
-      }
-    }
+    uniforms.gridType.value = gridType[type]
+    uniforms.lineGridCoord.value = axisToInt[axis as 'x' | 'y' | 'z']
+    uniforms.circleGridMaxRadius.value = maxRadius
+    uniforms.polarCellDividers.value = cellDividers
+    uniforms.polarSectionDividers.value = sectionDividers
     invalidate()
   })
 
   useTask(
     () => {
-      gridPlane.setFromNormalAndCoplanarPoint(upVector, zeroVector).applyMatrix4(mesh.matrixWorld)
+      gridPlane
+        .setFromNormalAndCoplanarPoint(gridPlaneNormal, zeroVector)
+        .applyMatrix4(mesh.matrixWorld)
 
       const material = mesh.material as ShaderMaterial
       const worldCamProjPosition = material.uniforms.worldCamProjPosition as Uniform<Vector3>
@@ -241,9 +180,11 @@
       if (!fadeOrigin) {
         uFadeOrigin.value = projectedPoint
       }
-      worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)
+      if (followCamera) {
+        worldPlanePosition.value.set(0, 0, 0).applyMatrix4(mesh.matrixWorld)
+      }
     },
-    { autoInvalidate: false }
+    { autoInvalidate: false, running: () => followCamera || !fadeOrigin }
   )
 </script>
 

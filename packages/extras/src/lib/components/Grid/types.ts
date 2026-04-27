@@ -91,10 +91,20 @@ export type GridProps = Props<Mesh> & {
       }
     | {
         type?: 'circular'
+        /**
+         * @default 0
+         *
+         * Maximum radius in world units. A value of 0 removes the radius limit.
+         */
         maxRadius?: number
       }
     | {
         type?: 'polar'
+        /**
+         * @default 0
+         *
+         * Maximum radius in world units. A value of 0 removes the radius limit.
+         */
         maxRadius?: number
         cellDividers?: number
         sectionDividers?: number
