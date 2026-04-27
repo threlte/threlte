@@ -26,14 +26,10 @@ zones, and look-ahead.
   let character = new Group()
 
   const follow = useFollow(() => ({
+    target: character,
     controls,
     lookAtOffset: [0, 1, 0]
   }))
-
-  $effect(() => {
-    follow.start(character)
-    return () => follow.stop()
-  })
 </script>
 
 <T.PerspectiveCamera
@@ -47,24 +43,6 @@ zones, and look-ahead.
   <!-- character mesh -->
 </T>
 ```
-
-## Target
-
-Call `follow.start(target)` to start tracking. The target can be any of:
-
-- An `Object3D` directly
-- A ref-like object with a `current` property
-- A getter function that returns an `Object3D | null | undefined`
-
-`follow.start` is also usable as an `oncreate` handler on a `<T>` component:
-
-```svelte
-<T.Group oncreate={follow.start}>
-  <!-- character mesh -->
-</T.Group>
-```
-
-Call `follow.stop()` to stop.
 
 ## Options
 
@@ -92,6 +70,7 @@ feet:
 
 ```ts
 const follow = useFollow(() => ({
+  target,
   controls,
   lookAtOffset: [0, 1.6, 0]
 }))
@@ -105,6 +84,7 @@ left at `0` has no dead zone on that axis.
 
 ```ts
 const follow = useFollow(() => ({
+  target,
   controls,
   deadZone: { x: 0.5, y: 0.3 }
 }))
@@ -118,6 +98,7 @@ in 300 ms at its current velocity."
 
 ```ts
 const follow = useFollow(() => ({
+  target,
   controls,
   lookAhead: 0.3
 }))
@@ -131,6 +112,7 @@ ease.
 
 ```ts
 const follow = useFollow(() => ({
+  target,
   controls,
   lookAhead: 0.4,
   lookAheadSmoothTime: 0.25
@@ -155,6 +137,7 @@ camera's look-at direction updates instantly, so:
 
 ```ts
 const follow = useFollow(() => ({
+  target,
   controls,
   followSmoothTime: 0.2
 }))
@@ -163,12 +146,12 @@ const follow = useFollow(() => ({
 ## trackRotation
 
 Drive the `CameraControls` azimuth from the target's Y-axis world rotation so
-the camera turns with the character — the same behaviour as Ecctrl's
-`FixedCamera` mode. User orbit input on the horizontal axis is effectively
-overridden while this is on; polar orbit and zoom still work.
+the camera turns with the character. User orbit input on the horizontal axis is effectively
+overridden while this is on; polar orbit and zoom still work if enabled.
 
 ```ts
 const follow = useFollow(() => ({
+  target,
   controls,
   trackRotation: true,
   trackRotationSmoothTime: 0.25
@@ -177,9 +160,7 @@ const follow = useFollow(() => ({
 
 `trackRotationSmoothTime` tunes how quickly the camera eases into the
 character's heading. `0` (the default) locks the azimuth to the target's
-yaw every frame; higher values ramp the rotation in, matching the feel of
-Ecctrl's `fixedCamRotMult` but expressed as a time-constant rather than a
-multiplier.
+yaw every frame; higher values ramp the rotation in.
 
 `trackRotationOffset` shifts the azimuth after the target's yaw is applied.
 Use `Math.PI` to sit the camera behind a character whose local `+Z` axis is
@@ -208,8 +189,7 @@ follow.getInputDirection(right, forward, out)
 
 - `right` — sideways input amount (positive = to camera's right).
 - `forward` — forward input amount (positive = away from the camera).
-- `out` — a `Vector3` you allocate once and reuse. Writes the world-space
-  direction into it and returns it. Length of the vector reflects the
+- `out` — a `Vector3` representing the world-space direction. Length of the vector reflects the
   magnitude of `(right, forward)`, so diagonal input gives a diagonal world
   direction.
 
@@ -242,7 +222,7 @@ With `trackRotation`, a typical tank input loop looks like:
 ```ts
 useTask((delta) => {
   // A/D directly rotate the character…
-  character.rotation.y += input.axis('moveLeft', 'moveRight') * turnSpeed * delta
+  character.rotation.y -= input.axis('moveLeft', 'moveRight') * turnSpeed * delta
   // …W/S translate along the character's current forward.
   follow.getTargetDirection(0, -input.axis('moveForward', 'moveBack'), worldMove)
   character.position.addScaledVector(worldMove, speed * delta)
@@ -271,7 +251,11 @@ schedule it **after** movement so the camera sees the final target position
 for the frame:
 
 ```ts
-const follow = useFollow(() => ({ controls, lookAtOffset: [0, 1.6, 0] }))
+const follow = useFollow(() => ({
+  target,
+  controls,
+  lookAtOffset: [0, 1.6, 0]
+}))
 
 useTask(
   () => {
@@ -322,14 +306,10 @@ basis.
   )
 
   const follow = useFollow(() => ({
+    target: character,
     controls,
     lookAtOffset: [0, 1, 0]
   }))
-
-  $effect(() => {
-    follow.start(character)
-    return () => follow.stop()
-  })
 
   const worldMove = new Vector3()
 

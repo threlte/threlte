@@ -34,6 +34,7 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   const keys = new Map<string, KeyState>()
   const pendingDown = new Set<string>()
   const pendingUp = new Set<string>()
+  const listenerOptions = { capture: true }
 
   const listeners: Record<KeyboardEventType, Set<KeyboardEventHandler>> = {
     keydown: new Set(),
@@ -114,13 +115,13 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   $effect.pre(() => {
     const { target = window } = optionsFn?.() ?? {}
 
-    target.addEventListener('keydown', handleKeyDown)
-    target.addEventListener('keyup', handleKeyUp)
+    target.addEventListener('keydown', handleKeyDown, listenerOptions)
+    target.addEventListener('keyup', handleKeyUp, listenerOptions)
     target.addEventListener('blur', handleBlur)
 
     return () => {
-      target.removeEventListener('keydown', handleKeyDown)
-      target.removeEventListener('keyup', handleKeyUp)
+      target.removeEventListener('keydown', handleKeyDown, listenerOptions)
+      target.removeEventListener('keyup', handleKeyUp, listenerOptions)
       target.removeEventListener('blur', handleBlur)
     }
   })

@@ -2,11 +2,6 @@ import { Euler, Object3D, Quaternion, Vector3, type Vector3Tuple } from 'three'
 import { useTask, useThrelte } from '@threlte/core'
 import type CameraControls from 'camera-controls'
 
-export type FollowTarget =
-  | Object3D
-  | { current?: Object3D | null }
-  | (() => Object3D | null | undefined)
-
 export interface UseFollowOptions {
   target?: Object3D | undefined | null
 
@@ -64,10 +59,9 @@ export interface UseFollowOptions {
 
   /**
    * When `true`, drive the camera's azimuth from the target's Y-axis world
-   * rotation each frame, so the camera turns with the character (Ecctrl's
-   * "FixedCamera" mode). User orbit input on the horizontal axis is
-   * effectively overridden while this is on; polar orbit and zoom still
-   * work.
+   * rotation each frame, so the camera turns with the character. User orbit input
+   * on the horizontal axis is effectively overridden while this is on; polar orbit
+   * and zoom still work.
    *
    * Don't pair with `minAzimuthAngle`/`maxAzimuthAngle` limits on
    * `<CameraControls>` — the tracker will fight the limits.
@@ -77,8 +71,7 @@ export interface UseFollowOptions {
 
   /**
    * Smoothing time in seconds for rotation tracking. `0` (the default)
-   * snaps the camera's azimuth to the target's yaw each frame (like
-   * Ecctrl's `fixedCamRotMult` at its ceiling). Higher values ease the
+   * snaps the camera's azimuth to the target's yaw each frame. Higher values ease the
    * camera into the character's facing direction.
    * @default 0
    */
@@ -161,7 +154,9 @@ export const useFollow = (optionsFn?: () => UseFollowOptions) => {
         return
       }
 
-      if (!following) following = true
+      if (!following) {
+        following = true
+      }
 
       target.getWorldPosition(targetWorld)
 

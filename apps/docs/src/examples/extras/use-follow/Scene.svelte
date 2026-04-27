@@ -143,7 +143,7 @@
       const speed = sprinting ? runSpeed : walkSpeed
 
       if (trackRotation) {
-        rotation += moveX * turnSpeed * delta
+        rotation -= moveX * turnSpeed * delta
         follow.getTargetDirection(0, -moveY, worldMove)
         character.position.addScaledVector(worldMove, speed * delta)
       } else {
