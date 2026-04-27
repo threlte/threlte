@@ -30,7 +30,6 @@ uniform bool colorBackfaces;
 // Dash
 uniform bool dashInvert;
 uniform bool dash;
-uniform bool dashOnly;
 uniform float dashRepeats;
 uniform float dashLength;
 
@@ -50,15 +49,8 @@ float wireframe_aastep(float threshold, float dist) {
   return smoothstep(threshold - afwidth, threshold + afwidth, dist);
 }
 
-float wireframe_map(float value, float min1, float max1, float min2, float max2) {
-  return min2 + (value - min1) * (max2 - min2) / (max1 - min1);
-}
-
 float getWireframe() {
   vec3 barycentric = v_edges_Barycentric;
-
-  // Distance from center of each triangle to its edges.
-  float d = min(min(barycentric.x, barycentric.y), barycentric.z);
 
   // for dashed rendering, we can use this to get the 0 .. 1 value of the line length
   float positionAlong = max(barycentric.x, barycentric.y);
@@ -66,8 +58,8 @@ float getWireframe() {
     positionAlong = 1.0 - positionAlong;
   }
 
-  // the thickness of the stroke
-  float computedThickness = wireframe_map(thickness, 0.0, 1.0, 0.0, 0.34);
+  // The thickness of the stroke, in approximate screen pixels.
+  float computedThickness = thickness;
 
   // if we want to shrink the thickness toward the center of the line segment
   if (squeeze) {
@@ -76,11 +68,14 @@ float getWireframe() {
 
   // Create dash pattern
   if (dash) {
+    float repeats = max(dashRepeats, 0.0001);
+    float length = clamp(dashLength, 0.0, 1.0);
+
     // here we offset the stroke position depending on whether it
     // should overlap or not
-    float offset = 1.0 / dashRepeats * dashLength / 2.0;
+    float offset = 1.0 / repeats * length / 2.0;
     if (!dashInvert) {
-      offset += 1.0 / dashRepeats / 2.0;
+      offset += 1.0 / repeats / 2.0;
     }
 
     // if we should animate the dash or not
@@ -89,14 +84,24 @@ float getWireframe() {
     // }
 
     // create the repeating dash pattern
-    float pattern = fract((positionAlong + offset) * dashRepeats);
-    computedThickness *= 1.0 - wireframe_aastep(dashLength, pattern);
+    float pattern = fract((positionAlong + offset) * repeats);
+    computedThickness *= 1.0 - wireframe_aastep(length, pattern);
   }
 
-  // compute the anti-aliased stroke edge  
-  float edge = 1.0 - wireframe_aastep(computedThickness, d);
+  if (computedThickness <= 0.0) {
+    return 0.0;
+  }
 
-  return edge;
+  // Compute the anti-aliased stroke edge in screen space so triangle shape
+  // does not change apparent line thickness.
+  vec3 width = fwidth(barycentric);
+  vec3 edge = smoothstep(
+    width * max(computedThickness - 0.5, 0.0),
+    width * (computedThickness + 0.5),
+    barycentric
+  );
+
+  return 1.0 - min(min(edge.x, edge.y), edge.z);
 }`
 }
 
@@ -106,7 +111,15 @@ export const setWireframeOverride = (
     [key: string]: Uniform
   }
 ) => {
-  material.onBeforeCompile = (shader) => {
+  const originalOnBeforeCompile = material.onBeforeCompile
+  const originalCustomProgramCacheKey = material.customProgramCacheKey
+  const originalCustomProgramCacheKeyValue = originalCustomProgramCacheKey.call(material)
+  const originalSide = material.side
+  const originalTransparent = material.transparent
+
+  material.onBeforeCompile = (shader, renderer) => {
+    originalOnBeforeCompile.call(material, shader, renderer)
+
     Object.assign(shader.uniforms, uniforms)
 
     shader.vertexShader = shader.vertexShader.replace(
@@ -130,9 +143,9 @@ void main() {`
 #include <color_fragment>
 float edge = getWireframe();
 vec4 colorStroke = vec4(stroke, edge);
-#ifdef FLIP_SIDED
+if (colorBackfaces && !gl_FrontFacing) {
 colorStroke.rgb = backfaceStroke;
-#endif
+}
 vec4 colorFill = vec4(mix(diffuseColor.rgb, fill, fillMix), mix(diffuseColor.a, fillOpacity, fillMix));
 vec4 outColor = mix(colorFill, colorStroke, edge * strokeOpacity);
 
@@ -141,6 +154,16 @@ diffuseColor.a *= outColor.a;`
     )
   }
 
+  material.customProgramCacheKey = () => `${originalCustomProgramCacheKeyValue}|threlte-wireframe`
   material.side = DoubleSide
   material.transparent = true
+  material.needsUpdate = true
+
+  return () => {
+    material.onBeforeCompile = originalOnBeforeCompile
+    material.customProgramCacheKey = originalCustomProgramCacheKey
+    material.side = originalSide
+    material.transparent = originalTransparent
+    material.needsUpdate = true
+  }
 }

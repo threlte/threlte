@@ -16,14 +16,14 @@ componentSignature:
         { name: 'sectionColor', type: 'ColorRepresentation', default: "'#0000ee'" },
         { name: 'sectionSize', type: 'number', default: '10' },
         { name: 'sectionThickness', type: 'number', default: '2' },
-        { name: 'gridSize', type: 'number | [number, number]', default: '[20,20]' },
+        { name: 'gridSize', type: 'number | [number, number]', default: '[20, 20]' },
         { name: 'followCamera', type: 'boolean', default: 'false' },
         { name: 'infiniteGrid', type: 'boolean', default: 'false' },
         { name: 'fadeDistance', type: 'number', default: '100' },
         { name: 'fadeStrength', type: 'number', default: '1' },
         {
           name: 'fadeOrigin',
-          type: 'Vector3',
+          type: '[number, number, number]',
           default: 'undefined',
           description: 'Set a custom fading point of origin. The current camera position will be used if unset.'
         },
@@ -38,7 +38,7 @@ componentSignature:
           name: 'maxRadius',
           type: 'number',
           default: '0',
-          description: "'circular' and 'polar' only. 0 removes the constraint."
+          description: "'circular' and 'polar' only. Maximum radius in world units. 0 removes the constraint."
         },
         {
           name: 'cellDividers',
@@ -70,8 +70,8 @@ The grid type can be selected by setting the `type` parameter. The available gri
 
 - `grid`: represents a standard box grid. It does not require any additional properties. (default)
 - `lines`: grid consisting of lines that align along a single world axis. You specify this axis by providing either `x`, `y` or `z` to the `axis` property.
-- `circular`: grid formed of concentric circles. It includes a `maxRadius` property that sets the maximum growth extent for the grid. A value of `0` removes this limit, allowing the grid to occupy the entire geometry, even if it results in incomplete circles.
-- `polar`: similar to the circular type, but it also features lines that subdivide the concentric circles. It too has a `maxRadius` property. Additionally, it has two properties for specifying dividers: `cellDivider` and `sectionDivider`. These determine how many lines will segment the circle into various sectors. For example, 2 lines result in 4 segments at 90° each, while 6 lines create 12 sectors at 30° apiece.
+- `circular`: grid formed of concentric circles. It includes a `maxRadius` property that sets the maximum world-space radius for the grid. A value of `0` removes this limit, allowing the grid to occupy the entire geometry, even if it results in incomplete circles.
+- `polar`: similar to the circular type, but it also features lines that subdivide the concentric circles. It too has a `maxRadius` property. Additionally, it has two properties for specifying dividers: `cellDividers` and `sectionDividers`. These determine how many lines will segment the circle into various sectors. For example, 2 lines result in 4 segments at 90° each, while 6 lines create 12 sectors at 30° apiece.
 
 | Grid                                               | Lines                                               | Circular                                               | Polar                                               |
 | -------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
