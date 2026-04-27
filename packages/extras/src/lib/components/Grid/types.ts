@@ -1,5 +1,5 @@
 import type { Props } from '@threlte/core'
-import type { ColorRepresentation, Mesh, Side, Vector3 } from 'three'
+import type { ColorRepresentation, Mesh, Side, Vector3, Vector3Tuple } from 'three'
 
 export type GridProps = Props<Mesh> & {
   /**
@@ -75,7 +75,7 @@ export type GridProps = Props<Mesh> & {
   /**
    * @default undefined, uses camera.current.position
    */
-  fadeOrigin?: Vector3
+  fadeOrigin?: Vector3 | Vector3Tuple
 
   /**
    * @default Three.DoubleSide

@@ -16,14 +16,14 @@ componentSignature:
         { name: 'sectionColor', type: 'ColorRepresentation', default: "'#0000ee'" },
         { name: 'sectionSize', type: 'number', default: '10' },
         { name: 'sectionThickness', type: 'number', default: '2' },
-        { name: 'gridSize', type: 'number | [number, number]', default: '[20,20]' },
+        { name: 'gridSize', type: 'number | [number, number]', default: '[20, 20]' },
         { name: 'followCamera', type: 'boolean', default: 'false' },
         { name: 'infiniteGrid', type: 'boolean', default: 'false' },
         { name: 'fadeDistance', type: 'number', default: '100' },
         { name: 'fadeStrength', type: 'number', default: '1' },
         {
           name: 'fadeOrigin',
-          type: 'Vector3',
+          type: '[number, number, number]',
           default: 'undefined',
           description: 'Set a custom fading point of origin. The current camera position will be used if unset.'
         },
