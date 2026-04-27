@@ -232,30 +232,12 @@ useTask((delta) => {
 
 No yaw feedback, because the input no longer depends on the camera.
 
-## Reactive state
-
-The returned object exposes two reactive properties:
-
-| Property    | Type      | Description                                                     |
-| ----------- | --------- | --------------------------------------------------------------- |
-| `following` | `boolean` | Whether a target is currently being followed                    |
-| `distance`  | `number`  | Current distance from the camera's world position to the target |
-
-```svelte
-<p>{follow.following ? `Tracking (${follow.distance.toFixed(1)}m)` : 'Idle'}</p>
-```
-
 ## Task ordering
 
-`useFollow` runs its update in two named tasks:
-
-- `task` — the main update, in `mainStage`. Sets the controls target (with
-  `followSmoothTime` smoothing baked in) and azimuth. Schedule movement
-  **before** this so the camera sees the final target position for the frame.
-- `postTask` — runs after `<CameraControls>`' own update, in a dedicated
-  stage between `mainStage` and `renderStage`. Reads the final camera pose to
-  update reactive state. Schedule camera-decorating work (e.g. a camera shake)
-  **after** this.
+`useFollow` runs its update in `task`, in `mainStage`. It sets the controls
+target (with `followSmoothTime` smoothing baked in) and azimuth, ahead of
+`<CameraControls>`' own update in the same stage. Schedule character movement
+**before** `task` so the camera sees the final target position for the frame.
 
 ```ts
 const follow = useFollow(() => ({

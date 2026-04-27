@@ -173,6 +173,15 @@
     { after: [gamepad.task, follow.task] }
   )
 
+  let liveDistance = $state(0)
+  useTask(
+    () => {
+      if (!controls) return
+      liveDistance = controls.camera.position.distanceTo(character.position)
+    },
+    { after: follow.task }
+  )
+
   const pillars: [number, number][] = Array.from({ length: 8 }, (_, i) => {
     const angle = ((i + 0.5) * Math.PI * 2) / 8
     return [Math.cos(angle) * 5, Math.sin(angle) * 5]
@@ -255,13 +264,13 @@
         </p>
         <div class="stats">
           <span>distance</span>
-          <span class="value">{follow.distance.toFixed(2)}</span>
+          <span class="value">{liveDistance.toFixed(2)}</span>
         </div>
         <div
           class="badge"
-          class:on={follow.following}
+          class:on={following}
         >
-          {follow.following ? action : 'paused'}
+          {following ? action : 'paused'}
         </div>
       </div>
     </HTML>
