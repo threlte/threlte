@@ -1,10 +1,3 @@
-<script
-  lang="ts"
-  module
->
-  export type { GizmoOptions } from 'three-viewport-gizmo'
-</script>
-
 <script lang="ts">
   import { useTask, useThrelte, useParent, observe } from '@threlte/core'
   import {
