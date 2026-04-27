@@ -1,6 +1,6 @@
 {
   "name": "@threlte/extras",
-  "version": "9.14.9",
+  "version": "9.15.0",
   "author": "Grischa Erbe <hello@legrisch.com> (https://legrisch.com)",
   "license": "MIT",
   "description": "Utilities, abstractions and plugins for your Threlte apps",
