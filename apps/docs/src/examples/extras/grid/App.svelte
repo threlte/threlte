@@ -1,7 +1,7 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
   import { Canvas, T } from '@threlte/core'
-  import { Checkbox, Color, Folder, Pane, List, Slider } from 'svelte-tweakpane-ui'
+  import { Checkbox, Color, Folder, Pane, List, Slider, Point } from 'svelte-tweakpane-ui'
   import { Grid, TransformControls } from '@threlte/extras'
   import { PlaneGeometry, Vector3 } from 'three'
   import { SimplexNoise } from 'three/examples/jsm/Addons.js'
@@ -71,112 +71,100 @@
 </script>
 
 <Pane
-  title="Grid"
+  title=""
   position="fixed"
 >
-  <Folder title="Cells">
-    <Slider
-      bind:value={cellSize}
-      label="size"
-      step={1}
-      min={1}
-      max={5}
-    />
-    <Color
-      bind:value={cellColor}
-      label="color"
-    />
-    <Slider
-      bind:value={cellThickness}
-      label="thickness"
-      step={0.1}
-      min={1}
-      max={10}
-    />
-  </Folder>
-  <Folder title="Sections">
-    <Slider
-      bind:value={sectionSize}
-      label="size"
-      step={1}
-      min={1}
-      max={50}
-    />
-    <Color
-      bind:value={sectionColor}
-      label="color"
-    />
-    <Slider
-      bind:value={sectionThickness}
-      label="thickness"
-      step={0.1}
-      min={1}
-      max={10}
-    />
-  </Folder>
-  <Folder title="General">
-    <Slider
-      bind:value={gridSize[0]}
-      label="size 1"
-      step={1}
-      min={1}
-      max={100}
-    />
-    <Slider
-      bind:value={gridSize[1]}
-      label="size 2"
-      step={1}
-      min={1}
-      max={100}
-    />
-    <List
-      bind:value={plane}
-      label="plane"
-      options={planeOptions}
-    />
-    <Checkbox
-      bind:value={followCamera}
-      label="follow camera"
-    />
-    <Checkbox
-      bind:value={infiniteGrid}
-      label="infinite Grid"
-    />
-    <Checkbox
-      bind:value={useFadeOrigin}
-      label="use fade origin"
-    />
-    <Slider
-      bind:value={fadeDistance}
-      label="fade distance"
-      step={10}
-      min={10}
-      max={400}
-    />
-    <Color
-      bind:value={backgroundColor}
-      label="background color"
-    />
-    <Slider
-      bind:value={backgroundOpacity}
-      label="background opacity"
-      step={0.01}
-      min={0}
-      max={1}
-    />
-    <Slider
-      bind:value={fadeStrength}
-      label="fade strength"
-      step={0.1}
-      min={0}
-      max={20}
-    />
-    <List
-      bind:value={gridGeometry}
-      options={gridGeometryOptions}
-      label="grid geometry"
-    />
-  </Folder>
+  <Slider
+    bind:value={cellSize}
+    label="cellSize"
+    step={1}
+    min={1}
+    max={5}
+  />
+  <Color
+    bind:value={cellColor}
+    label="cellColor"
+  />
+  <Slider
+    bind:value={cellThickness}
+    label="cellThickness"
+    step={0.1}
+    min={1}
+    max={10}
+  />
+  <Slider
+    bind:value={sectionSize}
+    label="sectionSize"
+    step={1}
+    min={1}
+    max={50}
+  />
+  <Color
+    bind:value={sectionColor}
+    label="sectionColor"
+  />
+  <Slider
+    bind:value={sectionThickness}
+    label="sectionThickness"
+    step={0.1}
+    min={1}
+    max={10}
+  />
+  <Point
+    bind:value={gridSize}
+    label="gridSize"
+    step={1}
+    min={1}
+    max={100}
+  />
+  <List
+    bind:value={plane}
+    label="plane"
+    options={planeOptions}
+  />
+  <Checkbox
+    bind:value={followCamera}
+    label="followCamera"
+  />
+  <Checkbox
+    bind:value={infiniteGrid}
+    label="infiniteGrid"
+  />
+  <Checkbox
+    bind:value={useFadeOrigin}
+    label="useFadeOrigin"
+  />
+  <Slider
+    bind:value={fadeDistance}
+    label="fadeDistance"
+    step={10}
+    min={10}
+    max={400}
+  />
+  <Color
+    bind:value={backgroundColor}
+    label="backgroundColor"
+  />
+  <Slider
+    bind:value={backgroundOpacity}
+    label="backgroundOpacity"
+    step={0.01}
+    min={0}
+    max={1}
+  />
+  <Slider
+    bind:value={fadeStrength}
+    label="fadeStrength"
+    step={0.1}
+    min={0}
+    max={20}
+  />
+  <List
+    bind:value={gridGeometry}
+    options={gridGeometryOptions}
+    label="grid geometry"
+  />
+
   <Folder title="Types of Grid">
     <List
       bind:value={gridType}
@@ -193,7 +181,7 @@
     {#if gridType == 'polar' || gridType == 'circular'}
       <Slider
         bind:value={maxRadius}
-        label="max radius"
+        label="maxRadius"
         step={1}
         min={0}
         max={15}
@@ -202,14 +190,14 @@
     {#if gridType == 'polar'}
       <Slider
         bind:value={cellDividers}
-        label="cell dividers"
+        label="cellDividers"
         step={1}
         min={0}
         max={18}
       />
       <Slider
         bind:value={sectionDividers}
-        label="section dividers"
+        label="sectionDividers"
         step={1}
         min={0}
         max={18}

@@ -2,15 +2,7 @@
   module
   lang="ts"
 >
-  import {
-    BufferGeometry,
-    Mesh,
-    Material,
-    WireframeGeometry,
-    BufferAttribute,
-    Uniform,
-    Color
-  } from 'three'
+  import { BufferGeometry, Mesh, WireframeGeometry, BufferAttribute, Uniform, Color } from 'three'
 
   import type { WireframeProps } from './types.js'
   import { setWireframeOverride } from './material.js'
@@ -18,11 +10,11 @@
 
   const getBarycentricCoordinates = (geometry: BufferGeometry, removeEdge?: boolean) => {
     const position = geometry.getAttribute('position')
-    const array = new Float32Array(position.count * 9)
+    const array = new Float32Array(position.count * 3)
+    const Q = removeEdge ? 1 : 0
 
     for (let i = 0, l = array.length; i < l; i += 9) {
-      const even = i % 2 === 0
-      const Q = removeEdge ? 1 : 0
+      const even = (i / 9) % 2 === 0
       if (even) {
         array[i + 2] = 1
         array[i + 4] = 1
@@ -39,16 +31,19 @@
     return new BufferAttribute(array, 3)
   }
 
-  const setBarycentricCoordinates = (geometry: BufferGeometry, simplify: boolean) => {
-    if (geometry.index) {
-      const nonIndexedGeo = geometry.toNonIndexed()
-      geometry.copy(nonIndexedGeo)
-      geometry.setIndex(null)
+  const createWireframeGeometry = (geometry: BufferGeometry, simplify: boolean) => {
+    const wireframeGeometry = geometry.index ? geometry.toNonIndexed() : geometry.clone()
+
+    if (!wireframeGeometry.getAttribute('position')) {
+      wireframeGeometry.dispose()
+      return undefined
     }
 
-    const newBarycentric = getBarycentricCoordinates(geometry, simplify)
+    const newBarycentric = getBarycentricCoordinates(wireframeGeometry, simplify)
 
-    geometry.setAttribute('barycentric', newBarycentric)
+    wireframeGeometry.setAttribute('barycentric', newBarycentric)
+
+    return wireframeGeometry
   }
 </script>
 
@@ -82,7 +77,7 @@
     strokeOpacity.value = rest.strokeOpacity ?? 1
   })
   $effect.pre(() => {
-    thickness.value = rest.thickness ?? 0.05
+    thickness.value = rest.thickness ?? 1
   })
   $effect.pre(() => {
     colorBackfaces.value = rest.colorBackfaces ?? false
@@ -125,48 +120,56 @@
       return
     }
 
+    if (!parentMesh.geometry) {
+      console.error('Wireframe: Must be a child of a Mesh with a geometry.')
+      return
+    }
+
     // Disallow WireframeGeometry
     if ((parentMesh.geometry as WireframeGeometry).type === 'WireframeGeometry') {
       console.error('Wireframe: WireframeGeometry is not supported.')
       return
     }
 
-    if (!parentMesh.geometry) {
-      console.error(
-        'Wireframe: Must be a child of a Mesh, Line or Points object or specify a geometry prop.'
-      )
+    const originalGeometry = parentMesh.geometry
+    const wireframeGeometry = createWireframeGeometry(originalGeometry, simplify)
+
+    if (!wireframeGeometry) {
+      console.error('Wireframe: Geometry must have a position attribute.')
       return
     }
 
-    const material = parentMesh.material as Material
-    const originalMaterial = material.clone()
-    const originalGeometry = parentMesh.geometry.clone()
+    const materials = Array.isArray(parentMesh.material)
+      ? parentMesh.material
+      : [parentMesh.material]
+    const restoreMaterials = materials.map((material) =>
+      setWireframeOverride(material, {
+        fillOpacity,
+        strokeOpacity,
+        fillMix,
+        thickness,
+        colorBackfaces,
+        dashInvert,
+        dash,
+        dashRepeats,
+        dashLength,
+        squeeze,
+        squeezeMin,
+        squeezeMax,
+        stroke,
+        backfaceStroke,
+        fill
+      })
+    )
 
-    setWireframeOverride(material, {
-      fillOpacity,
-      strokeOpacity,
-      fillMix,
-      thickness,
-      colorBackfaces,
-      dashInvert,
-      dash,
-      dashRepeats,
-      dashLength,
-      squeeze,
-      squeezeMin,
-      squeezeMax,
-      stroke,
-      backfaceStroke,
-      fill
-    })
-
-    setBarycentricCoordinates(parentMesh.geometry, simplify)
+    parentMesh.geometry = wireframeGeometry
 
     return () => {
-      parentMesh.geometry.copy(originalGeometry)
-      originalGeometry.dispose()
-      material.dispose()
-      parentMesh.material = originalMaterial
+      restoreMaterials.forEach((restoreMaterial) => restoreMaterial())
+      if (parentMesh.geometry === wireframeGeometry) {
+        parentMesh.geometry = originalGeometry
+      }
+      wireframeGeometry.dispose()
     }
   })
 </script>
