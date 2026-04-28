@@ -994,6 +994,9 @@ importers:
       '@threlte/core':
         specifier: workspace:*
         version: link:../core
+      '@threlte/extras':
+        specifier: workspace:*
+        version: link:../extras
       '@types/three':
         specifier: 'catalog:'
         version: 0.175.0

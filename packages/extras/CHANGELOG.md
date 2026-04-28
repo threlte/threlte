@@ -1,5 +1,23 @@
 # @threlte/extras
 
+## 9.15.0
+
+### Minor Changes
+
+- a5d66a1: Add `useFollow` hook
+
+### Patch Changes
+
+- 6555144: Fix Grid radius clipping for circular and polar grids, including polar divider rays extending past the outer radius.
+- 6555144: Avoid applying PointsMaterial tone mapping and color space shader chunks twice.
+- 6555144: Fix Wireframe material recompilation, backface coloring, barycentric attribute sizing, cleanup, and screen-space thickness consistency.
+
+## 9.14.9
+
+### Patch Changes
+
+- 4a54cf7: Fix: interactivity hover now keys plain meshes by uuid, so sweeping across faces no longer spams pointerenter/pointerleave
+
 ## 9.14.8
 
 ### Patch Changes

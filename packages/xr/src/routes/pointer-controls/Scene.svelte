@@ -3,7 +3,7 @@
   import { T, useTask } from '@threlte/core'
   import { Text, interactivity } from '@threlte/extras'
   import { Spring } from 'svelte/motion'
-  import { pointerControls, useXR, Controller, Hand } from '@threlte/xr'
+  import { pointerControls, useXR, Controller, Hand } from '$lib/index.js'
 
   const { isPresenting } = useXR()
 

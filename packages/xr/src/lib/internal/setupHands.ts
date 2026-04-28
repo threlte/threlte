@@ -12,14 +12,13 @@ export const setupHands = (factory?: XRHandModelFactory) => {
   const hasHands = useHandTrackingState()
   const handSpaces = [xr.getHand(0), xr.getHand(1)]
   const map = new Map()
+  const modelFactory = factory ?? new XRHandModelFactory()
 
   handSpaces.forEach((handSpace, index) => {
-    const model = (factory ?? new XRHandModelFactory()).createHandModel(handSpace, 'mesh')
-
     map.set(handSpace, {
       hand: handSpace,
       targetRay: xr.getController(index),
-      model
+      model: modelFactory.createHandModel(handSpace, 'mesh')
     })
   })
 
@@ -55,7 +54,10 @@ export const setupHands = (factory?: XRHandModelFactory) => {
 
     const handleDisconnected = (event: XRHandEvent<'disconnected'>) => {
       dispatch(event)
-      hands[event.data.handedness as 'left' | 'right'] = undefined
+      const { handedness } = event.data
+      if (handedness === 'left' || handedness === 'right') {
+        hands[handedness] = undefined
+      }
     }
 
     for (const handSpace of handSpaces) {

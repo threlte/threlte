@@ -78,6 +78,20 @@ While a controller or hand is pointed at this mesh...
 - `pointerover` and `pointerout` fire when the ray of the pointing device is moved onto an object, or onto one of its children. It bubbles, meaning it can trigger on the object that the pointer is over or any of its ancestor objects.
 - `pointerenter` and `pointerleave` fire when the ray of the pointing device enters / leaves the boundaries of an object, and does not bubble. It only triggers on the exact element the pointer has entered / left.
 
+Each controller/hand fires these events **independently**. If both hands hover the same object, you'll receive `pointerenter` twice — once with `event.handedness === 'left'` and once with `'right'`. When one hand stops hovering, its `pointerleave` fires even if the other hand is still on the object. Apps that need "is any hand hovering?" should track per-hand state and aggregate:
+
+```svelte
+<script>
+  const hovering = $state({ left: false, right: false })
+  const isHovered = $derived(hovering.left || hovering.right)
+</script>
+
+<T.Mesh
+  onpointerenter={(e) => (hovering[e.handedness] = true)}
+  onpointerleave={(e) => (hovering[e.handedness] = false)}
+/>
+```
+
 To replace the default ray and cursor that are created by the plugin, the following snippets can be added to a `<Controller>` or a `<Hand>`:
 
 ```svelte

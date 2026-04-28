@@ -11,6 +11,7 @@
 
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { pointerIntersection, pointerState } from '../../internal/state.svelte.js'
   import Cursor from './Cursor.svelte'
   import type { Snippet } from 'svelte'
@@ -28,6 +29,8 @@
 
   const ref = new Group()
 
+  const SURFACE_OFFSET = 0.002
+
   useTask(
     () => {
       if (intersection === undefined) {
@@ -43,17 +46,28 @@
 
       normalMatrix.getNormalMatrix(object.matrixWorld)
       worldNormal.copy(face.normal).applyMatrix3(normalMatrix).normalize()
-      ref.lookAt(vec3.addVectors(point, worldNormal))
+
+      // Float the reticle just above the surface so it doesn't z-fight
+      // with the coplanar face underneath.
+      ref.position.addScaledVector(worldNormal, SURFACE_OFFSET)
+
+      ref.lookAt(vec3.addVectors(ref.position, worldNormal))
     },
     {
       running: () => hovering && intersection !== undefined
     }
   )
 
+  // Snap to the hit point on hover entry so the reticle doesn't visibly
+  // fly in from its previous location. `intersection` is read untracked
+  // so this only reruns on hover transitions, not every frame.
   $effect.pre(() => {
-    if (hovering && intersection) {
-      ref.position.copy(intersection.point)
-    }
+    if (!hovering) return
+    untrack(() => {
+      if (intersection) {
+        ref.position.copy(intersection.point)
+      }
+    })
   })
 </script>
 

@@ -1,13 +1,14 @@
 import { Group } from 'three'
-import { useThrelte, useTask } from '@threlte/core'
+import { useThrelte, useTask, useStage } from '@threlte/core'
 import { isPresenting } from './state.svelte.js'
 
 export const headset = new Group()
 
 export const setupHeadset = () => {
-  const { renderer, camera, scheduler, renderStage } = useThrelte()
+  const { renderer, camera, renderStage } = useThrelte()
+  const stage = useStage(Symbol('xr-headset-stage'), { before: renderStage })
+
   const { xr } = renderer
-  const stage = scheduler.createStage(Symbol('xr-headset-stage'), { before: renderStage })
 
   useTask(
     () => {

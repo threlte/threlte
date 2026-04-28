@@ -12,14 +12,13 @@ export const setupControllers = (factory?: XRControllerModelFactory) => {
   const hasHands = useHandTrackingState()
   const targetRaySpaces = [xr.getController(0), xr.getController(1)]
   const indexMap = new Map()
+  const modelFactory = factory ?? new XRControllerModelFactory()
 
   targetRaySpaces.forEach((targetRay, index) => {
-    const model = (factory ?? new XRControllerModelFactory()).createControllerModel(targetRay)
-
     indexMap.set(targetRay, {
       targetRay,
       grip: xr.getControllerGrip(index),
-      model
+      model: modelFactory.createControllerModel(targetRay)
     })
   })
 
@@ -33,8 +32,14 @@ export const setupControllers = (factory?: XRControllerModelFactory) => {
     }
 
     function handleConnected(this: XRTargetRaySpace, event: XRControllerEvent<'connected'>) {
-      const { model, targetRay, grip } = indexMap.get(this)
       const { data: inputSource } = event
+
+      // The targetRaySpace 'connected' event fires for both controller and
+      // hand-tracking input sources. The controllers slot represents a physical
+      // controller — setupHands handles the hand-tracking side.
+      if (inputSource.hand) return
+
+      const { model, targetRay, grip } = indexMap.get(this)
 
       controllers[event.data.handedness] = {
         inputSource,
