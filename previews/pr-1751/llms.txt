@@ -118,6 +118,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 - [useAudioListener](https://threlte.xyz/previews/pr-1751/docs/reference/extras/use-audio-listener)
 - [useCursor](https://threlte.xyz/previews/pr-1751/docs/reference/extras/use-cursor)
 - [useFBO](https://threlte.xyz/previews/pr-1751/docs/reference/extras/use-fbo)
+- [useFollow](https://threlte.xyz/previews/pr-1751/docs/reference/extras/use-follow)
 - [useGamepad](https://threlte.xyz/previews/pr-1751/docs/reference/extras/use-gamepad)
 - [useGltf](https://threlte.xyz/previews/pr-1751/docs/reference/extras/use-gltf)
 - [useGltfAnimations](https://threlte.xyz/previews/pr-1751/docs/reference/extras/use-gltf-animations)
