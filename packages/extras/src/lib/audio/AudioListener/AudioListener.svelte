@@ -17,8 +17,8 @@
 
   const listener = new ThreeAudioListener()
 
-  export const audioContext = listener.context
-  export const resumeContext = () => listener.context.resume()
+  export const audioContext: AudioContext = listener.context
+  export const resumeContext: () => Promise<void> = () => listener.context.resume()
 
   $effect.pre(() => {
     if (masterVolume !== undefined) {
