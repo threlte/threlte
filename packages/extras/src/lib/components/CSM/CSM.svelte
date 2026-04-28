@@ -19,16 +19,16 @@
     /**
      * The camera to use for CSM. Defaults to the camera set by `makeDefault`.
      */
-    camera?: Camera | undefined
+    camera?: Camera
     /**
      * A configuration callback, which is triggered when CSM is activated. This
      * callback facilitates advanced configurations, such as enabling the fade
      * feature.
      */
-    configure?: ((csm: CSM) => void) | undefined
+    configure?: (csm: CSM) => void
 
-    lightIntensity?: number | undefined
-    lightColor?: ColorRepresentation | undefined
+    lightIntensity?: number
+    lightColor?: ColorRepresentation
     lightDirection?: Vector3Tuple
     children?: Snippet
     fallback?: Snippet

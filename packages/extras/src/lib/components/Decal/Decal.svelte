@@ -2,16 +2,7 @@
   module
   lang="ts"
 >
-  import {
-    Euler,
-    Matrix4,
-    Mesh,
-    Object3D,
-    Texture,
-    Vector3,
-    type EulerTuple,
-    type Vector3Tuple
-  } from 'three'
+  import { Euler, Matrix4, Mesh, Object3D, Texture, Vector3 } from 'three'
 
   const vertex = new Vector3()
   const matrixWorld = new Matrix4()
@@ -22,25 +13,10 @@
 
 <script lang="ts">
   import { DecalGeometry } from 'three/examples/jsm/geometries/DecalGeometry.js'
-  import { asyncWritable, T, useParent, type Props as ThrelteProps } from '@threlte/core'
-
-  import type { Snippet } from 'svelte'
+  import { asyncWritable, T, useParent } from '@threlte/core'
   import { useSuspense } from '../../suspense/useSuspense.js'
   import { useTexture } from '../../hooks/useTexture.js'
-
-  interface Props extends ThrelteProps<Mesh> {
-    src?: Texture | string
-    mesh?: Mesh
-    position?: Vector3Tuple
-    /** Euler for manual orientation or a single float for closest-vertex-normal orient */
-    rotation?: EulerTuple | number
-    scale?: Vector3Tuple | number
-    polygonOffsetFactor?: number
-    depthTest?: boolean
-    debug?: boolean
-    ref?: Mesh
-    children?: Snippet<[{ ref: Mesh }]>
-  }
+  import type { DecalProps } from './types.js'
 
   let {
     src,
@@ -54,7 +30,7 @@
     ref = $bindable(),
     children,
     ...rest
-  }: Props = $props()
+  }: DecalProps = $props()
 
   const parent = useParent()
   const parentNode = $derived(parentMesh ?? ($parent as Mesh))
