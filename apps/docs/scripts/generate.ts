@@ -72,7 +72,7 @@ export interface ComponentData {
   exports?: ExportInfo[]
 }
 
-async function main() {
+function main() {
   const packages = collectPackageNames(PACKAGES_DIR, IGNORED_PACKAGES)
 
   const packageComponents = packages.map((packageName) => {
@@ -210,21 +210,9 @@ function getDataFromSources(params: { name: string; path: string }) {
 }
 
 function updateTypeText(text: string) {
-  // TODO-DefinitelyMaybe: clean up
-  // console.log(text)
-  // const regex = /import\(.+?\)\./g
-  // let match
-  // while ((match = regex.exec(text)) !== null) {
-  //   if (match[0].includes('constants')) {
-  //     text = text.replace(regex, 'THREE.')
-  //   } else if (match[0].includes('packages')) {
-  //     text = text.replace(regex, '')
-  //   } else {
-  //     text = text.replace(regex, '')
-  //   }
-  // }
-  // // easy edit for quirky quotes "'
-  // text = text.replaceAll(/"/g, "'")
+  // other updates to type text can be made here if needed, this is just a quick fix to make the types more readable in the docs
+  // this specific case is for the common pattern of optional props that have a default value of undefined, which is often represented in types as "type | undefined"
+  text = text.replace(/ \| undefined/, '')
   return text
 }
 
@@ -629,7 +617,4 @@ function initSharedTypeChecker(typeFiles: string[]) {
   sharedTypeChecker = sharedTypeProgram.getTypeChecker()
 }
 
-main().catch((e) => {
-  console.error('Failure in generate script:', e)
-  process.exit(1)
-})
+main()
