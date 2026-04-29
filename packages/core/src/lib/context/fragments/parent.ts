@@ -1,18 +1,26 @@
 import { getContext, setContext } from 'svelte'
-import { currentWritable, type CurrentWritable } from '../../utilities/currentWritable.js'
+import { runeToCurrentReadable } from '../../utilities/currentWritable.js'
 
 const parentContextKey = Symbol('threlte-parent-context')
 
-type ParentContext = CurrentWritable<unknown>
+interface ParentContext {
+  current: unknown
+}
 
 /**
  * The parent context is used to access the parent object created by a `<T>`
  * component.
  */
-export const createParentContext = <T>(parent?: T) => {
-  const ctx: ParentContext = currentWritable(parent)
-  setContext(parentContextKey, ctx)
-  return ctx
+export const createParentContext = <T>(parent: () => T | undefined) => {
+  const context = {
+    get current() {
+      return parent()
+    }
+  }
+
+  setContext(parentContextKey, context)
+
+  return context
 }
 
 /**
@@ -30,6 +38,20 @@ export const createParentContext = <T>(parent?: T) => {
  * will be the mesh created by the `<T.Mesh>` component.
  */
 export const useParent = () => {
-  const parent = getContext<ParentContext>(parentContextKey)
-  return parent
+  return getContext<ParentContext>(parentContextKey)
+}
+
+/**
+ * Will be removed in Threlte 9
+ */
+export const createParentContext_deprecated = <T>(parent: T | undefined) => {
+  return createParentContext(() => parent)
+}
+
+/**
+ * Will be removed in Threlte 9
+ */
+export const useParent_deprecated = () => {
+  const parent = useParent()
+  return runeToCurrentReadable(() => parent.current)
 }
