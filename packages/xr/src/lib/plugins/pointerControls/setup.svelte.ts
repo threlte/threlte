@@ -1,5 +1,5 @@
 import { Vector3, type Event, type Object3D, type Points } from 'three'
-import { observe } from '@threlte/core'
+import { fromStore } from 'svelte/store'
 import type {
   ControlsContext,
   HandContext,
@@ -8,10 +8,9 @@ import type {
   events
 } from './types.js'
 import { getInternalContext } from './context.js'
-import { controllers } from '../../hooks/useController.svelte.js'
-import { useHand } from '../../hooks/useHand.svelte.js'
+import { addSubscriber } from '../../internal/inputSources.svelte.js'
 import { useFixed } from '../../internal/useFixed.js'
-import { isPresenting, pointerIntersection } from '../../internal/state.svelte.js'
+import { isPresenting } from '../../internal/state.svelte.js'
 
 type PointerEventName = (typeof events)[number]
 
@@ -32,19 +31,25 @@ const getIntersectionId = (intersection: Intersection) => {
 
 const EPSILON = 0.0001
 
+// Starts high enough to stay clear of browser-assigned DOM pointerIds in the
+// same session. Incremented per setupPointerControls call so each hand — and
+// each reconnect — gets a distinct id.
+let nextPointerId = 1001
+
 export const setupPointerControls = (
   context: ControlsContext,
   handContext: HandContext,
   fixedStep = 1 / 40
 ) => {
   const handedness = handContext.hand
-  const controller = $derived(controllers[handedness])
-  const hand = useHand(handedness)
+  const pointerId = nextPointerId++
+  const enabled = fromStore(handContext.enabled)
   const { dispatchers } = getInternalContext()
 
   let hits: Intersection[] = []
 
-  const lastPosition = new Vector3()
+  const lastRayOrigin = new Vector3()
+  const lastRayDirection = new Vector3()
 
   const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
@@ -97,11 +102,13 @@ export const setupPointerControls = (
     if (handContext.hovered.size === 0) {
       handContext.pointerOverTarget.set(false)
     }
+
+    handContext.syncSharedState()
   }
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const rawHits = context.raycaster.intersectObjects(
+    const rawHits = handContext.raycaster.intersectObjects(
       context.interactiveObjects,
       true
     ) as Intersection[]
@@ -125,9 +132,9 @@ export const setupPointerControls = (
       return true
     })
     const filtered =
-      context.filter === undefined ? hits : context.filter(hits, context, handContext)
-
-    pointerIntersection[handedness] = filtered[0]
+      handContext.filter === undefined ? hits : handContext.filter(hits, context, handContext)
+    handContext.currentIntersection = filtered[0]
+    handContext.syncSharedState()
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
@@ -147,12 +154,12 @@ export const setupPointerControls = (
 
   function pointerMissed(objects: Object3D[], event?: Event | undefined) {
     for (const object of objects) {
-      dispatchers.get(object)?.pointermissed?.(event)
+      dispatchers.get(object)?.onpointermissed?.(event)
     }
   }
 
   function processHits() {
-    context.compute(context, handContext)
+    handContext.compute(context, handContext)
     return getHits()
   }
 
@@ -186,6 +193,7 @@ export const setupPointerControls = (
         ...hit,
         intersections: hits,
         handedness,
+        pointerId,
         stopPropagation() {
           stopped = true
           intersectionEvent.stopped = true
@@ -201,7 +209,7 @@ export const setupPointerControls = (
         delta: 0,
         nativeEvent: event,
         pointer: handContext.pointer.current,
-        ray: context.raycaster.ray
+        ray: handContext.raycaster.ray
       }
 
       if (isPointerMove) {
@@ -223,6 +231,7 @@ export const setupPointerControls = (
 
             events.onpointerenter?.(intersectionEvent)
             handContext.pointerOverTarget.set(true)
+            handContext.syncSharedState()
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
             intersectionEvent.stopPropagation()
@@ -246,15 +255,17 @@ export const setupPointerControls = (
     () => {
       hits = processHits()
 
-      const targetRay = controller?.targetRay
+      const ray = handContext.raycaster.ray
 
-      if (targetRay === undefined) return
-
-      if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
+      if (
+        ray.origin.distanceToSquared(lastRayOrigin) > EPSILON * EPSILON ||
+        1 - ray.direction.dot(lastRayDirection) > EPSILON
+      ) {
         handleEvent('onpointermove')
       }
 
-      lastPosition.copy(targetRay.position)
+      lastRayOrigin.copy(ray.origin)
+      lastRayDirection.copy(ray.direction)
     },
     {
       fixedStep,
@@ -262,48 +273,45 @@ export const setupPointerControls = (
     }
   )
 
-  observe.pre(
-    () => [controller, handContext.enabled],
-    ([controller, $enabled]) => {
-      if (controller === undefined || !$enabled) return
-
-      controller.targetRay.addEventListener('selectstart', handlePointerDown)
-      controller.targetRay.addEventListener('selectend', handlePointerUp)
-      controller.targetRay.addEventListener('select', handleClick)
-
-      return () => {
-        controller.targetRay.removeEventListener('selectstart', handlePointerDown)
-        controller.targetRay.removeEventListener('selectend', handlePointerUp)
-        controller.targetRay.removeEventListener('select', handleClick)
-      }
+  $effect.pre(() => {
+    if (isPresenting.current && enabled.current) {
+      start()
+    } else {
+      stop()
+      hits = []
+      handContext.currentIntersection = undefined
+      cancelPointer([])
+      handContext.syncSharedState()
     }
-  )
+  })
 
-  observe.pre(
-    () => [hand, handContext.enabled],
-    ([input, enabled]) => {
-      if (input === undefined || !enabled) return
-
-      input.hand.addEventListener('pinchstart', handlePointerDown)
-      input.hand.addEventListener('pinchend', handlePointerUp)
-      input.hand.addEventListener('pinchend', handleClick)
-
-      return () => {
-        input.hand.removeEventListener('pinchstart', handlePointerDown)
-        input.hand.removeEventListener('pinchend', handlePointerUp)
-        input.hand.removeEventListener('pinchend', handleClick)
+  $effect.pre(() => {
+    if (handContext.sourceType !== 'controller') return
+    if (!enabled.current) return
+    return addSubscriber({
+      type: 'controller',
+      handedness,
+      callbacks: {
+        onselectstart: handlePointerDown as never,
+        onselectend: handlePointerUp as never,
+        onselect: handleClick as never
       }
-    }
-  )
+    })
+  })
 
-  observe.pre(
-    () => [isPresenting.current, handContext.enabled],
-    ([isPresenting, $enabled]) => {
-      if (isPresenting && $enabled) {
-        start()
-      } else {
-        stop()
+  $effect.pre(() => {
+    if (handContext.sourceType !== 'hand') return
+    if (!enabled.current) return
+    return addSubscriber({
+      type: 'hand',
+      handedness,
+      callbacks: {
+        onpinchstart: handlePointerDown as never,
+        onpinchend: ((event: Event) => {
+          handlePointerUp(event)
+          handleClick(event)
+        }) as never
       }
-    }
-  )
+    })
+  })
 }

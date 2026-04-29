@@ -28,3 +28,9 @@ useTask((delta) => {
   teleport(vec3)
 })
 ```
+
+### Interaction with `<XROrigin>`
+
+When `useTeleport` is called inside [`<XROrigin>`](/docs/reference/xr/xr-origin), the origin group is translated directly — the user's feet land at the target position, and their room-scale offset from the origin is preserved.
+
+Without an `<XROrigin>`, the underlying `XRReferenceSpace` is mutated to compensate for the viewer's current position so the feet land at the target regardless of where the user has walked in their physical space.

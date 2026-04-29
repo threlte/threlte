@@ -33,6 +33,18 @@ componentSignature:
           type: 'string',
           default: "'local-floor'",
           description: 'Type of WebXR reference space to use.'
+        },
+        {
+          name: 'enterGrantedSession',
+          type: 'boolean | XRSessionMode[]',
+          default: 'true',
+          description: 'Auto-enter a session when the OS grants one without an explicit request (e.g. when the user puts on a headset). Pass `false` to disable, or an array of modes (e.g. `["immersive-vr"]`) to restrict which modes are eligible.'
+        },
+        {
+          name: 'offerSession',
+          type: 'boolean | XRSessionMode',
+          default: 'true',
+          description: 'Pre-offer a session via `navigator.xr.offerSession` so the browser can surface its own entry UI (e.g. visionOS). When `true`, offers AR if supported, otherwise VR. Pass a specific mode to restrict, or `false` to disable.'
         }
       ],
     events:
@@ -56,6 +68,11 @@ componentSignature:
           name: 'inputsourceschange',
           payload: 'THREE.Event & { target: XRSession }',
           description: 'Fired when available inputsources change.'
+        },
+        {
+          name: 'frameratechange',
+          payload: 'THREE.Event & { target: XRSession }',
+          description: 'Fired when the session frame rate changes.'
         }
       ]
   }

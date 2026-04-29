@@ -1,21 +1,24 @@
 export const getXRSessionOptions = (
   referenceSpaceType?: XRReferenceSpaceType,
-  sessionInit?: XRSessionInit
+  sessionInit?: XRSessionInit,
+  fallbackSessionInit?: XRSessionInit
 ): XRSessionInit | undefined => {
-  if (referenceSpaceType === undefined && sessionInit === undefined) {
+  const init = sessionInit ?? fallbackSessionInit
+
+  if (referenceSpaceType === undefined && init === undefined) {
     return undefined
   }
 
-  if (referenceSpaceType && sessionInit === undefined) {
+  if (referenceSpaceType && init === undefined) {
     return { optionalFeatures: [referenceSpaceType] }
   }
 
-  if (referenceSpaceType && sessionInit) {
+  if (referenceSpaceType && init) {
     return {
-      ...sessionInit,
-      optionalFeatures: [...new Set([...(sessionInit.optionalFeatures ?? []), referenceSpaceType])]
+      ...init,
+      optionalFeatures: [...new Set([...(init.optionalFeatures ?? []), referenceSpaceType])]
     }
   }
 
-  return sessionInit
+  return init
 }

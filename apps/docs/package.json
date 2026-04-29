@@ -35,6 +35,7 @@
     "highlightjs-svelte": "^1.0.6",
     "preact": "^10.27.1",
     "three-custom-shader-material": "^6.3.7",
+    "threlte-uikit": "^2.0.0",
     "typescript": "catalog:"
   },
   "devDependencies": {

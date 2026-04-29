@@ -1,5 +1,5 @@
 import { Raycaster, Vector3 } from 'three'
-import { currentWritable, observe } from '@threlte/core'
+import { currentWritable, observe, type CurrentWritable } from '@threlte/core'
 import { defaultComputeFunction, type ComputeFunction } from './compute.js'
 import { injectPointerControlsPlugin } from './plugin.svelte.js'
 import { setupPointerControls } from './setup.svelte.js'
@@ -10,8 +10,16 @@ import {
   setHandContext,
   setInternalContext
 } from './context.js'
-import type { FilterFunction, HandContext } from './types.js'
-import { pointerState } from '../../internal/state.svelte.js'
+import type { FilterFunction, HandContext, IntersectionEvent, PointerSourceType } from './types.js'
+import { pointerIntersection, pointerState } from '../../internal/state.svelte.js'
+
+const aggregateStates = new Map<
+  'left' | 'right',
+  {
+    enabled: CurrentWritable<boolean>
+    hovered: Map<string, IntersectionEvent>
+  }
+>()
 
 export type PointerControlsOptions = {
   enabled?: boolean
@@ -39,56 +47,90 @@ export type PointerControlsOptions = {
 export const pointerControls = (handedness: 'left' | 'right', options?: PointerControlsOptions) => {
   if (getControlsContext() === undefined) {
     injectPointerControlsPlugin()
-
     setInternalContext()
-
-    setControlsContext({
-      interactiveObjects: [],
-      raycaster: new Raycaster(),
-      compute: options?.compute ?? defaultComputeFunction,
-      filter: options?.filter
-    })
+    setControlsContext({ interactiveObjects: [] })
   }
 
   const context = getControlsContext()
+  const aggregateState =
+    aggregateStates.get(handedness) ??
+    (() => {
+      const state = {
+        enabled: currentWritable(options?.enabled ?? true),
+        hovered: new Map<string, IntersectionEvent>()
+      }
+      aggregateStates.set(handedness, state)
+      return state
+    })()
+  const { enabled, hovered } = aggregateState
 
-  if (getHandContext(handedness) === undefined) {
-    const enabled = options?.enabled ?? true
+  let controllerContext = getHandContext(handedness, 'controller')
+  let handContext = getHandContext(handedness, 'hand')
 
-    const ctx: HandContext = {
-      hand: handedness,
-      enabled: currentWritable(enabled),
-      pointer: currentWritable(new Vector3()),
-      pointerOverTarget: currentWritable(false),
-      lastEvent: undefined,
-      initialClick: [0, 0, 0],
-      initialHits: [],
-      hovered: new Map()
+  const syncSharedState = () => {
+    hovered.clear()
+
+    for (const [id, event] of controllerContext.hovered) {
+      hovered.set(`controller:${id}`, event)
     }
 
-    setHandContext(handedness, ctx)
+    for (const [id, event] of handContext.hovered) {
+      hovered.set(`hand:${id}`, event)
+    }
 
-    setupPointerControls(context, ctx, options?.fixedStep)
+    // Shared handedness-level pointer visuals are currently controller-only:
+    // <Controller /> renders the cursor/ray from these globals, while hand
+    // pointer events are dispatched independently without a matching visual.
+    pointerState[handedness].hovering = controllerContext.pointerOverTarget.current
+    pointerIntersection[handedness] = controllerContext.currentIntersection
   }
 
-  const handContext = getHandContext(handedness)
+  const createContext = (sourceType: PointerSourceType): HandContext => ({
+    hand: handedness,
+    sourceType,
+    enabled,
+    pointer: currentWritable(new Vector3()),
+    pointerOverTarget: currentWritable(false),
+    lastEvent: undefined,
+    initialClick: [0, 0, 0],
+    initialHits: [],
+    hovered: new Map(),
+    currentIntersection: undefined,
+    raycaster: new Raycaster(),
+    syncSharedState,
+    compute: options?.compute ?? defaultComputeFunction,
+    filter: options?.filter
+  })
+
+  const setupContexts: HandContext[] = []
+
+  if (controllerContext === undefined) {
+    controllerContext = createContext('controller')
+    setHandContext(handedness, 'controller', controllerContext)
+    setupContexts.push(controllerContext)
+  }
+
+  if (handContext === undefined) {
+    handContext = createContext('hand')
+    setHandContext(handedness, 'hand', handContext)
+    setupContexts.push(handContext)
+  }
+
+  for (const setupContext of setupContexts) {
+    setupPointerControls(context, setupContext, options?.fixedStep)
+  }
 
   observe.pre(
-    () => [handContext.enabled],
-    ([enabled]) => {
-      pointerState[handedness].enabled = enabled
+    () => [enabled],
+    ([nextEnabled]) => {
+      pointerState[handedness].enabled = nextEnabled
     }
   )
 
-  observe.pre(
-    () => [handContext.pointerOverTarget],
-    ([hovering]) => {
-      pointerState[handedness].hovering = hovering
-    }
-  )
+  syncSharedState()
 
   return {
-    enabled: handContext.enabled,
-    hovered: handContext.hovered
+    enabled,
+    hovered
   }
 }

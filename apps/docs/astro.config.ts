@@ -75,6 +75,7 @@ export default defineConfig({
       noExternal: noExternal
     },
     optimizeDeps: {
+      exclude: ['threlte-uikit'],
       esbuildOptions: {
         target: 'esnext'
       }
