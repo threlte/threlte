@@ -1,5 +1,20 @@
 # @threlte/xr
 
+## 1.6.0
+
+### Minor Changes
+
+- 75f5b3d: Add XROrigin component
+- 7b7409e: Add touchControls plugin
+- a584c01: Add "offerSession" property on XR component
+- a584c01: Add enterGrantedSession prop to XR component
+
+### Patch Changes
+
+- 75f5b3d: Stopped the XR setup effect from running on every session transition
+- 75f5b3d: Add pointerId to IntersectionEvent for uikit compat
+- 75f5b3d: Fixed hand/controller event dispatch so ondisconnected fires and mixed hand+controller sessions work
+
 ## 1.5.5
 
 ### Patch Changes

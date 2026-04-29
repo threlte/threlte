@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.5.10
+
+### Patch Changes
+
+- d639f30: Narrow T event handler payloads per event-key on Object3D, and give Threlte.UserProps precedence over auto-derived EventProps for shared keys
+
 ## 8.5.9
 
 ### Patch Changes
