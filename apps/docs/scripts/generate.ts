@@ -450,6 +450,7 @@ function dataFromTypesFile(params: { name: string; path: string }) {
   return { props, events }
 }
 
+/** On merge we prefer the typescript data however sveld usually has component export type/description information */
 function mergeData(
   svelteDataSource: { props: PropInfo[]; events: EventInfo[]; exports: ExportInfo[] },
   typesDataSource: { props: PropInfo[]; events: EventInfo[] }
@@ -459,24 +460,31 @@ function mergeData(
   const finalExports: ExportInfo[] =
     svelteDataSource.exports.length > 0 ? svelteDataSource.exports : []
 
-  for (const prop of svelteDataSource.props) {
-    const { name } = prop
+  const sveldPropKeys = svelteDataSource.props.map((value) => value.name)
+  const tsPropKeys = typesDataSource.props.map((value) => value.name)
+  const allPropKeys = new Set([...sveldPropKeys, ...tsPropKeys])
 
-    const typeV = typesDataSource.props.find((value) => value.name == name)
-    if (typeV) {
-      finalProps.push({ ...prop, ...typeV })
+  for (const propKey of allPropKeys) {
+    const tsPropVersion = typesDataSource.props.find((value) => value.name == propKey)
+    if (tsPropVersion) {
+      finalProps.push({ ...tsPropVersion })
     } else {
+      const prop = svelteDataSource.props.find((value) => value.name == propKey)!
       finalProps.push(prop)
     }
   }
-  for (const prop of svelteDataSource.events) {
-    const { name } = prop
 
-    const typeV = typesDataSource.events.find((value) => value.name == name)
-    if (typeV) {
-      finalEvents.push({ ...prop, ...typeV })
+  const sveldEventPropKeys = svelteDataSource.events.map((value) => value.name)
+  const tsEventPropKeys = typesDataSource.events.map((value) => value.name)
+  const allEventPropKeys = new Set([...sveldEventPropKeys, ...tsEventPropKeys])
+
+  for (const eventPropKey of allEventPropKeys) {
+    const tsEventPropVersion = typesDataSource.events.find((value) => value.name == eventPropKey)
+    if (tsEventPropVersion) {
+      finalEvents.push({ ...tsEventPropVersion })
     } else {
-      finalEvents.push(prop)
+      const event = svelteDataSource.events.find((value) => value.name == eventPropKey)!
+      finalEvents.push(event)
     }
   }
 
