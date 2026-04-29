@@ -1,10 +1,10 @@
 import { fromStore } from 'svelte/store'
-import { useThrelte } from '../../../context/compounds/useThrelte.js'
 import { createParentContext, useParent } from '../../../context/fragments/parent.js'
 import {
   createParentObject3DContext,
   useParentObject3D
 } from '../../../context/fragments/parentObject3D.js'
+import { useScheduler } from '../../../context/fragments/scheduler.svelte.js'
 import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
 import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import type { BaseProps, MaybeInstance } from '../types.js'
@@ -17,7 +17,7 @@ export const useAttach = <T extends MaybeInstance<any>>(
   getRef: () => T,
   getAttach: () => BaseProps<T>['attach']
 ) => {
-  const { invalidate } = useThrelte()
+  const { invalidate } = useScheduler()
   const ref = $derived(getRef())
   const attach = $derived(getAttach())
   const parent = fromStore(useParent())
