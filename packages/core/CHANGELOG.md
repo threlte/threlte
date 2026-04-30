@@ -1,5 +1,12 @@
 # @threlte/core
 
+## 8.5.11
+
+### Patch Changes
+
+- 5588329: Perf: replace internal useThrelte() calls with more lightweight fragment contexts
+- 4544308: Perf: rework parent contexts to use lightweight getter-backed current values internally
+
 ## 8.5.10
 
 ### Patch Changes
