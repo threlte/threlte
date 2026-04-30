@@ -31,7 +31,7 @@ export type PerfMonitorProps = {
   visible?: boolean // stats are harvested, but stats panel is hidden
   /**
    * If set and given characters are typed in the the tab window, the three-perf dev gui will be shown. Disabled by default (empty string).
-   * @default ""
+   * @default ''
    */
   actionToCallUI?: string // by default is disabled [''], but if set and type this text in the tab window three-perf dev gui will be shown
   /**
@@ -51,12 +51,12 @@ export type PerfMonitorProps = {
   scale?: number // stats block scale [default 1]
   /**
    * Stats html element horizontal anchor.
-   * @default "left"
+   * @default 'left'
    */
   anchorX?: 'left' | 'right' // default is left [stats container horrisontal anchor]
   /**
    * Stats html element vertical anchor.
-   * @default "top"
+   * @default 'top'
    */
   anchorY?: 'top' | 'bottom' // default is top [stats container vertical anchor]
 }

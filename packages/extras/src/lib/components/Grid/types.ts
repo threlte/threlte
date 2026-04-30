@@ -73,7 +73,8 @@ export type GridProps = Props<Mesh> & {
   fadeStrength?: number
 
   /**
-   * @default undefined, uses camera.current.position
+   * Set a custom fading point of origin. The current camera position will be used if unset.
+   * @default undefined
    */
   fadeOrigin?: Vector3 | Vector3Tuple
 
@@ -81,32 +82,25 @@ export type GridProps = Props<Mesh> & {
    * @default Three.DoubleSide
    */
   side?: Side
-} & (
-    | {
-        type?: 'grid'
-      }
-    | {
-        type?: 'lines'
-        axis: 'x' | 'y' | 'z'
-      }
-    | {
-        type?: 'circular'
-        /**
-         * @default 0
-         *
-         * Maximum radius in world units. A value of 0 removes the radius limit.
-         */
-        maxRadius?: number
-      }
-    | {
-        type?: 'polar'
-        /**
-         * @default 0
-         *
-         * Maximum radius in world units. A value of 0 removes the radius limit.
-         */
-        maxRadius?: number
-        cellDividers?: number
-        sectionDividers?: number
-      }
-  )
+  /** @default 'grid' */
+  type?: 'grid' | 'lines' | 'circular' | 'polar'
+  /**
+   * 'line' only. Designates the world axis along which the line will be oriented.
+   *  @default 'x'
+   */
+  axis?: 'x' | 'y' | 'z'
+  /** 'circular' and 'polar' only. Maximum radius in world units. 0 removes the constraint.
+   * @default 0
+   */
+  maxRadius?: number
+  /**
+   * 'polar' only. How many lines will divide the polar grid. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°.
+   * @default 6
+   */
+  cellDividers?: number
+  /**
+   * 'polar' only. Specifies the number of lines that will subdivide the polar grid. For instance, 2 dividers will quarter the grid into 4 sections of 90° each, while 6 dividers will divide the grid into 12 segments, each measuring 30°.
+   * @default 2
+   */
+  sectionDividers?: number
+}

@@ -10,10 +10,14 @@ export type Controls = OrbitControls | TrackballControls | InstanceType<typeof C
 type TaskOptions = Pick<ThrelteUseTaskOptions, 'after' | 'before' | 'stage'> & { key?: Key }
 
 export type GizmoProps = GizmoOptions & {
+  /** Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`. */
   renderTask?: TaskOptions
-  controls?: Controls
+  controls?: OrbitControls | TrackballControls | CameraControls
   ref?: ViewportGizmo
+  /** Triggered when a view change interaction begins. */
   onstart?: EventListener<unknown, 'start', ViewportGizmo>
+  /** Triggered during view changes. */
   onchange?: EventListener<unknown, 'change', ViewportGizmo>
+  /** Triggered when a view change interaction ends. */
   onend?: EventListener<unknown, 'end', ViewportGizmo>
 }

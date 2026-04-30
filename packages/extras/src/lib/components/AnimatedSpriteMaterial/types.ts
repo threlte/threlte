@@ -62,7 +62,7 @@ export type AnimatedSpriteProps = Props<Material> & {
   /**
    * The texture filtering applied to the spritesheet.
    *
-   * @default "nearest"
+   * @default 'nearest'
    */
   filter?: 'nearest' | 'linear'
 
