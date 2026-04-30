@@ -221,6 +221,7 @@ function updateTypeText(text: string) {
     }
   }
   text = text.replaceAll(/Object3D<Object3DEventMap>/g, 'Object3D')
+  text = text.replaceAll(/Float32Array<ArrayBufferLike>/g, 'Float32Array')
   return text
 }
 
@@ -257,8 +258,8 @@ function getDataFromJSDocsTS(prop: Symbol) {
           description = jsDoc.comment.trim() || undefined
           // firstly replacing all \r\n occurances with " " as that's a common case for jsDocs
           description = description?.replaceAll(/(\r\n)+/g, ' ')
-          // any remaining \n 's are assumed to be ends of sentences
-          description = description?.replaceAll(/\n+/g, '. ')
+          // For a sentence to end there must be a full stop.
+          description = description?.replaceAll(/\n+/g, ' ')
         }
         for (const tag of jsDoc.tags || []) {
           if (tag.tagName.text === 'default') {
@@ -445,31 +446,43 @@ function dataFromTypesFile(params: { name: string; path: string }) {
     ? collectTypeLiteralProperties(alias.type)
     : collectInterfaceProperties(alias)
 
-  const data = propertySignatures.map((property) => {
-    const propName = property.name.getText(sourceFile)
-    const propType = property.type ? checker.getTypeFromTypeNode(property.type) : undefined
-    const typeText = propType ? updateTypeText(checker.typeToString(propType)) : undefined
-    const { description, defaultValue } = getDataFromJSDocsPropertySignature(property, sourceFile)
-    const isOptional = !!property.questionToken
-    let temp: PropInfo = {
-      name: propName,
-      type: typeText
-    }
-    if (description) {
-      temp.description = description
-    }
-    if (defaultValue) {
-      temp.default = defaultValue
-    }
-    if (!isOptional) {
-      temp.required = true
-    }
-    // TODO-DefinitelyMaybe: adjusting quirks of particular entries. This is a bit sad but the types generated for MeshoptDecoder are pretty unwieldy for the docs, so we hardcode it to be more readable. If we find ourselves doing more of these kinds of adjustments we may want to consider a more robust solution.
-    if (temp.name == 'meshoptDecoder') {
-      temp.type = 'MeshoptDecoder'
-    }
-    return temp
-  })
+  const data = propertySignatures
+    .map((property) => {
+      const propName = property.name.getText(sourceFile)
+      const propType = property.type ? checker.getTypeFromTypeNode(property.type) : undefined
+      const typeText = propType ? updateTypeText(checker.typeToString(propType)) : undefined
+      const { description, defaultValue } = getDataFromJSDocsPropertySignature(property, sourceFile)
+      const isOptional = !!property.questionToken
+      let temp: PropInfo = {
+        name: propName,
+        type: typeText
+      }
+      if (description) {
+        temp.description = description
+      }
+      if (defaultValue) {
+        temp.default = defaultValue
+      }
+      if (!isOptional) {
+        temp.required = true
+      }
+      // TODO-DefinitelyMaybe: adjusting quirks of particular entries. This is a bit sad but the types generated for MeshoptDecoder are pretty unwieldy for the docs, so we hardcode it to be more readable. If we find ourselves doing more of these kinds of adjustments we may want to consider a more robust solution.
+      if (temp.name == 'meshoptDecoder') {
+        temp.type = 'MeshoptDecoder'
+      }
+      // for some reason this gets mangled into Record<...>
+      if (temp.name == 'meshes') {
+        temp.type = 'Mesh[] | Record<string, Mesh>'
+      }
+      return temp
+    })
+    .filter((prop) => {
+      // We don't care about a default chilren prop with no new type info
+      if (prop.name == 'children' && prop.type == 'Snippet<[]>') {
+        return false
+      }
+      return true
+    })
 
   const props: PropInfo[] = []
   const events: EventInfo[] = []
