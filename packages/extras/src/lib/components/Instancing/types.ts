@@ -14,17 +14,17 @@ export type InstancedMeshProps = Props<ThreeInstancedMesh> & {
    */
   id?: string
 
-  /**
+  /** Limits the amount of possible <Instance> components.
    * @default 1000
    */
   limit?: number
 
-  /**
+  /** Limits the amount of drawn <Instance> components.
    * @default 1000
    */
   range?: number
 
-  /**
+  /** Whether the THREE.InstancedMesh should be updated.
    * @default true
    */
   update?: boolean
