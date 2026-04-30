@@ -213,7 +213,36 @@ function updateTypeText(text: string) {
   // other updates to type text can be made here if needed, this is just a quick fix to make the types more readable in the docs
   // this specific case is for the common pattern of optional props that have a default value of undefined, which is often represented in types as "type | undefined"
   text = text.replace(/ \| undefined/, '')
+  let match = text.match(/Mesh\<.*?\>/g)
+  if (match) {
+    let substring = bracketMatchedSubstring(text)
+    if (substring) {
+      text = text.replace(substring, 'Mesh')
+    }
+  }
+  text = text.replaceAll(/Object3D\<Object3DEventMap\>/g, 'Object3D')
   return text
+}
+
+function bracketMatchedSubstring(param: string) {
+  const prefix = 'Mesh'
+  const idx = param.indexOf(prefix)
+  if (idx === -1) return null
+
+  const afterPrefix = idx + prefix.length
+  if (param[afterPrefix] !== '<') return null
+
+  let depth = 0
+  for (let i = afterPrefix; i < param.length; i++) {
+    if (param[i] === '<') depth++
+    else if (param[i] === '>') {
+      depth--
+      if (depth === 0) {
+        return param.substring(idx, i + 1)
+      }
+    }
+  }
+  return null
 }
 
 function getDataFromJSDocsTS(prop: Symbol) {
@@ -352,6 +381,12 @@ function dataFromSvelteFile(params: { name: string; path: string }) {
       if (value.value && value.value != 'undefined' && value.value != "''") {
         data.default = value.value
       }
+      // TODO-DefinitelyMaybe: how much to we worry about bindables in the component signatures?
+      // currently nada
+      // if (value.reactive) {
+      //   console.log(value)
+      //   data.bindable = true
+      // }
       return data
     })
 
@@ -428,6 +463,10 @@ function dataFromTypesFile(params: { name: string; path: string }) {
     }
     if (!isOptional) {
       temp.required = true
+    }
+    // TODO-DefinitelyMaybe: adjusting quirks of particular entries. This is a bit sad but the types generated for MeshoptDecoder are pretty unwieldy for the docs, so we hardcode it to be more readable. If we find ourselves doing more of these kinds of adjustments we may want to consider a more robust solution.
+    if (temp.name == 'meshoptDecoder') {
+      temp.type = 'MeshoptDecoder'
     }
     return temp
   })
