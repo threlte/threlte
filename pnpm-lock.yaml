@@ -163,6 +163,9 @@ importers:
       highlightjs-svelte:
         specifier: ^1.0.6
         version: 1.0.6
+      lucide-svelte:
+        specifier: ^1.0.1
+        version: 1.0.1(svelte@5.53.6)
       preact:
         specifier: ^10.27.1
         version: 10.27.1
@@ -5528,6 +5531,11 @@ packages:
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
+
+  lucide-svelte@1.0.1:
+    resolution: {integrity: sha512-WvzZgk0pqzgda+AErLvgWxHkfg/+GgUwqKMRHvzt0IqyMdmyEDzDCk3Z+Wo/3y753oIgx8u9Q4eUbWkghFa8Jg==}
+    peerDependencies:
+      svelte: ^3 || ^4 || ^5.0.0-next.42
 
   maath@0.10.7:
     resolution: {integrity: sha512-zQ2xd7dNOIVTjAS+hj22fyj1EFYmOJX6tzKjZ92r6WDoq8hyFxjuGA2q950tmR4iC/EKXoMQdSipkaJVuUHDTg==}
@@ -13320,6 +13328,10 @@ snapshots:
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
+
+  lucide-svelte@1.0.1(svelte@5.53.6):
+    dependencies:
+      svelte: 5.53.6
 
   maath@0.10.7(@types/three@0.175.0)(three@0.175.0):
     dependencies:
