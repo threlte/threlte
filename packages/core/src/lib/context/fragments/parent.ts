@@ -41,16 +41,17 @@ export const useParent = () => {
   return getContext<ParentContext>(parentContextKey)
 }
 
-/**
- * Will be removed in Threlte 9
- */
-export const createParentContext_deprecated = <T>(parent: T | undefined) => {
-  return createParentContext(() => parent)
+/** Will be removed in Threlte 9 */
+type MaybeParentGetter<T> = T | undefined | (() => T | undefined)
+
+/** Will be removed in Threlte 9 */
+export const createParentContext_deprecated = <T>(parent: MaybeParentGetter<T>) => {
+  const getParent = typeof parent === 'function' ? (parent as () => T | undefined) : () => parent
+
+  return createParentContext(getParent)
 }
 
-/**
- * Will be removed in Threlte 9
- */
+/** Will be removed in Threlte 9 */
 export const useParent_deprecated = () => {
   const parent = useParent()
   return runeToCurrentReadable(() => parent.current)

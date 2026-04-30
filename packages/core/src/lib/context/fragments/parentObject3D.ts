@@ -48,16 +48,17 @@ export const useParentObject3D = () => {
   return getContext<ParentObject3DContext>(parentObject3DContextKey)
 }
 
-/**
- * Will be removed in Threlte 9
- */
-export const createParentObject3DContext_deprecated = (parent: Object3D | undefined) => {
-  return createParentObject3DContext(() => parent)
+/** Will be removed in Threlte 9 */
+type MaybeParentObject3DGetter = Object3D | undefined | (() => Object3D | undefined)
+
+/** Will be removed in Threlte 9 */
+export const createParentObject3DContext_deprecated = (parent: MaybeParentObject3DGetter) => {
+  const getParent = typeof parent === 'function' ? parent : () => parent
+
+  return createParentObject3DContext(getParent)
 }
 
-/**
- * Will be removed in Threlte 9
- */
+/** Will be removed in Threlte 9 */
 export const useParentObject3D_deprecated = () => {
   const parent = useParentObject3D()
   return runeToCurrentReadable(() => parent.current)
