@@ -1,5 +1,7 @@
-import { session, referenceSpaceType, xr } from '../internal/state.svelte.js'
+import { lastSessionRequest, referenceSpaceType, session, xr } from '../internal/state.svelte.js'
 import { getXRSessionOptions } from './getXRSessionOptions.js'
+
+let pending: Promise<XRSession | undefined> | undefined
 
 /**
  * Starts / ends an XR session.
@@ -9,9 +11,23 @@ import { getXRSessionOptions } from './getXRSessionOptions.js'
  * @param force Whether this button should only enter / exit an `XRSession`. Default is to toggle both ways
  * @returns
  */
-export const toggleXRSession = async (
+export const toggleXRSession = (
   sessionMode: XRSessionMode,
-  sessionInit?: XRSessionInit & { domOverlay?: { root: HTMLElement } },
+  sessionInit?: XRSessionInit & { domOverlay?: { root: Element } },
+  force?: 'enter' | 'exit'
+): Promise<XRSession | undefined> => {
+  if (pending !== undefined) return pending
+
+  pending = run(sessionMode, sessionInit, force).finally(() => {
+    pending = undefined
+  })
+
+  return pending
+}
+
+const run = async (
+  sessionMode: XRSessionMode,
+  sessionInit?: XRSessionInit & { domOverlay?: { root: Element } },
   force?: 'enter' | 'exit'
 ): Promise<XRSession | undefined> => {
   const currentSession = session.current
@@ -27,16 +43,23 @@ export const toggleXRSession = async (
     return
   }
 
-  if (xr.current === undefined) {
+  const manager = xr.current
+  if (manager === undefined) {
     throw new Error('An <XR> component was not created when attempting to toggle a session.')
   }
 
   // Otherwise enter a session
   const options = getXRSessionOptions(referenceSpaceType.current, sessionInit)
-  const nextSession = await navigator.xr!.requestSession(sessionMode, options)
+  const nextSession = await navigator.xr?.requestSession(sessionMode, options)
 
-  await xr.current.setSession(nextSession)
+  if (nextSession === undefined) {
+    throw new Error('A session was not able to be created.')
+  }
 
+  await manager.setSession(nextSession)
+
+  lastSessionRequest.mode = sessionMode
+  lastSessionRequest.sessionInit = sessionInit
   session.current = nextSession
   return nextSession
 }

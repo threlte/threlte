@@ -163,12 +163,18 @@ importers:
       highlightjs-svelte:
         specifier: ^1.0.6
         version: 1.0.6
+      lucide-svelte:
+        specifier: ^1.0.1
+        version: 1.0.1(svelte@5.53.6)
       preact:
         specifier: ^10.27.1
         version: 10.27.1
       three-custom-shader-material:
         specifier: ^6.3.7
         version: 6.3.7(react@18.2.0)(three@0.175.0)
+      threlte-uikit:
+        specifier: ^2.0.0
+        version: 2.0.0(@threlte/core@packages+core)(svelte@5.53.6)(three@0.175.0)
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
@@ -2538,6 +2544,26 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
+  '@pmndrs/msdfonts@1.0.64':
+    resolution: {integrity: sha512-fyDNvCIGUTUYxDOzQnLOAGEuDQbyjx1JUlEYrjHB8KLDWzVl0j2SoFiLN4AwahEh4pXiA7XdJBNneQKnfMa/Bw==}
+
+  '@pmndrs/uikit-default@1.0.64':
+    resolution: {integrity: sha512-247ak5lysNU9NGGuxOvdOas65aa78eGQTRWktmF9ymFLyqHdti0mlby5oqtFV/gIVjF0ZHNvdwinnUhm9pX8RA==}
+
+  '@pmndrs/uikit-horizon@1.0.64':
+    resolution: {integrity: sha512-0Hav6faSsMFC4UUEQiTq2BjDIQXAN33v3JlrngOc5c4TFe78mEYKO7zJ6U8AE9k1LxvgAaC9zlPTKPR5Wm041Q==}
+
+  '@pmndrs/uikit-lucide@1.0.64':
+    resolution: {integrity: sha512-WU9CqboaBJHLvAk3Qt6V+7oMSk2lafY/ZwdcjuwSt3U+ZExHMnM24APeBdwi6w0e0sER2I/qiSVDs26JPOg7ew==}
+
+  '@pmndrs/uikit-pub-sub@1.0.64':
+    resolution: {integrity: sha512-+hlc5aWC3wQlA/zihwh+OGSm3aY9O+L/TEuNLwXw6R8syHMv7obqeY6s/hcjzD92k6DRQZLhVzVy+yqqVKAbRA==}
+
+  '@pmndrs/uikit@1.0.64':
+    resolution: {integrity: sha512-FQgF8sf46U6fmHnqOn32S04lnWiXVxQO6MatL7FgoLKJ74YIBgEHgwKHRwltgLrN/rcTu7LgJm7LgvXvMccEGA==}
+    peerDependencies:
+      three: '>=0.162'
+
   '@pmndrs/vanilla@1.14.1':
     resolution: {integrity: sha512-I2gdXETqRIpD6crb5QdbhtU0A2WygqHG7KJGZUI1VLmImEAnFFWz9qGZeo+a9WVSL9t5LT4Hw6A9xzyJOqQ9lA==}
     peerDependencies:
@@ -2554,6 +2580,9 @@ packages:
 
   '@preact/signals-core@1.12.1':
     resolution: {integrity: sha512-BwbTXpj+9QutoZLQvbttRg5x3l5468qaV2kufh+51yha1c53ep5dY4kTuZR35+3pAZxpfQerGJiQqg34ZNZ6uA==}
+
+  '@preact/signals-core@1.14.1':
+    resolution: {integrity: sha512-vxPpfXqrwUe9lpjqfYNjAF/0RF/eFGeLgdJzdmIIZjpOnTmGmAB4BjWone562mJGMRP4frU6iZ6ei3PDsu52Ng==}
 
   '@preact/signals@2.3.1':
     resolution: {integrity: sha512-nyuRIGmcwM/HjvFHhN2xUWfyla9D4llHt+prWoxjQfD6b5prO7CFPlG/xjJkP31Oic4KQXfH9SIhJFP9cy4lmg==}
@@ -3520,6 +3549,10 @@ packages:
   '@yushijinhun/three-minifier-rollup@0.4.0':
     resolution: {integrity: sha512-p2FMA4cFKCPTbOCH1yA9Yi1OKSaU2VVf13Q7Traynp7svTMjPhZMLiIEUpGYkCgXmkEi5qFRi0cMeakXJHcjIw==}
 
+  '@zappar/msdf-generator@1.2.4':
+    resolution: {integrity: sha512-6S/MCk0Ky0ipewZJw4xFEzH/2aYfWmPXEkTdBtNyDDfkbicrNwgJgtxZ4SnTDyNe9XHMqDA4sL9srRsgDLRMqA==}
+    engines: {node: '>=18'}
+
   accepts@2.0.0:
     resolution: {integrity: sha512-5cvg6CtKwfgdmVqY1WIiXKc3Q1bkRqGLi+2W/6ao+6Y7gu/RCwRuAhGEzh5B4KlszSuTLgZYuqFqo5bImjNKng==}
     engines: {node: '>= 0.6'}
@@ -4000,6 +4033,9 @@ packages:
   combined-stream@1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
     engines: {node: '>= 0.8'}
+
+  comlink@4.4.2:
+    resolution: {integrity: sha512-OxGdvBmJuNKSCMO4NTl1L47VRp6xn2wG4F/2hYzB6tiCb709otOxtEYCSvK80PtjODfXXZu8ds+Nw5kVCjqd2g==}
 
   comma-separated-tokens@2.0.3:
     resolution: {integrity: sha512-Fu4hJdvzeylCfQPp9SGWidpzrMs7tTrlu6Vb8XGaRGck8QSNZJJp538Wrb60Lax4fPwR64ViY468OIUTbRlGZg==}
@@ -5525,6 +5561,11 @@ packages:
   lru-cache@6.0.0:
     resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
     engines: {node: '>=10'}
+
+  lucide-svelte@1.0.1:
+    resolution: {integrity: sha512-WvzZgk0pqzgda+AErLvgWxHkfg/+GgUwqKMRHvzt0IqyMdmyEDzDCk3Z+Wo/3y753oIgx8u9Q4eUbWkghFa8Jg==}
+    peerDependencies:
+      svelte: ^3 || ^4 || ^5.0.0-next.42
 
   maath@0.10.7:
     resolution: {integrity: sha512-zQ2xd7dNOIVTjAS+hj22fyj1EFYmOJX6tzKjZ92r6WDoq8hyFxjuGA2q950tmR4iC/EKXoMQdSipkaJVuUHDTg==}
@@ -7355,6 +7396,13 @@ packages:
 
   three@0.175.0:
     resolution: {integrity: sha512-nNE3pnTHxXN/Phw768u0Grr7W4+rumGg/H6PgeseNJojkJtmeHJfZWi41Gp2mpXl1pg1pf1zjwR4McM1jTqkpg==}
+
+  threlte-uikit@2.0.0:
+    resolution: {integrity: sha512-vKFFhJxanO+10JcjJTijOF21aFes7ryYTd9nZK6Ms0PAe9f/EkZLFmTKuf/QN4u59XTmPUqF1B8YvNZHX754mg==}
+    peerDependencies:
+      '@threlte/core': '>=8'
+      svelte: '>=5'
+      three: '>=0.160'
 
   through2@0.6.5:
     resolution: {integrity: sha512-RkK/CCESdTKQZHdmKICijdKKsCRVHs5KsLZ6pACAmF/1GPUQhonHSXWNERctxEp7RmvjdNbZTL5z9V7nSCXKcg==}
@@ -9885,6 +9933,41 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
+  '@pmndrs/msdfonts@1.0.64': {}
+
+  '@pmndrs/uikit-default@1.0.64(three@0.175.0)':
+    dependencies:
+      '@pmndrs/uikit': 1.0.64(three@0.175.0)
+      '@pmndrs/uikit-lucide': 1.0.64(three@0.175.0)
+    transitivePeerDependencies:
+      - three
+
+  '@pmndrs/uikit-horizon@1.0.64(three@0.175.0)':
+    dependencies:
+      '@pmndrs/uikit': 1.0.64(three@0.175.0)
+      '@pmndrs/uikit-lucide': 1.0.64(three@0.175.0)
+    transitivePeerDependencies:
+      - three
+
+  '@pmndrs/uikit-lucide@1.0.64(three@0.175.0)':
+    dependencies:
+      '@pmndrs/uikit': 1.0.64(three@0.175.0)
+    transitivePeerDependencies:
+      - three
+
+  '@pmndrs/uikit-pub-sub@1.0.64':
+    dependencies:
+      '@preact/signals-core': 1.14.1
+
+  '@pmndrs/uikit@1.0.64(three@0.175.0)':
+    dependencies:
+      '@pmndrs/msdfonts': 1.0.64
+      '@pmndrs/uikit-pub-sub': 1.0.64
+      '@preact/signals-core': 1.14.1
+      '@zappar/msdf-generator': 1.2.4
+      three: 0.175.0
+      yoga-layout: 3.2.1
+
   '@pmndrs/vanilla@1.14.1(three@0.175.0)':
     dependencies:
       three: 0.175.0
@@ -9909,6 +9992,8 @@ snapshots:
       - supports-color
 
   '@preact/signals-core@1.12.1': {}
+
+  '@preact/signals-core@1.14.1': {}
 
   '@preact/signals@2.3.1(preact@10.27.1)':
     dependencies:
@@ -11046,6 +11131,10 @@ snapshots:
       '@yushijinhun/three-minifier-common': 0.4.0
       magic-string: 0.26.7
 
+  '@zappar/msdf-generator@1.2.4':
+    dependencies:
+      comlink: 4.4.2
+
   accepts@2.0.0:
     dependencies:
       mime-types: 3.0.1
@@ -11601,6 +11690,8 @@ snapshots:
   combined-stream@1.0.8:
     dependencies:
       delayed-stream: 1.0.0
+
+  comlink@4.4.2: {}
 
   comma-separated-tokens@2.0.3: {}
 
@@ -13296,6 +13387,10 @@ snapshots:
   lru-cache@6.0.0:
     dependencies:
       yallist: 4.0.0
+
+  lucide-svelte@1.0.1(svelte@5.53.6):
+    dependencies:
+      svelte: 5.53.6
 
   maath@0.10.7(@types/three@0.175.0)(three@0.175.0):
     dependencies:
@@ -15788,6 +15883,17 @@ snapshots:
   three@0.159.0: {}
 
   three@0.175.0: {}
+
+  threlte-uikit@2.0.0(@threlte/core@packages+core)(svelte@5.53.6)(three@0.175.0):
+    dependencies:
+      '@pmndrs/uikit': 1.0.64(three@0.175.0)
+      '@pmndrs/uikit-default': 1.0.64(three@0.175.0)
+      '@pmndrs/uikit-horizon': 1.0.64(three@0.175.0)
+      '@pmndrs/uikit-lucide': 1.0.64(three@0.175.0)
+      '@preact/signals-core': 1.14.1
+      '@threlte/core': link:packages/core
+      svelte: 5.53.6
+      three: 0.175.0
 
   through2@0.6.5:
     dependencies:
