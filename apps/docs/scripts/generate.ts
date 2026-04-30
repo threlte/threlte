@@ -213,14 +213,14 @@ function updateTypeText(text: string) {
   // other updates to type text can be made here if needed, this is just a quick fix to make the types more readable in the docs
   // this specific case is for the common pattern of optional props that have a default value of undefined, which is often represented in types as "type | undefined"
   text = text.replace(/ \| undefined/, '')
-  let match = text.match(/Mesh\<.*?\>/g)
+  let match = text.match(/Mesh<.*?>/g)
   if (match) {
     let substring = bracketMatchedSubstring(text)
     if (substring) {
       text = text.replace(substring, 'Mesh')
     }
   }
-  text = text.replaceAll(/Object3D\<Object3DEventMap\>/g, 'Object3D')
+  text = text.replaceAll(/Object3D<Object3DEventMap>/g, 'Object3D')
   return text
 }
 
