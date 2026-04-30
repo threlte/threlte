@@ -106,12 +106,13 @@ export type AnimatedSpriteProps = Props<Material> & {
   /**
    * The end frame of the current animation.
    *
-   * @default rows * columns - 1
+   * @default totalFrames
    */
   endFrame?: number
 
   /**
    * The total number of frames in the spritesheet.
+   * @default rows * columns - 1
    */
   totalFrames?: number
 

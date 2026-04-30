@@ -43,7 +43,8 @@
     return effect
   })
 
-  export const getEffect = () => asciiEffect
+  /** Getter for the underlying AsciiEffect instance */
+  export const getEffect: () => AsciiEffect = () => asciiEffect
 
   const sizeStore = fromStore(size)
 
@@ -77,11 +78,17 @@
     { autoInvalidate: false, stage: renderStage, running: () => running }
   )
 
+  /**
+   * Manually start the render task
+   */
   export const start = () => {
     running = true
     onstart?.()
   }
 
+  /**
+   * Manually stop the render task
+   */
   export const stop = () => {
     running = false
     onstop?.()

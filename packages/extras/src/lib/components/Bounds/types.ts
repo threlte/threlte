@@ -24,7 +24,7 @@ export interface Goal {
 
 export interface BoundsProps extends Props<Group> {
   /**
-   * @default false
+   * @default true
    */
   enabled?: boolean
 
