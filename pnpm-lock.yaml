@@ -89,6 +89,9 @@ overrides:
   vite: ^7.1.4
 
 patchedDependencies:
+  '@dimforge/rapier3d-compat@0.19.3':
+    hash: 9198d134c9d3715d5697ee14d151de50ba74453bbf0b5ad2930213153bcf72f8
+    path: patches/@dimforge__rapier3d-compat@0.19.3.patch
   '@theatre/studio':
     hash: 1be11589f12d362f0a72e118ac4ef7b2c48bbd564289a80be63f7f5ac6f4e07f
     path: patches/@theatre__studio.patch
@@ -669,8 +672,8 @@ importers:
   packages/rapier:
     devDependencies:
       '@dimforge/rapier3d-compat':
-        specifier: ^0.16.2
-        version: 0.16.2
+        specifier: ^0.19.3
+        version: 0.19.3(patch_hash=9198d134c9d3715d5697ee14d151de50ba74453bbf0b5ad2930213153bcf72f8)
       '@eslint/js':
         specifier: 'catalog:'
         version: 9.26.0
@@ -1353,6 +1356,9 @@ packages:
 
   '@dimforge/rapier3d-compat@0.16.2':
     resolution: {integrity: sha512-VM4pOmZbWUgXzuSJbNmoiDVhurCV8KnHhg0/MB7cNcJEjkrhwTSlnMSAe7OCUU0MXnSJciXdIFOgJU8eCzGGkQ==}
+
+  '@dimforge/rapier3d-compat@0.19.3':
+    resolution: {integrity: sha512-mMVdSj1PRTT108s9Swbu2GQOmHbn8kbJANRV5xfczL3s0T4vkgZAuoMRgvBzQcHanpKusbC0ZJj6z3mC3aj3vg==}
 
   '@emmetio/abbreviation@2.3.3':
     resolution: {integrity: sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==}
@@ -8877,6 +8883,8 @@ snapshots:
   '@csstools/css-tokenizer@4.0.0': {}
 
   '@dimforge/rapier3d-compat@0.16.2': {}
+
+  '@dimforge/rapier3d-compat@0.19.3(patch_hash=9198d134c9d3715d5697ee14d151de50ba74453bbf0b5ad2930213153bcf72f8)': {}
 
   '@emmetio/abbreviation@2.3.3':
     dependencies:
