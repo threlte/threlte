@@ -1,16 +1,16 @@
 export type PerfMonitorProps = {
   /**
    * Dom element to which stats block will be attached to.
-   * @default `document.body`
+   * @default document.body
    */
   domElement?: HTMLElement
   /**
-   * Refresh rate of the logs
+   * Refresh rate of the logs.
    * @default 10
    */
   logsPerSecond?: number
   /**
-   * Toggles cpu/gpu/fps graphs rendering
+   * Toggles cpu/gpu/fps graphs rendering.
    * @default true
    */
   showGraph?: boolean

@@ -7,7 +7,7 @@ import type { ColorRepresentation, CubeTexture, ShaderMaterial, Texture } from '
 */
 
 export type MeshRefractionMaterialProps = Props<ShaderMaterial> & {
-  envMap?: CubeTexture | Texture
+  envMap: CubeTexture | Texture
   /**
    * Number of ray-cast bounces, it can be expensive to have too many
    * @default 2
@@ -33,7 +33,6 @@ export type MeshRefractionMaterialProps = Props<ShaderMaterial> & {
   aberrationStrength?: number
 
   /**
-   * Color
    * @default white
    */
   color?: ColorRepresentation

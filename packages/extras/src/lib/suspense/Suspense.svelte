@@ -1,22 +1,18 @@
 <script lang="ts">
   import { T, useParentObject3D, useThrelte } from '@threlte/core'
-  import type { Snippet } from 'svelte'
   import { Group } from 'three'
   import { createSuspenseContext } from './context.js'
+  import type { SuspenseProps } from './types.js'
 
-  interface Props {
-    final?: boolean
-
-    children?: Snippet<[{ suspended: boolean; errors: Error[] }]>
-    error?: Snippet<[{ errors: Error[] }]>
-    fallback?: Snippet
-
-    onload?: () => void
-    onerror?: (error: Error[]) => void
-    onsuspend?: () => void
-  }
-
-  let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
+  let {
+    final = false,
+    onload,
+    onsuspend,
+    onerror,
+    error,
+    fallback,
+    children
+  }: SuspenseProps = $props()
 
   const { suspended, errors, setFinal } = createSuspenseContext({ final })
   $effect(() => setFinal(final))

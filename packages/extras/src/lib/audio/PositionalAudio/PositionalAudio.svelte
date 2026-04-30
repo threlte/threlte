@@ -4,6 +4,7 @@
   import { useAudio } from '../utils/useAudio.js'
   import { useThrelteAudio } from '../useThrelteAudio.js'
   import type { PositionalAudioProps } from './types.js'
+  import type * as THREE from 'three'
 
   let {
     src,
@@ -57,9 +58,11 @@
     ...useAudioProps
   } = useAudio(audio, props)
 
-  export const pause = useAudioProps.pause
-  export const play = useAudioProps.play
-  export const stop = useAudioProps.stop
+  export const pause: () => THREE.PositionalAudio | THREE.Audio<GainNode> = useAudioProps.pause
+  export const play: (
+    delay?: number
+  ) => Promise<THREE.PositionalAudio | THREE.Audio<GainNode> | undefined> = useAudioProps.play
+  export const stop: () => THREE.PositionalAudio | THREE.Audio<GainNode> = useAudioProps.stop
 
   $effect(() => setAutoPlay(autoplay))
   $effect(() => void setSource(src))

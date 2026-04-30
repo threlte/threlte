@@ -4,6 +4,7 @@
   import { SvelteSet } from 'svelte/reactivity'
 
   interface Props {
+    /** The id of the portal to render into. */
     id?: string
     object?: never
     children?: Snippet
@@ -11,6 +12,7 @@
 
   let { id = 'default', object, children }: Props = $props()
 
+  // TODO-DefinitelyMaybe: remove in threlte 9
   $effect.pre(() => {
     if (object) {
       console.error('<Portal>: "object" prop has been removed. Use "attach" instead.')

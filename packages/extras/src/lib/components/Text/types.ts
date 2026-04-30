@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { Color, ColorRepresentation, Material, Mesh } from 'three'
 
-export interface TextMesh extends Mesh {
+export interface TextProps extends Props<Mesh> {
   /**
    * The string of text to be rendered.
    */
@@ -12,14 +12,14 @@ export interface TextMesh extends Mesh {
    * text block width e.g. `'25%'`, or one of the following keyword strings: 'left', 'center',
    * or 'right'.
    */
-  anchorX: number | 'left' | 'center' | 'right' | string
+  anchorX?: number | 'left' | 'center' | 'right' | string
   /**
    * Defines the vertical position in the text block that should line up with the local origin.
    * Can be specified as a numeric y position in local units (note: down is negative y), a string
    * percentage of the total text block height e.g. `'25%'`, or one of the following keyword strings:
    * 'top', 'top-baseline', 'middle', 'bottom-baseline', or 'bottom'.
    */
-  anchorY: number | 'top' | 'top-baseline' | 'middle' | 'bottom-baseline' | 'bottom' | string
+  anchorY?: number | 'top' | 'top-baseline' | 'middle' | 'bottom-baseline' | 'bottom' | string
   /**
    * Defines a cylindrical radius along which the text's plane will be curved. Positive numbers put
    * the cylinder's centerline (oriented vertically) that distance in front of the text, for a concave
@@ -29,18 +29,18 @@ export interface TextMesh extends Mesh {
    * Since each glyph is by default rendered with a simple quad, each glyph remains a flat plane
    * internally. You can use `glyphGeometryDetail` to add more vertices for curvature inside glyphs.
    */
-  curveRadius: number
+  curveRadius?: number
   /**
    * Sets the base direction for the text. The default value of "auto" will choose a direction based
    * on the text's content according to the bidi spec. A value of "ltr" or "rtl" will force the direction.
    */
-  direction: 'auto' | 'ltr' | 'rtl'
+  direction?: 'auto' | 'ltr' | 'rtl'
   /**
    * URL of a custom font to be used. Font files can be any of the formats supported by
    * OpenType (see https://github.com/opentypejs/opentype.js).
    * Defaults to the Roboto font loaded from Google Fonts.
    */
-  font: null | string
+  font?: null | string
 
   /**
    * MIDDLE
@@ -50,42 +50,42 @@ export interface TextMesh extends Mesh {
    * The size at which to render the font in local units; corresponds to the em-box height
    * of the chosen `font`.
    */
-  fontSize: number
+  fontSize?: number
 
   /**
    * Sets a uniform adjustment to spacing between letters after kerning is applied. Positive
    * numbers increase spacing and negative numbers decrease it.
    */
-  letterSpacing: number
+  letterSpacing?: number
 
   /**
    * Sets the height of each line of text, as a multiple of the `fontSize`. Defaults to 'normal'
    * which chooses a reasonable height based on the chosen font's ascender/descender metrics.
    */
-  lineHeight: number | string
+  lineHeight?: number | string
 
   /**
    * The maximum width of the text block, above which text may start wrapping according to the
    * `whiteSpace` and `overflowWrap` properties.
    */
-  maxWidth: number
+  maxWidth?: number
 
   /**
    * Defines how text wraps if the `whiteSpace` property is `normal`. Can be either `'normal'`
    * to break at whitespace characters, or `'break-word'` to allow breaking within words.
    * Defaults to `'normal'`.
    */
-  overflowWrap: 'normal' | 'break-word' | 'normal'
+  overflowWrap?: 'normal' | 'break-word' | 'normal'
 
   /**
    * The horizontal alignment of each line of text within the overall text bounding box.
    */
-  textAlign: 'left' | 'right' | 'center' | 'justify'
+  textAlign?: 'left' | 'right' | 'center' | 'justify'
 
   /**
    * Indentation for the first character of a line; see CSS `text-indent`.
    */
-  textIndent: number
+  textIndent?: number
 
   /**
    * Defines whether text should wrap when a line reaches the `maxWidth`. Can
@@ -93,7 +93,7 @@ export interface TextMesh extends Mesh {
    * or `'nowrap'` to prevent wrapping. Note that `'normal'` here honors newline characters to
    * manually break lines, making it behave more like `'pre-wrap'` does in CSS.
    */
-  whiteSpace: 'normal' | 'nowrap' | 'pre-wrap'
+  whiteSpace?: 'normal' | 'nowrap' | 'pre-wrap'
 
   /**
    * Defines a _base_ material to be used when rendering the text. This material will be
@@ -104,7 +104,7 @@ export interface TextMesh extends Mesh {
    *
    * Also see the `color` shortcut property.
    */
-  material: Material | Material[]
+  material?: Material | Material[]
 
   /**
    * This is a shortcut for setting the `color` of the text's material. You can use this
@@ -112,28 +112,28 @@ export interface TextMesh extends Mesh {
    * `material`, this color will only be used for this particuar Text instance, even if
    * that same material instance is shared across multiple Text objects.
    */
-  color: ColorRepresentation
+  color?: ColorRepresentation
 
   /**
    * This is a shortcut for setting the material's `polygonOffset` and related properties,
    * which can be useful in preventing z-fighting when this text is laid on top of another
    * plane in the scene. Positive numbers are further from the camera, negatives closer.
    */
-  depthOffset: number
+  depthOffset?: number
 
   /**
    * If specified, defines a `[minX, minY, maxX, maxY]` of a rectangle outside of which all
    * pixels will be discarded. This can be used for example to clip overflowing text when
    * `whiteSpace='nowrap'`.
    */
-  clipRect: [number, number, number, number] | null
+  clipRect?: [number, number, number, number]
 
   /**
    * Controls number of vertical/horizontal segments that make up each glyph's rectangular
    * plane. Defaults to 1. This can be increased to provide more geometrical detail for custom
    * vertex shader effects, for example.
    */
-  glyphGeometryDetail: number
+  glyphGeometryDetail?: number
 
   /**
    * The size of each glyph's SDF (signed distance field) used for rendering. This must be a
@@ -142,7 +142,7 @@ export interface TextMesh extends Mesh {
    * the sharpness of corners and preventing loss of very thin lines, at the expense of
    * increased memory footprint and longer SDF generation time.
    */
-  sdfGlyphSize: number | null
+  sdfGlyphSize?: number
 
   /**
    * WARNING: This API is experimental and may change.
@@ -151,21 +151,21 @@ export interface TextMesh extends Mesh {
    * `"12%"` which is treated as a percentage of the `fontSize`. Defaults to `0`, which means
    * no outline will be drawn unless an `outlineOffsetX/Y` or `outlineBlur` is set.
    */
-  outlineWidth: number | string
+  outlineWidth?: number | string
 
   /**
    * WARNING: This API is experimental and may change.
    * The color of the text outline, if `outlineWidth`/`outlineBlur`/`outlineOffsetX/Y` are set.
    * Defaults to black.
    */
-  outlineColor: ColorRepresentation
+  outlineColor?: ColorRepresentation
 
   /**
    * WARNING: This API is experimental and may change.
    * The opacity of the outline, if `outlineWidth`/`outlineBlur`/`outlineOffsetX/Y` are set.
    * Defaults to `1`.
    */
-  outlineOpacity: number
+  outlineOpacity?: number
 
   /**
    * WARNING: This API is experimental and may change.
@@ -174,7 +174,7 @@ export interface TextMesh extends Mesh {
    * Can be specified as either an absolute number in local units, or as a percentage string e.g.
    * `"12%"` which is treated as a percentage of the `fontSize`. Defaults to `0`.
    */
-  outlineBlur: number | string
+  outlineBlur?: number | string
 
   /**
    * WARNING: This API is experimental and may change.
@@ -182,7 +182,7 @@ export interface TextMesh extends Mesh {
    * Can be specified as either an absolute number in local units, or as a percentage string e.g. `"12%"`
    * which is treated as a percentage of the `fontSize`. Defaults to `0`.
    */
-  outlineOffsetX: number | string
+  outlineOffsetX?: number | string
 
   /**
    * WARNING: This API is experimental and may change.
@@ -190,7 +190,7 @@ export interface TextMesh extends Mesh {
    * Can be specified as either an absolute number in local units, or as a percentage string e.g. `"12%"`
    * which is treated as a percentage of the `fontSize`. Defaults to `0`.
    */
-  outlineOffsetY: number | string
+  outlineOffsetY?: number | string
 
   /**
    * WARNING: This API is experimental and may change.
@@ -198,19 +198,19 @@ export interface TextMesh extends Mesh {
    * Can be specified as either an absolute number in local units, or as a percentage string e.g. `"12%"`
    * which is treated as a percentage of the `fontSize`. Defaults to `0`.
    */
-  strokeWidth: number | string
+  strokeWidth?: number | string
 
   /**
    * WARNING: This API is experimental and may change.
    * The color of the text stroke, if `strokeWidth` is greater than zero. Defaults to gray.
    */
-  strokeColor: ColorRepresentation | Color
+  strokeColor?: ColorRepresentation | Color
 
   /**
    * WARNING: This API is experimental and may change.
    * The opacity of the stroke, if `strokeWidth` is greater than zero. Defaults to `1`.
    */
-  strokeOpacity: number
+  strokeOpacity?: number
 
   /**
    * WARNING: This API is experimental and may change.
@@ -218,7 +218,7 @@ export interface TextMesh extends Mesh {
    * giving the fill a different opacity than the `strokeOpacity`. A fillOpacity of `0` makes the
    * interior of the glyph invisible, leaving just the `strokeWidth`. Defaults to `1`.
    */
-  fillOpacity: number
+  fillOpacity?: number
 
   /**
    * A string or array of string character sequences for which to pre-generate
@@ -227,7 +227,7 @@ export interface TextMesh extends Mesh {
    * characters to get all possible glyphs, e.g. ["t", "h", "th"] to get the "t"
    * and "h" glyphs plus the "th" glyph.
    */
-  characters?: string | string[] | null
+  characters?: string | string[]
 
   /**
    * WARNING: This API is experimental and may change.
@@ -237,9 +237,7 @@ export interface TextMesh extends Mesh {
    * range. The color value can be a numeric hex color value, a `THREE.Color` object, or
    * any of the strings accepted by `THREE.Color`.
    */
-  colorRanges?: { [key: `${number}`]: ColorRepresentation } | null
+  colorRanges?: { [key: `${number}`]: ColorRepresentation }
 
   onsync?: () => void
 }
-
-export type TextProps = Props<TextMesh>

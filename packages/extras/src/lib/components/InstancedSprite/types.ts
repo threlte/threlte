@@ -62,7 +62,8 @@ export type InstancedSpriteProps = Omit<
   billboarding?: boolean
 
   /**
-   * changes playmode for all instances
+   * changes playmode for all instances.
+   * `"FORWARD" | "REVERSE" | "PAUSE" | "PINGPONG"`
    *
    * @default 'FORWARD'
    */

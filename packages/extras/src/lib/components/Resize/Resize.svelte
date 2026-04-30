@@ -72,8 +72,8 @@
     { stage, running: () => running }
   )
 
-  /** Manually trigger resizing */
-  export const resize = scheduleResizing
+  /** Manually trigger a resize. */
+  export const resize: () => void = scheduleResizing
 
   observe(() => [axis, precise], scheduleResizing)
 
