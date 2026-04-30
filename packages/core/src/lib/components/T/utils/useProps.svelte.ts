@@ -1,5 +1,5 @@
 import { EventDispatcher } from 'three'
-import { useThrelte } from '../../../context/compounds/useThrelte.js'
+import { useScheduler } from '../../../context/fragments/scheduler.svelte.js'
 import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import { untrack } from 'svelte'
 
@@ -57,7 +57,7 @@ export const useProps = <Type>(
   props: () => Record<string, unknown>,
   pluginProps: () => string[] | undefined
 ) => {
-  const { invalidate } = useThrelte()
+  const { invalidate } = useScheduler()
 
   /**
    * Skip redundant scalar assignments for the same instance + path.

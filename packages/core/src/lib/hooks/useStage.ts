@@ -1,4 +1,4 @@
-import { useThrelte } from '../context/compounds/useThrelte.js'
+import { useScheduler } from '../context/fragments/scheduler.svelte.js'
 import type { CreateStageOptions, Key } from '../frame-scheduling/index.js'
 
 /**
@@ -8,6 +8,6 @@ import type { CreateStageOptions, Key } from '../frame-scheduling/index.js'
  * @param options Options for creating the stage.
  */
 export function useStage(key: Key, options?: CreateStageOptions) {
-  const { scheduler } = useThrelte()
+  const { scheduler } = useScheduler()
   return scheduler.getStage(key) ?? scheduler.createStage(key, options)
 }

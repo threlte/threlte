@@ -12,6 +12,8 @@
   import { determineRef } from './utils/utils.js'
   import { isInstanceOf } from '../../utilities/isInstanceOf.js'
   import { untrack } from 'svelte'
+  import { createParentObject3DContext } from '../../context/fragments/parentObject3D.js'
+  import { createParentContext } from '../../context/fragments/parent.js'
 
   let {
     is = useIs<Type>(),
@@ -94,6 +96,11 @@
     () => internalRef,
     () => dispose
   )
+
+  createParentObject3DContext(() =>
+    isInstanceOf(internalRef, 'Object3D') ? internalRef : undefined
+  )
+  createParentContext(() => internalRef)
 
   /**
    * oncreate needs to be called after all other hooks
