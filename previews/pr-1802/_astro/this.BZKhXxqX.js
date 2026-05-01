@@ -1,1 +1,0 @@
-import{aq as b,ao as h,M as k,q as M,aj as S}from"./runtime.Blah4U0_.js";function u(r,i){return r===i||r?.[S]===i}function c(r={},i,f,q){return b(()=>{var a,s;return h(()=>{a=s,s=q?.()||[],k(()=>{r!==f(...s)&&(i(r,...s),a&&u(f(...a),r)&&i(null,...a))})}),()=>{M(()=>{s&&u(f(...s),r)&&i(null,...s)})}}),r}export{c as b};
