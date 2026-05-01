@@ -1,0 +1,1 @@
+import{r,x as s,s as n,i as e,c as a}from"./setup.svelte.BLJ4hecs.js";const t=()=>({isPresenting:r(()=>a.current),isHandTracking:r(()=>e.current),session:r(()=>n.current),xr:r(()=>s.current)});export{t as u};
