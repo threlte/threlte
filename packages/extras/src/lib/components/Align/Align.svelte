@@ -79,7 +79,7 @@
   useTask(
     () => {
       calculate()
-      stop()
+      scheduleAligning = false
     },
     { stage, running: () => scheduleAligning }
   )

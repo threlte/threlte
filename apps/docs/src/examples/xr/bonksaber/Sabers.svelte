@@ -4,9 +4,17 @@
   import { FakeGlowMaterial, Outlines } from '@threlte/extras'
   import { Collider, RigidBody } from '@threlte/rapier'
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { Controller, Hand, useXR } from '@threlte/xr'
+  import { Controller, Hand, useController, useXR } from '@threlte/xr'
 
   const { isHandTracking } = useXR()
+
+  const leftController = useController('left')
+  const rightController = useController('right')
+
+  const pulse = (hand: 'left' | 'right') => {
+    const controller = hand === 'left' ? leftController.current : rightController.current
+    controller?.inputSource.gamepad?.hapticActuators[0]?.pulse(0.8, 80)
+  }
 
   let rigidBodyLeft = $state.raw<RapierRigidBody>()
   let rigidBodyRight = $state.raw<RapierRigidBody>()
@@ -110,6 +118,7 @@
 <RigidBody
   type="kinematicPosition"
   bind:rigidBody={rigidBodyLeft}
+  oncollisionenter={() => pulse('left')}
 >
   <Collider
     shape="capsule"
@@ -120,6 +129,7 @@
 <RigidBody
   type="kinematicPosition"
   bind:rigidBody={rigidBodyRight}
+  oncollisionenter={() => pulse('right')}
 >
   <Collider
     shape="capsule"

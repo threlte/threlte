@@ -9,12 +9,12 @@ componentSignature:
       [
         {
           name: 'click',
-          payload: "CustomEvent<'unsupported' | 'insecure' | 'blocked' | 'supported'>",
-          description: 'Fired when a user clicks the VR button.'
+          payload: "{ state: 'unsupported' | 'insecure' | 'blocked' | 'supported'; nativeEvent: MouseEvent }",
+          description: 'Fired when a user clicks the AR button.'
         },
         {
           name: 'error',
-          payload: 'CustomEvent<Error>',
+          payload: 'Error',
           description: 'Fired when an enter / exit session error occurs.'
         }
       ]
@@ -22,3 +22,5 @@ componentSignature:
 ---
 
 `<ARButton />` is an HTML `<button />` that can be used to init an AR session. It will also display info about browser support.
+
+<Example path="xr/ar-button" />

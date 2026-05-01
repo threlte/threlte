@@ -15,6 +15,13 @@ export interface UseKeyboardOptions {
    * @default window
    */
   target?: EventTarget
+
+  /**
+   * Listen during the capture phase instead of the bubble phase. Use this
+   * when keyboard input must run before descendants can stop propagation.
+   * @default false
+   */
+  capture?: boolean
 }
 
 type KeyboardEventType = 'keydown' | 'keyup'
@@ -78,7 +85,7 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
    * cleared at the start of the next frame before new events are applied.
    */
   const { task } = useTask(
-    'useKeyboard',
+    Symbol('useKeyboard'),
     () => {
       // Clear last frame's transient states
       for (const [, state] of keys) {
@@ -112,15 +119,16 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   )
 
   $effect.pre(() => {
-    const { target = window } = optionsFn?.() ?? {}
+    const { target = window, capture = false } = optionsFn?.() ?? {}
+    const listenerOptions = { capture }
 
-    target.addEventListener('keydown', handleKeyDown)
-    target.addEventListener('keyup', handleKeyUp)
+    target.addEventListener('keydown', handleKeyDown, listenerOptions)
+    target.addEventListener('keyup', handleKeyUp, listenerOptions)
     target.addEventListener('blur', handleBlur)
 
     return () => {
-      target.removeEventListener('keydown', handleKeyDown)
-      target.removeEventListener('keyup', handleKeyUp)
+      target.removeEventListener('keydown', handleKeyDown, listenerOptions)
+      target.removeEventListener('keyup', handleKeyUp, listenerOptions)
       target.removeEventListener('blur', handleBlur)
     }
   })

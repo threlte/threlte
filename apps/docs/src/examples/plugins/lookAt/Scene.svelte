@@ -3,11 +3,15 @@
   import { T, useTask } from '@threlte/core'
   import { injectLookAtPlugin } from './lookAtPlugin.svelte'
 
-  const cubePos = $state<[number, number, number]>([0, 0.8, 0])
+  let cubePos: [number, number, number] = $state.raw([0, 0.8, 0])
 
-  useTask(() => {
-    cubePos[0] = Math.sin(Date.now() / 1000) * 2
-    cubePos[2] = Math.cos(Date.now() / 1000) * 2
+  let time = 0
+
+  const radius = 2
+
+  useTask((dt) => {
+    cubePos = [radius * Math.sin(time), 0.8, radius * Math.cos(time)]
+    time += dt
   })
 
   injectLookAtPlugin()
@@ -60,4 +64,5 @@
   intensity={1}
   castShadow
 />
+
 <T.AmbientLight intensity={0.2} />

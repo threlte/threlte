@@ -3,7 +3,7 @@
   import { GroundedSkybox } from 'three/examples/jsm/Addons.js'
   import { T } from '@threlte/core'
 
-  type Props = {
+  interface Props {
     useGround?: boolean
   }
 

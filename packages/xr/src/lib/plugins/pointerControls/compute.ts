@@ -1,20 +1,31 @@
 import { Vector3 } from 'three'
 import type { ControlsContext, HandContext } from './types.js'
-import { controllers } from '../../hooks/useController.svelte.js'
+import { getControllerState, getHandState } from '../../internal/inputSources.svelte.js'
 
 export type ComputeFunction = (state: ControlsContext, handState: HandContext) => void
 
+const origin = new Vector3()
 const forward = new Vector3()
 
 export const defaultComputeFunction: ComputeFunction = (
-  context: ControlsContext,
+  _context: ControlsContext,
   handContext: HandContext
 ) => {
-  const targetRay = controllers[handContext.hand]?.targetRay
+  const state =
+    handContext.sourceType === 'controller'
+      ? getControllerState(handContext.hand)
+      : getHandState(handContext.hand)
+  const targetRay = state?.targetRay
 
   if (targetRay === undefined) return
 
-  forward.set(0, 0, -1).applyQuaternion(targetRay.quaternion)
+  // Read origin/direction from matrixWorld so the ray is in real world space,
+  // even when an ancestor (e.g. <XROrigin>) has a non-identity transform.
+  // Force an update because this runs before the frame's scene.updateMatrixWorld.
+  targetRay.updateWorldMatrix(true, false)
 
-  context.raycaster.set(targetRay.position, forward)
+  origin.setFromMatrixPosition(targetRay.matrixWorld)
+  forward.set(0, 0, -1).transformDirection(targetRay.matrixWorld)
+
+  handContext.raycaster.set(origin, forward)
 }

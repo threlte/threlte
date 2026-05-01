@@ -33,17 +33,19 @@
 />
 
 <Suspense>
-  {#each { length: 9 }, i}
+  {#each { length: 9 }, index}
     <T.Sprite
       scale={0.5}
       position.y={-1.99}
-      position.x={i < 5 ? i / 2.4 + Math.random() * 0.4 - 2.8 : i / 2.4 + Math.random() * 0.4 - 1}
+      position.x={index < 5
+        ? index / 2.4 + Math.random() * 0.4 - 2.8
+        : index / 2.4 + Math.random() * 0.4 - 1}
     >
       <AnimatedSpriteMaterial
         textureUrl="/textures/sprites/grass.png"
         totalFrames={6}
         fps={5}
-        delay={i * 40}
+        delay={index * 40}
       />
     </T.Sprite>
   {/each}

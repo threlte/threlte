@@ -2,17 +2,19 @@
   import { GLTF, useGltfAnimations } from '@threlte/extras'
   import type { CharacterActions } from './types'
 
-  type Props = {
+  interface Props {
     actionKey: CharacterActions
   }
+
   let { actionKey = 'idle' }: Props = $props()
 
   let { gltf, actions } = useGltfAnimations()
+
   let currentActionKey: CharacterActions = 'idle'
 
   $effect(() => {
     // This effect acts like an init default pose
-    $actions?.['idle']?.play()
+    $actions.idle?.play()
   })
 
   $effect(() => {

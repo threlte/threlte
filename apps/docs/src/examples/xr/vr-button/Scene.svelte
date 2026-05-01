@@ -1,39 +1,35 @@
 <script lang="ts">
-  import { T, useTask } from '@threlte/core'
-  import { RoundedBoxGeometry } from '@threlte/extras'
+  import { T } from '@threlte/core'
+  import { OrbitControls } from '@threlte/extras'
   import { XR } from '@threlte/xr'
-
-  let rotation = $state(0)
-
-  useTask((delta) => {
-    rotation += delta
-  })
+  import Random from './Random.svelte'
 </script>
 
 <XR />
 
-<T.AmbientLight />
-<T.DirectionalLight
-  position.y={10}
-  position.z={10}
-/>
-
 <T.PerspectiveCamera
   makeDefault
-  position.y={1.8}
-  position.z={1}
+  position={[20, 20, 20]}
+>
+  <OrbitControls maxPolarAngle={1.56} />
+</T.PerspectiveCamera>
+
+<T.DirectionalLight
+  position={[3, 10, 7]}
+  castShadow
+  shadow.camera.top={10}
+  shadow.camera.left={-10}
+  shadow.camera.right={10}
+  shadow.camera.bottom={-10}
 />
+<T.AmbientLight />
 
 <T.Mesh
-  position.y={1.8}
-  rotation.x={rotation}
-  rotation.y={rotation}
+  rotation.x={-Math.PI / 2}
+  receiveShadow
 >
-  <RoundedBoxGeometry args={[0.2, 0.2, 0.2]} />
-  <T.MeshStandardMaterial color="orange" />
+  <T.PlaneGeometry args={[20, 20, 1, 1]} />
+  <T.MeshStandardMaterial color="green" />
 </T.Mesh>
 
-<T.Mesh>
-  <T.CylinderGeometry args={[3, 0.01]} />
-  <T.MeshStandardMaterial color="turquoise" />
-</T.Mesh>
+<Random />

@@ -5,7 +5,7 @@
   import { RadialGradientTexture, OrbitControls } from '@threlte/extras'
   import { T, useThrelte } from '@threlte/core'
 
-  type SceneProps = {
+  interface Props {
     canvasSize: number
     gradientEndColor: string
     gradientInnerRadius: number
@@ -39,7 +39,7 @@
     textureRotation,
     textureWrapS,
     textureWrapT
-  }: SceneProps = $props()
+  }: Props = $props()
 
   let stops = $derived<ColorStop[]>([
     { color: gradientStartColor, offset: 0 },

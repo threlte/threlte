@@ -10,20 +10,21 @@
   import { ballGeometry, ballMaterial } from './common'
   import { onMount } from 'svelte'
 
-  type Props = {
+  interface Props {
     startAtPosX: number
   }
+
   let { startAtPosX }: Props = $props()
 
   let posX = $state(0)
-  let rigidBody: RapierRigidBody | undefined = $state()
+  let rigidBody = $state<RapierRigidBody>()
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
   }
 
   const ballSpeed = $derived.by(() => {
-    return map(game.levelIndex, 0, 9, 0.1, 0.3)
+    return map(game.levelIndex, 0, 9, 4, 11)
   })
 
   let ballIsSpawned = false
@@ -54,9 +55,11 @@
       z: rbTranslation?.z ?? 0
     }
   })
+
   $effect(() => {
     if (rigidBody) game.ballRigidBody = rigidBody
   })
+
   onMount(() => {
     posX = startAtPosX
   })

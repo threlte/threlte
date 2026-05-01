@@ -8,16 +8,38 @@ import Footer from '$components/Footer/Footer.astro'
 
 export interface Props {
   title: string
+  description?: string
+  image?: string
+  canonical?: string
+  type?: 'website' | 'article'
+  noindex?: boolean
+  article?: {
+    publishedTime?: string
+    modifiedTime?: string
+    author?: string
+  }
 }
 
-const title = Astro.props.title
+const { title, description, image, canonical, type, noindex, article } = Astro.props
 
 const pathname = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/')
 
 const isBlog = pathname.startsWith('/blog')
 ---
 
-<AppLayout {title}>
+<AppLayout
+  {title}
+  {description}
+  {image}
+  {canonical}
+  {type}
+  {noindex}
+  {article}
+>
+  <slot
+    name="head"
+    slot="head"
+  />
   <!-- Desktop Nav -->
   <div
     class="fixed top-0 left-0 z-5 h-[var(--docs-navbar-height)] w-screen border-b border-blue-900/0 bg-[#0A0F19]"

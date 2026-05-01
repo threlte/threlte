@@ -1,13 +1,25 @@
 <script lang="ts">
   import { Checkbox, Pane, ThemeUtils, Slider } from 'svelte-tweakpane-ui'
 
-  export let staticMoving: boolean
-  export let noRotate: boolean
-  export let rotateSpeed: number
-  export let noZoom: boolean
-  export let zoomSpeed: number
-  export let noPan: boolean
-  export let panSpeed: number
+  interface Props {
+    staticMoving: boolean
+    noRotate: boolean
+    rotateSpeed: number
+    noZoom: boolean
+    zoomSpeed: number
+    noPan: boolean
+    panSpeed: number
+  }
+
+  let {
+    staticMoving = $bindable(),
+    noRotate = $bindable(),
+    rotateSpeed = $bindable(),
+    noZoom = $bindable(),
+    zoomSpeed = $bindable(),
+    noPan = $bindable(),
+    panSpeed = $bindable()
+  }: Props = $props()
 </script>
 
 <Pane

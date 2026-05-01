@@ -17,7 +17,7 @@ Caching cuts network requests, bandwidth, and memory, improving app performance.
 </Tip>
 <Tip type="tip">
   We recommend using SvelteKit's [asset function](https://svelte.dev/docs/kit/$app-paths#asset) to
-  help catch common loading problems. There are other equivalent vite plugins if your not using
+  help catch common loading problems. There are other equivalent Vite plugins if you're not using
   SvelteKit.
 </Tip>
 
@@ -62,14 +62,14 @@ the example above.
 You may run into the following challenges when working with models in Threlte:
 
 - Your model may have multiple parts that you'd like to adjust individually but
-  there's no easy way to declaritively achieve that with only one `<T/>`
+  there's no easy way to declaratively achieve that with only one `<T/>`
   component.
 - You can't seem to place multiple copies in your scene.
 
 To address both of these issues, you can use Threlte's CLI tool
 [@threlte/gltf](/docs/reference/gltf/getting-started) to generate a Svelte
 component for your model. The generated component has `<T/>` components for all
-of your models parts. [Adjust the component](/docs/learn/advanced/custom-abstractions) to your liking, then
+of your model's parts. [Adjust the component](/docs/learn/advanced/custom-abstractions) to your liking, then
 import and reuse it as much as you'd like.
 
 ### Animations

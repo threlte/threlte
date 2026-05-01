@@ -9,22 +9,22 @@ componentSignature:
       [
         {
           name: 'connected',
-          payload: "XRHandEvent<'connected', null>",
+          payload: "XRHandEvent<'connected'>",
           description: 'Fired when the hand connects.'
         },
         {
           name: 'disconnected',
-          payload: "XRHandEvent<'connected', null>",
+          payload: "XRHandEvent<'disconnected'>",
           description: 'Fired when the hand disconnects.'
         },
         {
           name: 'pinchstart',
-          payload: "XRHandEvent<'pinchstart', THREE.XRHandSpace>",
+          payload: "XRHandEvent<'pinchstart'>",
           description: 'Fired when a pinch gesture begins.'
         },
         {
           name: 'pinchend',
-          payload: "XRHandEvent<'pinchend', THREE.XRHandSpace>",
+          payload: "XRHandEvent<'pinchend'>",
           description: 'Fired when a pinch gesture ends.'
         }
       ]
@@ -73,7 +73,7 @@ A snippet, `wrist`, will place any children within the wrist space of the hand:
 </Hand>
 ```
 
-To trigger reactive changes based on whether hand input is or is not present, the `useXR` hook provides a [`currentWritable`](https://localhost:4321/docs/reference/core/utilities#currentwritable) store:
+To trigger reactive changes based on whether hand input is or is not present, the `useXR` hook provides a [`currentWritable`](/docs/reference/core/utilities#currentwritable) store:
 
 ```ts
 const { isHandTracking } = useXR()

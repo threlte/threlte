@@ -1,6 +1,6 @@
 {
   "name": "@threlte/xr",
-  "version": "1.5.3",
+  "version": "1.6.0",
   "author": "Micheal Parks <michealparks1989@gmail.com> (https://parks.lol)",
   "license": "MIT",
   "description": "Tools to more easily create VR and AR experiences with Threlte",
@@ -21,6 +21,7 @@
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@threlte/core": "workspace:*",
+    "@threlte/extras": "workspace:*",
     "@types/three": "catalog:",
     "@types/webxr": "catalog:",
     "autoprefixer": "^10.4.19",

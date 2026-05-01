@@ -28,9 +28,20 @@ interface Props {
 
 const { entry, author } = Astro.props
 const { Content } = await render(entry)
+
+const description = entry.data.description ?? entry.data.subtitle
 ---
 
-<MainLayout title={`${entry.data.title}`}>
+<MainLayout
+  title={`${entry.data.title} | Threlte Blog`}
+  {description}
+  image={entry.data.image}
+  type="article"
+  article={{
+    publishedTime: entry.data.date,
+    author: author.data.url
+  }}
+>
   <div class="w-full pt-6 pb-12">
     <div class="mx-auto max-w-5xl">
       <div class="mb-5 block">

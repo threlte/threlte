@@ -3,7 +3,7 @@
   import { Tween } from 'svelte/motion'
   import type { Color } from 'three'
 
-  type Props = {
+  interface Props {
     lightColor: Color
     machineIsOff?: boolean
     pointLightsOff?: boolean
@@ -13,21 +13,14 @@
 
   let pointLightIntensity = new Tween(0)
 
-  const blueLightIntensity = new Tween(2, {
+  const options = {
     duration: 3e3
-  })
+  }
 
-  const redLightIntensity = new Tween(1, {
-    duration: 3e3
-  })
-
-  const whiteLightIntensity = new Tween(0, {
-    duration: 3e3
-  })
-
-  const whiteAmbientLightIntensity = new Tween(1, {
-    duration: 3e3
-  })
+  const blueLightIntensity = new Tween(2, options)
+  const redLightIntensity = new Tween(1, options)
+  const whiteLightIntensity = new Tween(0, options)
+  const whiteAmbientLightIntensity = new Tween(1, options)
 
   $effect(() => {
     pointLightIntensity.set(pointLightsOff ? 1 : 0)
@@ -73,25 +66,19 @@
 <T.DirectionalLight
   intensity={redLightIntensity.current}
   color="#F67F55"
-  position.x={-2.2}
-  position.y={3.5}
-  position.z={2.6}
+  position={[-2.2, 3.6, 2.6]}
 />
 
 <!-- Blue light -->
 <T.DirectionalLight
   intensity={blueLightIntensity.current}
-  position.x={2.2}
-  position.y={3.4}
-  position.z={2.6}
+  position={[2.2, 3.4, 2.6]}
   color="#2722F3"
 />
 
 <!-- White light -->
 <T.DirectionalLight
   intensity={whiteLightIntensity.current}
-  position.x={-1}
-  position.y={2.5}
-  position.z={1}
+  position={[-1, 2.5, 1]}
   color="white"
 />

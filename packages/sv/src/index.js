@@ -28,7 +28,11 @@ const packages = [
     package: '@threlte/theatre',
     version: versionTag,
     description: 'Animation library',
-    dependencies: [{ package: '@theatre/core', version: theatreVersion }]
+    dependencies: [
+      { package: '@threlte/extras', version: versionTag },
+      { package: '@theatre/core', version: theatreVersion },
+      { package: '@theatre/studio', version: theatreVersion }
+    ]
   },
   {
     id: 'xr',
@@ -46,7 +50,8 @@ const packages = [
     id: 'studio',
     package: '@threlte/studio',
     version: versionTag,
-    description: 'Visual editor'
+    description: 'Visual editor',
+    dependencies: [{ package: '@threlte/extras', version: versionTag }]
   }
 ]
 

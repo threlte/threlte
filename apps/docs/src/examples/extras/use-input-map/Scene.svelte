@@ -9,15 +9,35 @@
     activeDevice = $bindable('keyboard')
   }: { sprintKey?: string; activeDevice?: string } = $props()
 
-  const keyboard = useKeyboard()
+  const keyboard = useKeyboard(() => ({ capture: true }))
   const gamepad = useGamepad()
 
   const input = useInputMap(
     ({ key, gamepadAxis, gamepadButton }) => ({
-      moveLeft: [key('a'), key('ArrowLeft'), gamepadAxis('leftStick', 'x', -1)],
-      moveRight: [key('d'), key('ArrowRight'), gamepadAxis('leftStick', 'x', 1)],
-      moveForward: [key('w'), key('ArrowUp'), gamepadAxis('leftStick', 'y', -1)],
-      moveBack: [key('s'), key('ArrowDown'), gamepadAxis('leftStick', 'y', 1)],
+      moveLeft: [
+        key('a'),
+        key('ArrowLeft'),
+        gamepadButton('directionalLeft'),
+        gamepadAxis('leftStick', 'x', -1)
+      ],
+      moveRight: [
+        key('d'),
+        key('ArrowRight'),
+        gamepadButton('directionalRight'),
+        gamepadAxis('leftStick', 'x', 1)
+      ],
+      moveForward: [
+        key('w'),
+        key('ArrowUp'),
+        gamepadButton('directionalTop'),
+        gamepadAxis('leftStick', 'y', -1)
+      ],
+      moveBack: [
+        key('s'),
+        key('ArrowDown'),
+        gamepadButton('directionalBottom'),
+        gamepadAxis('leftStick', 'y', 1)
+      ],
       sprint: [key(sprintKey), gamepadButton('leftBumper')]
     }),
     { keyboard, gamepad }
@@ -90,7 +110,9 @@
   sectionSize={5}
   cellSize={1}
   gridSize={[20, 20]}
-  fadeDistance={25}
+  fadeDistance={10}
+  fadeOrigin={[0, 0, 0]}
+  infiniteGrid
 />
 
 <T.Mesh

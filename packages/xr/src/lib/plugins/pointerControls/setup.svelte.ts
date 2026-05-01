@@ -1,5 +1,5 @@
 import { Vector3, type Event, type Object3D, type Points } from 'three'
-import { observe } from '@threlte/core'
+import { fromStore } from 'svelte/store'
 import type {
   ControlsContext,
   HandContext,
@@ -8,18 +8,33 @@ import type {
   events
 } from './types.js'
 import { getInternalContext } from './context.js'
-import { controllers } from '../../hooks/useController.svelte.js'
-import { useHand } from '../../hooks/useHand.svelte.js'
+import { addSubscriber } from '../../internal/inputSources.svelte.js'
 import { useFixed } from '../../internal/useFixed.js'
-import { isPresenting, pointerIntersection } from '../../internal/state.svelte.js'
+import { isPresenting } from '../../internal/state.svelte.js'
 
 type PointerEventName = (typeof events)[number]
 
+// Hover identity must match the dedup key used in `getHits`, otherwise the ID
+// changes mid-hover (e.g. the hit's face index changes as the ray sweeps a
+// plain mesh) and the object flickers between pointerout/pointerenter every
+// frame.
 const getIntersectionId = (intersection: Intersection) => {
-  return `${(intersection.eventObject || intersection.object).uuid}|${intersection.index}|${intersection.instanceId}`
+  const target = intersection.eventObject ?? intersection.object
+  if (intersection.instanceId !== undefined) {
+    return `${target.uuid}|${intersection.instanceId}`
+  }
+  if ((intersection.object as Points).isPoints) {
+    return `${target.uuid}|${intersection.index}`
+  }
+  return target.uuid
 }
 
 const EPSILON = 0.0001
+
+// Starts high enough to stay clear of browser-assigned DOM pointerIds in the
+// same session. Incremented per setupPointerControls call so each hand — and
+// each reconnect — gets a distinct id.
+let nextPointerId = 1001
 
 export const setupPointerControls = (
   context: ControlsContext,
@@ -27,13 +42,14 @@ export const setupPointerControls = (
   fixedStep = 1 / 40
 ) => {
   const handedness = handContext.hand
-  const controller = $derived(controllers[handedness])
-  const hand = useHand(handedness)
+  const pointerId = nextPointerId++
+  const enabled = fromStore(handContext.enabled)
   const { dispatchers } = getInternalContext()
 
   let hits: Intersection[] = []
 
-  const lastPosition = new Vector3()
+  const lastRayOrigin = new Vector3()
+  const lastRayDirection = new Vector3()
 
   const handlePointerDown = (event: Event) => {
     // Save initial coordinates on pointer-down
@@ -52,32 +68,21 @@ export const setupPointerControls = (
   }
 
   const handleClick = (event: Event) => {
-    // If a click yields no results, pass it back to the user as a miss
-    // Missed events have to come first in order to establish user-land side-effect clean up
-    if (hits.length === 0) {
-      pointerMissed(context.interactiveObjects, event)
-    }
-
     handleEvent('onclick', event)
   }
 
   function cancelPointer(intersections: Intersection[]) {
     if (handContext.hovered.size === 0) return
 
+    const currentIds = new Set<string>()
+    for (const hit of intersections) {
+      currentIds.add(getIntersectionId(hit))
+    }
+
     const toRemove: [string, IntersectionEvent][] = []
 
     for (const [id, hoveredObj] of handContext.hovered) {
-      // When no objects were hit or the hovered object wasn't found underneath the cursor
-      // we call pointerout and delete the object from the hovered elements map
-      if (
-        intersections.length === 0 ||
-        !intersections.some(
-          (hit) =>
-            hit.object === hoveredObj.object &&
-            hit.index === hoveredObj.index &&
-            hit.instanceId === hoveredObj.instanceId
-        )
-      ) {
+      if (!currentIds.has(id)) {
         toRemove.push([id, hoveredObj])
       }
     }
@@ -97,11 +102,13 @@ export const setupPointerControls = (
     if (handContext.hovered.size === 0) {
       handContext.pointerOverTarget.set(false)
     }
+
+    handContext.syncSharedState()
   }
 
   const getHits = (): Intersection[] => {
     const intersections: Intersection[] = []
-    const rawHits = context.raycaster.intersectObjects(
+    const rawHits = handContext.raycaster.intersectObjects(
       context.interactiveObjects,
       true
     ) as Intersection[]
@@ -125,9 +132,9 @@ export const setupPointerControls = (
       return true
     })
     const filtered =
-      context.filter === undefined ? hits : context.filter(hits, context, handContext)
-
-    pointerIntersection[handedness] = filtered[0]
+      handContext.filter === undefined ? hits : handContext.filter(hits, context, handContext)
+    handContext.currentIntersection = filtered[0]
+    handContext.syncSharedState()
 
     // Bubble up the events, find the event source (eventObject)
     for (const hit of filtered) {
@@ -147,12 +154,12 @@ export const setupPointerControls = (
 
   function pointerMissed(objects: Object3D[], event?: Event | undefined) {
     for (const object of objects) {
-      dispatchers.get(object)?.pointermissed?.(event)
+      dispatchers.get(object)?.onpointermissed?.(event)
     }
   }
 
   function processHits() {
-    context.compute(context, handContext)
+    handContext.compute(context, handContext)
     return getHits()
   }
 
@@ -160,7 +167,17 @@ export const setupPointerControls = (
     const isPointerMove = name === 'onpointermove'
     const isClickEvent = name === 'onclick' || name === 'oncontextmenu'
 
-    // Take care of unhover
+    // Fire pointermissed for objects that were not under the pointer at pointerdown.
+    // Must come before the dispatch loop so user-land cleanup runs first.
+    if (isClickEvent) {
+      pointerMissed(
+        context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
+        event
+      )
+    }
+
+    // Update hover state before dispatch so that pointerout/pointerleave fire
+    // before pointerover/pointerenter on newly hit objects.
     if (isPointerMove) cancelPointer(hits)
 
     let stopped = false
@@ -175,6 +192,8 @@ export const setupPointerControls = (
         stopped,
         ...hit,
         intersections: hits,
+        handedness,
+        pointerId,
         stopPropagation() {
           stopped = true
           intersectionEvent.stopped = true
@@ -190,7 +209,7 @@ export const setupPointerControls = (
         delta: 0,
         nativeEvent: event,
         pointer: handContext.pointer.current,
-        ray: context.raycaster.ray
+        ray: handContext.raycaster.ray
       }
 
       if (isPointerMove) {
@@ -212,6 +231,7 @@ export const setupPointerControls = (
 
             events.onpointerenter?.(intersectionEvent)
             handContext.pointerOverTarget.set(true)
+            handContext.syncSharedState()
           } else if (hoveredItem.stopped) {
             // If the object was previously hovered and stopped, we shouldn't allow other items to proceed
             intersectionEvent.stopPropagation()
@@ -220,23 +240,11 @@ export const setupPointerControls = (
 
         // Call pointer move
         events.onpointermove?.(intersectionEvent)
-      } else if (
-        (!isClickEvent || handContext.initialHits.includes(hit.eventObject)) &&
-        events[name] !== undefined
-      ) {
-        // Missed events have to come first
-        pointerMissed(
-          context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
-          event
-        )
-
-        // Call the event
-        events[name]?.(intersectionEvent)
-      } else if (isClickEvent && handContext.initialHits.includes(hit.eventObject)) {
-        pointerMissed(
-          context.interactiveObjects.filter((object) => !handContext.initialHits.includes(object)),
-          event
-        )
+      } else if (events[name] !== undefined) {
+        // All other events
+        if (!isClickEvent || handContext.initialHits.includes(hit.eventObject)) {
+          events[name]?.(intersectionEvent)
+        }
       }
 
       if (stopped) break dispatchEvents
@@ -247,15 +255,17 @@ export const setupPointerControls = (
     () => {
       hits = processHits()
 
-      const targetRay = controller?.targetRay
+      const ray = handContext.raycaster.ray
 
-      if (targetRay === undefined) return
-
-      if (targetRay.position.distanceTo(lastPosition) > EPSILON) {
+      if (
+        ray.origin.distanceToSquared(lastRayOrigin) > EPSILON * EPSILON ||
+        1 - ray.direction.dot(lastRayDirection) > EPSILON
+      ) {
         handleEvent('onpointermove')
       }
 
-      lastPosition.copy(targetRay.position)
+      lastRayOrigin.copy(ray.origin)
+      lastRayDirection.copy(ray.direction)
     },
     {
       fixedStep,
@@ -263,62 +273,45 @@ export const setupPointerControls = (
     }
   )
 
-  observe.pre(
-    () => [controller, handContext.enabled],
-    ([controller, $enabled]) => {
-      if (controller === undefined) return
-
-      const removeHandlers = () => {
-        controller.targetRay.removeEventListener('selectstart', handlePointerDown)
-        controller.targetRay.removeEventListener('selectend', handlePointerUp)
-        controller.targetRay.removeEventListener('select', handleClick)
-      }
-
-      if ($enabled) {
-        controller.targetRay.addEventListener('selectstart', handlePointerDown)
-        controller.targetRay.addEventListener('selectend', handlePointerUp)
-        controller.targetRay.addEventListener('select', handleClick)
-
-        return removeHandlers
-      } else {
-        removeHandlers()
-        return
-      }
+  $effect.pre(() => {
+    if (isPresenting.current && enabled.current) {
+      start()
+    } else {
+      stop()
+      hits = []
+      handContext.currentIntersection = undefined
+      cancelPointer([])
+      handContext.syncSharedState()
     }
-  )
+  })
 
-  observe.pre(
-    () => [hand, handContext.enabled],
-    ([input, enabled]) => {
-      if (input === undefined) return
-
-      const removeHandlers = () => {
-        input.hand.removeEventListener('pinchstart', handlePointerDown)
-        input.hand.removeEventListener('pinchend', handlePointerUp)
-        input.hand.removeEventListener('pinchend', handleClick)
+  $effect.pre(() => {
+    if (handContext.sourceType !== 'controller') return
+    if (!enabled.current) return
+    return addSubscriber({
+      type: 'controller',
+      handedness,
+      callbacks: {
+        onselectstart: handlePointerDown as never,
+        onselectend: handlePointerUp as never,
+        onselect: handleClick as never
       }
+    })
+  })
 
-      if (enabled) {
-        input.hand.addEventListener('pinchstart', handlePointerDown)
-        input.hand.addEventListener('pinchend', handlePointerUp)
-        input.hand.addEventListener('pinchend', handleClick)
-
-        return removeHandlers
-      } else {
-        removeHandlers()
-        return
+  $effect.pre(() => {
+    if (handContext.sourceType !== 'hand') return
+    if (!enabled.current) return
+    return addSubscriber({
+      type: 'hand',
+      handedness,
+      callbacks: {
+        onpinchstart: handlePointerDown as never,
+        onpinchend: ((event: Event) => {
+          handlePointerUp(event)
+          handleClick(event)
+        }) as never
       }
-    }
-  )
-
-  observe.pre(
-    () => [isPresenting.current, handContext.enabled],
-    ([isPresenting, $enabled]) => {
-      if (isPresenting && $enabled) {
-        start()
-      } else {
-        stop()
-      }
-    }
-  )
+    })
+  })
 }

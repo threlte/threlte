@@ -2,15 +2,17 @@
   import { T } from '@threlte/core'
   import { Gizmo, TrackballControls } from '@threlte/extras'
 
-  import { BoxGeometry, MeshStandardMaterial } from 'three'
+  interface Props {
+    staticMoving: boolean
+    noRotate: boolean
+    rotateSpeed: number
+    noZoom: boolean
+    zoomSpeed: number
+    noPan: boolean
+    panSpeed: number
+  }
 
-  export let staticMoving: boolean
-  export let noRotate: boolean
-  export let rotateSpeed: number
-  export let noZoom: boolean
-  export let zoomSpeed: number
-  export let noPan: boolean
-  export let panSpeed: number
+  let { staticMoving, noRotate, rotateSpeed, noZoom, zoomSpeed, noPan, panSpeed }: Props = $props()
 </script>
 
 <T.PerspectiveCamera
@@ -39,8 +41,7 @@
 
 <T.GridHelper args={[10, 10]} />
 
-<T.Mesh
-  position.y={1}
-  geometry={new BoxGeometry(2, 2, 2)}
-  material={new MeshStandardMaterial()}
-/>
+<T.Mesh position.y={1}>
+  <T.BoxGeometry args={[2, 2, 2]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>

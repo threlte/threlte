@@ -48,9 +48,9 @@
 </script>
 
 <svelte:window
-  on:keydown={onKeyDown}
-  on:keyup={onKeyUp}
-  on:keypress={onKeyPress}
+  onkeydown={onKeyDown}
+  onkeyup={onKeyUp}
+  onkeypress={onKeyPress}
 />
 
 {@render children?.({

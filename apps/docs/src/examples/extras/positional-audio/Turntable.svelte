@@ -96,6 +96,7 @@
     <Edges
       scale={1.001}
       color="black"
+      raycast={() => null}
     />
   </T.Mesh>
 
@@ -124,7 +125,10 @@
           transparent
           opacity={0.65}
         />
-        <Edges color="white" />
+        <Edges
+          color="white"
+          raycast={() => null}
+        />
       </T.Mesh>
     {/if}
   </T.Group>
@@ -158,6 +162,7 @@
       <Edges
         color="black"
         thresholdAngle={80}
+        raycast={() => null}
       />
     </T.Mesh>
   </T.Group>

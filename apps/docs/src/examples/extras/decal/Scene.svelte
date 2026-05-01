@@ -22,18 +22,23 @@
   let position = $state<Vector3Tuple>([0.5, 0, 0.5])
 
   let current = 0
-  setInterval(() => {
-    current += 1
-    current %= bodies.length
-    const body = bodies[current]
 
-    body?.setLinvel({ x: 0, y: 0, z: 0 }, true)
-    body?.setAngvel({ x: 0, y: 0, z: 0 }, true)
-    body?.setTranslation(
-      { x: (Math.random() - 0.5) * 0.1, y: 5, z: (Math.random() - 0.5) * 0.1 },
-      true
-    )
-  }, 400)
+  $effect(() => {
+    const intervalId = setInterval(() => {
+      current += 1
+      current %= bodies.length
+      const body = bodies[current]
+
+      body?.setLinvel({ x: 0, y: 0, z: 0 }, true)
+      body?.setAngvel({ x: 0, y: 0, z: 0 }, true)
+      body?.setTranslation(
+        { x: (Math.random() - 0.5) * 0.1, y: 5, z: (Math.random() - 0.5) * 0.1 },
+        true
+      )
+    }, 400)
+
+    return clearInterval(intervalId)
+  })
 </script>
 
 <T.PerspectiveCamera
@@ -91,7 +96,7 @@
   {/if}
 </T.Mesh>
 
-{#each { length: 20 } as _, index (index)}
+{#each { length: 20 }, index (index)}
   <RigidBody
     bind:rigidBody={bodies[index]}
     oncreate={(ref) => {

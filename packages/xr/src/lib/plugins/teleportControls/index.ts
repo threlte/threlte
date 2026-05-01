@@ -1,3 +1,4 @@
+import { Raycaster } from 'three'
 import { currentWritable, observe } from '@threlte/core'
 import {
   createTeleportContext,
@@ -9,9 +10,8 @@ import {
 import { injectTeleportControlsPlugin } from './plugin.svelte.js'
 import { setHandContext } from './context.js'
 import { setupTeleportControls } from './setup.svelte.js'
+import { defaultComputeFunction } from './compute.js'
 import { teleportState } from '../../internal/state.svelte.js'
-
-let controlsCounter = 0
 
 export interface TeleportControlsOptions {
   enabled?: boolean
@@ -35,22 +35,19 @@ export const teleportControls = (
 ) => {
   if (useTeleportControls() === undefined) {
     injectTeleportControlsPlugin()
-
-    createTeleportContext(options?.compute)
+    createTeleportContext()
   }
 
   const context = useTeleportControls()
 
   if (getHandContext(handedness) === undefined) {
-    const enabled = options?.enabled ?? true
-
-    controlsCounter += enabled ? 1 : -1
-
     const ctx: HandContext = {
       hand: handedness,
       active: currentWritable(false),
-      enabled: currentWritable(enabled),
-      hovered: currentWritable(undefined)
+      enabled: currentWritable(options?.enabled ?? true),
+      hovered: currentWritable(undefined),
+      raycaster: new Raycaster(),
+      compute: options?.compute ?? defaultComputeFunction
     }
 
     setHandContext(handedness, ctx)
@@ -63,8 +60,7 @@ export const teleportControls = (
   observe.pre(
     () => [handContext.enabled],
     ([enabled]) => {
-      controlsCounter += enabled ? 1 : -1
-      teleportState[handedness].enabled = controlsCounter > 0
+      teleportState[handedness].enabled = enabled
     }
   )
 

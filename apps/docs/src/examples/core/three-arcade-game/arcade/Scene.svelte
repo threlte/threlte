@@ -4,33 +4,29 @@
   import { cubicInOut } from 'svelte/easing'
   import { Spring, Tween } from 'svelte/motion'
   import { Color, Object3D, PerspectiveCamera, Scene } from 'three'
+  import { useArcadeControls } from '../game/controls.svelte'
   import { game } from '../game/Game.svelte'
   import Lights from './Lights.svelte'
   import Machine from './Machine.svelte'
   import { Button, StickPosition } from './types'
 
   const { scene } = useThrelte()
+  const controls = useArcadeControls()
 
-  let leftPressed = $state(false)
-  let rightPressed = $state(false)
-  let spacePressed = $state(false)
+  const left = controls.action('left')
+  const right = controls.action('right')
+  const advance = controls.action('advance')
 
   let joystick = $derived.by(() => {
-    if (leftPressed && !rightPressed) {
+    if (left.pressed && !right.pressed) {
       return StickPosition.Left
-    } else if (!leftPressed && rightPressed) {
+    } else if (!left.pressed && right.pressed) {
       return StickPosition.Right
     } else {
       return StickPosition.Idle
     }
   })
-  let button = $derived.by(() => {
-    if (spacePressed) {
-      return Button.Pressed
-    } else {
-      return Button.Idle
-    }
-  })
+  let button = $derived(advance.pressed ? Button.Pressed : Button.Idle)
 
   const machineIsOff = $derived(game.state == 'off' ? true : false)
 
@@ -89,31 +85,6 @@
     screenFocused = !screenFocused
   }
 
-  const onKeyUp = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      leftPressed = false
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      rightPressed = false
-    } else if (e.key === ' ') {
-      spacePressed = false
-    }
-  }
-
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== ' ') return
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      leftPressed = true
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      rightPressed = true
-    } else if (e.key === ' ') {
-      spacePressed = true
-    }
-  }
-
   $effect(() => {
     cameraTargetPos.set(
       screenFocused
@@ -154,11 +125,6 @@
     scene.background = new Color(backgroundColor.current)
   })
 </script>
-
-<svelte:window
-  on:keydown={onKeyDown}
-  on:keyup={onKeyUp}
-/>
 
 <T.Scene
   oncreate={(ref: Scene) => {
