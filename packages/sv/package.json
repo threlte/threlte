@@ -24,8 +24,16 @@
   "files": [
     "src"
   ],
+  "scripts": {
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
   "dependencies": {
     "sv": "^0.12.4"
+  },
+  "devDependencies": {
+    "prettier": "catalog:",
+    "prettier-plugin-svelte": "catalog:"
   },
   "publishOverrides": {
     "files": [

@@ -885,6 +885,13 @@ importers:
       sv:
         specifier: ^0.12.4
         version: 0.12.4
+    devDependencies:
+      prettier:
+        specifier: 'catalog:'
+        version: 3.8.1
+      prettier-plugin-svelte:
+        specifier: 'catalog:'
+        version: 3.5.1(prettier@3.8.1)(svelte@5.53.6)
 
   packages/theatre:
     dependencies:
