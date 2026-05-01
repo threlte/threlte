@@ -188,8 +188,10 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 - [<Controller>](https://threlte.xyz/previews/pr-1751/docs/reference/xr/controller)
 - [<Hand>](https://threlte.xyz/previews/pr-1751/docs/reference/xr/hand)
 - [<Headset>](https://threlte.xyz/previews/pr-1751/docs/reference/xr/headset)
+- [<XROrigin>](https://threlte.xyz/previews/pr-1751/docs/reference/xr/xr-origin)
 - [pointerControls](https://threlte.xyz/previews/pr-1751/docs/reference/xr/pointer-controls)
 - [teleportControls](https://threlte.xyz/previews/pr-1751/docs/reference/xr/teleport-controls)
+- [touchControls](https://threlte.xyz/previews/pr-1751/docs/reference/xr/touch-controls)
 - [useXR](https://threlte.xyz/previews/pr-1751/docs/reference/xr/use-xr)
 - [useController](https://threlte.xyz/previews/pr-1751/docs/reference/xr/use-controller)
 - [useHand](https://threlte.xyz/previews/pr-1751/docs/reference/xr/use-hand)
@@ -197,6 +199,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 - [useHeadset](https://threlte.xyz/previews/pr-1751/docs/reference/xr/use-headset)
 - [useHitTest](https://threlte.xyz/previews/pr-1751/docs/reference/xr/use-hit-test)
 - [useTeleport](https://threlte.xyz/previews/pr-1751/docs/reference/xr/use-teleport)
+- [useXROrigin](https://threlte.xyz/previews/pr-1751/docs/reference/xr/use-xr-origin)
 
 ### @threlte/flex
 

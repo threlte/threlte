@@ -1,0 +1,1 @@
+import{ay as c,g as i,k as n,ao as f,M as u,az as s,q as o}from"./runtime.Blah4U0_.js";function k(a){let e=0,r=n(0),t;return()=>{c()&&(i(r),f(()=>(e===0&&(t=u(()=>a(()=>s(r)))),e+=1,()=>{o(()=>{e-=1,e===0&&(t?.(),t=void 0,s(r))})})))}}export{k as c};
