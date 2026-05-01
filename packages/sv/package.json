@@ -1,0 +1,46 @@
+{
+  "name": "@threlte/sv",
+  "version": "0.1.0",
+  "description": "sv add-on for threlte",
+  "keywords": [
+    "sv",
+    "sv-add",
+    "svelte"
+  ],
+  "homepage": "https://threlte.xyz",
+  "bugs": {
+    "url": "https://github.com/threlte/threlte/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/threlte/threlte.git",
+    "directory": "packages/sv"
+  },
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "src"
+  ],
+  "scripts": {
+    "lint": "prettier --check .",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "sv": "^0.12.4"
+  },
+  "devDependencies": {
+    "prettier": "catalog:",
+    "prettier-plugin-svelte": "catalog:"
+  },
+  "publishOverrides": {
+    "files": [
+      "dist"
+    ],
+    "exports": {
+      ".": "./dist/index.js"
+    }
+  }
+}
