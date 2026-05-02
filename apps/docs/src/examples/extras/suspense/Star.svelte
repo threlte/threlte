@@ -5,7 +5,8 @@
 
   let positionX = Math.random() * 100 - 50
   let positionY = Math.random() * 100 - 50
-  let positionZ = 100
+
+  let positionZ = $state(Math.random() * 100 - 50)
 
   const colors = ['#FFF09E', '#B8DFFF', '#CADBFF', '#FFEBBE']
 
@@ -14,7 +15,11 @@
 
   useTask((delta) => {
     const f = 1 / 60 / delta
-    positionZ -= 10 * f
+    positionZ -= 15 * f
+
+    if (positionZ < -100) {
+      positionZ = 100
+    }
   })
 </script>
 
