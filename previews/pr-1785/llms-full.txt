@@ -5999,6 +5999,8 @@ URL: https://threlte.xyz/previews/pr-1785/docs/reference/xr/button-ar
 
 `<ARButton />` is an HTML `<button />` that can be used to init an AR session. It will also display info about browser support.
 
+<Example path="xr/ar-button" />
+
 ---
 
 ## <XRButton>
@@ -6156,6 +6158,73 @@ Like a [Portal](/docs/reference/extras/portal), you can place it anywhere in you
 
 ---
 
+## <XROrigin>
+
+Package: @threlte/xr  
+URL: https://threlte.xyz/previews/pr-1785/docs/reference/xr/xr-origin
+
+`<XROrigin />` represents the position of the XR user's feet in the scene. The XR camera is parented to the origin, and any `<Controller>` / `<Hand>` components nested inside attach here instead of the scene root. Transforming the origin (position, rotation, scale) transforms the user — useful for teleportation, dolly rigs, and resizing the user.
+
+Only one `<XROrigin>` may be mounted within a given [`<XR>`](/docs/reference/xr/xr). Mounting multiple origins in the same XR tree throws.
+
+```svelte
+<script>
+  import { XR, XROrigin, Controller, Hand } from '@threlte/xr'
+</script>
+
+<XR>
+  <XROrigin
+    position={[0, 0, 5]}
+    rotation.y={Math.PI}
+  >
+    <Controller left />
+    <Controller right />
+    <Hand left />
+    <Hand right />
+  </XROrigin>
+</XR>
+```
+
+Without `<XROrigin>`, controllers and hands continue to attach to the scene root.
+
+## Dolly rig
+
+Because `<XROrigin>` contains a regular `THREE.Group`, it can be placed inside any transformed parent. Moving that parent moves the user:
+
+```svelte
+<T.Group bind:ref={dolly}>
+  <XROrigin>
+    <Controller left />
+    <Controller right />
+  </XROrigin>
+</T.Group>
+```
+
+## Resizing
+
+Scaling the origin scales the user relative to the scene.
+
+```svelte
+<XROrigin scale={miniature ? 0.1 : 1}>
+  <Controller left />
+  <Controller right />
+</XROrigin>
+```
+
+## Interaction with `useTeleport`
+
+When used inside `<XROrigin>`, [`useTeleport`](/docs/reference/xr/use-teleport) translates the origin group directly. When used without an origin, it falls back to mutating the underlying `XRReferenceSpace`.
+
+<Example path="xr/xr-origin" />
+
+This example is a good regression test for room-scale teleportation. `<XROrigin>` is mounted inside a rotated parent rig, and clicking a pad calls `useTeleport` with a fixed world-space destination. Walk away from the middle of your playspace before teleporting: the cyan feet marker should still land in the center of the selected pad.
+
+## Accessing the origin
+
+Use [`useXROrigin`](/docs/reference/xr/use-xr-origin) to read the current XR tree's origin state from a child component.
+
+---
+
 ## <Collider>
 
 Package: @threlte/rapier  
@@ -6244,6 +6313,20 @@ While a controller or hand is pointed at this mesh...
 - `pointerdown` fires when a primary action begins, and `pointerup` fires when it ends.
 - `pointerover` and `pointerout` fire when the ray of the pointing device is moved onto an object, or onto one of its children. It bubbles, meaning it can trigger on the object that the pointer is over or any of its ancestor objects.
 - `pointerenter` and `pointerleave` fire when the ray of the pointing device enters / leaves the boundaries of an object, and does not bubble. It only triggers on the exact element the pointer has entered / left.
+
+Each controller/hand fires these events **independently**. If both hands hover the same object, you'll receive `pointerenter` twice — once with `event.handedness === 'left'` and once with `'right'`. When one hand stops hovering, its `pointerleave` fires even if the other hand is still on the object. Apps that need "is any hand hovering?" should track per-hand state and aggregate:
+
+```svelte
+<script>
+  const hovering = $state({ left: false, right: false })
+  const isHovered = $derived(hovering.left || hovering.right)
+</script>
+
+<T.Mesh
+  onpointerenter={(e) => (hovering[e.handedness] = true)}
+  onpointerleave={(e) => (hovering[e.handedness] = false)}
+/>
+```
 
 To replace the default ray and cursor that are created by the plugin, the following snippets can be added to a `<Controller>` or a `<Hand>`:
 
@@ -6392,6 +6475,122 @@ The resulting colliders can be transformed (i.e. positioned, rotated and scaled)
 <small>
   Model: Battle Damaged Sci-fi Helmet by [theblueturtle\_](https://sketchfab.com/theblueturtle_)
 </small>
+
+---
+
+## touchControls
+
+Package: @threlte/xr  
+URL: https://threlte.xyz/previews/pr-1785/docs/reference/xr/touch-controls
+
+The `touchControls` plugin adds proximity-based pointer events driven by a hand joint — "poke to press" interactions, as opposed to the ray-based `pointerControls`. When the tracked joint (by default the index fingertip) enters an object's bounding volume, hover events fire; when it gets closer than a down-radius threshold, pointerdown/pointerup events fire. This plugin only works with `<Hands>`.
+
+<Example path="xr/touch-controls" />
+
+```svelte
+<script>
+  import { touchControls } from '@threlte/xr'
+
+  touchControls('left')
+  touchControls('right')
+</script>
+```
+
+Any mesh **within this component and all child components** will receive touch-style pointer events when the hand's index fingertip is within the hover radius.
+
+```svelte
+<T.Mesh
+  onpointerenter={() => console.log('finger near')}
+  onpointerleave={() => console.log('finger away')}
+  onpointerdown={() => console.log('touching')}
+  onclick={() => console.log('pressed and released')}
+>
+  <T.BoxGeometry args={[0.1, 0.1, 0.1]} />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+## Options
+
+| Option        | Default              | Description                                                                         |
+| ------------- | -------------------- | ----------------------------------------------------------------------------------- |
+| `enabled`     | `true`               | Whether the plugin is active for this hand.                                         |
+| `joint`       | `'index-finger-tip'` | Which hand joint to track. Any [`HandJoints`](/docs/reference/xr/hand-joints) name. |
+| `hoverRadius` | `0.03` (3 cm)        | Distance at which an object starts receiving hover events.                          |
+| `downRadius`  | `0.01` (1 cm)        | Distance below which a hover transitions to `pointerdown`.                          |
+| `fixedStep`   | `1 / 40`             | Interval at which joint positions are polled and intersections are recomputed.      |
+
+```svelte
+<script>
+  import { touchControls } from '@threlte/xr'
+
+  const { enabled } = touchControls('right', {
+    joint: 'thumb-tip',
+    hoverRadius: 0.05,
+    downRadius: 0.015
+  })
+</script>
+```
+
+## Available events
+
+```svelte
+<T.Mesh
+  onpointerenter={(e) => console.log('enter')}
+  onpointerleave={(e) => console.log('leave')}
+  onpointerdown={(e) => console.log('down')}
+  onpointerup={(e) => console.log('up')}
+  onpointermove={(e) => console.log('move')}
+  onclick={(e) => console.log('click')}
+  onpointermissed={(e) => console.log('missed')}
+/>
+```
+
+- `pointerenter` / `pointerleave` fire when the joint crosses the `hoverRadius` threshold for an object.
+- `pointerdown` / `pointerup` fire when the joint crosses the `downRadius` threshold.
+- `click` fires immediately after every `pointerup` — there's no distance or time threshold beyond crossing back above the down radius.
+- `pointermove` fires every tick while hovering.
+- `pointermissed` fires on click for any interactive object not hit at down time.
+
+Each hand fires events independently — just like `pointerControls`. See the pattern in [pointerControls](/docs/reference/xr/pointer-controls#available-events).
+
+## Intersection model
+
+Internally, touchControls is calculating during each tick, for every interactive mesh:
+
+1. **Broad phase**: reject if the joint is further than `hoverRadius + boundingSphere.radius` from the object's world-space bounding sphere center.
+2. **Narrow phase**: transform the joint into the mesh's local space, clamp to the local AABB (`boundingBox.clampPoint`), project back to world, and measure distance. This respects rotation and non-uniform scale exactly.
+
+The reported `event.point` is the closest point on the mesh's oriented bounding box. For very concave meshes consider wrapping interactive children in simpler colliders.
+
+### Pointer capture
+
+`pointerdown` captures the pressed object. `pointerup` and `click` always fire on that captured target, even if the finger moves off the object before release.
+
+## Composing with other plugins
+
+`touchControls` can coexist with `pointerControls` and `teleportControls`. A single mesh with `onpointerenter` will be interactive to all active plugins — each fires its own events independently.
+
+```svelte
+<script>
+  import { pointerControls, touchControls } from '@threlte/xr'
+
+  pointerControls('left')
+  pointerControls('right')
+  touchControls('left')
+  touchControls('right')
+</script>
+```
+
+## Accessing the pointer
+
+Like `pointerControls`, the returned object exposes:
+
+```ts
+const { enabled, hovered } = touchControls('left')
+// enabled — currentWritable(boolean)
+// hovered — Map<string, IntersectionEvent>  (internal hover tracking)
+```
 
 ---
 
@@ -9017,6 +9216,46 @@ useTask((delta) => {
   vec3.z += delta
   teleport(vec3)
 })
+```
+
+### Interaction with `<XROrigin>`
+
+When `useTeleport` is called inside [`<XROrigin>`](/docs/reference/xr/xr-origin), the origin group is translated directly — the user's feet land at the target position, and their room-scale offset from the origin is preserved.
+
+Without an `<XROrigin>`, the underlying `XRReferenceSpace` is mutated to compensate for the viewer's current position so the feet land at the target regardless of where the user has walked in their physical space.
+
+---
+
+## useXROrigin
+
+Package: @threlte/xr  
+URL: https://threlte.xyz/previews/pr-1785/docs/reference/xr/use-xr-origin
+
+Returns XR-scoped origin state for the current `<XR>` tree.
+
+`origin.current` is the mounted `<XROrigin>` group when one exists, otherwise `undefined`.
+
+This hook must be called within a descendant of [`<XR>`](/docs/reference/xr/xr).
+
+```svelte
+<script>
+  import { useXROrigin } from '@threlte/xr'
+
+  const origin = useXROrigin()
+
+  if (origin.current !== undefined) {
+    origin.current.position.set(0, 0, 5)
+  }
+</script>
+```
+
+Primarily useful for libraries or custom hooks that need to reason about whether the current XR tree has an active `<XROrigin>` (e.g. to decide between moving the origin vs. mutating the XR reference space).
+
+### Signature
+
+```ts
+// { current: THREE.Group | undefined }
+const origin = useXROrigin()
 ```
 
 ---
@@ -11714,8 +11953,8 @@ The grid type can be selected by setting the `type` parameter. The available gri
 
 - `grid`: represents a standard box grid. It does not require any additional properties. (default)
 - `lines`: grid consisting of lines that align along a single world axis. You specify this axis by providing either `x`, `y` or `z` to the `axis` property.
-- `circular`: grid formed of concentric circles. It includes a `maxRadius` property that sets the maximum growth extent for the grid. A value of `0` removes this limit, allowing the grid to occupy the entire geometry, even if it results in incomplete circles.
-- `polar`: similar to the circular type, but it also features lines that subdivide the concentric circles. It too has a `maxRadius` property. Additionally, it has two properties for specifying dividers: `cellDivider` and `sectionDivider`. These determine how many lines will segment the circle into various sectors. For example, 2 lines result in 4 segments at 90° each, while 6 lines create 12 sectors at 30° apiece.
+- `circular`: grid formed of concentric circles. It includes a `maxRadius` property that sets the maximum world-space radius for the grid. A value of `0` removes this limit, allowing the grid to occupy the entire geometry, even if it results in incomplete circles.
+- `polar`: similar to the circular type, but it also features lines that subdivide the concentric circles. It too has a `maxRadius` property. Additionally, it has two properties for specifying dividers: `cellDividers` and `sectionDividers`. These determine how many lines will segment the circle into various sectors. For example, 2 lines result in 4 segments at 90° each, while 6 lines create 12 sectors at 30° apiece.
 
 | Grid                                               | Lines                                               | Circular                                               | Polar                                               |
 | -------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------ | --------------------------------------------------- |
@@ -15226,6 +15465,400 @@ assert(target.depthTexture.image.height === 1)
 
 ---
 
+## useFollow
+
+Package: @threlte/extras  
+URL: https://threlte.xyz/previews/pr-1785/docs/reference/extras/use-follow
+
+`useFollow` teaches a [`<CameraControls>`](/docs/reference/extras/camera-controls)
+instance to track a moving target. The `<CameraControls>` handles orbiting, collision
+avoidance, and damping. The hook handles the follow: it updates the
+controls' target to match your character (or vehicle, or any `Object3D`)
+each frame, and adds follow-specific behaviors like `lookAtOffset`, dead
+zones, and look-ahead.
+
+<Example path="extras/use-follow" />
+
+```svelte
+<script lang="ts">
+  import { Group } from 'three'
+  import { T } from '@threlte/core'
+  import { CameraControls, useFollow, type CameraControlsRef } from '@threlte/extras'
+
+  let controls = $state.raw<CameraControlsRef>()
+
+  let character = new Group()
+
+  const follow = useFollow(() => ({
+    target: character,
+    controls,
+    lookAtOffset: [0, 1, 0]
+  }))
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[0, 3, 6]}
+/>
+
+<CameraControls bind:ref={controls} />
+
+<T is={character}>
+  <!-- character mesh -->
+</T>
+```
+
+## Options
+
+Because `useFollow` is a layer on `<CameraControls>`, **camera behavior is
+configured on the component, follow behavior on the hook.**
+
+| Belongs on `<CameraControls>`         | Belongs on `useFollow` |
+| ------------------------------------- | ---------------------- |
+| `smoothTime` (orbit/zoom damping)     | `lookAtOffset`         |
+| `minDistance` / `maxDistance` (zoom)  | `deadZone`             |
+| `minPolarAngle` / `maxPolarAngle`     | `lookAhead`            |
+| `minAzimuthAngle` / `maxAzimuthAngle` | `followSmoothTime`     |
+| `colliderMeshes` (collision)          | `trackRotation`        |
+| `pointerLock` (input mode)            | `target`               |
+
+Everything on the left is already documented on
+[`<CameraControls>`](/docs/reference/extras/camera-controls) — set it as a
+prop and `useFollow` will cooperate.
+
+## lookAtOffset
+
+Offset added to the target's world position before it's sent to the
+controls. Use it to look at the character's head or chest rather than their
+feet:
+
+```ts
+const follow = useFollow(() => ({
+  target,
+  controls,
+  lookAtOffset: [0, 1.6, 0]
+}))
+```
+
+## Dead zone
+
+The target may drift this far from the currently tracked position (in
+camera-space right/up axes) before the camera starts to follow. Any axis
+left at `0` has no dead zone on that axis.
+
+```ts
+const follow = useFollow(() => ({
+  target,
+  controls,
+  deadZone: [0.5, 0.3]
+}))
+```
+
+## Look-Ahead
+
+Shift the tracked point in the target's direction of motion, expressed in
+seconds of preview. `0.3` means "place the camera where the target will be
+in 300 ms at its current velocity."
+
+```ts
+const follow = useFollow(() => ({
+  target,
+  controls,
+  lookAhead: 0.3
+}))
+```
+
+The velocity that drives `lookAhead` is itself smoothed (default time
+constant `0.15` s) so the offset ramps in when the character starts moving
+and eases out when they stop, instead of snapping. Tune it with
+`lookAheadSmoothTime` — lower for a snappier response, higher for a softer
+ease.
+
+```ts
+const follow = useFollow(() => ({
+  target,
+  controls,
+  lookAhead: 0.4,
+  lookAheadSmoothTime: 0.25
+}))
+```
+
+## followSmoothTime
+
+Seconds of lag between the character's movement and the camera's position,
+for a trailing / cinematic follow. `0` (the default) snaps the camera
+lock-step with the character.
+
+Only the tracked base position is smoothed — `lookAtOffset` and `lookAhead`
+are added unsmoothed on top, and the smoothed target is passed to
+`CameraControls` before its own update runs, so:
+
+- Adjusting `lookAtOffset` at runtime is snappy — the offset applies
+  instantly without dragging through the smoothing window.
+- Collision (`colliderMeshes`), zoom limits, and other `CameraControls`
+  features apply correctly to the smoothed pose.
+- User orbit/zoom input still smooths via `CameraControls`' own
+  `smoothTime`.
+
+```ts
+const follow = useFollow(() => ({
+  target,
+  controls,
+  followSmoothTime: 0.2
+}))
+```
+
+## trackRotation
+
+Drive the `CameraControls` azimuth from the target's Y-axis world rotation so
+the camera turns with the character. User orbit input on the horizontal axis is effectively
+overridden while this is on; polar orbit and zoom still work if enabled.
+
+```ts
+const follow = useFollow(() => ({
+  target,
+  controls,
+  trackRotation: true,
+  trackRotationSmoothTime: 0.25
+}))
+```
+
+`trackRotationSmoothTime` tunes how quickly the camera eases into the
+character's heading. `0` (the default) locks the azimuth to the target's
+yaw every frame; higher values ramp the rotation in.
+
+`trackRotationOffset` shifts the azimuth after the target's yaw is applied.
+Use `Math.PI` to sit the camera behind a character whose local `+Z` axis is
+its forward (the common convention, e.g. when
+`character.rotation.y = Math.atan2(velocity.x, velocity.z)`). Use `0` for a
+character whose local `-Z` is forward.
+
+**Use `getTargetDirection`, not `getInputDirection`, with `trackRotation`.**
+Camera-relative input (`W = away from camera`) combined with rotation tracking
+forms a feedback loop — the character tries to face away from the camera,
+the camera follows the character, "away from camera" is now a new direction,
+and the character spins. See [getTargetDirection](#gettargetdirection).
+
+Don't combine `trackRotation` with `minAzimuthAngle`/`maxAzimuthAngle`
+limits on `<CameraControls>` — the tracker will fight the limits each frame.
+
+## getInputDirection
+
+A helper that projects a 2D input onto the camera's horizontal basis — call
+it from your movement task to make `WASD` / stick input always feel correct
+regardless of how the user has orbited.
+
+```ts
+follow.getInputDirection(right, forward, out)
+```
+
+- `right` — sideways input amount (positive = to camera's right).
+- `forward` — forward input amount (positive = away from the camera).
+- `out` — a `Vector3` representing the world-space direction. Length of the vector reflects the
+  magnitude of `(right, forward)`, so diagonal input gives a diagonal world
+  direction.
+
+```ts
+const worldMove = new Vector3()
+
+useTask((delta) => {
+  const move = input.vector('moveLeft', 'moveRight', 'moveForward', 'moveBack')
+  follow.getInputDirection(move.x, -move.y, worldMove)
+  character.position.addScaledVector(worldMove, speed * delta)
+})
+```
+
+`useInputMap`'s `input.vector` returns `y = -1` when "forward" is pressed, so
+pass `-move.y` as the forward amount.
+
+## getTargetDirection
+
+The target-relative counterpart to `getInputDirection` — projects a 2D input
+onto the target's own horizontal basis (`forward` follows the target's local
+`+Z` axis, `right` follows its local `+X`). Use this for tank-style controls,
+or whenever `trackRotation` is on:
+
+```ts
+follow.getTargetDirection(right, forward, out)
+```
+
+With `trackRotation`, a typical tank input loop looks like:
+
+```ts
+useTask((delta) => {
+  // A/D directly rotate the character…
+  character.rotation.y -= input.axis('moveLeft', 'moveRight') * turnSpeed * delta
+  // …W/S translate along the character's current forward.
+  follow.getTargetDirection(0, -input.axis('moveForward', 'moveBack'), worldMove)
+  character.position.addScaledVector(worldMove, speed * delta)
+})
+```
+
+No yaw feedback, because the input no longer depends on the camera.
+
+## Task ordering
+
+`useFollow` runs its update in `task`, in `mainStage`. It sets the controls
+target (with `followSmoothTime` smoothing baked in) and azimuth, ahead of
+`<CameraControls>`' own update in the same stage. Schedule character movement
+**before** `task` so the camera sees the final target position for the frame.
+
+```ts
+const follow = useFollow(() => ({
+  target,
+  controls,
+  lookAtOffset: [0, 1.6, 0]
+}))
+
+useTask(
+  () => {
+    // run your movement
+  },
+  { before: follow.task }
+)
+```
+
+## Common patterns
+
+### Third-person character
+
+Mouse orbit + zoom handled by `<CameraControls>`; WASD moves the character;
+`useFollow` keeps the camera aimed at the character's head.
+
+Movement needs to be **camera-relative** so `W` always means "away from
+camera" regardless of how the user has orbited. Use
+[`follow.getInputDirection`](#getinputdirection) to convert the 2D input
+vector into a world-space direction aligned with the camera's horizontal
+basis.
+
+```svelte
+<script lang="ts">
+  import { Vector3, Group } from 'three'
+  import { T, useTask } from '@threlte/core'
+  import {
+    CameraControls,
+    useFollow,
+    useInputMap,
+    useKeyboard,
+    type CameraControlsRef
+  } from '@threlte/extras'
+
+  let controls = $state.raw<CameraControlsRef>()
+
+  let character = new Group()
+
+  const keyboard = useKeyboard()
+  const input = useInputMap(
+    ({ key }) => ({
+      moveLeft: [key('a')],
+      moveRight: [key('d')],
+      moveForward: [key('w')],
+      moveBack: [key('s')]
+    }),
+    { keyboard }
+  )
+
+  const follow = useFollow(() => ({
+    target: character,
+    controls,
+    lookAtOffset: [0, 1, 0]
+  }))
+
+  const worldMove = new Vector3()
+
+  useTask(
+    (delta) => {
+      if (!character) return
+      const move = input.vector('moveLeft', 'moveRight', 'moveForward', 'moveBack')
+      follow.getInputDirection(move.x, -move.y, worldMove)
+      character.position.addScaledVector(worldMove, 5 * delta)
+    },
+    { after: input.task, before: follow.task }
+  )
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[0, 3, 6]}
+/>
+
+<CameraControls
+  bind:ref={controls}
+  minDistance={2}
+  maxDistance={10}
+  minPolarAngle={0.3}
+  maxPolarAngle={1.5}
+/>
+
+<T is={character}>
+  <T.Mesh>
+    <T.BoxGeometry />
+    <T.MeshStandardMaterial color="orange" />
+  </T.Mesh>
+</T>
+```
+
+### Top-down
+
+Lock the polar and azimuth angles on `<CameraControls>` and the camera
+becomes a pure top-down follower. Orbit input still works within whatever
+limits you allow.
+
+```svelte
+<CameraControls
+  bind:ref={controls}
+  minPolarAngle={0.01}
+  maxPolarAngle={0.01}
+  minAzimuthAngle={0}
+  maxAzimuthAngle={0}
+  minDistance={10}
+  maxDistance={20}
+/>
+```
+
+### Collision avoidance
+
+`<CameraControls>` does a swept collision test against any meshes you hand
+it. Pass the obstacles as `colliderMeshes`:
+
+```svelte
+<script lang="ts">
+  import type { Mesh } from 'three'
+  let walls = $state<Mesh[]>([])
+</script>
+
+<CameraControls
+  bind:ref={controls}
+  colliderMeshes={walls}
+/>
+
+{#each wallData as data, i}
+  <T.Mesh bind:ref={walls[i]}>...</T.Mesh>
+{/each}
+```
+
+No option on `useFollow` is needed — collision is entirely a `CameraControls`
+concern.
+
+### Pointer lock
+
+By default `<CameraControls>` uses click-and-drag to rotate. Flip
+`pointerLock` on the component to switch to mouse-look: one click locks the
+pointer, subsequent movement rotates the camera directly, and `Escape`
+releases the lock.
+
+```svelte
+<CameraControls
+  bind:ref={controls}
+  pointerLock
+/>
+```
+
+Tune rotation speed with `pointerLockSensitivity` (radians per pixel, default
+`0.003`).
+
+---
+
 ## useGamepad
 
 Package: @threlte/extras  
@@ -16238,7 +16871,7 @@ useTask(
 
 ### `target`
 
-The DOM element to listen on. Defaults to `window`, which captures keyboard input
+The DOM element to listen on. Defaults to `window`, which receives keyboard input
 globally regardless of focus. Pass a specific element if you want scoped input:
 
 ```ts
@@ -16246,6 +16879,16 @@ import { useThrelte } from '@threlte/core'
 
 const { dom } = useThrelte()
 const keyboard = useKeyboard(() => ({ target: dom }))
+```
+
+### `capture`
+
+Set to `true` to listen during the capture phase. The default is `false`, so
+focused inputs, overlays, or other descendants can still isolate keyboard
+events with `stopPropagation()`.
+
+```ts
+const keyboard = useKeyboard(() => ({ capture: true }))
 ```
 
 ## Focus Handling
@@ -16776,9 +17419,9 @@ URL: https://threlte.xyz/previews/pr-1785/docs/reference/extras/wireframe
 
 <Example path="extras/wireframe" />
 
-`<Wireframe>` uses barycentric coordinates to generate the wireframe, which requires a non-indexed geometry to create.
+`<Wireframe>` uses barycentric coordinates to generate the wireframe, which requires a non-indexed geometry.
 
-This means that any geometry with a `<Wireframe>` that has indices will be converted to a non-indexed version.
+This means that any geometry with a `<Wireframe>` that has indices will use a cloned, non-indexed version while `<Wireframe>` is mounted.
 
 ## Basic Example
 
