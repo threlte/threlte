@@ -27,8 +27,8 @@
   {#each items as { color, distance }, i}
     {@const detail = items.length - i - 1}
     <T.Mesh {distance}>
-      <T.IcosahedronGeometry
-        args={[1, detail]}
+      <T.IcosahedronGeometry args={[1, detail]} />
+      <T.MeshBasicMaterial
         wireframe
         {color}
       />

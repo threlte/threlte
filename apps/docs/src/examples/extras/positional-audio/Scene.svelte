@@ -32,8 +32,8 @@
 <T.OrthographicCamera
   {zoom}
   makeDefault
+  position={[6, 9, 9]}
   oncreate={(ref) => {
-    ref.position.set(6, 9, 9)
     ref.lookAt(0, 1.5, 0)
   }}
 >

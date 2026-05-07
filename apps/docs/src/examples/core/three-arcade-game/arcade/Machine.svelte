@@ -45,7 +45,21 @@
     screenClicked
   }: Props = $props()
 
-  const { onPointerEnter, onPointerLeave } = useCursor('pointer')
+  const { onPointerEnter, onPointerLeave } = useCursor()
+
+  const stickRotation = Tween.of(
+    () => {
+      if (joystick == StickPosition.Left) {
+        return -15 * MathUtils.DEG2RAD
+      } else if (joystick == StickPosition.Right) {
+        return 15 * MathUtils.DEG2RAD
+      }
+      return 0
+    },
+    {
+      duration: 100
+    }
+  )
 
   const gltf = useGltf<GLTFResult>('/models/ball-game/archade-machine/arcade_machine_own.glb').then(
     (gltf) => {
@@ -59,20 +73,6 @@
     }
   )
   const scanLinesTexture = useTexture('/models/ball-game/archade-machine/textures/scanlines.png')
-
-  const stickRotation = new Tween(0, {
-    duration: 100
-  })
-
-  $effect(() => {
-    if (joystick == StickPosition.Left) {
-      stickRotation.set(-15 * MathUtils.DEG2RAD)
-    } else if (joystick == StickPosition.Right) {
-      stickRotation.set(15 * MathUtils.DEG2RAD)
-    } else {
-      stickRotation.set(0)
-    }
-  })
 </script>
 
 {#await gltf then { nodes, materials }}

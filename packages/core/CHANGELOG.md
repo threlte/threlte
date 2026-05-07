@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.5.12
+
+### Patch Changes
+
+- 50f6ac2: Allow Canvas component dpr property to accept a [min, max] tuple
+
 ## 8.5.11
 
 ### Patch Changes

@@ -45,11 +45,9 @@
     geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3))
   })
 
-  const material = $state(
-    new PointsMaterial({
-      transparent: true
-    })
-  )
+  const material = new PointsMaterial({
+    transparent: true
+  })
 
   const settings = {
     elapsedTime: 0,

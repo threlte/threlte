@@ -34,7 +34,7 @@
     green: 'bg-green hover:bg-green-400'
   }
 
-  const extras = `${paddings[size]} ${textSizes[size]} ${bgColors[color]} ${_class}`
+  const extras = $derived(`${paddings[size]} ${textSizes[size]} ${bgColors[color]} ${_class}`)
 </script>
 
 <a

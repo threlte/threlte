@@ -2,6 +2,7 @@
   import type { Snippet } from 'svelte'
   import { T, type Props } from '@threlte/core'
   import { type Group, MathUtils } from 'three'
+
   interface GroupProps extends Props<Group> {
     children?: Snippet
   }

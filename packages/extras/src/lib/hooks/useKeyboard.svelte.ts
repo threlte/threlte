@@ -37,10 +37,22 @@ const normalize = (key: string) => {
   return k === 'space' ? ' ' : k
 }
 
+const isMetaKey = (key: string) => key === 'meta' || key === 'os'
+
 export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   const keys = new Map<string, KeyState>()
   const pendingDown = new Set<string>()
   const pendingUp = new Set<string>()
+  const metaModifiedKeys = new Set<string>()
+
+  const hasMetaDown = () => {
+    return (
+      pendingDown.has('meta') ||
+      pendingDown.has('os') ||
+      keys.get('meta')?.pressed ||
+      keys.get('os')?.pressed
+    )
+  }
 
   const listeners: Record<KeyboardEventType, Set<KeyboardEventHandler>> = {
     keydown: new Set(),
@@ -61,22 +73,41 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
     const e = event as KeyboardEvent
     for (const fn of listeners.keydown) fn(e)
     if (e.repeat) return
-    pendingDown.add(normalize(e.key))
+
+    const key = normalize(e.key)
+    pendingDown.add(key)
+
+    if (!isMetaKey(key) && (e.metaKey || hasMetaDown())) {
+      metaModifiedKeys.add(key)
+    }
   }
 
   const handleKeyUp = (event: Event) => {
     const e = event as KeyboardEvent
-    pendingUp.add(normalize(e.key))
+    const key = normalize(e.key)
+    pendingUp.add(key)
+    if (isMetaKey(key) && !e.metaKey) {
+      for (const key of metaModifiedKeys) {
+        pendingUp.add(key)
+      }
+      metaModifiedKeys.clear()
+    } else {
+      metaModifiedKeys.delete(key)
+    }
     for (const fn of listeners.keyup) fn(e)
   }
 
   const handleBlur = () => {
     // Release all pressed keys when the window loses focus
+    for (const key of pendingDown) {
+      pendingUp.add(key)
+    }
     for (const [key, state] of keys) {
       if (state.pressed) {
         pendingUp.add(key)
       }
     }
+    metaModifiedKeys.clear()
   }
 
   /**

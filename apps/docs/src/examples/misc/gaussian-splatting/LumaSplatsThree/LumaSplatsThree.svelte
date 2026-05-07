@@ -4,6 +4,7 @@
   import { useSuspense } from '@threlte/extras'
   import type { CubeTexture } from 'three'
   import type { LumaSplatsThreeProps } from './types'
+  import { CubeEnvironment } from '@threlte/extras'
 
   let {
     source,
@@ -15,8 +16,7 @@
     ...rest
   }: LumaSplatsThreeProps = $props()
 
-  const { invalidate, renderer, scene } = useThrelte()
-
+  const { renderer, scene } = useThrelte()
   const { remember } = useCache()
   const suspend = useSuspense()
 
@@ -63,31 +63,10 @@
     { running: () => running }
   )
 
-  $effect(() => {
-    if (!$splats?.[1]) {
-      return
-    }
-
-    const previousEnvironment = scene.environment
-    const previousBackground = scene.background
-    const previousBackgroundBluriness = scene.backgroundBlurriness
-
-    scene.environment = $splats[1]
-    scene.background = $splats[1]
-    scene.backgroundBlurriness = 0.5
-
-    invalidate()
-
-    return () => {
-      scene.environment = previousEnvironment
-      scene.background = previousBackground
-      scene.backgroundBlurriness = previousBackgroundBluriness ?? 0
-      invalidate()
-    }
-  })
+  scene.backgroundBlurriness = 0.5
 </script>
 
-{#if (mode === 'object' || mode === 'object-env') && $splats && $splats[0]}
+{#if (mode === 'object' || mode === 'object-env') && $splats?.[0]}
   <T
     is={$splats[0]}
     oncreate={() => {
@@ -98,4 +77,8 @@
   >
     {@render children?.({ ref: $splats[0] })}
   </T>
+{/if}
+
+{#if $splats?.[1]}
+  <CubeEnvironment texture={$splats[1]} />
 {/if}

@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.15.1
+
+### Patch Changes
+
+- c487de8: Fix keyboard input getting stuck after Meta/Cmd shortcuts when the browser suppresses the modified key's keyup event.
+
 ## 9.15.0
 
 ### Minor Changes

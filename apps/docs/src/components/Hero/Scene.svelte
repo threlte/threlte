@@ -3,7 +3,6 @@
   import { T, useThrelte } from '@threlte/core'
   import { Float, Grid, OrbitControls, RadialGradientTexture } from '@threlte/extras'
   import { SheetObject } from '@threlte/theatre'
-  import { onMount } from 'svelte'
   import AnimatableCube from './AnimatableCube.svelte'
   import AnimatableStarField from './AnimatableStarField.svelte'
   import KeyboardControls from './KeyboardControls.svelte'
@@ -11,6 +10,7 @@
   import ScrollSheet from './ScrollSheet.svelte'
   import { mouseCoordsSpring, springScrollPos } from './scrollPos'
   import { debug } from './state'
+  import { innerWidth } from 'svelte/reactivity/window'
 
   let sheet = $state<ISheet>()
 
@@ -22,23 +22,8 @@
 
   const { scene } = useThrelte()
 
-  let fov = $state(40)
-  onMount(() => {
-    if (window.innerWidth > 640) {
-      fov = 35
-    }
-  })
+  let fov = $derived((innerWidth.current ?? 0 > 640) ? 35 : 40)
 </script>
-
-<svelte:window
-  onresize={() => {
-    if (window.innerWidth > 640) {
-      fov = 35
-    } else {
-      fov = 40
-    }
-  }}
-/>
 
 <T.Group position.x={-mouseCoordsSpring.current.x * 0.6}>
   <ScrollSheet

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
   import { useFBO, useTexture } from '@threlte/extras'
-  import { Group, PerspectiveCamera } from 'three'
+  import { Group, PerspectiveCamera, ShaderMaterial, Texture, Uniform } from 'three'
 
   import { baseFov, scoping, zoomedFov } from '../Controls.svelte'
   import fragmentShader from './scope_fs.glsl?raw'
@@ -24,7 +24,17 @@
     samples: 8
   })
 
-  let aspect = $derived($size.width / $size.height)
+  const uniforms = {
+    viewTexture: new Uniform(renderTarget.texture),
+    reticleTexture: new Uniform<Texture | null>(null),
+    aspect: new Uniform(1)
+  }
+
+  const material = new ShaderMaterial({
+    fragmentShader,
+    vertexShader,
+    uniforms
+  })
 
   useTask(() => {
     if (!scope || !$scoping) return
@@ -44,6 +54,13 @@
   })
 
   const reticleTexture = useTexture('/textures/NightforceScopeReticle2.png')
+
+  $effect(() => {
+    uniforms.reticleTexture.value = $reticleTexture || null
+  })
+  $effect(() => {
+    uniforms.aspect.value = size.current.width / size.current.height
+  })
 </script>
 
 <T.Mesh
@@ -52,21 +69,5 @@
 >
   <T.CircleGeometry args={[1.8]} />
 
-  <T.ShaderMaterial
-    {fragmentShader}
-    {vertexShader}
-    uniforms={{
-      viewTexture: {
-        value: renderTarget.texture
-      },
-      reticleTexture: {
-        value: null
-      },
-      aspect: {
-        value: 1
-      }
-    }}
-    uniforms.reticleTexture.value={$reticleTexture}
-    uniforms.aspect.value={aspect}
-  />
+  <T is={material} />
 </T.Mesh>
