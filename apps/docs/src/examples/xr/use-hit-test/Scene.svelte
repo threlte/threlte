@@ -6,10 +6,11 @@
   const geometry = new CylinderGeometry(0.1, 0.1, 0.2, 32).translate(0, 0.1, 0)
 
   let meshes = $state<Mesh[]>([])
-  let cursors = $state({
+
+  let cursors = {
     left: new Mesh(),
     right: new Mesh()
-  })
+  }
 
   const hands = ['left', 'right'] as const
   type Hands = (typeof hands)[number]
@@ -28,8 +29,6 @@
 
   const handleHitTest = (hand: Hands) => {
     return (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => {
-      if (!cursors[hand]) return
-
       if (hit) {
         cursors[hand].visible = true
         cursors[hand].matrix.copy(hitMatrix)

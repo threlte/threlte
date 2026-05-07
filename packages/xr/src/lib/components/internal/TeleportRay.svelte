@@ -33,6 +33,7 @@
   const positions = new Float32Array(rayDivisions * 3)
   const lineGeometry = new LineGeometry()
   const intersection = $derived(teleportIntersection[handedness])
+  let firstRender = true
 
   const setCurvePoints = (alpha = 0.3) => {
     if (intersection === undefined) return
@@ -51,9 +52,16 @@
     // Create an arc
     rayMidpoint.y += arc
 
-    curve.v0.lerp(rayStart, alpha)
-    curve.v1.lerp(rayMidpoint, alpha)
-    curve.v2.lerp(rayEnd, alpha)
+    if (firstRender) {
+      curve.v0.copy(rayStart)
+      curve.v1.copy(rayMidpoint)
+      curve.v2.copy(rayEnd)
+      firstRender = false
+    } else {
+      curve.v0.lerp(rayStart, alpha)
+      curve.v1.lerp(rayMidpoint, alpha)
+      curve.v2.lerp(rayEnd, alpha)
+    }
 
     for (let i = 0, j = 0; i < rayDivisions; i += 1, j += 3) {
       const t = i / rayDivisions
@@ -65,6 +73,10 @@
 
     lineGeometry.setPositions(positions)
   }
+
+  $effect(() => {
+    if (intersection === undefined) firstRender = true
+  })
 
   useTask(
     () => {

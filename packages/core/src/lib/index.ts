@@ -43,10 +43,13 @@ export { createCacheContext, useCache } from './context/fragments/cache.js'
 export { createCameraContext, useCamera } from './context/fragments/camera.svelte.js'
 export { createDOMContext, useDOM } from './context/fragments/dom.svelte.js'
 export { createDisposalContext, useDisposal } from './context/fragments/disposal.svelte.js'
-export { createParentContext, useParent } from './context/fragments/parent.js'
 export {
-  createParentObject3DContext,
-  useParentObject3D
+  createParentContext_deprecated as createParentContext,
+  useParent_deprecated as useParent
+} from './context/fragments/parent.js'
+export {
+  createParentObject3DContext_deprecated as createParentObject3DContext,
+  useParentObject3D_deprecated as useParentObject3D
 } from './context/fragments/parentObject3D.js'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte.js'
 export { createSceneContext, useScene } from './context/fragments/scene.js'

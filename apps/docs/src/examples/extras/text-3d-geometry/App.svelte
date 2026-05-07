@@ -1,19 +1,21 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import { Checkbox, Pane, Slider, Textarea } from 'svelte-tweakpane-ui'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import Scene from './Scene.svelte'
+  import { MathUtils } from 'three'
 
-  let text = 'Hello\nWorld'
-  let bevelEnabled = true
-  let bevelOffset = 0
-  let bevelSegments = 20
-  let bevelSize = 0.2
-  let bevelThickness = 0.1
-  let curveSegments = 12
-  let depth = 1
-  let size = 5
-  let smooth = 0.1
+  let options = $state({
+    text: 'Hello\nWorld',
+    bevelEnabled: true,
+    bevelOffset: 0,
+    bevelSegments: 20,
+    bevelSize: 0.2,
+    bevelThickness: 0.1,
+    curveSegments: 12,
+    depth: 1,
+    size: 5,
+    smooth: 0.1
+  })
 </script>
 
 <Pane
@@ -21,79 +23,68 @@
   position="fixed"
 >
   <Textarea
-    bind:value={text}
+    bind:value={options.text}
     label="text"
   />
   <Checkbox
     label="bevelEnabled"
-    bind:value={bevelEnabled}
+    bind:value={options.bevelEnabled}
   />
   <Slider
     label="bevelOffset"
-    bind:value={bevelOffset}
+    bind:value={options.bevelOffset}
     min={0}
     max={2}
   />
   <Slider
     label="bevelSegments"
-    bind:value={bevelSegments}
+    bind:value={options.bevelSegments}
     step={1}
     min={0}
     max={50}
   />
   <Slider
     label="bevelSize"
-    bind:value={bevelSize}
+    bind:value={options.bevelSize}
     min={0}
     max={2}
   />
   <Slider
     label="bevelThickness"
-    bind:value={bevelThickness}
+    bind:value={options.bevelThickness}
     min={0}
     max={2}
   />
   <Slider
     label="curveSegments"
-    bind:value={curveSegments}
+    bind:value={options.curveSegments}
     step={1}
     min={0}
     max={50}
   />
   <Slider
     label="depth"
-    bind:value={depth}
+    bind:value={options.depth}
     min={0}
     max={5}
   />
   <Slider
     label="size"
-    bind:value={size}
+    bind:value={options.size}
     min={0}
     max={10}
   />
   <Slider
     label="smooth"
-    bind:value={smooth}
+    bind:value={options.smooth}
     min={0}
-    max={180 * DEG2RAD}
+    max={MathUtils.degToRad(180)}
   />
 </Pane>
 
 <div>
   <Canvas>
-    <Scene
-      {text}
-      {bevelEnabled}
-      {bevelOffset}
-      {bevelSegments}
-      {bevelSize}
-      {bevelThickness}
-      {curveSegments}
-      {depth}
-      {size}
-      {smooth}
-    />
+    <Scene {...options} />
   </Canvas>
 </div>
 

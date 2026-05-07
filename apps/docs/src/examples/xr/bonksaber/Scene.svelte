@@ -2,10 +2,19 @@
   import { Color } from 'three'
   import { T, useThrelte } from '@threlte/core'
   import { Text, Grid, Outlines, VirtualEnvironment, Stars } from '@threlte/extras'
-  import { XR, useXR } from '@threlte/xr'
+  import {
+    XR,
+    useXR,
+    teleportControls,
+    pointerControls,
+    touchControls,
+    Controller,
+    Hand
+  } from '@threlte/xr'
   import Sabers from './Sabers.svelte'
   import Blocks from './Blocks.svelte'
   import Mountains from './Mountains.svelte'
+  import Menu from './Menu.svelte'
   import { Spring } from 'svelte/motion'
 
   const { scene } = useThrelte()
@@ -14,16 +23,31 @@
   scene.environmentIntensity = 2
   scene.background = new Color('#0e1625')
 
-  const spring = new Spring(1, { stiffness: 0.1, damping: 0.5 })
+  teleportControls('left')
+  teleportControls('right')
+  pointerControls('left')
+  pointerControls('right')
+  touchControls('left')
+  touchControls('right')
 
-  $effect.pre(() => {
-    spring.set($isPresenting ? 0 : 1)
-  })
+  let playing = $state(false)
+
+  const spring = Spring.of(() => ($isPresenting ? 0 : 1), { stiffness: 0.1, damping: 0.5 })
 </script>
 
 <XR>
-  <Sabers />
-  <Blocks />
+  {#if playing}
+    <Sabers />
+  {:else}
+    <Controller left />
+    <Controller right />
+    <Hand left />
+    <Hand right />
+  {/if}
+  <Blocks
+    {playing}
+    oncomplete={() => (playing = false)}
+  />
 
   {#snippet fallback()}
     <T.PerspectiveCamera
@@ -35,6 +59,10 @@
     />
   {/snippet}
 </XR>
+
+{#if $isPresenting && !playing}
+  <Menu onstart={() => (playing = true)} />
+{/if}
 
 <Text
   anchorX="center"
@@ -62,7 +90,7 @@
 />
 
 <!-- floor -->
-<T.Mesh>
+<T.Mesh teleportSurface>
   <T.CylinderGeometry args={[2, 2, 0.1, 128]} />
   <T.MeshStandardMaterial
     color="white"

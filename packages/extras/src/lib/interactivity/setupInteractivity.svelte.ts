@@ -3,8 +3,19 @@ import { type InteractivityContext, useInteractivity } from './context.js'
 import type { DomEvent, Intersection, IntersectionEvent } from './types.js'
 import { fromStore } from 'svelte/store'
 
+// Hover identity must match the dedup key used in `getHits`, otherwise the ID
+// changes mid-hover (e.g. the hit's face index changes as the ray sweeps a
+// plain mesh) and the object flickers between pointerout/pointerenter every
+// frame.
 function createIntersectionId(intersection: Intersection) {
-  return `${(intersection.eventObject || intersection.object).uuid}|${intersection.index}|${intersection.instanceId}`
+  const target = intersection.eventObject ?? intersection.object
+  if (intersection.instanceId !== undefined) {
+    return `${target.uuid}|${intersection.instanceId}`
+  }
+  if ((intersection.object as Points).isPoints) {
+    return `${target.uuid}|${intersection.index}`
+  }
+  return target.uuid
 }
 
 const DOM_EVENTS = [

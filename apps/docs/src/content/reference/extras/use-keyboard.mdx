@@ -129,7 +129,7 @@ useTask(
 
 ### `target`
 
-The DOM element to listen on. Defaults to `window`, which captures keyboard input
+The DOM element to listen on. Defaults to `window`, which receives keyboard input
 globally regardless of focus. Pass a specific element if you want scoped input:
 
 ```ts
@@ -137,6 +137,16 @@ import { useThrelte } from '@threlte/core'
 
 const { dom } = useThrelte()
 const keyboard = useKeyboard(() => ({ target: dom }))
+```
+
+### `capture`
+
+Set to `true` to listen during the capture phase. The default is `false`, so
+focused inputs, overlays, or other descendants can still isolate keyboard
+events with `stopPropagation()`.
+
+```ts
+const keyboard = useKeyboard(() => ({ capture: true }))
 ```
 
 ## Focus Handling

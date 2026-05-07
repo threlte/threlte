@@ -9,7 +9,7 @@
 
   $effect(() => {
     // This effect acts like an init default pose
-    $actions?.['idle']?.play()
+    $actions?.idle?.play()
   })
 </script>
 

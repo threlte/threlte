@@ -17,23 +17,48 @@ This should be placed within a Threlte `<Canvas />`.
 ```
 
 -->
+<script
+  module
+  lang="ts"
+>
+  declare global {
+    interface XRSystem {
+      offerSession?: XRSystem['requestSession']
+    }
+  }
+</script>
+
 <script lang="ts">
   import type { EventListener, WebXRManager, Event as ThreeEvent } from 'three'
   import type { XRHandModelFactory } from 'three/examples/jsm/webxr/XRHandModelFactory.js'
   import type { XRControllerModelFactory } from 'three/examples/jsm/webxr/XRControllerModelFactory.js'
-  import type { Snippet } from 'svelte'
+  import { untrack, type Snippet } from 'svelte'
   import { useThrelte } from '@threlte/core'
   import {
-    isHandTracking,
     isPresenting,
+    lastSessionRequest,
+    pointerIntersection,
     referenceSpaceType,
     session,
+    teleportIntersection,
     xr
   } from '../internal/state.svelte.js'
   import { setupRaf } from '../internal/setupRaf.svelte.js'
   import { setupHeadset } from '../internal/setupHeadset.svelte.js'
-  import { setupControllers } from '../internal/setupControllers.js'
-  import { setupHands } from '../internal/setupHands.js'
+  import { setupInputSources } from '../internal/setupInputSources.js'
+  import { dispatchXRInputSourceEvent } from '../internal/inputSources.svelte.js'
+  import { defaultFeatures } from '../internal/defaultFeatures.js'
+  import { getXRSessionOptions } from '../lib/getXRSessionOptions.js'
+  import { toggleXRSession } from '../lib/toggleXRSession.js'
+
+  const INPUT_SOURCE_EVENTS = [
+    'select',
+    'selectstart',
+    'selectend',
+    'squeeze',
+    'squeezestart',
+    'squeezeend'
+  ] as const
 
   interface Props {
     /**
@@ -78,6 +103,26 @@ This should be placed within a Threlte `<Canvas />`.
 
     /** Called when available inputsources change */
     oninputsourceschange?: (event: XRSessionEvent) => void
+
+    /** Called when the session frame rate changes. */
+    onframeratechange?: (event: XRSessionEvent) => void
+
+    /**
+     * Auto-enter a session when the OS grants one without an explicit request
+     * (e.g. when the user puts on a headset). Pass `false` to disable, or an
+     * array of modes to restrict which modes are eligible.
+     * @default true
+     */
+    enterGrantedSession?: boolean | XRSessionMode[]
+
+    /**
+     * Pre-offer a session via `navigator.xr.offerSession` so the browser can
+     * show its own entry UI (e.g. Vision Pro). When `true`, offers AR if
+     * supported, otherwise VR. Pass a specific mode to restrict. Pass `false`
+     * to disable.
+     * @default true
+     */
+    offerSession?: boolean | XRSessionMode
   }
 
   let {
@@ -88,6 +133,9 @@ This should be placed within a Threlte `<Canvas />`.
     onsessionend,
     onvisibilitychange,
     oninputsourceschange,
+    onframeratechange,
+    enterGrantedSession = true,
+    offerSession = true,
     fallback,
     children,
     handFactory,
@@ -96,12 +144,9 @@ This should be placed within a Threlte `<Canvas />`.
 
   const { renderer, renderMode } = useThrelte()
 
-  let originalRenderMode = $renderMode
-
   setupRaf()
   setupHeadset()
-  setupControllers(controllerFactory)
-  setupHands(handFactory)
+  const bindInputSources = setupInputSources(controllerFactory, handFactory)
 
   const handleSessionStart: EventListener<object, 'sessionstart', WebXRManager> = (event) => {
     isPresenting.current = true
@@ -112,6 +157,10 @@ This should be placed within a Threlte `<Canvas />`.
     onsessionend?.(event)
     isPresenting.current = false
     session.current = undefined
+    pointerIntersection.left = undefined
+    pointerIntersection.right = undefined
+    teleportIntersection.left = undefined
+    teleportIntersection.right = undefined
   }
 
   const handleVisibilityChange = (event: XRSessionEvent) => {
@@ -119,46 +168,61 @@ This should be placed within a Threlte `<Canvas />`.
   }
 
   const handleInputSourcesChange = (event: XRInputSourcesChangeEvent) => {
-    isHandTracking.current = Object.values(event.session.inputSources).some((source) => source.hand)
     oninputsourceschange?.(event)
   }
 
   const handleFramerateChange = (event: XRSessionEvent) => {
-    onvisibilitychange?.(event)
+    onframeratechange?.(event)
+  }
+
+  const handleXRInputEvent = (event: XRInputSourceEvent) => {
+    dispatchXRInputSourceEvent(event)
   }
 
   $effect(() => {
     const currentSession = session.current
 
     if (currentSession === undefined) {
+      bindInputSources(undefined)
       return
     }
+
+    bindInputSources(currentSession)
 
     currentSession.addEventListener('visibilitychange', handleVisibilityChange)
     currentSession.addEventListener('inputsourceschange', handleInputSourcesChange)
     currentSession.addEventListener('frameratechange', handleFramerateChange)
     currentSession.addEventListener('end', handleSessionEnd)
+    for (const type of INPUT_SOURCE_EVENTS) {
+      currentSession.addEventListener(type, handleXRInputEvent)
+    }
 
     return () => {
       currentSession.removeEventListener('visibilitychange', handleVisibilityChange)
       currentSession.removeEventListener('inputsourceschange', handleInputSourcesChange)
       currentSession.removeEventListener('frameratechange', handleFramerateChange)
       currentSession.removeEventListener('end', handleSessionEnd)
+      for (const type of INPUT_SOURCE_EVENTS) {
+        currentSession.removeEventListener(type, handleXRInputEvent)
+      }
+      bindInputSources(undefined)
     }
   })
 
   $effect.pre(() => {
-    if (isPresenting.current) {
-      originalRenderMode = renderMode.current
-      renderMode.set('always')
-    } else {
-      renderMode.set(originalRenderMode)
+    if (!isPresenting.current) return
+
+    // Capture the mode from before we forced 'always' so it survives
+    // any manual renderMode changes made during the session.
+    const saved = untrack(() => renderMode.current)
+    renderMode.set('always')
+
+    return () => {
+      renderMode.set(saved)
     }
   })
 
   $effect.pre(() => {
-    const currentSession = session.current
-
     xr.current = renderer.xr
     renderer.xr.enabled = true
     renderer.xr.addEventListener('sessionstart', handleSessionStart)
@@ -169,7 +233,9 @@ This should be placed within a Threlte `<Canvas />`.
       renderer.xr.removeEventListener('sessionstart', handleSessionStart)
 
       // if unmounted while presenting (e.g. due to sveltekit navigation), end the session
-      currentSession?.end()
+      untrack(() => session.current)
+        ?.end()
+        .catch(() => {})
     }
   })
 
@@ -190,6 +256,83 @@ This should be placed within a Threlte `<Canvas />`.
   $effect.pre(() => {
     renderer.xr.setReferenceSpaceType(referenceSpace)
     referenceSpaceType.current = referenceSpace
+  })
+
+  $effect.pre(() => {
+    if (enterGrantedSession === false) return
+
+    const allowed: XRSessionMode[] = Array.isArray(enterGrantedSession)
+      ? enterGrantedSession
+      : ['immersive-ar', 'immersive-vr']
+
+    const listener = async () => {
+      // Prefer to replay whatever mode + sessionInit the app entered with last.
+      if (lastSessionRequest.mode !== undefined && allowed.includes(lastSessionRequest.mode)) {
+        toggleXRSession(lastSessionRequest.mode, lastSessionRequest.sessionInit, 'enter').catch(
+          () => {}
+        )
+        return
+      }
+
+      for (const mode of allowed) {
+        if (await navigator.xr?.isSessionSupported(mode).catch(() => false)) {
+          toggleXRSession(mode, { ...defaultFeatures }, 'enter').catch(() => {})
+          return
+        }
+      }
+    }
+
+    navigator.xr?.addEventListener('sessiongranted', listener)
+    return () => {
+      navigator.xr?.removeEventListener('sessiongranted', listener)
+    }
+  })
+
+  $effect.pre(() => {
+    if (navigator.xr === undefined) return
+    if (offerSession === false) return
+    if (!('offerSession' in navigator.xr)) return
+    if (session.current !== undefined) return
+    const manager = xr.current
+    if (manager === undefined) return
+
+    let cancelled = false
+
+    const run = async () => {
+      let mode: XRSessionMode
+      if (offerSession === true) {
+        const arSupported = await navigator.xr
+          ?.isSessionSupported('immersive-ar')
+          .catch(() => false)
+        mode = arSupported ? 'immersive-ar' : 'immersive-vr'
+      } else {
+        mode = offerSession
+      }
+
+      const init = getXRSessionOptions(
+        referenceSpaceType.current,
+        lastSessionRequest.sessionInit,
+        defaultFeatures
+      )
+
+      try {
+        const nextSession = await navigator.xr?.offerSession?.(mode, init)
+        if (!nextSession || cancelled) return
+        await manager.setSession(nextSession)
+        if (cancelled) return
+        lastSessionRequest.mode = mode
+        lastSessionRequest.sessionInit = init
+        session.current = nextSession
+      } catch {
+        // user declined or offer was rejected
+      }
+    }
+
+    run()
+
+    return () => {
+      cancelled = true
+    }
   })
 </script>
 

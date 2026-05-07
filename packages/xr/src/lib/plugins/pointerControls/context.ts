@@ -1,20 +1,30 @@
 import { getContext, setContext } from 'svelte'
 import type { Object3D } from 'three'
-import type { ControlsContext, HandContext } from './types.js'
+import type { ControlsContext, HandContext, PointerSourceType } from './types.js'
 
 const handContextKeys = {
-  left: Symbol('pointer-controls-context-left'),
-  right: Symbol('pointer-controls-context-right')
+  left: {
+    controller: Symbol('pointer-controls-context-left-controller'),
+    hand: Symbol('pointer-controls-context-left-hand')
+  },
+  right: {
+    controller: Symbol('pointer-controls-context-right-controller'),
+    hand: Symbol('pointer-controls-context-right-hand')
+  }
 }
 
 const contextKey = Symbol('pointer-controls-context')
 
-export const getHandContext = (hand: 'left' | 'right') => {
-  return getContext<HandContext>(handContextKeys[hand])
+export const getHandContext = (hand: 'left' | 'right', sourceType: PointerSourceType) => {
+  return getContext<HandContext>(handContextKeys[hand][sourceType])
 }
 
-export const setHandContext = (hand: 'left' | 'right', context: HandContext) => {
-  setContext(handContextKeys[hand], context)
+export const setHandContext = (
+  hand: 'left' | 'right',
+  sourceType: PointerSourceType,
+  context: HandContext
+) => {
+  setContext(handContextKeys[hand][sourceType], context)
 }
 
 export const getControlsContext = () => {

@@ -1,9 +1,10 @@
 <script lang="ts">
   import { Group } from 'three'
-  import { T, useThrelte, useTask } from '@threlte/core'
+  import { T, useThrelte, useTask, useStage } from '@threlte/core'
   import type { XRHandEvents } from '../types.js'
-  import { isHandTracking, handEvents } from '../internal/state.svelte.js'
-  import { hands } from '../hooks/useHand.svelte.js'
+  import { addSubscriber } from '../internal/inputSources.svelte.js'
+  import { useHand } from '../hooks/useHand.svelte.js'
+  import { useXROrigin } from '../hooks/useXROrigin.svelte.js'
   import type { Snippet } from 'svelte'
 
   type Props = {
@@ -45,22 +46,25 @@
     wrist
   }: Props = $props()
 
-  const { scene, renderer, scheduler, renderStage } = useThrelte()
-
-  const handedness = $derived<'left' | 'right'>(left ? 'left' : right ? 'right' : (hand ?? 'left'))
+  const { scene, renderer, renderStage } = useThrelte()
+  const xrOrigin = useXROrigin()
+  const attachTarget = $derived(xrOrigin.current ?? scene)
+  const handedness: 'left' | 'right' = left ? 'left' : right ? 'right' : (hand ?? 'left')
+  const handStore = useHand(handedness)
 
   $effect.pre(() => {
-    handEvents[handedness] = {
-      onconnected,
-      ondisconnected,
-      onpinchend,
-      onpinchstart
-    }
-
-    return () => {
-      handEvents[handedness] = undefined
-    }
+    return addSubscriber({
+      type: 'hand',
+      handedness,
+      callbacks: { onconnected, ondisconnected, onpinchend, onpinchstart }
+    })
   })
+
+  const xrHand = $derived($handStore)
+  const inputSource = $derived(xrHand?.inputSource)
+  const model = $derived(xrHand?.model)
+
+  const stage = useStage(Symbol('xr-hand-stage'), { before: renderStage })
 
   const group = new Group()
 
@@ -90,23 +94,16 @@
       group.quaternion.set(orientation.x, orientation.y, orientation.z, orientation.w)
     },
     {
-      stage: scheduler.createStage(Symbol('xr-hand-stage'), { before: renderStage }),
-      running: () =>
-        isHandTracking.current &&
-        (wrist !== undefined || children !== undefined) &&
-        inputSource !== undefined
+      stage,
+      running: () => inputSource !== undefined && (wrist !== undefined || children !== undefined)
     }
   )
-
-  const xrHand = $derived(hands[handedness])
-  const inputSource = $derived(xrHand?.inputSource)
-  const model = $derived(xrHand?.model)
 </script>
 
-{#if xrHand?.hand && isHandTracking.current}
+{#if xrHand?.hand}
   <T
     is={xrHand.hand}
-    attach={scene}
+    attach={attachTarget}
   >
     {#if children === undefined}
       <T is={model} />
@@ -114,16 +111,17 @@
   </T>
 
   {#if targetRay !== undefined}
-    <T is={xrHand.targetRay}>
+    <T
+      is={xrHand.targetRay}
+      attach={attachTarget}
+    >
       {@render targetRay()}
     </T>
   {/if}
-{/if}
 
-{#if isHandTracking.current}
   <T
     is={group}
-    attach={scene}
+    attach={attachTarget}
   >
     {@render wrist?.()}
     {@render children?.()}

@@ -9,14 +9,7 @@
 
   const entries = Object.entries(presets)
 
-  const presetSpring = new Spring(presets.sunset, {
-    damping: 0.95,
-    precision: 0.0001,
-    stiffness: 0.05
-  })
-
   let setEnvironment = $state(true)
-
   let azimuth = $state(0)
   let elevation = $state(0)
   let exposure = $state(0)
@@ -24,6 +17,23 @@
   let mieDirectionalG = $state(0)
   let rayleigh = $state(0)
   let turbidity = $state(0)
+
+  const presetSpring = Spring.of(
+    () => ({
+      azimuth,
+      elevation,
+      exposure,
+      mieCoefficient,
+      mieDirectionalG,
+      rayleigh,
+      turbidity
+    }),
+    {
+      damping: 0.95,
+      precision: 0.0001,
+      stiffness: 0.05
+    }
+  )
 
   const applyPreset = (preset: Preset) => {
     azimuth = preset.azimuth
@@ -34,19 +44,8 @@
     rayleigh = preset.rayleigh
     turbidity = preset.turbidity
   }
-  applyPreset(presets.sunset)
 
-  $effect(() => {
-    presetSpring.set({
-      azimuth,
-      elevation,
-      exposure,
-      mieCoefficient,
-      mieDirectionalG,
-      rayleigh,
-      turbidity
-    })
-  })
+  applyPreset(presets.sunset)
 </script>
 
 <Pane

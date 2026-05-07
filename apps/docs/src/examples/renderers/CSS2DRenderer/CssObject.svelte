@@ -4,7 +4,7 @@
   import { CSS2DObject } from 'three/examples/jsm/renderers/CSS2DRenderer.js'
   import { T } from '@threlte/core'
 
-  type CssObjectProps = Props<typeof CSS2DObject> & {
+  type CssObjectProps = Omit<Props<typeof CSS2DObject>, 'pointerEvents'> & {
     content?: Snippet
     pointerEvents?: boolean
   }

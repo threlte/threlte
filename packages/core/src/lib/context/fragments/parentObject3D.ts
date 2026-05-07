@@ -1,14 +1,11 @@
 import { getContext, setContext } from 'svelte'
-import { derived, readable, writable, type Readable } from 'svelte/store'
 import type { Object3D } from 'three'
+import { runeToCurrentReadable } from '../../utilities/currentWritable.js'
 
 const parentObject3DContextKey = Symbol('threlte-parent-object3d-context')
-type ParentObject3DContext = Readable<Object3D>
 
-export const createRootParentObject3DContext = (object: Object3D) => {
-  const ctx: ParentObject3DContext = readable<Object3D>(object)
-  setContext(parentObject3DContextKey, ctx)
-  return ctx
+interface ParentObject3DContext {
+  current: Object3D
 }
 
 /**
@@ -17,14 +14,18 @@ export const createRootParentObject3DContext = (object: Object3D) => {
  * parentObject3D context of the parent component when the local context store
  * is `undefined`.
  */
-export const createParentObject3DContext = (object?: Object3D) => {
+export const createParentObject3DContext = (object: () => Object3D | undefined) => {
   const parentObject3D = getContext<ParentObject3DContext>(parentObject3DContextKey)
-  const object3D = writable<Object3D | undefined>(object)
-  const ctx = derived([object3D, parentObject3D], ([object3D, parentObject3D]) => {
-    return object3D ?? parentObject3D
-  })
-  setContext(parentObject3DContextKey, ctx)
-  return object3D
+
+  const context = {
+    get current() {
+      return object() ?? parentObject3D.current
+    }
+  }
+
+  setContext(parentObject3DContextKey, context)
+
+  return context
 }
 
 /**
@@ -45,4 +46,21 @@ export const createParentObject3DContext = (object?: Object3D) => {
  */
 export const useParentObject3D = () => {
   return getContext<ParentObject3DContext>(parentObject3DContextKey)
+}
+
+/*********************************/
+/** Will be removed in Threlte 9 */
+/*********************************/
+
+type MaybeParentObject3DGetter = Object3D | undefined | (() => Object3D | undefined)
+
+export const createParentObject3DContext_deprecated = (parent: MaybeParentObject3DGetter) => {
+  const getParent = typeof parent === 'function' ? parent : () => parent
+
+  return createParentObject3DContext(getParent)
+}
+
+export const useParentObject3D_deprecated = () => {
+  const parent = useParentObject3D()
+  return runeToCurrentReadable(() => parent.current)
 }

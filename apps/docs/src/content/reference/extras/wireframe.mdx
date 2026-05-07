@@ -9,7 +9,7 @@ componentSignature:
     props:
       [
         { name: 'simplify', type: 'boolean', default: 'false' },
-        { name: 'thickness', type: 'number', default: '0.05' },
+        { name: 'thickness', type: 'number', default: '1' },
         { name: 'squeeze', type: 'boolean', default: 'false' },
         { name: 'squeezeMin', type: 'number', default: '0.2' },
         { name: 'squeezeMax', type: 'number', default: '1' },
@@ -23,8 +23,7 @@ componentSignature:
         { name: 'dash', type: 'boolean', default: 'false' },
         { name: 'dashRepeats', type: 'number', default: '4' },
         { name: 'dashLength', type: 'number', default: '0.5' },
-        { name: 'dashInvert', type: 'boolean', default: 'true' },
-        { name: 'fillOpacity', type: 'number', default: 'false' }
+        { name: 'dashInvert', type: 'boolean', default: 'true' }
       ]
   }
 ---
@@ -33,9 +32,9 @@ componentSignature:
 
 <Example path="extras/wireframe" />
 
-`<Wireframe>` uses barycentric coordinates to generate the wireframe, which requires a non-indexed geometry to create.
+`<Wireframe>` uses barycentric coordinates to generate the wireframe, which requires a non-indexed geometry.
 
-This means that any geometry with a `<Wireframe>` that has indices will be converted to a non-indexed version.
+This means that any geometry with a `<Wireframe>` that has indices will use a cloned, non-indexed version while `<Wireframe>` is mounted.
 
 ## Basic Example
 

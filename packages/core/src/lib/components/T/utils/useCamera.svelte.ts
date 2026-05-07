@@ -1,6 +1,7 @@
 import { fromStore } from 'svelte/store'
 import { useCamera as useDefaultCamera } from '../../../context/fragments/camera.svelte.js'
-import { useThrelte } from '../../../context/compounds/useThrelte.js'
+import { useDOM } from '../../../context/fragments/dom.svelte.js'
+import { useScheduler } from '../../../context/fragments/scheduler.svelte.js'
 import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
 import type { OrthographicCamera, PerspectiveCamera } from 'three'
 
@@ -43,7 +44,8 @@ export const useCamera = (
   props: () => Record<string, unknown>
 ) => {
   const { camera: defaultCamera, manual: defaultManual, makeDefaultCameras } = useDefaultCamera()
-  const { invalidate, size: sizeStore } = useThrelte()
+  const { invalidate } = useScheduler()
+  const { size: sizeStore } = useDOM()
 
   const camera = $derived(getCamera())
   const manual = $derived(getManual())

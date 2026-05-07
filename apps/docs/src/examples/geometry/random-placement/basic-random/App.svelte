@@ -2,9 +2,9 @@
   import { Canvas } from '@threlte/core'
   import Scene from './Scene.svelte'
   import { Pane, Button, Slider } from 'svelte-tweakpane-ui'
-  import { numberOfObjects } from './stores'
 
   let regen = $state(0)
+  let numObjects = $state(50)
 </script>
 
 <Pane
@@ -18,7 +18,7 @@
     }}
   />
   <Slider
-    bind:value={$numberOfObjects}
+    bind:value={numObjects}
     label="Number of Objects"
     min={20}
     max={100}
@@ -28,7 +28,10 @@
 
 <div>
   <Canvas>
-    <Scene {regen} />
+    <Scene
+      {regen}
+      {numObjects}
+    />
   </Canvas>
 </div>
 

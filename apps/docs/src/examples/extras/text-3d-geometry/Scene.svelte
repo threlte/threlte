@@ -15,18 +15,7 @@
     smooth: number
   }
 
-  let {
-    text,
-    bevelEnabled,
-    bevelOffset,
-    bevelSegments,
-    bevelSize,
-    bevelThickness,
-    curveSegments,
-    depth,
-    size,
-    smooth
-  }: Props = $props()
+  let { ...rest }: Props = $props()
 </script>
 
 <Align>
@@ -34,16 +23,7 @@
     <T.Mesh>
       <Text3DGeometry
         font="/fonts/Inter-semibold.blob"
-        {text}
-        {bevelEnabled}
-        {bevelOffset}
-        {bevelSegments}
-        {bevelSize}
-        {bevelThickness}
-        {curveSegments}
-        {depth}
-        {size}
-        {smooth}
+        {...rest}
         oncreate={() => {
           align()
         }}

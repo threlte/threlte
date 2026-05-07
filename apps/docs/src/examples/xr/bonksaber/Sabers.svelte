@@ -4,33 +4,37 @@
   import { FakeGlowMaterial, Outlines } from '@threlte/extras'
   import { Collider, RigidBody } from '@threlte/rapier'
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
-  import { Controller, Hand, useXR } from '@threlte/xr'
+  import { Controller, Hand, useController, useXR } from '@threlte/xr'
 
   const { isHandTracking } = useXR()
 
+  const leftController = useController('left')
+  const rightController = useController('right')
+
+  const pulse = (hand: 'left' | 'right') => {
+    const controller = hand === 'left' ? leftController.current : rightController.current
+    controller?.inputSource.gamepad?.hapticActuators[0]?.pulse(0.8, 80)
+  }
+
   let rigidBodyLeft = $state.raw<RapierRigidBody>()
   let rigidBodyRight = $state.raw<RapierRigidBody>()
-  let leftSaber = $state.raw<Group>()
-  let rightSaber = $state.raw<Group>()
-  let leftHandSaber = $state.raw<Group>()
-  let rightHandSaber = $state.raw<Group>()
 
-  const left = $derived($isHandTracking ? leftHandSaber : leftSaber)
-  const right = $derived($isHandTracking ? rightHandSaber : rightSaber)
+  const leftSaber = new Group()
+  const rightSaber = new Group()
+  const leftHandSaber = new Group()
+  const rightHandSaber = new Group()
+
+  const left = $derived(isHandTracking.current ? leftHandSaber : leftSaber)
+  const right = $derived(isHandTracking.current ? rightHandSaber : rightSaber)
 
   const vec3 = new Vector3()
   const quaternion = new Quaternion()
 
   useTask(() => {
-    if (left) {
-      rigidBodyLeft?.setTranslation(left.getWorldPosition(vec3), true)
-      rigidBodyLeft?.setRotation(left.getWorldQuaternion(quaternion), true)
-    }
-
-    if (right) {
-      rigidBodyRight?.setTranslation(right.getWorldPosition(vec3), true)
-      rigidBodyRight?.setRotation(right.getWorldQuaternion(quaternion), true)
-    }
+    rigidBodyLeft?.setTranslation(left.getWorldPosition(vec3), true)
+    rigidBodyLeft?.setRotation(left.getWorldQuaternion(quaternion), true)
+    rigidBodyRight?.setTranslation(right.getWorldPosition(vec3), true)
+    rigidBodyRight?.setRotation(right.getWorldQuaternion(quaternion), true)
   })
 
   const saberRadius = 0.02
@@ -64,52 +68,53 @@
 {/snippet}
 
 <Controller left>
-  <T.Group
+  <T
+    is={leftSaber}
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    bind:ref={leftSaber}
   >
     {@render saber()}
-  </T.Group>
+  </T>
 </Controller>
 
 <Controller right>
-  <T.Group
+  <T
+    is={rightSaber}
     rotation.x={Math.PI / 2}
     position.z={-saberLength / 2}
-    bind:ref={rightSaber}
   >
     {@render saber()}
-  </T.Group>
+  </T>
 </Controller>
 
 <Hand left>
   {#snippet wrist()}
-    <T.Group
+    <T
+      is={leftHandSaber}
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      bind:ref={leftHandSaber}
     >
       {@render saber()}
-    </T.Group>
+    </T>
   {/snippet}
 </Hand>
 
 <Hand right>
   {#snippet wrist()}
-    <T.Group
+    <T
+      is={rightHandSaber}
       rotation.x={Math.PI / 2}
       position.z={-saberLength / 2}
-      bind:ref={rightHandSaber}
     >
       {@render saber()}
-    </T.Group>
+    </T>
   {/snippet}
 </Hand>
 
 <RigidBody
   type="kinematicPosition"
   bind:rigidBody={rigidBodyLeft}
+  oncollisionenter={() => pulse('left')}
 >
   <Collider
     shape="capsule"
@@ -120,6 +125,7 @@
 <RigidBody
   type="kinematicPosition"
   bind:rigidBody={rigidBodyRight}
+  oncollisionenter={() => pulse('right')}
 >
   <Collider
     shape="capsule"

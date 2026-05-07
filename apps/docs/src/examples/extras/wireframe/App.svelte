@@ -28,11 +28,14 @@
 </script>
 
 <Pane
-  title="Wireframe"
+  title=""
   position="fixed"
 >
   <Slider
     label="thickness"
+    min={0}
+    max={20}
+    step={0.1}
     bind:value={wireframeProps.thickness}
   />
   <Separator />

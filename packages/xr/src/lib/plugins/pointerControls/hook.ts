@@ -26,6 +26,7 @@ export const usePointerControls = () => {
 
   const removeInteractiveObject = (object: Object3D) => {
     const index = context.interactiveObjects.indexOf(object)
+    if (index === -1) return
     context.interactiveObjects.splice(index, 1)
     dispatchers.delete(object)
   }

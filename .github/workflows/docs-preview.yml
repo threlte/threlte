@@ -1,45 +1,63 @@
-name: Docs Preview
+name: Docs Preview Deploy
+
+# Privileged half of the docs preview pipeline. Triggered by `workflow_run`
+# after Docs Preview Build completes; downloads the built artifact and
+# deploys it to gh-pages without ever executing PR code. Cleanup runs on
+# `pull_request_target` closed events, which is safe because cleanup only
+# manipulates the gh-pages branch using the integer PR number from the
+# trusted base-repo event payload — it never checks out PR code.
+#
+# Both `workflow_run` and `pull_request_target` always execute the version
+# of this workflow on the default branch, so a malicious PR cannot alter
+# this workflow to gain privileges. See GHSA-p368-h5pf-7fc2.
 
 on:
+  workflow_run:
+    workflows: [Docs Preview Build]
+    types: [completed]
   pull_request_target:
     branches:
       - main
-    types: [opened, synchronize, reopened, closed]
+    types: [closed]
 
 permissions:
   contents: write
   pull-requests: write
-
-concurrency:
-  group: docs-preview-${{ github.event.pull_request.number }}
-  cancel-in-progress: true
+  actions: read
 
 jobs:
-  deploy-preview:
-    if: github.event.action != 'closed'
+  deploy:
+    if: >-
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
-      # pull_request_target runs in the base repo context for write access,
-      # but we need to build the PR's code, not the base branch.
-      - name: Checkout PR head
-        uses: actions/checkout@v4
+      - name: Resolve PR number from head SHA
+        id: pr
+        uses: actions/github-script@v7
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          script: |
+            const headSha = context.payload.workflow_run.head_sha;
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              commit_sha: headSha,
+            });
+            const pr = prs.find((p) => p.state === 'open');
+            if (!pr) {
+              core.setFailed(`No open PR found for SHA ${headSha}`);
+              return;
+            }
+            core.setOutput('number', pr.number);
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download preview artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: 24
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: true
-
-      - name: Build docs
-        env:
-          BASE_PATH: /previews/pr-${{ github.event.pull_request.number }}
-        run: pnpm run build:docs
+          name: docs-preview
+          path: dist
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Checkout gh-pages
         uses: actions/checkout@v4
@@ -48,25 +66,29 @@ jobs:
           path: gh-pages
 
       - name: Deploy preview
+        env:
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
         run: |
           cd gh-pages
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          rm -rf previews/pr-${{ github.event.pull_request.number }}
-          mkdir -p previews/pr-${{ github.event.pull_request.number }}
-          cp -r ../apps/docs/dist/* previews/pr-${{ github.event.pull_request.number }}/
+          rm -rf "previews/pr-$PR_NUMBER"
+          mkdir -p "previews/pr-$PR_NUMBER"
+          cp -r ../dist/* "previews/pr-$PR_NUMBER/"
 
           git add -A
-          git diff --staged --quiet || git commit -m "Deploy preview for PR #${{ github.event.pull_request.number }}"
+          git diff --staged --quiet || git commit -m "Deploy preview for PR #$PR_NUMBER"
           git pull --rebase
           git push
 
       - name: Comment preview URL
         uses: actions/github-script@v7
+        env:
+          PR_NUMBER: ${{ steps.pr.outputs.number }}
         with:
           script: |
-            const prNumber = context.payload.pull_request.number;
+            const prNumber = Number(process.env.PR_NUMBER);
             const owner = context.repo.owner;
             const repo = context.repo.repo;
             const previewUrl = `https://threlte.xyz/previews/pr-${prNumber}/`;
@@ -89,8 +111,10 @@ jobs:
               owner, repo, issue_number: prNumber, body
             });
 
-  cleanup-preview:
-    if: github.event.action == 'closed'
+  cleanup:
+    if: >-
+      github.event_name == 'pull_request_target' &&
+      github.event.action == 'closed'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout gh-pages
@@ -99,13 +123,15 @@ jobs:
           ref: gh-pages
 
       - name: Remove preview
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          rm -rf previews/pr-${{ github.event.pull_request.number }}
+          rm -rf "previews/pr-$PR_NUMBER"
 
           git add -A
-          git diff --staged --quiet || git commit -m "Remove preview for PR #${{ github.event.pull_request.number }}"
+          git diff --staged --quiet || git commit -m "Remove preview for PR #$PR_NUMBER"
           git pull --rebase
           git push

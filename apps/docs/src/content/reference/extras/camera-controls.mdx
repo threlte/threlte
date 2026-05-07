@@ -4,7 +4,65 @@ group: 'Interaction'
 title: '<CameraControls>'
 sourcePath: 'packages/extras/src/lib/components/CameraControls/CameraControls.svelte'
 type: 'component'
-componentSignature: { props: [{ name: 'camera', type: 'THREE.Camera' }] }
+componentSignature:
+  {
+    extends: { type: 'CameraControls', url: 'https://github.com/yomotsu/camera-controls' },
+    props:
+      [
+        {
+          name: 'camera',
+          type: 'PerspectiveCamera | OrthographicCamera',
+          description: "Camera instance to control. Uses the parent camera or Threlte's default camera when unset."
+        },
+        { name: 'enabled', type: 'boolean', default: 'true' },
+        { name: 'minPolarAngle', type: 'number', default: '0' },
+        { name: 'maxPolarAngle', type: 'number', default: 'Math.PI' },
+        { name: 'minAzimuthAngle', type: 'number', default: '-Infinity' },
+        { name: 'maxAzimuthAngle', type: 'number', default: 'Infinity' },
+        { name: 'minDistance', type: 'number', default: 'Number.EPSILON' },
+        { name: 'maxDistance', type: 'number', default: 'Infinity' },
+        { name: 'distance', type: 'number' },
+        { name: 'infinityDolly', type: 'boolean', default: 'false' },
+        { name: 'minZoom', type: 'number', default: '0.01' },
+        { name: 'maxZoom', type: 'number', default: 'Infinity' },
+        { name: 'smoothTime', type: 'number', default: '0.25' },
+        { name: 'draggingSmoothTime', type: 'number', default: '0.125' },
+        { name: 'maxSpeed', type: 'number', default: 'Infinity' },
+        { name: 'azimuthAngle', type: 'number' },
+        { name: 'polarAngle', type: 'number' },
+        { name: 'azimuthRotateSpeed', type: 'number', default: '1' },
+        { name: 'polarRotateSpeed', type: 'number', default: '1' },
+        { name: 'dollySpeed', type: 'number', default: '1' },
+        { name: 'dollyDragInverted', type: 'boolean', default: 'false' },
+        { name: 'truckSpeed', type: 'number', default: '2' },
+        { name: 'dollyToCursor', type: 'boolean', default: 'false' },
+        { name: 'dragToOffset', type: 'boolean', default: 'false' },
+        { name: 'boundaryFriction', type: 'number', default: '0' },
+        { name: 'boundaryEnclosesCamera', type: 'boolean', default: 'false' },
+        { name: 'restThreshold', type: 'number', default: '0.01' },
+        { name: 'colliderMeshes', type: 'Object3D[]', default: '[]' },
+        { name: 'mouseButtons', type: 'CameraControlsMouseButtons' },
+        { name: 'touches', type: 'CameraControlsTouches' },
+        {
+          name: 'interactiveArea',
+          type: 'DOMRect | { x: number; y: number; width: number; height: number }',
+          default: 'new DOMRect(0, 0, 1, 1)'
+        },
+        {
+          name: 'pointerLock',
+          type: 'boolean',
+          default: 'false',
+          description: 'Click the canvas to request pointer lock and rotate from pointer movement.'
+        },
+        {
+          name: 'pointerLockSensitivity',
+          type: 'number',
+          default: '0.003',
+          description: 'Radians of camera rotation per pixel of pointer movement while pointer lock is active.'
+        }
+      ],
+    bindings: [{ name: 'ref', type: 'CameraControlsRef' }]
+  }
 ---
 
 This component is a declarative implementation of the popular [camera-controls](https://github.com/yomotsu/camera-controls) library.

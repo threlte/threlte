@@ -6,6 +6,7 @@
   interface Props {
     selection: number
   }
+
   let { selection }: Props = $props()
 </script>
 

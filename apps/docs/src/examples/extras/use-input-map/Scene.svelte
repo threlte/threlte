@@ -9,7 +9,7 @@
     activeDevice = $bindable('keyboard')
   }: { sprintKey?: string; activeDevice?: string } = $props()
 
-  const keyboard = useKeyboard()
+  const keyboard = useKeyboard(() => ({ capture: true }))
   const gamepad = useGamepad()
 
   const input = useInputMap(
@@ -110,7 +110,9 @@
   sectionSize={5}
   cellSize={1}
   gridSize={[20, 20]}
-  fadeDistance={25}
+  fadeDistance={10}
+  fadeOrigin={[0, 0, 0]}
+  infiniteGrid
 />
 
 <T.Mesh

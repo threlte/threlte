@@ -1,21 +1,19 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Headset, XR, useXR } from '@threlte/xr'
-  import { AudioListener } from '@threlte/extras'
+  import { Controller, Hand, Headset, XR, pointerControls, teleportControls } from '@threlte/xr'
+  import { AudioListener, interactivity } from '@threlte/extras'
   import { MathUtils } from 'three'
   import Turntable from '../../extras/positional-audio/Turntable.svelte'
   import Speaker from '../../extras/positional-audio/Speaker.svelte'
   import Microphone from './Microphone.svelte'
 
-  let turntable = $state.raw<Turntable>()
-
-  const { isPresenting } = useXR()
-
   let volume = $state(0)
 
-  $effect.pre(() => {
-    if ($isPresenting) turntable?.toggle()
-  })
+  interactivity()
+  pointerControls('left')
+  pointerControls('right')
+  teleportControls('left')
+  teleportControls('right')
 </script>
 
 <XR>
@@ -25,20 +23,31 @@
       rotation.x={Math.PI / 3}
     />
   </Headset>
+
+  <Controller left />
+  <Controller right />
+  <Hand left />
+  <Hand right />
 </XR>
 
 <Headset>
   <AudioListener />
 </Headset>
 
+<T.Mesh
+  teleportSurface
+  receiveShadow
+  rotation.x={-Math.PI / 2}
+>
+  <T.CircleGeometry args={[10, 64]} />
+  <T.MeshStandardMaterial color="#333333" />
+</T.Mesh>
+
 <T.Group
   position={[0, 0.6, -0.5]}
   scale={0.08}
 >
-  <Turntable
-    bind:this={turntable}
-    bind:volume
-  />
+  <Turntable bind:volume />
   <Speaker
     position.x={6}
     rotation.y={MathUtils.DEG2RAD * -7}
