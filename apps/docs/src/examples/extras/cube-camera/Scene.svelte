@@ -15,7 +15,7 @@
 
 <script lang="ts">
   import type { Group } from 'three'
-  import { CubeCamera, Environment, Grid, OrbitControls } from '@threlte/extras'
+  import { CubeCamera, Grid, OrbitControls } from '@threlte/extras'
   import { EquirectangularReflectionMapping } from 'three'
   import { RGBELoader } from 'three/examples/jsm/Addons.js'
   import { T, useLoader, useTask } from '@threlte/core'
@@ -44,12 +44,12 @@
   const radius = 3
 
   let time = 0
-  const groups: Group[] = []
+  const cameras: Group[] = []
   useTask((delta) => {
     time += delta
     let i = 0
-    for (const group of groups) {
-      group.position.setY(2 * Math.sin(time + i))
+    for (const camera of cameras) {
+      camera.position.setY(2 * Math.sin(time + i))
       i += 1
     }
   })
@@ -85,7 +85,7 @@
   />
 </T.PerspectiveCamera>
 
-<Environment url={`${hdrPath}shanghai_riverside_1k.hdr`} />
+<T.AmbientLight intensity={2} />
 
 <Grid
   position.y={-3}
@@ -97,6 +97,7 @@
   {@const background = isHdrKey(hdr) ? backgroundMap[hdr] : hdr}
   {#each colors as color, i}
     {@const r = increment * i}
+    {@const o = Math.PI + increment * i}
     <T.Mesh
       position.x={radius * Math.cos(r)}
       position.y={i}
@@ -105,34 +106,27 @@
       <T.MeshStandardMaterial {color} />
       <T.SphereGeometry />
     </T.Mesh>
-  {/each}
-
-  {#each Array(colors.length) as _, i}
-    {@const r = Math.PI + increment * i}
-    <T.Group
-      position.x={radius * Math.cos(r)}
-      position.z={radius * Math.sin(r)}
+    <CubeCamera
+      {background}
+      {frames}
+      {near}
+      {resolution}
+      position.x={radius * Math.cos(o)}
+      position.z={radius * Math.sin(o)}
       oncreate={(ref) => {
-        groups.push(ref)
+        cameras.push(ref)
       }}
     >
-      <CubeCamera
-        {background}
-        {frames}
-        {near}
-        {resolution}
-      >
-        {#snippet children({ renderTarget })}
-          <T.Mesh>
-            <T.SphereGeometry />
-            <T.MeshStandardMaterial
-              {roughness}
-              {metalness}
-              envMap={renderTarget.texture}
-            />
-          </T.Mesh>
-        {/snippet}
-      </CubeCamera>
-    </T.Group>
+      {#snippet children({ renderTarget })}
+        <T.Mesh>
+          <T.SphereGeometry />
+          <T.MeshStandardMaterial
+            {roughness}
+            {metalness}
+            envMap={renderTarget.texture}
+          />
+        </T.Mesh>
+      {/snippet}
+    </CubeCamera>
   {/each}
 {/await}
