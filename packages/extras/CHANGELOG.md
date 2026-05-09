@@ -1,15 +1,5 @@
 # @threlte/extras
 
-## 9.16.0
-
-### Minor Changes
-
-- e47ac42: Fix SoftShadows component
-
-### Patch Changes
-
-- e47ac42: Perf: remove unnecessary effects in T component
-
 ## 9.15.2
 
 ### Patch Changes
