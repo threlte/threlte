@@ -15397,7 +15397,7 @@ Framebuffer objects are useful when you want to render a scene to something othe
 
 ## Usage
 
-`useFBO` accepts an options getter. Reads inside the getter are tracked through runes.
+`useFBO` accepts an options getter. Reads inside the getter are tracked through runes, so changes to `size` and `depth` are applied to the render target reactively. Render-target construction options (`format`, `type`, `samples`, …) are read once at hook initialization.
 
 ```typescript
 let resolution = $state(512)
