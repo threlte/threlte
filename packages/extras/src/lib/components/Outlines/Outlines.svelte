@@ -35,7 +35,7 @@
 
   const uniforms = {
     screenspace: new Uniform(false),
-    color: new Uniform(new Color()),
+    color: new Uniform(new Color('black')),
     opacity: new Uniform(1),
     thickness: new Uniform(0.05),
     size: new Uniform(new Vector2())

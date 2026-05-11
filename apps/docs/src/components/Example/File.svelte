@@ -11,7 +11,7 @@
   let context = getCodeExampleContext()
   let isSelected = $derived(file.path === context.currentFilePath)
 
-  const fileExtension = file.name.split('.').pop()
+  const fileExtension = $derived(file.name.split('.').pop())
 </script>
 
 <button

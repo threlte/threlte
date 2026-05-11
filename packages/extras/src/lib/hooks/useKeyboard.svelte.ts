@@ -119,7 +119,7 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
     Symbol('useKeyboard'),
     () => {
       // Clear last frame's transient states
-      for (const [, state] of keys) {
+      for (const state of keys.values()) {
         if (state.justPressed) state.justPressed = false
         if (state.justReleased) state.justReleased = false
       }

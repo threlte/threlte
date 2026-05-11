@@ -1,5 +1,23 @@
 # @threlte/core
 
+## 8.5.14
+
+### Patch Changes
+
+- aad1053: Perf: remove unnecessary effects in T component
+
+## 8.5.13
+
+### Patch Changes
+
+- ab91a3b: Perf: cache property lookups in useProps
+
+## 8.5.12
+
+### Patch Changes
+
+- 50f6ac2: Allow Canvas component dpr property to accept a [min, max] tuple
+
 ## 8.5.11
 
 ### Patch Changes

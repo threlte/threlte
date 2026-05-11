@@ -114,7 +114,10 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
   const group = new Group()
 
   const gltf = useGltf('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations(() => $gltf, () => group)
+  export const { actions, mixer } = useGltfAnimations(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 {#if $gltf}
@@ -252,7 +255,10 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb -t
   }
 
   const gltf = useGltf<GLTFResult>('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations<ActionName>(() => $gltf, () => ref)
+  export const { actions, mixer } = useGltfAnimations<ActionName>(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 {#if $gltf}
@@ -290,7 +296,10 @@ If your GLTF contains animations it will add [@threlte/extras's `useGltfAnimatio
 ```ts
 const gltf = useGltf('/stacy.glb')
 
-export const { actions, mixer } = useGltfAnimations(() => $gltf)
+export const { actions, mixer } = useGltfAnimations(
+  () => $gltf,
+  () => ref
+)
 ```
 
 If you want to play an animation you can do so at any time:

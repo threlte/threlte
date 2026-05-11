@@ -52,6 +52,18 @@ const imageUrl = toAbsolute(image)
   rel="canonical"
   href={canonicalUrl}
 />
+<link
+  rel="alternate"
+  type="text/plain"
+  href={toAbsolute('/llms.txt')}
+  title="llms.txt"
+/>
+<link
+  rel="alternate"
+  type="text/plain"
+  href={toAbsolute('/llms-full.txt')}
+  title="llms-full.txt"
+/>
 {
   noindex && (
     <meta

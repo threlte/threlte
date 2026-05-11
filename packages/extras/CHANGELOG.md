@@ -1,5 +1,28 @@
 # @threlte/extras
 
+## 9.17.0
+
+### Minor Changes
+
+- 6de99ec: Add runes-based reactivity for Audio, PositionalAudio, useFBO, and useGltfAnimations props
+
+## 9.16.0
+
+### Minor Changes
+
+- e47ac42: Fix SoftShadows component
+
+### Patch Changes
+
+- e47ac42: Perf: remove unnecessary effects in T component
+
+## 9.15.2
+
+### Patch Changes
+
+- ab91a3b: Perf: cache values in useInputMap and useKeyboard
+- ab91a3b: Fix: capture portal id to prevent live value reads when props update
+
 ## 9.15.1
 
 ### Patch Changes

@@ -4,13 +4,17 @@ export const fragmentShader = `
 uniform sampler2D pointTexture;
 uniform float fade;
 uniform float opacity;
+uniform float rounded;
 
 varying vec3 vColor;
 void main() {
+	float d = distance(gl_PointCoord, vec2(0.5, 0.5));
 	float pointOpacity = 1.0;
 	if (fade == 1.0) {
-		float d = distance(gl_PointCoord, vec2(0.5, 0.5));
 		pointOpacity = 1.0 / (1.0 + exp(16.0 * (d - 0.25)));
+	}
+	if (rounded == 1.0) {
+		pointOpacity *= 1.0 - smoothstep(0.3, 0.5, d);
 	}
 	gl_FragColor = vec4(vColor, pointOpacity * opacity);
 

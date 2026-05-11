@@ -249,7 +249,7 @@ export class DAG<T extends { key: Key }> {
     for (; index < this.sortedConnectedValues.length; index++) {
       callback(this.sortedConnectedValues[index], index)
     }
-    for (const [, vertex] of this.isolatedVertices) {
+    for (const vertex of this.isolatedVertices.values()) {
       if (vertex.value !== undefined) callback(vertex.value, index++)
     }
   }

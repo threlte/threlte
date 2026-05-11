@@ -2,7 +2,7 @@ import { useTask } from '@threlte/core'
 import { AnimationMixer, type AnimationAction, type Object3D } from 'three'
 import type { ThrelteGltf } from '../types/types.js'
 
-type UseGltfAnimationsReturnType<Actions> = {
+interface UseGltfAnimationsReturnType<Actions> {
   mixer: AnimationMixer
   actions: { readonly current: Actions }
 }
@@ -14,9 +14,11 @@ type UseGltfAnimationsReturnType<Actions> = {
  *
  * ```svelte
  * <script lang="ts">
- *   import { GLTF, useGltfAnimations } from '@threlte/extras'
+ *   import { GLTF, useGltfAnimations, type ThrelteGltf } from '@threlte/extras'
  *
- *   const { gltf, actions } = useGltfAnimations<'All Animations'>()
+ *   let gltf = $state<ThrelteGltf>()
+ *
+ *   const { actions } = useGltfAnimations<'All Animations'>(() => gltf)
  *
  *   // play them whenever you need
  *   export const triggerAnimation = () => {
@@ -24,7 +26,7 @@ type UseGltfAnimationsReturnType<Actions> = {
  *   }
  * </script>
  *
- * <GLTF url={'/Bengal.glb'} bind:gltf={$gltf} />
+ * <GLTF bind:gltf url="/Bengal.glb" />
  * ```
  * @param callback
  * @returns
@@ -46,22 +48,21 @@ export function useGltfAnimations<
 
     if (!currentGltf?.animations.length || !resolvedRoot) return
 
-    // if there's a mixer, we stop all running actions
-    const newActions = currentGltf.animations.reduce((acc, clip) => {
+    const newActions: Partial<Record<T, AnimationAction>> = {}
+
+    for (const clip of currentGltf.animations) {
       const action = mixer.clipAction(clip, resolvedRoot)
-      return {
-        ...acc,
-        [clip.name as T]: action
-      }
-    }, {} as Actions)
-    actions = newActions
+      newActions[clip.name as T] = action
+    }
+
+    actions = newActions as Actions
 
     return () => {
-      Object.values(newActions).forEach((a) => {
-        const action = a as AnimationAction
+      // if there's a mixer, we stop all running actions
+      for (const action of Object.values(newActions) as AnimationAction[]) {
         action.stop()
         mixer.uncacheClip(action.getClip())
-      })
+      }
     }
   })
 

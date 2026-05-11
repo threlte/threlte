@@ -1,9 +1,10 @@
 <script lang="ts">
   import { GLTF, useGltfAnimations, type ThrelteGltf } from '@threlte/extras'
 
-  type Props = {
+  interface Props {
     action: 'idle' | 'run' | 'walk'
   }
+
   let { action = 'idle' }: Props = $props()
 
   let gltf = $state.raw<ThrelteGltf>()

@@ -28,14 +28,21 @@ export const useMeasure = (element: HTMLElement) => {
 
   const observer = new ResizeObserver(() => {
     dirty = true
+    // Stamp size eagerly so consumers reading size.current outside rAF
+    // (event handlers, async work) see fresh dimensions.
     const rect = element.getBoundingClientRect()
     size = { width: rect.width, height: rect.height }
   })
 
+  // ResizeObserver runs after rAF in the same frame, so trusting it alone would
+  // render one frame stale during resize. This re-reads layout at rAF time so
+  // renderer.setSize() runs before paint.
   function shouldUpdateSize() {
+    // clientWidth/Height is integer-rounded but cheap; gate the precise,
+    // transform-aware getBoundingClientRect read behind it. The dirty flag
+    // forces the precise read after the observer fires, catching subpixel
+    // changes that integer-rounded clientWidth/Height misses.
     const { clientWidth, clientHeight } = element
-
-    // super cheap check every frame
     if (!dirty && clientWidth === lastClientWidth && clientHeight === lastClientHeight) {
       return false
     }
@@ -44,7 +51,6 @@ export const useMeasure = (element: HTMLElement) => {
     lastClientHeight = clientHeight
     dirty = false
 
-    // expensive read only when something likely changed
     const rect = element.getBoundingClientRect()
     size = { width: rect.width, height: rect.height }
 

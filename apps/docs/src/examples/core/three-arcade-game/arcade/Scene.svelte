@@ -30,7 +30,7 @@
 
   const machineIsOff = $derived(game.state == 'off' ? true : false)
 
-  const cameraTweenZ = new Tween(2.1, {
+  const cameraTweenZ = Tween.of(() => (machineIsOff ? 2.1 : 1.4), {
     duration: 3e3,
     easing: cubicInOut
   })
@@ -45,48 +45,8 @@
     z: 0.1447
   }
 
-  const cameraTargetPos = new Spring(
-    {
-      x: $pointer.x * 0.1,
-      y: 1.23,
-      z: 0
-    },
-    {
-      precision: 0.000001
-    }
-  )
-
-  const cameraPos = new Spring(
-    {
-      x: $pointer.x * 0.1, //(machineIsOff ? 2 : 0.1),
-      y: 1.48,
-      z: cameraTweenZ.current
-    },
-    {
-      stiffness: 0.05,
-      damping: 0.9,
-      precision: 0.00001
-    }
-  )
-
-  let cameraTarget = $state.raw<Object3D>()
-  let camera = $state.raw<PerspectiveCamera>()
-
-  const backgroundColor = new Tween(new Color('#020203'), {
-    duration: 2.5e3
-  })
-
-  useTask(() => {
-    if (!camera || !cameraTarget) return
-    camera.lookAt(cameraTarget.position)
-  })
-
-  const onScreenClick = () => {
-    screenFocused = !screenFocused
-  }
-
-  $effect(() => {
-    cameraTargetPos.set(
+  const cameraTargetPos = Spring.of(
+    () =>
       screenFocused
         ? {
             ...screenPos,
@@ -96,12 +56,14 @@
             x: $pointer.x * 0.1,
             y: 1.23,
             z: 0
-          }
-    )
-  })
+          },
+    {
+      precision: 0.000001
+    }
+  )
 
-  $effect(() => {
-    cameraPos.set(
+  const cameraPos = Spring.of(
+    () =>
       screenFocused
         ? {
             x: screenPos.x,
@@ -112,14 +74,32 @@
             x: $pointer.x * (machineIsOff ? 0.1 : 0.1),
             y: 1.48,
             z: cameraTweenZ.current
-          }
-    )
+          },
+    {
+      stiffness: 0.05,
+      damping: 0.9,
+      precision: 0.00001
+    }
+  )
+
+  let cameraTarget = $state.raw<Object3D>()
+  let camera = $state.raw<PerspectiveCamera>()
+
+  const backgroundColor = Tween.of(
+    () => (machineIsOff ? new Color('#020203') : new Color('#020203')),
+    {
+      duration: 2.5e3
+    }
+  )
+
+  useTask(() => {
+    if (!camera || !cameraTarget) return
+    camera.lookAt(cameraTarget.position)
   })
 
-  $effect(() => {
-    cameraTweenZ.set(machineIsOff ? 2.1 : 1.4)
-    backgroundColor.set(machineIsOff ? new Color('#020203') : new Color('#020203'))
-  })
+  const onScreenClick = () => {
+    screenFocused = !screenFocused
+  }
 
   $effect(() => {
     scene.background = new Color(backgroundColor.current)

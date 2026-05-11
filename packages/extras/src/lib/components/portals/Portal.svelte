@@ -15,11 +15,15 @@
   $effect.pre(() => {
     if (!children) return
 
-    if (!portals.has(id)) {
-      portals.set(id, new SvelteSet())
+    const currentId = id
+
+    if (!portals.has(currentId)) {
+      portals.set(currentId, new SvelteSet())
     }
 
-    portals.get(id)?.add(children)
-    return () => portals.get(id)?.delete(children)
+    portals.get(currentId)?.add(children)
+    return () => {
+      portals.get(currentId)?.delete(children)
+    }
   })
 </script>

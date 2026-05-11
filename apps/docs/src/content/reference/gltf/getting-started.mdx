@@ -254,7 +254,11 @@ Command: npx @threlte/gltf@latest ./stacy.glb -t
   ref = new Group()
 
   const gltf = useGltf<GLTFResult>('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+
+  export const { actions, mixer } = useGltfAnimations<ActionName>(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 <T

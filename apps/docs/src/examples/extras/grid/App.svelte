@@ -3,7 +3,7 @@
   import { Canvas, T } from '@threlte/core'
   import { Checkbox, Color, Folder, Pane, List, Slider, Point } from 'svelte-tweakpane-ui'
   import { Grid, TransformControls } from '@threlte/extras'
-  import { PlaneGeometry, Vector3 } from 'three'
+  import { PlaneGeometry } from 'three'
   import { SimplexNoise } from 'three/examples/jsm/Addons.js'
 
   let cellSize = $state(1)
@@ -24,7 +24,7 @@
   let followCamera = $state(false)
   let infiniteGrid = $state(false)
   let useFadeOrigin = $state(false)
-  let fadeOrigin = $state(new Vector3())
+  let fadeOrigin = $state<[number, number, number]>([0, 0, 0])
   let fadeDistance = $state(100)
   let backgroundColor = $state('#003eff')
   let backgroundOpacity = $state(0)
@@ -211,7 +211,7 @@
     {#if useFadeOrigin}
       <TransformControls
         onobjectChange={(e) => {
-          fadeOrigin = e.target.object.position.clone()
+          e.target.object.position.toArray(fadeOrigin)
         }}
       />
     {/if}
