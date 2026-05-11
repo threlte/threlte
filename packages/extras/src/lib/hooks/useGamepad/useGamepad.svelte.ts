@@ -216,25 +216,7 @@ const createXrStandard = (allEvents: Events, events: Events[]) => {
       const s = sticks[name]
       if (!s) throw new Error(`Unknown XR gamepad stick: "${name}"`)
       return s
-    },
-
-    /** @deprecated Use `button('trigger')` instead */
-    trigger: buttons.trigger,
-    /** @deprecated Use `button('squeeze')` instead */
-    squeeze: buttons.squeeze,
-    /** @deprecated Use `button('touchpadButton')` instead */
-    touchpadButton: buttons.touchpadButton,
-    /** @deprecated Use `button('thumbstickButton')` instead */
-    thumbstickButton: buttons.thumbstickButton,
-    /** @deprecated Use `button('clusterBottom')` instead */
-    clusterBottom: buttons.clusterBottom,
-    /** @deprecated Use `button('clusterTop')` instead */
-    clusterTop: buttons.clusterTop,
-
-    /** @deprecated Use `stick('touchpad')` instead */
-    touchpad: sticks.touchpad,
-    /** @deprecated Use `stick('thumbstick')` instead */
-    thumbstick: sticks.thumbstick
+    }
   }
 }
 
@@ -296,47 +278,7 @@ const createStandard = (allEvents: Events, events: Events[]) => {
       const s = sticks[name]
       if (!s) throw new Error(`Unknown gamepad stick: "${name}"`)
       return s
-    },
-
-    /** @deprecated Use `button('clusterBottom')` instead */
-    clusterBottom: buttons.clusterBottom,
-    /** @deprecated Use `button('clusterRight')` instead */
-    clusterRight: buttons.clusterRight,
-    /** @deprecated Use `button('clusterLeft')` instead */
-    clusterLeft: buttons.clusterLeft,
-    /** @deprecated Use `button('clusterTop')` instead */
-    clusterTop: buttons.clusterTop,
-    /** @deprecated Use `button('leftBumper')` instead */
-    leftBumper: buttons.leftBumper,
-    /** @deprecated Use `button('rightBumper')` instead */
-    rightBumper: buttons.rightBumper,
-    /** @deprecated Use `button('leftTrigger')` instead */
-    leftTrigger: buttons.leftTrigger,
-    /** @deprecated Use `button('rightTrigger')` instead */
-    rightTrigger: buttons.rightTrigger,
-    /** @deprecated Use `button('select')` instead */
-    select: buttons.select,
-    /** @deprecated Use `button('start')` instead */
-    start: buttons.start,
-    /** @deprecated Use `button('leftStickButton')` instead */
-    leftStickButton: buttons.leftStickButton,
-    /** @deprecated Use `button('rightStickButton')` instead */
-    rightStickButton: buttons.rightStickButton,
-    /** @deprecated Use `button('directionalTop')` instead */
-    directionalTop: buttons.directionalTop,
-    /** @deprecated Use `button('directionalBottom')` instead */
-    directionalBottom: buttons.directionalBottom,
-    /** @deprecated Use `button('directionalLeft')` instead */
-    directionalLeft: buttons.directionalLeft,
-    /** @deprecated Use `button('directionalRight')` instead */
-    directionalRight: buttons.directionalRight,
-    /** @deprecated Use `button('center')` instead */
-    center: buttons.center,
-
-    /** @deprecated Use `stick('leftStick')` instead */
-    leftStick: sticks.leftStick,
-    /** @deprecated Use `stick('rightStick')` instead */
-    rightStick: sticks.rightStick
+    }
   }
 }
 
@@ -443,7 +385,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
         const { buttons = [], axes = [] } = gamepad.raw ?? {}
 
         xrButtons.forEach((name, index) =>
-          processButton(name, gamepad[name], allEvents, events[index], buttons[index])
+          processButton(name, gamepad.button(name), allEvents, events[index], buttons[index])
         )
 
         processAxis(
@@ -567,10 +509,31 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
       if (!pad) {
         // Clear transient button/axis state by feeding empty sources.
         for (let i = 0; i < standardButtons.length; i += 1) {
-          processButton(standardButtons[i], gamepad[standardButtons[i]], allEvents, events[i])
+          processButton(
+            standardButtons[i],
+            gamepad.button(standardButtons[i]),
+            allEvents,
+            events[i]
+          )
         }
-        processAxis('leftStick', gamepad.leftStick, allEvents, events[17], axisDeadzone, 0, 0)
-        processAxis('rightStick', gamepad.rightStick, allEvents, events[18], axisDeadzone, 0, 0)
+        processAxis(
+          'leftStick',
+          gamepad.stick('leftStick'),
+          allEvents,
+          events[17],
+          axisDeadzone,
+          0,
+          0
+        )
+        processAxis(
+          'rightStick',
+          gamepad.stick('rightStick'),
+          allEvents,
+          events[18],
+          axisDeadzone,
+          0,
+          0
+        )
         return
       }
 
@@ -609,7 +572,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
           source = readButton(pad, mapping?.buttons?.[name], i)
         }
 
-        processButton(name, gamepad[name], allEvents, events[i], source)
+        processButton(name, gamepad.button(name), allEvents, events[i], source)
       }
 
       const leftStickVals = readStick(pad, mapping?.leftStick, 0, 1)

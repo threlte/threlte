@@ -23,12 +23,6 @@ export type TransformControlsProps = Omit<
      */
     autoPauseControls?: boolean
 
-    /** @deprecated Use `autoPauseControls` instead. */
-    autoPauseOrbitControls?: boolean
-
-    /** @deprecated Use `autoPauseControls` instead. */
-    autoPauseTrackballControls?: boolean
-
     /**
      * An arbitrary camera controls instance to pause while dragging.
      * Any object with an `enabled` property works (e.g. a custom controls class).
