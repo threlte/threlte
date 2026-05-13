@@ -17499,8 +17499,8 @@ URL: https://threlte.xyz/previews/pr-1819/docs/reference/extras/wobble
 
 `<Wobble>` adds a time-varying vertex displacement to whatever material is already on its parent
 mesh. Because it patches the material rather than replacing it, you can wobble any
-`MeshStandardMaterial`, `MeshPhysicalMaterial`, `MeshLambertMaterial`, `MeshToonMaterial`, and so
-on — pick the look you want, then drop `<Wobble>` in to make it move.
+`MeshStandardMaterial`, `MeshPhysicalMaterial`, `MeshToonMaterial`, etc. —
+pick the look you want, then drop `<Wobble>` in to make it move.
 
 <Example path="extras/wobble" />
 
@@ -17530,15 +17530,13 @@ on — pick the look you want, then drop `<Wobble>` in to make it move.
 ```
 
 The wobble is computed per-vertex, so meshes need enough geometric detail for the deformation
-to look smooth. Increase the segment counts on the geometry if the surface looks faceted.
-
-Setting `speed={0}` pauses the animation without unmounting the component.
+to look smooth.
 
 ### Anchoring the base
 
-Pass `anchor` to pin a plane along the wobble axis. Amplitude grows with each vertex's distance
-from that plane — vertices on the plane don't move, ones farther away move more. This is what
-you want for a plant whose base shouldn't slide around in its pot:
+Pass `anchor` to pin a plane that stays put while everything else wobbles around it. Amplitude
+grows with distance from that plane — what you want for a plant whose base shouldn't slide
+around in its pot:
 
 ```svelte title="AnchoredPlant.svelte"
 <T.Mesh castShadow>
@@ -17552,13 +17550,20 @@ you want for a plant whose base shouldn't slide around in its pot:
 </T.Mesh>
 ```
 
+### Shadows
+
 Shadows wobble alongside the visible mesh — `<Wobble>` attaches matching `customDepthMaterial`
 and `customDistanceMaterial` to the parent so the shadow silhouette tracks the deformation.
 
-### Pointing the bend
+Set `shadow` to `false` to disable this.
 
-When `bendiness > 0`, an unset `forceDirection` produces a slowly drifting wind-like heading.
-Set `forceDirection` when the force has a known direction — e.g. a blast from a specific side:
+```svelte
+<Wobble shadow={false} />
+```
+
+### Pointing the bend with `forceDirection`
+
+When `bendiness > 0`, setting `forceDirection` produces a bend from a specific side:
 
 ```svelte
 <Wobble
@@ -17571,7 +17576,7 @@ Set `forceDirection` when the force has a known direction — e.g. a blast from 
 ### Sideways objects
 
 Default `axis` is `[0, 1, 0]` — Y-up. Pass a different axis for models whose "up" is along X or
-Z (a vine, a horizontally-mounted flag, a Z-up model):
+Z:
 
 ```svelte
 <T.Mesh>
@@ -17585,11 +17590,10 @@ Z (a vine, a horizontally-mounted flag, a Z-up model):
 </T.Mesh>
 ```
 
-### Adjusting frequency for big or small geometry
+### Tuning frequency for geometry size
 
-`frequency` scales the per-vertex spatial sampling. The default (`1`) is tuned for ~1–3 unit
-geometry; on much larger meshes the wobble looks uniform across the whole shape, on tiny ones
-it gets too chaotic. Tune `frequency` to recover the look you want:
+The default `frequency` is tuned for ~1–3 unit meshes. On much larger geometry the wobble looks
+uniform across the whole shape; on tiny ones it gets too chaotic. Adjust to taste:
 
 ```svelte
 <!-- Tall building-sized mesh -->
@@ -17623,7 +17627,7 @@ a single timeline, scrubbing back and forth, or pausing:
 ### Reacting to material swaps
 
 By default `<Wobble>` patches the parent mesh's material once when it mounts. If you swap
-materials at runtime, pass it in via `material` so the patch follows:
+materials at runtime, pass it in:
 
 ```svelte
 <script lang="ts">
