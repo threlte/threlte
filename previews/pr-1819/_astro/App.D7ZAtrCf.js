@@ -98,8 +98,7 @@ import"./disclose-version.DsnmJJEf.js";import{p as se,L as k,a as ie,f as p,s as
        vec2 acrossPos = vec2(dot(position, across1), dot(position, across2));
 
        // For InstancedMesh / BatchedMesh, fold each instance's "across"
-       // translation into the noise sample so instances wobble out of
-       // phase. #ifdef guards keep us safe on non-instanced meshes.
+       // translation into the noise sample so instances wobble out of phase.
        vec2 instanceOffset = vec2(0.0);
        #ifdef USE_INSTANCING
          vec3 instTrans = vec3(instanceMatrix[3].x, instanceMatrix[3].y, instanceMatrix[3].z);
@@ -114,6 +113,7 @@ import"./disclose-version.DsnmJJEf.js";import{p as se,L as k,a as ie,f as p,s as
        vec2 spatialSample = (acrossPos + instanceOffset) * frequency;
 
        float sineWobble = sin(1.0 + time + along * frequency + instanceOffset.x);
+       
        // Domain warping: sample fBM once to perturb the input of a second
        // fBM call. Breaks up the grid-aligned feel of straight noise and
        // gives fluid, swirling motion (iquilezles's classic trick).
