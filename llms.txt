@@ -134,6 +134,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 - [<View>](https://threlte.xyz/docs/reference/extras/view)
 - [<VirtualEnvironment>](https://threlte.xyz/docs/reference/extras/virtual-environment)
 - [<Wireframe>](https://threlte.xyz/docs/reference/extras/wireframe)
+- [<Wobble>](https://threlte.xyz/docs/reference/extras/wobble)
 
 ### @threlte/rapier
 
