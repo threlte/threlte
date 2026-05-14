@@ -4171,7 +4171,11 @@ Command: npx @threlte/gltf@latest ./stacy.glb
   ref = new Group()
 
   const gltf = useGltf('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations(gltf, ref)
+
+  export const { actions, mixer } = useGltfAnimations(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 <T
@@ -4332,7 +4336,11 @@ Command: npx @threlte/gltf@latest ./stacy.glb -t
   ref = new Group()
 
   const gltf = useGltf<GLTFResult>('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+
+  export const { actions, mixer } = useGltfAnimations<ActionName>(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 <T
@@ -4375,7 +4383,10 @@ extracts all clips and prepares them as actions:
 ```ts
 const gltf = useGltf('/stacy.glb')
 
-export const { actions, mixer } = useGltfAnimations(gltf, ref)
+export const { actions, mixer } = useGltfAnimations(
+  () => $gltf,
+  () => ref
+)
 ```
 
 If you want to play an animation you can do so at any time:
@@ -14493,9 +14504,7 @@ The `<Sky>` component will only re-render the cubemap when the properties change
 Package: @threlte/extras  
 URL: https://threlte.xyz/previews/pr-1751/docs/reference/extras/soft-shadows
 
-This component is a port of the component [`<SoftShadows>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/softShadows.tsx).
-
-It injects Percentage-Closer Soft Shadows (PCSS) into Three.js' shader chunk. Mounting and unmounting this component will lead to all shaders being be re-compiled, although it will only cause overhead if `<SoftShadows>` is mounted after the scene has already rendered, if it mounts with everything else in your scene shaders will compile naturally.
+`<SoftShadows>` replaces Three.js's default hard shadows with Percentage-Closer Soft Shadows (PCSS): shadows that are sharp where they touch their caster and soften with distance. Mount it alongside the rest of your scene — adding or removing it after the first render recompiles every shadow-receiving material.
 
 <Example path="extras/soft-shadows" />
 
@@ -15386,6 +15395,18 @@ Framebuffer objects are useful when you want to render a scene to something othe
 
 <Example path="extras/use-fbo" />
 
+## Usage
+
+`useFBO` accepts an options getter. Reads inside the getter are tracked through runes, so changes to `size` and `depth` are applied to the render target reactively. Render-target construction options (`format`, `type`, `samples`, …) are read once at hook initialization.
+
+```typescript
+let resolution = $state(512)
+
+const target = useFBO(() => ({
+  size: { width: resolution, height: resolution }
+}))
+```
+
 ## Options
 
 `useFBO`'s options object extends `THREE.RenderTargetOptions`. The additional properties are listed below.
@@ -15411,7 +15432,7 @@ If `size` is provided, the `width` and `height` of the texture are taken from `s
 ```typescript
 const size = { width: 512, height: 512 }
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === size.width)
 assert(target.height === size.height)
 ```
@@ -15421,7 +15442,7 @@ assert(target.height === size.height)
 ```typescript
 const size = { width: 512 }
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === size.width)
 assert(target.height === 1)
 ```
@@ -15429,7 +15450,7 @@ assert(target.height === 1)
 ```typescript
 const size = { height: 512 }
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === 1)
 assert(target.height === size.height)
 ```
@@ -15437,7 +15458,7 @@ assert(target.height === size.height)
 ```typescript
 const size = {}
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === 1)
 assert(target.height === 1)
 ```
@@ -15451,7 +15472,7 @@ If `depth` is set to `true`, a depth texture is created and sized to match the s
 ```typescript
 const { size } = useThrelte()
 
-const target = useFBO({ depth: true })
+const target = useFBO(() => ({ depth: true }))
 
 assert(target.depthTexture.image.width === size.current.width)
 assert(target.depthTexture.image.height === size.current.height)
@@ -15462,7 +15483,7 @@ If `depth` is a depth texture instance, it is assigned to the `depthTexture` pro
 ```typescript
 const depthTexture = new DepthTexture(512, 512)
 
-const target = useFBO({ depth: depthTexture })
+const target = useFBO(() => ({ depth: depthTexture }))
 
 assert(target.depthTexture === depthTexture)
 ```
@@ -15472,7 +15493,7 @@ If `depth` is set to a "size" object, the depth texture size is set the `width` 
 ```typescript
 const depth = { width: 512, height: 512 }
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === depth.width)
 assert(target.depthTexture.image.height === depth.height)
@@ -15483,7 +15504,7 @@ assert(target.depthTexture.image.height === depth.height)
 ```typescript
 const depth = { width: 512 }
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === depth.width)
 assert(target.depthTexture.image.height === 1)
@@ -15492,7 +15513,7 @@ assert(target.depthTexture.image.height === 1)
 ```typescript
 const depth = { height: 512 }
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === 1)
 assert(target.depthTexture.image.height === depth.height)
@@ -15501,7 +15522,7 @@ assert(target.depthTexture.image.height === depth.height)
 ```typescript
 const depth = {}
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === 1)
 assert(target.depthTexture.image.height === 1)
@@ -16407,31 +16428,34 @@ A convenience hook to use gltf animations loaded by a [\<GLTF>](/docs/reference/
 
 ## Examples
 
+`useGltfAnimations` takes the `gltf` as a getter so that reads are tracked through runes automatically. The hook returns the `mixer` and an `actions` store keyed by clip name — type the clip names with a generic to get autocompletion.
+
 ### With the `<GLTF>` component
 
-Without any arguments, `useGltfAnimations` returns a store which can be bound to the `<GLTF>` component.
+Bind a local `$state` variable to the `<GLTF>` component's `gltf` prop and pass the getter to `useGltfAnimations`.
 
 ```svelte
 <script lang="ts">
-  import { GLTF, useGltfAnimations } from '@threlte/extras'
+  import { GLTF, useGltfAnimations, type ThrelteGltf } from '@threlte/extras'
 
-  const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>()
+  let gltf = $state<ThrelteGltf>()
+  const { actions, mixer } = useGltfAnimations<'All Animations'>(() => gltf)
   mixer.timeScale = 0.5
 
-  export const triggerAnimation = () => {
+  $effect(() => {
     $actions['All Animations']?.play()
-  }
+  })
 </script>
 
 <GLTF
   url="/path/to/model.glb"
-  bind:gltf={$gltf}
+  bind:gltf
 />
 ```
 
 ### With the `useGltf` hook
 
-For cases where you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, `useGltfAnimations` accepts a writable store as its first argument. [`useGltf`](/docs/reference/extras/use-gltf) returns a store that can be directly passed to `useGltfAnimations`.
+When you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, load it with [`useGltf`](/docs/reference/extras/use-gltf) and pass the value through the getter.
 
 ```svelte
 <script lang="ts">
@@ -16439,7 +16463,7 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 
   const gltf = useGltf('/path/to/model.glb')
-  const { actions, mixer } = useGltfAnimations<'All Animations'>(gltf)
+  const { actions, mixer } = useGltfAnimations<'All Animations'>(() => $gltf)
 
   $effect(() => {
     $actions['All Animations']?.play()
@@ -16453,10 +16477,11 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
 
 ## Applying Animations to a Different Root
 
-`useGltfAnimations`'s second optional argument allows you to apply the animations to a root other than the GLTF scene.
+`useGltfAnimations`'s second optional argument is a getter for an alternative root `Object3D`. Use this when you want to retarget the clips onto a separate rig rather than the gltf's own scene.
 
 ```svelte
-<script>
+<script lang="ts">
+  import { T } from '@threlte/core'
   import { useGltfAnimations, useGltf } from '@threlte/extras'
   import { Group } from 'three'
 
@@ -16464,33 +16489,16 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
 
   const group = new Group()
 
-  const { root } = useGltfAnimations(gltf, group)
-  // $root === group
+  const { actions } = useGltfAnimations(
+    () => $gltf,
+    () => group
+  )
 </script>
 
 {#await gltf then { scene }}
   <T is={group}>
     <T is={scene} />
   </T>
-{/await}
-```
-
-You can also set the root store without passing in the second argument
-
-```svelte
-<script>
-  import { useGltfAnimations, useGltf } from '@threlte/extras'
-  import { Group } from 'three'
-
-  const gltf = useGltf('/path/to/model.glb')
-
-  const { root } = useGltfAnimations(gltf)
-</script>
-
-{#await gltf then { scene }}
-  <T.Group bind:ref={$root}>
-    <T is={scene} />
-  </T.Group>
 {/await}
 ```
 
@@ -17479,5 +17487,160 @@ This means that any geometry with a `<Wireframe>` that has indices will use a cl
   <T.BoxGeometry />
   <T.MeshStandardMaterial />
   <Wireframe />
+</T.Mesh>
+```
+
+---
+
+## <Wobble>
+
+Package: @threlte/extras  
+URL: https://threlte.xyz/previews/pr-1751/docs/reference/extras/wobble
+
+`<Wobble>` adds a time-varying vertex displacement to whatever material is already on its parent
+mesh. Because it patches the material rather than replacing it, you can wobble any
+`MeshStandardMaterial`, `MeshPhysicalMaterial`, `MeshToonMaterial`, etc. —
+pick the look you want, then drop `<Wobble>` in to make it move.
+
+<Example path="extras/wobble" />
+
+<small>
+  [Rhyzome Plant](https://sketchfab.com/3d-models/rhyzome-plant-7191a1b935ac452987866573713e4da5) by
+  Blizzy
+</small>
+
+## Examples
+
+### Basic Example
+
+```svelte title="WobblingTorus.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { Wobble } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <T.TorusGeometry />
+  <T.MeshStandardMaterial color="#ff6b6b" />
+  <Wobble
+    speed={2}
+    factor={2}
+  />
+</T.Mesh>
+```
+
+The wobble is computed per-vertex, so meshes need enough geometric detail for the deformation
+to look smooth.
+
+### Anchoring the base
+
+Pass `anchor` to pin a plane that stays put while everything else wobbles around it. Amplitude
+grows with distance from that plane — what you want for a plant whose base shouldn't slide
+around in its pot:
+
+```svelte title="AnchoredPlant.svelte"
+<T.Mesh castShadow>
+  <T is={plantGeometry} />
+  <T.MeshStandardMaterial color="#4a7a3a" />
+  <Wobble
+    speed={1}
+    factor={0.5}
+    anchor={plantBaseY}
+  />
+</T.Mesh>
+```
+
+### Shadows
+
+Shadows wobble alongside the visible mesh — `<Wobble>` attaches matching `customDepthMaterial`
+and `customDistanceMaterial` to the parent so the shadow silhouette tracks the deformation.
+
+Set `shadow` to `false` to disable this.
+
+```svelte
+<Wobble shadow={false} />
+```
+
+### Pointing the bend with `forceDirection`
+
+When `bendiness > 0`, setting `forceDirection` produces a bend from a specific side:
+
+```svelte
+<Wobble
+  factor={1}
+  bendiness={1}
+  forceDirection={[1, 0, 0]}
+/>
+```
+
+### Sideways objects
+
+Default `axis` is `[0, 1, 0]` — Y-up. Pass a different axis for models whose "up" is along X or
+Z:
+
+```svelte
+<T.Mesh>
+  <T is={vineGeometry} />
+  <T.MeshStandardMaterial />
+  <Wobble
+    axis={[1, 0, 0]}
+    bendiness={1}
+    factor={0.4}
+  />
+</T.Mesh>
+```
+
+### Tuning frequency for geometry size
+
+The default `frequency` is tuned for ~1–3 unit meshes. On much larger geometry the wobble looks
+uniform across the whole shape; on tiny ones it gets too chaotic. Adjust to taste:
+
+```svelte
+<!-- Tall building-sized mesh -->
+<Wobble
+  factor={1}
+  frequency={0.1}
+/>
+```
+
+### Driving time externally
+
+Provide `time` (in seconds) to drive the clock yourself. Useful for syncing many `<Wobble>`s to
+a single timeline, scrubbing back and forth, or pausing:
+
+```svelte
+<script lang="ts">
+  let clock = $state(0)
+  // ...your own time source...
+</script>
+
+<T.Mesh>
+  <T.SphereGeometry />
+  <T.MeshStandardMaterial />
+  <Wobble
+    time={clock}
+    factor={1}
+  />
+</T.Mesh>
+```
+
+### Reacting to material swaps
+
+By default `<Wobble>` patches the parent mesh's material once when it mounts. If you swap
+materials at runtime, pass it in:
+
+```svelte
+<script lang="ts">
+  let { material } = $props()
+</script>
+
+<T.Mesh>
+  <T.SphereGeometry />
+  <T is={material} />
+  <Wobble
+    {material}
+    speed={2}
+    factor={1}
+  />
 </T.Mesh>
 ```
