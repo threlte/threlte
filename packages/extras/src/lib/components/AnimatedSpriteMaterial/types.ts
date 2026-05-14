@@ -56,6 +56,8 @@ export type AnimatedSpriteProps = Props<Material> & {
    * The desired frames per second of the animation
    *
    * This will override any frame durations specified in JSON
+   *
+   * @default 10
    */
   fps?: number
 

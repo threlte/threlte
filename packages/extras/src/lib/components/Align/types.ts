@@ -41,8 +41,8 @@ export type AlignProps = Props<Group, [{ align: () => void; ref: Group }]> & {
     height: number
     depth: number
     boundingBox: Box3
+    center: Vector3
     boundingSphere: Sphere
-    align: Vector3
     verticalAlignment: number
     horizontalAlignment: number
     depthAlignment: number
