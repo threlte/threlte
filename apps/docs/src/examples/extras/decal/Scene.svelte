@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { type Vector3Tuple, DoubleSide } from 'three'
+  import { type Vector3Tuple, DoubleSide, Vector3 } from 'three'
   import { T } from '@threlte/core'
   import {
     Decal,
@@ -10,7 +10,7 @@
     useSuspense
   } from '@threlte/extras'
   import { RigidBody as RigidBodyRef } from '@dimforge/rapier3d-compat'
-  import { Collider, RigidBody } from '@threlte/rapier'
+  import { Attractor, Collider, RigidBody } from '@threlte/rapier'
 
   let { controls = false, debug = false } = $props()
 
@@ -21,36 +21,17 @@
   let bodies = $state<RigidBodyRef[]>([])
   let position = $state<Vector3Tuple>([0.5, 0, 0.5])
 
-  let current = 0
-
-  $effect(() => {
-    const intervalId = setInterval(() => {
-      current += 1
-      current %= bodies.length
-      const body = bodies[current]
-
-      body?.setLinvel({ x: 0, y: 0, z: 0 }, true)
-      body?.setAngvel({ x: 0, y: 0, z: 0 }, true)
-      body?.setTranslation(
-        { x: (Math.random() - 0.5) * 0.1, y: 5, z: (Math.random() - 0.5) * 0.1 },
-        true
-      )
-    }, 400)
-
-    return clearInterval(intervalId)
-  })
+  const vec3 = new Vector3()
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[5, 1, 4]}
-  oncreate={(ref) => ref.lookAt(0, 1, 0)}
 >
   <OrbitControls
     enablePan={false}
     enableZoom={false}
     enableDamping
-    target={[0, 1, 0]}
   />
 </T.PerspectiveCamera>
 
@@ -59,6 +40,8 @@
   position={[5, 5, 5]}
   intensity={1.25}
 />
+
+<Attractor />
 
 <T.Mesh receiveShadow>
   <Collider
@@ -100,7 +83,8 @@
   <RigidBody
     bind:rigidBody={bodies[index]}
     oncreate={(ref) => {
-      ref.setTranslation({ x: 0, y: -10 + index, z: 0 }, true)
+      vec3.randomDirection()
+      ref.setTranslation(vec3, true)
     }}
   >
     <T.Mesh castShadow>

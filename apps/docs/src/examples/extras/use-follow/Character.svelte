@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { GLTF, useGltfAnimations } from '@threlte/extras'
+  import { GLTF, type ThrelteGltf, useGltfAnimations } from '@threlte/extras'
 
   interface Props {
     action: 'idle' | 'run' | 'walk'
@@ -7,11 +7,13 @@
 
   let { action = 'idle' }: Props = $props()
 
-  let { gltf, actions } = useGltfAnimations()
+  let gltf = $state<ThrelteGltf>()
+
+  let { actions } = useGltfAnimations(() => gltf)
   let currentAction = 'idle'
 
   $effect(() => {
-    $actions?.['idle']?.play()
+    $actions?.idle?.play()
   })
 
   $effect(() => {
@@ -32,7 +34,7 @@
 </script>
 
 <GLTF
-  bind:gltf={$gltf}
+  bind:gltf
   url="https://threejs.org/examples/models/gltf/Xbot.glb"
   oncreate={(scene) => {
     scene.traverse((child) => {

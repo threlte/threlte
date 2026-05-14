@@ -1,5 +1,3 @@
-import { onDestroy } from 'svelte'
-
 export const useTimeout = () => {
   const timeoutHandlers = new Set<ReturnType<typeof setTimeout>>()
 
@@ -8,8 +6,12 @@ export const useTimeout = () => {
     timeoutHandlers.add(handler)
   }
 
-  onDestroy(() => {
-    timeoutHandlers.forEach((handler) => clearTimeout(handler))
+  $effect(() => {
+    return () => {
+      for (const handler of timeoutHandlers) {
+        clearTimeout(handler)
+      }
+    }
   })
 
   return {

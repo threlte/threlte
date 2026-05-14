@@ -22,16 +22,14 @@
 
   let machineIsOff = $derived(game.state === 'off' ? true : false)
 
-  const bloomIntensity = new Tween(0, {
+  const bloomIntensity = Tween.of(() => (machineIsOff ? 0 : 1), {
     duration: 3e3
   })
 
   $effect(() => {
-    bloomIntensity.set(machineIsOff ? 0 : 1)
-  })
-  $effect(() => {
     if (bloomEffect) bloomEffect.intensity = bloomIntensity.current
   })
+
   $effect(() => {
     if ($camera && game.arcadeMachineScene) {
       addComposerAndPasses()

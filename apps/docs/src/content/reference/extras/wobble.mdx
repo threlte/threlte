@@ -1,0 +1,235 @@
+---
+category: '@threlte/extras'
+group: 'Visual Effects'
+title: '<Wobble>'
+sourcePath: 'packages/extras/src/lib/components/Wobble/Wobble.svelte'
+type: 'component'
+componentSignature:
+  {
+    props:
+      [
+        {
+          name: 'speed',
+          type: 'number',
+          default: '1',
+          description: 'How fast the wobble animates. Ignored when `time` is provided.'
+        },
+        {
+          name: 'factor',
+          type: 'number',
+          default: '1',
+          description: 'How strongly vertices are displaced. Roughly the maximum rotation angle (in radians) at full weight.'
+        },
+        {
+          name: 'frequency',
+          type: 'number',
+          default: '1',
+          description: 'How tight the per-vertex wobble pattern is. Increase for large geometry, decrease for small. Default is tuned for ~1–3 unit meshes.'
+        },
+        {
+          name: 'noise',
+          type: 'number',
+          default: '0',
+          description: 'Per-vertex variation. 0 keeps every vertex in lockstep on a clean sine; 1 has neighbours fall out of phase from a noise field.'
+        },
+        {
+          name: 'pulse',
+          type: 'number',
+          default: '0',
+          description: 'Amplitude pulsation. 0 keeps the wobble steady; 1 lets the whole mesh swell and fade over time.'
+        },
+        {
+          name: 'drift',
+          type: 'number',
+          default: '0',
+          description: 'Bend-direction wander. 0 holds the bend direction steady; 1 lets it sweep the full circle over time. Only used when `bendiness > 0` and `forceDirection` is unset.'
+        },
+        {
+          name: 'bendiness',
+          type: 'number',
+          default: '0',
+          description: 'Blends from an axial twist (0) to a directional bend pivoted at the anchor (1).'
+        },
+        {
+          name: 'axis',
+          type: 'Vector3Tuple',
+          default: '[0, 1, 0]',
+          description: 'The wobble "up" direction in local geometry space. Twist happens around this axis; bend tilts perpendicular to it.'
+        },
+        {
+          name: 'anchor',
+          type: 'number',
+          description: 'Position along `axis` where the mesh stays anchored. Wobble amplitude scales with each vertex distance from this plane. When omitted, every vertex wobbles equally.'
+        },
+        {
+          name: 'forceDirection',
+          type: 'Vector3Tuple',
+          description: 'Direction the bend leans toward, in local geometry space. The component along `axis` is projected out. When omitted, the direction drifts on its own (see `drift`).'
+        },
+        {
+          name: 'time',
+          type: 'number',
+          description: 'Drive the clock yourself, in seconds. When set, `speed` is ignored. Useful for syncing many wobbles to one timeline or scrubbing through poses.'
+        },
+        {
+          name: 'material',
+          type: 'Material | Material[]',
+          description: 'The material to wobble. When omitted, the parent mesh material (read once at mount) is patched. Pass a bound material ref to react to runtime material swaps.'
+        },
+        {
+          name: 'shadow',
+          type: 'boolean',
+          default: 'true',
+          description: 'Whether the shadow silhouette follows the wobble via attached custom depth/distance materials. Set to false to skip — useful if the mesh does not cast shadows, or you manage those materials yourself.'
+        }
+      ]
+  }
+---
+
+`<Wobble>` adds a time-varying vertex displacement to whatever material is already on its parent
+mesh. Because it patches the material rather than replacing it, you can wobble any
+`MeshStandardMaterial`, `MeshPhysicalMaterial`, `MeshToonMaterial`, etc. —
+pick the look you want, then drop `<Wobble>` in to make it move.
+
+<Example path="extras/wobble" />
+
+<small>
+  [Rhyzome Plant](https://sketchfab.com/3d-models/rhyzome-plant-7191a1b935ac452987866573713e4da5) by
+  Blizzy
+</small>
+
+## Examples
+
+### Basic Example
+
+```svelte title="WobblingTorus.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { Wobble } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <T.TorusGeometry />
+  <T.MeshStandardMaterial color="#ff6b6b" />
+  <Wobble
+    speed={2}
+    factor={2}
+  />
+</T.Mesh>
+```
+
+The wobble is computed per-vertex, so meshes need enough geometric detail for the deformation
+to look smooth.
+
+### Anchoring the base
+
+Pass `anchor` to pin a plane that stays put while everything else wobbles around it. Amplitude
+grows with distance from that plane — what you want for a plant whose base shouldn't slide
+around in its pot:
+
+```svelte title="AnchoredPlant.svelte"
+<T.Mesh castShadow>
+  <T is={plantGeometry} />
+  <T.MeshStandardMaterial color="#4a7a3a" />
+  <Wobble
+    speed={1}
+    factor={0.5}
+    anchor={plantBaseY}
+  />
+</T.Mesh>
+```
+
+### Shadows
+
+Shadows wobble alongside the visible mesh — `<Wobble>` attaches matching `customDepthMaterial`
+and `customDistanceMaterial` to the parent so the shadow silhouette tracks the deformation.
+
+Set `shadow` to `false` to disable this.
+
+```svelte
+<Wobble shadow={false} />
+```
+
+### Pointing the bend with `forceDirection`
+
+When `bendiness > 0`, setting `forceDirection` produces a bend from a specific side:
+
+```svelte
+<Wobble
+  factor={1}
+  bendiness={1}
+  forceDirection={[1, 0, 0]}
+/>
+```
+
+### Sideways objects
+
+Default `axis` is `[0, 1, 0]` — Y-up. Pass a different axis for models whose "up" is along X or
+Z:
+
+```svelte
+<T.Mesh>
+  <T is={vineGeometry} />
+  <T.MeshStandardMaterial />
+  <Wobble
+    axis={[1, 0, 0]}
+    bendiness={1}
+    factor={0.4}
+  />
+</T.Mesh>
+```
+
+### Tuning frequency for geometry size
+
+The default `frequency` is tuned for ~1–3 unit meshes. On much larger geometry the wobble looks
+uniform across the whole shape; on tiny ones it gets too chaotic. Adjust to taste:
+
+```svelte
+<!-- Tall building-sized mesh -->
+<Wobble
+  factor={1}
+  frequency={0.1}
+/>
+```
+
+### Driving time externally
+
+Provide `time` (in seconds) to drive the clock yourself. Useful for syncing many `<Wobble>`s to
+a single timeline, scrubbing back and forth, or pausing:
+
+```svelte
+<script lang="ts">
+  let clock = $state(0)
+  // ...your own time source...
+</script>
+
+<T.Mesh>
+  <T.SphereGeometry />
+  <T.MeshStandardMaterial />
+  <Wobble
+    time={clock}
+    factor={1}
+  />
+</T.Mesh>
+```
+
+### Reacting to material swaps
+
+By default `<Wobble>` patches the parent mesh's material once when it mounts. If you swap
+materials at runtime, pass it in:
+
+```svelte
+<script lang="ts">
+  let { material } = $props()
+</script>
+
+<T.Mesh>
+  <T.SphereGeometry />
+  <T is={material} />
+  <Wobble
+    {material}
+    speed={2}
+    factor={1}
+  />
+</T.Mesh>
+```

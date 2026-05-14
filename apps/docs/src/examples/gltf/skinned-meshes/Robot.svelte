@@ -84,10 +84,13 @@ Command: npx @threlte/gltf@3.0.5 apps/docs/public/models/RobotExpressive.glb --t
     return nodes as unknown as GLTFResult['nodes']
   }
 
-  export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+  export const { actions, mixer } = useGltfAnimations<ActionName>(
+    () => $gltf,
+    () => ref
+  )
 
   $effect(() => {
-    if (action) $actions?.[action]?.play()
+    if (action) $actions[action]?.play()
   })
 </script>
 

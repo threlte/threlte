@@ -1,9 +1,8 @@
 <script lang="ts">
   import { MathUtils } from 'three'
   import { T } from '@threlte/core'
-  import { Edges, Text } from '@threlte/extras'
+  import { Audio, Edges, Text } from '@threlte/extras'
   import { Tween } from 'svelte/motion'
-  import type { ArcadeAudio } from '../sound'
   import { useTimeout } from '../hooks/useTimeout.svelte'
   import { useArcadeControls } from '../controls.svelte'
   import { game } from '../Game.svelte'
@@ -19,8 +18,8 @@
   })
 
   const { timeout } = useTimeout()
-  let audio: ArcadeAudio | undefined = undefined
   let direction = $state<1 | -1>(1)
+  let playMusic = $state(false)
 
   const logoScale = new Tween(0)
 
@@ -29,10 +28,7 @@
   const showPressSpaceToStartAfter = showThrelteAfter + 2e3
 
   timeout(() => {
-    audio = game.sound.play('levelSlow', {
-      loop: true,
-      volume: 1
-    })
+    playMusic = true
     logoScale.set(1)
     game.state = 'await-intro-skip'
   }, showLogoAfter)
@@ -52,17 +48,22 @@
   }, showPressSpaceToStartAfter)
 
   $effect(() => {
-    let intervalHandler = setInterval(() => {
+    const intervalHandler = setInterval(() => {
       if (!showPressSpaceToStart) return
       blinkClock = blinkClock ? 0 : 1
     }, 500)
 
-    return () => {
-      clearInterval(intervalHandler)
-      audio?.source.stop()
-    }
+    return () => clearInterval(intervalHandler)
   })
 </script>
+
+{#if playMusic}
+  <Audio
+    src="/audio/level_slow.m4a"
+    loop
+    autoplay
+  />
+{/if}
 
 <T.Group position.z={-0.35}>
   <ThrelteLogo

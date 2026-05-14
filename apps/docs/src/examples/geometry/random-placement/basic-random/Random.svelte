@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { numberOfObjects } from './stores'
   // The following components started as copies from https://fun-bit.vercel.app/
   import BirchTrees from './assets/birch.svelte'
   import Trees from './assets/tree.svelte'
   import Bushes from './assets/bush.svelte'
   import Rocks from './assets/rock.svelte'
+
+  let { numObjects } = $props()
 
   const distinctObjects = 4
   const commonRatio = 0.5
@@ -31,7 +32,7 @@
 
   const data = $derived.by(() => {
     const exponentialSumValues = calculateExponentialSumValues(
-      $numberOfObjects,
+      numObjects,
       distinctObjects,
       commonRatio
     )

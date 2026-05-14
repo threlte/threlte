@@ -12,7 +12,7 @@
 
   let { id = 'default', object, children }: Props = $props()
 
-  // TODO-DefinitelyMaybe: remove in threlte 9
+  // @Todo Remove in Threlte 9
   $effect.pre(() => {
     if (object) {
       console.error('<Portal>: "object" prop has been removed. Use "attach" instead.')
@@ -24,11 +24,15 @@
   $effect.pre(() => {
     if (!children) return
 
-    if (!portals.has(id)) {
-      portals.set(id, new SvelteSet())
+    const currentId = id
+
+    if (!portals.has(currentId)) {
+      portals.set(currentId, new SvelteSet())
     }
 
-    portals.get(id)?.add(children)
-    return () => portals.get(id)?.delete(children)
+    portals.get(currentId)?.add(children)
+    return () => {
+      portals.get(currentId)?.delete(children)
+    }
   })
 </script>

@@ -5,7 +5,7 @@
   const dracoLoader = useDraco()
   const gltf = useGltf('/models/LittlestTokyo.glb', { dracoLoader })
 
-  export const { actions, mixer } = useGltfAnimations<'Take 001'>(gltf)
+  export const { actions, mixer } = useGltfAnimations<'Take 001'>(() => $gltf)
 </script>
 
 <T.PerspectiveCamera

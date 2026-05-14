@@ -57,13 +57,10 @@
   let showOutro = $derived(game.state === 'outro')
 
   let machineIsOff = $derived(game.state === 'off' ? true : false)
-  let backgroundColor = $derived(machineIsOff ? 'black' : '#08060a')
+  let backgroundColor = $derived(machineIsOff ? new Color('black') : new Color('#08060a'))
 
-  const tweenedBackgroundColor = new Tween(new Color('black'), {
+  const tweenedBackgroundColor = Tween.of(() => backgroundColor, {
     duration: 1e3
-  })
-  $effect(() => {
-    tweenedBackgroundColor.set(new Color(backgroundColor))
   })
 </script>
 

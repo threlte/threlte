@@ -1,68 +1,37 @@
-import { observe, useThrelte } from '@threlte/core'
-import type { Scene, Texture } from 'three'
+import { useThrelte } from '@threlte/core'
+import type { Scene } from 'three'
 
-type EnvironmentOptions = {
-  scene: Scene
-  texture?: Texture | undefined
-  isBackground?: boolean
-}
-
-export const useEnvironment = (options: EnvironmentOptions) => {
+export const useEnvironment = (
+  scene: () => Scene,
+  environment: () => Scene['environment'] | undefined,
+  isBackground: () => boolean
+) => {
   const { invalidate } = useThrelte()
 
-  // save lastScene and restore when scene changes and on unmount
-  observe(
-    () => [options.scene],
-    ([scene]) => {
-      const { background, environment } = scene
-
-      return () => {
-        scene.background = background
-        scene.environment = environment
-      }
-    }
-  )
-
-  let background: Scene['background'] | undefined = $state()
-  let environment: Scene['environment'] | undefined = $state()
-
-  observe(
-    () => [options.scene],
-    ([scene]) => {
-      background = scene.background
-      environment = scene.environment
-    }
-  )
-
   $effect(() => {
-    if (options.texture === undefined || !options.isBackground) {
-      return
+    const currentEnvironment = environment()
+    if (currentEnvironment === undefined) return
+
+    const currentScene = scene()
+    const { background: lastBackground, environment: lastEnvironment } = currentScene
+    const currentIsBackground = isBackground()
+
+    currentScene.environment = currentEnvironment
+
+    if (currentIsBackground) {
+      currentScene.background = currentEnvironment
     }
 
-    options.scene.background = options.texture
     invalidate()
-    return () => {
-      // background is allowed to be `null`
-      if (background !== undefined) {
-        options.scene.background = background
-        invalidate()
-      }
-    }
-  })
 
-  $effect(() => {
-    if (options.texture === undefined) {
-      return
-    }
-
-    options.scene.environment = options.texture
-    invalidate()
     return () => {
-      // environment is allowed to be `null`
-      if (environment !== undefined) {
-        options.scene.environment = environment
-        invalidate()
+      currentScene.environment = lastEnvironment
+
+      if (currentIsBackground) {
+        currentScene.background = lastBackground
       }
+
+      invalidate()
     }
   })
 }

@@ -12,15 +12,17 @@
 
   let { directory, showDirectoryName = true, expanded = $bindable(true) }: Props = $props()
 
-  const sortedFiles = directory.files.sort((a, b) => {
-    if (a.type === 'directory' && b.type === 'file') {
-      return -1
-    } else if (a.type === 'file' && b.type === 'directory') {
-      return 1
-    } else {
-      return a.name.localeCompare(b.name)
-    }
-  })
+  const sortedFiles = $derived(
+    directory.files.sort((a, b) => {
+      if (a.type === 'directory' && b.type === 'file') {
+        return -1
+      } else if (a.type === 'file' && b.type === 'directory') {
+        return 1
+      } else {
+        return a.name.localeCompare(b.name)
+      }
+    })
+  )
 </script>
 
 {#if showDirectoryName}

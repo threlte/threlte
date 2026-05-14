@@ -141,17 +141,19 @@ export function useInputMap<T extends ActionDefinitions>(
     return state
   }
 
+  const actionEntries = $derived(
+    Object.entries(definitionsFn(bindingHelpers)) as [ActionName, Binding[]][]
+  )
+
   /**
    * Process all action states once per frame, after both the keyboard and
-   * gamepad tasks have populated their state for the frame. The definitions
-   * function is called each frame so reactive dependencies are picked up.
+   * gamepad tasks have populated their state for the frame.
    */
   const { task } = useTask(
     Symbol('useInputMap'),
     () => {
-      const actions = definitionsFn(bindingHelpers)
-
-      for (const [name, bindings] of Object.entries(actions) as [ActionName, Binding[]][]) {
+      for (let i = 0; i < actionEntries.length; i++) {
+        const [name, bindings] = actionEntries[i]!
         const state = getOrCreateState(name)
 
         let maxStrength = 0

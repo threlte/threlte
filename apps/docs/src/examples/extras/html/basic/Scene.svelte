@@ -4,7 +4,7 @@
   import { HTML, OrbitControls } from '@threlte/extras'
   import { Spring } from 'svelte/motion'
 
-  type Props = {
+  interface Props {
     autoRender?: boolean
   }
 

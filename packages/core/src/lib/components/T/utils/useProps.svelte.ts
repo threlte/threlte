@@ -1,9 +1,6 @@
 import { EventDispatcher } from 'three'
 import { useScheduler } from '../../../context/fragments/scheduler.svelte.js'
-import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import { untrack } from 'svelte'
-
-const ignoredProps = new Set(['$$scope', '$$slots', 'type', 'args', 'attach', 'instance'])
 
 /**
  * Only scalar values are memoized. Objects/functions/arrays are treated as dynamic
@@ -20,35 +17,25 @@ const memoizeProp = (value: unknown): boolean => {
 }
 
 const setter = (target: any, key: any, value: any) => {
+  const current = target[key]
+  const valueIsArray = Array.isArray(value)
+
   if (
-    !Array.isArray(value) &&
+    !valueIsArray &&
     typeof value === 'number' &&
-    typeof target[key] === 'object' &&
-    target[key] !== null &&
-    typeof target[key]?.setScalar === 'function' &&
-    // colors do have a setScalar function, but we don't want to use it, because
-    // the hex notation (i.e. 0xff0000) is very popular and matches the number
-    // type. So we exclude colors here.
-    !target[key]?.isColor
+    typeof current === 'object' &&
+    current !== null &&
+    typeof current.setScalar === 'function' &&
+    // Colors have setScalar, but the hex notation (e.g. 0xff0000) is popular
+    // and matches the number type, so route colors through .set() instead.
+    !current.isColor
   ) {
-    // edge case of setScalar setters
-    target[key].setScalar(value)
+    current.setScalar(value)
+  } else if (typeof current === 'object' && current !== null && typeof current.set === 'function') {
+    if (valueIsArray) current.set(...value)
+    else current.set(value)
   } else {
-    if (
-      typeof target[key]?.set === 'function' &&
-      typeof target[key] === 'object' &&
-      target[key] !== null
-    ) {
-      // if the property has a "set" function, we can use it
-      if (Array.isArray(value)) {
-        target[key].set(...value)
-      } else {
-        target[key].set(value)
-      }
-    } else {
-      // otherwise, we just set the value
-      target[key] = value
-    }
+    target[key] = value
   }
 }
 
@@ -88,16 +75,26 @@ export const useProps = <Type>(
       memoizedProps.delete(propertyPath)
     }
 
-    const { key, target } = resolvePropertyPath(instance, propertyPath)
+    // Inlined resolvePropertyPath. Avoids function + object allocation tax
+    let target: any = instance
+    let key = propertyPath
+    const hasDot = propertyPath.includes('.')
+    if (hasDot) {
+      const path = propertyPath.split('.')
+      key = path.pop() as string
+      for (let i = 0; i < path.length; i++) {
+        target = target[path[i]]
+        if (target == null) {
+          console.error(`Cannot resolve property path "${propertyPath}": "${path[i]}" is ${target}`)
+          return
+        }
+      }
+    }
 
-    /**
-     * If we can determine that this is an event listener prop,
-     * attach it.
-     */
     if (
       typeof value === 'function' &&
       key.startsWith('on') &&
-      !propertyPath.includes('.') &&
+      !hasDot &&
       'addEventListener' in (target as EventDispatcher)
     ) {
       const dispatcher = target as EventDispatcher<Record<string, any>>
@@ -131,13 +128,11 @@ export const useProps = <Type>(
 
     untrack(() => {
       for (const key in _props) {
-        $effect.pre(() => {
-          if (_pluginProps?.includes(key) || ignoredProps.has(key)) {
-            return
-          }
-
-          return setProp(_object, key, _props[key])
-        })
+        // Skip plugin-reserved props at setup time. `pluginProps` is captured
+        // once at component init and never mutates, so there's no reason to
+        // re-check on every prop change.
+        if (_pluginProps?.includes(key)) continue
+        $effect.pre(() => setProp(_object, key, _props[key]))
       }
     })
   })

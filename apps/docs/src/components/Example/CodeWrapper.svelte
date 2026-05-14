@@ -2,7 +2,7 @@
   import { CodeXml } from 'lucide-svelte'
   import CodeExplorer from './CodeExplorer.svelte'
   import { fade } from 'svelte/transition'
-  import type { Snippet } from 'svelte'
+  import { untrack, type Snippet } from 'svelte'
   import { setCodeExampleContext } from './exampleContext.svelte'
 
   interface Props {
@@ -23,13 +23,11 @@
     expanded = $bindable(false)
   }: Props = $props()
 
-  let childrenElements: HTMLElement[] = $state([])
+  let childrenElements = $state<HTMLElement[]>([])
 
-  const initialFilePath = showFile
-    ? filePaths.includes(showFile)
-      ? showFile
-      : 'App.svelte'
-    : 'App.svelte'
+  const initialFilePath = untrack(() =>
+    showFile ? (filePaths.includes(showFile) ? showFile : 'App.svelte') : 'App.svelte'
+  )
   const initialFileName = initialFilePath.split('/').pop() || 'App.svelte'
 
   let context = $state({ currentFilePath: initialFileName })

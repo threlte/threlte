@@ -46,9 +46,7 @@
 
       <Edges
         color="black"
-        raycast={() => {
-          return false
-        }}
+        raycast={() => null}
       />
     </T.Mesh>
     <Text

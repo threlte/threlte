@@ -6,10 +6,10 @@
     Color,
     Points,
     ShaderMaterial,
-    Spherical,
+    Uniform,
     Vector3
   } from 'three'
-  import { T, useTask } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core'
   import type { StarsProps } from './types.js'
   import { fragmentShader } from './fragment.js'
   import { vertexShader } from './vertex.js'
@@ -19,67 +19,85 @@
     radius = 50,
     depth = 50,
     factor = 6,
-    saturation = 1.0,
+    saturation = 1,
     lightness = 0.8,
-    speed = 1,
+    speed = 0,
     fade = true,
     opacity = 1.0,
+    rounded = false,
     ref = $bindable(),
     children,
     ...props
   }: StarsProps = $props()
 
+  const { invalidate } = useThrelte()
+
   const points = new Points()
-
   const vec3 = new Vector3()
-  const spherical = new Spherical()
   const color = new Color()
-
-  const generateStar = (r: number) => {
-    return vec3.setFromSpherical(
-      spherical.set(r, Math.acos(1 - Math.random() * 2), Math.random() * 2 * Math.PI)
-    )
-  }
 
   const geometry = new BufferGeometry()
   const positions = $derived(new BufferAttribute(new Float32Array(count * 3), 3))
   const colors = $derived(new BufferAttribute(new Float32Array(count * 3), 3))
   const sizes = $derived(new BufferAttribute(new Float32Array(count), 1))
+  const phases = $derived(new BufferAttribute(new Float32Array(count), 1))
 
-  $effect.pre(() => {
+  $effect(() => {
     geometry.setAttribute('position', positions)
     geometry.setAttribute('color', colors)
     geometry.setAttribute('size', sizes)
+    geometry.setAttribute('phase', phases)
   })
 
-  $effect.pre(() => {
+  $effect(() => {
+    for (let i = 0; i < count; i += 1) {
+      phases.setX(i, Math.random())
+    }
+
+    phases.needsUpdate = true
+    invalidate()
+  })
+
+  $effect(() => {
     const increment = depth / count
 
-    let r = radius + depth
+    let totalRadius = radius + depth
 
     for (let i = 0; i < count; i += 1) {
-      r -= increment * Math.random()
-      const position = generateStar(r)
+      totalRadius -= increment * Math.random()
+      const position = vec3.randomDirection().multiplyScalar(totalRadius)
       positions.setXYZ(i, position.x, position.y, position.z)
-
-      color.setHSL(i / count, saturation, lightness)
-      colors.setXYZ(i, color.r, color.g, color.b)
-
-      sizes.setX(i, (0.5 + 0.5 * Math.random()) * factor)
     }
+
+    positions.needsUpdate = true
+    invalidate()
   })
 
-  useTask(
-    (dt) => {
-      uniforms.time.value += dt * speed
-    },
-    { running: () => speed > 0 }
-  )
+  $effect(() => {
+    for (let i = 0; i < count; i += 1) {
+      sizes.setX(i, (0.5 + 0.5 * Math.random()) * factor)
+    }
+
+    sizes.needsUpdate = true
+    invalidate()
+  })
+
+  $effect(() => {
+    for (let i = 0; i < count; i += 1) {
+      color.setHSL(i / count, saturation, lightness)
+      colors.setXYZ(i, color.r, color.g, color.b)
+    }
+
+    colors.needsUpdate = true
+
+    invalidate()
+  })
 
   const uniforms = {
-    time: { value: 0 },
-    fade: { value: 1 },
-    opacity: { value: 1 }
+    time: new Uniform(0),
+    fade: new Uniform(1),
+    opacity: new Uniform(1),
+    rounded: new Uniform(0)
   }
 
   const material = new ShaderMaterial({
@@ -88,12 +106,30 @@
     fragmentShader
   })
 
-  $effect.pre(() => {
+  useTask(
+    (dt) => {
+      uniforms.time.value += dt * speed
+      invalidate()
+    },
+    {
+      running: () => speed > 0,
+      autoInvalidate: false
+    }
+  )
+
+  $effect(() => {
     uniforms.fade.value = fade ? 1 : 0
+    invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.opacity.value = opacity
+    invalidate()
+  })
+
+  $effect(() => {
+    uniforms.rounded.value = rounded ? 1 : 0
+    invalidate()
   })
 </script>
 
@@ -107,7 +143,7 @@
     is={material}
     blending={AdditiveBlending}
     depthWrite={false}
-    transparent
+    transparent={rounded || opacity < 1}
     vertexColors
   />
   {@render children?.({ ref: points })}

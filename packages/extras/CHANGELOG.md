@@ -1,5 +1,46 @@
 # @threlte/extras
 
+## 9.18.0
+
+### Minor Changes
+
+- cb711f6: Add Wobble component
+
+## 9.17.1
+
+### Patch Changes
+
+- cf6480d: Simplify environment-related components internals
+
+## 9.17.0
+
+### Minor Changes
+
+- 6de99ec: Add runes-based reactivity for Audio, PositionalAudio, useFBO, and useGltfAnimations props
+
+## 9.16.0
+
+### Minor Changes
+
+- e47ac42: Fix SoftShadows component
+
+### Patch Changes
+
+- e47ac42: Perf: remove unnecessary effects in T component
+
+## 9.15.2
+
+### Patch Changes
+
+- ab91a3b: Perf: cache values in useInputMap and useKeyboard
+- ab91a3b: Fix: capture portal id to prevent live value reads when props update
+
+## 9.15.1
+
+### Patch Changes
+
+- c487de8: Fix keyboard input getting stuck after Meta/Cmd shortcuts when the browser suppresses the modified key's keyup event.
+
 ## 9.15.0
 
 ### Minor Changes

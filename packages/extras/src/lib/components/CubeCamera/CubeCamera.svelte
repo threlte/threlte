@@ -6,13 +6,13 @@
 
   let {
     background = 'auto',
-    far = 1000,
+    far,
     fog = 'auto',
     frames = Infinity,
-    near = 0.1,
+    near,
     onupdatestart,
     onupdatestop,
-    resolution = 256,
+    resolution,
     children,
     ref = $bindable(),
     ...props
@@ -36,14 +36,17 @@
   export const update = () => {
     // if frames === Infinity, the task will run indefinitely
     if (count < frames) {
+      const lastBackground = scene.background
+      if (background !== 'auto') scene.background = background
+
+      const lastFog = scene.fog
+      if (fog !== 'auto') scene.fog = fog
+
       inner.visible = false
-      const originalFog = scene.fog
-      const originalBackground = scene.background
-      scene.background = background === 'auto' ? originalBackground : background
-      scene.fog = fog === 'auto' ? originalFog : fog
       camera.update(renderer, scene)
-      scene.background = originalBackground
-      scene.fog = originalFog
+
+      scene.background = lastBackground
+      scene.fog = lastFog
       inner.visible = true
       count += 1
     } else {
@@ -52,7 +55,9 @@
     }
   }
 
-  useTask(update, { running: () => running })
+  useTask(update, {
+    running: () => running
+  })
 
   /** restarts the internal update task */
   export const restart = () => {
@@ -76,6 +81,12 @@
 >
   <T is={camera} />
   <T is={inner}>
-    {@render children?.({ camera, ref: group, renderTarget, restart, update })}
+    {@render children?.({
+      camera,
+      renderTarget,
+      ref: group,
+      restart,
+      update
+    })}
   </T>
 </T>

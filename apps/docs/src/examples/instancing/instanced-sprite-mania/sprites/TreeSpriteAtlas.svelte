@@ -8,8 +8,6 @@
  -->
 
 <script lang="ts">
-  import { run } from 'svelte/legacy'
-
   import { InstancedSprite, buildSpritesheet, type SpritesheetMetadata } from '@threlte/extras'
   import { AdaptedPoissonDiscSample as Sampler } from '../util'
   import type { Vector3Tuple } from 'three'
@@ -93,7 +91,7 @@
 
   let sprite: any = $state()
 
-  run(() => {
+  $effect(() => {
     // manually update once to apply tree atlas
     // also, flip random trees on X axis for more variety
     if (sprite) {

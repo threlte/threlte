@@ -597,7 +597,7 @@ ${
       hasAnimations
         ? `export const { actions, mixer } = useGltfAnimations${
             options.types ? '<ActionName>' : ''
-          }(gltf, ref)`
+          }(() => $gltf, () => ref)`
         : ''
     }
     </script>

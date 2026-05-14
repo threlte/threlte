@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { ArcadeAudio } from '../sound'
+  import { Audio } from '@threlte/extras'
+  import { Tween } from 'svelte/motion'
   import { arenaBorderWidth, arenaHeight, arenaWidth, blockGap } from '../config'
   import { useTimeout } from '../hooks/useTimeout.svelte'
   import { levels } from './levels'
@@ -11,27 +12,13 @@
 
   const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-  let bgVolume = 0.6
-
-  let levelBackgroundAudio: ArcadeAudio | undefined = undefined
+  const bgVolume = new Tween(0.6)
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
   }
 
-  $effect(() => {
-    levelBackgroundAudio = game.sound.play('levelSlow', {
-      loop: true,
-      volume: bgVolume,
-      playbackRate: map(game.levelIndex, 0, levels.length - 1, 1.0, 2)
-    })
-
-    return () => {
-      if (levelBackgroundAudio) {
-        levelBackgroundAudio.source.stop()
-      }
-    }
-  })
+  const playbackRate = map(game.levelIndex, 0, levels.length - 1, 1.0, 2)
 
   let levelStarted = false
   const buildBlocks = async () => {
@@ -108,9 +95,7 @@
       })
     }, 1e3)
 
-    if (levelBackgroundAudio) {
-      levelBackgroundAudio.fade(0, 300)
-    }
+    bgVolume.set(0, { duration: 300 })
 
     game.sound.play('gameOver2', { volume: 0.5 })?.onEnded()
   }
@@ -135,9 +120,9 @@
         block.blinkingColors = undefined
       })
     }, 1e3)
-    if (levelBackgroundAudio) levelBackgroundAudio.fade(0.2, 200)
+    bgVolume.set(0.2, { duration: 200 })
     await game.sound.play('levelComplete')?.onEnded()
-    if (levelBackgroundAudio) levelBackgroundAudio.fade(bgVolume, 200)
+    bgVolume.set(0.6, { duration: 200 })
   }
 
   $effect(() => {
@@ -159,6 +144,14 @@
     }
   }
 </script>
+
+<Audio
+  src="/audio/level_slow.m4a"
+  loop
+  autoplay
+  volume={bgVolume.current}
+  {playbackRate}
+/>
 
 {#each blocks as block (block)}
   <Block

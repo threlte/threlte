@@ -8,23 +8,15 @@
     after: renderStage
   })
 
-  let log = Array(200).fill(0)
+  let log = $state.raw(new Array(100).fill(0))
 
   useTask(
     () => {
-      log = update(log)
+      const [, ...rest] = log
+      log = [...rest, +shouldRender()]
     },
-    {
-      autoInvalidate: false,
-      stage: afterRenderStage
-    }
+    { autoInvalidate: false, stage: afterRenderStage }
   )
-
-  function update(log: number[]) {
-    log.shift()
-    log.push(shouldRender() ? 1 : 0)
-    return log
-  }
 </script>
 
 <WaveformMonitor

@@ -127,6 +127,36 @@ describe('<Canvas>', () => {
       await rerender({ dpr: 2 })
       expect(ctx.renderer.getPixelRatio()).toBe(2)
     })
+
+    it('clamps to min when window.devicePixelRatio is below the tuple range', async () => {
+      const min = window.devicePixelRatio + 1
+      const { ctx } = await renderCanvas({ dpr: [min, min + 1] })
+      expect(ctx.renderer.getPixelRatio()).toBe(min)
+    })
+
+    it('clamps to max when window.devicePixelRatio is above the tuple range', async () => {
+      const max = window.devicePixelRatio / 2
+      const { ctx } = await renderCanvas({ dpr: [max / 2, max] })
+      expect(ctx.renderer.getPixelRatio()).toBe(max)
+    })
+
+    it('uses window.devicePixelRatio when within the tuple range', async () => {
+      const target = window.devicePixelRatio
+      const { ctx } = await renderCanvas({ dpr: [target / 2, target * 2] })
+      expect(ctx.renderer.getPixelRatio()).toBe(target)
+    })
+
+    it('switches between number and tuple after mount', async () => {
+      const { ctx, rerender } = await renderCanvas({ dpr: 1 })
+      expect(ctx.renderer.getPixelRatio()).toBe(1)
+
+      const min = window.devicePixelRatio + 1
+      await rerender({ dpr: [min, min + 1] })
+      expect(ctx.renderer.getPixelRatio()).toBe(min)
+
+      await rerender({ dpr: 3 })
+      expect(ctx.renderer.getPixelRatio()).toBe(3)
+    })
   })
 
   describe('renderMode', () => {
