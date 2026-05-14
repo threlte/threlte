@@ -142,7 +142,7 @@ export interface TextProps extends Props<Mesh> {
    * the sharpness of corners and preventing loss of very thin lines, at the expense of
    * increased memory footprint and longer SDF generation time.
    */
-  sdfGlyphSize?: number
+  sdfGlyphSize?: null | number
 
   /**
    * WARNING: This API is experimental and may change.
@@ -227,7 +227,7 @@ export interface TextProps extends Props<Mesh> {
    * characters to get all possible glyphs, e.g. ["t", "h", "th"] to get the "t"
    * and "h" glyphs plus the "th" glyph.
    */
-  characters?: string | string[]
+  characters?: null | string | string[]
 
   /**
    * WARNING: This API is experimental and may change.

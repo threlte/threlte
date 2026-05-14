@@ -4,7 +4,6 @@
   import { useAudio } from '../utils/useAudio.svelte.js'
   import { useThrelteAudio } from '../useThrelteAudio.js'
   import type { AudioProps } from './types.js'
-  import type { PositionalAudio } from 'three'
 
   let {
     id,

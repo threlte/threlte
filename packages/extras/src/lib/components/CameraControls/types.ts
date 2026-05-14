@@ -1,6 +1,6 @@
 import type { Props } from '@threlte/core'
 import type CameraControls from 'camera-controls'
-import type { Camera, Object3D, OrthographicCamera, PerspectiveCamera } from 'three'
+import type { Object3D, OrthographicCamera, PerspectiveCamera } from 'three'
 
 export interface CameraControlsProps extends Props<CameraControls> {
   ref?: CameraControls
