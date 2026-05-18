@@ -13214,6 +13214,22 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
+## Setting passive or active events
+
+The events on the canvas that drive interactivity can have their active / passive options modified by passing an `eventOptions` object:
+
+```svelte title="Scene.svelte"
+<script>
+  import { interactivity } from '@threlte/extras'
+
+  interactivity({
+    eventOptions: {
+      wheel: { passive: true }
+    }
+  })
+</script>
+```
+
 ## Interactivity state
 
 To access the interactivity state, you can use the `useInteractivity` hook in any child component of the component that implements the `interactivity` plugin as follows:
@@ -13246,6 +13262,7 @@ export type State = {
   filter?: FilterFunction
   clickDistanceThreshold: number
   clickTimeThreshold: number
+  eventOptions?: EventOptions
 }
 ```
 
