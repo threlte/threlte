@@ -1,0 +1,1 @@
+import{aB as c,g as i,k as n,ar as f,M as u,aC as s,q as o}from"./runtime.DlhdfUbH.js";function k(a){let e=0,r=n(0),t;return()=>{c()&&(i(r),f(()=>(e===0&&(t=u(()=>a(()=>s(r)))),e+=1,()=>{o(()=>{e-=1,e===0&&(t?.(),t=void 0,s(r))})})))}}export{k as c};

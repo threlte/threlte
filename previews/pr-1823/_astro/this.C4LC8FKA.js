@@ -1,0 +1,1 @@
+import{at as h,ar as k,M as q,q as t,am as M}from"./runtime.DlhdfUbH.js";function u(r,i){return r===i||r?.[M]===i}function T(r={},i,f,b){return h(()=>{var a,s;return k(()=>{a=s,s=b?.()||[],q(()=>{r!==f(...s)&&(i(r,...s),a&&u(f(...a),r)&&i(null,...a))})}),()=>{t(()=>{s&&u(f(...s),r)&&i(null,...s)})}}),r}export{T as b};
