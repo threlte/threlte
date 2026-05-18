@@ -13214,9 +13214,9 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
-## Event options
+## Setting passive or active events
 
-Certain configuration options are available for DOM events via `eventOptions`. Setting `enabled: false` for a specified event will prevent its respective listener from being added.
+The events on the canvas that drive interactivity can have their active / passive options modified by passing an `eventOptions` object:
 
 ```svelte title="Scene.svelte"
 <script>
@@ -13224,8 +13224,7 @@ Certain configuration options are available for DOM events via `eventOptions`. S
 
   interactivity({
     eventOptions: {
-      wheel: { passive: true },
-      click: { enabled: false }
+      wheel: { passive: true }
     }
   })
 </script>
