@@ -17283,7 +17283,6 @@ A material that visualizes the uvs of a geometry. Uvs are typically used for
 texture sampling in the shader. `UvMaterial` is meant to give you a sense of
 how textures will be mapped onto a mesh.
 
-
 <Example path="extras/uv-material" />
 
 ## Usage
@@ -17309,14 +17308,14 @@ you're creating your own geometry, be sure to assign the "uv" attribute.
 
 ```svelte
 <script>
-	const geometry = new BufferGeometry()
-	const uvAttribute = new BufferAttribute(/* uv array here */)
-	geometry.setAttribute('uv', uvAttribute)
+  const geometry = new BufferGeometry()
+  const uvAttribute = new BufferAttribute(/* uv array here */)
+  geometry.setAttribute('uv', uvAttribute)
 </script>
 
 <T.Mesh>
-	<T is={geometry} />
-	<UvMaterial />
+  <T is={geometry} />
+  <UvMaterial />
 </T.Mesh>
 ```
 
