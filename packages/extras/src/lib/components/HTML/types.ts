@@ -2,7 +2,7 @@ import type { Props } from '@threlte/core'
 import type { Camera, Group, Object3D } from 'three'
 
 export type HTMLProps = Props<Group, [{ render(): void }]> & {
-  /**
+  /** whether the render task should be ran every frame
    * @default true
    */
   autoRender?: boolean
@@ -58,13 +58,13 @@ export type HTMLProps = Props<Group, [{ render(): void }]> & {
    * @default false
    */
   fullscreen?: boolean
-
+  /** @default undefined */
   distanceFactor?: number
   /**
    * @default 'div'
    */
   as?: keyof HTMLElementTagNameMap
-
+  /** @default undefined */
   portal?: HTMLElement
 
   /**
@@ -74,9 +74,15 @@ export type HTMLProps = Props<Group, [{ render(): void }]> & {
    * @default false
    */
   occlude?: boolean | Object3D[] | boolean | 'raycast' | 'blending'
-
-  castShadow?: boolean // Cast shadow for occlusion plane
-  receiveShadow?: boolean // Receive shadow for occlusion plane
+  /**
+   * Cast shadow for occlusion plane
+   *  @default undefined
+   */
+  castShadow?: boolean
+  /** Receive shadow for occlusion plane
+   * @default undefined
+   */
+  receiveShadow?: boolean
 
   onvisibilitychange?: (visible: boolean) => void
 }

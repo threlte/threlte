@@ -62,7 +62,11 @@ export type SchedulerContext = {
 }
 
 export type CreateSchedulerContextOptions = {
+  /** Whether to automatically render the scene every frame. Set to `false` to implement custom render pipelines.
+   * @default true
+   */
   autoRender?: boolean
+  /** @default 'on-demand' */
   renderMode?: 'always' | 'on-demand' | 'manual'
 }
 

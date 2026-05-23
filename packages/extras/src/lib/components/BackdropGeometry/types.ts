@@ -4,7 +4,7 @@ import type { PlaneGeometry } from 'three'
 export interface BackdropGeometryProps extends Props<PlaneGeometry> {
   /**
    * Length of the flat floor section before the curve
-   * @default 0.25
+   * @default 1
    */
   length?: number
 

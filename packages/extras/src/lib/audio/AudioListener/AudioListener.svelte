@@ -17,8 +17,8 @@
 
   const listener = new AudioListener()
 
-  export const audioContext = listener.context
-  export const resumeContext = () => listener.context.resume()
+  export const audioContext: AudioContext = listener.context
+  export const resumeContext: () => Promise<void> = () => listener.context.resume()
 
   $effect(() => {
     if (masterVolume !== undefined) {

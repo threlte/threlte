@@ -28,20 +28,20 @@ export type LinearGradientTextureProps = Props<CanvasTexture> & {
   endY?: number
 
   /**
-   * height of the underlying canvas
+   * width of the texture's canvas
    * @default 1024
    */
   width?: number
 
   /**
-   * width of the underlying canvas
+   * height of the texture's canvas
    * @default 1024
    */
   height?: number
 
   /**
    * stop offsets for the gradient. @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
-   * @default [ { offset: 0, color: 'black' }, { offset: 1, color: 'white' } ]
+   * @default [ { color: 'black', offset: 0, }, { color: 'white', offset: 1 } ]
    */
   stops?: ColorStop[]
 }

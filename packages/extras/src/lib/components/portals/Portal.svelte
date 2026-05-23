@@ -4,6 +4,7 @@
   import { SvelteSet } from 'svelte/reactivity'
 
   interface Props {
+    /** The id of the portal to render into. */
     id?: string
     object?: never
     children?: Snippet

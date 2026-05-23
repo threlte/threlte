@@ -11,7 +11,7 @@ export type AsciiRendererProps = {
 
   /**
    * text background color. any valid css color string may be used
-   * @default '#000000',
+   * @default '#000000'
    */
   bgColor?: string
 

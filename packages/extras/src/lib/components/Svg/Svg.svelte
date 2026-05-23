@@ -1,19 +1,9 @@
 <script lang="ts">
-  import { T, useLoader, type Props as ThrelteProps } from '@threlte/core'
-  import { DoubleSide, type Group, type Mesh, type MeshBasicMaterial } from 'three'
+  import { T, useLoader } from '@threlte/core'
+  import { DoubleSide } from 'three'
   import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
   import { useSuspense } from '../../suspense/useSuspense.js'
-
-  interface Props extends ThrelteProps<typeof Group> {
-    /** Can be a URL or SVG data */
-    src: string
-    skipFill?: boolean
-    skipStrokes?: boolean
-    fillMaterialProps?: ThrelteProps<typeof MeshBasicMaterial>
-    strokeMaterialProps?: ThrelteProps<typeof MeshBasicMaterial>
-    fillMeshProps?: ThrelteProps<typeof Mesh>
-    strokeMeshProps?: ThrelteProps<typeof Mesh>
-  }
+  import type { SVGProps } from './types.js'
 
   let {
     src,
@@ -25,7 +15,7 @@
     strokeMeshProps,
     ref = $bindable(),
     ...rest
-  }: Props = $props()
+  }: SVGProps = $props()
 
   const suspend = useSuspense()
   const loader = useLoader(SVGLoader)

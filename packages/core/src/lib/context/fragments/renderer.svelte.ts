@@ -64,12 +64,13 @@ export type CreateRendererContextOptions<T extends Renderer> = {
   colorSpace?: ColorSpace
 
   /**
-   * @default AgXToneMapping
+   * renderer.toneMapping
+   * @default THREE.AgXToneMapping
    */
   toneMapping?: ToneMapping
 
   /**
-   * @default PCFSoftShadowMap
+   * @default THREE.PCFSoftShadowMap
    */
   shadows?: boolean | ShadowMapType
 

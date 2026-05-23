@@ -32,6 +32,7 @@
   let count = 0
   let running = $state(false)
 
+  /** causes the cube camera to update which renders to the render target */
   export const update = () => {
     // if frames === Infinity, the task will run indefinitely
     if (count < frames) {
@@ -58,6 +59,7 @@
     running: () => running
   })
 
+  /** restarts the internal update task */
   export const restart = () => {
     if (running) {
       onupdatestop?.()

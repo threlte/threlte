@@ -23,7 +23,10 @@
 
   const group = new Group()
 
-  export const bounds = provideBounds(
+  export const bounds: {
+    reset(): void
+    fit(): void
+  } = provideBounds(
     () => group,
     () => margin,
     () => animate,

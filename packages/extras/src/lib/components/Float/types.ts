@@ -28,7 +28,7 @@ export type FloatProps = Props<Group> & {
   rotationSpeed?: number | [x: number, y: number, z: number]
 
   /**
-   * @default Math.random() * 1000
+   * @default Math.random() * 10000
    */
   seed?: number
 }

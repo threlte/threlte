@@ -8,21 +8,24 @@ export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
    */
   auto?: boolean
   /**
-   * Specifies which axis to constrain. If not provided, the maximum axis is
-   * used
+   * Specifies which axis to constrain. If not provided, the maximum axis is used.
+   * @default undefined
    */
   axis?: 'x' | 'y' | 'z'
   /**
    * Bring your own box to capture the bounding box.
+   * @default new Box3()
    */
   box?: Box3
   /**
    * If true, use precise bounding box calculation.
+   * @default undefined
    */
   precise?: boolean
   /**
    * Bring your own stage to control when resizing occurs. If not provided,
    * resizing will occur before the main render stage.
+   * @default useStage('<Resize>', { before: renderStage })
    */
   stage?: Stage
   /**

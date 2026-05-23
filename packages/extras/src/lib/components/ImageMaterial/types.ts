@@ -2,20 +2,14 @@ import type { ShaderMaterial, ColorRepresentation, Side, Texture, VideoTexture }
 import type { Props } from '@threlte/core'
 
 export type ImageMaterialProps = Props<ShaderMaterial> & {
+  /** Creates a texture from the url. Takes priority over texture prop. */
+  url?: string
+  /** Uses the provided texture. Will be ignored if url is present. */
+  texture?: Texture
   /**
    * @default 'white'
    */
   color?: ColorRepresentation
-
-  /**
-   * @default 1
-   */
-  segments?: number
-
-  /**
-   * @defaut 1
-   */
-  scale?: [number, number] | number
 
   /**
    * @default 1
@@ -37,42 +31,42 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
    */
   alphaSmoothing?: number
 
-  /**
+  /** Modifies brightness. Recommended range from -1 to 1.
    * @default 0
    */
   brightness?: number
 
-  /**
+  /** Modifies contrast. Recommended range from -1 to 1.
    * @default 0
    */
   contrast?: number
 
-  /**
+  /** Modifies hue. Range from 0 to 1.
    * @default 0
    */
   hue?: number
 
-  /**
+  /** Modifies saturation. Recommended range from -1 to 1.
    * @default 0
    */
   saturation?: number
 
-  /**
+  /** Modifies lightness. Recommended range from -1 to 1.
    * @default 0
    */
   lightness?: number
 
-  /**
+  /** Sets a monochrome tint the image is converted to.
    * @default '#535970'
    */
   monochromeColor?: string
 
-  /**
+  /** Sets the strength of monochrome effect. Range from 0 to 1.
    * @default 0
    */
   monochromeStrength?: number
 
-  /**
+  /** Enables/disables negative effect.
    * @default false
    */
   negative?: boolean
@@ -111,16 +105,7 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
   opacity?: number
 
   /**
-   * @default Three.FrontSide
+   * @default FrontSide
    */
   side?: Side
-} & (
-    | {
-        texture: Texture
-        url?: never
-      }
-    | {
-        texture?: never
-        url: string
-      }
-  )
+}

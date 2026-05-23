@@ -125,6 +125,7 @@
     }
   })
 
+  /** Manually renders a single frame of the provided html */
   export const render = () => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
