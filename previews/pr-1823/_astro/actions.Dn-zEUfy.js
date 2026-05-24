@@ -1,1 +1,0 @@
-import{at as d,M as n,ar as u,a0 as c,aH as p}from"./runtime.DlhdfUbH.js";function y(s,o,e){d(()=>{var a=n(()=>o(s,e?.())||{});if(e&&a?.update){var t=!1,f={};u(()=>{var r=e();c(r),t&&p(f,r)&&(f=r,a.update(r))}),t=!0}if(a?.destroy)return()=>a.destroy()})}export{y as a};

@@ -11511,15 +11511,15 @@ Edges are displayed when the angle between two faces exceeds the angle defined b
 Package: @threlte/extras  
 URL: https://threlte.xyz/previews/pr-1823/docs/reference/extras/environment
 
-Asynchronously loads a single equirectangular-mapped texture and sets the provided scene's `environment` and or `background` to the texture. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
+Asynchronously loads a single equirectangular-mapped texture and sets the provided scene's `environment` and/or `background` to the texture. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
 
 <Example path="extras/environment/basic" />
 
 ## Fetching, Loading, and Assigning Textures
 
-`<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment`.
+`<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment` by default.
 
-`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by Three.js' [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
+`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by Three.js' [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties based on `isEnvironment` and `isBackground`. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
 Internally `<Environment>` creates a loader based on the extension of the `url` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
 
@@ -11629,7 +11629,7 @@ There are a couple of important things to consider when using the `ground` prope
 
 2. A new instance of `GroundedSkybox` is created whenever the `ground` prop updates to something other than `false`. This is a limitation of the addon. If you need to modify the skybox's properties, try to do it through the `skybox` bindable to avoid creating and destroying multiple instances.
 
-3. `scene.environment` and/or `scene.background` are still set to the environment texture. This is done so that the environment map still affects materials used in the scene.
+3. `scene.environment` and/or `scene.background` are still set to the environment texture based on `isEnvironment` and `isBackground`. This is done so that the environment map can still affect materials used in the scene.
 
 ---
 
@@ -13237,6 +13237,22 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
+## Setting passive or active events
+
+The events on the canvas that drive interactivity can have their active / passive options modified by passing an `eventOptions` object:
+
+```svelte title="Scene.svelte"
+<script>
+  import { interactivity } from '@threlte/extras'
+
+  interactivity({
+    eventOptions: {
+      wheel: { passive: true }
+    }
+  })
+</script>
+```
+
 ## Interactivity state
 
 To access the interactivity state, you can use the `useInteractivity` hook in any child component of the component that implements the `interactivity` plugin as follows:
@@ -13269,6 +13285,7 @@ export type State = {
   filter?: FilterFunction
   clickDistanceThreshold: number
   clickTimeThreshold: number
+  eventOptions?: EventOptions
 }
 ```
 
@@ -17285,7 +17302,9 @@ const viewport = useViewport([1, 0, 1])
 Package: @threlte/extras  
 URL: https://threlte.xyz/previews/pr-1823/docs/reference/extras/uv-material
 
-A material that visualizes the uvs of a geometry. Uvs are typically used for texture indexing.
+A material that visualizes the uvs of a geometry. Uvs are typically used for
+texture sampling in the shader. `UvMaterial` is meant to give you a sense of
+how textures will be mapped onto a mesh.
 
 <Example path="extras/uv-material" />
 
@@ -17307,15 +17326,26 @@ Simply import the component and add it as a child to a mesh
 
 ## Caveats
 
-The geometry must have a "uv" attribute in order for this material to work. If you're creating your own geometry, be sure to assign the "uv" attribute.
+The mesh's geometry must have a "uv" attribute in order for `UvMaterial` to work properly. If
+you're creating your own geometry, be sure to assign the "uv" attribute.
 
-```ts
-const geometry = new BufferGeometry()
-const uvAttribute = new BufferAttribute(/* uv array here */)
-geometry.setAttribute('uv', uvAttribute)
+```svelte
+<script>
+  const geometry = new BufferGeometry()
+  const uvAttribute = new BufferAttribute(/* uv array here */)
+  geometry.setAttribute('uv', uvAttribute)
+</script>
+
+<T.Mesh>
+  <T is={geometry} />
+  <UvMaterial />
+</T.Mesh>
 ```
 
-Most models that you import into your program should come with uv data and three.js will automatically assign uv attributes when loading the model.
+Most models that you import into your program should come with uv data and
+three.js will automatically assign uv attributes when loading the model.
+Three.js geometry primitives such as `BoxGeometry` and `SphereGeometry` are
+also outfitted with uv data.
 
 ---
 
@@ -17334,7 +17364,7 @@ per normal.
 The following example is equivalent to three.js's [multiple elements
 example](https://threejs.org/examples/#webgl_multiple_elements).
 
-<Example path="extras/view" />
+<Example path="extras/view/multiple-scenes" />
 
 Under the hood, this component uses the renderer's [scissor-cut
 method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setScissor).
@@ -17342,6 +17372,16 @@ method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setSc
 when using scissor-cuts as the styling of your canvas has different effects on
 the renderering. You access the `canvas` to switch between the options via the
 `useThrelte` hook.
+
+## Sharing a scene across views
+
+Pass an existing `THREE.Scene` via the `scene` prop to render the same content
+in multiple views instead of creating a new scene per `<View>`. Each `<View>`
+still owns its own camera, DOM, cache and user contexts, so you can show one
+scene from several angles — for example a main perspective plus a top-down
+minimap.
+
+<Example path="extras/view/shared-scene" />
 
 ---
 
