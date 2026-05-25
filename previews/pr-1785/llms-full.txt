@@ -4127,7 +4127,11 @@ Command: npx @threlte/gltf@latest ./stacy.glb
   ref = new Group()
 
   const gltf = useGltf('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations(gltf, ref)
+
+  export const { actions, mixer } = useGltfAnimations(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 <T
@@ -4288,7 +4292,11 @@ Command: npx @threlte/gltf@latest ./stacy.glb -t
   ref = new Group()
 
   const gltf = useGltf<GLTFResult>('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+
+  export const { actions, mixer } = useGltfAnimations<ActionName>(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 <T
@@ -4331,7 +4339,10 @@ extracts all clips and prepares them as actions:
 ```ts
 const gltf = useGltf('/stacy.glb')
 
-export const { actions, mixer } = useGltfAnimations(gltf, ref)
+export const { actions, mixer } = useGltfAnimations(
+  () => $gltf,
+  () => ref
+)
 ```
 
 If you want to play an animation you can do so at any time:
@@ -4530,7 +4541,12 @@ URL: https://threlte.xyz/previews/pr-1785/docs/reference/rapier/getting-started
 
 [Rapier](https://rapier.rs/) is a fast physics engine written in Rust. This package provides easy to use components and hooks to use the Rapier physics engine in Threlte.
 
-To start off, it's best to get yourself comfortable with the [basic concepts of rapier](https://rapier.rs/docs/).
+<Example
+  path="rapier/pachinko"
+  hideCode
+/>
+
+It's best to get yourself comfortable with the [basic concepts of rapier](https://rapier.rs/docs/) if you aren't familiar.
 
 <Tip type="experimental">
   This package is under heavy development and its API is subject to change. Also be aware that
@@ -4539,10 +4555,8 @@ To start off, it's best to get yourself comfortable with the [basic concepts of 
 
 ### Installation
 
-Make sure to have `@threlte/core` installed.
-
 ```bash copy
-npm install @threlte/rapier @dimforge/rapier3d-compat
+npm install @threlte/core @threlte/rapier @dimforge/rapier3d-compat
 ```
 
 ---
@@ -8007,6 +8021,10 @@ URL: https://threlte.xyz/previews/pr-1785/docs/reference/rapier/debug
 
 Use the Debug component to see live representations of all colliders in a scene.
 
+<Example path="rapier/debug" />
+
+### Example
+
 ```svelte
 <Canvas>
   <World>
@@ -8239,14 +8257,14 @@ Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a 
 
   const { world } = useRapier()
 
-  // rigidBody is undefined if there's
-  // no parent `<RigidBody>` component
   const rigidBody = useRigidBody()
 
-  const collider = world.createCollider(colliderDesc, rigidBody)
+  $effect(() => {
+    const collider = world.createCollider(colliderDesc, rigidBody.current)
 
-  onDestroy(() => {
-    world.removeCollider(collider, true)
+    return () => {
+      world.removeCollider(collider, true)
+    }
   })
 </script>
 ```
@@ -8254,7 +8272,7 @@ Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a 
 ### Types
 
 ```ts
-const rigidBody = useRigidBody() // RAPIER.RigidBody | undefined
+const rigidBody = useRigidBody() // { current: RAPIER.RigidBody | undefined }
 ```
 
 ---
@@ -8776,6 +8794,10 @@ URL: https://threlte.xyz/previews/pr-1785/docs/reference/rapier/use-fixed-joint
 
 Use this hook to initialize a [`FixedImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint).
 
+A fixed joint welds two rigid bodies together, locking their relative position and orientation so they behave as a single rigid unit. Reach for it when you need a composite from separate bodies — parts you may want to detach at runtime, or parts with different mass, friction, or collision properties.
+
+<Example path="rapier/joints/fixed/basic" />
+
 ```svelte
 <script>
   import { useFixedJoint, RigidBody, Collider } from '@threlte/rapier'
@@ -8821,6 +8843,10 @@ Package: @threlte/rapier
 URL: https://threlte.xyz/previews/pr-1785/docs/reference/rapier/use-revolute-joint
 
 Use this hook to initialize a [`RevoluteImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint).
+
+A revolute joint is a hinge — it pins two rigid bodies together at a shared point and allows rotation around a single axis, locking the other five degrees of freedom. Reach for it for doors, wheel axles, pendulums, levers, and articulated arms.
+
+<Example path="rapier/joints/revolute/basic" />
 
 ```svelte
 <script>
@@ -8946,6 +8972,10 @@ URL: https://threlte.xyz/previews/pr-1785/docs/reference/rapier/use-spherical-jo
 
 Use this hook to initialize a [`SphericalImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#spherical-joint).
 
+A spherical joint is a ball-and-socket — it pins two rigid bodies together at a shared point and allows free rotation around all three axes. Reach for it for chains and ropes, ragdoll joints (hips, shoulders), tethered objects, and anywhere two bodies need to pivot freely in 3D.
+
+<Example path="rapier/joints/spherical/basic" />
+
 ```svelte
 <script>
   import { useSphericalJoint, RigidBody, Collider } from '@threlte/rapier'
@@ -9015,6 +9045,10 @@ Package: @threlte/rapier
 URL: https://threlte.xyz/previews/pr-1785/docs/reference/rapier/use-prismatic-joint
 
 Use this hook to initialize a [`PrismaticImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#prismatic-joint).
+
+A prismatic joint is a slider — it constrains two rigid bodies to translate along a single axis with optional min/max travel limits, and locks all rotation. Reach for it for pistons, hydraulic rams, elevators, sliding doors, drawers, and linear actuators.
+
+<Example path="rapier/joints/prismatic/basic" />
 
 ```svelte
 <script>
@@ -11433,15 +11467,15 @@ Edges are displayed when the angle between two faces exceeds the angle defined b
 Package: @threlte/extras  
 URL: https://threlte.xyz/previews/pr-1785/docs/reference/extras/environment
 
-Asynchronously loads a single equirectangular-mapped texture and sets the provided scene's `environment` and or `background` to the texture. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
+Asynchronously loads a single equirectangular-mapped texture and sets the provided scene's `environment` and/or `background` to the texture. [Here](/textures/equirectangular/jpg/equirect_ruined_room.jpg) is an example of such a texture.
 
 <Example path="extras/environment/basic" />
 
 ## Fetching, Loading, and Assigning Textures
 
-`<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment`.
+`<Environment>`'s `url` prop is used to fetch and load textures. If it is provided, a corresponding loader will be used to fetch, load, and assign the texture to `scene.environment` by default.
 
-`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by Three.js' [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
+`<Environment>` supports loading `exr`, `hdr`, and any other file type that can be loaded by Three.js' [TextureLoader](https://threejs.org/docs/#api/en/loaders/TextureLoader) such as `jpg` files. This means you can swap the `url` prop at any time and `<Environment>` will dispose of the previous texture and assign the new one to the scene's `environment` and/or `background` properties based on `isEnvironment` and `isBackground`. Loaders within `<Environment>` are created on demand and cached for future use until `<Environment>` unmounts.
 
 Internally `<Environment>` creates a loader based on the extension of the `url` prop. Refer to the table below to determine what kind of loader is used for a particular extension.
 
@@ -11551,7 +11585,7 @@ There are a couple of important things to consider when using the `ground` prope
 
 2. A new instance of `GroundedSkybox` is created whenever the `ground` prop updates to something other than `false`. This is a limitation of the addon. If you need to modify the skybox's properties, try to do it through the `skybox` bindable to avoid creating and destroying multiple instances.
 
-3. `scene.environment` and/or `scene.background` are still set to the environment texture. This is done so that the environment map still affects materials used in the scene.
+3. `scene.environment` and/or `scene.background` are still set to the environment texture based on `isEnvironment` and `isBackground`. This is done so that the environment map can still affect materials used in the scene.
 
 ---
 
@@ -13159,6 +13193,22 @@ You can filter and sort events by passing a `filter` to the `interactivity` plug
 </script>
 ```
 
+## Setting passive or active events
+
+The events on the canvas that drive interactivity can have their active / passive options modified by passing an `eventOptions` object:
+
+```svelte title="Scene.svelte"
+<script>
+  import { interactivity } from '@threlte/extras'
+
+  interactivity({
+    eventOptions: {
+      wheel: { passive: true }
+    }
+  })
+</script>
+```
+
 ## Interactivity state
 
 To access the interactivity state, you can use the `useInteractivity` hook in any child component of the component that implements the `interactivity` plugin as follows:
@@ -13191,6 +13241,7 @@ export type State = {
   filter?: FilterFunction
   clickDistanceThreshold: number
   clickTimeThreshold: number
+  eventOptions?: EventOptions
 }
 ```
 
@@ -14449,9 +14500,7 @@ The `<Sky>` component will only re-render the cubemap when the properties change
 Package: @threlte/extras  
 URL: https://threlte.xyz/previews/pr-1785/docs/reference/extras/soft-shadows
 
-This component is a port of the component [`<SoftShadows>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/softShadows.tsx).
-
-It injects Percentage-Closer Soft Shadows (PCSS) into Three.js' shader chunk. Mounting and unmounting this component will lead to all shaders being be re-compiled, although it will only cause overhead if `<SoftShadows>` is mounted after the scene has already rendered, if it mounts with everything else in your scene shaders will compile naturally.
+`<SoftShadows>` replaces Three.js's default hard shadows with Percentage-Closer Soft Shadows (PCSS): shadows that are sharp where they touch their caster and soften with distance. Mount it alongside the rest of your scene — adding or removing it after the first render recompiles every shadow-receiving material.
 
 <Example path="extras/soft-shadows" />
 
@@ -15342,6 +15391,18 @@ Framebuffer objects are useful when you want to render a scene to something othe
 
 <Example path="extras/use-fbo" />
 
+## Usage
+
+`useFBO` accepts an options getter. Reads inside the getter are tracked through runes, so changes to `size` and `depth` are applied to the render target reactively. Render-target construction options (`format`, `type`, `samples`, …) are read once at hook initialization.
+
+```typescript
+let resolution = $state(512)
+
+const target = useFBO(() => ({
+  size: { width: resolution, height: resolution }
+}))
+```
+
 ## Options
 
 `useFBO`'s options object extends `THREE.RenderTargetOptions`. The additional properties are listed below.
@@ -15367,7 +15428,7 @@ If `size` is provided, the `width` and `height` of the texture are taken from `s
 ```typescript
 const size = { width: 512, height: 512 }
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === size.width)
 assert(target.height === size.height)
 ```
@@ -15377,7 +15438,7 @@ assert(target.height === size.height)
 ```typescript
 const size = { width: 512 }
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === size.width)
 assert(target.height === 1)
 ```
@@ -15385,7 +15446,7 @@ assert(target.height === 1)
 ```typescript
 const size = { height: 512 }
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === 1)
 assert(target.height === size.height)
 ```
@@ -15393,7 +15454,7 @@ assert(target.height === size.height)
 ```typescript
 const size = {}
 
-const target = useFBO({ size })
+const target = useFBO(() => ({ size }))
 assert(target.width === 1)
 assert(target.height === 1)
 ```
@@ -15407,7 +15468,7 @@ If `depth` is set to `true`, a depth texture is created and sized to match the s
 ```typescript
 const { size } = useThrelte()
 
-const target = useFBO({ depth: true })
+const target = useFBO(() => ({ depth: true }))
 
 assert(target.depthTexture.image.width === size.current.width)
 assert(target.depthTexture.image.height === size.current.height)
@@ -15418,7 +15479,7 @@ If `depth` is a depth texture instance, it is assigned to the `depthTexture` pro
 ```typescript
 const depthTexture = new DepthTexture(512, 512)
 
-const target = useFBO({ depth: depthTexture })
+const target = useFBO(() => ({ depth: depthTexture }))
 
 assert(target.depthTexture === depthTexture)
 ```
@@ -15428,7 +15489,7 @@ If `depth` is set to a "size" object, the depth texture size is set the `width` 
 ```typescript
 const depth = { width: 512, height: 512 }
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === depth.width)
 assert(target.depthTexture.image.height === depth.height)
@@ -15439,7 +15500,7 @@ assert(target.depthTexture.image.height === depth.height)
 ```typescript
 const depth = { width: 512 }
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === depth.width)
 assert(target.depthTexture.image.height === 1)
@@ -15448,7 +15509,7 @@ assert(target.depthTexture.image.height === 1)
 ```typescript
 const depth = { height: 512 }
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === 1)
 assert(target.depthTexture.image.height === depth.height)
@@ -15457,7 +15518,7 @@ assert(target.depthTexture.image.height === depth.height)
 ```typescript
 const depth = {}
 
-const target = useFBO({ depth })
+const target = useFBO(() => ({ depth }))
 
 assert(target.depthTexture.image.width === 1)
 assert(target.depthTexture.image.height === 1)
@@ -16363,31 +16424,34 @@ A convenience hook to use gltf animations loaded by a [\<GLTF>](/docs/reference/
 
 ## Examples
 
+`useGltfAnimations` takes the `gltf` as a getter so that reads are tracked through runes automatically. The hook returns the `mixer` and an `actions` store keyed by clip name — type the clip names with a generic to get autocompletion.
+
 ### With the `<GLTF>` component
 
-Without any arguments, `useGltfAnimations` returns a store which can be bound to the `<GLTF>` component.
+Bind a local `$state` variable to the `<GLTF>` component's `gltf` prop and pass the getter to `useGltfAnimations`.
 
 ```svelte
 <script lang="ts">
-  import { GLTF, useGltfAnimations } from '@threlte/extras'
+  import { GLTF, useGltfAnimations, type ThrelteGltf } from '@threlte/extras'
 
-  const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>()
+  let gltf = $state<ThrelteGltf>()
+  const { actions, mixer } = useGltfAnimations<'All Animations'>(() => gltf)
   mixer.timeScale = 0.5
 
-  export const triggerAnimation = () => {
+  $effect(() => {
     $actions['All Animations']?.play()
-  }
+  })
 </script>
 
 <GLTF
   url="/path/to/model.glb"
-  bind:gltf={$gltf}
+  bind:gltf
 />
 ```
 
 ### With the `useGltf` hook
 
-For cases where you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, `useGltfAnimations` accepts a writable store as its first argument. [`useGltf`](/docs/reference/extras/use-gltf) returns a store that can be directly passed to `useGltfAnimations`.
+When you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, load it with [`useGltf`](/docs/reference/extras/use-gltf) and pass the value through the getter.
 
 ```svelte
 <script lang="ts">
@@ -16395,7 +16459,7 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 
   const gltf = useGltf('/path/to/model.glb')
-  const { actions, mixer } = useGltfAnimations<'All Animations'>(gltf)
+  const { actions, mixer } = useGltfAnimations<'All Animations'>(() => $gltf)
 
   $effect(() => {
     $actions['All Animations']?.play()
@@ -16409,10 +16473,11 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
 
 ## Applying Animations to a Different Root
 
-`useGltfAnimations`'s second optional argument allows you to apply the animations to a root other than the GLTF scene.
+`useGltfAnimations`'s second optional argument is a getter for an alternative root `Object3D`. Use this when you want to retarget the clips onto a separate rig rather than the gltf's own scene.
 
 ```svelte
-<script>
+<script lang="ts">
+  import { T } from '@threlte/core'
   import { useGltfAnimations, useGltf } from '@threlte/extras'
   import { Group } from 'three'
 
@@ -16420,33 +16485,16 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
 
   const group = new Group()
 
-  const { root } = useGltfAnimations(gltf, group)
-  // $root === group
+  const { actions } = useGltfAnimations(
+    () => $gltf,
+    () => group
+  )
 </script>
 
 {#await gltf then { scene }}
   <T is={group}>
     <T is={scene} />
   </T>
-{/await}
-```
-
-You can also set the root store without passing in the second argument
-
-```svelte
-<script>
-  import { useGltfAnimations, useGltf } from '@threlte/extras'
-  import { Group } from 'three'
-
-  const gltf = useGltf('/path/to/model.glb')
-
-  const { root } = useGltfAnimations(gltf)
-</script>
-
-{#await gltf then { scene }}
-  <T.Group bind:ref={$root}>
-    <T is={scene} />
-  </T.Group>
 {/await}
 ```
 
@@ -17210,7 +17258,9 @@ const viewport = useViewport([1, 0, 1])
 Package: @threlte/extras  
 URL: https://threlte.xyz/previews/pr-1785/docs/reference/extras/uv-material
 
-A material that visualizes the uvs of a geometry. Uvs are typically used for texture indexing.
+A material that visualizes the uvs of a geometry. Uvs are typically used for
+texture sampling in the shader. `UvMaterial` is meant to give you a sense of
+how textures will be mapped onto a mesh.
 
 <Example path="extras/uv-material" />
 
@@ -17232,15 +17282,26 @@ Simply import the component and add it as a child to a mesh
 
 ## Caveats
 
-The geometry must have a "uv" attribute in order for this material to work. If you're creating your own geometry, be sure to assign the "uv" attribute.
+The mesh's geometry must have a "uv" attribute in order for `UvMaterial` to work properly. If
+you're creating your own geometry, be sure to assign the "uv" attribute.
 
-```ts
-const geometry = new BufferGeometry()
-const uvAttribute = new BufferAttribute(/* uv array here */)
-geometry.setAttribute('uv', uvAttribute)
+```svelte
+<script>
+  const geometry = new BufferGeometry()
+  const uvAttribute = new BufferAttribute(/* uv array here */)
+  geometry.setAttribute('uv', uvAttribute)
+</script>
+
+<T.Mesh>
+  <T is={geometry} />
+  <UvMaterial />
+</T.Mesh>
 ```
 
-Most models that you import into your program should come with uv data and three.js will automatically assign uv attributes when loading the model.
+Most models that you import into your program should come with uv data and
+three.js will automatically assign uv attributes when loading the model.
+Three.js geometry primitives such as `BoxGeometry` and `SphereGeometry` are
+also outfitted with uv data.
 
 ---
 
@@ -17259,7 +17320,7 @@ per normal.
 The following example is equivalent to three.js's [multiple elements
 example](https://threejs.org/examples/#webgl_multiple_elements).
 
-<Example path="extras/view" />
+<Example path="extras/view/multiple-scenes" />
 
 Under the hood, this component uses the renderer's [scissor-cut
 method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setScissor).
@@ -17267,6 +17328,16 @@ method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setSc
 when using scissor-cuts as the styling of your canvas has different effects on
 the renderering. You access the `canvas` to switch between the options via the
 `useThrelte` hook.
+
+## Sharing a scene across views
+
+Pass an existing `THREE.Scene` via the `scene` prop to render the same content
+in multiple views instead of creating a new scene per `<View>`. Each `<View>`
+still owns its own camera, DOM, cache and user contexts, so you can show one
+scene from several angles — for example a main perspective plus a top-down
+minimap.
+
+<Example path="extras/view/shared-scene" />
 
 ---
 
@@ -17435,5 +17506,160 @@ This means that any geometry with a `<Wireframe>` that has indices will use a cl
   <T.BoxGeometry />
   <T.MeshStandardMaterial />
   <Wireframe />
+</T.Mesh>
+```
+
+---
+
+## <Wobble>
+
+Package: @threlte/extras  
+URL: https://threlte.xyz/previews/pr-1785/docs/reference/extras/wobble
+
+`<Wobble>` adds a time-varying vertex displacement to whatever material is already on its parent
+mesh. Because it patches the material rather than replacing it, you can wobble any
+`MeshStandardMaterial`, `MeshPhysicalMaterial`, `MeshToonMaterial`, etc. —
+pick the look you want, then drop `<Wobble>` in to make it move.
+
+<Example path="extras/wobble" />
+
+<small>
+  [Rhyzome Plant](https://sketchfab.com/3d-models/rhyzome-plant-7191a1b935ac452987866573713e4da5) by
+  Blizzy
+</small>
+
+## Examples
+
+### Basic Example
+
+```svelte title="WobblingTorus.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+  import { Wobble } from '@threlte/extras'
+</script>
+
+<T.Mesh>
+  <T.TorusGeometry />
+  <T.MeshStandardMaterial color="#ff6b6b" />
+  <Wobble
+    speed={2}
+    factor={2}
+  />
+</T.Mesh>
+```
+
+The wobble is computed per-vertex, so meshes need enough geometric detail for the deformation
+to look smooth.
+
+### Anchoring the base
+
+Pass `anchor` to pin a plane that stays put while everything else wobbles around it. Amplitude
+grows with distance from that plane — what you want for a plant whose base shouldn't slide
+around in its pot:
+
+```svelte title="AnchoredPlant.svelte"
+<T.Mesh castShadow>
+  <T is={plantGeometry} />
+  <T.MeshStandardMaterial color="#4a7a3a" />
+  <Wobble
+    speed={1}
+    factor={0.5}
+    anchor={plantBaseY}
+  />
+</T.Mesh>
+```
+
+### Shadows
+
+Shadows wobble alongside the visible mesh — `<Wobble>` attaches matching `customDepthMaterial`
+and `customDistanceMaterial` to the parent so the shadow silhouette tracks the deformation.
+
+Set `shadow` to `false` to disable this.
+
+```svelte
+<Wobble shadow={false} />
+```
+
+### Pointing the bend with `forceDirection`
+
+When `bendiness > 0`, setting `forceDirection` produces a bend from a specific side:
+
+```svelte
+<Wobble
+  factor={1}
+  bendiness={1}
+  forceDirection={[1, 0, 0]}
+/>
+```
+
+### Sideways objects
+
+Default `axis` is `[0, 1, 0]` — Y-up. Pass a different axis for models whose "up" is along X or
+Z:
+
+```svelte
+<T.Mesh>
+  <T is={vineGeometry} />
+  <T.MeshStandardMaterial />
+  <Wobble
+    axis={[1, 0, 0]}
+    bendiness={1}
+    factor={0.4}
+  />
+</T.Mesh>
+```
+
+### Tuning frequency for geometry size
+
+The default `frequency` is tuned for ~1–3 unit meshes. On much larger geometry the wobble looks
+uniform across the whole shape; on tiny ones it gets too chaotic. Adjust to taste:
+
+```svelte
+<!-- Tall building-sized mesh -->
+<Wobble
+  factor={1}
+  frequency={0.1}
+/>
+```
+
+### Driving time externally
+
+Provide `time` (in seconds) to drive the clock yourself. Useful for syncing many `<Wobble>`s to
+a single timeline, scrubbing back and forth, or pausing:
+
+```svelte
+<script lang="ts">
+  let clock = $state(0)
+  // ...your own time source...
+</script>
+
+<T.Mesh>
+  <T.SphereGeometry />
+  <T.MeshStandardMaterial />
+  <Wobble
+    time={clock}
+    factor={1}
+  />
+</T.Mesh>
+```
+
+### Reacting to material swaps
+
+By default `<Wobble>` patches the parent mesh's material once when it mounts. If you swap
+materials at runtime, pass it in:
+
+```svelte
+<script lang="ts">
+  let { material } = $props()
+</script>
+
+<T.Mesh>
+  <T.SphereGeometry />
+  <T is={material} />
+  <Wobble
+    {material}
+    speed={2}
+    factor={1}
+  />
 </T.Mesh>
 ```
