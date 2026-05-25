@@ -1,16 +1,8 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
-  import { Canvas, extend } from '@threlte/core'
+  import { Canvas } from '@threlte/core/webgpu'
   import { Checkbox, Color, Folder, Pane, Slider } from 'svelte-tweakpane-ui'
   import { ACESFilmicToneMapping, MathUtils } from 'three'
-  import {
-    DirectionalLight,
-    MeshPhysicalNodeMaterial,
-    MeshStandardMaterial,
-    WebGPURenderer
-  } from 'three/webgpu'
-
-  extend({ DirectionalLight, MeshPhysicalNodeMaterial, MeshStandardMaterial })
 
   let arcAngleDegrees = $state(90)
   let startAngleDegrees = $state(60)
@@ -50,16 +42,7 @@
     />
   </Folder>
 </Pane>
-<Canvas
-  toneMapping={ACESFilmicToneMapping}
-  createRenderer={(canvas) => {
-    return new WebGPURenderer({
-      antialias: true,
-      canvas,
-      forceWebGL: false
-    })
-  }}
->
+<Canvas toneMapping={ACESFilmicToneMapping}>
   <Scene
     {rotate}
     {arcAngle}
