@@ -4585,7 +4585,12 @@ URL: https://threlte.xyz/docs/reference/rapier/getting-started
 
 [Rapier](https://rapier.rs/) is a fast physics engine written in Rust. This package provides easy to use components and hooks to use the Rapier physics engine in Threlte.
 
-To start off, it's best to get yourself comfortable with the [basic concepts of rapier](https://rapier.rs/docs/).
+<Example
+  path="rapier/pachinko"
+  hideCode
+/>
+
+It's best to get yourself comfortable with the [basic concepts of rapier](https://rapier.rs/docs/) if you aren't familiar.
 
 <Tip type="experimental">
   This package is under heavy development and its API is subject to change. Also be aware that
@@ -4594,10 +4599,8 @@ To start off, it's best to get yourself comfortable with the [basic concepts of 
 
 ### Installation
 
-Make sure to have `@threlte/core` installed.
-
 ```bash copy
-npm install @threlte/rapier @dimforge/rapier3d-compat
+npm install @threlte/core @threlte/rapier @dimforge/rapier3d-compat
 ```
 
 ---
@@ -8062,6 +8065,10 @@ URL: https://threlte.xyz/docs/reference/rapier/debug
 
 Use the Debug component to see live representations of all colliders in a scene.
 
+<Example path="rapier/debug" />
+
+### Example
+
 ```svelte
 <Canvas>
   <World>
@@ -8294,14 +8301,14 @@ Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a 
 
   const { world } = useRapier()
 
-  // rigidBody is undefined if there's
-  // no parent `<RigidBody>` component
   const rigidBody = useRigidBody()
 
-  const collider = world.createCollider(colliderDesc, rigidBody)
+  $effect(() => {
+    const collider = world.createCollider(colliderDesc, rigidBody.current)
 
-  onDestroy(() => {
-    world.removeCollider(collider, true)
+    return () => {
+      world.removeCollider(collider, true)
+    }
   })
 </script>
 ```
@@ -8309,7 +8316,7 @@ Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a 
 ### Types
 
 ```ts
-const rigidBody = useRigidBody() // RAPIER.RigidBody | undefined
+const rigidBody = useRigidBody() // { current: RAPIER.RigidBody | undefined }
 ```
 
 ---
@@ -8831,6 +8838,10 @@ URL: https://threlte.xyz/docs/reference/rapier/use-fixed-joint
 
 Use this hook to initialize a [`FixedImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint).
 
+A fixed joint welds two rigid bodies together, locking their relative position and orientation so they behave as a single rigid unit. Reach for it when you need a composite from separate bodies — parts you may want to detach at runtime, or parts with different mass, friction, or collision properties.
+
+<Example path="rapier/joints/fixed/basic" />
+
 ```svelte
 <script>
   import { useFixedJoint, RigidBody, Collider } from '@threlte/rapier'
@@ -8876,6 +8887,10 @@ Package: @threlte/rapier
 URL: https://threlte.xyz/docs/reference/rapier/use-revolute-joint
 
 Use this hook to initialize a [`RevoluteImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint).
+
+A revolute joint is a hinge — it pins two rigid bodies together at a shared point and allows rotation around a single axis, locking the other five degrees of freedom. Reach for it for doors, wheel axles, pendulums, levers, and articulated arms.
+
+<Example path="rapier/joints/revolute/basic" />
 
 ```svelte
 <script>
@@ -9001,6 +9016,10 @@ URL: https://threlte.xyz/docs/reference/rapier/use-spherical-joint
 
 Use this hook to initialize a [`SphericalImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#spherical-joint).
 
+A spherical joint is a ball-and-socket — it pins two rigid bodies together at a shared point and allows free rotation around all three axes. Reach for it for chains and ropes, ragdoll joints (hips, shoulders), tethered objects, and anywhere two bodies need to pivot freely in 3D.
+
+<Example path="rapier/joints/spherical/basic" />
+
 ```svelte
 <script>
   import { useSphericalJoint, RigidBody, Collider } from '@threlte/rapier'
@@ -9070,6 +9089,10 @@ Package: @threlte/rapier
 URL: https://threlte.xyz/docs/reference/rapier/use-prismatic-joint
 
 Use this hook to initialize a [`PrismaticImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#prismatic-joint).
+
+A prismatic joint is a slider — it constrains two rigid bodies to translate along a single axis with optional min/max travel limits, and locks all rotation. Reach for it for pistons, hydraulic rams, elevators, sliding doors, drawers, and linear actuators.
+
+<Example path="rapier/joints/prismatic/basic" />
 
 ```svelte
 <script>
