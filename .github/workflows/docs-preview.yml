@@ -38,15 +38,17 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const headSha = context.payload.workflow_run.head_sha;
-            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+            const run = context.payload.workflow_run;
+            const head = `${run.head_repository.owner.login}:${run.head_branch}`;
+            const { data: prs } = await github.rest.pulls.list({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              commit_sha: headSha,
+              head,
+              state: 'open',
             });
-            const pr = prs.find((p) => p.state === 'open');
+            const pr = prs.find((p) => p.head.sha === run.head_sha);
             if (!pr) {
-              core.setFailed(`No open PR found for SHA ${headSha}`);
+              core.setFailed(`No matching open PR for ${head}@${run.head_sha}`);
               return;
             }
             core.setOutput('number', pr.number);

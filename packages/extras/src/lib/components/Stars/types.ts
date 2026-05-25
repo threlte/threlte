@@ -46,4 +46,12 @@ export type StarsProps = Props<Points> & {
    * @default 1.0
    */
   opacity?: number
+
+  /**
+   * Renders each point as an antialiased circle instead of a square.
+   * Combine with `fade` for a soft halo, or disable `fade` for crisp filled discs.
+   *
+   * @default false
+   */
+  rounded?: boolean
 }

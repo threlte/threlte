@@ -9,7 +9,8 @@
     64: 64,
     128: 128,
     256: 256,
-    512: 512
+    512: 512,
+    1024: 1024
   } as const
 
   const environmentOptions: { [Key in keyof typeof hdrs]: Key } & { auto: 'auto' } = {
@@ -19,7 +20,7 @@
     workshop: 'workshop'
   } as const
 
-  let hdr: keyof typeof environmentOptions = $state('auto')
+  let hdr = $state<keyof typeof environmentOptions>('auto')
   let metalness = $state(1)
   let resolution = $state(256)
   let roughness = $state(0)
@@ -28,36 +29,41 @@
   let frames = $derived(capFrames ? 3 : Infinity)
 
   let near = $state(0.1)
+  let far = $state(1000)
 </script>
 
 <Pane
   position="fixed"
-  title="CubeCamera"
+  title=""
 >
-  <Folder title="render target">
-    <List
-      bind:value={resolution}
-      label="resolution"
-      options={resolutionOptions}
-    />
-    <List
-      bind:value={hdr}
-      label="environment"
-      options={environmentOptions}
-    />
-    <Checkbox
-      bind:value={capFrames}
-      label="cap frames"
-    />
-  </Folder>
-  <Folder title="cube camera props">
-    <Slider
-      bind:value={near}
-      label="near"
-      max={15}
-      min={0.1}
-    />
-  </Folder>
+  <List
+    bind:value={resolution}
+    label="resolution"
+    options={resolutionOptions}
+  />
+  <List
+    bind:value={hdr}
+    label="environment"
+    options={environmentOptions}
+  />
+  <Checkbox
+    bind:value={capFrames}
+    label="cap frames"
+  />
+
+  <Slider
+    bind:value={near}
+    label="near"
+    max={15}
+    min={0.1}
+  />
+  <Slider
+    bind:value={far}
+    label="far"
+    max={2000}
+    min={10}
+  />
+
   <Folder title="material props">
     <Slider
       bind:value={metalness}
@@ -83,6 +89,7 @@
       {hdr}
       {metalness}
       {near}
+      {far}
       {resolution}
       {roughness}
     />

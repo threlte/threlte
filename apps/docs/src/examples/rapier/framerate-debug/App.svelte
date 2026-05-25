@@ -5,7 +5,7 @@
   import Scene from './Scene.svelte'
 
   let minFramerate = 5
-  let framerate: number = $state(minFramerate)
+  let framerate = $state(minFramerate)
 </script>
 
 <Pane

@@ -8,6 +8,10 @@ type: 'hook'
 
 Use this hook to initialize a [`PrismaticImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#prismatic-joint).
 
+A prismatic joint is a slider — it constrains two rigid bodies to translate along a single axis with optional min/max travel limits, and locks all rotation. Reach for it for pistons, hydraulic rams, elevators, sliding doors, drawers, and linear actuators.
+
+<Example path="rapier/joints/prismatic/basic" />
+
 ```svelte
 <script>
   import { usePrismaticJoint, RigidBody, Collider } from '@threlte/rapier'

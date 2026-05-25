@@ -13,6 +13,12 @@ componentSignature:
           type: 'HTMLElement',
           default: '',
           description: 'The target DOM to scissor-cut and attach events. Does nothing if none given.'
+        },
+        {
+          name: 'scene',
+          type: 'THREE.Scene',
+          default: 'new THREE.Scene()',
+          description: 'An existing scene to render. If omitted, `<View>` creates a new scene and any children are added to it.'
         }
       ]
   }
@@ -28,7 +34,7 @@ per normal.
 The following example is equivalent to three.js's [multiple elements
 example](https://threejs.org/examples/#webgl_multiple_elements).
 
-<Example path="extras/view" />
+<Example path="extras/view/multiple-scenes" />
 
 Under the hood, this component uses the renderer's [scissor-cut
 method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setScissor).
@@ -36,3 +42,13 @@ method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setSc
 when using scissor-cuts as the styling of your canvas has different effects on
 the renderering. You access the `canvas` to switch between the options via the
 `useThrelte` hook.
+
+## Sharing a scene across views
+
+Pass an existing `THREE.Scene` via the `scene` prop to render the same content
+in multiple views instead of creating a new scene per `<View>`. Each `<View>`
+still owns its own camera, DOM, cache and user contexts, so you can show one
+scene from several angles — for example a main perspective plus a top-down
+minimap.
+
+<Example path="extras/view/shared-scene" />

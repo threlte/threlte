@@ -28,7 +28,11 @@
   far={10000}
   oncreate={(ref) => ref.lookAt(0, 20, 0)}
 >
-  <OrbitControls target.y={20} />
+  <OrbitControls
+    target.y={20}
+    enableZoom={false}
+    enableDamping
+  />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight

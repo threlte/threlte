@@ -1,5 +1,11 @@
 # @threlte/gltf
 
+## 3.1.0
+
+### Minor Changes
+
+- 6de99ec: Add runes-based reactivity for Audio, PositionalAudio, useFBO, and useGltfAnimations props
+
 ## 3.0.7
 
 ### Patch Changes

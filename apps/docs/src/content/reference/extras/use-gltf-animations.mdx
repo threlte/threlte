@@ -1,7 +1,7 @@
 ---
 category: '@threlte/extras'
 group: 'Content'
-sourcePath: 'packages/extras/src/lib/hooks/useGltfAnimations.ts'
+sourcePath: 'packages/extras/src/lib/hooks/useGltfAnimations.svelte.ts'
 title: useGltfAnimations
 type: 'hook'
 ---
@@ -17,31 +17,34 @@ A convenience hook to use gltf animations loaded by a [\<GLTF>](/docs/reference/
 
 ## Examples
 
+`useGltfAnimations` takes the `gltf` as a getter so that reads are tracked through runes automatically. The hook returns the `mixer` and an `actions` store keyed by clip name — type the clip names with a generic to get autocompletion.
+
 ### With the `<GLTF>` component
 
-Without any arguments, `useGltfAnimations` returns a store which can be bound to the `<GLTF>` component.
+Bind a local `$state` variable to the `<GLTF>` component's `gltf` prop and pass the getter to `useGltfAnimations`.
 
 ```svelte
 <script lang="ts">
-  import { GLTF, useGltfAnimations } from '@threlte/extras'
+  import { GLTF, useGltfAnimations, type ThrelteGltf } from '@threlte/extras'
 
-  const { gltf, actions, mixer } = useGltfAnimations<'All Animations'>()
+  let gltf = $state<ThrelteGltf>()
+  const { actions, mixer } = useGltfAnimations<'All Animations'>(() => gltf)
   mixer.timeScale = 0.5
 
-  export const triggerAnimation = () => {
+  $effect(() => {
     $actions['All Animations']?.play()
-  }
+  })
 </script>
 
 <GLTF
   url="/path/to/model.glb"
-  bind:gltf={$gltf}
+  bind:gltf
 />
 ```
 
 ### With the `useGltf` hook
 
-For cases where you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, `useGltfAnimations` accepts a writable store as its first argument. [`useGltf`](/docs/reference/extras/use-gltf) returns a store that can be directly passed to `useGltfAnimations`.
+When you want to reuse parts of the GLTF such as materials, nodes, or the embedded camera, load it with [`useGltf`](/docs/reference/extras/use-gltf) and pass the value through the getter.
 
 ```svelte
 <script lang="ts">
@@ -49,7 +52,7 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
   import { useGltfAnimations, useGltf } from '@threlte/extras'
 
   const gltf = useGltf('/path/to/model.glb')
-  const { actions, mixer } = useGltfAnimations<'All Animations'>(gltf)
+  const { actions, mixer } = useGltfAnimations<'All Animations'>(() => $gltf)
 
   $effect(() => {
     $actions['All Animations']?.play()
@@ -63,10 +66,11 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
 
 ## Applying Animations to a Different Root
 
-`useGltfAnimations`'s second optional argument allows you to apply the animations to a root other than the GLTF scene.
+`useGltfAnimations`'s second optional argument is a getter for an alternative root `Object3D`. Use this when you want to retarget the clips onto a separate rig rather than the gltf's own scene.
 
 ```svelte
-<script>
+<script lang="ts">
+  import { T } from '@threlte/core'
   import { useGltfAnimations, useGltf } from '@threlte/extras'
   import { Group } from 'three'
 
@@ -74,32 +78,15 @@ For cases where you want to reuse parts of the GLTF such as materials, nodes, or
 
   const group = new Group()
 
-  const { root } = useGltfAnimations(gltf, group)
-  // $root === group
+  const { actions } = useGltfAnimations(
+    () => $gltf,
+    () => group
+  )
 </script>
 
 {#await gltf then { scene }}
   <T is={group}>
     <T is={scene} />
   </T>
-{/await}
-```
-
-You can also set the root store without passing in the second argument
-
-```svelte
-<script>
-  import { useGltfAnimations, useGltf } from '@threlte/extras'
-  import { Group } from 'three'
-
-  const gltf = useGltf('/path/to/model.glb')
-
-  const { root } = useGltfAnimations(gltf)
-</script>
-
-{#await gltf then { scene }}
-  <T.Group bind:ref={$root}>
-    <T is={scene} />
-  </T.Group>
 {/await}
 ```

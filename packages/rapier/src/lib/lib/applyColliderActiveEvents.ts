@@ -25,7 +25,5 @@ export const applyColliderActiveEvents = (
     events = events | ActiveEvents.CONTACT_FORCE_EVENTS
   }
 
-  if (events > 0) {
-    collider.setActiveEvents(events)
-  }
+  collider.setActiveEvents(events)
 }

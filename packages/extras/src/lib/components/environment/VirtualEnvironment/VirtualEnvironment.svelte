@@ -10,6 +10,7 @@
     far = 1000,
     frames = Infinity,
     isBackground = false,
+    isEnvironment = true,
     near = 0.1,
     onupdatestart,
     onupdatestop,
@@ -28,15 +29,12 @@
     () => resolution
   )
 
-  useEnvironment({
-    texture: renderTarget.texture,
-    get scene() {
-      return parentScene
-    },
-    get isBackground() {
-      return isBackground
-    }
-  })
+  useEnvironment(
+    () => parentScene,
+    () => renderTarget.texture,
+    () => isBackground,
+    () => isEnvironment
+  )
 
   export const update = () => {
     camera.update(ctx.renderer, scene)
@@ -77,5 +75,10 @@
   attach={visible ? undefined : false}
 >
   <T is={camera} />
-  {@render children?.({ camera, renderTarget, restart, update })}
+  {@render children?.({
+    camera,
+    renderTarget,
+    restart,
+    update
+  })}
 </T>

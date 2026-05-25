@@ -1,5 +1,36 @@
 # @threlte/core
 
+## 8.5.16
+
+### Patch Changes
+
+- 77b7c68: Improve useMeasure resize behavior and reduce unnecessary layout reads
+
+## 8.5.15
+
+### Patch Changes
+
+- f605bfe: Fix infinite effect loop when using bind:ref
+- f605bfe: Fix: A manual makeDefault camera could leave Threlte’s active camera state stuck in manual mode after it was disabled or unmounted
+
+## 8.5.14
+
+### Patch Changes
+
+- aad1053: Perf: remove unnecessary effects in T component
+
+## 8.5.13
+
+### Patch Changes
+
+- ab91a3b: Perf: cache property lookups in useProps
+
+## 8.5.12
+
+### Patch Changes
+
+- 50f6ac2: Allow Canvas component dpr property to accept a [min, max] tuple
+
 ## 8.5.11
 
 ### Patch Changes

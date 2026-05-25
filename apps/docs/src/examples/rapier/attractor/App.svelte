@@ -23,12 +23,12 @@
   position="fixed"
 >
   <Button
-    title="Reset the scene"
+    title="Reset"
     on:click={() => scene?.reset()}
   />
   <Checkbox
     bind:value={showHelper}
-    label="Show helper"
+    label="Debug"
   />
   <TabGroup bind:selectedIndex={tabIndex}>
     <TabPage title="Basic">

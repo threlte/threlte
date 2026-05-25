@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onDestroy, setContext, tick } from 'svelte'
+  import { setContext } from 'svelte'
   import { createRapierContext } from '../../lib/createRapierContext.js'
   import type { RapierContext } from '../../types/types.js'
   import type { WorldProps } from './types.js'
@@ -53,19 +53,20 @@
 
   setContext<RapierContext>('threlte-rapier-context', rapierContext)
 
-  $effect.pre(() => {
+  $effect(() => {
     if (gravity !== undefined) {
       rapierContext.world.gravity = { x: gravity[0], y: gravity[1], z: gravity[2] }
     }
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     if (framerate !== undefined) rapierContext.framerate.set(framerate)
   })
 
-  onDestroy(async () => {
-    await tick()
-    rapierContext.world.free()
+  $effect(() => {
+    return () => {
+      rapierContext.world.free()
+    }
   })
 </script>
 

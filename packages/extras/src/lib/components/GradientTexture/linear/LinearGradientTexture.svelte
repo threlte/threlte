@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { LinearGradientTextureProps } from './types.js'
-  import { CanvasTexture } from 'three'
-  import { T, observe, useThrelte } from '@threlte/core'
+  import { CanvasTexture, ClampToEdgeWrapping } from 'three'
+  import { T, useThrelte } from '@threlte/core'
   import { addStops } from '../common.js'
+  import { untrack } from 'svelte'
 
   let {
     width = 1024,
@@ -15,13 +16,18 @@
       { offset: 0, color: 'black' },
       { offset: 1, color: 'white' }
     ],
+    wrapS = ClampToEdgeWrapping,
+    wrapT = ClampToEdgeWrapping,
     attach = 'map',
     children,
     ref = $bindable(),
     ...props
   }: LinearGradientTextureProps = $props()
 
-  const canvas = new OffscreenCanvas(0, 0)
+  const canvas = new OffscreenCanvas(
+    untrack(() => width),
+    untrack(() => height)
+  )
   const context = canvas.getContext('2d')
 
   if (context === null) {
@@ -30,21 +36,18 @@
 
   const texture = new CanvasTexture(canvas)
 
-  $effect.pre(() => {
+  $effect(() => {
     canvas.width = width
-  })
-
-  $effect.pre(() => {
     canvas.height = height
+    invalidate()
   })
 
-  observe(
-    () => [props.wrapS, props.wrapT],
-    () => {
-      texture.needsUpdate = true
-      invalidate()
-    }
-  )
+  $effect(() => {
+    texture.wrapS = wrapS
+    texture.wrapT = wrapT
+    texture.needsUpdate = true
+    invalidate()
+  })
 
   const gradient = $derived.by(() => {
     const gradient = context.createLinearGradient(startX, startY, endX, endY)

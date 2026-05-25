@@ -1,8 +1,8 @@
-import { currentWritable, type CurrentWritable, useDOM } from '@threlte/core'
+import { currentWritable, useDOM, type CurrentWritable } from '@threlte/core'
 import { getContext, setContext } from 'svelte'
-import { Vector2, Raycaster, type Object3D, type Intersection } from 'three'
-import type { IntersectionEvent, DomEvent } from './types.js'
+import { Raycaster, Vector2, type Intersection, type Object3D } from 'three'
 import { getDefaultComputeFunction } from './defaults.svelte.js'
+import type { DomEvent, EventOptions, IntersectionEvent } from './types.js'
 
 export type FilterFunction = (
   items: Intersection[],
@@ -38,6 +38,10 @@ export type InteractivityOptions = {
    * matching native DOM behavior.
    */
   clickTimeThreshold?: number
+  /* 
+    Optionally configure `passive` options for specified events.
+  */
+  eventOptions?: EventOptions
 }
 
 type Events = Record<string, (arg: unknown) => void>
@@ -59,6 +63,7 @@ export type InteractivityContext = {
   filter?: FilterFunction | undefined
   clickDistanceThreshold: number
   clickTimeThreshold: number
+  eventOptions: EventOptions | undefined
   addInteractiveObject: (object: Object3D, events: Events) => void
   removeInteractiveObject: (object: Object3D) => void
 }
@@ -89,6 +94,7 @@ export const setInteractivityContext = (options?: InteractivityOptions) => {
     filter: options?.filter,
     clickDistanceThreshold: options?.clickDistanceThreshold ?? 8,
     clickTimeThreshold: options?.clickTimeThreshold ?? Number.POSITIVE_INFINITY,
+    eventOptions: options?.eventOptions,
     addInteractiveObject: (object: Object3D, events: Events) => {
       // Always update handlers so re-registration picks up new callbacks,
       // even if the object is already in the list.

@@ -38,52 +38,65 @@ export const updateCamera = (
 }
 
 export const useCamera = (
-  getCamera: () => PerspectiveCamera | OrthographicCamera,
-  getManual: () => boolean,
-  getMakeDefault: () => boolean,
+  camera: () => PerspectiveCamera | OrthographicCamera,
+  manual: () => boolean,
+  makeDefault: () => boolean,
   props: () => Record<string, unknown>
 ) => {
-  const { camera: defaultCamera, manual: defaultManual, makeDefaultCameras } = useDefaultCamera()
+  const {
+    camera: defaultCamera,
+    manual: defaultManual,
+    makeDefaultCameras,
+    makeDefaultCameraManual
+  } = useDefaultCamera()
   const { invalidate } = useScheduler()
   const { size: sizeStore } = useDOM()
 
-  const camera = $derived(getCamera())
-  const manual = $derived(getManual())
   const size = fromStore(sizeStore)
 
   $effect.pre(() => {
-    if (!getMakeDefault()) {
+    if (!makeDefault()) {
       return
     }
 
-    const currentCamera = camera
+    const currentCamera = camera()
+    const currentManual = manual()
 
     makeDefaultCameras.add(currentCamera)
+    makeDefaultCameraManual.set(currentCamera, currentManual)
     defaultCamera.set(currentCamera)
-    defaultManual.set(manual)
+    defaultManual.set(currentManual)
     invalidate()
 
     return () => {
       makeDefaultCameras.delete(currentCamera)
+      makeDefaultCameraManual.delete(currentCamera)
       // If the unmounted camera was the active default, fall back to
       // another makeDefault camera. The size === 0 fallback in
       // camera.svelte.ts handles the case where no makeDefault cameras remain.
       const next = makeDefaultCameras.values().next().value
-      if (defaultCamera.current === currentCamera && next) {
-        defaultCamera.set(next)
+      if (defaultCamera.current === currentCamera) {
+        if (next) {
+          defaultCamera.set(next)
+          defaultManual.set(makeDefaultCameraManual.get(next) ?? false)
+        } else {
+          defaultManual.set(false)
+        }
         invalidate()
       }
     }
   })
 
   $effect.pre(() => {
-    if (manual) {
+    if (manual()) {
       return
     }
 
+    const currentCamera = camera()
+
     for (const key in props()) {
       if (updateProjectionMatrixKeys.has(key)) {
-        camera.updateProjectionMatrix()
+        currentCamera.updateProjectionMatrix()
         invalidate()
         break
       }
@@ -91,10 +104,10 @@ export const useCamera = (
   })
 
   $effect.pre(() => {
-    if (getManual()) {
+    if (manual()) {
       return
     }
 
-    updateCamera(camera, size.current.width, size.current.height)
+    updateCamera(camera(), size.current.width, size.current.height)
   })
 }

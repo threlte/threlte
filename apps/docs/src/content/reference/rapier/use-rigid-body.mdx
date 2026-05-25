@@ -16,14 +16,14 @@ Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a 
 
   const { world } = useRapier()
 
-  // rigidBody is undefined if there's
-  // no parent `<RigidBody>` component
   const rigidBody = useRigidBody()
 
-  const collider = world.createCollider(colliderDesc, rigidBody)
+  $effect(() => {
+    const collider = world.createCollider(colliderDesc, rigidBody.current)
 
-  onDestroy(() => {
-    world.removeCollider(collider, true)
+    return () => {
+      world.removeCollider(collider, true)
+    }
   })
 </script>
 ```
@@ -31,5 +31,5 @@ Use this hook to e.g. add custom colliders to a `RAPIER.RigidBody` defined by a 
 ### Types
 
 ```ts
-const rigidBody = useRigidBody() // RAPIER.RigidBody | undefined
+const rigidBody = useRigidBody() // { current: RAPIER.RigidBody | undefined }
 ```

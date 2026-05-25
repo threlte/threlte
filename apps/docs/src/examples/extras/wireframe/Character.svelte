@@ -5,7 +5,7 @@
   let { wireframeProps } = $props()
 
   const gltf = useGltf('https://threejs.org/examples/models/gltf/Xbot.glb')
-  let { actions } = useGltfAnimations(gltf)
+  let { actions } = useGltfAnimations(() => $gltf)
 
   $effect(() => {
     // This effect acts like an init default pose

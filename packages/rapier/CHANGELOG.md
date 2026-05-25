@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 3.5.0
+
+### Minor Changes
+
+- 8b075ec: Lifecycle and reactivity cleanup for Svelte 5
+
 ## 3.4.2
 
 ### Patch Changes

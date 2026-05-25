@@ -89,7 +89,11 @@ Command: npx @threlte/gltf@latest ./stacy.glb
   ref = new Group()
 
   const gltf = useGltf('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations(gltf, ref)
+
+  export const { actions, mixer } = useGltfAnimations(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 <T
@@ -250,7 +254,11 @@ Command: npx @threlte/gltf@latest ./stacy.glb -t
   ref = new Group()
 
   const gltf = useGltf<GLTFResult>('/stacy.glb')
-  export const { actions, mixer } = useGltfAnimations<ActionName>(gltf, ref)
+
+  export const { actions, mixer } = useGltfAnimations<ActionName>(
+    () => $gltf,
+    () => ref
+  )
 </script>
 
 <T
@@ -293,7 +301,10 @@ extracts all clips and prepares them as actions:
 ```ts
 const gltf = useGltf('/stacy.glb')
 
-export const { actions, mixer } = useGltfAnimations(gltf, ref)
+export const { actions, mixer } = useGltfAnimations(
+  () => $gltf,
+  () => ref
+)
 ```
 
 If you want to play an animation you can do so at any time:

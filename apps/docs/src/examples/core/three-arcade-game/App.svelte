@@ -9,10 +9,6 @@
 
   const { progress, finishedOnce } = useProgress()
 
-  $effect(() => {
-    game.sound.handleMuted(game.muted)
-  })
-
   extend({
     CustomGridHelper
   })
@@ -51,7 +47,6 @@
     >
       <button
         onclick={() => {
-          game.sound.resume()
           game.state = 'intro'
         }}
         class="pointer-events-auto rounded-full bg-white px-8 py-4 text-2xl text-black"

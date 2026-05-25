@@ -20,10 +20,8 @@
 
   let { position, size, hit, freeze, staticColors, blinkingColors, onHit }: Props = $props()
 
-  const scale = new Tween(0)
-  scale.set(1, {
-    easing: cubicIn
-  })
+  const scale = new Tween(0, { easing: cubicIn })
+  scale.set(1)
 
   let innerColor = $derived(
     blinkingColors

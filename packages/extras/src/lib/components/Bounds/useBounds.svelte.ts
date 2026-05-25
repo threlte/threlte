@@ -71,15 +71,10 @@ export const provideBounds = (
   const cameraControls = fromStore(ccStore)
 
   const boundsControls = new CameraControls(camera.current, dom)
-  const { smoothTime } = boundsControls
   boundsControls.disconnect()
 
   $effect.pre(() => {
     boundsControls.camera = camera.current
-  })
-
-  $effect.pre(() => {
-    boundsControls.smoothTime = animate() ? smoothTime : 0.001
   })
 
   let animating = $state(false)
@@ -95,13 +90,14 @@ export const provideBounds = (
     const { azimuthAngle, polarAngle } = boundsControls
     const currentMargin = margin()
     const currentControls = controls
+    const shouldAnimate = animate()
 
     currentControls.enabled = false
 
     animating = true
 
     await Promise.all([
-      boundsControls.fitToBox(ref(), true, {
+      boundsControls.fitToBox(ref(), shouldAnimate, {
         paddingBottom: currentMargin,
         paddingLeft: currentMargin,
         paddingTop: currentMargin,
@@ -109,9 +105,15 @@ export const provideBounds = (
       }),
 
       // Preserve previous rotation
-      boundsControls?.rotateAzimuthTo(azimuthAngle, true),
-      boundsControls?.rotatePolarTo(polarAngle, true)
+      boundsControls?.rotateAzimuthTo(azimuthAngle, shouldAnimate),
+      boundsControls?.rotatePolarTo(polarAngle, shouldAnimate)
     ])
+
+    // Flush the snap to the underlying camera. With `shouldAnimate=true` the
+    // animation task has already been advancing the camera per frame and this
+    // is a no-op; with `shouldAnimate=false` no task ran and the camera is
+    // still at its old position until we drive it once here.
+    boundsControls.update(0)
 
     if ('fromJSON' in currentControls) {
       currentControls.fromJSON(boundsControls.toJSON())

@@ -13,17 +13,19 @@ In this example, we extract the animations from the glTF file, play them, and cr
 
 ### What is the code doing?
 
-1. Extract the variables `gltf` and `actions`.
+1. Extract the `actions` variable.
 
 ```ts
-const { gltf, actions } = useGltfAnimations()
+let gltf = $state()
+
+const { actions } = useGltfAnimations(() => gltf)
 ```
 
 2. Bind `gltf` to the `<GLTF>` component.
 
 ```svelte
 <GLTF
-  bind:gltf={$gltf}
+  bind:gltf
   url="https://threejs.org/examples/models/gltf/Xbot.glb"
 />
 ```

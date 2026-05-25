@@ -12,7 +12,7 @@ import type { ColliderEvents, CreateEvent } from '../../../types/types.js'
 
 type Type = 'static' | 'dynamic'
 
-type BaseProps = {
+interface BaseProps {
   /**
    * If a collider is *not* attached to a RigidBody and its type is `static`,
    * its transform is only applied once on initialization. If the transform
@@ -67,14 +67,14 @@ export type Shape =
 
 type Args<TShape extends Shape> = Parameters<(typeof ColliderDesc)[TShape]>
 
-type ShapeProps<TShape extends Shape> = {
+interface ShapeProps<TShape extends Shape> {
   shape: TShape
   args: Args<TShape>
 }
 
 // ------------------ MASS ------------------
 
-type Density = {
+interface Density {
   /** The density of this collider. */
   density: number
   mass?: never
@@ -82,7 +82,8 @@ type Density = {
   principalAngularInertia?: never
   angularInertiaLocalFrame?: never
 }
-type Mass = {
+
+interface Mass {
   /** The mass of this collider. */
   mass: number
   density?: never
@@ -90,7 +91,8 @@ type Mass = {
   principalAngularInertia?: never
   angularInertiaLocalFrame?: never
 }
-type MassProperties = {
+
+interface MassProperties {
   /** The mass of this collider. */
   mass: number
   /** The center of mass of this collider. */
@@ -102,7 +104,7 @@ type MassProperties = {
   density?: never
 }
 
-type NoMassProperties = {
+interface NoMassProperties {
   density?: never
   mass?: never
   centerOfMass?: never

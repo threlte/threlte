@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 1.6.1
+
+### Patch Changes
+
+- 5e41f7f: Update teleportControls to use Threlte 8 plugin internals
+
 ## 1.6.0
 
 ### Minor Changes

@@ -73,7 +73,7 @@ export type HTMLProps = Props<Group, [{ render(): void }]> & {
    * as well as Joe Pea in CodePen: https://codepen.io/trusktr/pen/RjzKJx
    * @default false
    */
-  occlude?: boolean | Object3D[] | boolean | 'raycast' | 'blending'
+  occlude?: boolean | Object3D[] | 'raycast' | 'blending'
 
   castShadow?: boolean // Cast shadow for occlusion plane
   receiveShadow?: boolean // Receive shadow for occlusion plane

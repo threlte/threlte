@@ -1,4 +1,4 @@
-import { AudioLoader } from 'three'
+import { AudioListener, AudioLoader } from 'three'
 
 const sounds = {
   bounce1: '/audio/ball_bounce_1.mp3',
@@ -10,12 +10,7 @@ const sounds = {
   bounce7: '/audio/ball_bounce_7.mp3',
   bounce8: '/audio/ball_bounce_8.mp3',
   bounce9: '/audio/ball_bounce_9.mp3',
-  intro: '/audio/arcade_intro.mp3',
-  intro2: '/audio/arcade_intro2.m4a',
-  intro3: '/audio/arcade_intro3.m4a',
-  levelSlow: '/audio/level_slow.m4a',
   levelComplete: '/audio/level_complete.m4a',
-  gameOver: '/audio/game_over.m4a',
   gameOver2: '/audio/game_over2.m4a'
 } as const
 type Sounds = keyof typeof sounds
@@ -29,21 +24,15 @@ type PlayOptions = {
   playbackRate?: number
 }
 
-export type ArcadeAudio = {
+type ArcadeAudio = {
   source: AudioBufferSourceNode
   gain: GainNode
-  fade: (
-    volume: number,
-    duration: number,
-    options?: { type?: 'linear' | 'exponential' }
-  ) => Promise<void> | undefined
   setVolume: (volume: number) => void
   onEnded: () => Promise<void>
 }
 
 export class Sound {
-  context: AudioContext | undefined = undefined
-  globalGainNode: GainNode | undefined = undefined
+  listener: AudioListener | undefined = undefined
   groups: Record<Groups, Sounds[]> = {
     bounce: [
       'bounce1',
@@ -58,7 +47,6 @@ export class Sound {
     ]
   }
   audioBuffers: Record<Sounds, AudioBuffer> = {} as Record<Sounds, AudioBuffer>
-  buffersLoaded = false
   debounceInMs = 150
   randomLimits: [min: number, max: number] = [-20, 150]
 
@@ -70,40 +58,24 @@ export class Sound {
     },
     {} as Record<Groups, number>
   )
-  constructor() {
-    this.context = new AudioContext()
-    this.globalGainNode = this.context.createGain()
-    this.globalGainNode.connect(this.context.destination)
-    this.initAudio()
-    if (typeof window === 'undefined') return
-    window.addEventListener('click', () => {
-      if (this.context) this.context.resume()
-    })
-    window.addEventListener('keydown', () => {
-      if (this.context) this.context.resume()
-    })
+
+  init(listener: AudioListener) {
+    if (this.listener) return
+    this.listener = listener
+    this.loadAll()
   }
-  async initAudio() {
-    const promises = Object.entries(sounds).map(async ([sound, url]) => {
-      if (!this.context) return
-      const audioBuffer = await this.loadAudioBuffer(url)
-      this.audioBuffers[sound as Sounds] = audioBuffer
-    })
-    await Promise.all(promises)
-    this.buffersLoaded = true
-  }
-  resume() {
-    if (this.context) this.context.resume()
-  }
-  loadAudioBuffer(url: string): Promise<AudioBuffer> {
-    return new Promise((resolve) => {
-      this.audioLoader.load(url, (buffer) => {
-        resolve(buffer)
+
+  async loadAll() {
+    await Promise.all(
+      Object.entries(sounds).map(async ([sound, url]) => {
+        this.audioBuffers[sound as Sounds] = await this.audioLoader.loadAsync(url)
       })
-    })
+    )
   }
+
   play(sound: Sounds, options?: PlayOptions): ArcadeAudio | undefined {
-    if (!this.context || !this.globalGainNode) return
+    if (!this.listener) return
+    const context = this.listener.context
     const now = Date.now()
     const groupsOfSound = Object.entries(this.groups).filter(([, sounds]) => sounds.includes(sound))
 
@@ -119,14 +91,12 @@ export class Sound {
 
     const buffer = this.audioBuffers[sound]
     if (!buffer) return
-    if (this.context.state === 'suspended' || this.context.state === 'closed') this.context.resume()
-    const source = this.context.createBufferSource()
+    const source = context.createBufferSource()
     source.buffer = buffer
-    const gainNode = this.context.createGain()
+    const gainNode = context.createGain()
     source.connect(gainNode)
-    gainNode.connect(this.globalGainNode)
-    let volume = options?.volume ?? 1
-    volume = volume === 0 ? 0.000000001 : volume
+    gainNode.connect(this.listener.gain)
+    const volume = options?.volume === 0 ? 0.000000001 : (options?.volume ?? 1)
     gainNode.gain.value = volume
     source.loop = options?.loop ?? false
     source.playbackRate.value = options?.playbackRate ?? 1
@@ -137,41 +107,13 @@ export class Sound {
     })
 
     const setVolume = (volume: number) => {
-      if (!this.context) return
-      gainNode.gain.cancelScheduledValues(this.context.currentTime)
+      gainNode.gain.cancelScheduledValues(context.currentTime)
       gainNode.gain.value = volume
-    }
-
-    const fade = (
-      volume: number,
-      duration: number,
-      options?: {
-        type?: 'linear' | 'exponential'
-      }
-    ) => {
-      if (!this.context) return
-      if (volume === 0) {
-        volume = 0.000000001
-      }
-      gainNode.gain.setValueAtTime(gainNode.gain.value, this.context.currentTime)
-      if (options?.type === 'exponential') {
-        gainNode.gain.exponentialRampToValueAtTime(
-          volume,
-          this.context.currentTime + duration / 1000
-        )
-      } else {
-        gainNode.gain.exponentialRampToValueAtTime(
-          volume,
-          this.context.currentTime + duration / 1000
-        )
-      }
-      return new Promise<void>((resolve) => setTimeout(resolve, duration))
     }
 
     return {
       source,
       gain: gainNode,
-      fade,
       setVolume,
       onEnded: () => {
         return new Promise((resolve) => {
@@ -186,16 +128,6 @@ export class Sound {
   }
   playFromGroup(group: Groups, options?: PlayOptions) {
     const sound = this.groups[group][Math.floor(Math.random() * this.groups[group].length)]
-    const source = this.play(sound!, options)
-    return source
-  }
-  handleMuted(muted: boolean) {
-    if (!this.globalGainNode) return
-    if (muted) {
-      this.globalGainNode.gain.value = 0
-    } else {
-      this.resume()
-      this.globalGainNode.gain.value = 1
-    }
+    return this.play(sound!, options)
   }
 }

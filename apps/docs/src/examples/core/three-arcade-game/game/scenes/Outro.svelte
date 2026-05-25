@@ -1,7 +1,7 @@
 <script lang="ts">
   import { MathUtils } from 'three'
   import { T } from '@threlte/core'
-  import { Edges, Text } from '@threlte/extras'
+  import { Audio, Edges, Text } from '@threlte/extras'
   import { Tween } from 'svelte/motion'
   import { useTimeout } from '../hooks/useTimeout.svelte'
   import { useArcadeControls } from '../controls.svelte'
@@ -44,17 +44,15 @@
       if (!showPressSpaceToStart) return
       blinkClock = blinkClock ? 0 : 1
     }, 500)
-    return () => {
-      clearInterval(intervalHandler)
-      audio?.source.stop()
-    }
-  })
-
-  let audio = game.sound.play('intro', {
-    loop: true,
-    volume: 1
+    return () => clearInterval(intervalHandler)
   })
 </script>
+
+<Audio
+  src="/audio/arcade_intro.mp3"
+  loop
+  autoplay
+/>
 
 <T.Group position.z={-0.35}>
   <ThrelteLogo

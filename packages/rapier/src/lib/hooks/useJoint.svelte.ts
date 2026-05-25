@@ -1,5 +1,4 @@
 import { MultibodyJoint, type ImpulseJoint, type RigidBody } from '@dimforge/rapier3d-compat'
-import { onDestroy } from 'svelte'
 import { derived, get, writable } from 'svelte/store'
 import type { RapierContext } from '../types/types.js'
 import { useRapier } from './useRapier.js'
@@ -22,18 +21,20 @@ export const useJoint = <T extends ImpulseJoint | MultibodyJoint>(
 
   const joint = writable<T>(undefined)
 
-  const unsubscribeBodies = bodies.subscribe((bodies) => {
-    if (bodies) joint.set(initializeJoint(...bodies, ctx))
-  })
+  $effect(() => {
+    const unsubscribeBodies = bodies.subscribe((bodies) => {
+      if (bodies) joint.set(initializeJoint(...bodies, ctx))
+    })
 
-  onDestroy(() => {
-    unsubscribeBodies()
-    const j = get(joint)
-    if (!j) return
-    if (j instanceof MultibodyJoint) {
-      ctx.world.removeMultibodyJoint(j, true)
-    } else {
-      ctx.world.removeImpulseJoint(j, true)
+    return () => {
+      unsubscribeBodies()
+      const j = get(joint)
+      if (!j) return
+      if (j instanceof MultibodyJoint) {
+        ctx.world.removeMultibodyJoint(j, true)
+      } else {
+        ctx.world.removeImpulseJoint(j, true)
+      }
     }
   })
 

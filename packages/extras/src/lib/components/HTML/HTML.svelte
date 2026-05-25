@@ -30,14 +30,15 @@
 
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
+  import { untrack } from 'svelte'
   import {
     DoubleSide,
     Group,
     Matrix4,
     Mesh,
-    Object3D,
-    OrthographicCamera,
-    PerspectiveCamera,
+    type Object3D,
+    type OrthographicCamera,
+    type PerspectiveCamera,
     Raycaster,
     Vector3
   } from 'three'
@@ -87,37 +88,41 @@
 
   const group = new Group()
 
-  let element = document.createElement(as)
+  let element!: HTMLElement
   let oldZoom = 0
-  let oldPosition = [0, 0]
+  let oldX = 0
+  let oldY = 0
+  let cachedZIndexNum = Number.MIN_SAFE_INTEGER
+  let cachedWidth = -1
+  let cachedHeight = -1
+  let cachedPerspective = ''
+  let cachedOuterTransform = ''
+  let cachedInnerTransform = ''
+  let cachedTransform = ''
   let transformOuterRef: HTMLDivElement | undefined = $state()
   let transformInnerRef: HTMLDivElement | undefined = $state()
   let isMeshSizeSet = false
 
   const occlusionMesh = new Mesh()
   const raycaster = new Raycaster()
+  const matrix = new Matrix4()
+  const viewportTarget = new Vector3()
 
-  let isRayCastOcclusion = $derived(
-    (occlude && occlude !== 'blending') || (Array.isArray(occlude) && occlude.length > 0)
-  )
+  const isRayCastOcclusion = $derived(!!occlude && occlude !== 'blending')
+  const viewportFactor = $derived(getViewportFactor($camera, viewportTarget, $size))
 
-  let matrix = new Matrix4()
-  let width = $derived($size.width)
-  let height = $derived($size.height)
-  let halfWidth = $derived(width / 2)
-  let halfHeight = $derived(height / 2)
-  let fov = $derived($camera.projectionMatrix.elements[5] * halfHeight)
-  let viewportFactor = $derived(getViewportFactor($camera, new Vector3(), $size))
-
-  $effect.pre(() => {
-    if (wrapperClass) element.className = wrapperClass
+  // Stable zRange tuple — objectZIndex only reads zRange[0] and zRange[1].
+  // Recomputes only when occlude/raycast/zIndexRange actually change.
+  const zRange = $derived.by(() => {
+    if (!occlude) return zIndexRange
+    const halfRange = Math.floor(zIndexRange[0] / 2)
+    return isRayCastOcclusion ? [zIndexRange[0], halfRange] : [halfRange - 1, 0]
   })
 
   $effect.pre(() => {
-    if (occlude === 'blending') {
-      activeOccludeInstances += 1
-      modifyCanvas(canvas, zIndexRange[0])
-    }
+    if (occlude !== 'blending') return
+    activeOccludeInstances += 1
+    modifyCanvas(canvas, zIndexRange[0])
 
     return () => {
       activeOccludeInstances -= 1
@@ -128,13 +133,14 @@
   export const render = () => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
-    const vec = transform ? oldPosition : calculatePosition(group, camera.current, $size)
+    const vec = transform ? null : calculatePosition(group, camera.current, $size)
 
     if (
       transform ||
-      Math.abs(oldZoom - (camera.current as PerspectiveCamera).zoom) > eps ||
-      Math.abs(oldPosition[0] - vec[0]) > eps ||
-      Math.abs(oldPosition[1] - vec[1]) > eps
+      (vec &&
+        (Math.abs(oldZoom - (camera.current as PerspectiveCamera).zoom) > eps ||
+          Math.abs(oldX - vec[0]) > eps ||
+          Math.abs(oldY - vec[1]) > eps))
     ) {
       const isBehindCamera = isObjectBehindCamera(group, camera.current)
       let raytraceTarget: null | undefined | boolean | Object3D[] = false
@@ -164,18 +170,23 @@
         }
       }
 
-      const halfRange = Math.floor(zIndexRange[0] / 2)
-      const zRange = occlude
-        ? isRayCastOcclusion //
-          ? [zIndexRange[0], halfRange]
-          : [halfRange - 1, 0]
-        : zIndexRange
-
-      element.style.zIndex = `${objectZIndex(group, camera.current as OrthographicCamera | PerspectiveCamera, zRange)}`
+      const zIndexNum = objectZIndex(
+        group,
+        camera.current as OrthographicCamera | PerspectiveCamera,
+        zRange
+      )
+      if (cachedZIndexNum !== zIndexNum) {
+        element.style.zIndex = `${zIndexNum}`
+        cachedZIndexNum = zIndexNum
+      }
 
       if (transform && transformOuterRef && transformInnerRef) {
         const { isOrthographicCamera, top, left, bottom, right } =
           camera.current as OrthographicCamera
+        const { width, height } = $size
+        const halfWidth = width / 2
+        const halfHeight = height / 2
+        const fov = $camera.projectionMatrix.elements[5] * halfHeight
         const cameraMatrix = getCameraCSSMatrix(camera.current.matrixWorldInverse)
         const cameraTransform = isOrthographicCamera
           ? `scale(${fov})translate(${epsilon(-(right + left) / 2)}px,${epsilon(
@@ -195,20 +206,43 @@
           matrix.copy(group.matrixWorld)
         }
 
-        element.style.width = `${width}px`
-        element.style.height = `${height}px`
-        element.style.perspective = isOrthographicCamera ? '' : `${fov}px`
-        transformOuterRef.style.transform = `${cameraTransform}${cameraMatrix}translate(${halfWidth}px,${halfHeight}px)`
-        transformInnerRef.style.transform = getObjectCSSMatrix(
-          matrix,
-          1 / ((distanceFactor || 10) / 400)
-        )
-      } else {
+        if (cachedWidth !== width) {
+          element.style.width = `${width}px`
+          cachedWidth = width
+        }
+        if (cachedHeight !== height) {
+          element.style.height = `${height}px`
+          cachedHeight = height
+        }
+        const perspective = isOrthographicCamera ? '' : `${fov}px`
+        if (cachedPerspective !== perspective) {
+          element.style.perspective = perspective
+          cachedPerspective = perspective
+        }
+        const newOuterTransform = `${cameraTransform}${cameraMatrix}translate(${halfWidth}px,${halfHeight}px)`
+        if (cachedOuterTransform !== newOuterTransform) {
+          transformOuterRef.style.transform = newOuterTransform
+          cachedOuterTransform = newOuterTransform
+        }
+        const newInnerTransform = getObjectCSSMatrix(matrix, 1 / ((distanceFactor || 10) / 400))
+        if (cachedInnerTransform !== newInnerTransform) {
+          transformInnerRef.style.transform = newInnerTransform
+          cachedInnerTransform = newInnerTransform
+        }
+      } else if (vec) {
         const scale =
           distanceFactor === undefined ? 1 : objectScale(group, camera.current) * distanceFactor
-        element.style.transform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`
+        const newTransform = `translate3d(${vec[0]}px,${vec[1]}px,0) scale(${scale})`
+        if (cachedTransform !== newTransform) {
+          element.style.transform = newTransform
+          cachedTransform = newTransform
+        }
       }
-      oldPosition = vec
+
+      if (vec) {
+        oldX = vec[0]
+        oldY = vec[1]
+      }
       oldZoom = (camera.current as PerspectiveCamera).zoom
     }
 
@@ -262,9 +296,10 @@
     running: () => autoRender
   })
 
-  let pos = $derived.by(() => {
-    scene.updateMatrixWorld()
-    return calculatePosition(group, $camera, $size)
+  $effect(() => {
+    // Track $size so resize updates the DOM synchronously, ahead of the next renderStage tick.
+    void $size
+    untrack(render)
   })
 
   const portalAction = (el: HTMLElement) => {
@@ -322,12 +357,12 @@
   this={as}
   use:portalAction
   bind:this={element}
+  class={wrapperClass}
   style:position="absolute"
   style:top="0"
   style:left="0"
   style:pointer-events={transform ? 'none' : undefined}
   style:overflow={transform ? 'hidden' : undefined}
-  style:transform={transform ? undefined : `translate3d(${pos[0]}px,${pos[1]}px,0)`}
   style:transform-origin={transform ? undefined : '0 0'}
   style:display={$suspended ? 'none' : undefined}
 >
@@ -339,8 +374,8 @@
       style:left="0"
       style:transform-style="preserve-3d"
       style:pointer-events="none"
-      style:width={`${width}px`}
-      style:height={`${height}px`}
+      style:width={`${$size.width}px`}
+      style:height={`${$size.height}px`}
     >
       <div
         bind:this={transformInnerRef}
@@ -359,10 +394,10 @@
     <div
       style:position="absolute"
       style:transform={center ? 'translate3d(-50%,-50%,0)' : 'none'}
-      style:top={fullscreen ? `${-height / 2}px` : undefined}
-      style:left={fullscreen ? `${-width / 2}px` : undefined}
-      style:width={fullscreen ? `${width}px` : undefined}
-      style:height={fullscreen ? `${height}px` : undefined}
+      style:top={fullscreen ? `${-$size.height / 2}px` : undefined}
+      style:left={fullscreen ? `${-$size.width / 2}px` : undefined}
+      style:width={fullscreen ? `${$size.width}px` : undefined}
+      style:height={fullscreen ? `${$size.height}px` : undefined}
       style={props.style}
       class={props.class}
     >

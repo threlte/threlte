@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { Pane, Checkbox } from 'svelte-tweakpane-ui'
+  import { Pane, Checkbox, Button } from 'svelte-tweakpane-ui'
   import { Canvas } from '@threlte/core'
   import { HTML } from '@threlte/extras'
   import { Debug, World } from '@threlte/rapier'
   import Scene from './Scene.svelte'
 
+  let version = $state(0)
   let debug = $state(true)
 </script>
 
@@ -16,6 +17,12 @@
     bind:value={debug}
     label="Debug"
   />
+  <Button
+    title="reset"
+    on:click={() => {
+      version += 1
+    }}
+  />
 </Pane>
 
 <div>
@@ -25,7 +32,9 @@
         <Debug />
       {/if}
 
-      <Scene />
+      {#key version}
+        <Scene />
+      {/key}
 
       {#snippet fallback()}
         <HTML transform>

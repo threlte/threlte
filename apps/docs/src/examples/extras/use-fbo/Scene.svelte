@@ -13,12 +13,12 @@
   const gltf = useGltf('/models/Duck.glb')
 
   const { renderer, scene } = useThrelte()
-  const fbo = useFBO({
+  const fbo = useFBO(() => ({
     size: {
       width: 1024,
       height: 2048
     }
-  })
+  }))
 
   const group = new Group()
 

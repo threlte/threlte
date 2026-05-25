@@ -74,9 +74,16 @@ export type CreateRendererContextOptions<T extends Renderer> = {
   shadows?: boolean | ShadowMapType
 
   /**
+   * The device pixel ratio used by the renderer.
+   *
+   * Pass a single number to set the pixel ratio explicitly. Pass a tuple
+   * `[min, max]` to clamp `window.devicePixelRatio` between those bounds —
+   * useful for capping render resolution on high-DPI displays while still
+   * using the native ratio on lower-DPI ones.
+   *
    * @default window.devicePixelRatio
    */
-  dpr?: number
+  dpr?: number | [min: number, max: number]
 }
 
 export const createRendererContext = <T extends Renderer>(
@@ -138,7 +145,13 @@ export const createRendererContext = <T extends Renderer>(
 
   // Seperate derived runes since users can set these values through the canvas or by .set()
   let colorSpace = $derived<ColorSpace>(optsColorSpace ?? SRGBColorSpace)
-  let dpr = $derived(optsDpr ?? devicePixelRatio.current ?? window.devicePixelRatio)
+  let dpr = $derived.by(() => {
+    const target = devicePixelRatio.current ?? window.devicePixelRatio
+    if (Array.isArray(optsDpr)) {
+      return Math.min(Math.max(optsDpr[0], target), optsDpr[1])
+    }
+    return optsDpr ?? target
+  })
   let shadows = $derived(optsShadows ?? PCFSoftShadowMap)
   let toneMapping = $derived(optsToneMapping ?? AgXToneMapping)
 

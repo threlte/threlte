@@ -1,5 +1,60 @@
 # @threlte/extras
 
+## 9.20.1
+
+### Patch Changes
+
+- 2bb801e: Fix HTML component not responding correctly to resize events
+- 2bb801e: Fix Bounds component in no-animate mode
+
+## 9.20.0
+
+### Minor Changes
+
+- f605bfe: Add `isEnvironment` to environment components so textures can be assigned as a background without replacing `scene.environment`.
+- f605bfe: View: allow same scene rendering
+
+## 9.19.0
+
+### Minor Changes
+
+- b6e29a7: Add eventOptions option to interactivity plugin
+
+## 9.18.0
+
+### Minor Changes
+
+- cb711f6: Add Wobble component
+
+## 9.17.1
+
+### Patch Changes
+
+- cf6480d: Simplify environment-related components internals
+
+## 9.17.0
+
+### Minor Changes
+
+- 6de99ec: Add runes-based reactivity for Audio, PositionalAudio, useFBO, and useGltfAnimations props
+
+## 9.16.0
+
+### Minor Changes
+
+- e47ac42: Fix SoftShadows component
+
+### Patch Changes
+
+- e47ac42: Perf: remove unnecessary effects in T component
+
+## 9.15.2
+
+### Patch Changes
+
+- ab91a3b: Perf: cache values in useInputMap and useKeyboard
+- ab91a3b: Fix: capture portal id to prevent live value reads when props update
+
 ## 9.15.1
 
 ### Patch Changes
