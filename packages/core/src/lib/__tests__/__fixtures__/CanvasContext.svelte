@@ -4,7 +4,7 @@
   import type { Renderer } from '../../context/fragments/renderer.svelte.js'
   import { useThrelte, type ThrelteContext } from '../../context/compounds/useThrelte.js'
 
-  type Props = Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'dom'> & {
+  interface Props extends Omit<CreateThrelteContextOptions<Renderer>, 'canvas' | 'dom'> {
     oncontext?: (ctx: ThrelteContext<Renderer>) => void
   }
 
