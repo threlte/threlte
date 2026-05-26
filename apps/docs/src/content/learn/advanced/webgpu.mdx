@@ -11,6 +11,8 @@ swaps the default renderer for `WebGPURenderer`, awaits `renderer.init()`
 internally, and points `<T>` at `three/webgpu` so node materials (e.g.
 `<T.MeshPhysicalNodeMaterial />`) resolve out of the box.
 
+`useThrelte` from the `webgpu` export is also updated to have `WebGPURenderer` types.
+
 ```svelte title="App.svelte"
 <script>
   import Scene from './Scene.svelte'
@@ -33,7 +35,7 @@ internally, and points `<T>` at `three/webgpu` so node materials (e.g.
 </T.Mesh>
 ```
 
-`useThrelte` from the `webgpu` export is also updated to have `WebGPURenderer` types.
+<Example path="renderers/WebGPU" />
 
 <Tip type="note">
   WebGPU is still young and has [limited availability across major
@@ -65,8 +67,6 @@ factory. The `<Canvas>` still awaits `init()` for you.
   <Scene />
 </Canvas>
 ```
-
-<Example path="renderers/WebGPU" />
 
 <small>
   Adapted from [this Three.js
