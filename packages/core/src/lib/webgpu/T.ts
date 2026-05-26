@@ -30,10 +30,23 @@ export const extend = (extensions: Extensions) => {
 /**
  * ## `<T>` (WebGPU)
  *
- * Variant of Threlte's `<T>` whose name lookups resolve against `three/webgpu`,
- * so e.g. `<T.MeshStandardMaterial>` uses the WebGPU-native class rather than
- * the WebGL one, and the Node material classes (`MeshStandardNodeMaterial`,
- * etc.) are addressable directly.
+ * Threlte's `<T>` component is a wrapper around Three.js objects. It is a generic component
+ * that can be used to create any Three.js object.
+ *
+ * @example
+ *
+ * ```svelte
+ * <script>
+ * 	import { T } from 'threlte'
+ * </script>
+ *
+ * <T.PerspectiveCamera makeDefault />
+ *
+ * <T.Mesh>
+ * 	<T.BoxGeometry />
+ * 	<T.MeshBasicMaterial color="red" />
+ * </T.Mesh>
+ * ```
  */
 export const T = new Proxy(TComp, {
   get(_target, is: keyof typeof THREE) {

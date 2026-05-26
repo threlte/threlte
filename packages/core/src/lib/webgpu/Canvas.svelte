@@ -4,7 +4,7 @@
   import Context from '../components/Context/Context.svelte'
   import type { CreateThrelteContextOptions } from '../context/createThrelteContext.svelte.js'
 
-  type Props = Omit<CreateThrelteContextOptions<WebGPURenderer>, 'canvas' | 'dom'> & {
+  interface Props extends Omit<CreateThrelteContextOptions<WebGPURenderer>, 'canvas' | 'dom'> {
     children?: Snippet
   }
 
