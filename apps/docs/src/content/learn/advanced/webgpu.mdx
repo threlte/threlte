@@ -37,6 +37,12 @@ internally, and points `<T>` at `three/webgpu` so node materials (e.g.
 
 <Example path="renderers/WebGPU" />
 
+<small>
+  Adapted from [this Three.js
+  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle), demonstrating
+  WebGPU [render bundles](https://developer.mozilla.org/en-US/docs/Web/API/GPURenderBundle).
+</small>
+
 <Tip type="note">
   WebGPU is still young and has [limited availability across major
   browsers](https://caniuse.com/?search=webgpu). Three.js's `WebGPURenderer` will fall back to WebGL
@@ -67,12 +73,6 @@ factory. The `<Canvas>` still awaits `init()` for you.
   <Scene />
 </Canvas>
 ```
-
-<small>
-  Adapted from [this Three.js
-  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle), demonstrating
-  WebGPU [render bundles](https://developer.mozilla.org/en-US/docs/Web/API/GPURenderBundle).
-</small>
 
 ### Vite
 
