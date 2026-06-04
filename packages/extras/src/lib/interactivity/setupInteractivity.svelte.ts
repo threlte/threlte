@@ -1,7 +1,7 @@
-import type { Points, Object3D } from 'three'
-import { type InteractivityContext, useInteractivity } from './context.js'
-import type { DomEvent, Intersection, IntersectionEvent } from './types.js'
 import { fromStore } from 'svelte/store'
+import type { Object3D, Points } from 'three'
+import { type InteractivityContext, useInteractivity } from './context.js'
+import type { DomEvent, DomEventName, Intersection, IntersectionEvent } from './types.js'
 
 // Hover identity must match the dedup key used in `getHits`, otherwise the ID
 // changes mid-hover (e.g. the hit's face index changes as the ray sweeps a
@@ -18,7 +18,7 @@ function createIntersectionId(intersection: Intersection) {
   return target.uuid
 }
 
-const DOM_EVENTS = [
+const DOM_EVENTS: [DomEventName, boolean][] = [
   ['click', false],
   ['contextmenu', false],
   ['dblclick', false],
@@ -29,7 +29,7 @@ const DOM_EVENTS = [
   ['pointerenter', true],
   ['pointermove', true],
   ['pointercancel', true]
-] as const
+]
 
 export const setupInteractivity = (context: InteractivityContext) => {
   const { handlers } = useInteractivity()
@@ -308,7 +308,9 @@ export const setupInteractivity = (context: InteractivityContext) => {
   }
 
   const connect = (target: HTMLElement) => {
-    for (const [eventName, passive] of DOM_EVENTS) {
+    for (const [eventName, defaultPassive] of DOM_EVENTS) {
+      const passive = context.eventOptions?.[eventName]?.passive ?? defaultPassive
+
       if (eventName === 'pointerleave' || eventName === 'pointercancel') {
         target.addEventListener(eventName, handlePointerLeaveOrCancel, { passive })
       } else if (eventName === 'pointermove') {

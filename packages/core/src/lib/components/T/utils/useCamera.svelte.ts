@@ -42,7 +42,12 @@ export const useCamera = (
   makeDefault: () => boolean,
   props: () => Record<string, unknown>
 ) => {
-  const { camera: defaultCamera, manual: defaultManual, makeDefaultCameras } = useDefaultCamera()
+  const {
+    camera: defaultCamera,
+    manual: defaultManual,
+    makeDefaultCameras,
+    makeDefaultCameraManual
+  } = useDefaultCamera()
   const { invalidate } = useScheduler()
   const { size } = useDOM()
 
@@ -52,20 +57,28 @@ export const useCamera = (
     }
 
     const currentCamera = camera()
+    const currentManual = manual()
 
     makeDefaultCameras.add(currentCamera)
+    makeDefaultCameraManual.set(currentCamera, currentManual)
     defaultCamera.set(currentCamera)
-    defaultManual.set(manual())
+    defaultManual.set(currentManual)
     invalidate()
 
     return () => {
       makeDefaultCameras.delete(currentCamera)
+      makeDefaultCameraManual.delete(currentCamera)
       // If the unmounted camera was the active default, fall back to
       // another makeDefault camera. The size === 0 fallback in
       // camera.svelte.ts handles the case where no makeDefault cameras remain.
       const next = makeDefaultCameras.values().next().value
-      if (defaultCamera.current === currentCamera && next) {
-        defaultCamera.set(next)
+      if (defaultCamera.current === currentCamera) {
+        if (next) {
+          defaultCamera.set(next)
+          defaultManual.set(makeDefaultCameraManual.get(next) ?? false)
+        } else {
+          defaultManual.set(false)
+        }
         invalidate()
       }
     }

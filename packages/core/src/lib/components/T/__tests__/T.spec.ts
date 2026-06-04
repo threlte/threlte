@@ -4,6 +4,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { extend, T } from '../T.js'
 import Bindable from './__fixtures__/Bindable.svelte'
+import BoundRefFeedback from './__fixtures__/BoundRefFeedback.svelte'
 
 describe('<T>', () => {
   it('instantiates a Three.js object when the "is" argument is a class', () => {
@@ -65,5 +66,9 @@ describe('<T>', () => {
     expect(onRefCreate).toHaveBeenCalledTimes(2)
     expect(onRefCreate).toHaveBeenNthCalledWith(1, undefined)
     expect(onRefCreate).toHaveBeenNthCalledWith(2, group)
+  })
+
+  it('does not exceed effect update depth when a parent reacts to a bound ref', () => {
+    expect(() => render(BoundRefFeedback)).not.toThrow()
   })
 })

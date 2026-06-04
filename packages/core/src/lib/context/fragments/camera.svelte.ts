@@ -10,6 +10,7 @@ export interface CameraContext {
     set(value: PerspectiveCamera | OrthographicCamera): void
   }
   makeDefaultCameras: SvelteSet<PerspectiveCamera | OrthographicCamera>
+  makeDefaultCameraManual: WeakMap<PerspectiveCamera | OrthographicCamera, boolean>
   manual: {
     current: boolean
     set(value: boolean): void
@@ -21,6 +22,7 @@ export const createCameraContext = (): CameraContext => {
   const { invalidate } = useScheduler()
 
   const makeDefaultCameras = new SvelteSet<PerspectiveCamera | OrthographicCamera>()
+  const makeDefaultCameraManual = new WeakMap<PerspectiveCamera | OrthographicCamera, boolean>()
 
   // Create a default camera to use when no camera is defined by the user.
   // Aspect is 1 (not 0) to avoid a NaN projection matrix before the first resize.
@@ -44,13 +46,27 @@ export const createCameraContext = (): CameraContext => {
 
   $effect.pre(() => {
     if (camera === undefined || makeDefaultCameras.size === 0) {
-      camera = defaultCamera
-      invalidate()
+      let changed = false
+
+      if (camera !== defaultCamera) {
+        camera = defaultCamera
+        changed = true
+      }
+
+      if (manual) {
+        manual = false
+        changed = true
+      }
+
+      if (changed) {
+        invalidate()
+      }
     }
   })
 
   const context: CameraContext = {
     makeDefaultCameras,
+    makeDefaultCameraManual,
     camera: {
       get current() {
         return camera

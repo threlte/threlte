@@ -2,6 +2,7 @@ import { useThrelteUserContext } from '@threlte/core'
 import CameraControls from 'camera-controls'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
+import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 
 interface ControlsContext {
   orbitControls: {
@@ -16,19 +17,32 @@ interface ControlsContext {
     readonly current: CameraControls | undefined
     set(value?: CameraControls | undefined): void
   }
+  transformControls: {
+    readonly current: TransformControls | undefined
+    set(value?: TransformControls | undefined): void
+  }
 }
 
 /**
  * ### `useControlsContext`
  *
- * This hook is used to register the `OrbitControls` or `TrackballControls instance
- * with the `ControlsContext`. We're using this context to enable and disable the
- * controls when the user is interacting with the TransformControls.
+ * Internal registry of the controls instances mounted within the current
+ * `<Canvas>`. Each controls component (`<OrbitControls>`,
+ * `<TrackballControls>`, `<CameraControls>`, `<TransformControls>`) registers
+ * itself here on mount and clears its entry on unmount.
+ *
+ * It powers two things:
+ * - `<TransformControls>` reads the camera controls to enable/disable them
+ *   while a transform gizmo is being dragged.
+ * - The public `useCameraControls`, `useOrbitControls`, `useTrackballControls`
+ *   and `useTransformControls` hooks expose the registered instance to user
+ *   code.
  */
 export const useControlsContext = (): ControlsContext => {
-  let orbitControls = $state<OrbitControls>()
-  let trackballControls = $state<TrackballControls>()
-  let cameraControls = $state<CameraControls>()
+  let orbitControls = $state.raw<OrbitControls>()
+  let trackballControls = $state.raw<TrackballControls>()
+  let cameraControls = $state.raw<CameraControls>()
+  let transformControls = $state.raw<TransformControls>()
 
   return useThrelteUserContext<ControlsContext>('threlte-controls', {
     orbitControls: {
@@ -53,6 +67,14 @@ export const useControlsContext = (): ControlsContext => {
       },
       set(value) {
         cameraControls = value
+      }
+    },
+    transformControls: {
+      get current() {
+        return transformControls
+      },
+      set(value) {
+        transformControls = value
       }
     }
   })

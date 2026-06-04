@@ -27,8 +27,7 @@
       {#snippet fallback()}
         <HTML transform>
           <p>
-            It seems your browser<br />
-            doesn't support WASM.<br />
+            It seems your browser doesn't support WASM.<br />
             I'm sorry.
           </p>
         </HTML>

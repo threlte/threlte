@@ -2,11 +2,14 @@
   import InnerView from './InnerView.svelte'
   import type { ViewProps } from './types.js'
 
-  let { dom, children }: ViewProps = $props()
+  let { dom, scene, children }: ViewProps = $props()
 </script>
 
 {#if dom}
-  <InnerView {dom}>
+  <InnerView
+    {dom}
+    {scene}
+  >
     {@render children?.()}
   </InnerView>
 {/if}

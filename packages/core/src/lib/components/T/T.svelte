@@ -91,7 +91,10 @@
   $effect(() => {
     if (internalRef) {
       return untrack(() => {
-        ref = internalRef
+        if (ref !== internalRef) {
+          ref = internalRef
+        }
+
         return oncreate?.(internalRef)
       })
     }

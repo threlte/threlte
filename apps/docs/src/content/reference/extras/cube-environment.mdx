@@ -20,6 +20,12 @@ componentSignature:
           type: 'boolean'
         },
         {
+          default: 'true',
+          description: 'whether to set `scene.environment` to the loaded environment texture',
+          name: 'isEnvironment',
+          type: 'boolean'
+        },
+        {
           default: 'useThrelte().scene',
           description: 'the scene that will have its environment and/or background set',
           name: 'scene',

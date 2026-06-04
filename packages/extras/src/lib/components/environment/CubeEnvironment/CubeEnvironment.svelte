@@ -20,6 +20,7 @@
 
   let {
     isBackground = false,
+    isEnvironment = true,
     scene = ctx.scene,
     texture = $bindable(),
     urls
@@ -28,17 +29,12 @@
   const cache = useCache()
   const suspend = useSuspense()
 
-  useEnvironment({
-    get scene() {
-      return scene
-    },
-    get isBackground() {
-      return isBackground
-    },
-    get texture() {
-      return texture
-    }
-  })
+  useEnvironment(
+    () => scene,
+    () => texture,
+    () => isBackground,
+    () => isEnvironment
+  )
 
   const first = $derived(urls?.[0])
   const firstIsHDR = $derived(first?.endsWith('hdr') ?? false)

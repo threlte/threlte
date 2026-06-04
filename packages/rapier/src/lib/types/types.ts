@@ -67,7 +67,7 @@ export type RigidBodyEvents = ColliderEvents & {
   onwake?: () => void
 }
 
-export type CollisionGroupsContext = Writable<number> | undefined
+export type CollisionGroupsContext = (() => number) | undefined
 
 export type RigidBodyUserData = {
   events?: RigidBodyEvents
@@ -76,8 +76,6 @@ export type RigidBodyUserData = {
 export type ThrelteRigidBody = RigidBody & {
   userData?: RigidBodyUserData
 }
-
-export type RigidBodyContext = ThrelteRigidBody
 
 export type CollisionGroupsBitMask = (
   | 0

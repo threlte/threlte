@@ -1,7 +1,7 @@
 import { Euler, Quaternion } from 'three'
 
-const e = new Euler()
-const q = new Quaternion()
+const euler = new Euler()
+const quaternion = new Quaternion()
 
 /**
  * Sets the values of a temporary Euler and returns the quaternion from that
@@ -9,6 +9,5 @@ const q = new Quaternion()
  * @returns
  */
 export const eulerToQuaternion = (values: Parameters<Euler['set']>): Quaternion => {
-  e.set(...values)
-  return q.setFromEuler(e)
+  return quaternion.setFromEuler(euler.fromArray(values))
 }

@@ -20,6 +20,10 @@ export { useFollow } from './hooks/useFollow.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
 export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'
+export { useCameraControls } from './components/CameraControls/useCameraControls.js'
+export { useOrbitControls } from './components/controls/OrbitControls/useOrbitControls.js'
+export { useTrackballControls } from './components/controls/TrackballControls/useTrackballControls.js'
+export { useTransformControls } from './components/controls/TransformControls/useTransformControls.js'
 export { meshBounds } from './utilities/meshBounds.js'
 
 // abstractions
@@ -65,6 +69,7 @@ export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMat
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as SVG } from './components/Svg/Svg.svelte'
 export { default as MeshRefractionMaterial } from './components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
+export { default as Wobble } from './components/Wobble/Wobble.svelte'
 export { default as Text3DGeometry } from './components/Text3DGeometry/Text3DGeometry.svelte'
 export { default as PerfMonitor } from './components/PerfMonitor/PerfMonitor.svelte'
 export { default as Outlines } from './components/Outlines/Outlines.svelte'

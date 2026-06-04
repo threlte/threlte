@@ -29,7 +29,7 @@
   position.y={13}
   fov={40}
 >
-  <OrbitControls target.x={2.5} />
+  <OrbitControls />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight

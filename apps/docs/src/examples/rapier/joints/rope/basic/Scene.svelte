@@ -8,8 +8,7 @@
     type IntersectionEvent
   } from '@threlte/extras'
   import { AutoColliders, Debug } from '@threlte/rapier'
-  import { DoubleSide, type Vector3Tuple } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
+  import { DoubleSide, type Vector3Tuple, MathUtils } from 'three'
   import Rope from './Rope.svelte'
 
   let { debug, damping, segments }: { debug: boolean; damping: number; segments: number } = $props()
@@ -34,7 +33,10 @@
   makeDefault
   position={[-10, 5, 10]}
 >
-  <OrbitControls />
+  <OrbitControls
+    enableDamping
+    enableZoom={false}
+  />
 </T.PerspectiveCamera>
 
 <Grid
@@ -45,7 +47,7 @@
 
 <T.Mesh
   {onpointermove}
-  rotation.y={90 * DEG2RAD}
+  rotation.y={90 * MathUtils.DEG2RAD}
 >
   <T.CircleGeometry args={[5]} />
   <T.MeshBasicMaterial

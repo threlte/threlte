@@ -2,31 +2,29 @@
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { T, useTask } from '@threlte/core'
   import { AutoColliders, Collider, RigidBody } from '@threlte/rapier'
-  import { BoxGeometry, MeshStandardMaterial, SphereGeometry } from 'three'
+  import { Vector3 } from 'three'
   import TestBed from './TestBed.svelte'
 
-  const material = new MeshStandardMaterial({ color: 0xff3f00 })
-
   let rigidBody = $state.raw<RapierRigidBody>()
-  let positionZ = 0
-  let positionX = 0
-  const offset = Date.now()
 
-  useTask(() => {
-    positionZ = Math.sin(Date.now() / 2000) * 2.5
-    positionX = Math.sin((Date.now() + offset) / 1500) * 1.2
-    rigidBody?.setNextKinematicTranslation({ x: positionX, y: 1, z: positionZ })
+  const position = new Vector3(0, 1, 0)
+  let elapsed = 0
+
+  useTask((dt) => {
+    elapsed += dt
+    position.x = Math.sin(elapsed)
+    position.z = Math.cos(elapsed)
+    rigidBody?.setNextKinematicTranslation(position)
   })
 </script>
 
 <!-- ATTACHED COLLIDER -->
 <T.Group position={[0, 2, 0]}>
   <RigidBody>
-    <T.Mesh
-      castShadow
-      geometry={new BoxGeometry(2, 2, 2)}
-      {material}
-    />
+    <T.Mesh castShadow>
+      <T.MeshStandardMaterial color={0xff3f00} />
+      <T.BoxGeometry args={[2, 2, 2]} />
+    </T.Mesh>
     <Collider
       shape="cuboid"
       args={[1, 1, 1]}
@@ -42,11 +40,10 @@
     lockRotations
   >
     <AutoColliders shape="ball">
-      <T.Mesh
-        castShadow
-        geometry={new SphereGeometry(1)}
-        material={new MeshStandardMaterial()}
-      />
+      <T.Mesh castShadow>
+        <T.SphereGeometry args={[1]} />
+        <T.MeshStandardMaterial />
+      </T.Mesh>
     </AutoColliders>
   </RigidBody>
 </T.Group>
