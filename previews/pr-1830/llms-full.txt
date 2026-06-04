@@ -10807,6 +10807,23 @@ A camera can also optionally be passed to the controls as a prop.
 Finally, if the component is created without an attached camera
 it will use the scene's default camera as provided by `useThrelte`.
 
+## `useCameraControls`
+
+To access the underlying `CameraControls` instance from another component —
+without a `bind:ref` — use the `useCameraControls` hook. It returns a reactive
+accessor whose `current` is the instance registered by the nearest
+`<CameraControls>` within the `<Canvas>`, or `undefined` until it has mounted.
+
+```svelte title="FrameButton.svelte"
+<script lang="ts">
+  import { useCameraControls } from '@threlte/extras'
+
+  const controls = useCameraControls()
+</script>
+
+<button onclick={() => controls.current?.setLookAt(5, 5, 5, 0, 0, 0, true)}> Frame scene </button>
+```
+
 ## Examples
 
 ### Basic Example
@@ -13839,6 +13856,23 @@ docs](https://threejs.org/docs/#examples/en/controls/OrbitControls).
 camera (or the default camera if not a child of one) and the DOM element the
 renderer is rendering to as the DOM element to listen to pointer events.
 
+## `useOrbitControls`
+
+To access the underlying `OrbitControls` instance from another component —
+without a `bind:ref` — use the `useOrbitControls` hook. It returns a reactive
+accessor whose `current` is the instance registered by the nearest
+`<OrbitControls>` within the `<Canvas>`, or `undefined` until it has mounted.
+
+```svelte title="ResetButton.svelte"
+<script lang="ts">
+  import { useOrbitControls } from '@threlte/extras'
+
+  const controls = useOrbitControls()
+</script>
+
+<button onclick={() => controls.current?.reset()}>Reset camera</button>
+```
+
 ---
 
 ## <Outlines>
@@ -14802,6 +14836,23 @@ This example shows off just a few of the configurable properties of `<TrackballC
 rendering to as the DOM element to listen to. It will also by demand invalidate the
 frame loop.
 
+## `useTrackballControls`
+
+To access the underlying `TrackballControls` instance from another component —
+without a `bind:ref` — use the `useTrackballControls` hook. It returns a reactive
+accessor whose `current` is the instance registered by the nearest
+`<TrackballControls>` within the `<Canvas>`, or `undefined` until it has mounted.
+
+```svelte title="ResetButton.svelte"
+<script lang="ts">
+  import { useTrackballControls } from '@threlte/extras'
+
+  const controls = useTrackballControls()
+</script>
+
+<button onclick={() => controls.current?.reset()}>Reset camera</button>
+```
+
 ---
 
 ## <TransformControls>
@@ -14854,6 +14905,25 @@ Any object with an `enabled` property works:
     <T.MeshStandardMaterial />
   </T.Mesh>
 </TransformControls>
+```
+
+## `useTransformControls`
+
+To access the underlying `TransformControls` instance from another component —
+without a `bind:controls` — use the `useTransformControls` hook. It returns a
+reactive accessor whose `current` is the instance registered by the nearest
+`<TransformControls>` within the `<Canvas>`, or `undefined` until it has mounted.
+
+```svelte title="ModeToggle.svelte"
+<script lang="ts">
+  import { useTransformControls } from '@threlte/extras'
+
+  const controls = useTransformControls()
+</script>
+
+<button onclick={() => controls.current?.setMode('translate')}>Translate</button>
+<button onclick={() => controls.current?.setMode('rotate')}>Rotate</button>
+<button onclick={() => controls.current?.setMode('scale')}>Scale</button>
 ```
 
 ## Examples
