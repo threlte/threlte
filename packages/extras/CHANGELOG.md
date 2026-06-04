@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.21.0
+
+### Minor Changes
+
+- 926ef08: Add `useCameraControls`, `useOrbitControls`, `useTrackballControls` and `useTransformControls` hooks
+
 ## 9.20.1
 
 ### Patch Changes

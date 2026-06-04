@@ -22,7 +22,12 @@
 
   const { camera, dom, invalidate, scene } = useThrelte()
 
-  const { orbitControls, trackballControls, cameraControls } = useControlsContext()
+  const {
+    orbitControls,
+    trackballControls,
+    cameraControls,
+    transformControls: transformControlsContext
+  } = useControlsContext()
 
   let isDragging = $state(false)
 
@@ -88,6 +93,13 @@
   $effect.pre(() => {
     transformControls?.attach(object ?? attachGroup)
     return () => transformControls?.detach()
+  })
+
+  $effect.pre(() => {
+    transformControlsContext.set(transformControls)
+    return () => {
+      transformControlsContext.set(undefined)
+    }
   })
 
   // This component is receiving the props for the controls as well as the props

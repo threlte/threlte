@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte'
   import {
     CoefficientCombineRule,
     type RigidBody as RapierRigidBody
@@ -8,7 +9,6 @@
   import { arenaHeight, playerHeight, playerToBorderDistance } from '../../config'
   import { game } from '../../Game.svelte'
   import { ballGeometry, ballMaterial } from './common'
-  import { onMount } from 'svelte'
 
   interface Props {
     startAtPosX: number
@@ -16,7 +16,7 @@
 
   let { startAtPosX }: Props = $props()
 
-  let posX = $state(0)
+  let posX = $state(untrack(() => startAtPosX))
   let rigidBody = $state<RapierRigidBody>()
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
@@ -59,16 +59,12 @@
   $effect(() => {
     if (rigidBody) game.ballRigidBody = rigidBody
   })
-
-  onMount(() => {
-    posX = startAtPosX
-  })
 </script>
 
 <T.Group position={[posX, 0, startAtPosZ]}>
   <RigidBody
     bind:rigidBody
-    type={'dynamic'}
+    type="dynamic"
     onsensorenter={onSensorEnter}
     enabledTranslations={[true, false, true]}
   >

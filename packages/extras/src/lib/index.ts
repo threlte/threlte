@@ -20,6 +20,10 @@ export { useFollow } from './hooks/useFollow.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
 export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'
+export { useCameraControls } from './components/CameraControls/useCameraControls.js'
+export { useOrbitControls } from './components/controls/OrbitControls/useOrbitControls.js'
+export { useTrackballControls } from './components/controls/TrackballControls/useTrackballControls.js'
+export { useTransformControls } from './components/controls/TransformControls/useTransformControls.js'
 export { meshBounds } from './utilities/meshBounds.js'
 
 // abstractions

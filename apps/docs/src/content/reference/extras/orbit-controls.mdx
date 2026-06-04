@@ -52,3 +52,20 @@ docs](https://threejs.org/docs/#examples/en/controls/OrbitControls).
 `<OrbitControls>` is a light wrapper that will use its parent as the target
 camera (or the default camera if not a child of one) and the DOM element the
 renderer is rendering to as the DOM element to listen to pointer events.
+
+## `useOrbitControls`
+
+To access the underlying `OrbitControls` instance from another component —
+without a `bind:ref` — use the `useOrbitControls` hook. It returns a reactive
+accessor whose `current` is the instance registered by the nearest
+`<OrbitControls>` within the `<Canvas>`, or `undefined` until it has mounted.
+
+```svelte title="ResetButton.svelte"
+<script lang="ts">
+  import { useOrbitControls } from '@threlte/extras'
+
+  const controls = useOrbitControls()
+</script>
+
+<button onclick={() => controls.current?.reset()}>Reset camera</button>
+```
