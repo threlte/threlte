@@ -53,10 +53,10 @@
 
   injectPlugin('resize', (args) => {
     $effect(() => {
-      if (!isInstanceOf(args.ref, 'Object3D')) return
-      if (auto) resize()
+      if (!isInstanceOf(args.ref, 'Object3D') || !auto) return
+      resize()
       return () => {
-        if (auto) resize()
+        resize()
       }
     })
   })
