@@ -22,7 +22,9 @@
     onresize,
     ref = $bindable(new Group()),
     children,
-    stage = useStage('<Resize>', { before: renderStage }),
+    stage = useStage('<Resize>', {
+      before: renderStage
+    }),
     ...props
   }: ResizeProps = $props()
 
@@ -32,22 +34,27 @@
 
   let running = $state(false)
 
-  const doResize = () => {
-    outer.matrixWorld.identity()
-    box.setFromObject(inner, precise).getSize(_size)
-    const scale =
-      1 / (axis === 'max' ? Math.max(..._size) : axis === 'min' ? Math.min(..._size) : _size[axis])
-    outer.scale.setScalar(scale)
-    onresize?.()
-    running = false
-  }
-
   /** Manually trigger resizing */
   export const resize = () => {
     running = true
   }
 
-  useTask(doResize, { stage, running: () => running })
+  useTask(
+    () => {
+      outer.matrixWorld.identity()
+      box.setFromObject(inner, precise).getSize(_size)
+      const scale =
+        1 /
+        (axis === 'max' ? Math.max(..._size) : axis === 'min' ? Math.min(..._size) : _size[axis])
+      outer.scale.setScalar(scale)
+      onresize?.()
+      running = false
+    },
+    {
+      stage,
+      running: () => running
+    }
+  )
 
   observe(() => [axis, precise], resize)
 
@@ -68,7 +75,10 @@
 >
   <T is={outer}>
     <T is={inner}>
-      {@render children?.({ ref, resize })}
+      {@render children?.({
+        ref,
+        resize
+      })}
     </T>
   </T>
 </T>
