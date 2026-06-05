@@ -1,8 +1,10 @@
 import { OrthographicCamera, PerspectiveCamera } from 'three'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
 import Camera from './__fixtures__/Camera.svelte'
+import ManualCameraState from './__fixtures__/ManualCameraState.svelte'
+import TwoCameras from './__fixtures__/TwoCameras.svelte'
 
 describe('<T> camera', () => {
   it('does not change the default camera if a camera is added', () => {
@@ -72,6 +74,49 @@ describe('<T> camera', () => {
 
     const orthographic = scene.getObjectByProperty('type', 'OrthographicCamera')
     expect(camera.current).toBe(orthographic)
+  })
+
+  it('falls back to remaining makeDefault camera when one unmounts', async () => {
+    const { scene, camera, rerender } = render(TwoCameras, { props: { showSecond: true } })
+
+    const orthographic = scene.getObjectByProperty('type', 'OrthographicCamera')
+    expect(camera.current).toBe(orthographic)
+
+    await rerender({ showSecond: false })
+
+    const perspective = scene.getObjectByProperty('type', 'PerspectiveCamera')
+    expect(camera.current).toBe(perspective)
+  })
+
+  it('resets manual state when a manual makeDefault camera is disabled', async () => {
+    const onmanual = vi.fn()
+    const { rerender } = render(ManualCameraState, {
+      props: { firstMakeDefault: true, firstManual: true, onmanual }
+    })
+
+    expect(onmanual).toHaveBeenLastCalledWith(true)
+
+    await rerender({ firstMakeDefault: false })
+
+    expect(onmanual).toHaveBeenLastCalledWith(false)
+  })
+
+  it('restores manual state when falling back to a remaining makeDefault camera', async () => {
+    const onmanual = vi.fn()
+    const { rerender } = render(ManualCameraState, {
+      props: {
+        firstManual: false,
+        onmanual,
+        secondManual: true,
+        showSecond: true
+      }
+    })
+
+    expect(onmanual).toHaveBeenLastCalledWith(true)
+
+    await rerender({ showSecond: false })
+
+    expect(onmanual).toHaveBeenLastCalledWith(false)
   })
 
   it('does not update camera props if "manual"=true', () => {

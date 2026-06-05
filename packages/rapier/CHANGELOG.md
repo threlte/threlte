@@ -1,5 +1,17 @@
 # @threlte/extras
 
+## 3.5.0
+
+### Minor Changes
+
+- 8b075ec: Lifecycle and reactivity cleanup for Svelte 5
+
+## 3.4.2
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
 ## 3.4.1
 
 ### Patch Changes

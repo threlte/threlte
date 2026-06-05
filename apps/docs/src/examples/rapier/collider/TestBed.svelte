@@ -3,7 +3,7 @@
   import { T } from '@threlte/core'
   import { HTML } from '@threlte/extras'
   import { AutoColliders } from '@threlte/rapier'
-  import { BoxGeometry, MeshStandardMaterial, MathUtils } from 'three'
+  import { MathUtils } from 'three'
 
   interface Props {
     title: string
@@ -18,11 +18,10 @@
 {#if useGround}
   <T.Group position={[1, -0.5, 0]}>
     <AutoColliders shape={'cuboid'}>
-      <T.Mesh
-        receiveShadow
-        geometry={new BoxGeometry(12, 1, 10)}
-        material={new MeshStandardMaterial()}
-      />
+      <T.Mesh receiveShadow>
+        <T.BoxGeometry args={[12, 1, 10]} />
+        <T.MeshStandardMaterial />
+      </T.Mesh>
     </AutoColliders>
   </T.Group>
 {/if}
@@ -32,7 +31,7 @@
   rotation.z={90 * MathUtils.DEG2RAD}
   rotation.x={-90 * MathUtils.DEG2RAD}
   position.x={5.8}
-  pointerEvents={'none'}
+  pointerEvents="none"
   scale={0.6}
 >
   <div class="w-[500px] -translate-y-1/2 transform text-black">

@@ -12,7 +12,7 @@
 
   const gltf = useGltf('/models/Duck.glb')
 
-  const { renderer, scene, size } = useThrelte()
+  const { renderer, scene } = useThrelte()
   const fbo = useFBO(() => ({
     size: {
       width: size.current.width / 2,

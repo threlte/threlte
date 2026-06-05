@@ -1,7 +1,6 @@
 import { type Mesh, Raycaster, type Intersection } from 'three'
 import { getContext, setContext } from 'svelte'
-import { defaultComputeFunction } from './compute.js'
-import type { TeleportControlsOptions } from './index.svelte.js'
+import type { CurrentWritable } from '@threlte/core'
 
 export type ComputeFunction = (context: Context, handContext: HandContext) => void
 
@@ -12,8 +11,6 @@ export interface Context {
   surfaces: Map<string, Mesh>
   blockers: Map<string, Mesh>
   dispatchers: WeakMap<Mesh, Record<string, (arg: unknown) => void>>
-  raycaster: Raycaster
-  compute: ComputeFunction
   addBlocker: (mesh: Mesh) => void
   removeBlocker: (mesh: Mesh) => void
   addSurface: (mesh: Mesh, events: TeleportEvents) => void
@@ -22,9 +19,12 @@ export interface Context {
 
 export interface HandContext {
   hand: 'left' | 'right'
-  enabled: { current: boolean }
-  active: { current: boolean }
-  hovered: { current: Intersection | undefined }
+  enabled: CurrentWritable<boolean>
+  active: CurrentWritable<boolean>
+  hovered: CurrentWritable<Intersection | undefined>
+  /** Per-hand raycaster — keeps intersection state isolated between hands. */
+  raycaster: Raycaster
+  compute: ComputeFunction
 }
 
 const handContextKeys = {
@@ -46,7 +46,7 @@ export const useTeleportControls = () => {
   return getContext<Context>(contextKey)
 }
 
-export const createTeleportContext = (compute: TeleportControlsOptions['compute']) => {
+export const createTeleportContext = () => {
   const addSurface = (mesh: Mesh, events: TeleportEvents) => {
     // check if the object is already in the list
     if (context.interactiveObjects.indexOf(mesh) > -1) {
@@ -60,6 +60,7 @@ export const createTeleportContext = (compute: TeleportControlsOptions['compute'
 
   const removeSurface = (mesh: Mesh) => {
     const index = context.interactiveObjects.indexOf(mesh)
+    if (index === -1) return
     context.interactiveObjects.splice(index, 1)
     context.surfaces.delete(mesh.uuid)
     context.dispatchers.delete(mesh)
@@ -77,6 +78,7 @@ export const createTeleportContext = (compute: TeleportControlsOptions['compute'
 
   const removeBlocker = (mesh: Mesh) => {
     const index = context.interactiveObjects.indexOf(mesh)
+    if (index === -1) return
     context.interactiveObjects.splice(index, 1)
     context.blockers.delete(mesh.uuid)
   }
@@ -86,8 +88,6 @@ export const createTeleportContext = (compute: TeleportControlsOptions['compute'
     surfaces: new Map(),
     blockers: new Map(),
     dispatchers: new WeakMap(),
-    raycaster: new Raycaster(),
-    compute: compute ?? defaultComputeFunction,
     addBlocker,
     removeBlocker,
     addSurface,

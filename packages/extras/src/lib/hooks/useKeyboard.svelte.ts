@@ -15,6 +15,13 @@ export interface UseKeyboardOptions {
    * @default window
    */
   target?: EventTarget
+
+  /**
+   * Listen during the capture phase instead of the bubble phase. Use this
+   * when keyboard input must run before descendants can stop propagation.
+   * @default false
+   */
+  capture?: boolean
 }
 
 type KeyboardEventType = 'keydown' | 'keyup'
@@ -30,10 +37,22 @@ const normalize = (key: string) => {
   return k === 'space' ? ' ' : k
 }
 
+const isMetaKey = (key: string) => key === 'meta' || key === 'os'
+
 export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   const keys = new Map<string, KeyState>()
   const pendingDown = new Set<string>()
   const pendingUp = new Set<string>()
+  const metaModifiedKeys = new Set<string>()
+
+  const hasMetaDown = () => {
+    return (
+      pendingDown.has('meta') ||
+      pendingDown.has('os') ||
+      keys.get('meta')?.pressed ||
+      keys.get('os')?.pressed
+    )
+  }
 
   const listeners: Record<KeyboardEventType, Set<KeyboardEventHandler>> = {
     keydown: new Set(),
@@ -54,22 +73,41 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
     const e = event as KeyboardEvent
     for (const fn of listeners.keydown) fn(e)
     if (e.repeat) return
-    pendingDown.add(normalize(e.key))
+
+    const key = normalize(e.key)
+    pendingDown.add(key)
+
+    if (!isMetaKey(key) && (e.metaKey || hasMetaDown())) {
+      metaModifiedKeys.add(key)
+    }
   }
 
   const handleKeyUp = (event: Event) => {
     const e = event as KeyboardEvent
-    pendingUp.add(normalize(e.key))
+    const key = normalize(e.key)
+    pendingUp.add(key)
+    if (isMetaKey(key) && !e.metaKey) {
+      for (const key of metaModifiedKeys) {
+        pendingUp.add(key)
+      }
+      metaModifiedKeys.clear()
+    } else {
+      metaModifiedKeys.delete(key)
+    }
     for (const fn of listeners.keyup) fn(e)
   }
 
   const handleBlur = () => {
     // Release all pressed keys when the window loses focus
+    for (const key of pendingDown) {
+      pendingUp.add(key)
+    }
     for (const [key, state] of keys) {
       if (state.pressed) {
         pendingUp.add(key)
       }
     }
+    metaModifiedKeys.clear()
   }
 
   /**
@@ -78,10 +116,10 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
    * cleared at the start of the next frame before new events are applied.
    */
   const { task } = useTask(
-    'useKeyboard',
+    Symbol('useKeyboard'),
     () => {
       // Clear last frame's transient states
-      for (const [, state] of keys) {
+      for (const state of keys.values()) {
         if (state.justPressed) state.justPressed = false
         if (state.justReleased) state.justReleased = false
       }
@@ -112,15 +150,16 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
   )
 
   $effect.pre(() => {
-    const { target = window } = optionsFn?.() ?? {}
+    const { target = window, capture = false } = optionsFn?.() ?? {}
+    const listenerOptions = { capture }
 
-    target.addEventListener('keydown', handleKeyDown)
-    target.addEventListener('keyup', handleKeyUp)
+    target.addEventListener('keydown', handleKeyDown, listenerOptions)
+    target.addEventListener('keyup', handleKeyUp, listenerOptions)
     target.addEventListener('blur', handleBlur)
 
     return () => {
-      target.removeEventListener('keydown', handleKeyDown)
-      target.removeEventListener('keyup', handleKeyUp)
+      target.removeEventListener('keydown', handleKeyDown, listenerOptions)
+      target.removeEventListener('keyup', handleKeyUp, listenerOptions)
       target.removeEventListener('blur', handleBlur)
     }
   })

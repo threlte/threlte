@@ -1,14 +1,30 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls, Stars } from '@threlte/extras'
+  import { OrbitControls, Grid, Stars } from '@threlte/extras'
+
+  interface Props {
+    count: number
+    radius: number
+    depth: number
+    factor: number
+    saturation: number
+    lightness: number
+    opacity: number
+    fade: boolean
+    rounded: boolean
+    speed: number
+  }
+
+  let { ...rest }: Props = $props()
 </script>
 
-<Stars />
+<Stars {...rest} />
 
 <T.PerspectiveCamera
   makeDefault
   position.y={1}
-  position.z={8}
+  position.x={2}
+  position.z={5}
   fov={90}
   oncreate={(ref) => ref.lookAt(0, 6, 0)}
 >
@@ -17,11 +33,14 @@
     enablePan={false}
     enableZoom={false}
     autoRotate
-    target={[0, 6, 0]}
+    autoRotateSpeed={0.3}
   />
 </T.PerspectiveCamera>
 
-<T.Mesh rotation.x={-Math.PI / 2}>
-  <T.CircleGeometry args={[100]} />
-  <T.MeshStandardMaterial color="black" />
-</T.Mesh>
+<Grid
+  infiniteGrid
+  fadeOrigin={[0, 0, 0]}
+  fadeDistance={10}
+  cellColor="#dddddd"
+  sectionColor="#ddd"
+/>

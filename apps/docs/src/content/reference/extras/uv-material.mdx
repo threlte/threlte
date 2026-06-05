@@ -16,7 +16,9 @@ componentSignature:
   }
 ---
 
-A material that visualizes the uvs of a geometry. Uvs are typically used for texture indexing.
+A material that visualizes the uvs of a geometry. Uvs are typically used for
+texture sampling in the shader. `UvMaterial` is meant to give you a sense of
+how textures will be mapped onto a mesh.
 
 <Example path="extras/uv-material" />
 
@@ -38,12 +40,23 @@ Simply import the component and add it as a child to a mesh
 
 ## Caveats
 
-The geometry must have a "uv" attribute in order for this material to work. If you're creating your own geometry, be sure to assign the "uv" attribute.
+The mesh's geometry must have a "uv" attribute in order for `UvMaterial` to work properly. If
+you're creating your own geometry, be sure to assign the "uv" attribute.
 
-```ts
-const geometry = new BufferGeometry()
-const uvAttribute = new BufferAttribute(/* uv array here */)
-geometry.setAttribute('uv', uvAttribute)
+```svelte
+<script>
+  const geometry = new BufferGeometry()
+  const uvAttribute = new BufferAttribute(/* uv array here */)
+  geometry.setAttribute('uv', uvAttribute)
+</script>
+
+<T.Mesh>
+  <T is={geometry} />
+  <UvMaterial />
+</T.Mesh>
 ```
 
-Most models that you import into your program should come with uv data and three.js will automatically assign uv attributes when loading the model.
+Most models that you import into your program should come with uv data and
+three.js will automatically assign uv attributes when loading the model.
+Three.js geometry primitives such as `BoxGeometry` and `SphereGeometry` are
+also outfitted with uv data.

@@ -1,6 +1,6 @@
 // hooks
 export { useRapier } from './hooks/useRapier.js'
-export { useCollisionGroups } from './hooks/useCollisionGroups.js'
+export { useCollisionGroups } from './hooks/useCollisionGroups.svelte.js'
 export { useRigidBody } from './hooks/useRigidBody.js'
 export { usePhysicsTask } from './hooks/usePhysicsTask.js'
 
@@ -9,7 +9,7 @@ export { useRevoluteJoint } from './hooks/useRevoluteJoint.js'
 export { usePrismaticJoint } from './hooks/usePrismaticJoint.js'
 export { useFixedJoint } from './hooks/useFixedJoint.js'
 export { useSphericalJoint } from './hooks/useSphericalJoint.js'
-export { useJoint } from './hooks/useJoint.js'
+export { useJoint } from './hooks/useJoint.svelte.js'
 export { useRopeJoint } from './hooks/useRopeJoint.js'
 
 // components

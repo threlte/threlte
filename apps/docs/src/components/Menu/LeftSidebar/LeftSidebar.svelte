@@ -1,10 +1,14 @@
 <script lang="ts">
   import LeftSidebarCategory from './LeftSidebarCategory.svelte'
 
-  export let menu: Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
-  export let activeSidebarTab: 'learn' | 'reference' | 'examples'
-  export let activeUrlPathName: string
-  export let baseUrl: string
+  interface Props {
+    menu: Record<'learn' | 'reference' | 'examples', LeftSidebarMenu>
+    activeSidebarTab: 'learn' | 'reference' | 'examples'
+    activeUrlPathName: string
+    baseUrl: string
+  }
+
+  let { menu, activeSidebarTab, activeUrlPathName, baseUrl }: Props = $props()
 </script>
 
 <nav class="relative hidden h-full w-full pr-2 pl-6 md:block">

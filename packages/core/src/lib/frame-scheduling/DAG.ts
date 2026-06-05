@@ -188,8 +188,10 @@ export class DAG<T extends { key: Key }> {
     // if it's not, it's a bit more complicated
     const linkedVertex = this.connectedVertices.get(removeKey)
 
-    if (!linkedVertex) {
-      // The node does not exist in the graph.
+    if (!linkedVertex || linkedVertex.value === undefined) {
+      // The node does not exist in the graph, or is a phantom placeholder
+      // created by another node's before/after constraint. Don't remove
+      // phantoms — they hold ordering edges for the real node when it arrives.
       return
     }
 
@@ -247,7 +249,7 @@ export class DAG<T extends { key: Key }> {
     for (; index < this.sortedConnectedValues.length; index++) {
       callback(this.sortedConnectedValues[index], index)
     }
-    for (const [, vertex] of this.isolatedVertices) {
+    for (const vertex of this.isolatedVertices.values()) {
       if (vertex.value !== undefined) callback(vertex.value, index++)
     }
   }

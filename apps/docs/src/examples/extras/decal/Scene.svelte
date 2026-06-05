@@ -1,7 +1,15 @@
 <script lang="ts">
-  import { type Vector3Tuple, DoubleSide, Quaternion, Vector3 } from 'three'
+  import { type Vector3Tuple, DoubleSide, Vector3 } from 'three'
   import { T } from '@threlte/core'
-  import { Decal, TransformControls, useTexture, VirtualEnvironment } from '@threlte/extras'
+  import {
+    Decal,
+    TransformControls,
+    useTexture,
+    OrbitControls,
+    VirtualEnvironment,
+    useSuspense
+  } from '@threlte/extras'
+  import { RigidBody as RigidBodyRef } from '@dimforge/rapier3d-compat'
   import { Attractor, Collider, RigidBody } from '@threlte/rapier'
 
   let { controls = false, debug = false } = $props()
@@ -14,14 +22,18 @@
   let position = $state<Vector3Tuple>([0.5, 0, 0.5])
 
   const vec3 = new Vector3()
-  const quat = new Quaternion()
 </script>
 
 <T.PerspectiveCamera
   makeDefault
   position={[5, 1, 4]}
-  oncreate={(ref) => ref.lookAt(0, 0, 0)}
-/>
+>
+  <OrbitControls
+    enablePan={false}
+    enableZoom={false}
+    enableDamping
+  />
+</T.PerspectiveCamera>
 
 <T.DirectionalLight
   castShadow
@@ -30,6 +42,8 @@
   shadow.mapSize.height={2 ** 11}
   intensity={1.25}
 />
+
+<Attractor />
 
 <T.Mesh receiveShadow>
   <Collider
@@ -67,13 +81,15 @@
   </Decal>
 </T.Mesh>
 
-{#each { length: 20 } as _, index (index)}
-  <RigidBody>
-    <T.Mesh
-      castShadow
-      position={vec3.randomDirection().toArray()}
-      quaternion={quat.random().toArray()}
-    >
+{#each { length: 20 }, index (index)}
+  <RigidBody
+    bind:rigidBody={bodies[index]}
+    oncreate={(ref) => {
+      vec3.randomDirection()
+      ref.setTranslation(vec3, true)
+    }}
+  >
+    <T.Mesh castShadow>
       <Collider
         shape="ball"
         args={[0.3]}

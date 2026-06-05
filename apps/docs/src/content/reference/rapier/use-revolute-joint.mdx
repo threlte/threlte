@@ -8,6 +8,10 @@ type: 'hook'
 
 Use this hook to initialize a [`RevoluteImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#revolute-joint).
 
+A revolute joint is a hinge — it pins two rigid bodies together at a shared point and allows rotation around a single axis, locking the other five degrees of freedom. Reach for it for doors, wheel axles, pendulums, levers, and articulated arms.
+
+<Example path="rapier/joints/revolute/basic" />
+
 ```svelte
 <script>
   import { useRevoluteJoint, RigidBody, Collider } from '@threlte/rapier'

@@ -5,7 +5,7 @@ import type { AutoCollidersShapes, ColliderEvents, CreateEvent } from '../../../
 
 // ------------------ BASE ------------------
 
-type BaseProps = {
+interface BaseProps {
   /**
    * The shape of the collider.
    */
@@ -33,7 +33,7 @@ type BaseProps = {
 
 // ------------------ MASS ------------------
 
-type Density = {
+interface Density {
   /** The density of this collider. */
   density: number
   mass?: never
@@ -42,7 +42,7 @@ type Density = {
   angularInertiaLocalFrame?: never
 }
 
-type Mass = {
+interface Mass {
   /** The mass of this collider. */
   mass: number
   density?: never
@@ -51,7 +51,7 @@ type Mass = {
   angularInertiaLocalFrame?: never
 }
 
-type MassProperties = {
+interface MassProperties {
   /** The mass of this collider. */
   mass: number
   /** The center of mass of this collider. */
@@ -63,7 +63,7 @@ type MassProperties = {
   density?: never
 }
 
-type NoMassProperties = {
+interface NoMassProperties {
   density?: never
   mass?: never
   centerOfMass?: never

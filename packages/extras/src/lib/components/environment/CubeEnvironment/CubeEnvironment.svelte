@@ -17,7 +17,13 @@
 
   let { isBackground = false, scene, texture = $bindable(), urls }: CubeEnvironmentProps = $props()
 
-  const { scene: defaultScene } = useThrelte()
+  let {
+    isBackground = false,
+    isEnvironment = true,
+    scene = ctx.scene,
+    texture = $bindable(),
+    urls
+  }: CubeEnvironmentProps = $props()
 
   useEnvironment(
     () => scene ?? defaultScene,
@@ -25,7 +31,15 @@
     () => isBackground
   )
 
-  const isHDR = $derived(urls?.[0]?.endsWith('hdr') ?? false)
+  useEnvironment(
+    () => scene,
+    () => texture,
+    () => isBackground,
+    () => isEnvironment
+  )
+
+  const first = $derived(urls?.[0])
+  const firstIsHDR = $derived(first?.endsWith('hdr') ?? false)
 
   const loader = $derived.by(() => {
     if (urls === undefined) return

@@ -1,22 +1,14 @@
 import type { WebXRManager, Intersection } from 'three'
-import type { XRControllerEvents, XRHandEvents } from '../types.js'
-
-interface ControllerEvents {
-  left?: XRControllerEvents
-  right?: XRControllerEvents
-}
-
-interface HandEvents {
-  left?: XRHandEvents
-  right?: XRHandEvents
-}
+import { inputSources } from './inputSources.svelte.js'
 
 class Presenting {
   current = $state(false)
 }
 
 class IsHandTracking {
-  current = $state(false)
+  get current() {
+    return inputSources.current.some((s) => s.type === 'hand')
+  }
 }
 
 class Session {
@@ -29,6 +21,11 @@ class ReferenceSpaceType {
 
 class XR {
   current = $state.raw<WebXRManager>()
+}
+
+class LastSessionRequest {
+  mode = $state.raw<XRSessionMode>()
+  sessionInit = $state.raw<XRSessionInit & { domOverlay?: { root: Element } }>()
 }
 
 class PointerState {
@@ -46,8 +43,7 @@ export const isHandTracking = new IsHandTracking()
 export const session = new Session()
 export const referenceSpaceType = new ReferenceSpaceType()
 export const xr = new XR()
-export const controllerEvents: ControllerEvents = {}
-export const handEvents: HandEvents = {}
+export const lastSessionRequest = new LastSessionRequest()
 
 export const teleportState = {
   left: new PointerState(),

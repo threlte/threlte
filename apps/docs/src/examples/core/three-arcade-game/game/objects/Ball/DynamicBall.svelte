@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte'
   import {
     CoefficientCombineRule,
     type RigidBody as RapierRigidBody
@@ -15,15 +16,15 @@
 
   let { startAtPosX }: Props = $props()
 
-  let posX = startAtPosX
-  let rigidBody = $state.raw<RapierRigidBody>()
+  let posX = $state(untrack(() => startAtPosX))
+  let rigidBody = $state<RapierRigidBody>()
 
   const map = (value: number, inMin: number, inMax: number, outMin: number, outMax: number) => {
     return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin
   }
 
   const ballSpeed = $derived.by(() => {
-    return map(game.levelIndex, 0, 9, 0.1, 0.3)
+    return map(game.levelIndex, 0, 9, 4, 11)
   })
 
   let ballIsSpawned = false
@@ -56,9 +57,7 @@
   })
 
   $effect(() => {
-    if (rigidBody) {
-      game.ballRigidBody = rigidBody
-    }
+    if (rigidBody) game.ballRigidBody = rigidBody
   })
 </script>
 

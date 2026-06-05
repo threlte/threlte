@@ -1,49 +1,44 @@
 <script lang="ts">
   import { useTask } from '@threlte/core'
-  import { Vector3, MathUtils, Quaternion } from 'three'
+  import { Quaternion, type Vector3Tuple, type QuaternionTuple } from 'three'
   import Particle from './Particle.svelte'
+  import { SvelteSet } from 'svelte/reactivity'
 
   type Body = {
-    id: string
     mounted: number
-    position: Vector3
-    quaternion: Quaternion
+    position: Vector3Tuple
+    quaternion: QuaternionTuple
   }
 
-  let bodies = $state<Body[]>([])
+  let bodies = new SvelteSet<Body>()
 
   let lastBodyMounted = 0
   let bodyEveryMilliseconds = 800
   let longevityMilliseconds = 8000
 
+  const quaternion = new Quaternion()
+
   useTask(() => {
-    if (lastBodyMounted + bodyEveryMilliseconds < Date.now()) {
+    const now = performance.now()
+
+    if (lastBodyMounted + bodyEveryMilliseconds < now) {
       const body: Body = {
-        id: MathUtils.generateUUID(),
-        mounted: Date.now(),
-        position: new Vector3(0, 15, 0),
-        quaternion: new Quaternion().random()
+        mounted: now,
+        position: [0, 15, 0],
+        quaternion: quaternion.random().toArray()
       }
-      bodies.unshift(body)
-      lastBodyMounted = Date.now()
+      bodies.add(body)
+      lastBodyMounted = now
     }
 
-    const deleteIds: string[] = []
     bodies.forEach((body) => {
-      if (body.mounted + longevityMilliseconds < Date.now()) {
-        deleteIds.push(body.id)
+      if (body.mounted + longevityMilliseconds < now) {
+        bodies.delete(body)
       }
     })
-
-    if (deleteIds.length > 0) {
-      deleteIds.forEach((id) => {
-        const index = bodies.findIndex((body) => body.id === id)
-        if (index !== -1) bodies.splice(index, 1)
-      })
-    }
   })
 </script>
 
-{#each bodies as body (body.id)}
+{#each bodies as body (body)}
   <Particle {...body} />
 {/each}

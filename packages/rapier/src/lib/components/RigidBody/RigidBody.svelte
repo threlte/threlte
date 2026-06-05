@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { createParentObject3D, useParentObject3D } from '@threlte/core'
-  import { setContext, tick, untrack } from 'svelte'
+  import { createParentObject3DContext, useParentObject3D } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { Object3D, Vector3 } from 'three'
   import { useRapier } from '../../hooks/useRapier.js'
   import {
@@ -14,9 +14,10 @@
   } from '../../lib/getWorldTransforms.js'
   import { parseRigidBodyType } from '../../lib/parseRigidBodyType.js'
   import { setParentRigidbodyObject } from '../../lib/rigidBodyObjectContext.js'
-  import type { RigidBodyContext, ThrelteRigidBody } from '../../types/types.js'
-  import { overrideTeleportMethods } from './overrideTeleportMethods.js'
+  import type { ThrelteRigidBody } from '../../types/types.js'
+  import { overrideTeleportMethods } from './overrideTeleportMethods.svelte.js'
   import type { RigidBodyProps } from './types.js'
+  import { provideRigidbody, provideRigidBodyEvents } from '../../hooks/useRigidBody.js'
 
   const { world, rapier, addRigidBodyToContext, removeRigidBodyFromContext } = useRapier()
 
@@ -59,41 +60,50 @@
   /**
    * RigidBody Description
    */
-  const desc = new rapier.RigidBodyDesc(parseRigidBodyType(type)).setCanSleep(canSleep)
+  const desc = new rapier.RigidBodyDesc(parseRigidBodyType(untrack(() => type))).setCanSleep(
+    untrack(() => canSleep)
+  )
 
   /**
    * Temporary RigidBody init
    */
-  let rigidBody = world.createRigidBody(desc) as ThrelteRigidBody
+  let rigidBodyInternal = $derived(world.createRigidBody(desc) as ThrelteRigidBody)
 
-  overrideTeleportMethods(rigidBody, object)
+  overrideTeleportMethods(
+    () => rigidBodyInternal,
+    () => object
+  )
 
   /**
-   * Apply transforms after the parent component added "object" to itself
+   * Apply transforms now that the parent component has added "object" to itself.
+   * Runs synchronously inside the bindable `$effect` below, after `$effect.pre`
+   * has parented `object`, so `bind:rigidBody` and `oncreate` both fire with the
+   * body already at its intended world position.
    */
-  const initPosition = async () => {
-    await tick()
+  const initPosition = () => {
     object.updateMatrix()
     object.updateWorldMatrix(true, false)
     const parentWorldScale = object.parent ? getWorldScale(object.parent) : new Vector3(1, 1, 1)
     const worldPosition = getWorldPosition(object).multiply(parentWorldScale)
     const worldQuaternion = getWorldQuaternion(object)
     setInitialRigidBodyState(object, worldPosition, worldQuaternion)
-    rigidBody.setTranslation(worldPosition, true)
-    rigidBody.setRotation(worldQuaternion, true)
+    rigidBodyInternal.setTranslation(worldPosition, true)
+    rigidBodyInternal.setRotation(worldQuaternion, true)
   }
-  initPosition()
 
   /**
-   * Will come in handy in the future for joints
+   * Stored on userData so per-frame loops can read it without a wasm round-trip
+   * through `world.getRigidBody(handle)`.
    */
-  object.userData.rigidBody = rigidBody
-
-  $effect.pre(() => {
-    rigidBody.setBodyType(parseRigidBodyType(type), true)
+  $effect(() => {
+    object.userData.rigidBody = rigidBodyInternal
   })
 
-  $effect.pre(() => {
+  $effect(() => {
+    rigidBodyInternal.setBodyType(parseRigidBodyType(type), true)
+  })
+
+  $effect(() => {
     if (linearVelocity) {
       rigidBody.setLinvel(
         { x: linearVelocity[0], y: linearVelocity[1], z: linearVelocity[2] },
@@ -101,7 +111,8 @@
       )
     }
   })
-  $effect.pre(() => {
+
+  $effect(() => {
     if (angularVelocity) {
       rigidBody.setAngvel(
         { x: angularVelocity[0], y: angularVelocity[1], z: angularVelocity[2] },
@@ -109,70 +120,19 @@
       )
     }
   })
-  $effect.pre(() => {
-    rigidBody.setGravityScale(gravityScale, true)
-  })
-  $effect.pre(() => {
-    rigidBody.enableCcd(ccd)
-  })
-  $effect.pre(() => {
-    rigidBody.setDominanceGroup(dominance)
-  })
-  $effect.pre(() => {
-    rigidBody.lockRotations(lockRotations, true)
-  })
-  $effect.pre(() => {
-    rigidBody.lockTranslations(lockTranslations, true)
-  })
-  $effect.pre(() => {
-    rigidBody.setEnabledRotations(...enabledRotations, true)
-  })
-  $effect.pre(() => {
-    rigidBody.setEnabledTranslations(...enabledTranslations, true)
-  })
-  $effect.pre(() => {
-    rigidBody.setAngularDamping(angularDamping)
-  })
-  $effect.pre(() => {
-    rigidBody.setLinearDamping(linearDamping)
-  })
-  $effect.pre(() => {
-    rigidBody.setEnabled(enabled)
-  })
 
-  /**
-   * Add userData to the rigidBody
-   */
-  $effect.pre(() => {
-    rigidBody.userData = {
-      events: {
-        oncollisionenter,
-        oncollisionexit,
-        oncontact,
-        onsensorenter,
-        onsensorexit,
-        onsleep,
-        onwake
-      },
-      ...userData
-    }
-  })
+  $effect(() => rigidBodyInternal.setGravityScale(gravityScale, true))
+  $effect(() => rigidBodyInternal.enableCcd(ccd))
+  $effect(() => rigidBodyInternal.setDominanceGroup(dominance))
+  $effect(() => rigidBodyInternal.lockRotations(lockRotations, true))
+  $effect(() => rigidBodyInternal.lockTranslations(lockTranslations, true))
+  $effect(() => rigidBodyInternal.setEnabledRotations(...enabledRotations, true))
+  $effect(() => rigidBodyInternal.setEnabledTranslations(...enabledTranslations, true))
+  $effect(() => rigidBodyInternal.setAngularDamping(angularDamping))
+  $effect(() => rigidBodyInternal.setLinearDamping(linearDamping))
+  $effect(() => rigidBodyInternal.setEnabled(enabled))
 
-  /**
-   * Setting the RigidBody context so that colliders can
-   * hook onto.
-   */
-  setContext<RigidBodyContext>('threlte-rapier-rigidbody', rigidBody)
-
-  /**
-   * Used by child colliders to restore transform
-   */
-  setParentRigidbodyObject(object)
-
-  /**
-   * Add the mesh to the context
-   */
-  addRigidBodyToContext(rigidBody, object, {
+  const events = $derived({
     oncollisionenter,
     oncollisionexit,
     oncontact,
@@ -203,12 +163,56 @@
   })
 
   /**
-   * cleanup
+   * Add userData to the rigidBody
    */
   $effect(() => {
+    rigidBodyInternal.userData = {
+      events,
+      ...userData
+    }
+
+    addRigidBodyToContext(rigidBodyInternal, object, events)
+  })
+
+  /**
+   * Setting the RigidBody context so that colliders can
+   * hook onto.
+   */
+  provideRigidbody(() => rigidBodyInternal)
+  provideRigidBodyEvents(() => events)
+
+  /**
+   * Used by child colliders to restore transform
+   */
+  setParentRigidbodyObject(() => object)
+
+  $effect(() => {
+    const currentRigidBody = rigidBodyInternal
+
+    return () => {
+      removeRigidBodyFromContext(currentRigidBody)
+      world.removeRigidBody(currentRigidBody)
+    }
+  })
+
+  const parent3DObject = useParentObject3D()
+  createParentObject3DContext(object)
+
+  $effect.pre(() => {
+    $parent3DObject?.add(object)
     return () => {
       removeRigidBodyFromContext(rigidBody)
       world.removeRigidBody(rigidBody)
+    }
+  })
+
+  $effect(() => {
+    if (rigidBodyInternal) {
+      return untrack(() => {
+        initPosition()
+        rigidBody = rigidBodyInternal
+        return oncreate?.(rigidBody)
+      })
     }
   })
 </script>

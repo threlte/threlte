@@ -1,5 +1,5 @@
 import type { Props } from '@threlte/core'
-import type { ColorRepresentation, Mesh, Side, Vector3 } from 'three'
+import type { ColorRepresentation, Mesh, Side, Vector3, Vector3Tuple } from 'three'
 
 export type GridProps = Props<Mesh> & {
   /**
@@ -75,7 +75,7 @@ export type GridProps = Props<Mesh> & {
   /**
    * @default undefined, uses camera.current.position
    */
-  fadeOrigin?: Vector3
+  fadeOrigin?: Vector3 | Vector3Tuple
 
   /**
    * @default Three.DoubleSide
@@ -91,10 +91,20 @@ export type GridProps = Props<Mesh> & {
       }
     | {
         type?: 'circular'
+        /**
+         * @default 0
+         *
+         * Maximum radius in world units. A value of 0 removes the radius limit.
+         */
         maxRadius?: number
       }
     | {
         type?: 'polar'
+        /**
+         * @default 0
+         *
+         * Maximum radius in world units. A value of 0 removes the radius limit.
+         */
         maxRadius?: number
         cellDividers?: number
         sectionDividers?: number

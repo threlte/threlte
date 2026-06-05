@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-  import { Color, DoubleSide, RawShaderMaterial, Uniform, type ColorRepresentation } from 'three'
+  import { Color, DoubleSide, ShaderMaterial, type ColorRepresentation } from 'three'
   import { T } from '@threlte/core'
 
   interface Props {
@@ -25,10 +25,6 @@
   }: Props = $props()
 
   const vertexShader = `
-    uniform mat4 projectionMatrix;
-    uniform mat4 modelViewMatrix;
-    attribute vec2 uv;
-    attribute vec3 position;
     varying vec2 vUv;
     void main() {
       vUv = uv;
@@ -37,14 +33,13 @@
   `
 
   const fragmentShader = `
-    precision mediump float;
     uniform float thickness;
     uniform vec3 color;
     varying vec2 vUv;
     void main() {
-      float radius = 0.1;
-      float dist = length(vUv - vec2(0.5));
-      float alpha = 1.0 - step(thickness, abs(distance(vUv, vec2(0.5)) - 0.25));
+      float d = abs(distance(vUv, vec2(0.5)) - 0.25);
+      float edge = fwidth(d);
+      float alpha = 1.0 - smoothstep(thickness - edge, thickness + edge, d);
       gl_FragColor = vec4(color, alpha);
     }
   `
@@ -54,7 +49,7 @@
     color: new Uniform(DEFAULT_COLOR)
   }
 
-  const shaderMaterial = new RawShaderMaterial({
+  const shaderMaterial = new ShaderMaterial({
     vertexShader,
     fragmentShader,
     uniforms,

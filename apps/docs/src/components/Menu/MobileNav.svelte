@@ -1,13 +1,21 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { useElementMounted } from '$hooks/useElementMounted'
   import { fade } from 'svelte/transition'
   import { customSlide } from './customSlide'
   import BurgerIcon from './BurgerIcon.svelte'
   import Search from '$components/Search/Search.svelte'
 
-  export let search = false
+  interface Props {
+    search?: boolean
+    topbarLeft?: Snippet
+    topbarRight?: Snippet
+    content?: Snippet
+  }
 
-  let showMenu = false
+  let { search = false, topbarLeft, topbarRight, content }: Props = $props()
+
+  let showMenu = $state(false)
 
   const { action, mounted } = useElementMounted()
 </script>
@@ -20,12 +28,12 @@
     ]}
   >
     <div>
-      <slot name="topbar-left" />
+      {@render topbarLeft?.()}
     </div>
     <div class="max-w-[30%]"></div>
     <div class="flex flex-row items-center justify-end gap-4">
       <div>
-        <slot name="topbar-right" />
+        {@render topbarRight?.()}
       </div>
       <BurgerIcon bind:showMenu />
     </div>
@@ -50,7 +58,7 @@
             <Search />
           </div>
         {/if}
-        <slot name="content" />
+        {@render content?.()}
       </div>
     </div>
   {/if}

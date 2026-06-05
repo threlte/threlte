@@ -4,16 +4,14 @@
   import { onMount } from 'svelte'
   import Common from './examples/Common.svelte'
 
-  const browser = typeof window !== 'undefined'
-
   type Example = {
     name: string
     dom: ConstructorOfATypedSvelteComponent
     threlte: ConstructorOfATypedSvelteComponent
   }
 
-  let selected: string = browser ? sessionStorage.selected || '' : ''
-  let components: Example[] = []
+  let selected: string = $state('')
+  let components: Example[] = $state([])
 
   const load = () => {
     const modules = (import.meta as any).glob('./examples/*/*.svelte', { eager: true }) as Record<
@@ -48,12 +46,14 @@
 
   onMount(load)
 
-  $: example = components.find((e) => e.name === selected)
-  $: if (browser && selected.length) sessionStorage.selected = selected
+  let example = $derived(components.find((e) => e.name === selected))
+  $effect(() => {
+    if (selected.length) sessionStorage.selected = selected
+  })
 </script>
 
 <svelte:window
-  on:keydown={(event) => {
+  onkeydown={(event) => {
     if (event.key === 'ArrowLeft') {
       const index = components.findIndex((e) => e.name === selected)
       selected = components[index - 1]?.name || selected
@@ -68,7 +68,7 @@
   <div class="example-view split-view">
     <div class="dom">
       <div>
-        <svelte:component this={example.dom} />
+        <example.dom />
       </div>
     </div>
 
@@ -76,7 +76,7 @@
       <Canvas toneMapping={NoToneMapping}>
         <Common />
 
-        <svelte:component this={example.threlte} />
+        <example.threlte />
       </Canvas>
     </div>
   </div>
@@ -84,7 +84,7 @@
 
 <nav>
   <select bind:value={selected}>
-    {#each components as { name }}
+    {#each components as { name } (name)}
       <option value={name}>{name}</option>
     {/each}
   </select>

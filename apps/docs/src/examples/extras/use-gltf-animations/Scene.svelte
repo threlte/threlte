@@ -5,12 +5,7 @@
   const dracoLoader = useDraco()
   const gltf = await useGltf('/models/LittlestTokyo.glb', { dracoLoader })
 
-  const { scene } = useThrelte()
-
-  export const { gltf: animatedGltf, actions, mixer } = useGltfAnimations<'Take 001'>()
-  animatedGltf.current = gltf
-
-  let debug = false
+  export const { actions, mixer } = useGltfAnimations<'Take 001'>(() => $gltf)
 </script>
 
 <T.PerspectiveCamera

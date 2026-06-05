@@ -26,8 +26,7 @@
     new THREE.TorusKnotGeometry(1.0, 0.5, 20, 3, 1, 1)
   ]
 
-  const group = new THREE.Group()
-  group.static = true
+  const group = new THREE.BundleGroup()
 
   const position = new THREE.Vector3()
   const rotation = new THREE.Euler()

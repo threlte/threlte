@@ -12,7 +12,13 @@ export type CreateStageOptions = {
  * requestAnimationFrame stage.
  */
 export class Scheduler extends DAG<Stage> {
-  private lastTime = performance.now()
+  /**
+   * Initialized to 0 rather than performance.now() so the first frame's delta is
+   * deterministic (clamped to clampDeltaTo). Using performance.now() would make
+   * the first delta depend on the gap between construction and first tick, which
+   * varies with page load time and can produce inconsistent initial state.
+   */
+  private lastTime = 0
   private clampDeltaTo = 0.1
 
   public get stages() {
@@ -77,6 +83,7 @@ export class Scheduler extends DAG<Stage> {
         tasks: taskTimings
       }
     })
+    this.lastTime = time
     return {
       total: performance.now() - start,
       stages: stageTimings

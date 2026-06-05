@@ -1,11 +1,9 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy'
-
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
   import { GLTF, OrbitControls } from '@threlte/extras'
   import { Checkbox, Folder, FpsGraph, List, Pane, Slider } from 'svelte-tweakpane-ui'
   import type { MeshStandardMaterial } from 'three'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
   import LumaSplats from './LumaSplatsThree/LumaSplatsThree.svelte'
   import RenderIndicator from './RenderIndicator.svelte'
   import Splat from './Splat/Splat.svelte'
@@ -25,8 +23,8 @@
 
   let paneExpanded = $state(false)
 
-  let gltfMaterials: Record<string, MeshStandardMaterial> | undefined = $state()
-  run(() => {
+  let gltfMaterials = $state<Record<string, MeshStandardMaterial>>()
+  $effect(() => {
     if (gltfMaterials) {
       Object.values(gltfMaterials).forEach((material) => {
         material.envMapIntensity = 5
@@ -44,7 +42,7 @@
 <Splat
   visible={showSplat}
   position={[1.08, 2.21, -1.99]}
-  rotation={[-32.3 * DEG2RAD, -18.5 * DEG2RAD, -6.4 * DEG2RAD]}
+  rotation={[-32.3 * MathUtils.DEG2RAD, -18.5 * MathUtils.DEG2RAD, -6.4 * MathUtils.DEG2RAD]}
   src="https://huggingface.co/cakewalk/splat-data/resolve/main/nike.splat"
   {alphaHash}
   alphaTest={alphaTest > 0 ? alphaTest : undefined}
@@ -54,7 +52,7 @@
 <GLTF
   visible={showPorsche}
   position={[-1.48, -0.51, 2.15]}
-  rotation.y={57 * DEG2RAD}
+  rotation.y={57 * MathUtils.DEG2RAD}
   scale={0.7}
   url="/models/splat-example/porsche_959.glb"
   bind:materials={gltfMaterials}

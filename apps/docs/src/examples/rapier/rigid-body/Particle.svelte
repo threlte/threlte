@@ -12,12 +12,12 @@
   import { PositionalAudio } from '@threlte/extras'
   import { Collider, RigidBody, type ContactEvent } from '@threlte/rapier'
   import { writable } from 'svelte/store'
-  import type { Quaternion, Vector3 } from 'three'
+  import type { QuaternionTuple, Vector3Tuple } from 'three'
   import { BoxGeometry, MeshStandardMaterial, MathUtils } from 'three'
 
   interface Props {
-    position: Vector3
-    quaternion: Quaternion
+    position: Vector3Tuple
+    quaternion: QuaternionTuple
   }
 
   let { position, quaternion }: Props = $props()
@@ -48,8 +48,8 @@
 </script>
 
 <T.Group
-  position={position.toArray()}
-  quaternion={quaternion.toArray()}
+  {position}
+  {quaternion}
 >
   <RigidBody
     type="dynamic"

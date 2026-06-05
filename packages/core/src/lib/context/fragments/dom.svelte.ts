@@ -6,10 +6,8 @@ export interface DOMContext {
   dom: HTMLElement
 
   canvas: HTMLCanvasElement
-
-  size: {
-    readonly current: { width: number; height: number }
-  }
+  size: CurrentReadable<{ width: number; height: number }>
+  shouldUpdateSize: () => boolean
 }
 
 export type CreateDOMContextOptions = {
@@ -23,16 +21,13 @@ export const createDOMContext = (
   const opts = typeof options === 'function' ? options() : options
   const { dom, canvas } = opts
 
-  const { size } = useMeasure(dom)
+  const { size, shouldUpdateSize } = useMeasure(dom)
 
   const context: DOMContext = {
     dom,
     canvas,
-    size: {
-      get current() {
-        return size.current
-      }
-    }
+    size: runeToCurrentReadable(() => size.current),
+    shouldUpdateSize
   }
 
   setContext<DOMContext>('threlte-dom-context', context)

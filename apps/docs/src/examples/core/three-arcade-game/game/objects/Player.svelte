@@ -5,13 +5,13 @@
   import { AutoColliders } from '@threlte/rapier'
   import { type Mesh, MathUtils } from 'three'
   import { arenaHeight, arenaWidth, playerHeight, playerSpeed, playerWidth } from '../config'
+  import { useArcadeControls } from '../controls.svelte'
   import { game } from '../Game.svelte'
+
+  const controls = useArcadeControls()
 
   let positionZ = $derived(arenaHeight / 2 - playerHeight)
   let positionX = $state(0)
-
-  let leftPressed = false
-  let rightPressed = false
 
   // 0.12 is a magic number that makes the player barely touch the border
   let posXMax = arenaWidth / 2 - playerWidth / 2 - 0.12
@@ -24,46 +24,23 @@
     if (!playerCanMove) {
       if (centerPlayer) {
         positionX = 0
-      } else {
-        positionX = positionX
       }
       return
     }
-    if (!leftPressed && !rightPressed) return
-    if (leftPressed && rightPressed) return
-    if (leftPressed) {
-      positionX = Math.max(positionX - (playerSpeed * delta * 60) / 2, -posXMax)
-    }
-    if (rightPressed) {
-      positionX = Math.min(positionX + (playerSpeed * delta * 60) / 2, posXMax)
-    }
+    // Analog-friendly: actions have strength 0–1 so a stick tilt scales speed.
+    const direction = controls.axis('left', 'right')
+    if (direction === 0) return
+    positionX = Math.min(
+      Math.max(positionX + direction * playerSpeed * delta * 30, -posXMax),
+      posXMax
+    )
   })
 
   $effect(() => {
     game.playerPosition = positionX
   })
 
-  const onkeyup = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      leftPressed = false
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      rightPressed = false
-    }
-  }
-
-  const onkeydown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      leftPressed = true
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      rightPressed = true
-    }
-  }
-
-  const gltf = await useGltf<{
+  const gltf = useGltf<{
     nodes: { Player: Mesh }
     materials: Record<string, never>
   }>('/models/ball-game/player/player-simple.glb')
@@ -78,12 +55,7 @@
   })
 </script>
 
-<svelte:window
-  {onkeydown}
-  {onkeyup}
-/>
-
-{#if gltf}
+{#if $gltf?.nodes.Player}
   <T.Group>
     <AutoColliders
       shape="convexHull"

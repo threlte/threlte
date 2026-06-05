@@ -2,22 +2,17 @@ import { useLoader } from '@threlte/core'
 import { AudioLoader, type Audio, type PositionalAudio } from 'three'
 
 type AudioSource = string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream
-type AudioVolume = number | undefined
-type AudioPlaybackRate = number | undefined
 
-export type AudioProps = {
+export interface AudioProps {
   src: AudioSource
   autoplay?: boolean
   loop?: boolean
-  volume?: AudioVolume
-  playbackRate?: AudioPlaybackRate
+  volume?: number
+  playbackRate?: number
   detune?: number
-}
-
-export type AudioEvents = {
-  load: AudioBuffer | void
-  progress: ProgressEvent<EventTarget>
-  error: ErrorEvent
+  onload?: (buffer: AudioBuffer | null) => void
+  onerror?: (event: ErrorEvent) => void
+  onprogress?: (event: ProgressEvent) => void
 }
 
 /**
@@ -25,32 +20,145 @@ export type AudioEvents = {
  * It’s used by the <Audio> and <PositionalAudio> components.
  */
 export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
-  audio: () => T,
-  src: () => AudioProps['src'],
-  props: {
-    onprogress?: (event: ProgressEvent) => void
-    onload?: (event: AudioBuffer | null) => void
+  audio: () => T | undefined,
+  src: () => AudioSource,
+  autoplay: () => boolean,
+  loop: () => boolean,
+  volume: () => number,
+  playbackRate: () => number,
+  detune: () => number,
+  props: () => {
+    onload?: (buffer: AudioBuffer | null) => void
     onerror?: (event: ErrorEvent) => void
+    onprogress?: (event: ProgressEvent) => void
   }
 ) => {
   let loaded = $state(false)
   let shouldPlay = $state(false)
   let audioDestroyed = false
 
+  // @Todo: replace with an AbortController
+  let audioEpoch = 0
+
+  const isCurrentAudio = (currentAudio: T, epoch: number) => {
+    return !audioDestroyed && epoch === audioEpoch && currentAudio === audio()
+  }
+
+  const stopAudio = (currentAudio: T | undefined) => {
+    if (!currentAudio) return
+
+    if (!currentAudio.source) {
+      return currentAudio
+    }
+
+    return currentAudio.stop()
+  }
+
+  $effect(() => {
+    const currentAudio = audio()
+    audioEpoch += 1
+
+    return () => {
+      audioEpoch += 1
+      try {
+        stopAudio(currentAudio)
+      } catch (error) {
+        console.warn('Error while destroying audio', error)
+      }
+    }
+  })
+
+  $effect(() => {
+    audio()?.setVolume(volume())
+  })
+
+  $effect(() => {
+    audio()?.setPlaybackRate(playbackRate())
+  })
+
+  $effect(() => {
+    const currentAudio = audio()
+    if (currentAudio?.source && currentAudio.detune) {
+      currentAudio.setDetune(detune())
+    }
+  })
+
+  $effect(() => {
+    audio()?.setLoop(loop())
+  })
+
+  $effect(() => {
+    if (!loaded) {
+      if (audio()?.isPlaying) stop()
+      return
+    }
+
+    if (autoplay() || shouldPlay) {
+      play()
+    }
+  })
+
+  $effect(() => {
+    audioEpoch += 1
+    setSrc(src())
+  })
+
   const loader = useLoader(AudioLoader)
 
-  const play = async (delay?: number) => {
-    const currentAudio = audio()
+  const setSrc = async (source: AudioProps['src']) => {
+    loaded = false
 
+    const currentAudio = audio()
+    const epoch = audioEpoch
+
+    if (!currentAudio) return
+
+    const { onload, onprogress, onerror } = props()
+
+    if (!isCurrentAudio(currentAudio, epoch)) return
+
+    try {
+      if (typeof source === 'string') {
+        const audioBuffer = await loader.load(source, {
+          onProgress(event) {
+            onprogress?.(event)
+          }
+        })
+        currentAudio.setBuffer(audioBuffer)
+      } else if (source instanceof AudioBuffer) {
+        currentAudio.setBuffer(source)
+      } else if (source instanceof HTMLMediaElement) {
+        currentAudio.setMediaElementSource(source)
+      } else if (source instanceof AudioBufferSourceNode) {
+        currentAudio.setNodeSource(source)
+      } else if (source instanceof MediaStream) {
+        currentAudio.setMediaStreamSource(source)
+      }
+
+      loaded = true
+
+      onload?.(currentAudio.buffer)
+    } catch (error) {
+      onerror?.(error as ErrorEvent)
+    }
+  }
+
+  const play = async (delay?: number) => {
     // source is not loaded yet, so we should play it after it's loaded
     if (!loaded) {
       shouldPlay = true
       return
     }
 
+    const currentAudio = audio()
+    const epoch = audioEpoch
+
+    if (!currentAudio) return
+
     if (currentAudio.context.state !== 'running') {
       await currentAudio.context.resume()
-      if (audioDestroyed) {
+
+      if (!isCurrentAudio(currentAudio, epoch)) {
         return
       }
     }
@@ -58,66 +166,23 @@ export const useAudio = <T extends Audio<GainNode> | PositionalAudio>(
     return currentAudio.play(delay)
   }
 
-  $effect(() => {
-    const load = async () => {
-      const source = src()
-      const currentAudio = audio()
+  const pause = () => {
+    return audio()?.pause()
+  }
 
-      loaded = false
-      try {
-        if (typeof source === 'string') {
-          const audioBuffer = await loader.load(source, {
-            onProgress(event) {
-              props.onprogress?.(event)
-            }
-          })
-          currentAudio.setBuffer(audioBuffer)
-        } else if (source instanceof AudioBuffer) {
-          currentAudio.setBuffer(source)
-        } else if (source instanceof HTMLMediaElement) {
-          currentAudio.setMediaElementSource(source)
-        } else if (source instanceof AudioBufferSourceNode) {
-          currentAudio.setNodeSource(source)
-        } else if (source instanceof MediaStream) {
-          currentAudio.setMediaStreamSource(source)
-        }
-
-        loaded = true
-
-        props.onload?.(currentAudio.buffer)
-      } catch (error) {
-        props.onerror?.(error as ErrorEvent)
-      }
-    }
-
-    load()
-  })
-
-  $effect.pre(() => {
-    const currentAudio = audio()
-
-    if (!loaded) {
-      if (currentAudio.isPlaying) {
-        currentAudio.stop()
-      }
-      return
-    }
-
-    if (shouldPlay) {
-      play()
-    }
-  })
+  const stop = () => {
+    return stopAudio(audio())
+  }
 
   $effect(() => {
     return () => {
-      try {
-        audioDestroyed = true
-        stop()
-      } catch (error) {
-        console.warn('Error while destroying audio', error)
-      }
+      audioDestroyed = true
     }
   })
 
-  return play
+  return {
+    play,
+    pause,
+    stop
+  }
 }

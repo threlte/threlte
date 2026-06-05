@@ -61,7 +61,7 @@
   scene.backgroundBlurriness = 0.5
 </script>
 
-{#if (mode === 'object' || mode === 'object-env') && splats?.[0]}
+{#if (mode === 'object' || mode === 'object-env') && $splats?.[0]}
   <T
     is={splats[0]}
     oncreate={() => {
@@ -74,6 +74,6 @@
   </T>
 {/if}
 
-{#if splats[1]}
-  <CubeEnvironment texture={splats[1]} />
+{#if $splats?.[1]}
+  <CubeEnvironment texture={$splats[1]} />
 {/if}

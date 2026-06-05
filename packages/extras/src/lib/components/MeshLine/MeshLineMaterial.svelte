@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { MeshLineMaterialProps } from './types.js'
   import { T, useThrelte } from '@threlte/core'
-  import { ShaderMaterial, Color, Vector2 } from 'three'
+  import { ShaderMaterial, Color, Vector2, Uniform, Texture } from 'three'
   import { fragmentShader } from './fragment.js'
   import { vertexShader } from './vertex.js'
 
@@ -23,22 +23,21 @@
   let { invalidate, size } = useThrelte()
 
   const uniforms = {
-    lineWidth: { value: width },
-    color: { value: new Color(color) },
-    opacity: { value: opacity },
-    resolution: { value: new Vector2(1, 1) },
-    sizeAttenuation: { value: attenuate ? 1 : 0 },
-    dashArray: { value: dashArray },
-    useDash: { value: dashArray > 0 ? 1 : 0 },
-    dashOffset: { value: dashOffset },
-    dashRatio: { value: dashRatio },
-    scaleDown: { value: scaleDown / 10 },
-    alphaTest: { value: 0 },
-    alphaMap: { value: alphaMap },
-    useAlphaMap: { value: alphaMap ? 1 : 0 }
+    lineWidth: new Uniform(1),
+    color: new Uniform(new Color('#ffffff')),
+    opacity: new Uniform(1),
+    resolution: new Uniform(new Vector2(1, 1)),
+    sizeAttenuation: new Uniform(1),
+    dashArray: new Uniform(0),
+    useDash: new Uniform(0),
+    dashOffset: new Uniform(0),
+    dashRatio: new Uniform(0),
+    scaleDown: new Uniform(0),
+    alphaMap: new Uniform<Texture | undefined>(undefined),
+    useAlphaMap: new Uniform(0)
   }
 
-  const material = new ShaderMaterial({ uniforms })
+  export const material = new ShaderMaterial({ uniforms })
 
   $effect.pre(() => {
     uniforms.lineWidth.value = width

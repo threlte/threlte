@@ -17,7 +17,6 @@ import { useScene } from './scene.js'
 import { useScheduler } from './scheduler.svelte.js'
 import type { WebGPURenderer } from 'three/webgpu'
 import { devicePixelRatio } from 'svelte/reactivity/window'
-import { useMeasure } from '../../utilities/useMeasure.svelte.js'
 import { updateCamera } from '../../components/T/utils/useCamera.svelte.js'
 
 export type Renderer = WebGLRenderer | WebGPURenderer
@@ -76,9 +75,16 @@ export type CreateRendererContextOptions<T extends Renderer> = {
   shadows?: boolean | ShadowMapType
 
   /**
+   * The device pixel ratio used by the renderer.
+   *
+   * Pass a single number to set the pixel ratio explicitly. Pass a tuple
+   * `[min, max]` to clamp `window.devicePixelRatio` between those bounds —
+   * useful for capping render resolution on high-DPI displays while still
+   * using the native ratio on lower-DPI ones.
+   *
    * @default window.devicePixelRatio
    */
-  dpr?: number
+  dpr?: number | [min: number, max: number]
 }
 
 export const createRendererContext = <T extends Renderer>(
@@ -86,10 +92,15 @@ export const createRendererContext = <T extends Renderer>(
 ): RendererContext<T> => {
   const { camera, manual } = useCamera()
   const { scene } = useScene()
-  const { invalidate, renderStage, autoRender, scheduler, frameInvalidated, mainStage } =
-    useScheduler()
-  const { canvas, dom } = useDOM()
-  const { shouldUpdateSize, size } = useMeasure(dom)
+  const {
+    invalidate,
+    mainStage,
+    renderStage,
+    autoRender: autoRenderStore,
+    scheduler,
+    frameInvalidated
+  } = useScheduler()
+  const { canvas, size, shouldUpdateSize } = useDOM()
 
   const opts = $derived(options())
   const renderer = untrack(() =>
@@ -135,8 +146,14 @@ export const createRendererContext = <T extends Renderer>(
 
   // Seperate derived runes since users can set these values through the canvas or by .set()
   let colorSpace = $derived<ColorSpace>(optsColorSpace ?? SRGBColorSpace)
-  let dpr = $derived(optsDpr ?? devicePixelRatio.current ?? window.devicePixelRatio)
-  let shadows = $derived(optsShadows ?? PCFShadowMap)
+  let dpr = $derived.by(() => {
+    const target = devicePixelRatio.current ?? window.devicePixelRatio
+    if (Array.isArray(optsDpr)) {
+      return Math.min(Math.max(optsDpr[0], target), optsDpr[1])
+    }
+    return optsDpr ?? target
+  })
+  let shadows = $derived(optsShadows ?? PCFSoftShadowMap)
   let toneMapping = $derived(optsToneMapping ?? AgXToneMapping)
 
   const context: RendererContext<T> = {
@@ -227,7 +244,11 @@ export const createRendererContext = <T extends Renderer>(
   $effect(() => {
     return () => {
       renderer.setAnimationLoop(null)
-      renderer.dispose()
+      try {
+        renderer.dispose()
+      } catch {
+        // WebGPURenderer.dispose() throws if async init() hasn't completed (e.g. during HMR)
+      }
     }
   })
 

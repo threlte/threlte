@@ -8,13 +8,13 @@ describe('onwheel', () => {
   it('fires when scrolling over a mesh', async () => {
     const onwheelA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onwheelA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // wheel at center — hits mesh A
@@ -27,13 +27,13 @@ describe('onwheel', () => {
   it('does not fire when scrolling over empty space', async () => {
     const onwheelA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onwheelA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // wheel in top-left corner — hits nothing
@@ -46,13 +46,13 @@ describe('onwheel', () => {
   it('fires for every event in a scroll burst', async () => {
     const onwheelA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onwheelA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // A real scroll gesture fires many wheel events in quick succession.

@@ -1,7 +1,18 @@
-<script>
+<script lang="ts">
   import { T } from '@threlte/core'
   import { Grid, MeshLineGeometry, MeshLineMaterial, OrbitControls } from '@threlte/extras'
   import { CatmullRomCurve3, Vector3 } from 'three'
+  import type { ColorRepresentation } from 'three'
+
+  let {
+    shape = 'taper',
+    color = '#fe3d00',
+    width = 1
+  }: {
+    shape?: 'none' | 'taper'
+    color?: ColorRepresentation
+    width?: number
+  } = $props()
 
   // create a smooth curve from 4 points
   const curve = new CatmullRomCurve3([
@@ -21,10 +32,13 @@
 >
   <MeshLineGeometry
     {points}
-    shape="taper"
+    {shape}
   />
 
-  <MeshLineMaterial color="#fe3d00" />
+  <MeshLineMaterial
+    {color}
+    {width}
+  />
 </T.Mesh>
 
 <T.PerspectiveCamera
@@ -37,6 +51,7 @@
     autoRotate={true}
     autoRotateSpeed={2}
     enableDamping
+    enableZoom={false}
     target.y={2}
   />
 </T.PerspectiveCamera>

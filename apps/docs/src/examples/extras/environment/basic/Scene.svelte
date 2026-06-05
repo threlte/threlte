@@ -2,7 +2,7 @@
   import { Environment, OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
 
-  type Props = {
+  interface Props {
     environmentUrl: string
     environmentIsBackground?: boolean
     isBackground?: boolean

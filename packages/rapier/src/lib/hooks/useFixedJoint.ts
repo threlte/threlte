@@ -1,7 +1,9 @@
 import type { FixedImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Euler, Quaternion, Vector3 } from 'three'
-import { useJoint } from './useJoint.js'
+import { useJoint } from './useJoint.svelte.js'
 import { isInstanceOf } from '@threlte/core'
+
+const euler = new Euler()
 
 export const useFixedJoint = (
   anchorA: Parameters<Vector3['set']>,
@@ -9,14 +11,14 @@ export const useFixedJoint = (
   anchorB: Parameters<Vector3['set']>,
   frameB: Parameters<Euler['set']> | Euler
 ) => {
-  const jaA = isInstanceOf(anchorA, 'Vector3') ? anchorA : new Vector3(...anchorA)
+  const jaA = isInstanceOf(anchorA, 'Vector3') ? anchorA : new Vector3().fromArray(anchorA)
   const jfA = new Quaternion().setFromEuler(
-    isInstanceOf(frameA, 'Euler') ? frameA : new Euler(...frameA)
+    isInstanceOf(frameA, 'Euler') ? frameA : euler.fromArray(frameA)
   )
 
-  const jaB = isInstanceOf(anchorB, 'Vector3') ? anchorB : new Vector3(...anchorB)
+  const jaB = isInstanceOf(anchorB, 'Vector3') ? anchorB : new Vector3().fromArray(anchorB)
   const jfB = new Quaternion().setFromEuler(
-    isInstanceOf(frameB, 'Euler') ? frameB : new Euler(...frameB)
+    isInstanceOf(frameB, 'Euler') ? frameB : euler.fromArray(frameB)
   )
 
   return useJoint((rbA, rbB, { world, rapier }) => {

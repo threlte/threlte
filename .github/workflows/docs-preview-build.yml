@@ -1,0 +1,50 @@
+name: Docs Preview Build
+
+# Untrusted half of the docs preview pipeline. Runs on `pull_request`, which
+# means GitHub forces GITHUB_TOKEN to read-only for fork PRs, so even though
+# this workflow executes PR code via pnpm scripts, an attacker has nothing
+# privileged to steal. The built site is uploaded as an artifact and consumed
+# by the privileged Docs Preview Deploy workflow, which never executes PR
+# code. See GHSA-p368-h5pf-7fc2.
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-preview-build-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: true
+
+      - name: Build docs
+        env:
+          BASE_PATH: /previews/pr-${{ github.event.pull_request.number }}
+        run: pnpm run build:docs
+
+      - name: Upload preview artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docs-preview
+          path: apps/docs/dist
+          retention-days: 1

@@ -14,10 +14,8 @@
 
   const vec3 = new Vector3()
 
-  // make an array of random x-z coordinates in the range of -20 to 20 with 200 elements
   const items = Array.from({ length: 500 }, () => {
     vec3.randomDirection().multiplyScalar(2.5)
-
     return {
       x: vec3.x,
       z: vec3.z,
@@ -31,32 +29,34 @@
   })
 </script>
 
-<InstancedMeshes
-  castShadow
-  meshes={gltf.nodes}
-  oncreate={() => {
-    gltf.scene.traverse((child) => {
-      child.castShadow = true
-      child.receiveShadow = true
-    })
-  }}
->
-  {#snippet children({ components: { Blossom, Stem } })}
-    {#each items as item (item)}
-      <Flower
-        position.x={item.x}
-        position.z={item.z}
-        scale={item.scale}
-        rotation.y={item.rotation.y * MathUtils.DEG2RAD}
-        rotation.x={item.rotation.x * MathUtils.DEG2RAD}
-        rotation.z={item.rotation.z * MathUtils.DEG2RAD}
-      >
-        <Blossom />
-        <Stem />
-      </Flower>
-    {/each}
-  {/snippet}
-</InstancedMeshes>
+{#if $gltf}
+  <InstancedMeshes
+    castShadow
+    meshes={$gltf.nodes}
+    oncreate={() => {
+      $gltf.scene.traverse((child) => {
+        child.castShadow = true
+        child.receiveShadow = true
+      })
+    }}
+  >
+    {#snippet children({ components: { Blossom, Stem } })}
+      {#each items as item}
+        <Flower
+          position.x={item.x}
+          position.z={item.z}
+          scale={item.scale}
+          rotation.y={item.rotation.y * MathUtils.DEG2RAD}
+          rotation.x={item.rotation.x * MathUtils.DEG2RAD}
+          rotation.z={item.rotation.z * MathUtils.DEG2RAD}
+        >
+          <Blossom />
+          <Stem />
+        </Flower>
+      {/each}
+    {/snippet}
+  </InstancedMeshes>
+{/if}
 
 <T.DirectionalLight
   position.y={3}

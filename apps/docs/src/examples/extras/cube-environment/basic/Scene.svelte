@@ -2,7 +2,7 @@
   import { CubeEnvironment, OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
 
-  type Props = {
+  interface Props {
     environmentUrls: [string, string, string, string, string, string]
     environmentIsBackground?: boolean
     materialMetalness?: number

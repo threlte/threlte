@@ -5,7 +5,7 @@ export { useDraco } from './hooks/useDraco.js'
 export { useMeshopt } from './hooks/useMeshopt.js'
 export { useKtx2 } from './hooks/useKtx2.js'
 export { useGltfAnimations } from './hooks/useGltfAnimations.svelte.js'
-export { useProgress } from './hooks/useProgress.svelte.js'
+export { useProgress } from './hooks/useProgress.js'
 export { useTexture } from './hooks/useTexture.js'
 export { useFBO } from './hooks/useFBO.svelte.js'
 export {
@@ -13,12 +13,17 @@ export {
   type StandardGamepadEvent,
   type StandardGamepad,
   type StandardXRGamepad
-} from './hooks/useGamepad.svelte.js'
+} from './hooks/useGamepad/useGamepad.svelte.js'
 export { useKeyboard } from './hooks/useKeyboard.svelte.js'
 export { useInputMap } from './hooks/useInputMap.svelte.js'
+export { useFollow } from './hooks/useFollow.svelte.js'
 export { useMask } from './hooks/useMask.js'
 export { useViewport } from './hooks/useViewport.svelte.js'
 export { useTrailTexture } from './hooks/useTrailTexture.svelte.js'
+export { useCameraControls } from './components/CameraControls/useCameraControls.js'
+export { useOrbitControls } from './components/controls/OrbitControls/useOrbitControls.js'
+export { useTrackballControls } from './components/controls/TrackballControls/useTrackballControls.js'
+export { useTransformControls } from './components/controls/TransformControls/useTransformControls.js'
 export { meshBounds } from './utilities/meshBounds.js'
 
 // abstractions
@@ -26,16 +31,15 @@ export { default as AnimatedSpriteMaterial } from './components/AnimatedSpriteMa
 export { default as AsciiRenderer } from './components/AsciiRenderer/AsciiRenderer.svelte'
 export { default as BackdropGeometry } from './components/BackdropGeometry/BackdropGeometry.svelte'
 export { default as Decal } from './components/Decal/Decal.svelte'
-export {
-  default as CameraControls,
-  type CameraControlsRef
-} from './components/CameraControls/CameraControls.svelte'
+export { default as CameraControls } from './components/CameraControls/CameraControls.svelte'
+export { default as CameraControlsRef } from 'camera-controls'
 export { default as Edges } from './components/Edges/Edges.svelte'
 export { default as HTML } from './components/HTML/HTML.svelte'
 export { default as HUD } from './components/HUD/HUD.svelte'
 export { default as Float } from './components/Float/Float.svelte'
 export { default as GLTF } from './components/GLTF/GLTF.svelte'
-export { default as Gizmo, type GizmoOptions } from './components/Gizmo/Gizmo.svelte'
+export { default as Gizmo } from './components/Gizmo/Gizmo.svelte'
+export type { GizmoOptions } from 'three-viewport-gizmo'
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
 export { default as CubeEnvironment } from './components/environment/CubeEnvironment/CubeEnvironment.svelte'
 export { default as Environment } from './components/environment/Environment/Environment.svelte'
@@ -65,6 +69,7 @@ export { default as ShadowMaterial } from './components/ShadowMaterial/ShadowMat
 export { default as Stars } from './components/Stars/Stars.svelte'
 export { default as SVG } from './components/Svg/Svg.svelte'
 export { default as MeshRefractionMaterial } from './components/MeshRefractionMaterial/MeshRefractionMaterial.svelte'
+export { default as Wobble } from './components/Wobble/Wobble.svelte'
 export { default as Text3DGeometry } from './components/Text3DGeometry/Text3DGeometry.svelte'
 export { default as PerfMonitor } from './components/PerfMonitor/PerfMonitor.svelte'
 export { default as Outlines } from './components/Outlines/Outlines.svelte'

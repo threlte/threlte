@@ -14,13 +14,13 @@ describe('onclick', () => {
   it('fires onclick when a mesh is hit', async () => {
     const onclickA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onclickA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits mesh A
@@ -37,13 +37,13 @@ describe('onclick', () => {
   it('does not fire onclick when clicking empty space', async () => {
     const onclickA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onclickA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at (0, 0) → hits nothing

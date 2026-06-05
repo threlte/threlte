@@ -6,7 +6,7 @@ export const applyTransforms = (
   rotation?: Parameters<Euler['set']>,
   scale?: Parameters<Vector3['set']>
 ): void => {
-  if (position) object.position.set(...position)
-  if (rotation) object.rotation.set(...rotation)
-  if (scale) object.scale.set(...scale)
+  if (position) object.position.fromArray(position)
+  if (rotation) object.rotation.fromArray(rotation)
+  if (scale) object.scale.fromArray(scale)
 }

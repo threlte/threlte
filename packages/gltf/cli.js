@@ -47,7 +47,7 @@ const cli = meow(
       keepnames: { type: 'boolean', shortFlag: 'k' },
       keepgroups: { type: 'boolean', shortFlag: 'K' },
       shadows: { type: 'boolean', shortFlag: 's' },
-      printwidth: { type: 'number', shortFlag: 'p', default: 120 },
+      printwidth: { type: 'number', shortFlag: 'w', default: 120 },
       meta: { type: 'boolean', shortFlag: 'm' },
       precision: { type: 'number', shortFlag: 'p', default: 2 },
       isolated: { type: 'boolean', shortFlag: 'i', default: false },
@@ -62,6 +62,7 @@ const cli = meow(
       simplify: { type: 'boolean', shortFlag: 'S', default: false },
       keepmeshes: { type: 'boolean', shortFlag: 'j', default: false },
       keepmaterials: { type: 'boolean', shortFlag: 'M', default: false },
+      format: { type: 'string', shortFlag: 'f', default: 'webp' },
       ratio: { type: 'number', default: 0.75 },
       error: { type: 'number', default: 0.001 },
       debug: { type: 'boolean', shortFlag: 'D' }

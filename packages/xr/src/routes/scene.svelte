@@ -7,8 +7,8 @@
   const { isPresenting } = useXR()
   const teleport = useTeleport()
 
-  $effect.pre(() => {
-    if (isPresenting.current) teleport([0, 0, 5])
+  $effect(() => {
+    if ($isPresenting) teleport([0, 0, 5])
   })
 
   let listenToGamepad = $state(false)

@@ -1,33 +1,42 @@
 import { useThrelte } from '@threlte/core'
-import type { Scene, Texture } from 'three'
+import type { Scene } from 'three'
 
 export const useEnvironment = (
   scene: () => Scene,
-  texture: () => Texture | undefined,
-  isBackground: () => boolean
+  environment: () => Scene['environment'] | undefined,
+  isBackground: () => boolean,
+  isEnvironment: () => boolean
 ) => {
   const { invalidate } = useThrelte()
 
-  // save lastScene and restore when scene changes and on unmount
-  $effect.pre(() => {
+  $effect(() => {
+    const currentEnvironment = environment()
+    if (currentEnvironment === undefined) return
+
     const currentScene = scene()
-    const currentTexture = texture()
+    const { background: lastBackground, environment: lastEnvironment } = currentScene
+    const currentIsBackground = isBackground()
+    const currentIsEnvironment = isEnvironment()
 
-    const { background, environment } = currentScene
-
-    if (currentTexture) {
-      currentScene.environment = currentTexture
-
-      if (isBackground()) {
-        currentScene.background = currentTexture
-      }
-
-      invalidate()
+    if (currentIsEnvironment) {
+      currentScene.environment = currentEnvironment
     }
 
+    if (currentIsBackground) {
+      currentScene.background = currentEnvironment
+    }
+
+    invalidate()
+
     return () => {
-      currentScene.background = background
-      currentScene.environment = environment
+      if (currentIsEnvironment) {
+        currentScene.environment = lastEnvironment
+      }
+
+      if (currentIsBackground) {
+        currentScene.background = lastBackground
+      }
+
       invalidate()
     }
   })

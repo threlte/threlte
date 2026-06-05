@@ -68,6 +68,25 @@ Any object with an `enabled` property works:
 </TransformControls>
 ```
 
+## `useTransformControls`
+
+To access the underlying `TransformControls` instance from another component —
+without a `bind:controls` — use the `useTransformControls` hook. It returns a
+reactive accessor whose `current` is the instance registered by the nearest
+`<TransformControls>` within the `<Canvas>`, or `undefined` until it has mounted.
+
+```svelte title="ModeToggle.svelte"
+<script lang="ts">
+  import { useTransformControls } from '@threlte/extras'
+
+  const controls = useTransformControls()
+</script>
+
+<button onclick={() => controls.current?.setMode('translate')}>Translate</button>
+<button onclick={() => controls.current?.setMode('rotate')}>Rotate</button>
+<button onclick={() => controls.current?.setMode('scale')}>Scale</button>
+```
+
 ## Examples
 
 ### Basic usage

@@ -19,13 +19,14 @@ interface Props {
 }
 
 const { entry } = Astro.props
-const { category, title } = entry.data
+const { category, title, description } = entry.data
 const { Content } = await render(entry)
 ---
 
 <DocsLayout
   {entry}
   title={`${title} | Learn Threlte`}
+  {description}
 >
   <h6>
     {category}

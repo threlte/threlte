@@ -10,14 +10,14 @@ describe('stopPropagation', () => {
     const onpointerdownChild = vi.fn((e) => e.stopPropagation())
     const onpointerdownParent = vi.fn()
 
-    const { context, container } = render(PropagationScene, {
+    const { context } = render(PropagationScene, {
       props: {
         onpointerdownChild,
         onpointerdownParent
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // pointerdown at center → hits Child, which calls stopPropagation
@@ -33,14 +33,14 @@ describe('stopPropagation', () => {
     const onpointeroverChild = vi.fn((e) => e.stopPropagation())
     const onpointeroverParent = vi.fn()
 
-    const { context, container } = render(PropagationScene, {
+    const { context } = render(PropagationScene, {
       props: {
         onpointeroverChild,
         onpointeroverParent
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First pointermove — processed immediately, hovers Child which calls stopPropagation
@@ -60,13 +60,13 @@ describe('stopPropagation', () => {
       capturedEvent = e
     })
 
-    const { context, container } = render(PropagationScene, {
+    const { context } = render(PropagationScene, {
       props: {
         onpointerdownChild
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     pointer(target, 'pointerdown')

@@ -82,6 +82,7 @@ export const referenceCollection = defineCollection({
     schemaType: z.string().default('reference'),
     type: z.enum(['component', 'hook', 'plugin']).optional(),
     title: z.string(),
+    description: z.string().optional(),
     /**
      * Path to the source file or directory, relative to the root of the repository.
      */
@@ -102,6 +103,7 @@ export const learnCollection = defineCollection({
     category: z.enum(['Getting Started', 'Basics', 'Advanced', 'More', 'Preprocessing']),
     isDivider: z.boolean().optional(),
     title: z.string(),
+    description: z.string().optional(),
     order: z.number().optional(),
     showInSidebar: z.boolean().optional().default(true)
   })
@@ -157,7 +159,8 @@ export const blogCollection = defineCollection({
     date: z.string(),
     image: z.string(),
     title: z.string(),
-    subtitle: z.string()
+    subtitle: z.string(),
+    description: z.string().optional()
   })
 })
 

@@ -631,4 +631,65 @@ describe('DAG', () => {
     stage.createTask('task b', () => {}, { before: 'task a' })
     expect(() => scheduler.run(0)).toThrow('cycle')
   })
+
+  it('runWithTiming updates lastTime so subsequent calls get correct deltas', () => {
+    const scheduler = new Scheduler()
+    const stage = scheduler.createStage('stage')
+    const deltas: number[] = []
+    stage.createTask('task', (delta) => {
+      deltas.push(delta)
+    })
+
+    scheduler.runWithTiming(0) // reset lastTime
+    scheduler.runWithTiming(16)
+    scheduler.runWithTiming(32)
+
+    // deltas[0] is unreliable (Bug 24: lastTime initialized to performance.now())
+    expect(deltas[1]).toBeCloseTo(0.016, 5)
+    expect(deltas[2]).toBeCloseTo(0.016, 5) // would be 0.032 without the fix
+  })
+
+  it('runWithTiming and run share lastTime correctly', () => {
+    const scheduler = new Scheduler()
+    const stage = scheduler.createStage('stage')
+    const deltas: number[] = []
+    stage.createTask('task', (delta) => {
+      deltas.push(delta)
+    })
+
+    scheduler.run(0)
+    scheduler.runWithTiming(16)
+    scheduler.run(32)
+
+    expect(deltas[1]).toBeCloseTo(0.016, 5)
+    expect(deltas[2]).toBeCloseTo(0.016, 5)
+  })
+
+  it('removing a phantom node does not corrupt ordering constraints', () => {
+    const scheduler = new Scheduler()
+    const stage = scheduler.createStage('stage')
+    let i = 0
+
+    // task a creates a phantom for task b via "before"
+    stage.createTask(
+      'task a',
+      () => {
+        expect(i).toBe(0)
+        i++
+      },
+      { before: 'task b' }
+    )
+
+    // remove task b before it's actually added — should not destroy the constraint
+    stage.removeTask('task b')
+
+    // now add task b for real — it should still run after task a
+    stage.createTask('task b', () => {
+      expect(i).toBe(1)
+      i++
+    })
+
+    scheduler.run(0)
+    expect(i).toBe(2)
+  })
 })

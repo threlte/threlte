@@ -9,22 +9,35 @@
   const { world, debug } = useRapier()
 
   const geometry = new BufferGeometry()
+  let positionAttribute = new BufferAttribute(new Float32Array(0), 3)
+  let colorAttribute = new BufferAttribute(new Float32Array(0), 4)
+  geometry.setAttribute('position', positionAttribute)
+  geometry.setAttribute('color', colorAttribute)
 
   useTask(() => {
-    const buffers = world.debugRender()
+    const { vertices, colors } = world.debugRender()
 
-    const vertices = new BufferAttribute(buffers.vertices, 3)
-    const colors = new BufferAttribute(buffers.colors, 4)
-
-    geometry.setAttribute('position', vertices)
-    geometry.setAttribute('color', colors)
+    if (positionAttribute.array.length === vertices.length) {
+      positionAttribute.array.set(vertices)
+      colorAttribute.array.set(colors)
+      positionAttribute.needsUpdate = true
+      colorAttribute.needsUpdate = true
+    } else {
+      // rapier returns matched vertex/color counts, so they always resize together
+      geometry.dispose()
+      positionAttribute = new BufferAttribute(vertices, 3)
+      colorAttribute = new BufferAttribute(colors, 4)
+      geometry.setAttribute('position', positionAttribute)
+      geometry.setAttribute('color', colorAttribute)
+    }
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     debug.set(true)
 
     return () => {
       debug.set(false)
+      geometry.dispose()
     }
   })
 </script>

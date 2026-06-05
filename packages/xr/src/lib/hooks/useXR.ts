@@ -1,5 +1,6 @@
 import type { WebXRManager } from 'three'
 import { isPresenting, isHandTracking, session, xr } from '../internal/state.svelte.js'
+import { runeToCurrentReadable, type CurrentReadable } from './currentReadable.svelte.js'
 
 /**
  * Provides access to context related to `<XR />`.
@@ -11,25 +12,9 @@ export const useXR = (): {
   xr: { readonly current: WebXRManager | undefined }
 } => {
   return {
-    isPresenting: {
-      get current() {
-        return isPresenting.current
-      }
-    },
-    isHandTracking: {
-      get current() {
-        return isHandTracking.current
-      }
-    },
-    session: {
-      get current() {
-        return session.current
-      }
-    },
-    xr: {
-      get current() {
-        return xr.current
-      }
-    }
+    isPresenting: runeToCurrentReadable(() => isPresenting.current),
+    isHandTracking: runeToCurrentReadable(() => isHandTracking.current),
+    session: runeToCurrentReadable(() => session.current),
+    xr: runeToCurrentReadable(() => xr.current)
   }
 }

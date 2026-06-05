@@ -2,9 +2,11 @@
   import { OrbitControls } from '@threlte/extras'
   import { T } from '@threlte/core'
 
-  type SceneProps = { autoRotate: boolean }
+  interface Props {
+    autoRotate?: boolean
+  }
 
-  let { autoRotate = true }: SceneProps = $props()
+  let { autoRotate = true }: Props = $props()
 </script>
 
 <T.DirectionalLight position={5} />

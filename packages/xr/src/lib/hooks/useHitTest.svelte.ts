@@ -1,7 +1,9 @@
 import { Matrix4 } from 'three'
 import { useThrelte, useTask } from '@threlte/core'
-import { controllers } from './useController.svelte.js'
+import { useController } from './useController.svelte.js'
+import { useXROrigin } from './useXROrigin.svelte.js'
 import { isPresenting, session } from '../internal/state.svelte.js'
+import { fromStore } from 'svelte/store'
 
 export type HitTestCallback = (hitMatrix: Matrix4, hit: XRHitTestResult | undefined) => void
 
@@ -31,28 +33,66 @@ export const useHitTest = (
 ): void => {
   const source = options.source ?? 'viewer'
   const { xr } = useThrelte().renderer
+  const xrOrigin = useXROrigin()
   const hitMatrix = new Matrix4()
 
   let hitTestSource = $state.raw<XRHitTestSource>()
 
-  const getHitTestSource = async (space?: XRSpace) => {
-    if (space === undefined) {
-      return
-    }
-
-    hitTestSource = await session.current?.requestHitTestSource?.({ space })
-  }
-
   if (source === 'viewer') {
     $effect.pre(() => {
-      session.current?.requestReferenceSpace('viewer').then((space) => {
-        getHitTestSource(space)
-      })
+      const currentSession = session.current
+      if (currentSession === undefined) return
+
+      let cancelled = false
+      let created: XRHitTestSource | undefined
+
+      currentSession
+        .requestReferenceSpace('viewer')
+        .then((space) => currentSession.requestHitTestSource?.({ space }))
+        .then((src) => {
+          if (cancelled || src === undefined) {
+            src?.cancel()
+            return
+          }
+          created = src
+          hitTestSource = src
+        })
+        .catch(console.error)
+
+      return () => {
+        cancelled = true
+        created?.cancel()
+        if (hitTestSource === created) hitTestSource = undefined
+      }
     })
   } else {
-    const controller = $derived(controllers[source === 'leftInput' ? 'left' : 'right'])
+    const controller = fromStore(useController(source === 'leftInput' ? 'left' : 'right'))
+
     $effect.pre(() => {
-      getHitTestSource(controller?.inputSource.targetRaySpace)
+      const currentSession = session.current
+      const space = controller.current?.inputSource.targetRaySpace
+      if (currentSession === undefined || space === undefined) return
+
+      let cancelled = false
+      let created: XRHitTestSource | undefined
+
+      currentSession
+        .requestHitTestSource?.({ space })
+        ?.then((src) => {
+          if (cancelled || src === undefined) {
+            src?.cancel()
+            return
+          }
+          created = src
+          hitTestSource = src
+        })
+        .catch(console.error)
+
+      return () => {
+        cancelled = true
+        created?.cancel()
+        if (hitTestSource === created) hitTestSource = undefined
+      }
     })
   }
 
@@ -72,6 +112,13 @@ export const useHitTest = (
       }
 
       hitMatrix.fromArray(pose.transform.matrix)
+
+      const currentOrigin = xrOrigin.current
+      if (currentOrigin !== undefined) {
+        currentOrigin.updateWorldMatrix(true, false)
+        hitMatrix.premultiply(currentOrigin.matrixWorld)
+      }
+
       hitTestCallback(hitMatrix, hit)
     },
     { running: () => isPresenting.current && hitTestSource !== undefined }

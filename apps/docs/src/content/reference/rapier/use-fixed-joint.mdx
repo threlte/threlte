@@ -8,6 +8,10 @@ type: 'hook'
 
 Use this hook to initialize a [`FixedImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#fixed-joint).
 
+A fixed joint welds two rigid bodies together, locking their relative position and orientation so they behave as a single rigid unit. Reach for it when you need a composite from separate bodies — parts you may want to detach at runtime, or parts with different mass, friction, or collision properties.
+
+<Example path="rapier/joints/fixed/basic" />
+
 ```svelte
 <script>
   import { useFixedJoint, RigidBody, Collider } from '@threlte/rapier'

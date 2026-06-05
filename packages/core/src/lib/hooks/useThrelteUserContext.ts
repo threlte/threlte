@@ -71,7 +71,7 @@ type SetThrelteUserContextOptions = {
  *     }
  *   }
  *
- *   const ctx = useThrelteUserContext('some-context', getCtx, { exising: 'merge' })
+ *   const ctx = useThrelteUserContext('some-context', getCtx, { existing: 'merge' })
  *   console.log(ctx) // -> { foo: 'bar' }
  * </script>
  * ```

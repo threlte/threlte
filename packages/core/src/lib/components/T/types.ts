@@ -1,5 +1,5 @@
 import type { Snippet } from 'svelte'
-import type { Camera, Object3D } from 'three'
+import type { Camera, Object3D, Event as ThreeEvent } from 'three'
 
 /** Inlined from type-fest */
 type ConditionalKeys<Base, Condition> = {
@@ -158,13 +158,21 @@ export type EventProps<Type> = Type extends {
   : Record<string, unknown>
 
 type ExtractPayload<
-  Event extends string,
+  EventName extends string,
   Type extends { addEventListener: (type: string, listener: (args: any[]) => void) => any }
-> = Parameters<Extract<Type['addEventListener'], (type: Event, listener: any) => any>>[1] extends (
-  event: infer EventData
-) => any
-  ? EventData
-  : never
+> =
+  // Object3D's `addEventListener` is a single generic overload, which `Extract`
+  // can't narrow per-key — it would collapse to the union of every payload in
+  // the map. Index `EventMap[EventName]` directly when we can recover the map.
+  Type extends Object3D<infer EventMap>
+    ? EventName extends keyof EventMap
+      ? EventMap[EventName] & ThreeEvent<EventName, Type>
+      : never
+    : Parameters<
+          Extract<Type['addEventListener'], (type: EventName, listener: any) => any>
+        >[1] extends (event: infer EventData) => any
+      ? EventData
+      : never
 
 type CreateEvent<Type> = (ref: Type) => void | (() => void)
 
@@ -187,7 +195,13 @@ export type Props<
   ClassProps<Type> &
   CameraProps<Type> &
   InstanceProps<Type> &
-  EventProps<MaybeInstance<Type>> &
+  // `Threlte.UserProps` (interactivity, pointerControls, touchControls, etc.)
+  // wins over the auto-derived `EventProps` for any shared keys. This keeps
+  // pointer event handlers narrowed to the plugin's event shape (with required
+  // `stopPropagation`, `intersections`, etc.) instead of intersecting with the
+  // raw three.js dispatcher payload — which would otherwise widen the param to
+  // a union that loses plugin-specific fields.
+  Omit<EventProps<MaybeInstance<Type>>, keyof Threlte.UserProps> &
   Threlte.UserProps
 
 /**

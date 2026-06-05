@@ -1,5 +1,71 @@
 # @threlte/core
 
+## 8.5.16
+
+### Patch Changes
+
+- 77b7c68: Improve useMeasure resize behavior and reduce unnecessary layout reads
+
+## 8.5.15
+
+### Patch Changes
+
+- f605bfe: Fix infinite effect loop when using bind:ref
+- f605bfe: Fix: A manual makeDefault camera could leave Threlte’s active camera state stuck in manual mode after it was disabled or unmounted
+
+## 8.5.14
+
+### Patch Changes
+
+- aad1053: Perf: remove unnecessary effects in T component
+
+## 8.5.13
+
+### Patch Changes
+
+- ab91a3b: Perf: cache property lookups in useProps
+
+## 8.5.12
+
+### Patch Changes
+
+- 50f6ac2: Allow Canvas component dpr property to accept a [min, max] tuple
+
+## 8.5.11
+
+### Patch Changes
+
+- 5588329: Perf: replace internal useThrelte() calls with more lightweight fragment contexts
+- 4544308: Perf: rework parent contexts to use lightweight getter-backed current values internally
+
+## 8.5.10
+
+### Patch Changes
+
+- d639f30: Narrow T event handler payloads per event-key on Object3D, and give Threlte.UserProps precedence over auto-derived EventProps for shared keys
+
+## 8.5.9
+
+### Patch Changes
+
+- c99afe5: WebGPURenderer no longer crashes during HMR when dispose is called before async initialization completes
+
+## 8.5.8
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
+## 8.5.7
+
+### Patch Changes
+
+- bd14893: resolvePropertyPath logs a descriptive error instead of crashing on null segments
+- bd14893: Fix: DAG phantom node removal no longer corrupts ordering constraints
+- bd14893: Fix: memoizedProps cleared on instance change to prevent memory leak
+- bd14893: Removed duplicate ResizeObserver — renderer now uses DOM context's instance
+- bd14893: Fix autoRender/renderMode options reactivity
+
 ## 8.5.6
 
 ### Patch Changes

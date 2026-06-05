@@ -8,11 +8,11 @@ describe('pointerleave', () => {
   it('fires onpointerleave when the pointer leaves a mesh', async () => {
     const onpointerleaveA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointerleaveA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hovers mesh A
@@ -30,11 +30,11 @@ describe('pointerleave', () => {
   it('fires onpointerleave for all hovered objects when the pointer leaves the canvas', async () => {
     const onpointerleaveA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: { onpointerleaveA }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hovers mesh A

@@ -8,6 +8,7 @@
     far = 1000,
     frames = Infinity,
     isBackground = false,
+    isEnvironment = true,
     near = 0.1,
     onupdatestart,
     onupdatestop,
@@ -29,9 +30,10 @@
   )
 
   useEnvironment(
-    () => parentScene ?? defaultParentScene,
+    () => parentScene,
     () => renderTarget.texture,
-    () => isBackground
+    () => isBackground,
+    () => isEnvironment
   )
 
   export const update = () => {
@@ -73,5 +75,10 @@
   attach={visible ? undefined : false}
 >
   <T is={camera} />
-  {@render children?.({ camera, renderTarget, restart, update })}
+  {@render children?.({
+    camera,
+    renderTarget,
+    restart,
+    update
+  })}
 </T>

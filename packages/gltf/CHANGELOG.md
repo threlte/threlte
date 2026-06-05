@@ -1,5 +1,32 @@
 # @threlte/gltf
 
+## 3.1.0
+
+### Minor Changes
+
+- 6de99ec: Add runes-based reactivity for Audio, PositionalAudio, useFBO, and useGltfAnimations props
+
+## 3.0.7
+
+### Patch Changes
+
+- e854fb5: Add multiple SkinnedMesh support
+
+## 3.0.6
+
+### Patch Changes
+
+- 766701b: Fixed -p flag collision between --printwidth and --precision
+- 766701b: Fixed --printwidth flag being ignored
+- 766701b: Fixed ReferenceError crash when using --degrade flag
+
+## 3.0.5
+
+### Patch Changes
+
+- bd24a8a: Fix prettier-plugin-svelte resolution error when running via npx
+- 3c951cc: Auto-detect Draco compression from GLTF metadata and include useDraco() in generated components automatically
+
 ## 3.0.4
 
 ### Patch Changes

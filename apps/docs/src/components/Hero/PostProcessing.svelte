@@ -36,8 +36,7 @@
    * Chromatic Aberration
    */
   const chromaticAberrationEffect = new ChromaticAberrationEffect()
-  chromaticAberrationEffect.offset.x = 0.0008
-  chromaticAberrationEffect.offset.y = 0
+  chromaticAberrationEffect.offset.set(0.0008, 0)
 
   /**
    * Tone Mapping

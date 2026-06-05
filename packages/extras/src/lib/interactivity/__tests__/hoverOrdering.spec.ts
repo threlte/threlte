@@ -19,7 +19,7 @@ describe('hover event ordering', () => {
     const onpointerenterBack = vi.fn(() => callOrder.push('enter-back'))
     const onpointerleaveBack = vi.fn(() => callOrder.push('leave-back'))
 
-    const { context, container } = render(OverlappingScene, {
+    const { context } = render(OverlappingScene, {
       props: {
         onpointerenterFront,
         onpointerleaveFront,
@@ -28,7 +28,7 @@ describe('hover event ordering', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hover both Front and Back
@@ -68,7 +68,7 @@ describe('hover event ordering', () => {
     const onpointerenterA = vi.fn(() => callOrder.push('enter-A'))
     const onpointerleaveA = vi.fn(() => callOrder.push('leave-A'))
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointeroverA,
         onpointeroutA,
@@ -77,7 +77,7 @@ describe('hover event ordering', () => {
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hover mesh A
@@ -123,14 +123,14 @@ describe('hover event ordering', () => {
       cursor = 'auto'
     })
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointerenterA,
         onpointerleaveA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // First move — processed immediately, hover mesh A

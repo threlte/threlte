@@ -8,7 +8,12 @@ componentSignature:
   {
     props:
       [
-        { name: 'dpr', type: 'number', default: 'window.devicePixelRatio' },
+        {
+          name: 'dpr',
+          type: 'number | [min: number, max: number]',
+          default: 'window.devicePixelRatio',
+          description: 'A single number sets the pixel ratio explicitly. A tuple `[min, max]` clamps `window.devicePixelRatio` between those bounds.'
+        },
         {
           name: 'toneMapping',
           type:

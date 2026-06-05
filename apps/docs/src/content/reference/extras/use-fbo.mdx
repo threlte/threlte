@@ -1,7 +1,7 @@
 ---
 category: '@threlte/extras'
 group: 'Visual Effects'
-sourcePath: 'packages/extras/src/lib/hooks/useFBO.ts'
+sourcePath: 'packages/extras/src/lib/hooks/useFBO.svelte.ts'
 title: useFBO
 type: 'hook'
 ---
@@ -11,6 +11,18 @@ type: 'hook'
 Framebuffer objects are useful when you want to render a scene to something other than the canvas. In Three.js, you do this by rendering the scene to a `RenderTarget`. The render target has a texture property that can be used for various things such as postprocessing effects or applying the texture to something in the scene.
 
 <Example path="extras/use-fbo" />
+
+## Usage
+
+`useFBO` accepts an options getter. Reads inside the getter are tracked through runes, so changes to `size` and `depth` are applied to the render target reactively. Render-target construction options (`format`, `type`, `samples`, …) are read once at hook initialization.
+
+```typescript
+let resolution = $state(512)
+
+const target = useFBO(() => ({
+  size: { width: resolution, height: resolution }
+}))
+```
 
 ## Options
 

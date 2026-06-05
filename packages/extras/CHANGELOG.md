@@ -1,5 +1,119 @@
 # @threlte/extras
 
+## 9.21.0
+
+### Minor Changes
+
+- 926ef08: Add `useCameraControls`, `useOrbitControls`, `useTrackballControls` and `useTransformControls` hooks
+
+## 9.20.1
+
+### Patch Changes
+
+- 2bb801e: Fix HTML component not responding correctly to resize events
+- 2bb801e: Fix Bounds component in no-animate mode
+
+## 9.20.0
+
+### Minor Changes
+
+- f605bfe: Add `isEnvironment` to environment components so textures can be assigned as a background without replacing `scene.environment`.
+- f605bfe: View: allow same scene rendering
+
+## 9.19.0
+
+### Minor Changes
+
+- b6e29a7: Add eventOptions option to interactivity plugin
+
+## 9.18.0
+
+### Minor Changes
+
+- cb711f6: Add Wobble component
+
+## 9.17.1
+
+### Patch Changes
+
+- cf6480d: Simplify environment-related components internals
+
+## 9.17.0
+
+### Minor Changes
+
+- 6de99ec: Add runes-based reactivity for Audio, PositionalAudio, useFBO, and useGltfAnimations props
+
+## 9.16.0
+
+### Minor Changes
+
+- e47ac42: Fix SoftShadows component
+
+### Patch Changes
+
+- e47ac42: Perf: remove unnecessary effects in T component
+
+## 9.15.2
+
+### Patch Changes
+
+- ab91a3b: Perf: cache values in useInputMap and useKeyboard
+- ab91a3b: Fix: capture portal id to prevent live value reads when props update
+
+## 9.15.1
+
+### Patch Changes
+
+- c487de8: Fix keyboard input getting stuck after Meta/Cmd shortcuts when the browser suppresses the modified key's keyup event.
+
+## 9.15.0
+
+### Minor Changes
+
+- a5d66a1: Add `useFollow` hook
+
+### Patch Changes
+
+- 6555144: Fix Grid radius clipping for circular and polar grids, including polar divider rays extending past the outer radius.
+- 6555144: Avoid applying PointsMaterial tone mapping and color space shader chunks twice.
+- 6555144: Fix Wireframe material recompilation, backface coloring, barycentric attribute sizing, cleanup, and screen-space thickness consistency.
+
+## 9.14.9
+
+### Patch Changes
+
+- 4a54cf7: Fix: interactivity hover now keys plain meshes by uuid, so sweeping across faces no longer spams pointerenter/pointerleave
+
+## 9.14.8
+
+### Patch Changes
+
+- 8c55241: Ensure correct task ordering when accepting gamepad and keyboard input
+- 8c55241: Create unique task labels per useGamepad call
+
+## 9.14.7
+
+### Patch Changes
+
+- 8b0b6ee: useGamepad: support non-standard gamepad mappings, such as nintendo controllers
+
+## 9.14.6
+
+### Patch Changes
+
+- b24ac4f: Fix Align component stopping async resource loading in child components
+- 1d86e68: Fix reactivity for MeshLineGeometry shape property
+- 1d86e68: Simplify colorspace fragment in MeshLineMaterial
+
+## 9.14.5
+
+### Patch Changes
+
+- 97a34a5: Fix PointsMaterial build error from override keyword in Svelte module script
+- bfd06cd: Exclude test files and **tests** directories from published packages
+- 7ba9fe0: Stop InstancedMesh from invalidating every frame when update is false
+
 ## 9.14.4
 
 ### Patch Changes

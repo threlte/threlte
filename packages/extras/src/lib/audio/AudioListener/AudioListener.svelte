@@ -1,30 +1,45 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { AudioListener as ThreeAudioListener } from 'three'
+  import { AudioListener } from 'three'
   import { useThrelteAudio } from '../useThrelteAudio.js'
+  import { acquireAutoResume } from './autoResume.js'
   import type { AudioListenerProps } from './types.js'
+  import { untrack } from 'svelte'
 
-  let { id, masterVolume, ref = $bindable(), children, ...props }: AudioListenerProps = $props()
+  let {
+    id,
+    masterVolume,
+    autoResume,
+    ref = $bindable(),
+    children,
+    ...props
+  }: AudioListenerProps = $props()
 
-  const listener = new ThreeAudioListener()
+  const listener = new AudioListener()
 
   export const audioContext = listener.context
   export const resumeContext = () => listener.context.resume()
 
-  $effect.pre(() => {
+  $effect(() => {
     if (masterVolume !== undefined) {
       listener.setMasterVolume(masterVolume)
     }
   })
 
+  $effect(() => {
+    if (!autoResume) return
+
+    return acquireAutoResume(listener.context)
+  })
+
   const { addAudioListener, removeAudioListener } = useThrelteAudio()
 
   $effect.pre(() => {
-    addAudioListener(listener, id)
-
-    return () => {
-      removeAudioListener(id)
-    }
+    const currentId = id
+    return untrack(() => {
+      addAudioListener(listener, currentId)
+      return () => removeAudioListener(currentId)
+    })
   })
 </script>
 

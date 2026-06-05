@@ -1,9 +1,10 @@
-import { Group, Mesh, MeshBasicMaterial } from 'three'
+import { DirectionalLight, Group, Mesh, MeshBasicMaterial, OrthographicCamera } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
 import Scene from './__fixtures__/Scene.svelte'
 import Attach from './__fixtures__/Attach.svelte'
+import NestedAttach from './__fixtures__/NestedAttach.svelte'
 
 describe('<T> attach', () => {
   it('attaches and detaches to an object that is passed to "attach"', () => {
@@ -92,7 +93,13 @@ describe('<T> attach', () => {
     expect(material.map).toBeFalsy()
   })
 
-  it.todo('attaches to a nested parent property via dot-notation')
+  it('attaches to a nested parent property via dot-notation', () => {
+    const light = new DirectionalLight()
+    const camera = new OrthographicCamera()
+    render(NestedAttach, { light, camera })
+
+    expect(light.shadow.camera).toBe(camera)
+  })
 
   it('attaches and detaches a conditionally rendered component', async () => {
     const { scene, rerender } = render(Attach, { props: { attach: false } })

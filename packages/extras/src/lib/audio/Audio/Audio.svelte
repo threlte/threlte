@@ -1,75 +1,53 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { Audio as ThreeAudio } from 'three'
+  import { Audio } from 'three'
   import { useAudio } from '../utils/useAudio.svelte.js'
   import { useThrelteAudio } from '../useThrelteAudio.js'
   import type { AudioProps } from './types.js'
 
   let {
-    src,
     id,
-    volume,
-    playbackRate,
-    autoplay,
-    detune,
-    loop,
+    src,
+    autoplay = false,
+    loop = false,
+    volume = 1,
+    playbackRate = 1,
+    detune = 0,
     ref = $bindable(),
     children,
-    ...props
+    ...rest
   }: AudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
   const listener = $derived(getAudioListener(id))
 
-  const audio = $derived.by(() => {
+  $effect(() => {
     if (!listener) {
-      throw new Error(`No Audiolistener with id ${id} found.`)
+      console.warn(`No Audiolistener with id ${id} found.`)
     }
-
-    return new ThreeAudio<GainNode>(listener)
   })
 
-  export const play = useAudio(
+  const audio = $derived(listener ? new Audio<GainNode>(listener) : undefined)
+
+  export const { pause, play, stop } = useAudio(
     () => audio,
     () => src,
-    {
-      ...props
-    }
+    () => autoplay,
+    () => loop,
+    () => volume,
+    () => playbackRate,
+    () => detune,
+    () => rest
   )
-
-  export const pause = () => audio.pause()
-  export const stop = () => audio.stop()
-
-  $effect(() => {
-    if (autoplay) {
-      play()
-    } else {
-      stop()
-    }
-  })
-
-  $effect(() => {
-    audio.setVolume(volume ?? 1)
-  })
-
-  $effect(() => {
-    audio.setPlaybackRate(playbackRate ?? 1)
-  })
-
-  $effect(() => {
-    audio.setDetune(detune ?? 0)
-  })
-
-  $effect(() => {
-    audio.setLoop(loop ?? false)
-  })
 </script>
 
-<T
-  is={audio}
-  bind:ref
-  {...props}
->
-  {@render children?.({ ref: audio })}
-</T>
+{#if audio}
+  <T
+    is={audio}
+    bind:ref
+    {...rest}
+  >
+    {@render children?.({ ref: audio })}
+  </T>
+{/if}

@@ -13,7 +13,14 @@
 
   let text = $state('')
   let debug = $state(false)
-  let happy = $state(false)
+
+  // Each XR controller/hand dispatches pointer events independently, so tracking a
+  // single shared `happy` flag would be clobbered when one hand leaves while the
+  // other is still hovering. Track per-source and aggregate.
+  const hovering = $state({ left: false, right: false, desktop: false })
+  const happy = $derived(hovering.left || hovering.right || hovering.desktop)
+
+  const sourceOf = (event: { handedness?: 'left' | 'right' }) => event.handedness ?? 'desktop'
 
   const mesh = new Mesh()
 
@@ -34,13 +41,13 @@
           return
         }
         case 'pointerenter': {
-          happy = true
+          hovering[sourceOf(event)] = true
           scale.set(1.1)
           return
         }
         case 'pointerleave': {
-          happy = false
-          scale.set(1)
+          hovering[sourceOf(event)] = false
+          if (!happy) scale.set(1)
           return
         }
         case 'pointermissed': {

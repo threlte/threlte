@@ -1,7 +1,8 @@
 <script lang="ts">
   import type { Snippet } from 'svelte'
   import { T, type Props } from '@threlte/core'
-  import { type Group, MathUtils } from 'three'
+  import { type Group } from 'three'
+
   interface GroupProps extends Props<Group> {
     children?: Snippet
   }
@@ -10,8 +11,5 @@
 </script>
 
 <T.Group {...rest}>
-  <!-- Correct rotation -->
-  <T.Group rotation.x={MathUtils.DEG2RAD * 90}>
-    {@render children?.()}
-  </T.Group>
+  {@render children?.()}
 </T.Group>

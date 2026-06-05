@@ -30,8 +30,6 @@ componentSignature:
   }
 ---
 
-This component is a port of the component [`<SoftShadows>` from drei](https://github.com/pmndrs/drei/blob/master/src/core/softShadows.tsx).
-
-It injects Percentage-Closer Soft Shadows (PCSS) into Three.js' shader chunk. Mounting and unmounting this component will lead to all shaders being be re-compiled, although it will only cause overhead if `<SoftShadows>` is mounted after the scene has already rendered, if it mounts with everything else in your scene shaders will compile naturally.
+`<SoftShadows>` replaces Three.js's default hard shadows with Percentage-Closer Soft Shadows (PCSS): shadows that are sharp where they touch their caster and soften with distance. Mount it alongside the rest of your scene — adding or removing it after the first render recompiles every shadow-receiving material.
 
 <Example path="extras/soft-shadows" />

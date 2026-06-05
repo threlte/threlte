@@ -8,8 +8,8 @@
     Mesh,
     ShaderMaterial,
     SkinnedMesh,
-    Vector2,
-    Uniform
+    Uniform,
+    Vector2
   } from 'three'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
   import { fragmentShader, vertexShader } from './shaders.js'
@@ -35,14 +35,13 @@
 
   const uniforms = {
     screenspace: new Uniform(false),
-    color: new Uniform(new Color()),
+    color: new Uniform(new Color('black')),
     opacity: new Uniform(1),
     thickness: new Uniform(0.05),
     size: new Uniform(new Vector2())
   }
 
   const group = new Group()
-  ref = group
 
   const material = new ShaderMaterial({
     side: BackSide,
@@ -51,16 +50,15 @@
     fragmentShader
   })
 
-  const parent = useParent()
+  let parent = fromStore(useParent())
 
   let geometry = $derived.by(() => {
     if (!isInstanceOf(parent.current, 'Mesh')) return undefined
     return toCreasedNormals(parent.current.geometry, angle)
   })
 
-  let mesh = $derived.by<Mesh | SkinnedMesh | InstancedMesh | undefined>(() => {
+  let mesh: undefined | Mesh | SkinnedMesh | InstancedMesh = $derived.by(() => {
     if (!isInstanceOf(parent.current, 'Mesh')) return
-
     if (isInstanceOf(parent.current, 'SkinnedMesh')) {
       const nextMesh = new SkinnedMesh()
       nextMesh.bind(parent.current.skeleton, parent.current.bindMatrix)
@@ -108,6 +106,7 @@
 
 <T
   is={group}
+  bind:ref
   {...props}
 >
   <T is={mesh}>

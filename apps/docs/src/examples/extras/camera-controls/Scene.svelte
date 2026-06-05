@@ -3,13 +3,12 @@
   import { T } from '@threlte/core'
   import { Grid, CameraControls, type CameraControlsRef } from '@threlte/extras'
 
-  let {
-    controls = $bindable(),
-    mesh = $bindable()
-  }: {
+  interface Props {
     controls?: CameraControlsRef
     mesh?: Mesh
-  } = $props()
+  }
+
+  let { controls = $bindable(), mesh = $bindable() }: Props = $props()
 </script>
 
 <CameraControls

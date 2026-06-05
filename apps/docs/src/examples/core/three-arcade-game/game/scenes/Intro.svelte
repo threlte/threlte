@@ -1,17 +1,25 @@
 <script lang="ts">
+  import { MathUtils } from 'three'
   import { T } from '@threlte/core'
-  import { Edges, Text } from '@threlte/extras'
-  import { onDestroy } from 'svelte'
+  import { Audio, Edges, Text } from '@threlte/extras'
   import { Tween } from 'svelte/motion'
-  import { DEG2RAD } from 'three/src/math/MathUtils.js'
-  import type { ArcadeAudio } from '../sound'
-  import { useTimeout } from '../hooks/useTimeout'
+  import { useTimeout } from '../hooks/useTimeout.svelte'
+  import { useArcadeControls } from '../controls.svelte'
   import { game } from '../Game.svelte'
   import ThrelteLogo from '../objects/ThrelteLogo.svelte'
 
+  const controls = useArcadeControls()
+  const left = controls.action('left')
+  const right = controls.action('right')
+
+  $effect(() => {
+    if (left.justPressed) direction = -1
+    else if (right.justPressed) direction = 1
+  })
+
   const { timeout } = useTimeout()
-  let audio: ArcadeAudio | undefined = undefined
   let direction = $state<1 | -1>(1)
+  let playMusic = $state(false)
 
   const logoScale = new Tween(0)
 
@@ -20,10 +28,7 @@
   const showPressSpaceToStartAfter = showThrelteAfter + 2e3
 
   timeout(() => {
-    audio = game.sound.play('levelSlow', {
-      loop: true,
-      volume: 1
-    })
+    playMusic = true
     logoScale.set(1)
     game.state = 'await-intro-skip'
   }, showLogoAfter)
@@ -36,34 +41,29 @@
   }, showThrelteAfter)
 
   let showPressSpaceToStart = $state(false)
-  let blinkClock: 0 | 1 = $state(0)
+  let blinkClock = $state<0 | 1>(0)
 
   timeout(() => {
     showPressSpaceToStart = true
   }, showPressSpaceToStartAfter)
 
-  let intervalHandler = setInterval(() => {
-    if (!showPressSpaceToStart) return
-    blinkClock = blinkClock ? 0 : 1
-  }, 500)
-  onDestroy(() => {
-    clearInterval(intervalHandler)
-  })
+  $effect(() => {
+    const intervalHandler = setInterval(() => {
+      if (!showPressSpaceToStart) return
+      blinkClock = blinkClock ? 0 : 1
+    }, 500)
 
-  const onkeydown = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      direction = -1
-    } else if (e.key === 'ArrowRight') {
-      direction = 1
-    }
-  }
-
-  onDestroy(() => {
-    audio?.source.stop()
+    return () => clearInterval(intervalHandler)
   })
 </script>
 
-<svelte:window {onkeydown} />
+{#if playMusic}
+  <Audio
+    src="/audio/level_slow.m4a"
+    loop
+    autoplay
+  />
+{/if}
 
 <T.Group position.z={-0.35}>
   <ThrelteLogo
@@ -75,7 +75,7 @@
   <T.Group
     scale={textScale.current}
     position.z={1.3}
-    rotation.x={-90 * DEG2RAD}
+    rotation.x={MathUtils.degToRad(-90)}
     rotation.z={textRotation.current}
   >
     <T.Mesh position.y={-0.05}>
@@ -102,7 +102,7 @@
   <T.Group
     scale={textScale.current}
     position.z={3.3}
-    rotation.x={-90 * DEG2RAD}
+    rotation.x={MathUtils.degToRad(-90)}
     visible={!!blinkClock}
   >
     <Text
@@ -112,7 +112,7 @@
       textAlign="center"
       fontSize={0.35}
       color={game.baseColor}
-      text={`PRESS SPACE TO START`}
+      text="PRESS SPACE TO START"
     />
   </T.Group>
 {/if}

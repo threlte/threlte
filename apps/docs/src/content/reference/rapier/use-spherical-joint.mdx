@@ -8,6 +8,10 @@ type: 'hook'
 
 Use this hook to initialize a [`SphericalImpulseJoint`](https://rapier.rs/docs/user_guides/javascript/joints#spherical-joint).
 
+A spherical joint is a ball-and-socket — it pins two rigid bodies together at a shared point and allows free rotation around all three axes. Reach for it for chains and ropes, ragdoll joints (hips, shoulders), tethered objects, and anywhere two bodies need to pivot freely in 3D.
+
+<Example path="rapier/joints/spherical/basic" />
+
 ```svelte
 <script>
   import { useSphericalJoint, RigidBody, Collider } from '@threlte/rapier'

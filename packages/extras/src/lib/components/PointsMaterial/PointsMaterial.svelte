@@ -14,26 +14,26 @@
     #include <opaque_fragment>
     vec2 cxy = 2.0 * gl_PointCoord - 1.0;
     float r = dot(cxy, cxy);
-    if (r > 1.0) discard;
-    float delta = fwidth(r);     
-    float mask = 1.0 - smoothstep(1.0 - delta, 1.0 + delta, r);
-    gl_FragColor.a = mask * gl_FragColor.a;
-    #include <tonemapping_fragment>
-    #include <colorspace_fragment>
-  `
+	    if (r > 1.0) discard;
+	    float delta = fwidth(r);     
+	    float mask = 1.0 - smoothstep(1.0 - delta, 1.0 + delta, r);
+	    gl_FragColor.a = mask * gl_FragColor.a;
+	  `
 
   class PointsMaterial extends ThreePointsMaterial {
-    override alphaToCoverage = true
-
-    override onBeforeCompile(
-      parameters: WebGLProgramParametersWithUniforms,
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      _renderer: WebGLRenderer
-    ) {
-      parameters.fragmentShader = parameters.fragmentShader.replace(
-        `#include <opaque_fragment>`,
-        fragment
-      )
+    constructor() {
+      super()
+      this.alphaToCoverage = true
+      this.onBeforeCompile = (
+        parameters: WebGLProgramParametersWithUniforms,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        _renderer: WebGLRenderer
+      ) => {
+        parameters.fragmentShader = parameters.fragmentShader.replace(
+          `#include <opaque_fragment>`,
+          fragment
+        )
+      }
     }
   }
 </script>

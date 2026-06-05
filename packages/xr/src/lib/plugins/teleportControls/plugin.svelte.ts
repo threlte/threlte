@@ -1,24 +1,22 @@
-import { injectPlugin, isInstanceOf } from '@threlte/core'
+import { injectPlugin } from '@threlte/core'
 import { useTeleportControls } from './context.js'
 
 /**
  * Registers T components with "teleportSurface" or "teleportBlocker" attributes.
  */
 export const injectTeleportControlsPlugin = (): void => {
-  injectPlugin('threlte-teleport-controls', (args) => {
-    if (!isInstanceOf(args.ref, 'Mesh')) return
-    if (!('teleportSurface' in args.props)) return
-
+  injectPlugin('threlte-teleport-controls-surfaces', (args) => {
     const { addSurface, removeSurface } = useTeleportControls()
 
     $effect(() => {
-      const { ref } = args
+      const currentProps = args.props
+      const currentRef = args.ref
 
-      if (args.props.isSurface) {
-        addSurface(ref, args.props)
+      if (currentProps.teleportSurface) {
+        addSurface(currentRef, currentProps)
       }
 
-      return () => removeSurface(ref)
+      return () => removeSurface(currentRef)
     })
 
     return {
@@ -27,19 +25,16 @@ export const injectTeleportControlsPlugin = (): void => {
   })
 
   injectPlugin('threlte-teleport-controls-blockers', (args) => {
-    if (!isInstanceOf(args.ref, 'Mesh')) return
-    if (!('teleportBlocker' in args.props)) return
-
     const { addBlocker, removeBlocker } = useTeleportControls()
 
     $effect(() => {
-      const { ref } = args
+      const currentRef = args.ref
 
-      if (args.props.isBlocker) {
-        addBlocker(ref)
+      if (args.props.teleportBlocker) {
+        addBlocker(currentRef)
       }
 
-      return () => removeBlocker(ref)
+      return () => removeBlocker(currentRef)
     })
 
     return {

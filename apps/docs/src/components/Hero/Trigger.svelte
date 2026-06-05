@@ -1,15 +1,19 @@
 <script lang="ts">
+  import type { Snippet } from 'svelte'
   import { scrollPos } from './scrollPos'
 
-  let _in: number | undefined = undefined
-  let _out: number | undefined = undefined
+  interface Props {
+    in?: number | undefined
+    out?: number | undefined
+    children?: Snippet
+    fallback?: Snippet
+  }
 
-  export { _in as in }
-  export { _out as out }
+  let { in: _in, out: _out, children, fallback }: Props = $props()
 </script>
 
 {#if (_in === undefined || $scrollPos > _in) && (_out === undefined || $scrollPos < _out)}
-  <slot />
+  {@render children?.()}
 {:else}
-  <slot name="fallback" />
+  {@render fallback?.()}
 {/if}

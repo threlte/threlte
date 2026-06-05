@@ -3,6 +3,7 @@ import { threeMinifier } from '@yushijinhun/three-minifier-rollup'
 import { sveltekit } from '@sveltejs/kit/vite'
 import { svelte } from '@sveltejs/vite-plugin-svelte'
 import { defineConfig } from 'vite'
+import { playwright } from '@vitest/browser-playwright'
 
 export default defineConfig(({ mode }) => ({
   plugins: [mode === 'test' ? svelte() : sveltekit(), { ...threeMinifier(), enforce: 'pre' }],
@@ -28,7 +29,7 @@ export default defineConfig(({ mode }) => ({
     unstubGlobals: true,
     browser: {
       enabled: true,
-      provider: 'playwright',
+      provider: playwright(),
       instances: [{ browser: 'chromium' }]
     }
   }

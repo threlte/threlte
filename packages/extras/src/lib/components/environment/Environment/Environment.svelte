@@ -23,21 +23,33 @@
     texture,
     ground = false,
     isBackground = false,
-    scene,
+    isEnvironment = true,
+    scene = ctx.scene,
     url
   }: EquirectangularEnvironmentProps = $props()
 
-  const { scene: defaultScene } = useThrelte()
+  const suspend = useSuspense()
 
-  // defaults to `TextureLoader` if `url` is not provided
+  const cache = useCache()
+
+  useEnvironment(
+    () => scene,
+    () => texture,
+    () => isBackground,
+    () => isEnvironment
+  )
+
+  const isEXR = $derived(url?.endsWith('exr') ?? false)
+  const isHDR = $derived(url?.endsWith('hdr') ?? false)
+
   const loader = $derived.by(() => {
-    if (url === undefined) return
-
-    if (url?.endsWith('exr')) {
+    if (isEXR) {
       loaders.exr ??= new EXRLoader()
       return loaders.exr
-    } else if (url?.endsWith('hdr')) {
-      loaders.hdr ??= new HDRLoader()
+    }
+
+    if (isHDR) {
+      loaders.hdr ??= new RGBELoader()
       return loaders.hdr
     }
 
@@ -48,8 +60,18 @@
   const tex = $derived(texture ?? (await loader.loadAsync(url)))
 
   $effect.pre(() => {
-    tex.mapping = EquirectangularReflectionMapping
-  })
+    if (url === undefined) return
+
+    const suspendedTexture = suspend(
+      cache.remember(() => {
+        return loader.loadAsync(url)
+      }, [url])
+    )
+
+    suspendedTexture.then((t) => {
+      t.mapping = EquirectangularReflectionMapping
+      texture = t
+    })
 
   $effect(() => {
     return () => {

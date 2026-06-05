@@ -4,8 +4,8 @@
 
   interface Props {
     ref: PerspectiveCamera | OrthographicCamera
-    manual: boolean | undefined
-    makeDefault: boolean | undefined
+    manual?: boolean
+    makeDefault?: boolean
   }
 
   let { ref, manual = false, makeDefault = false, ...rest }: Props = $props()

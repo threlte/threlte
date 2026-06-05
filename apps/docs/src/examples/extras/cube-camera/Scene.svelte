@@ -20,10 +20,11 @@
   import { RGBELoader } from 'three/examples/jsm/Addons.js'
   import { T, useLoader, useTask } from '@threlte/core'
 
-  type SceneProps = {
+  interface Props {
     frames?: number
     hdr?: 'auto' | keyof typeof hdrs
     metalness?: number
+    far?: number
     near?: number
     resolution?: number
     roughness?: number
@@ -34,9 +35,10 @@
     hdr = 'auto',
     metalness = 1,
     near = 0.1,
+    far = 1000,
     resolution = 256,
     roughness = 0
-  }: SceneProps = $props()
+  }: Props = $props()
 
   const colors = ['#ff00ff', '#ffff00', '#00ffff'] as const
 
@@ -44,7 +46,8 @@
   const radius = 3
 
   let time = 0
-  const groups: Group[] = []
+  const groups = $state<Group[]>([])
+
   useTask((delta) => {
     time += delta
     let i = 0
@@ -74,18 +77,14 @@
 
 <T.PerspectiveCamera
   makeDefault
-  position={[10, 5, 10]}
-  fov={30}
->
-  <OrbitControls
-    enableDamping
-    enablePan={false}
-    enableZoom={false}
-    target.y={0.5}
-    autoRotate
-    autoRotateSpeed={0.1}
-  />
-</T.PerspectiveCamera>
+  position={[8, 5, 8]}
+/>
+
+<OrbitControls
+  enableDamping
+  enablePan={false}
+  enableZoom={false}
+/>
 
 <Environment url={`${hdrPath}shanghai_riverside_1k.hdr`} />
 
@@ -95,43 +94,44 @@
   cellColor="#fff"
 />
 
-{#each colors as color, i}
-  {@const r = increment * i}
-  <T.Mesh
-    position.x={radius * Math.cos(r)}
-    position.y={i}
-    position.z={radius * Math.sin(r)}
-  >
-    <T.MeshStandardMaterial {color} />
-    <T.SphereGeometry />
-  </T.Mesh>
-{/each}
+{#await backgrounds then backgroundMap}
+  {@const background = isHdrKey(hdr) ? backgroundMap[hdr] : hdr}
+  {#each colors as color, index}
+    {@const x = increment * index}
+    {@const y = Math.PI + x}
 
-{#each Array(colors.length), i}
-  {@const r = Math.PI + increment * i}
-  <T.Group
-    position.x={radius * Math.cos(r)}
-    position.z={radius * Math.sin(r)}
-    oncreate={(ref) => {
-      groups.push(ref)
-    }}
-  >
-    <CubeCamera
-      {background}
-      {frames}
-      {near}
-      {resolution}
+    <T.Mesh
+      position.x={radius * Math.cos(x)}
+      position.y={index}
+      position.z={radius * Math.sin(x)}
     >
-      {#snippet children({ renderTarget })}
-        <T.Mesh>
-          <T.SphereGeometry />
-          <T.MeshStandardMaterial
-            {roughness}
-            {metalness}
-            envMap={renderTarget.texture}
-          />
-        </T.Mesh>
-      {/snippet}
-    </CubeCamera>
-  </T.Group>
-{/each}
+      <T.MeshStandardMaterial {color} />
+      <T.SphereGeometry />
+    </T.Mesh>
+
+    <T.Group
+      bind:ref={groups[index]}
+      position.x={radius * Math.cos(y)}
+      position.z={radius * Math.sin(y)}
+    >
+      <CubeCamera
+        {background}
+        {frames}
+        {near}
+        {far}
+        {resolution}
+      >
+        {#snippet children({ renderTarget })}
+          <T.Mesh>
+            <T.SphereGeometry />
+            <T.MeshStandardMaterial
+              {roughness}
+              {metalness}
+              envMap={renderTarget.texture}
+            />
+          </T.Mesh>
+        {/snippet}
+      </CubeCamera>
+    </T.Group>
+  {/each}
+{/await}

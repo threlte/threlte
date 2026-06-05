@@ -1,14 +1,14 @@
 import type { Snippet } from 'svelte'
-import type { CubeCamera, Scene, WebGLCubeRenderTarget } from 'three'
+import type { CubeCamera, Scene } from 'three'
 
-export type VirtualEnvironmentProps = {
+export interface VirtualEnvironmentProps {
   children?: Snippet<
     [
       {
         restart(): void
         update(): void
         camera: CubeCamera
-        renderTarget: WebGLCubeRenderTarget
+        renderTarget: CubeCamera['renderTarget']
       }
     ]
   >
@@ -24,6 +24,12 @@ export type VirtualEnvironmentProps = {
    * @default false
    */
   isBackground?: boolean
+
+  /**
+   * Whether to set the `scene`'s environment to the virtual environment
+   * @default true
+   */
+  isEnvironment?: boolean
 
   /**
    * Passed along to the internal CubeCamera

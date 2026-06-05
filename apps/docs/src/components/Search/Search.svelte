@@ -16,12 +16,12 @@
   }
 </script>
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window onkeydown={handleKeyDown} />
 
 <button
   aria-label="Search"
   class="text-faded relative flex w-full max-w-56 min-w-[50px] flex-row items-center justify-start gap-2 rounded-md border border-blue-500/10 bg-blue-900 px-3 py-2 hover:text-white hover:brightness-110 md:max-w-none"
-  on:click={() => {
+  onclick={() => {
     searchActive.set(true)
   }}
 >

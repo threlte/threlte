@@ -3,38 +3,34 @@
   import { useInteractivity, OrbitControls } from '@threlte/extras'
   import { cubicInOut } from 'svelte/easing'
   import { Spring, Tween } from 'svelte/motion'
-  import { Color, Object3D, PerspectiveCamera } from 'three'
+  import { Color, Object3D, PerspectiveCamera, Scene } from 'three'
+  import { useArcadeControls } from '../game/controls.svelte'
   import { game } from '../game/Game.svelte'
   import Lights from './Lights.svelte'
   import Machine from './Machine.svelte'
   import { Button, StickPosition } from './types'
 
   const { scene } = useThrelte()
+  const controls = useArcadeControls()
 
-  let leftPressed = $state(false)
-  let rightPressed = $state(false)
-  let spacePressed = $state(false)
+  const left = controls.action('left')
+  const right = controls.action('right')
+  const advance = controls.action('advance')
 
   let joystick = $derived.by(() => {
-    if (leftPressed && !rightPressed) {
+    if (left.pressed && !right.pressed) {
       return StickPosition.Left
-    } else if (!leftPressed && rightPressed) {
+    } else if (!left.pressed && right.pressed) {
       return StickPosition.Right
     } else {
       return StickPosition.Idle
     }
   })
-  let button = $derived.by(() => {
-    if (spacePressed) {
-      return Button.Pressed
-    } else {
-      return Button.Idle
-    }
-  })
+  let button = $derived(advance.pressed ? Button.Pressed : Button.Idle)
 
   const machineIsOff = $derived(game.state == 'off' ? true : false)
 
-  const cameraTweenZ = new Tween(2.1, {
+  const cameraTweenZ = Tween.of(() => (machineIsOff ? 2.1 : 1.4), {
     duration: 3e3,
     easing: cubicInOut
   })
@@ -49,73 +45,8 @@
     z: 0.1447
   }
 
-  const cameraTargetPos = new Spring(
-    {
-      x: pointer.current.x * 0.1,
-      y: 1.23,
-      z: 0
-    },
-    {
-      precision: 0.000001
-    }
-  )
-
-  const cameraPos = new Spring(
-    {
-      x: pointer.current.x * 0.1, //(machineIsOff ? 2 : 0.1),
-      y: 1.48,
-      z: cameraTweenZ.current
-    },
-    {
-      stiffness: 0.05,
-      damping: 0.9,
-      precision: 0.00001
-    }
-  )
-
-  let cameraTarget = $state.raw<Object3D>()
-  let camera = $state.raw<PerspectiveCamera>()
-
-  const backgroundColor = new Tween(new Color('#020203'), {
-    duration: 2.5e3
-  })
-
-  useTask(() => {
-    if (!camera || !cameraTarget) return
-    camera.lookAt(cameraTarget.position)
-  })
-
-  const onScreenClick = () => {
-    screenFocused = !screenFocused
-  }
-
-  const onKeyUp = (e: KeyboardEvent) => {
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      leftPressed = false
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      rightPressed = false
-    } else if (e.key === ' ') {
-      spacePressed = false
-    }
-  }
-
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== ' ') return
-    if (e.key === 'ArrowLeft') {
-      e.preventDefault()
-      leftPressed = true
-    } else if (e.key === 'ArrowRight') {
-      e.preventDefault()
-      rightPressed = true
-    } else if (e.key === ' ') {
-      spacePressed = true
-    }
-  }
-
-  $effect(() => {
-    cameraTargetPos.set(
+  const cameraTargetPos = Spring.of(
+    () =>
       screenFocused
         ? {
             ...screenPos,
@@ -125,12 +56,14 @@
             x: pointer.current.x * 0.1,
             y: 1.23,
             z: 0
-          }
-    )
-  })
+          },
+    {
+      precision: 0.000001
+    }
+  )
 
-  $effect(() => {
-    cameraPos.set(
+  const cameraPos = Spring.of(
+    () =>
       screenFocused
         ? {
             x: screenPos.x,
@@ -141,24 +74,37 @@
             x: pointer.current.x * (machineIsOff ? 0.1 : 0.1),
             y: 1.48,
             z: cameraTweenZ.current
-          }
-    )
+          },
+    {
+      stiffness: 0.05,
+      damping: 0.9,
+      precision: 0.00001
+    }
+  )
+
+  let cameraTarget = $state.raw<Object3D>()
+  let camera = $state.raw<PerspectiveCamera>()
+
+  const backgroundColor = Tween.of(
+    () => (machineIsOff ? new Color('#020203') : new Color('#020203')),
+    {
+      duration: 2.5e3
+    }
+  )
+
+  useTask(() => {
+    if (!camera || !cameraTarget) return
+    camera.lookAt(cameraTarget.position)
   })
 
-  $effect(() => {
-    cameraTweenZ.set(machineIsOff ? 2.1 : 1.4)
-    backgroundColor.set(machineIsOff ? new Color('#020203') : new Color('#020203'))
-  })
+  const onScreenClick = () => {
+    screenFocused = !screenFocused
+  }
 
   $effect(() => {
     scene.background = new Color(backgroundColor.current)
   })
 </script>
-
-<svelte:window
-  onkeydown={onKeyDown}
-  onkeyup={onKeyUp}
-/>
 
 <T.Scene
   oncreate={(ref) => {

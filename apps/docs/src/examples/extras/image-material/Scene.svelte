@@ -2,7 +2,7 @@
   lang="ts"
   module
 >
-  const urls: string[] = [
+  const urls = [
     '/textures/paintings/caravaggio.jpg',
     '/textures/paintings/vangogh.jpg',
     '/textures/paintings/klimt.jpg',
@@ -12,7 +12,7 @@
   ]
 
   const count = 5 // 4 for each channel + 1 for the texture of all channels
-  const names: string[] = ['Hue(R)', 'Saturation(G)', 'Lightness(B)', 'Alpha(A)']
+  const names = ['Hue(R)', 'Saturation(G)', 'Lightness(B)', 'Alpha(A)']
 </script>
 
 <script lang="ts">
@@ -40,6 +40,20 @@
   } from '@threlte/extras'
   import { T, useTask, useThrelte } from '@threlte/core'
 
+  interface Props {
+    alphaSmoothing?: number
+    alphaThreshold?: number
+    brightness?: number
+    contrast?: number
+    hue?: number
+    lightness?: number
+    monochromeColor?: string
+    monochromeStrength?: number
+    negative?: boolean
+    saturation?: number
+    textureOverrideEnabled?: boolean
+  }
+
   let {
     alphaSmoothing = 0.15,
     alphaThreshold = 0.5,
@@ -52,19 +66,7 @@
     negative = false,
     saturation = 0,
     textureOverrideEnabled = false
-  }: {
-    alphaSmoothing?: number
-    alphaThreshold?: number
-    brightness?: number
-    contrast?: number
-    hue?: number
-    lightness?: number
-    monochromeColor?: string
-    monochromeStrength?: number
-    negative?: boolean
-    saturation?: number
-    textureOverrideEnabled?: boolean
-  } = $props()
+  }: Props = $props()
 
   const viewport = useViewport()
 

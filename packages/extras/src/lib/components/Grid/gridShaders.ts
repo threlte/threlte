@@ -88,19 +88,37 @@ export const fragmentShader = /*glsl*/ `
 		return 1.0 - min(line, 1.0);
 	}
 
-	float getCirclesGrid(float size, float thickness, vec3 localPos) {
-		float coord = length(localPos.xy) / size;
-		float line = abs(fract(coord - 0.5) - 0.5) / fwidth(coord) - thickness * 0.2;
-
-		if (!infiniteGrid && circleGridMaxRadius > 0. && coord > circleGridMaxRadius + thickness * 0.05) {
-		  discard;
+	float getRadiusMask(float radius) {
+		if (infiniteGrid || circleGridMaxRadius <= 0.0) {
+			return 1.0;
 		}
+
+		float width = max(fwidth(radius), 0.0001);
+		return 1.0 - smoothstep(circleGridMaxRadius, circleGridMaxRadius + width, radius);
+	}
+
+	float getPolarDividerMask(float radius) {
+		if (infiniteGrid || circleGridMaxRadius <= 0.0) {
+			return 1.0;
+		}
+
+		float width = max(fwidth(radius), 0.0001);
+		return 1.0 - smoothstep(circleGridMaxRadius - width, circleGridMaxRadius, radius);
+	}
+
+	float getCirclesGrid(float size, float thickness, float radius) {
+		float coord = radius / size;
+		float line = abs(fract(coord - 0.5) - 0.5) / fwidth(coord) - thickness * 0.2;
 
 		return 1.0 - min(line, 1.0);
 	}
 
-	float getPolarGrid(float size, float thickness, float polarDividers, vec3 localPos) {
-		float rad = length(localPos.xy) / size;
+	float getPolarGrid(float size, float thickness, float polarDividers, vec3 localPos, float radius) {
+		if (polarDividers <= 0.0) {
+			return getCirclesGrid(size, thickness, radius);
+		}
+
+		float rad = radius / size;
 		vec2 coord = vec2(rad, atan(localPos.x, localPos.y) * polarDividers / PI) ;
 
 		vec2 wrapped = vec2(coord.x, fract(coord.y / (2.0 * polarDividers)) * (2.0 * polarDividers));
@@ -110,13 +128,10 @@ export const fragmentShader = /*glsl*/ `
 
 		// Compute anti-aliased world-space grid lines
 		vec2 grid = abs(fract(coord - 0.5) - 0.5) / width;
-		float line = min(grid.x, grid.y);
+		float circle = 1.0 - min(grid.x, 1.0);
+		float divider = 1.0 - min(grid.y, 1.0);
 
-if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + thickness * 0.05) {
-		  discard;
-		}
-
-		return 1.0 - min(line, 1.0);
+		return max(circle, divider * getPolarDividerMask(radius));
 	}
 
 	void main() {
@@ -124,6 +139,7 @@ if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + th
 		float g2 = 0.0;
 
 		vec3 localPos = vec3(localPosition[coord0], localPosition[coord1], localPosition[coord2]);
+		float radiusMask = 1.0;
 
 		if (gridType == 0) {
 			g1 = getSquareGrid(cellSize, cellThickness, localPos);
@@ -134,12 +150,16 @@ if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + th
 			g2 = getLinesGrid(sectionSize, sectionThickness, localPos);
 
 		} else if (gridType == 2) {
-			g1 = getCirclesGrid(cellSize, cellThickness, localPos);
-			g2 = getCirclesGrid(sectionSize, sectionThickness, localPos);
+			float radius = length(localPos.xy);
+			g1 = getCirclesGrid(cellSize, cellThickness, radius);
+			g2 = getCirclesGrid(sectionSize, sectionThickness, radius);
+			radiusMask = getRadiusMask(radius);
 
 		} else if (gridType == 3) {
-			g1 = getPolarGrid(cellSize, cellThickness, polarCellDividers, localPos);
-			g2 = getPolarGrid(sectionSize, sectionThickness, polarSectionDividers, localPos);
+			float radius = length(localPos.xy);
+			g1 = getPolarGrid(cellSize, cellThickness, polarCellDividers, localPos, radius);
+			g2 = getPolarGrid(sectionSize, sectionThickness, polarSectionDividers, localPos, radius);
+			radiusMask = getRadiusMask(radius);
 		}
 
 		float dist = distance(fadeOrigin, worldPosition.xyz);
@@ -158,6 +178,8 @@ if (!infiniteGrid && circleGridMaxRadius > 0.0 && rad > circleGridMaxRadius + th
 			gl_FragColor = vec4(color, (g1 + g2) * pow(d, fadeStrength));
 			gl_FragColor.a = mix(0.75 * gl_FragColor.a, gl_FragColor.a, g2);
 		}
+
+		gl_FragColor.a *= radiusMask;
 
 		if (gl_FragColor.a <= 0.0) {
 		  discard;

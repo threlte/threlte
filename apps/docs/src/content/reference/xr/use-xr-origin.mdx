@@ -1,0 +1,33 @@
+---
+order: 18
+category: '@threlte/xr'
+title: 'useXROrigin'
+type: 'hook'
+---
+
+Returns XR-scoped origin state for the current `<XR>` tree.
+
+`origin.current` is the mounted `<XROrigin>` group when one exists, otherwise `undefined`.
+
+This hook must be called within a descendant of [`<XR>`](/docs/reference/xr/xr).
+
+```svelte
+<script>
+  import { useXROrigin } from '@threlte/xr'
+
+  const origin = useXROrigin()
+
+  if (origin.current !== undefined) {
+    origin.current.position.set(0, 0, 5)
+  }
+</script>
+```
+
+Primarily useful for libraries or custom hooks that need to reason about whether the current XR tree has an active `<XROrigin>` (e.g. to decide between moving the origin vs. mutating the XR reference space).
+
+### Signature
+
+```ts
+// { current: THREE.Group | undefined }
+const origin = useXROrigin()
+```

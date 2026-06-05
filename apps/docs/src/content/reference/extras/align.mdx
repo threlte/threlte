@@ -118,7 +118,7 @@ By default, the component `<Align>` will calculate the bounding box and align it
   import { T } from '@threlte/core'
   import { Align } from '@threlte/extras'
 
-  export let showOtherCube = true
+  let { showOtherCube = true } = $props()
 </script>
 
 <Align auto>

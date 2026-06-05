@@ -10,21 +10,35 @@
     useThrelte
   } from '@threlte/core'
   import type { Snippet } from 'svelte'
-  import { Vector4 } from 'three'
-  import { OffscreenObserver } from './OffscreenObserver.svelte.js'
+  import { Scene, Vector4 } from 'three'
 
-  let { dom, children }: { dom: HTMLElement; children: Snippet<[]> } = $props()
+  let {
+    dom,
+    scene: providedScene,
+    children
+  }: { dom: HTMLElement; scene?: Scene; children: Snippet<[]> } = $props()
 
-  const offscreenObserver = new OffscreenObserver(() => dom)
+  let isOffscreen = $state(false)
+
+  const observer = new IntersectionObserver(([entry]) => {
+    isOffscreen = !entry.isIntersecting
+  })
+
+  $effect(() => {
+    observer.observe(dom)
+
+    return () => {
+      observer.disconnect()
+    }
+  })
 
   const parentContext = useThrelte()
 
-  createParent(() => scene)
-  createParentObject3D(() => scene)
-
-  createDOMContext({ dom, canvas: parentContext.canvas })
-  const { scene } = createSceneContext()
-
+  createDOMContext(() => ({ dom, canvas: parentContext.canvas }))
+  createCacheContext()
+  const { scene } = createSceneContext(providedScene)
+  createParentContext(scene)
+  createParentObject3DContext(scene)
   const { camera } = createCameraContext()
   createUserContext()
 
@@ -37,6 +51,8 @@
   useTask(
     Symbol('<View>'),
     () => {
+      if (isOffscreen) return
+
       const { left: trackLeft, bottom: trackBottom, width, height } = dom.getBoundingClientRect()
       const { bottom: canvasBottom, left: canvasLeft } = canvas.getBoundingClientRect()
       const bottom = canvasBottom - trackBottom
@@ -62,7 +78,7 @@
     },
     {
       stage: renderStage,
-      running: () => offscreenObserver.isOffscreen === false
+      running: () => !isOffscreen
     }
   )
 </script>

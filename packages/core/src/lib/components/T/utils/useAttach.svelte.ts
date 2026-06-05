@@ -1,6 +1,6 @@
-import { useThrelte } from '../../../context/compounds/useThrelte.js'
-import { useParent } from './useParent.svelte.js'
-import { useParentObject3D } from './useParentObject3D.svelte.js'
+import { useParent } from '../../../context/fragments/parent.js'
+import { useParentObject3D } from '../../../context/fragments/parentObject3D.js'
+import { useScheduler } from '../../../context/fragments/scheduler.svelte.js'
 import { isInstanceOf } from '../../../utilities/isInstanceOf.js'
 import { resolvePropertyPath } from '../../../utilities/resolvePropertyPath.js'
 import type { BaseProps, MaybeInstance } from '../types.js'
@@ -13,14 +13,13 @@ export const useAttach = <T extends MaybeInstance<any>>(
   ref: () => T,
   attach: () => BaseProps<T>['attach']
 ) => {
-  const { invalidate } = useThrelte()
+  const { invalidate } = useScheduler()
   const parent = useParent()
   const parentObject3D = useParentObject3D()
 
   $effect.pre(() => {
     invalidate()
 
-    // Save the current ref in case it is destroyed / changed
     const currentRef = ref()
     const currentAttach = attach()
 
@@ -36,18 +35,17 @@ export const useAttach = <T extends MaybeInstance<any>>(
 
     // Auto-attach to parent material or geometry
     if (currentAttach === undefined && isObject(parent.current)) {
-      const currentParent = parent.current
-
+      const p = parent.current
       if (isInstanceOf(currentRef, 'Material')) {
-        const originalMaterial = currentParent.material
-        currentParent.material = currentRef
+        const originalMaterial = p.material
+        p.material = currentRef
         return () => {
           invalidate()
           currentParent.material = originalMaterial
         }
       } else if (isInstanceOf(currentRef, 'BufferGeometry')) {
-        const originalGeometry = currentParent.geometry
-        currentParent.geometry = currentRef
+        const originalGeometry = p.geometry
+        p.geometry = currentRef
         return () => {
           invalidate()
           currentParent.geometry = originalGeometry

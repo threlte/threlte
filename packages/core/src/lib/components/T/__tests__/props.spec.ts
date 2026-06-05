@@ -1,5 +1,5 @@
-import { PerspectiveCamera, Group } from 'three'
-import { describe, it, expect } from 'vitest'
+import { PerspectiveCamera, Group, MeshStandardMaterial, Color } from 'three'
+import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
 
@@ -67,6 +67,29 @@ describe('<T> props', () => {
     expect(group.castShadow).toBe(true)
   })
 
+  it('applies setScalar for a numeric value on a Vector-like prop', () => {
+    const group = new Group()
+    render(T, { props: { is: group, scale: 2 } })
+
+    expect(group.scale.x).toBe(2)
+    expect(group.scale.y).toBe(2)
+    expect(group.scale.z).toBe(2)
+  })
+
+  it('sets a color prop from a string', () => {
+    const material = new MeshStandardMaterial()
+    render(T, { props: { is: material, color: 'red' } })
+
+    expect(material.color.getHexString()).toBe(new Color('red').getHexString())
+  })
+
+  it('sets a color prop from a hex number without calling setScalar', () => {
+    const material = new MeshStandardMaterial()
+    render(T, { props: { is: material, color: 0xff0000 } })
+
+    expect(material.color.getHex()).toBe(0xff0000)
+  })
+
   /**
    * @todo(mp) Strange behavior: why do we call updateProjectionMatrix only for non-manual
    * cameras in `useProps.ts`? Manual cameras need updates, non-manual cameras are already updated
@@ -94,5 +117,17 @@ describe('<T> props', () => {
     camera.updateProjectionMatrix()
 
     expect(camera.projectionMatrix.toArray()).toStrictEqual(reference.projectionMatrix.toArray())
+  })
+
+  it('logs a readable error when a pierced prop path has a null intermediate segment', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const group = new Group()
+
+    render(T, { props: { is: group, 'shadow.camera.near': 0.5 } })
+
+    expect(spy).toHaveBeenCalledWith(
+      'Cannot resolve property path "shadow.camera.near": "shadow" is undefined'
+    )
+    spy.mockRestore()
   })
 })

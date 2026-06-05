@@ -32,15 +32,19 @@
   function applyImpulseToBodiesInRange() {
     group.getWorldPosition(gravitySource)
 
+    const calcForce = calcForceByType[gravityType]
+    const rangeSquared = range * range
+    const isNewtonian = gravityType === 'newtonian'
+
     world.forEachRigidBody((body: RigidBody) => {
       const { x, y, z } = body.translation()
       bodyV3.set(x, y, z)
 
       const distance = gravitySource.distanceToSquared(bodyV3)
-      if (distance < range ** 2) {
-        let force = calcForceByType[gravityType](
+      if (distance < rangeSquared) {
+        let force = calcForce(
           strength,
-          body.mass(),
+          isNewtonian ? body.mass() : 0,
           range,
           distance,
           gravitationalConstant

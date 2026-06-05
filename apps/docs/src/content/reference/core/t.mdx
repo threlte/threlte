@@ -323,17 +323,16 @@ geometry to the geometry property:
 
 ```svelte
 <script>
-  import { MeshStandardMaterial } from 'three'
-  export let texture
+  let { texture } = $props()
 </script>
 
-<T is={MeshStandardMaterial}>
+<T.MeshStandardMaterial>
   <!-- Attaches the texture to the property "map" of the parent material -->
   <T
     is={texture}
     attach="map"
   />
-</T>
+</T.MeshStandardMaterial>
 ```
 
 - `attach` can be a dot-notated path to a nested parent property:

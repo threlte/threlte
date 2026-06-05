@@ -3,11 +3,12 @@
   generics="TMassDef extends MassDef"
 >
   import { ActiveCollisionTypes, CoefficientCombineRule } from '@dimforge/rapier3d-compat'
-  import { createParentObject3D, useParentObject3D } from '@threlte/core'
+  import { createParentObject3DContext, useParentObject3D } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { Group } from 'three'
-  import { useCollisionGroups } from '../../../hooks/useCollisionGroups.js'
+  import { useCollisionGroups } from '../../../hooks/useCollisionGroups.svelte.js'
   import { useRapier } from '../../../hooks/useRapier.js'
-  import { useRigidBody } from '../../../hooks/useRigidBody.js'
+  import { useRigidBody, useRigidBodyEvents } from '../../../hooks/useRigidBody.js'
   import { applyColliderActiveEvents } from '../../../lib/applyColliderActiveEvents.js'
   import { createCollidersFromChildren } from '../../../lib/createCollidersFromChildren.js'
   import { eulerToQuaternion } from '../../../lib/eulerToQuaternion.js'
@@ -41,11 +42,20 @@
   const group = new Group()
 
   const rigidBody = useRigidBody()
+  const rigidBodyEvents = useRigidBodyEvents()
   const rigidBodyParentObject = useParentRigidbodyObject()
 
   const { world, addColliderToContext, removeColliderFromContext } = useRapier()
 
   const collisionGroups = useCollisionGroups()
+
+  const events = $derived({
+    oncollisionenter,
+    oncollisionexit,
+    oncontact,
+    onsensorenter,
+    onsensorexit
+  })
 
   const cleanup = () => {
     if (colliders === undefined) return
@@ -60,28 +70,22 @@
     colliders.length = 0
   }
 
-  const events = {
-    oncollisionenter,
-    oncollisionexit,
-    oncontact,
-    onsensorenter,
-    onsensorexit
-  }
-
   const create = () => {
+    cleanup()
+
     colliders = createCollidersFromChildren(
       group,
       shape ?? 'convexHull',
       world,
-      rigidBody,
-      rigidBodyParentObject
+      rigidBody.current,
+      rigidBodyParentObject.current
     )
     colliders.forEach((c) => addColliderToContext(c, group, events))
 
     collisionGroups.registerColliders(colliders)
 
-    colliders.forEach((collider) => {
-      applyColliderActiveEvents(collider, events, rigidBody?.userData?.events)
+    for (const collider of colliders) {
+      applyColliderActiveEvents(collider, events, rigidBodyEvents.current)
       collider.setActiveCollisionTypes(ActiveCollisionTypes.ALL)
       collider.setRestitution(restitution ?? 0)
       collider.setRestitutionCombineRule(restitutionCombineRule ?? CoefficientCombineRule.Average)
@@ -89,7 +93,11 @@
       collider.setFrictionCombineRule(frictionCombineRule ?? CoefficientCombineRule.Average)
       collider.setSensor(sensor ?? false)
       collider.setContactForceEventThreshold(contactForceEventThreshold ?? 0)
-      if (density) collider.setDensity(density)
+
+      if (density) {
+        collider.setDensity(density)
+      }
+
       if (mass) {
         if (centerOfMass && principalAngularInertia && angularInertiaLocalFrame)
           collider.setMassProperties(
@@ -104,8 +112,19 @@
           )
         else collider.setMass(mass)
       }
-    })
+    }
   }
+
+  $effect(() => {
+    if (!colliders) return
+
+    const currentRigidBodyEvents = rigidBodyEvents.current
+
+    for (const collider of colliders) {
+      addColliderToContext(collider, group, events)
+      applyColliderActiveEvents(collider, events, currentRigidBodyEvents)
+    }
+  })
 
   /**
    * Refresh the colliders.
@@ -115,10 +134,7 @@
   $effect(() => {
     return untrack(() => {
       create()
-
-      return () => {
-        cleanup()
-      }
+      return cleanup
     })
   })
 
@@ -132,12 +148,14 @@
     }
   })
 
-  $effect.pre(() => {
-    return untrack(() => {
-      if (colliders) {
-        return oncreate?.(colliders)
-      }
-    })
+  $effect(() => {
+    if (colliders) {
+      return untrack(() => {
+        if (colliders) {
+          return oncreate?.(colliders)
+        }
+      })
+    }
   })
 </script>
 

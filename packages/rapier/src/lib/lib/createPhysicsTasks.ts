@@ -1,12 +1,18 @@
 import { Collider, EventQueue, type World } from '@dimforge/rapier3d-compat'
 import { useTask, type CurrentWritable, type Stage } from '@threlte/core'
-import { Object3D, Quaternion, Vector3 } from 'three'
-import type { ColliderEvents, Framerate, RigidBodyEvents } from '../types/types.js'
+import { Matrix4, Object3D, Quaternion, Vector3 } from 'three'
+import type {
+  ColliderEvents,
+  Framerate,
+  RigidBodyEvents,
+  ThrelteRigidBody
+} from '../types/types.js'
 import { simulationKey, synchronizationKey } from './keys.js'
 
 const tempObject = new Object3D()
 const tempVector3 = new Vector3()
 const tempQuaternion = new Quaternion()
+const tempMatrix4 = new Matrix4()
 
 const getEventDispatchers = (
   collider1: Collider,
@@ -26,6 +32,8 @@ const getEventDispatchers = (
   return {
     collider1Events,
     collider2Events,
+    rigidBody1,
+    rigidBody2,
     rigidBody1Events,
     rigidBody2Events
   }
@@ -101,28 +109,31 @@ export const createPhysicsTasks = (
       }
       world.step(eventQueue)
 
-      rigidBodyObjects.forEach((mesh, handle) => {
-        const rigidBody = world.getRigidBody(handle)
+      const shouldUpdateSimulationData = updateRigidBodySimulationData.current
 
-        if (!rigidBody || !rigidBody.isValid()) return
+      for (const [handle, mesh] of rigidBodyObjects) {
+        const rigidBody = mesh.userData.rigidBody as ThrelteRigidBody | undefined
 
+        if (!rigidBody || !rigidBody.isValid()) continue
+
+        const isSleeping = rigidBody.isSleeping()
         const events = rigidBodyEventDispatchers.get(handle)
 
         if (events) {
-          if (rigidBody.isSleeping() && !mesh.userData.isSleeping) {
+          const wasSleeping = mesh.userData.isSleeping
+          if (isSleeping && !wasSleeping) {
             events.onsleep?.()
-          }
-          if (!rigidBody.isSleeping() && mesh.userData.isSleeping) {
+          } else if (!isSleeping && wasSleeping) {
             events.onwake?.()
           }
-          mesh.userData.isSleeping = rigidBody.isSleeping()
+          mesh.userData.isSleeping = isSleeping
         }
 
-        if (rigidBody.isSleeping() || rigidBody.isFixed() || !mesh.parent) {
-          return
+        if (isSleeping || rigidBody.isFixed() || !mesh.parent) {
+          continue
         }
 
-        if (updateRigidBodySimulationData.current) {
+        if (shouldUpdateSimulationData) {
           const translation = rigidBody.translation()
           const rotation = rigidBody.rotation()
 
@@ -155,7 +166,7 @@ export const createPhysicsTasks = (
             )
           }
         }
-      })
+      }
 
       eventQueue.drainContactForceEvents((e) => {
         const collider1 = world.getCollider(e.collider1())
@@ -166,51 +177,70 @@ export const createPhysicsTasks = (
           return
         }
 
-        const { collider1Events, collider2Events, rigidBody1Events, rigidBody2Events } =
-          getEventDispatchers(
-            collider1,
-            collider2,
-            colliderEventDispatchers,
-            rigidBodyEventDispatchers
-          )
+        const {
+          collider1Events,
+          collider2Events,
+          rigidBody1,
+          rigidBody2,
+          rigidBody1Events,
+          rigidBody2Events
+        } = getEventDispatchers(
+          collider1,
+          collider2,
+          colliderEventDispatchers,
+          rigidBodyEventDispatchers
+        )
 
-        const rigidBody1 = collider1.parent()
-        const rigidBody2 = collider2.parent()
+        const collider1OnContact = collider1Events?.oncontact
+        const collider2OnContact = collider2Events?.oncontact
+        const rigidBody1OnContact = rigidBody1Events?.oncontact
+        const rigidBody2OnContact = rigidBody2Events?.oncontact
 
-        // Collider events
-        collider1Events?.oncontact?.({
+        if (
+          !collider1OnContact &&
+          !collider2OnContact &&
+          !rigidBody1OnContact &&
+          !rigidBody2OnContact
+        ) {
+          return
+        }
+
+        const maxForceDirection = e.maxForceDirection()
+        const maxForceMagnitude = e.maxForceMagnitude()
+        const totalForce = e.totalForce()
+        const totalForceMagnitude = e.totalForceMagnitude()
+
+        collider1OnContact?.({
           targetCollider: collider2,
           targetRigidBody: rigidBody2,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
+          maxForceDirection,
+          maxForceMagnitude,
+          totalForce,
+          totalForceMagnitude
         })
-        collider2Events?.oncontact?.({
+        collider2OnContact?.({
           targetCollider: collider1,
           targetRigidBody: rigidBody1,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
+          maxForceDirection,
+          maxForceMagnitude,
+          totalForce,
+          totalForceMagnitude
         })
-
-        // RigidBody Events
-        rigidBody1Events?.oncontact?.({
+        rigidBody1OnContact?.({
           targetCollider: collider2,
           targetRigidBody: rigidBody2,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
+          maxForceDirection,
+          maxForceMagnitude,
+          totalForce,
+          totalForceMagnitude
         })
-        rigidBody2Events?.oncontact?.({
+        rigidBody2OnContact?.({
           targetCollider: collider1,
           targetRigidBody: rigidBody1,
-          maxForceDirection: e.maxForceDirection(),
-          maxForceMagnitude: e.maxForceMagnitude(),
-          totalForce: e.totalForce(),
-          totalForceMagnitude: e.totalForceMagnitude()
+          maxForceDirection,
+          maxForceMagnitude,
+          totalForce,
+          totalForceMagnitude
         })
       })
 
@@ -224,20 +254,23 @@ export const createPhysicsTasks = (
           return
         }
 
-        const { collider1Events, collider2Events, rigidBody1Events, rigidBody2Events } =
-          getEventDispatchers(
-            collider1,
-            collider2,
-            colliderEventDispatchers,
-            rigidBodyEventDispatchers
-          )
+        const {
+          collider1Events,
+          collider2Events,
+          rigidBody1,
+          rigidBody2,
+          rigidBody1Events,
+          rigidBody2Events
+        } = getEventDispatchers(
+          collider1,
+          collider2,
+          colliderEventDispatchers,
+          rigidBodyEventDispatchers
+        )
 
         if (!collider1Events && !collider2Events && !rigidBody1Events && !rigidBody2Events) {
           return
         }
-
-        const rigidBody1 = collider1.parent()
-        const rigidBody2 = collider2.parent()
 
         if (started) {
           // intersections are triggered by sensors
@@ -358,32 +391,39 @@ export const createPhysicsTasks = (
   const synchronization = useTask(
     synchronizationKey,
     () => {
-      rigidBodyObjects.forEach((mesh) => {
-        if (!objectHasPhysicsUserData(mesh)) return
-        const userData = mesh.userData.physics
-        if (framerate.current === 'varying') {
+      const isVaryingFramerate = framerate.current === 'varying'
+      const offset = simulationOffset.current
+
+      for (const object of rigidBodyObjects.values()) {
+        if (!objectHasPhysicsUserData(object)) {
+          continue
+        }
+
+        const userData = object.userData.physics
+        if (isVaryingFramerate) {
           tempObject.position.copy(userData.currentPosition)
           tempObject.quaternion.copy(userData.currentQuaternion)
         } else {
-          tempObject.position
-            .copy(userData.lastPosition)
-            .lerp(userData.currentPosition, simulationOffset.current)
+          tempObject.position.copy(userData.lastPosition).lerp(userData.currentPosition, offset)
           tempObject.quaternion
             .copy(userData.lastQuaternion)
-            .slerp(userData.currentQuaternion, simulationOffset.current)
+            .slerp(userData.currentQuaternion, offset)
         }
 
-        // Rapier has no concept of scale, so we use the mesh's scale
-        mesh.getWorldScale(tempVector3)
-        tempObject.scale.copy(tempVector3)
+        if (object.parent) {
+          // Rapier has no concept of scale, so we use the mesh's world scale
+          // so the local-pose decomposition handles non-uniform parent scale correctly.
+          object.getWorldScale(tempVector3)
+          tempObject.scale.copy(tempVector3)
 
-        tempObject.updateMatrix()
-        if (mesh.parent) tempObject.applyMatrix4(mesh.parent.matrixWorld.clone().invert())
-        tempObject.updateMatrix()
+          tempObject.updateMatrix()
+          tempMatrix4.copy(object.parent.matrixWorld).invert()
+          tempObject.applyMatrix4(tempMatrix4)
+        }
 
-        mesh.position.setFromMatrixPosition(tempObject.matrix)
-        mesh.rotation.setFromRotationMatrix(tempObject.matrix)
-      })
+        object.position.copy(tempObject.position)
+        object.quaternion.copy(tempObject.quaternion)
+      }
     },
     {
       stage: synchronizationStage

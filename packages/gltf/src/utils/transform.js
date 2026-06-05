@@ -83,7 +83,7 @@ export async function transform(file, output, config = {}) {
         encoder: sharp,
         pattern: new RegExp(`^(?=${config.degrade}).*$`),
         targetFormat: config.format,
-        resize: [degradeResolution, degradeResolution]
+        resize: [config.degraderesolution ?? 512, config.degraderesolution ?? 512]
       }),
       textureCompress({
         encoder: sharp,

@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { LOD } from 'three'
   import { Detailed } from '@threlte/extras'
-  import { IcosahedronGeometry } from 'three'
   import { T, useTask } from '@threlte/core'
 
   type DetailItem = {
@@ -26,12 +25,13 @@
 
 <Detailed bind:ref={detailed}>
   {#each items as { color, distance }, i}
-    {@const detail = items.length - i + 1}
-    <T.Mesh
-      {distance}
-      geometry={new IcosahedronGeometry(1, detail)}
-      material.wireframe
-      material.color={color}
-    />
+    {@const detail = items.length - i - 1}
+    <T.Mesh {distance}>
+      <T.IcosahedronGeometry args={[1, detail]} />
+      <T.MeshBasicMaterial
+        wireframe
+        {color}
+      />
+    </T.Mesh>
   {/each}
 </Detailed>

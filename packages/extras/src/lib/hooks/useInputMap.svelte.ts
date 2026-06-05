@@ -1,6 +1,14 @@
 import { useTask } from '@threlte/core'
 import type { UseKeyboardReturn } from './useKeyboard.svelte.js'
-import type { StandardGamepad, StandardXRGamepad } from './useGamepad.svelte.js'
+import type { StandardGamepad, StandardXRGamepad } from './useGamepad/useGamepad.svelte.js'
+
+type GamepadButtonName =
+  | Parameters<StandardGamepad['button']>[0]
+  | Parameters<StandardXRGamepad['button']>[0]
+
+type GamepadStickName =
+  | Parameters<StandardGamepad['stick']>[0]
+  | Parameters<StandardXRGamepad['stick']>[0]
 
 interface KeyboardBinding {
   type: 'keyboard'
@@ -9,12 +17,12 @@ interface KeyboardBinding {
 
 interface GamepadButtonBinding {
   type: 'gamepadButton'
-  button: string
+  button: GamepadButtonName
 }
 
 interface GamepadAxisBinding {
   type: 'gamepadAxis'
-  stick: string
+  stick: GamepadStickName
   axis: 'x' | 'y'
   direction: 1 | -1
   threshold: number
@@ -52,7 +60,7 @@ const bindingHelpers = {
     key
   }),
   /** Bind a standard gamepad button (e.g. `'clusterBottom'`, `'leftTrigger'`). */
-  gamepadButton: (button: string): GamepadButtonBinding => ({
+  gamepadButton: (button: GamepadButtonName): GamepadButtonBinding => ({
     type: 'gamepadButton',
     button
   }),
@@ -65,7 +73,7 @@ const bindingHelpers = {
    * ```
    */
   gamepadAxis: (
-    stick: string,
+    stick: GamepadStickName,
     axis: 'x' | 'y',
     direction: 1 | -1,
     threshold = 0.1
@@ -133,17 +141,19 @@ export function useInputMap<T extends ActionDefinitions>(
     return state
   }
 
+  const actionEntries = $derived(
+    Object.entries(definitionsFn(bindingHelpers)) as [ActionName, Binding[]][]
+  )
+
   /**
-   * Process all action states once per frame, after the keyboard task
-   * has finished processing its buffered events. The definitions function
-   * is called each frame so reactive dependencies are picked up.
+   * Process all action states once per frame, after both the keyboard and
+   * gamepad tasks have populated their state for the frame.
    */
   const { task } = useTask(
-    'useInputMap',
+    Symbol('useInputMap'),
     () => {
-      const actions = definitionsFn(bindingHelpers)
-
-      for (const [name, bindings] of Object.entries(actions) as [ActionName, Binding[]][]) {
+      for (let i = 0; i < actionEntries.length; i++) {
+        const [name, bindings] = actionEntries[i]!
         const state = getOrCreateState(name)
 
         let maxStrength = 0
@@ -166,7 +176,10 @@ export function useInputMap<T extends ActionDefinitions>(
         previousPressed.set(name, isPressed)
       }
     },
-    { after: keyboard.task, autoInvalidate: false }
+    {
+      after: gamepad ? [keyboard.task, gamepad.task] : keyboard.task,
+      autoInvalidate: false
+    }
   )
 
   /** Get the current state of a named action. */

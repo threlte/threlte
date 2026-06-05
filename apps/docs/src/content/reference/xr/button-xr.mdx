@@ -28,12 +28,12 @@ componentSignature:
       [
         {
           name: 'click',
-          payload: "CustomEvent<'unsupported' | 'insecure' | 'blocked' | 'supported'>",
-          description: 'Fired when a user clicks the VR button.'
+          payload: "{ state: 'unsupported' | 'insecure' | 'blocked' | 'supported'; nativeEvent: MouseEvent }",
+          description: 'Fired when a user clicks the XR button.'
         },
         {
           name: 'error',
-          payload: 'CustomEvent<Error>',
+          payload: 'Error',
           description: 'Fired when an enter / exit session error occurs.'
         }
       ]

@@ -1,5 +1,4 @@
 import { useThrelteUserContext } from '@threlte/core'
-import { untrack } from 'svelte'
 import { SvelteMap } from 'svelte/reactivity'
 import type { AudioListener } from 'three'
 

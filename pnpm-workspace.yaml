@@ -4,12 +4,13 @@
     "apps/*"
   ],
   "catalog": {
-    "three": "^0.183.2",
-    "@types/three": "^0.183.1",
-    "svelte": "5.55.1",
+    "three": "^0.175.0",
+    "@types/three": "^0.175.0",
+    "svelte": "5.53.6",
     "typescript": "5.9.2",
     "vite": "^7.1.4",
-    "vitest": "^3.2.4",
+    "vitest": "^4.1.2",
+    "playwright": "^1.60.0",
     "@types/node": "^20.19.4",
     "@types/webxr": "0.5.23",
     "@eslint/js": "^9.26.0",
@@ -29,6 +30,7 @@
     "svelte-tweakpane-ui": "^1.5.9",
     "tslib": "^2.6.2",
     "type-fest": "^4.15.0",
-    "typescript-eslint": "^8.32.0"
+    "typescript-eslint": "^8.32.0",
+    "@threlte/test": "^2.0.2"
   }
 }

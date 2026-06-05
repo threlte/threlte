@@ -4,22 +4,15 @@
   import { Box3, type Vector3 } from 'three'
 
   interface Props {
-    x?: number
-    y?: number
-    z?: number
-    precise?: boolean
-    showSphere?: boolean
-    autoAlign?: boolean
+    x: number
+    y: number
+    z: number
+    precise: boolean
+    showSphere: boolean
+    autoAlign: boolean
   }
 
-  let {
-    x = 0,
-    y = 0,
-    z = 0,
-    precise = false,
-    showSphere = false,
-    autoAlign = false
-  }: Props = $props()
+  let { x, y, z, precise, showSphere, autoAlign }: Props = $props()
 
   let box = new Box3()
   let center = $state<Vector3>()

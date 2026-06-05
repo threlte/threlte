@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   import { T } from '@threlte/core'
   import { OrbitControls } from '@threlte/extras'
   import Scenery from './Random.svelte'
 
-  let { regen } = $props()
+  let { regen, numObjects } = $props()
 </script>
 
 <T.PerspectiveCamera
@@ -32,5 +32,5 @@
 </T.Mesh>
 
 {#key regen}
-  <Scenery />
+  <Scenery {numObjects} />
 {/key}

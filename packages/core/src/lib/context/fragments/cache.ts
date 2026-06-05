@@ -29,10 +29,17 @@ export const createCacheContext = () => {
 
     const promise = callback()
 
-    // If the promise rejects, remove the cache entry so that retries can be made
-    promise.catch((error) => {
-      cache.delete(key)
-      throw error
+    // If the promise rejects, remove the cache entry so that retries can be made.
+    // The caller holds the original `promise` and will see the rejection through
+    // it — re-throwing here would create a separate unhandled rejected promise.
+    promise.catch(() => {
+      for (let i = 0; i < items.length; i++) {
+        const entry = items[i]
+        if (shallowEqualArrays(keys, entry.keys)) {
+          items.splice(i, 1)
+          break
+        }
+      }
     })
 
     // If no match was found, create a new entry and add to the cache

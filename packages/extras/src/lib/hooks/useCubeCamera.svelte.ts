@@ -1,43 +1,41 @@
 import { CubeCamera, WebGLCubeRenderTarget } from 'three'
 import { isInstanceOf } from '@threlte/core'
+import { untrack } from 'svelte'
 
 /**
- * creates a `CubeCamera` instance
- * `near` and `far`, and `resolution` are getters so you can use $state()
- * the camera's `renderTarget` is disposed when the component unmounts.
+ * creates a CubeCamera and renderTarget instance
  */
-export const useCubeCamera = (near: () => number, far: () => number, resolution: () => number) => {
-  const renderTarget = new WebGLCubeRenderTarget(resolution())
-  const camera = new CubeCamera(near(), far(), renderTarget)
+export const useCubeCamera = (
+  near: () => number | undefined,
+  far: () => number | undefined,
+  resolution: () => number | undefined
+) => {
+  const currentNear = $derived(near() ?? 0.1)
+  const currentFar = $derived(far() ?? 1000)
+  const currentResolution = $derived(resolution() ?? 256)
 
-  $effect.pre(() => {
-    const _resolution = resolution()
-    renderTarget.setSize(_resolution, _resolution)
+  const renderTarget = new WebGLCubeRenderTarget(untrack(() => currentResolution))
+
+  const camera = new CubeCamera(
+    untrack(() => currentNear),
+    untrack(() => currentFar),
+    renderTarget
+  )
+
+  $effect(() => {
+    renderTarget.setSize(currentResolution, currentResolution)
   })
 
   $effect(() => {
-    const _near = near()
-
     for (const child of camera.children) {
       if (isInstanceOf(child, 'PerspectiveCamera')) {
-        child.near = _near
+        child.near = currentNear
+        child.far = currentFar
         child.updateProjectionMatrix()
       }
     }
   })
 
-  $effect(() => {
-    const _far = far()
-
-    for (const child of camera.children) {
-      if (isInstanceOf(child, 'PerspectiveCamera')) {
-        child.far = _far
-        child.updateProjectionMatrix()
-      }
-    }
-  })
-
-  // dispose on unmount
   $effect(() => {
     return () => {
       renderTarget.dispose()

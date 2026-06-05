@@ -3,7 +3,7 @@
   import { Tween } from 'svelte/motion'
   import type { Color } from 'three'
 
-  type Props = {
+  interface Props {
     lightColor: Color
     machineIsOff?: boolean
     pointLightsOff?: boolean
@@ -11,49 +11,23 @@
 
   let { machineIsOff = false, pointLightsOff = false, lightColor }: Props = $props()
 
-  let pointLightIntensity = new Tween(0)
+  let pointLightIntensity = Tween.of(() => (pointLightsOff ? 1 : 0))
 
-  const blueLightIntensity = new Tween(2, {
+  const options = {
     duration: 3e3
-  })
+  }
 
-  const redLightIntensity = new Tween(1, {
-    duration: 3e3
-  })
-
-  const whiteLightIntensity = new Tween(0, {
-    duration: 3e3
-  })
-
-  const whiteAmbientLightIntensity = new Tween(1, {
-    duration: 3e3
-  })
-
-  $effect(() => {
-    pointLightIntensity.set(pointLightsOff ? 1 : 0)
-  })
-
-  $effect(() => {
-    setTimeout(() => {
-      pointLightIntensity.set(1, {
-        duration: 200
-      })
-    }, 1000)
-  })
-
-  $effect(() => {
-    blueLightIntensity.set(machineIsOff ? 2 : 2)
-    redLightIntensity.set(machineIsOff ? 2 : 2)
-    whiteLightIntensity.set(machineIsOff ? 0 : 0)
-    whiteAmbientLightIntensity.set(machineIsOff ? 1 : 0)
-  })
+  const blueLightIntensity = Tween.of(() => (machineIsOff ? 0 : 2), options)
+  const redLightIntensity = Tween.of(() => (machineIsOff ? 0 : 2), options)
+  const whiteLightIntensity = Tween.of(() => (machineIsOff ? 0 : 1), options)
+  const whiteAmbientLightIntensity = Tween.of(() => (machineIsOff ? 0 : 1), options)
 </script>
 
 <!-- This PointLight replicates the light emitted by the screen -->
 <T.PointLight
   args={['black']}
-  position.y={1.376583185239323}
-  position.z={-0.12185962320246482}
+  position.y={1.37}
+  position.z={-0.12}
   intensity={25 * pointLightIntensity.current}
   distance={1.2}
   decay={2}
@@ -73,25 +47,19 @@
 <T.DirectionalLight
   intensity={redLightIntensity.current}
   color="#F67F55"
-  position.x={-2.2}
-  position.y={3.5}
-  position.z={2.6}
+  position={[-2.2, 3.6, 2.6]}
 />
 
 <!-- Blue light -->
 <T.DirectionalLight
   intensity={blueLightIntensity.current}
-  position.x={2.2}
-  position.y={3.4}
-  position.z={2.6}
+  position={[2.2, 3.4, 2.6]}
   color="#2722F3"
 />
 
 <!-- White light -->
 <T.DirectionalLight
   intensity={whiteLightIntensity.current}
-  position.x={-1}
-  position.y={2.5}
-  position.z={1}
+  position={[-1, 2.5, 1]}
   color="white"
 />

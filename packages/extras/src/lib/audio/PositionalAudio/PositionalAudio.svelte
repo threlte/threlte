@@ -1,18 +1,18 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { PositionalAudio as ThreePositionalAudio } from 'three'
+  import { PositionalAudio } from 'three'
   import { useAudio } from '../utils/useAudio.svelte.js'
   import { useThrelteAudio } from '../useThrelteAudio.js'
   import type { PositionalAudioProps } from './types.js'
 
   let {
-    src,
     id,
-    volume,
-    playbackRate,
-    autoplay,
-    detune,
-    loop,
+    src,
+    autoplay = false,
+    loop = false,
+    volume = 1,
+    playbackRate = 1,
+    detune = 0,
     directionalCone,
     refDistance,
     rolloffFactor,
@@ -20,22 +20,24 @@
     maxDistance,
     ref = $bindable(),
     children,
-    ...props
+    ...rest
   }: PositionalAudioProps = $props()
 
   const { getAudioListener } = useThrelteAudio()
 
   const listener = $derived(getAudioListener(id))
 
-  const audio = $derived.by(() => {
+  $effect(() => {
     if (!listener) {
-      throw new Error(`No Audiolistener with id ${id} found.`)
+      console.warn(`No Audiolistener with id ${id} found.`)
     }
-
-    return new ThreePositionalAudio(listener)
   })
 
+  const audio = $derived(listener ? new PositionalAudio(listener) : undefined)
+
   $effect(() => {
+    if (!audio) return
+
     if (refDistance !== undefined) {
       audio.setRefDistance(refDistance)
     }
@@ -61,46 +63,24 @@
     }
   })
 
-  export const play = useAudio(
+  export const { pause, play, stop } = useAudio(
     () => audio,
     () => src,
-    {
-      ...props
-    }
+    () => autoplay,
+    () => loop,
+    () => volume,
+    () => playbackRate,
+    () => detune,
+    () => rest
   )
-
-  export const pause = () => audio.pause()
-  export const stop = () => audio.stop()
-
-  $effect(() => {
-    if (autoplay) {
-      play()
-    } else {
-      stop()
-    }
-  })
-
-  $effect(() => {
-    audio.setVolume(volume ?? 1)
-  })
-
-  $effect(() => {
-    audio.setPlaybackRate(playbackRate ?? 1)
-  })
-
-  $effect(() => {
-    audio.setDetune(detune ?? 0)
-  })
-
-  $effect(() => {
-    audio.setLoop(loop ?? false)
-  })
 </script>
 
-<T
-  is={audio}
-  bind:ref
-  {...props}
->
-  {@render children?.({ ref: audio })}
-</T>
+{#if audio}
+  <T
+    is={audio}
+    bind:ref
+    {...rest}
+  >
+    {@render children?.({ ref: audio })}
+  </T>
+{/if}

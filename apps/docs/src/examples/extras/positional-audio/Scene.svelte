@@ -36,37 +36,20 @@
 <Suspense>
   <Environment url="/textures/equirectangular/hdr/shanghai_riverside_1k.hdr" />
 
-  <T.OrthographicCamera
-    {zoom}
-    makeDefault
-    oncreate={(ref) => {
-      ref.position.set(6, 9, 9)
-      ref.lookAt(0, 1.5, 0)
-    }}
-  >
-    <OrbitControls
-      autoRotate={isPlaying}
-      autoRotateSpeed={0.5}
-      enableDamping
-      enableZoom={false}
-      maxPolarAngle={MathUtils.DEG2RAD * 80}
-      target.y={1.5}
-    />
-    <AudioListener />
-  </T.OrthographicCamera>
-
-  <!-- FLOOR -->
-  <T.Mesh
-    receiveShadow
-    rotation.x={MathUtils.DEG2RAD * -90}
-  >
-    <T.CircleGeometry args={[10, 64]} />
-    <T.MeshStandardMaterial color="#333333" />
-  </T.Mesh>
-
-  <Turntable
-    bind:isPlaying
-    bind:volume
+<T.OrthographicCamera
+  {zoom}
+  makeDefault
+  position={[6, 9, 9]}
+  oncreate={(ref) => {
+    ref.lookAt(0, 1.5, 0)
+  }}
+>
+  <OrbitControls
+    autoRotate={isPlaying}
+    autoRotateSpeed={0.5}
+    enableDamping
+    maxPolarAngle={MathUtils.DEG2RAD * 80}
+    target.y={1.5}
   />
 
   <Speaker

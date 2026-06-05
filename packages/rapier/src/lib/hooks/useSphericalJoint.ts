@@ -1,6 +1,6 @@
 import type { SphericalImpulseJoint } from '@dimforge/rapier3d-compat'
 import { Vector3 } from 'three'
-import { useJoint } from './useJoint.js'
+import { useJoint } from './useJoint.svelte.js'
 import { isInstanceOf } from '@threlte/core'
 
 export const useSphericalJoint = (

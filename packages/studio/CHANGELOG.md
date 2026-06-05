@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.4.3
+
+### Patch Changes
+
+- bfd06cd: Exclude test files and **tests** directories from published packages
+
 ## 0.4.2
 
 ### Patch Changes

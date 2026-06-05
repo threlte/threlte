@@ -8,6 +8,8 @@ import type {
 } from 'three'
 import type { ComputeFunction } from './compute.js'
 
+export type PointerSourceType = 'controller' | 'hand'
+
 export type Properties<T> = Pick<
   T,
   { [K in keyof T]: T[K] extends (_: any) => any ? never : K }[keyof T]
@@ -23,6 +25,11 @@ export interface IntersectionEvent extends Intersection {
   eventObject: Object3D
   /** An array of intersections */
   intersections: Intersection[]
+  /** Which hand dispatched this event. Each controller/hand fires enter/leave/etc. independently. */
+  handedness: 'left' | 'right'
+  /** Stable identifier for this pointer source. Mirrors DOM PointerEvent.pointerId so downstream
+   * consumers that key per-pointer state by id can distinguish hands / reconnects. */
+  pointerId: number
   /** Normalized event coordinates */
   pointer: Vector3
   /** Delta between first click and this event */
@@ -46,21 +53,28 @@ export type FilterFunction = (
 // State that can be shared among hands / controllers
 export type ControlsContext = {
   interactiveObjects: Object3D[]
-  raycaster: Raycaster
-  compute: ComputeFunction
-  filter?: FilterFunction | undefined
 }
 
 // State attached to a left / right hand or controller
 export type HandContext = {
   hand: 'left' | 'right'
-  enabled: { current: boolean }
-  pointer: { current: Vector3 }
-  pointerOverTarget: { current: boolean }
+  /** Physical XR source this runtime tracks for the handedness. */
+  sourceType: PointerSourceType
+  enabled: CurrentWritable<boolean>
+  pointer: CurrentWritable<Vector3>
+  pointerOverTarget: CurrentWritable<boolean>
   lastEvent: Event | undefined
   initialClick: [x: number, y: number, z: number]
   initialHits: Object3D[]
   hovered: Map<string, IntersectionEvent>
+  currentIntersection: Intersection | undefined
+  /** Per-hand raycaster — keeps `intersectionEvent.ray` consistent across the
+   * tick even when the other hand also raycasts. */
+  raycaster: Raycaster
+  /** Syncs aggregate handedness-level state after this source mutates hover or hit state. */
+  syncSharedState: () => void
+  compute: ComputeFunction
+  filter?: FilterFunction | undefined
 }
 
 export interface PointerCaptureTarget {
@@ -90,5 +104,6 @@ export const events: (keyof ThrelteXREvents)[] = [
   'onpointerout',
   'onpointerenter',
   'onpointerleave',
-  'onpointermove'
+  'onpointermove',
+  'onpointermissed'
 ]

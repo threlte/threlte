@@ -8,13 +8,13 @@ describe('pointerdown', () => {
   it('fires onpointerdown when pressing on a mesh', async () => {
     const onpointerdownA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointerdownA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // Press down at center — ray hits mesh A directly in front of the camera
@@ -27,13 +27,13 @@ describe('pointerdown', () => {
   it('does not fire onpointerdown when pressing on empty space', async () => {
     const onpointerdownA = vi.fn()
 
-    const { context, container } = render(Scene, {
+    const { context } = render(Scene, {
       props: {
         onpointerdownA
       }
     })
 
-    await setupDom(context, container)
+    await setupDom(context)
     const target = context.dom
 
     // Press down at top-left corner — ray misses all meshes
