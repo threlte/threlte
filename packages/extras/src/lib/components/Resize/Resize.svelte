@@ -3,14 +3,13 @@
   module
 >
   const _box = new Box3()
-  const _diff = new Vector3()
+  const _size = new Vector3()
 </script>
 
 <script lang="ts">
   import { isInstanceOf, observe, T, useStage, useTask, useThrelte } from '@threlte/core'
-  import { type Plugin } from '@threlte/core'
   import { Box3, Group, Vector3 } from 'three'
-  import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
+  import { injectPlugin } from '@threlte/core'
   import type { ResizeProps } from './types.js'
 
   const { renderStage } = useThrelte()
@@ -35,10 +34,9 @@
 
   const doResize = () => {
     outer.matrixWorld.identity()
-    const { max, min } = box.setFromObject(inner, precise)
-    _diff.subVectors(max, min)
+    box.setFromObject(inner, precise).getSize(_size)
     const scale =
-      1 / (axis === 'max' ? Math.max(..._diff) : axis === 'min' ? Math.min(..._diff) : _diff[axis])
+      1 / (axis === 'max' ? Math.max(..._size) : axis === 'min' ? Math.min(..._size) : _size[axis])
     outer.scale.setScalar(scale)
     onresize?.()
     running = false
@@ -53,7 +51,7 @@
 
   observe(() => [axis, precise], resize)
 
-  const plugin: Plugin = (args) => {
+  injectPlugin('resize', (args) => {
     $effect(() => {
       if (!isInstanceOf(args.ref, 'Object3D')) return
       if (auto) resize()
@@ -61,7 +59,7 @@
         if (auto) resize()
       }
     })
-  }
+  })
 </script>
 
 <T
@@ -70,12 +68,7 @@
 >
   <T is={outer}>
     <T is={inner}>
-      <InjectPlugin
-        name="resize"
-        {plugin}
-      >
-        {@render children?.({ ref, resize })}
-      </InjectPlugin>
+      {@render children?.({ ref, resize })}
     </T>
   </T>
 </T>
