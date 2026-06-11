@@ -4912,8 +4912,8 @@ In this example we're looking at two invokations of `requestAnimationFrame`.
 
 <Tip type="info">
   Threlte is making use of [the scheduler's
-  ability](http://localhost:4321/docs/learn/basics/scheduling-tasks#creating-a-stage) to run the
-  tasks of a stage multiple times per frame and with a fixed delta.
+  ability](/docs/learn/basics/scheduling-tasks#creating-a-stage) to run the tasks of a stage
+  multiple times per frame and with a fixed delta.
 </Tip>
 
 We'd like to advance the physics simulation 200 times per second, so 5ms per step.
@@ -14142,7 +14142,7 @@ You can use the prop `id` to render into a `<PortalTarget>`.
 Some objects such as the [`THREE.DirectionalLightHelper`](https://threejs.org/docs/index.html#api/en/helpers/DirectionalLightHelper)
 need to be added to the scene itself to be functional.
 
-In this case, the portal target is easily accessible, and passing the `scene` object to the `<T>` component's [attach](http://localhost:4321/docs/reference/core/t#attach) property can accomplish everything we need.
+In this case, the portal target is easily accessible, and passing the `scene` object to the `<T>` component's [attach](/docs/reference/core/t#attach) property can accomplish everything we need.
 
 <Example path="extras/portals/helper" />
 
