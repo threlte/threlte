@@ -114,7 +114,7 @@ On its own, `<Theatre>` only opens the editor — nothing is animatable yet. To 
 The Theatre.js Studio now overlays the scene, with a **Box** entry in the outline on the left. Select it and drag its transform — you're editing the scene live.
 
 <Tip type="info">
-  `<Theatre>` is the convenient all-in-one wrapper. When you need more control — multiple sheets, a custom project name, or showing the studio only in development — reach for [`<Project>`](/docs/reference/theatre/project), [`<Sheet>`](/docs/reference/theatre/sheet) and [`<Studio>`](/docs/reference/theatre/studio) directly. We'll use those in the last step.
+  `<Theatre>` is the convenient all-in-one wrapper. When you need more control — multiple sheets, a custom project name, or showing the studio only in development — reach for [`<Project>`](/docs/reference/theatre/project), [`<Sheet>`](/docs/reference/theatre/sheet) and [`<Studio>`](/docs/reference/theatre/studio) directly — see [Where to go next](#where-to-go-next).
 </Tip>
 
 ## Syncing more properties
@@ -144,3 +144,72 @@ Here we nest `<Sync color />` inside the material, and pull `Sync` out of the sa
 />
 
 Select the **Box** in the Studio and you'll now find a **color** control alongside its transform. Everything we want to animate is now exposed — next we'll actually animate it.
+
+## Animating on the timeline
+
+With the box's properties exposed, we can author an animation. In the Studio, select the **Box**, then use the timeline at the bottom: move the playhead to a point in time, change a value (drag the box in the viewport, or edit `position` / `rotation` in the panel), and Theatre.js records a **keyframe**. Set a few keyframes at different times and you've built an animation — no code required.
+
+There's one catch for a website: while you edit, the Studio saves your work to the browser's local storage. That's great for iterating, but it isn't something you can ship. To make an animation part of your app, you **export** it and load it back in:
+
+1. In the Studio, select the project (top-left) and click **Export** — you get a `state.json` file.
+2. Drop that file next to your components.
+3. Import it and hand it to Theatre.js through the `config` prop.
+
+```svelte title="App.svelte"
+<script>
+  import { Canvas } from '@threlte/core'
+  import { Theatre } from '@threlte/theatre'
+  import Scene from './Scene.svelte'
+  import state from './state.json'
+</script>
+
+<Canvas>
+  <Theatre config={{ state }}>
+    <Scene />
+  </Theatre>
+</Canvas>
+```
+
+<Example
+  path="animating-with-theatre/step-4"
+  hideCode
+/>
+
+The example above loads a `state.json` we prepared earlier — the box is keyed to spin a full turn and bob up and down over four seconds. You can see the keyframes on the timeline, but nothing is moving yet. Loading a state doesn't play it; for that we need a sequence.
+
+## Playing it back
+
+A [`<Sequence>`](/docs/reference/theatre/sequence) plays a sheet's timeline. Wrap the scene in one: `autoplay` starts it on load, and `iterationCount={Infinity}` loops it forever.
+
+```svelte title="App.svelte"
+<script>
+  import { Canvas } from '@threlte/core'
+  import { Sequence, Theatre } from '@threlte/theatre'
+  import Scene from './Scene.svelte'
+  import state from './state.json'
+</script>
+
+<Canvas>
+  <Theatre config={{ state }}>
+    <Sequence
+      autoplay
+      iterationCount={Infinity}
+    >
+      <Scene />
+    </Sequence>
+  </Theatre>
+</Canvas>
+```
+
+<Example
+  path="animating-with-theatre/step-5"
+  hideCode
+/>
+
+That's the whole workflow: build a scene, expose the parts you care about with `<SheetObject>`, keyframe them in the Studio, export the `state.json`, and play it back with `<Sequence>`.
+
+## Where to go next
+
+- **Drive playback yourself.** `<Sequence>` exposes `bind:playing`, `bind:position`, `play` and `pause`, so you can control the animation from your own UI instead of `autoplay`. See the [`<Sequence>`](/docs/reference/theatre/sequence) reference and the [`useSequence`](/docs/reference/theatre/use-sequence) hook.
+- **Hide the Studio in production.** You usually only want the editor while developing. Swap `<Theatre>` for [`<Project>`](/docs/reference/theatre/project), [`<Sheet>`](/docs/reference/theatre/sheet) and a conditionally-rendered [`<Studio>`](/docs/reference/theatre/studio).
+- **Animate more.** Anything you can wrap in a `<Sync>` can be keyframed — light intensity and colour, camera position, material roughness. Try exposing a few more properties on this scene and animating them.

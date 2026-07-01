@@ -1,0 +1,47 @@
+{
+  "sheetsById": {
+    "default": {
+      "staticOverrides": {
+        "byObject": {
+          "Box": {
+            "color": { "r": 1, "g": 0.243, "b": 0, "a": 1 }
+          }
+        }
+      },
+      "sequence": {
+        "subUnitsPerUnit": 30,
+        "length": 4,
+        "type": "PositionalSequence",
+        "tracksByObject": {
+          "Box": {
+            "trackData": {
+              "rotationY": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Box:[\"rotation\",\"y\"]",
+                "keyframes": [
+                  { "id": "kf_rot_0", "position": 0, "connectedRight": true, "handles": [0.333, 0.333, 0.667, 0.667], "type": "bezier", "value": 0 },
+                  { "id": "kf_rot_1", "position": 4, "connectedRight": true, "handles": [0.333, 0.333, 0.667, 0.667], "type": "bezier", "value": 6.283185307179586 }
+                ]
+              },
+              "positionY": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Box:[\"position\",\"y\"]",
+                "keyframes": [
+                  { "id": "kf_pos_0", "position": 0, "connectedRight": true, "handles": [0.5, 1, 0.5, 0], "type": "bezier", "value": 0 },
+                  { "id": "kf_pos_1", "position": 2, "connectedRight": true, "handles": [0.5, 1, 0.5, 0], "type": "bezier", "value": 1 },
+                  { "id": "kf_pos_2", "position": 4, "connectedRight": true, "handles": [0.5, 1, 0.5, 0], "type": "bezier", "value": 0 }
+                ]
+              }
+            },
+            "trackIdByPropPath": {
+              "[\"rotation\",\"y\"]": "rotationY",
+              "[\"position\",\"y\"]": "positionY"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitionVersion": "0.4.0",
+  "revisionHistory": ["thob-theatre-tutorial-r1"]
+}
