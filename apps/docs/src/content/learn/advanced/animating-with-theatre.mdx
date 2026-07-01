@@ -1,0 +1,146 @@
+---
+category: Advanced
+title: Animating with Theatre.js
+order: 2
+---
+
+[Theatre.js](https://www.theatrejs.com/) is an animation library with a visual, keyframe-based editor. The [`@threlte/theatre`](/docs/reference/theatre/getting-started) package connects it to your scene: you pick the properties you want to animate, keyframe them on a timeline in the browser, and play the result back.
+
+In this tutorial we'll build one small scene and animate it from start to finish. Along the way we'll meet every piece of the package you need for real work: [`<Theatre>`](/docs/reference/theatre/theatre), [`<SheetObject>`](/docs/reference/theatre/sheet-object), the [`<Studio>`](/docs/reference/theatre/studio), and [`<Sequence>`](/docs/reference/theatre/sequence).
+
+<Tip type="info">
+  This guide assumes you're comfortable with the [Your First Scene](/docs/learn/getting-started/your-first-scene) basics. If Theatre.js itself is new to you, the [reference getting started](/docs/reference/theatre/getting-started) page is a good companion — it covers the same components as a quick reference.
+</Tip>
+
+## The starting scene
+
+Before we bring in Theatre.js, we need something to animate. Here's a plain Threlte scene: a box on a floor, lit by a single directional light, viewed from a fixed camera. Nothing here is Theatre-specific yet.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[5, 5, 5]}
+  oncreate={(ref) => {
+    ref.lookAt(0, 0, 0)
+  }}
+/>
+
+<T.DirectionalLight position={[3, 10, 7]} />
+<T.AmbientLight intensity={0.4} />
+
+<T.Mesh position.y={0.5}>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial color="#ff3e00" />
+</T.Mesh>
+
+<T.Mesh rotation.x={-Math.PI / 2}>
+  <T.CircleGeometry args={[4, 48]} />
+  <T.MeshStandardMaterial color="white" />
+</T.Mesh>
+```
+
+<Example
+  path="animating-with-theatre/step-1"
+  hideCode
+/>
+
+The `App.svelte` entry point is the usual Threlte setup — a `<Canvas>` wrapping our `Scene`. We'll return to it in the next step, because wiring in Theatre.js starts there.
+
+## Bringing in the studio
+
+Two changes turn this static scene into something we can edit: we open the Theatre.js editor, and we tell it which object it's allowed to touch.
+
+First, in `App.svelte`, wrap the scene in [`<Theatre>`](/docs/reference/theatre/theatre). This one component sets up everything we need behind the scenes — a `<Project>`, a `<Sheet>` (the timeline our animation will live on), and the `<Studio>` (the visual editor):
+
+```svelte title="App.svelte"
+<script>
+  import { Canvas } from '@threlte/core'
+  import { Theatre } from '@threlte/theatre'
+  import Scene from './Scene.svelte'
+</script>
+
+<Canvas>
+  <Theatre>
+    <Scene />
+  </Theatre>
+</Canvas>
+```
+
+On its own, `<Theatre>` only opens the editor — nothing is animatable yet. To expose the box, we wrap it in a [`<SheetObject>`](/docs/reference/theatre/sheet-object). Its `key` is the name the object gets in the Studio outline. The `children` snippet hands us a `Transform` component, which puts the box's position, rotation and scale under Theatre.js's control:
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core'
+  import { SheetObject } from '@threlte/theatre'
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[5, 5, 5]}
+  oncreate={(ref) => {
+    ref.lookAt(0, 0, 0)
+  }}
+/>
+
+<T.DirectionalLight position={[3, 10, 7]} />
+<T.AmbientLight intensity={0.4} />
+
+<SheetObject key="Box">
+  {#snippet children({ Transform })}
+    <Transform>
+      <T.Mesh position.y={0.5}>
+        <T.BoxGeometry />
+        <T.MeshStandardMaterial color="#ff3e00" />
+      </T.Mesh>
+    </Transform>
+  {/snippet}
+</SheetObject>
+
+<T.Mesh rotation.x={-Math.PI / 2}>
+  <T.CircleGeometry args={[4, 48]} />
+  <T.MeshStandardMaterial color="white" />
+</T.Mesh>
+```
+
+<Example
+  path="animating-with-theatre/step-2"
+  hideCode
+/>
+
+The Theatre.js Studio now overlays the scene, with a **Box** entry in the outline on the left. Select it and drag its transform — you're editing the scene live.
+
+<Tip type="info">
+  `<Theatre>` is the convenient all-in-one wrapper. When you need more control — multiple sheets, a custom project name, or showing the studio only in development — reach for [`<Project>`](/docs/reference/theatre/project), [`<Sheet>`](/docs/reference/theatre/sheet) and [`<Studio>`](/docs/reference/theatre/studio) directly. We'll use those in the last step.
+</Tip>
+
+## Syncing more properties
+
+`Transform` covers position, rotation and scale — but we want to animate the box's **colour** too. For any property that isn't a transform, we use [`<Sync>`](/docs/reference/theatre/sheet-object), which bridges a specific prop of an object to the Studio.
+
+Here we nest `<Sync color />` inside the material, and pull `Sync` out of the same `children` snippet:
+
+```svelte title="Scene.svelte"
+<SheetObject key="Box">
+  {#snippet children({ Transform, Sync })}
+    <Transform>
+      <T.Mesh position.y={0.5}>
+        <T.BoxGeometry />
+        <T.MeshStandardMaterial color="#ff3e00">
+          <Sync color />
+        </T.MeshStandardMaterial>
+      </T.Mesh>
+    </Transform>
+  {/snippet}
+</SheetObject>
+```
+
+<Example
+  path="animating-with-theatre/step-3"
+  hideCode
+/>
+
+Select the **Box** in the Studio and you'll now find a **color** control alongside its transform. Everything we want to animate is now exposed — next we'll actually animate it.
