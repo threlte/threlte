@@ -33,7 +33,7 @@
                     "connectedRight": true,
                     "handles": [0.333, 0.333, 0.667, 0.667],
                     "type": "bezier",
-                    "value": 6.283185307179586
+                    "value": 360
                   }
                 ]
               },
@@ -78,5 +78,5 @@
     }
   },
   "definitionVersion": "0.4.0",
-  "revisionHistory": ["thob-theatre-tutorial-r1"]
+  "revisionHistory": ["theatre-tutorial-r1"]
 }
