@@ -122,8 +122,9 @@ The Theatre.js Studio now overlays the scene, with a **Box** entry in the outlin
 >
   The Studio autosaves everything you change to your browser's local storage — refresh the page and
   your edits are still there, but they're only visible to you. Press `Alt` + `\` (`Option` + `\` on
-  macOS) to hide or show the Studio UI. To reset an example to its original state, clear the site's
-  local storage (or use a private window).
+  macOS) to hide or show the Studio UI — one of several handy [keyboard
+  shortcuts](https://www.theatrejs.com/docs/latest/manual/keyboard-shortcuts). To reset an example
+  to its original state, clear the site's local storage (or use a private window).
 </Tip>
 
 <Tip type="info">
@@ -160,9 +161,9 @@ Select the **Box** in the Studio and you'll now find a **color** control alongsi
 
 ## Animating on the timeline
 
-With the box's properties exposed, we can author an animation. In the Studio, select the **Box**, then use the timeline at the bottom: move the playhead to a point in time, change a value (drag the box in the viewport, or edit `position` / `rotation` in the panel), and Theatre.js records a **keyframe**. Set a few keyframes at different times and you've built an animation — no code required.
+With the box's properties exposed, we can author an animation. In the Studio, select the **Box**, then use the timeline at the bottom: move the playhead to a point in time, change a value (drag the box in the viewport, or edit `position` / `rotation` in the panel), and Theatre.js records a **keyframe**. Set a few keyframes at different times and you've built an animation — no code required. The Theatre.js manual has a full guide to [adding and removing keyframes](https://www.theatrejs.com/docs/latest/manual/sequences#addingremoving-keyframes).
 
-There's one catch for a website: while you edit, the Studio saves your work to the browser's local storage. That's great for iterating, but it isn't something you can ship. To make an animation part of your app, you **export** it and load it back in:
+There's one catch for a website: while you edit, the Studio saves your work to the browser's local storage. That's great for iterating, but it isn't something you can ship. To make an animation part of your app, you [**export**](https://www.theatrejs.com/docs/latest/manual/projects#state) it and load it back in:
 
 1. In the Studio, select the project (top-left) and click **Export** — you get a `state.json` file.
 2. Drop that file next to your components.
