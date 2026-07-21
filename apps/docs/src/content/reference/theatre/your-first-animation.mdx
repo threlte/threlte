@@ -4,15 +4,13 @@ category: '@threlte/theatre'
 title: 'Your First Animation'
 ---
 
-[Theatre.js](https://www.theatrejs.com/) is an animation library with a visual, keyframe-based editor. The [`@threlte/theatre`](/docs/reference/theatre/getting-started) package connects it to your scene: you pick the properties you want to animate, keyframe them on a timeline in the browser, and play the result back.
-
 In this tutorial we'll build one small scene and animate it from start to finish. Along the way we'll meet every piece of the package you need for real work: [`<Theatre>`](/docs/reference/theatre/theatre), [`<SheetObject>`](/docs/reference/theatre/sheet-object), the [`<Studio>`](/docs/reference/theatre/studio), and [`<Sequence>`](/docs/reference/theatre/sequence).
 
 <Tip type="info">
   This guide assumes you're comfortable with the [Your First
   Scene](/docs/learn/getting-started/your-first-scene) basics. For installation and a quick
-  component-by-component overview of `@threlte/theatre`, see [Getting
-  Started](/docs/reference/theatre/getting-started), directly above this page.
+  component-by-component overview of `@threlte/theatre`, see the [Getting
+  Started](/docs/reference/theatre/getting-started) page.
 </Tip>
 
 ## The starting scene
@@ -51,13 +49,13 @@ Before we bring in Theatre.js, we need something to animate. Here's a plain Thre
   hideCode
 />
 
-The `App.svelte` entry point is the usual Threlte setup — a `<Canvas>` wrapping our `Scene`. We'll return to it in the next step, because wiring in Theatre.js starts there.
+The `App.svelte` entry point is the usual Threlte setup — a `<Canvas>` wrapping our `<Scene>`. We'll return to it in the next step, because wiring in Theatre.js starts there.
 
 ## Bringing in the studio
 
-Two changes turn this static scene into something we can edit: we open the Theatre.js editor, and we tell it which object it's allowed to touch.
+Two changes turn this static scene into something we can edit for animations: the Theatre.js editor, and telling Theatre.js which objects it's allowed to touch.
 
-First, in `App.svelte`, wrap the scene in [`<Theatre>`](/docs/reference/theatre/theatre). This one component sets up everything we need behind the scenes — a `<Project>`, a `<Sheet>` (the timeline our animation will live on), and the `<Studio>` (the visual editor):
+First, in `App.svelte`, wrap the scene in the [`<Theatre>`](/docs/reference/theatre/theatre) component. This one component sets up everything we need behind the scenes — a `<Project>`, a `<Sheet>` (the timeline our animation will live on), and the `<Studio>` (the visual editor):
 
 ```svelte title="App.svelte"
 <script>
@@ -73,7 +71,7 @@ First, in `App.svelte`, wrap the scene in [`<Theatre>`](/docs/reference/theatre/
 </Canvas>
 ```
 
-On its own, `<Theatre>` only opens the editor — nothing is animatable yet. To expose the box, we wrap it in a [`<SheetObject>`](/docs/reference/theatre/sheet-object). Its `key` is the name the object gets in the Studio outline. The `children` snippet hands us a `Transform` component, which puts the box's position, rotation and scale under Theatre.js's control:
+On its own, `<Theatre>` only opens the editor — nothing is animatable yet. To expose the box, we wrap it in a [`<SheetObject>`](/docs/reference/theatre/sheet-object). Its `key` is the name the object gets in the [Studio outline](https://www.theatrejs.com/docs/latest/manual/Studio). The `children` snippet hands us a `Transform` component, which puts the box's position, rotation and scale under Theatre.js's control:
 
 ```svelte title="Scene.svelte"
 <script>
@@ -124,11 +122,11 @@ The Theatre.js Studio now overlays the scene, with a **Box** entry in the outlin
   your edits are still there, but they're only visible to you. Press `Alt` + `\` (`Option` + `\` on
   macOS) to hide or show the Studio UI — one of several handy [keyboard
   shortcuts](https://www.theatrejs.com/docs/latest/manual/keyboard-shortcuts). To reset an example
-  to its original state, clear the site's local storage (or use a private window).
+  to its original state, clear the site's local storage.
 </Tip>
 
 <Tip type="info">
-  `<Theatre>` is the convenient all-in-one wrapper. When you need more control — multiple sheets, a custom project name, or showing the studio only in development — reach for [`<Project>`](/docs/reference/theatre/project), [`<Sheet>`](/docs/reference/theatre/sheet) and [`<Studio>`](/docs/reference/theatre/studio) directly — see [Where to go next](#where-to-go-next).
+  `<Theatre>` is the convenient all-in-one wrapper. When you need more control — multiple sheets, a custom project name, or showing the studio only in development — reach for [`<Project>`](/docs/reference/theatre/project), [`<Sheet>`](/docs/reference/theatre/sheet) and [`<Studio>`](/docs/reference/theatre/studio) directly.
 </Tip>
 
 ## Syncing more properties
@@ -161,13 +159,13 @@ Select the **Box** in the Studio and you'll now find a **color** control alongsi
 
 ## Animating on the timeline
 
-With the box's properties exposed, we can author an animation. In the Studio, select the **Box**, then use the timeline at the bottom: move the playhead to a point in time, change a value (drag the box in the viewport, or edit `position` / `rotation` in the panel), and Theatre.js records a **keyframe**. Set a few keyframes at different times and you've built an animation — no code required. The Theatre.js manual has a full guide to [adding and removing keyframes](https://www.theatrejs.com/docs/latest/manual/sequences#addingremoving-keyframes).
+With the box's properties exposed, we can author an animation. In the Studio, select the **Box**, then use the timeline at the bottom: move the playhead to a point in time, change a value (drag the box in the viewport, or edit `position` / `rotation` in the panel), and Theatre.js records a **keyframe**. [Add keyframes](https://www.theatrejs.com/docs/latest/manual/sequences#addingremoving-keyframes) at different times and you've built an animation.
 
 There's one catch for a website: while you edit, the Studio saves your work to the browser's local storage. That's great for iterating, but it isn't something you can ship. To make an animation part of your app, you [**export**](https://www.theatrejs.com/docs/latest/manual/projects#state) it and load it back in:
 
-1. In the Studio, select the project (top-left) and click **Export** — you get a `state.json` file.
-2. Drop that file next to your components.
-3. Import it and hand it to Theatre.js through the `config` prop.
+- In the Studio, select the project (top-left) and click **Export** — you get a `state.json` file.
+- Drop that file next to your components.
+- Import it and hand it to Theatre.js through the `config` prop.
 
 ```svelte title="App.svelte"
 <script>
@@ -227,3 +225,4 @@ That's the whole workflow: build a scene, expose the parts you care about with `
 - **Drive playback yourself.** `<Sequence>` exposes `bind:playing`, `bind:position`, `play` and `pause`, so you can control the animation from your own UI instead of `autoplay`. See the [`<Sequence>`](/docs/reference/theatre/sequence) reference and the [`useSequence`](/docs/reference/theatre/use-sequence) hook.
 - **Hide the Studio in production.** You usually only want the editor while developing. Swap `<Theatre>` for [`<Project>`](/docs/reference/theatre/project), [`<Sheet>`](/docs/reference/theatre/sheet) and a conditionally-rendered [`<Studio>`](/docs/reference/theatre/studio).
 - **Animate more.** Anything you can wrap in a `<Sync>` can be keyframed — light intensity and colour, camera position, material roughness. Try exposing a few more properties on this scene and animating them.
+- **Adjust the tween** between keyframes. There's some neat options to play with in the [tween editor](https://www.theatrejs.com/docs/latest/manual/sequences#using-the-tween-editor).
