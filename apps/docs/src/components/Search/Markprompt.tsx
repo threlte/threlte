@@ -2,8 +2,7 @@ import { searchActive } from './searchStore'
 import { Markprompt } from '@markprompt/react'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import hljs from 'highlight.js'
-//@ts-ignore
-import hljs_svelte from 'highlightjs-svelte'
+// import hljs_svelte from 'highlightjs-svelte'
 
 function Search({ visible }: { visible: boolean }) {
   const container = useRef(null)

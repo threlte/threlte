@@ -10,10 +10,11 @@ import tailwindcss from '@tailwindcss/vite'
 import preact from '@astrojs/preact'
 import svelte from '@astrojs/svelte'
 import mdx from '@astrojs/mdx'
+import { unified } from '@astrojs/markdown-remark'
 import sitemap from '@astrojs/sitemap'
-import { cpus } from 'os'
+// import { cpus } from 'os'
 
-const CPU_COUNT = cpus().length
+// const CPU_COUNT = cpus().length
 
 // "@theatre/core" needs to be externalized in development mode but not in production!
 const noExternal = ['three', 'troika-three-text', 'postprocessing', '@pmndrs/vanilla']
@@ -28,6 +29,9 @@ export default defineConfig({
   base: process.env.BASE_PATH ? `/${process.env.BASE_PATH.replace(/^\/|\/$/g, '')}/` : '/',
   compressHTML: false,
   markdown: {
+    processor: unified({
+      rehypePlugins: [rehypeSlug(), rehypeAutolinkHeadings()]
+    }),
     syntaxHighlight: false
   },
   prefetch: {
@@ -41,9 +45,7 @@ export default defineConfig({
       imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
     }),
     svelte(),
-    mdx({
-      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
-    }),
+    mdx(),
     preact({ compat: true, include: ['**/*.tsx'] }),
     sitemap({
       // `/examples/*` are iframe runtimes with no indexable content; keep `/docs/examples/*`.
@@ -76,8 +78,13 @@ export default defineConfig({
     },
     optimizeDeps: {
       exclude: ['threlte-uikit'],
-      esbuildOptions: {
-        target: 'esnext'
+      rolldownOptions: {
+        resolve: {
+          symlinks: true
+        },
+        output: {
+          topLevelVar: true
+        }
       }
     },
     build: {
@@ -86,9 +93,9 @@ export default defineConfig({
       terserOptions: {
         keep_classnames: true
       },
-      rollupOptions: {
+      rolldownOptions: {
         external: ['sharp'],
-        maxParallelFileOps: CPU_COUNT * 3,
+        // maxParallelFileOps: CPU_COUNT * 3,
         output: {
           manualChunks: undefined
         }
