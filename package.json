@@ -27,15 +27,6 @@
     "turbo": "^2.3.1",
     "typescript": "catalog:"
   },
-  "pnpm": {
-    "overrides": {
-      "vite": "catalog:"
-    },
-    "patchedDependencies": {
-      "@theatre/studio": "patches/@theatre__studio.patch",
-      "mitt": "patches/mitt.patch"
-    }
-  },
   "engines": {
     "pnpm": ">=9",
     "node": ">=22"
