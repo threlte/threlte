@@ -30,7 +30,8 @@ export default defineConfig({
   compressHTML: false,
   markdown: {
     processor: unified({
-      rehypePlugins: [rehypeSlug(), rehypeAutolinkHeadings()]
+      // @ts-ignore
+      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings]
     }),
     syntaxHighlight: false
   },
