@@ -11,9 +11,10 @@
     topbarLeft?: Snippet
     topbarRight?: Snippet
     content?: Snippet
+    children?: Snippet
   }
 
-  let { search = false, topbarLeft, topbarRight, content }: Props = $props()
+  let { search = false, topbarLeft, topbarRight, content, children }: Props = $props()
 
   let showMenu = $state(false)
 
@@ -66,3 +67,5 @@
 
 <!-- Mobile nav spacer -->
 <div class="h-[var(--docs-navbar-height)]"></div>
+
+{@render children?.()}

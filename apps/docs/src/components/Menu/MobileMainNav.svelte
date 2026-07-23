@@ -4,9 +4,10 @@
   interface Props {
     logo?: Snippet
     socials?: Snippet
+    children?: Snippet
   }
 
-  let { logo, socials }: Props = $props()
+  let { logo, socials, children }: Props = $props()
 </script>
 
 <MobileNav>
@@ -30,4 +31,5 @@
       </div>
     </div>
   {/snippet}
+  {@render children?.()}
 </MobileNav>

@@ -14,9 +14,18 @@
     baseUrl: string
     logo?: Snippet
     socials?: Snippet
+    children?: Snippet
   }
 
-  let { sidebarMenu, activeSidebarTab, activeUrlPathName, baseUrl, logo, socials }: Props = $props()
+  let {
+    sidebarMenu,
+    activeSidebarTab,
+    activeUrlPathName,
+    baseUrl,
+    logo,
+    socials,
+    children
+  }: Props = $props()
 </script>
 
 <MobileNav search>
@@ -75,4 +84,5 @@
       {@render socials?.()}
     </div>
   {/snippet}
+  {@render children?.()}
 </MobileNav>
