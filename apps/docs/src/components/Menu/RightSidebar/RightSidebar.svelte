@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { MarkdownHeading } from 'astro'
+  import type { Snippet } from 'svelte'
   import { onMount } from 'svelte'
   import { onDestroy } from 'svelte'
 
@@ -7,7 +8,7 @@
     editUrl?: string | undefined
     sourceUrl?: string | undefined
     headings: MarkdownHeading[]
-    children?: import('svelte').Snippet
+    children?: Snippet
   }
 
   let { editUrl = undefined, sourceUrl = undefined, headings, children }: Props = $props()
