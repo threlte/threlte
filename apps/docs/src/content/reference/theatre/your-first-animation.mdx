@@ -131,7 +131,7 @@ The Theatre.js Studio now overlays the scene, with a **Box** entry in the outlin
 
 ## Syncing more properties
 
-`Transform` covers position, rotation and scale — but we want to animate the box's **colour** too. For any property that isn't a transform, we use [`<Sync>`](/docs/reference/theatre/sync), which bridges a specific prop of an object to the Studio.
+`Transform` covers position, rotation and scale — but we can expose the box's **colour** too. For any property that isn't a transform, we use [`<Sync>`](/docs/reference/theatre/sync), which bridges a specific prop of an object to the Studio.
 
 Here we nest `<Sync color />` inside the material, and pull `Sync` out of the same `children` snippet:
 
