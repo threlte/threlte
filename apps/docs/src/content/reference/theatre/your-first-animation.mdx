@@ -131,7 +131,7 @@ The Theatre.js Studio now overlays the scene, with a **Box** entry in the outlin
 
 ## Syncing more properties
 
-`Transform` covers position, rotation and scale — but we can expose the box's **colour** too. For any property that isn't a transform, we use [`<Sync>`](/docs/reference/theatre/sync), which bridges a specific prop of an object to the Studio.
+`Transform` covers position, rotation and scale — but we want to animate the box's **colour** too. For any property that isn't a transform, we use [`<Sync>`](/docs/reference/theatre/sync), which bridges a specific prop of an object to the Studio.
 
 Here we nest `<Sync color />` inside the material, and pull `Sync` out of the same `children` snippet:
 
@@ -159,7 +159,7 @@ Select the **Box** in the Studio and you'll now find a **color** control alongsi
 
 ## Animating on the timeline
 
-With the box's properties exposed, we can author an animation. In the Studio, select the **Box**, then use the timeline at the bottom: move the playhead to a point in time, change a value (drag the box in the viewport, or edit `position` / `rotation` in the panel), and Theatre.js records a **keyframe**. [Add keyframes](https://www.theatrejs.com/docs/latest/manual/sequences#addingremoving-keyframes) at different times and you've built an animation.
+With the box's properties exposed, we can author an animation. In the Studio, select the **Box**, then use the timeline at the bottom: move the playhead to a point in time, change a value (drag the box in the viewport, or edit `position` / `rotation` / `color` in the panel), and Theatre.js records a **keyframe**. [Add keyframes](https://www.theatrejs.com/docs/latest/manual/sequences#addingremoving-keyframes) at different times and you've built an animation.
 
 There's one catch for a website: while you edit, the Studio saves your work to the browser's local storage. That's great for iterating, but it isn't something you can ship. To make an animation part of your app, you [**export**](https://www.theatrejs.com/docs/latest/manual/projects#state) it and load it back in:
 
