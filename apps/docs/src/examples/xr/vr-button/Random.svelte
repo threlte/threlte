@@ -1,5 +1,5 @@
 <script lang="ts">
-  // The following components started as copies from https://fun-bit.vercel.app/
+  // The following components started as copies
   import BirchTrees from './assets/birch.svelte'
   import Trees from './assets/tree.svelte'
   import Bushes from './assets/bush.svelte'

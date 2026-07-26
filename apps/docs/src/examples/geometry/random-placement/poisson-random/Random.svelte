@@ -1,7 +1,7 @@
 <script lang="ts">
   import { radius, width, height } from './stores'
   import { AdaptedPoissonDiscSample as Sampler } from './sampling'
-  // The following component started as a copy from https://fun-bit.vercel.app/
+  // The following component started as a copy
   import Bushes from './assets/bush.svelte'
 
   const sampler = $derived(new Sampler($radius, [width, height], undefined, Math.random))

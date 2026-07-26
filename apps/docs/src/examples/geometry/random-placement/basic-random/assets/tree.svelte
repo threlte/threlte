@@ -21,13 +21,17 @@
   }
 
   const assets = Promise.all([
-    useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/NormalTree_1.gltf'),
-    useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/NormalTree_Bark.png'),
-    useTexture(
-      'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/NormalTree_Leaves.png'
+    useGltf<GLTFResult>(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/NormalTree_1.gltf'
     ),
     useTexture(
-      'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/NormalTree_Bark_Normal.png'
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Textures/NormalTree_Bark.png'
+    ),
+    useTexture(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Textures/NormalTree_Leaves.png'
+    ),
+    useTexture(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Textures/NormalTree_Bark_Normal.png'
     )
   ])
 </script>

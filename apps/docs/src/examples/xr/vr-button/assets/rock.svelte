@@ -19,7 +19,7 @@
   }
 
   const gltf = useGltf<GLTFResult>(
-    'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Rock_2.gltf'
+    'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Rock_2.gltf'
   )
 </script>
 

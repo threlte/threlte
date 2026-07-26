@@ -21,11 +21,17 @@
   }
 
   const assets = Promise.all([
-    useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/BirchTree_1.gltf'),
-    useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Bark.png'),
-    useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Leaves.png'),
+    useGltf<GLTFResult>(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/BirchTree_1.gltf'
+    ),
     useTexture(
-      'https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/BirchTree_Bark_Normal.png'
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Textures/BirchTree_Bark.png'
+    ),
+    useTexture(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Textures/BirchTree_Leaves.png'
+    ),
+    useTexture(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Textures/BirchTree_Bark_Normal.png'
     )
   ])
 </script>

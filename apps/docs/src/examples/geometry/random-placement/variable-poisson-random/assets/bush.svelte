@@ -19,8 +19,12 @@
   }
 
   const assets = Promise.all([
-    useGltf<GLTFResult>('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Bush.gltf'),
-    useTexture('https://fun-bit.vercel.app/Ultimate-Stylized-Nature/Textures/Bush_Leaves.png')
+    useGltf<GLTFResult>(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Bush.gltf'
+    ),
+    useTexture(
+      'https://funbit.definitelymaybe.deno.net/Ultimate-Stylized-Nature/Textures/Bush_Leaves.png'
+    )
   ])
 </script>
 

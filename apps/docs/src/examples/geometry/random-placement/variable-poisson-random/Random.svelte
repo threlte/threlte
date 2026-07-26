@@ -1,7 +1,7 @@
 <script lang="ts">
   import { width, height } from './stores'
   import { PoissonDiscSample as Sampler } from './sampling'
-  // The following components started as copies from https://fun-bit.vercel.app/
+  // The following components started as copies
   import Trees from './assets/tree.svelte'
   import Bushes from './assets/bush.svelte'
   import Rocks from './assets/rock.svelte'
