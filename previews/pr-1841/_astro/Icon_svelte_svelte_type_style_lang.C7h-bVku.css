@@ -1,0 +1,1 @@
+svg.svelte-w0dxgi{transform:rotate(var(--r, 0deg)) scale(var(--sx, 1),var(--sy, 1))}path.svelte-w0dxgi{fill:currentColor}@keyframes svelte-w0dxgi-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.spin.svelte-w0dxgi{animation:svelte-w0dxgi-spin 1s linear infinite}
