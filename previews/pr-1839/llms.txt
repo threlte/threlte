@@ -162,6 +162,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 ### @threlte/theatre
 
 - [Getting Started](https://threlte.xyz/previews/pr-1839/docs/reference/theatre/getting-started)
+- [Your First Animation](https://threlte.xyz/previews/pr-1839/docs/reference/theatre/your-first-animation)
 - [<Theatre>](https://threlte.xyz/previews/pr-1839/docs/reference/theatre/theatre)
 - [<Project>](https://threlte.xyz/previews/pr-1839/docs/reference/theatre/project)
 - [<Sheet>](https://threlte.xyz/previews/pr-1839/docs/reference/theatre/sheet)
