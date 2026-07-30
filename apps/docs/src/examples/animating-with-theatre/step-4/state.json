@@ -1,0 +1,133 @@
+{
+  "sheetsById": {
+    "default": {
+      "staticOverrides": {
+        "byObject": {
+          "Box": {
+            "color": {
+              "r": 1,
+              "g": 0.243,
+              "b": 0,
+              "a": 1
+            }
+          }
+        }
+      },
+      "sequence": {
+        "subUnitsPerUnit": 30,
+        "length": 4,
+        "type": "PositionalSequence",
+        "tracksByObject": {
+          "Box": {
+            "trackData": {
+              "rotationY": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Box:[\"rotation\",\"y\"]",
+                "keyframes": [
+                  {
+                    "id": "kf_rot_0",
+                    "position": 0,
+                    "connectedRight": true,
+                    "handles": [0.333, 0.333, 0.667, 0.667],
+                    "type": "bezier",
+                    "value": 0
+                  },
+                  {
+                    "id": "kf_rot_1",
+                    "position": 4,
+                    "connectedRight": true,
+                    "handles": [0.333, 0.333, 0.667, 0.667],
+                    "type": "bezier",
+                    "value": 360
+                  }
+                ]
+              },
+              "positionY": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Box:[\"position\",\"y\"]",
+                "keyframes": [
+                  {
+                    "id": "kf_pos_0",
+                    "position": 0,
+                    "connectedRight": true,
+                    "handles": [0.5, 1, 0.5, 0],
+                    "type": "bezier",
+                    "value": 0
+                  },
+                  {
+                    "id": "kf_pos_1",
+                    "position": 2,
+                    "connectedRight": true,
+                    "handles": [0.5, 1, 0.5, 0],
+                    "type": "bezier",
+                    "value": 1
+                  },
+                  {
+                    "id": "kf_pos_2",
+                    "position": 4,
+                    "connectedRight": true,
+                    "handles": [0.5, 1, 0.5, 0],
+                    "type": "bezier",
+                    "value": 0
+                  }
+                ]
+              },
+              "V2bfL5vQNa": {
+                "type": "BasicKeyframedTrack",
+                "__debugName": "Box:[\"color\"]",
+                "keyframes": [
+                  {
+                    "id": "TFQuSgEpEP",
+                    "position": 0,
+                    "connectedRight": true,
+                    "handles": [0.5, 1, 0.5, 0],
+                    "type": "bezier",
+                    "value": {
+                      "r": 1,
+                      "g": 0.23921568627450981,
+                      "b": 0,
+                      "a": 1
+                    }
+                  },
+                  {
+                    "id": "Zo94DBRYtK",
+                    "position": 2,
+                    "connectedRight": true,
+                    "handles": [0.5, 1, 0.5, 0],
+                    "type": "bezier",
+                    "value": {
+                      "r": 0.29411764705882354,
+                      "g": 0.27450980392156865,
+                      "b": 1,
+                      "a": 1
+                    }
+                  },
+                  {
+                    "id": "GsjviFU9hx",
+                    "position": 4,
+                    "connectedRight": true,
+                    "handles": [0.5, 1, 0.5, 0],
+                    "type": "bezier",
+                    "value": {
+                      "r": 1,
+                      "g": 0.23921568627450981,
+                      "b": 0,
+                      "a": 1
+                    }
+                  }
+                ]
+              }
+            },
+            "trackIdByPropPath": {
+              "[\"rotation\",\"y\"]": "rotationY",
+              "[\"position\",\"y\"]": "positionY",
+              "[\"color\"]": "V2bfL5vQNa"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitionVersion": "0.4.0",
+  "revisionHistory": ["tmMIDB6oCJ16jsqe", "theatre-tutorial-r1"]
+}
