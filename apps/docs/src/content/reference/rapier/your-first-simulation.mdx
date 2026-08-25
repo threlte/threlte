@@ -229,11 +229,18 @@ to show the reader where the pane is — the posts mark its exact width.
 You now have the pieces that most physics work is built from: a world, fixed and
 dynamic bodies, colliders, impulses, material properties and sensors. From here:
 
-- [`<AutoColliders>`](/docs/reference/rapier/auto-colliders) generates collider
-  shapes from your meshes instead of you declaring them by hand
-- [Joints](/docs/reference/rapier/joints) connect bodies together — hinges, ropes,
-  sliders and motors
-- [`<CollisionGroups>`](/docs/reference/rapier/collision-groups) controls what is
-  allowed to collide with what
-- The [Rapier user guide](https://rapier.rs/docs/user_guides/javascript/getting_started_js)
-  covers the engine underneath in far more depth than we can here
+- **Let Threlte build your colliders.** [`<AutoColliders>`](/docs/reference/rapier/auto-colliders)
+  generates collider shapes from your meshes instead of you declaring them by hand.
+- **Connect bodies together.** [Joints](/docs/reference/rapier/joints) give you hinges,
+  ropes, sliders and motors — a catapult arm, a suspension, a swinging bridge.
+- **Decide what can hit what.** [`<CollisionGroups>`](/docs/reference/rapier/collision-groups)
+  controls which bodies are allowed to collide — how you'd stop a shot from knocking
+  over your own cannon.
+- **Turn it into a game.** The sensor and the `Set` in step 6 are already the skeleton
+  of a scoring system. Add a limited number of shots, a target to beat and a reset, and
+  you have a game loop. [`usePhysicsTask`](/docs/reference/rapier/use-physics-task) runs
+  your logic in step with the physics world rather than the render frame, and
+  [framerate](/docs/reference/rapier/framerate) covers the fixed-step setup you'll want
+  once the rules depend on the simulation being repeatable.
+- **Go deeper on the engine.** The [Rapier user guide](https://rapier.rs/docs/user_guides/javascript/getting_started_js)
+  covers the physics underneath in far more depth than we can here.
