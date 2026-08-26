@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core/webgpu'
   import { OrbitControls } from '@threlte/extras'
   import Stats from 'three/addons/libs/stats.module.js'
   import * as THREE from 'three/webgpu'

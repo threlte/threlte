@@ -3,7 +3,7 @@
   import type { ColorRepresentation, Mesh } from 'three/webgpu'
   import { DoubleSide, Group } from 'three/webgpu'
   import { Environment, OrbitControls, useDraco, useGltf } from '@threlte/extras'
-  import { T, useTask, useThrelte } from '@threlte/core'
+  import { T, useTask, useThrelte } from '@threlte/core/webgpu'
 
   type SceneProps = {
     arcAngle: number
@@ -51,7 +51,10 @@
   position.y={5}
   position.z={12}
 >
-  <OrbitControls enableDamping />
+  <OrbitControls
+    enableDamping
+    enableZoom={false}
+  />
 </T.PerspectiveCamera>
 
 <T.DirectionalLight
