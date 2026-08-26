@@ -42,9 +42,9 @@ const {
 	rigidBodyA: Writable<RAPIER.RigidBody>
 	rigidBodyB: Writable<RAPIER.RigidBody>
 } = useFixedJoint(
-	anchorA,  // Position
-  frameA,   // Rotation
-  anchorB,  // Position
-  frameB    // Rotation
+	anchorA,  // [number, number, number]
+  frameA,   // [number, number, number] | Euler
+  anchorB,  // [number, number, number]
+  frameB    // [number, number, number] | Euler
 )
 ```
