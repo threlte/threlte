@@ -52,7 +52,7 @@ export {
   useParentObject3D_deprecated as useParentObject3D
 } from './context/fragments/parentObject3D.js'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte.js'
-export { createSceneContext, useScene } from './context/fragments/scene.js'
+export { getSceneContext, setSceneContext } from './context/fragments/scene.js'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte.js'
 export { createUserContext } from './context/fragments/user.js'
 

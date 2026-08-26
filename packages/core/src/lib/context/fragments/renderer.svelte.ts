@@ -20,7 +20,7 @@ import {
 } from '../../utilities/currentWritable.js'
 import { useCamera } from './camera.svelte.js'
 import { useDOM } from './dom.svelte.js'
-import { useScene } from './scene.js'
+import { getSceneContext } from './scene.js'
 import { useScheduler } from './scheduler.svelte.js'
 import type { WebGPURenderer } from 'three/webgpu'
 import { fromStore } from 'svelte/store'
@@ -90,7 +90,7 @@ export const createRendererContext = <T extends Renderer>(
   options: () => CreateRendererContextOptions<T>
 ): RendererContext<T> => {
   const { camera, manual } = useCamera()
-  const { scene } = useScene()
+  const scene = getSceneContext()
   const {
     invalidate,
     mainStage,
