@@ -9,7 +9,7 @@ import {
   type CreateRendererContextOptions,
   type Renderer
 } from './fragments/renderer.svelte.js'
-import { createSceneContext } from './fragments/scene.js'
+import { setSceneContext } from './fragments/scene.js'
 import {
   createSchedulerContext,
   type CreateSchedulerContextOptions
@@ -23,7 +23,7 @@ export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererCont
 export const createThrelteContext = <T extends Renderer>(
   options: CreateThrelteContextOptions<T> | (() => CreateThrelteContextOptions<T>)
 ) => {
-  const { scene } = createSceneContext()
+  const scene = setSceneContext()
 
   const opts = typeof options === 'function' ? options : () => options
 

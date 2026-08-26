@@ -2,8 +2,12 @@ import type { WebGLRenderer } from 'three'
 import { useCamera, type CameraContext } from '../fragments/camera.svelte.js'
 import { useDOM, type DOMContext } from '../fragments/dom.svelte.js'
 import { useRenderer, type Renderer, type RendererContext } from '../fragments/renderer.svelte.js'
-import { useScene, type SceneContext } from '../fragments/scene.js'
+import { getSceneContext, setSceneContext } from '../fragments/scene.js'
 import { useScheduler, type SchedulerContext } from '../fragments/scheduler.svelte.js'
+
+type Scene = {
+  scene: ReturnType<typeof getSceneContext>
+}
 
 /**
  * ### `ThrelteContext`
@@ -16,7 +20,7 @@ export interface ThrelteContext<T extends Renderer>
     Omit<CameraContext, 'manual' | 'makeDefaultCameras' | 'makeDefaultCameraManual'>,
     Omit<DOMContext, 'shouldUpdateSize'>,
     RendererContext<T>,
-    SceneContext,
+    Scene,
     Omit<SchedulerContext, 'frameInvalidated' | 'autoInvalidations' | 'resetFrameInvalidation'> {}
 
 /**
@@ -38,7 +42,6 @@ export const useThrelte = <T extends Renderer = WebGLRenderer>(): ThrelteContext
   const schedulerCtx = useScheduler()
   const rendererCtx = useRenderer()
   const cameraCtx = useCamera()
-  const sceneCtx = useScene()
   const domCtx = useDOM()
 
   const context: ThrelteContext<T> = {
@@ -62,10 +65,10 @@ export const useThrelte = <T extends Renderer = WebGLRenderer>(): ThrelteContext
     size: domCtx.size,
     toneMapping: rendererCtx.toneMapping,
     get scene() {
-      return sceneCtx.scene
+      return getSceneContext()
     },
     set scene(scene) {
-      sceneCtx.scene = scene
+      setSceneContext(scene)
     }
   }
 

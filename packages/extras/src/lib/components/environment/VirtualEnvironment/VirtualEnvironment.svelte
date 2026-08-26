@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { VirtualEnvironmentProps } from './types.js'
-  import { createSceneContext, observe, T, useTask, useThrelte } from '@threlte/core'
+  import { setSceneContext, observe, T, useTask, useThrelte } from '@threlte/core'
   import { useCubeCamera } from '../../../hooks/useCubeCamera.svelte.js'
   import { useEnvironment } from '../utils/useEnvironment.svelte.js'
 
@@ -21,7 +21,7 @@
   }: VirtualEnvironmentProps = $props()
 
   // Create a parent scene to render the virtual environment into
-  const { scene } = createSceneContext()
+  const scene = setSceneContext()
 
   export const { camera, renderTarget } = useCubeCamera(
     () => near,

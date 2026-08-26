@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { T, createCameraContext, createSceneContext, useThrelte } from '@threlte/core'
+  import { T, createCameraContext, setSceneContext, useThrelte } from '@threlte/core'
   import type { HUDProps } from './types.js'
 
   const { renderStage, renderer, toneMapping } = useThrelte()
@@ -13,7 +13,7 @@
     ...rest
   }: HUDProps = $props()
 
-  const { scene } = createSceneContext()
+  const scene = setSceneContext()
   const { camera } = createCameraContext()
 
   const key = Symbol('threlte-hud-render-stage')
