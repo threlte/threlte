@@ -42,9 +42,9 @@ const {
 	rigidBodyA: Writable<RAPIER.RigidBody>
 	rigidBodyB: Writable<RAPIER.RigidBody>
 } = useRevoluteJoint(
-	anchorA,  // Position
-  anchorB,  // Position
-  axis,     // Rotation
+	anchorA,  // [number, number, number] | Vector3
+  anchorB,  // [number, number, number] | Vector3
+  axis,     // [number, number, number] | Vector3
   limits    // [min, max] | undefined
 )
 ```

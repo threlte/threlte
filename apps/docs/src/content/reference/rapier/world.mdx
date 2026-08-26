@@ -10,7 +10,7 @@ componentSignature:
       [
         { name: 'framerate', type: "number | 'varying'", default: "'varying'" },
         { name: 'autoStart', type: 'boolean', default: 'true' },
-        { name: 'gravity', type: 'Position', default: '{ y: -9.81 }' },
+        { name: 'gravity', type: '[number, number, number]', default: '[0, -9.81, 0]' },
         {
           name: 'simulationStageOptions',
           type: '{ before?: (Key | Stage) | (Key | Stage)[]; after?: (Key | Stage) | (Key | Stage)[] }'

@@ -41,8 +41,8 @@ const {
 	rigidBodyA: Writable<RAPIER.RigidBody>
 	rigidBodyB: Writable<RAPIER.RigidBody>
 } = useRopeJoint(
-	anchorA,  // Position
-  anchorB,  // Position
+	anchorA,  // [number, number, number] | Vector3
+  anchorB,  // [number, number, number] | Vector3
 	length    // Length of the rope
 )
 ```
