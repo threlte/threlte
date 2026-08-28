@@ -4846,7 +4846,7 @@ ricochet.
 <Example path="building-a-cannon/step-5" />
 
 Try setting `restitution` to `2` and firing again. Physics parameters are much
-easier to understand once you've abused them.
+easier to understand once you've played with the extremes.
 
 ## Keeping score
 
