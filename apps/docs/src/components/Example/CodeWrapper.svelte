@@ -9,7 +9,7 @@
     filePaths: string[]
     exampleBasePath: string
     hidePreview: boolean
-    showFile: string | null
+    showFile?: string
     expanded?: boolean
     children: Snippet
   }
