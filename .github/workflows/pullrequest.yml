@@ -49,6 +49,7 @@ jobs:
 
   test-core:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout 🛎️
@@ -64,14 +65,32 @@ jobs:
         with:
           run_install: true
 
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install Playwright system dependencies
+        run: pnpm --filter @threlte/core exec playwright install-deps chromium
+
       - name: Install Playwright Browsers
-        run: pnpm --filter @threlte/core exec playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: |
+          for attempt in 1 2 3; do
+            timeout 120 pnpm --filter @threlte/core exec playwright install chromium && exit 0
+            echo "::warning::Playwright browser install attempt $attempt timed out or failed, retrying..."
+          done
+          echo "::error::Playwright browser install failed after 3 attempts"
+          exit 1
 
       - name: Test core
         run: pnpm --filter @threlte/core exec vitest run --browser=chromium
 
   test-extras:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout 🛎️
@@ -87,8 +106,25 @@ jobs:
         with:
           run_install: true
 
+      - name: Cache Playwright Browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+
+      - name: Install Playwright system dependencies
+        run: pnpm --filter @threlte/extras exec playwright install-deps chromium
+
       - name: Install Playwright Browsers
-        run: pnpm --filter @threlte/extras exec playwright install --with-deps chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: |
+          for attempt in 1 2 3; do
+            timeout 120 pnpm --filter @threlte/extras exec playwright install chromium && exit 0
+            echo "::warning::Playwright browser install attempt $attempt timed out or failed, retrying..."
+          done
+          echo "::error::Playwright browser install failed after 3 attempts"
+          exit 1
 
       - name: Test extras
         run: pnpm --filter @threlte/extras exec vitest run --browser=chromium

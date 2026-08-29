@@ -14,8 +14,8 @@ componentSignature:
           default: "'dynamic'"
         },
         { name: 'canSleep', type: 'boolean', default: 'true' },
-        { name: 'linearVelocity', type: 'Position', default: '{}' },
-        { name: 'angularVelocity', type: 'Rotation', default: '{}' },
+        { name: 'linearVelocity', type: '[number, number, number]', default: '[0, 0, 0]' },
+        { name: 'angularVelocity', type: '[number, number, number]', default: '[0, 0, 0]' },
         { name: 'gravityScale', type: 'number', default: '1' },
         { name: 'ccd', type: 'boolean', default: 'false' },
         { name: 'lockRotations', type: 'boolean', default: 'false' },

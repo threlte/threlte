@@ -3,6 +3,7 @@
   import type { Vector2Tuple } from 'three'
   import { useTask, T } from '@threlte/core'
   import type { FloatProps } from './types.js'
+  import { untrack } from 'svelte'
 
   let {
     speed = 1,
@@ -19,7 +20,7 @@
   const outerGroup = new Group()
   const group = new Group()
 
-  let t = seed
+  let now = untrack(() => seed)
 
   const map = MathUtils.mapLinear
 
@@ -43,18 +44,18 @@
   )
 
   useTask((delta) => {
-    t += delta
+    now += delta
 
     group.position.x =
-      map(Math.sin((t / 4) * fSpeed[0]) / 10, -0.1, 0.1, ...fRange[0]) * fIntensity[0]
+      map(Math.sin((now / 4) * fSpeed[0]) / 10, -0.1, 0.1, ...fRange[0]) * fIntensity[0]
     group.position.y =
-      map(Math.sin((t / 4) * fSpeed[1]) / 10, -0.1, 0.1, ...fRange[1]) * fIntensity[1]
+      map(Math.sin((now / 4) * fSpeed[1]) / 10, -0.1, 0.1, ...fRange[1]) * fIntensity[1]
     group.position.z =
-      map(Math.sin((t / 4) * fSpeed[2]) / 10, -0.1, 0.1, ...fRange[2]) * fIntensity[2]
+      map(Math.sin((now / 4) * fSpeed[2]) / 10, -0.1, 0.1, ...fRange[2]) * fIntensity[2]
 
-    group.rotation.x = (Math.cos((t / 4) * rSpeed[0]) / 8) * rIntensity[0]
-    group.rotation.y = (Math.sin((t / 4) * rSpeed[1]) / 8) * rIntensity[1]
-    group.rotation.z = (Math.sin((t / 4) * rSpeed[2]) / 20) * rIntensity[2]
+    group.rotation.x = (Math.cos((now / 4) * rSpeed[0]) / 8) * rIntensity[0]
+    group.rotation.y = (Math.sin((now / 4) * rSpeed[1]) / 8) * rIntensity[1]
+    group.rotation.z = (Math.sin((now / 4) * rSpeed[2]) / 20) * rIntensity[2]
     group.updateMatrix()
   })
 </script>

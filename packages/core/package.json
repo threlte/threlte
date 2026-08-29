@@ -33,7 +33,7 @@
     "eslint-plugin-svelte": "catalog:",
     "globals": "catalog:",
     "happy-dom": "^18.0.1",
-    "playwright": "^1.58.2",
+    "playwright": "catalog:",
     "prettier": "catalog:",
     "prettier-plugin-svelte": "catalog:",
     "publint": "catalog:",
