@@ -1,0 +1,3 @@
+const x=t=>t;function g(t){const n=t-1;return n*n*n+1}function u(t){const n=typeof t=="string"&&t.match(/^\s*(-?[\d.]+)([^\s]*)\s*$/);return n?[parseFloat(n[1]),n[2]||"px"]:[t,"px"]}function C(t,{delay:n=0,duration:o=400,easing:s=x}={}){const c=+getComputedStyle(t).opacity;return{delay:n,duration:o,easing:s,css:r=>`opacity: ${r*c}`}}function S(t,{delay:n=0,duration:o=400,easing:s=g,x:c=0,y:r=0,opacity:p=0}={}){const a=getComputedStyle(t),e=+a.opacity,f=a.transform==="none"?"":a.transform,y=e*(1-p),[l,_]=u(c),[$,m]=u(r);return{delay:n,duration:o,easing:s,css:(i,d)=>`
+			transform: ${f} translate(${(1-i)*l}${_}, ${(1-i)*$}${m});
+			opacity: ${e-y*d}`}}export{S as a,C as f};
