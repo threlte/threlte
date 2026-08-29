@@ -1,9 +1,7 @@
 import { getContext, setContext } from 'svelte'
 import { Scene } from 'three'
 
-export const createSceneContext = (): Scene => {
-  const scene = new Scene()
-
+export const createSceneContext = (scene = new Scene()): Scene => {
   setContext<Scene>('threlte-scene-context', scene)
 
   return scene

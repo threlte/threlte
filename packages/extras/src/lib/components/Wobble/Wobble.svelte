@@ -402,7 +402,8 @@
   })
 
   $effect(() => {
-    const parentMesh = $parent
+    const parentMesh = parent.current
+
     if (!isInstanceOf(parentMesh, 'Mesh')) {
       console.error('<Wobble> must be placed inside a <T.Mesh>.')
       return
