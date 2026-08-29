@@ -25,7 +25,7 @@
 
   // The power slider is a multiplier so its whole range reads on screen: 1 is
   // the tuned default, 2 a full-strength shot, 0.1 barely leaves the barrel.
-  const FULL_POWER = 14
+  const FULL_POWER = 28
   const BALL_RADIUS = 0.24
 
   const aimRad = $derived((aim * Math.PI) / 180)
