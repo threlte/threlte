@@ -1,5 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
+  import { BARREL_LENGTH, PIVOT_HEIGHT, PIVOT_X } from './cannon'
 
   let { aim = 0 }: { aim?: number } = $props()
 
@@ -13,14 +14,9 @@
   const CHEEK_Z = 0.36
   const CHEEK_HEIGHT = 0.55
 
-  // A real barrel pivots about its trunnions, forward of the carriage's middle
-  // so the breech has room to swing down.
-  const PIVOT_HEIGHT = 0.8
   // The cheeks carry the barrel, so their top has to meet the pivot rather than
   // stopping short of it.
   const CHEEK_CENTRE_Y = PIVOT_HEIGHT - CHEEK_HEIGHT / 2
-  const PIVOT_X = 0.35
-  const BARREL_LENGTH = 1.6
   const BARREL_BACK = BARREL_LENGTH * 0.34
 </script>
 

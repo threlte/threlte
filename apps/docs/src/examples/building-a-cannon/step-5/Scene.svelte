@@ -3,7 +3,9 @@
   import { T } from '@threlte/core'
   import { OrbitControls, SoftShadows } from '@threlte/extras'
   import { Collider, Debug, RigidBody } from '@threlte/rapier'
-  import Cannon from './Cannon.svelte'
+  import Cannon from '../shared/Cannon.svelte'
+  import { BARREL_LENGTH, PIVOT_HEIGHT, PIVOT_X } from '../shared/cannon'
+  import { createWall } from '../shared/wall'
 
   type Props = {
     debug: boolean
@@ -14,32 +16,16 @@
 
   let { debug, aim, power, fireSignal }: Props = $props()
 
-  const WALL_X = 7
-  const ROWS = 4
-  const COLUMNS = 3
-
-  const bricks = Array.from({ length: COLUMNS * ROWS }, (_, i) => {
-    const column = i % COLUMNS
-    const row = Math.floor(i / COLUMNS)
-    // Running bond: alternate rows shift relative to each other. Kept under
-    // 0.245 so the end brick of an offset row still has its centre of mass over
-    // the brick below it, otherwise it topples on its own.
-    const stagger = row % 2 === 0 ? 0.15 : -0.15
-    // Columns run across the firing line, so this is a wall facing the cannon
-    // rather than a stack pointing away from it.
-    const z = (column - (COLUMNS - 1) / 2 + stagger) * 1.02
-    return {
-      key: i,
-      position: [WALL_X, 0.5 + row * 1.02, z] as [number, number, number]
-    }
-  })
+  const bricks = createWall()
 
   // The shot leaves along the barrel, so the aim angle is the launch angle and
   // the impulse direction falls straight out of it. Only the forward part of
   // the barrel reaches past the trunnions.
-  const PIVOT_HEIGHT = 0.8
-  const PIVOT_X = 0.35
-  const MUZZLE_FROM_PIVOT = 1.6 * 0.66
+  const MUZZLE_FROM_PIVOT = BARREL_LENGTH * 0.66
+
+  // The power slider is a multiplier so its whole range reads on screen: 1 is
+  // the tuned default, 2 a full-strength shot, 0.1 barely leaves the barrel.
+  const FULL_POWER = 14
   const BALL_RADIUS = 0.24
 
   const aimRad = $derived((aim * Math.PI) / 180)
@@ -58,7 +44,10 @@
     const body = ball
     if (!body || fireSignal === 0 || firedFor === fireSignal) return
     firedFor = fireSignal
-    body.applyImpulse({ x: Math.cos(aimRad) * power, y: Math.sin(aimRad) * power, z: 0 }, true)
+    body.applyImpulse(
+      { x: Math.cos(aimRad) * power * FULL_POWER, y: Math.sin(aimRad) * power * FULL_POWER, z: 0 },
+      true
+    )
   })
 </script>
 
@@ -69,6 +58,7 @@
 >
   <OrbitControls
     enableDamping
+    enableZoom={false}
     target={[7, 1.2, 0]}
   />
 </T.PerspectiveCamera>
@@ -81,8 +71,8 @@
   shadow.camera.bottom={-20}
   shadow.camera.left={-20}
   shadow.camera.right={20}
-  shadow.mapSize.width={2048}
-  shadow.mapSize.height={2048}
+  shadow.mapSize.width={1024}
+  shadow.mapSize.height={1024}
 />
 <T.AmbientLight intensity={1} />
 
@@ -112,7 +102,17 @@
   </T.Mesh>
 </RigidBody>
 
-<Cannon aim={aimRad} />
+<!-- The carriage never moves, so it is a fixed body. One box collider stands in
+     for the whole assembly: colliders do not have to match the meshes. -->
+<RigidBody type="fixed">
+  <T.Group position.y={0.45}>
+    <Collider
+      shape="cuboid"
+      args={[1, 0.45, 0.6]}
+    />
+  </T.Group>
+  <Cannon aim={aimRad} />
+</RigidBody>
 
 <!-- Four properties turn a shot that behaves oddly into one that behaves:
      ccd stops it tunnelling through the wall at speed, restitution 0 stops it

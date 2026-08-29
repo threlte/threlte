@@ -120,13 +120,18 @@ Now the fun part. A shot is a ball spawned at the muzzle, given a single shove
 with `applyImpulse`:
 
 ```ts
-body.applyImpulse({ x: Math.cos(aimRad) * power, y: Math.sin(aimRad) * power, z: 0 }, true)
+body.applyImpulse(
+  { x: Math.cos(aimRad) * power * FULL_POWER, y: Math.sin(aimRad) * power * FULL_POWER, z: 0 },
+  true
+)
 ```
 
 Because we push along the barrel's own direction, the aim angle _is_ the launch
 angle — set the slider to 30° and the shot leaves at 30°. That's the whole
 trajectory model, and it's worth appreciating how little there is to it: gravity
-does the rest.
+does the rest. The power slider is a multiplier on a tuned base impulse rather
+than a raw physics value, so its whole range stays perceptible: `1` is the
+default, `2` a full-strength shot, and `0.1` barely clears the muzzle.
 
 <Example path="building-a-cannon/step-4" />
 

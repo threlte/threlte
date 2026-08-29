@@ -2,27 +2,10 @@
   import { T } from '@threlte/core'
   import { OrbitControls, SoftShadows } from '@threlte/extras'
   import { Collider, RigidBody } from '@threlte/rapier'
-  import Cannon from './Cannon.svelte'
+  import Cannon from '../shared/Cannon.svelte'
+  import { createWall } from '../shared/wall'
 
-  const WALL_X = 7
-  const ROWS = 4
-  const COLUMNS = 3
-
-  const bricks = Array.from({ length: COLUMNS * ROWS }, (_, i) => {
-    const column = i % COLUMNS
-    const row = Math.floor(i / COLUMNS)
-    // Running bond: alternate rows shift relative to each other. Kept under
-    // 0.245 so the end brick of an offset row still has its centre of mass over
-    // the brick below it, otherwise it topples on its own.
-    const stagger = row % 2 === 0 ? 0.15 : -0.15
-    // Columns run across the firing line, so this is a wall facing the cannon
-    // rather than a stack pointing away from it.
-    const z = (column - (COLUMNS - 1) / 2 + stagger) * 1.02
-    return {
-      key: i,
-      position: [WALL_X, 0.5 + row * 1.02, z] as [number, number, number]
-    }
-  })
+  const bricks = createWall()
 </script>
 
 <T.PerspectiveCamera
@@ -32,6 +15,7 @@
 >
   <OrbitControls
     enableDamping
+    enableZoom={false}
     target={[7, 1.2, 0]}
   />
 </T.PerspectiveCamera>
@@ -44,8 +28,8 @@
   shadow.camera.bottom={-20}
   shadow.camera.left={-20}
   shadow.camera.right={20}
-  shadow.mapSize.width={2048}
-  shadow.mapSize.height={2048}
+  shadow.mapSize.width={1024}
+  shadow.mapSize.height={1024}
 />
 <T.AmbientLight intensity={1} />
 

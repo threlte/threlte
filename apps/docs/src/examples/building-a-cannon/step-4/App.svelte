@@ -6,7 +6,7 @@
 
   let debug = $state(false)
   let aim = $state(18)
-  let power = $state(14)
+  let power = $state(1)
 
   // Bumping fireSignal fires the cannon, resetKey rebuilds the whole scene.
   let fireSignal = $state(0)
@@ -31,9 +31,9 @@
   <Slider
     bind:value={power}
     label="Power"
-    min={2}
-    max={60}
-    step={0.5}
+    min={0.1}
+    max={2}
+    step={0.05}
   />
   <Button
     title="Fire"
