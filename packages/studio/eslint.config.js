@@ -20,7 +20,7 @@ export default ts.config(
   },
   {
     name: 'ignores',
-    ignores: ['.svelte-kit']
+    ignores: ['.svelte-kit/**', 'build/**', 'package/**', 'dist/**', 'coverage/**', '.turbo/**']
   },
   {
     files: ['**/*.svelte', '**/*.svelte.ts', '**/*.svelte.js'],

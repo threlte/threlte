@@ -9,7 +9,7 @@
 
 <script lang="ts">
   import type { SliceMaterialProps } from './types'
-  import { T } from '@threlte/core'
+  import { T } from '@threlte/core/webgpu'
   import { atan, Fn, frontFacing, If, output, PI2, positionLocal, uniform, vec4 } from 'three/tsl'
   import { Color } from 'three/webgpu'
 

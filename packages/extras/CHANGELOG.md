@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.21.1
+
+### Patch Changes
+
+- cdda0b7: Fix portal insertion order
+
 ## 9.21.0
 
 ### Minor Changes

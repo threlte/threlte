@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.6.0
+
+### Minor Changes
+
+- 6d87493: Add `@threlte/core/webgpu` export
+
 ## 8.5.16
 
 ### Patch Changes

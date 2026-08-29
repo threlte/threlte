@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Snippet } from 'svelte'
+  import { untrack, type Snippet } from 'svelte'
   import { usePortalContext } from './usePortalContext.svelte.js'
   import { SvelteSet } from 'svelte/reactivity'
 
@@ -17,13 +17,16 @@
 
     const currentId = id
 
-    if (!portals.has(currentId)) {
-      portals.set(currentId, new SvelteSet())
-    }
+    return untrack(() => {
+      let contents = portals.get(currentId)
 
-    portals.get(currentId)?.add(children)
-    return () => {
-      portals.get(currentId)?.delete(children)
-    }
+      if (contents === undefined) {
+        contents = new SvelteSet()
+        portals.set(currentId, contents)
+      }
+
+      contents.add(children)
+      return () => contents.delete(children)
+    })
   })
 </script>
