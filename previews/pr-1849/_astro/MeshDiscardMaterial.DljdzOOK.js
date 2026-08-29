@@ -1,5 +1,0 @@
-import"./disclose-version.DsnmJJEf.js";import{p as h,f as s,n as g,a as u}from"./runtime.Cq5xh0TU.js";import{c as n,a as i}from"./template.L6xDPO6U.js";import{s as v}from"./snippet.B1WTn4og.js";import{c as M}from"./svelte-component.B_Rq4ZKt.js";import{p as S,s as _,r as x}from"./props.D2nmUwxA.js";/* empty css                                                      */import{T as $}from"./observe.svelte.TvC_xpcN.js";const D=`void main() {
-	gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
-	discard;
-}
-`,k="void main() {}";function q(m,r){h(r,!0);let e=S(r,"ref",15),p=x(r,["$$slots","$$events","$$legacy","children","ref"]);var a=n(),d=s(a);M(d,()=>$.ShaderMaterial,(l,c)=>{c(l,_({get fragmentShader(){return D},get vertexShader(){return k}},()=>p,{threlteStudio:{moduleId:"/home/runner/work/threlte/threlte/packages/extras/src/lib/components/MeshDiscardMaterial/MeshDiscardMaterial.svelte",index:0},get ref(){return e()},set ref(t){e(t)},children:(t,b)=>{var o=n(),f=s(o);v(f,()=>r.children??g,e),i(t,o)},$$slots:{default:!0}}))}),i(m,a),u()}export{q as M};
