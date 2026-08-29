@@ -15,7 +15,6 @@
     rawImpulseJoints,
     rawMultibodyJoints,
     rawCCDSolver,
-    rawQueryPipeline,
     rawPhysicsPipeline,
     rawSerializationPipeline,
     rawDebugRenderPipeline,
@@ -38,7 +37,6 @@
       rawImpulseJoints,
       rawMultibodyJoints,
       rawCCDSolver,
-      rawQueryPipeline,
       rawPhysicsPipeline,
       rawSerializationPipeline,
       rawDebugRenderPipeline
