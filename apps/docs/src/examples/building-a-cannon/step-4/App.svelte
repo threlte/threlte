@@ -13,6 +13,15 @@
   let resetKey = $state(0)
 </script>
 
+<svelte:window
+  onkeydown={(e) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault()
+      aim = Math.min(85, Math.max(0, aim + (e.key === 'ArrowUp' ? 1 : -1)))
+    }
+  }}
+/>
+
 <Pane
   position="fixed"
   title="Cannon"
