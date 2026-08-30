@@ -60,7 +60,7 @@
     return loaders.tex
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     if (url === undefined) return
 
     const suspendedTexture = suspend(

@@ -42,7 +42,7 @@
   })
 
   let geometry = $derived(new ExtrudeGeometry(shape, params))
-  $effect.pre(() => {
+  $effect(() => {
     geometry.center()
     toCreasedNormals(geometry, creaseAngle)
   })

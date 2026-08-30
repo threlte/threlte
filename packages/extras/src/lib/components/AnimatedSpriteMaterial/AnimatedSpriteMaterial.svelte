@@ -1,14 +1,6 @@
 <script lang="ts">
-  import {
-    asyncWritable,
-    type AsyncWritable,
-    isInstanceOf,
-    T,
-    useLoader,
-    useParent,
-    useTask,
-    observe
-  } from '@threlte/core'
+  import { untrack } from 'svelte'
+  import { isInstanceOf, T, useLoader, useParent, useTask, useThrelte } from '@threlte/core'
   import {
     DoubleSide,
     FileLoader,
@@ -18,9 +10,9 @@
     RepeatWrapping,
     RGBADepthPacking,
     SpriteMaterial,
+    TextureLoader,
     type Texture
   } from 'three'
-  import { useTexture } from '../../hooks/useTexture.js'
   import { useSuspense } from '../../suspense/useSuspense.js'
   import type { AnimatedSpriteProps, Frame, FrameTag, SpriteJsonHashData } from './types.js'
 
@@ -53,6 +45,9 @@
   }: AnimatedSpriteProps = $props()
 
   const parent = useParent()
+  const { renderer } = useThrelte()
+  const textureLoader = useLoader(TextureLoader)
+  const fileLoader = useLoader(FileLoader)
 
   const supportedDirections = ['forward', 'reverse'] as const
   const isSupportedDirection = (
@@ -68,9 +63,9 @@
   }
 
   let timerOffset = 0
-  let currentFrame = startFrame
+  let currentFrame = 0
   let numFrames = 0
-  let flipOffset = flipX ? -1 : 1
+  let flipOffset = 1
   let frameWidth = 0
   let frameHeight = 0
   let texture: Texture | undefined = $state()
@@ -88,54 +83,26 @@
   })
 
   const suspend = useSuspense()
-
-  const textureStore = suspend(
-    useTexture(textureUrl, {
-      transform: (value: Texture) => {
-        value.matrixAutoUpdate = false
-        value.generateMipmaps = false
-        value.premultiplyAlpha = false
-        value.wrapS = value.wrapT = RepeatWrapping
-        value.magFilter = value.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
-        return value
-      }
-    })
-  )
-
-  const jsonStore: AsyncWritable<SpriteJsonHashData | undefined> = suspend(
-    dataUrl
-      ? useLoader(FileLoader).load(dataUrl, {
-          transform: (file) => {
-            if (typeof file !== 'string') return
-            try {
-              return JSON.parse(file)
-            } catch {
-              return
-            }
-          }
-        })
-      : asyncWritable<SpriteJsonHashData>(
-          new Promise((resolve) => {
-            const unsub = textureStore.subscribe((value) => {
-              if (!value) return
-              unsub()
-              resolve(createData(value))
-            })
-          })
-        )
-  )
+  let loadPromise: Promise<void> = Promise.resolve()
+  let loadToken = 0
 
   /**
    * Creates metadata if no JSON file is supplied.
    */
-  const createData = (texture: Texture) => {
+  const createData = (
+    texture: Texture,
+    options: {
+      columns?: number
+      rows: number
+      totalFrames: number
+    }
+  ) => {
     const { width, height } = texture.image
-    const cols = columns ?? totalFrames
-
-    numFrames = totalFrames
+    const cols = options.columns ?? options.totalFrames
+    const frameCount = options.totalFrames
 
     const frameWidth = width / cols
-    const frameHeight = height / rows
+    const frameHeight = height / options.rows
     const data: SpriteJsonHashData = {
       frames: {},
       meta: {
@@ -149,7 +116,7 @@
       }
     }
 
-    for (let i = 0; i < numFrames; i += 1) {
+    for (let i = 0; i < frameCount; i += 1) {
       // Calculate the row and column for the current frame
       const row = Math.floor(i / cols)
       const col = i % cols
@@ -184,6 +151,29 @@
     texture?.updateMatrix()
   }
 
+  const setTextureRepeat = () => {
+    if (!texture) return
+    texture.repeat.set(
+      flipOffset / (spritesheetSize.w / frameWidth),
+      1 / (spritesheetSize.h / frameHeight)
+    )
+  }
+
+  const setCurrentFrame = () => {
+    if (!json) return
+    const name = frameNames[currentFrame]
+    const frame = name ? json.frames[name]?.frame : undefined
+    if (frame) setFrame(frame)
+  }
+
+  const resetCurrentFrame = () => {
+    currentFrame =
+      direction === 'forward'
+        ? (frameTag?.from ?? startFrame ?? 0)
+        : (frameTag?.to ?? endFrame ?? numFrames - 1)
+    setCurrentFrame()
+  }
+
   const setAnimation = (name: string) => {
     if (!json) return
 
@@ -194,11 +184,49 @@
       direction = isSupportedDirection(frameTag?.direction) ? frameTag.direction : 'forward'
     }
 
-    currentFrame = direction === 'forward' ? (frameTag?.from ?? 0) : (frameTag?.to ?? numFrames - 1)
-
-    setFrame(json.frames[frameNames[currentFrame]].frame)
+    resetCurrentFrame()
 
     onstart?.()
+  }
+
+  const parseData = (file: unknown) => {
+    if (typeof file !== 'string') return
+    try {
+      return JSON.parse(file) as SpriteJsonHashData
+    } catch {
+      return
+    }
+  }
+
+  const configureTexture = (texture: Texture) => {
+    texture.colorSpace = renderer.outputColorSpace
+    texture.needsUpdate = true
+    texture.matrixAutoUpdate = false
+    texture.generateMipmaps = false
+    texture.premultiplyAlpha = false
+    texture.wrapS = texture.wrapT = RepeatWrapping
+    texture.magFilter = texture.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
+  }
+
+  const initializeSpritesheet = (nextTexture: Texture, nextJson: SpriteJsonHashData) => {
+    texture = nextTexture
+    json = nextJson
+    frameNames = Object.keys(json.frames)
+    numFrames = frameNames.length
+    spritesheetSize = json.meta.size
+
+    const { sourceSize } = Object.values(json.frames)[0]
+    frameWidth = sourceSize.w
+    frameHeight = sourceSize.h
+
+    setTextureRepeat()
+    setAnimation(animation)
+
+    onload?.()
+
+    if (autoplay) {
+      play()
+    }
   }
 
   let playQueued = false
@@ -209,8 +237,17 @@
    */
   export const play = async () => {
     playQueued = true
-    await Promise.all([textureStore, jsonStore])
-    if (!playQueued) return
+    while (true) {
+      const promise = loadPromise
+      try {
+        await promise
+      } catch (error) {
+        if (promise === loadPromise) throw error
+        continue
+      }
+      if (promise === loadPromise) break
+    }
+    if (!playQueued || !texture || !json) return
     timerOffset = performance.now() - delay
     running = true
   }
@@ -275,41 +312,83 @@
     { running: () => running }
   )
 
-  observe.pre(
-    () => [textureStore, jsonStore],
-    ([nextTexture, nextJson]) => {
-      if (nextTexture === undefined || nextJson === undefined) return
+  $effect(() => {
+    const currentToken = ++loadToken
+    const currentTextureUrl = textureUrl
+    const currentDataUrl = dataUrl
 
-      texture = nextTexture.clone()
-      json = nextJson
-      frameNames = Object.keys(json.frames)
-      numFrames = frameNames.length
-      spritesheetSize = json.meta.size
+    const textureStore = textureLoader.load(currentTextureUrl)
+    const texturePromise = Promise.resolve(textureStore)
+    const dataPromise: Promise<SpriteJsonHashData | undefined> = currentDataUrl
+      ? Promise.resolve(fileLoader.load(currentDataUrl, { transform: parseData }))
+      : (() => {
+          const currentColumns = columns
+          const currentRows = rows
+          const currentTotalFrames = totalFrames
+          return texturePromise.then((texture) =>
+            createData(texture, {
+              columns: currentColumns,
+              rows: currentRows,
+              totalFrames: currentTotalFrames
+            })
+          )
+        })()
 
-      const { sourceSize } = Object.values(json.frames)[0]
-      frameWidth = sourceSize.w
-      frameHeight = sourceSize.h
+    loadPromise = suspend(
+      Promise.all([texturePromise, dataPromise])
+        .then(([sourceTexture, nextJson]) => {
+          if (currentToken !== loadToken) return
+          if (!nextJson) {
+            texture = undefined
+            json = undefined
+            return
+          }
 
-      texture.repeat.set(
-        (1 * flipOffset) / (spritesheetSize.w / frameWidth),
-        1 / (spritesheetSize.h / frameHeight)
-      )
+          const nextTexture = sourceTexture.clone()
+          configureTexture(nextTexture)
+          initializeSpritesheet(nextTexture, nextJson)
+        })
+        .catch((error) => {
+          if (currentToken !== loadToken) return
+          throw error
+        })
+    )
+  })
 
-      setAnimation(animation)
+  $effect(() => {
+    if (!texture) return
+    texture.magFilter = texture.minFilter = filter === 'nearest' ? NearestFilter : LinearFilter
+    texture.needsUpdate = true
+  })
 
-      onload?.()
+  $effect(() => {
+    flipOffset = flipX ? -1 : 1
+    untrack(() => {
+      setTextureRepeat()
+      setCurrentFrame()
+    })
+  })
 
-      if (autoplay) {
+  $effect(() => {
+    startFrame
+    endFrame
+    untrack(resetCurrentFrame)
+  })
+
+  $effect(() => {
+    const currentAnimation = animation
+    const shouldAutoplay = autoplay
+    untrack(() => {
+      setAnimation(currentAnimation)
+      if (shouldAutoplay) {
         play()
       }
-    }
-  )
+    })
+  })
 
-  $effect.pre(() => {
-    setAnimation(animation)
-    if (autoplay) {
-      play()
-    }
+  $effect(() => {
+    const currentTexture = texture
+    return () => currentTexture?.dispose()
   })
 </script>
 

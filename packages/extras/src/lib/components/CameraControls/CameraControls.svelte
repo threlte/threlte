@@ -80,11 +80,11 @@
     dom
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     controls.camera = camera
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     cameraControls.set(controls)
     return () => {
       cameraControls.set(undefined)

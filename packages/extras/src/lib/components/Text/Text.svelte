@@ -71,7 +71,7 @@
 
   const suspend = useSuspense()
 
-  $effect.pre(() => {
+  $effect(() => {
     suspend(new Promise<any>((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
   })
 </script>

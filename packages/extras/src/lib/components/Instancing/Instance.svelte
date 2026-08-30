@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { onDestroy, untrack } from 'svelte'
   import { PositionMesh } from './PositionMesh.js'
   import { useApi } from './api.js'
   import type { InstanceProps } from './types.js'
@@ -8,7 +8,8 @@
 
   let { id = useInstanceId(), ref = $bindable(), children, ...props }: InstanceProps = $props()
 
-  const { addInstance, removeInstance, instancedMesh, instances } = useApi(id)
+  const initialId = untrack(() => id)
+  const { addInstance, removeInstance, instancedMesh, instances } = useApi(initialId)
 
   const mesh = new PositionMesh(instancedMesh, instances)
 

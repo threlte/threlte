@@ -22,7 +22,7 @@
 
   let perf: ThreePerf
 
-  $effect.pre(() => {
+  $effect(() => {
     perf = new ThreePerf({
       domElement,
       renderer
@@ -30,7 +30,7 @@
     return () => perf.dispose()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     perf.logsPerSecond = logsPerSecond
     perf.showGraph = showGraph
     perf.memory = memory

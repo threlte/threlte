@@ -86,7 +86,7 @@
   const transformControls = new TransformControls(camera.current, dom)
   const attachGroup = new Group()
 
-  $effect.pre(() => {
+  $effect(() => {
     transformControls.camera = $camera
   })
 
@@ -95,7 +95,7 @@
     return () => transformControls?.detach()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     transformControlsContext.set(transformControls)
     return () => {
       transformControlsContext.set(undefined)
@@ -125,12 +125,12 @@
   let transformProps = $state<Props<TransformControls>>({})
   let objectProps = $state<Props<Group>>({})
 
-  $effect.pre(() => {
+  $effect(() => {
     transformProps = {}
     objectProps = {}
 
     Object.keys(props).forEach((key) => {
-      $effect.pre(() => {
+      $effect(() => {
         if (transformOnlyPropNames.includes(key)) {
           transformProps[key] = props[key]
         } else {

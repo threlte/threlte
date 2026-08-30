@@ -7,7 +7,7 @@
 
   const { renderer } = useThrelte()
 
-  $effect.pre(() => {
+  $effect(() => {
     if (suspended.current) {
       return
     }

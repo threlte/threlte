@@ -16,6 +16,7 @@
     useThrelte,
     type Plugin
   } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { Box3, Group } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
   import type { ResizeProps } from './types.js'
@@ -33,6 +34,8 @@
     children,
     ...props
   }: ResizeProps = $props()
+
+  const initialStage = untrack(() => stage)
 
   const group = new Group()
   const inner = new Group()
@@ -69,7 +72,7 @@
       doResize()
       stop()
     },
-    { stage, running: () => running }
+    { stage: initialStage, running: () => running }
   )
 
   /** Manually trigger resizing */

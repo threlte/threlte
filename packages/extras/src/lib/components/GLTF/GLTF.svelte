@@ -1,5 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { useGltf } from '../../hooks/useGltf.js'
   import { useSuspense } from '../../suspense/useSuspense.js'
   import type { ThrelteGltf } from '../../types/types.js'
@@ -29,11 +30,13 @@
     ...props
   }: Props = $props()
 
-  const loader = useGltf({
-    dracoLoader,
-    meshoptDecoder,
-    ktx2Loader
-  })
+  const loader = useGltf(
+    untrack(() => ({
+      dracoLoader,
+      meshoptDecoder,
+      ktx2Loader
+    }))
+  )
 
   const onLoad = (data: ThrelteGltf) => {
     if (gltf) onunload?.()
@@ -78,7 +81,7 @@
     }
   }
 
-  $effect.pre(() => {
+  $effect(() => {
     loadGltf(url)
   })
 </script>

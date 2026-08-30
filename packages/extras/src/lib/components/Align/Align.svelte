@@ -8,6 +8,7 @@
     useThrelte,
     type Plugin
   } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { Box3, Group, Sphere, Vector3 } from 'three'
   import InjectPlugin from '../InjectPlugin/InjectPlugin.svelte'
   import type { AlignProps } from './types.js'
@@ -26,6 +27,8 @@
     stage = useStage('<Align>', { before: renderStage }),
     ...props
   }: AlignProps = $props()
+
+  const initialStage = untrack(() => stage)
 
   const group = new Group()
   const innerGroup = new Group()
@@ -81,7 +84,7 @@
       calculate()
       scheduleAligning = false
     },
-    { stage, running: () => scheduleAligning }
+    { stage: initialStage, running: () => scheduleAligning }
   )
 
   /** Manually trigger aligning */

@@ -8,7 +8,7 @@
     type Vector2Tuple,
     type Vector3Tuple
   } from 'three'
-  import { setContext } from 'svelte'
+  import { setContext, untrack } from 'svelte'
   import { writable } from 'svelte/store'
   import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types.js'
   import SpriteInstance from './SpriteInstance.svelte'
@@ -30,16 +30,23 @@
     ...props
   }: InstancedSpriteProps = $props()
 
-  const spriteBaseMaterial = new baseMaterial({
-    transparent: transparent,
-    alphaTest: alphaTest,
+  const initialOptions = untrack(() => ({
+    baseMaterial,
+    alphaTest,
+    transparent,
+    count
+  }))
+
+  const spriteBaseMaterial = new initialOptions.baseMaterial({
+    transparent: initialOptions.transparent,
+    alphaTest: initialOptions.alphaTest,
     // needs to be double side for shading
     side: DoubleSide
   })
 
   const { renderer } = useThrelte()
 
-  const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
+  const mesh = new InstancedSpriteMesh(spriteBaseMaterial, initialOptions.count, renderer)
 
   const animationMap = writable<Map<string, number>>(new Map())
 
@@ -93,7 +100,7 @@
 
     // going from random offset to none
     if (previousRndOffset === true && !randomPlaybackOffset) {
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < initialOptions.count; i++) {
         mesh.offset.setAt(i, 0)
       }
     }
@@ -114,7 +121,7 @@
   // Context for user facing components and hooks
   setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
     sprite: mesh,
-    count,
+    count: initialOptions.count,
     animationMap,
     updatePosition
   })

@@ -11,7 +11,7 @@
   }
 
   let { meshes, index = meshes.length - 1, children, ...props }: Props = $props()
-  const mesh = meshes[index]
+  const mesh = $derived(meshes[index])
 </script>
 
 {#if index > -1}
