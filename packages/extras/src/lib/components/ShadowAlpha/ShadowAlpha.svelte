@@ -12,7 +12,6 @@
     type Texture
   } from 'three'
   import type { ShadowAlphaProps } from './types.js'
-  import { fromStore } from 'svelte/store'
 
   const bayerDither = `
     float bayerDither2x2(vec2 v) {
@@ -85,7 +84,7 @@
   patchShader(depthMaterial, uniforms)
   patchShader(distanceMaterial, uniforms)
 
-  const parent = fromStore(useParentObject3D())
+  const parent = useParentObject3D()
 
   useTask(() => {
     const currentParent = parent.current

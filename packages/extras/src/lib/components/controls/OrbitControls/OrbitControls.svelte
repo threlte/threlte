@@ -4,7 +4,7 @@
     OrbitControls,
     type OrbitControlsEventMap
   } from 'three/examples/jsm/controls/OrbitControls.js'
-  import { useControlsContext } from '../useControlsContext.js'
+  import { useControlsContext } from '../useControlsContext.svelte.js'
   import type { OrbitControlsProps } from './types.js'
   import type { Event } from 'three'
   import { untrack } from 'svelte'
@@ -14,7 +14,11 @@
   const { dom, camera: defaultCamera, invalidate } = useThrelte()
   const parent = useParent()
   const resolvedCamera = $derived(
-    camera ? camera : isInstanceOf($parent, 'Camera') ? $parent : $defaultCamera
+    camera
+      ? camera
+      : isInstanceOf(parent.current, 'Camera')
+        ? parent.current
+        : defaultCamera.current
   )
 
   // <HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
@@ -46,7 +50,7 @@
   $effect.pre(() => {
     orbitControls.set(controls)
     return () => {
-      orbitControls.set(undefined)
+      orbitControls.set()
     }
   })
 </script>

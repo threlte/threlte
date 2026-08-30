@@ -1,16 +1,11 @@
 <script lang="ts">
   import { useTask, useThrelte, useParent, observe } from '@threlte/core'
-  import {
-    NoToneMapping,
-    Vector4,
-    type OrthographicCamera,
-    type PerspectiveCamera,
-    type Event
-  } from 'three'
+  import { NoToneMapping, Vector4, type Event } from 'three'
   import type { GizmoProps, Controls } from './types.js'
   import { ViewportGizmo } from 'three-viewport-gizmo'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
+  import { untrack } from 'svelte'
 
   let {
     controls,
@@ -27,12 +22,16 @@
 
   const gizmo = $derived.by(() => {
     invalidate()
-    return new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer, {
-      container: dom,
-      placement: 'bottom-left',
-      size: 86,
-      ...rest
-    })
+    return new ViewportGizmo(
+      untrack(() => camera.current),
+      renderer,
+      {
+        container: dom,
+        placement: 'bottom-left',
+        size: 86,
+        ...rest
+      }
+    )
   })
 
   $effect.pre(() => {
@@ -43,7 +42,7 @@
 
   const viewport = new Vector4()
 
-  const cameraControls = $derived(controls ?? ($parent as Controls))
+  const cameraControls = $derived(controls ?? (parent.current as Controls))
 
   useTask(
     renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
@@ -66,8 +65,8 @@
     }
   )
 
-  $effect.pre(() => {
-    gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
+  $effect(() => {
+    gizmo.camera = camera.current
   })
 
   $effect.pre(() => {

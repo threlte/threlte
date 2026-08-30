@@ -1,7 +1,6 @@
 import { getContext, setContext, untrack } from 'svelte'
 import {
   AgXToneMapping,
-  ColorManagement,
   SRGBColorSpace,
   PCFSoftShadowMap,
   WebGLRenderer,
@@ -12,18 +11,11 @@ import {
   PerspectiveCamera
 } from 'three'
 import type { Task } from '../../frame-scheduling/index.js'
-import {
-  runeToCurrentReadable,
-  runeToCurrentWritable,
-  type CurrentReadable,
-  type CurrentWritable
-} from '../../utilities/currentWritable.js'
 import { useCamera } from './camera.svelte.js'
 import { useDOM } from './dom.svelte.js'
-import { useScene } from './scene.js'
+import { useScene } from './scene.svelte.js'
 import { useScheduler } from './scheduler.svelte.js'
 import type { WebGPURenderer } from 'three/webgpu'
-import { fromStore } from 'svelte/store'
 import { devicePixelRatio } from 'svelte/reactivity/window'
 import { updateCamera } from '../../components/T/utils/useCamera.svelte.js'
 
@@ -33,30 +25,27 @@ type CreateRenderer<T extends Renderer> = (canvas: HTMLCanvasElement) => T
 
 export interface RendererContext<T extends Renderer> {
   renderer: T
-  colorManagementEnabled: CurrentReadable<boolean>
-  colorSpace: CurrentWritable<ColorSpace>
-  toneMapping: CurrentWritable<ToneMapping>
-  shadows: CurrentWritable<boolean | ShadowMapType>
-  dpr: CurrentWritable<number>
+  colorSpace: {
+    readonly current: ColorSpace
+    set(value: ColorSpace): void
+  }
+  toneMapping: {
+    readonly current: ToneMapping
+    set(value: ToneMapping): void
+  }
+  shadows: {
+    readonly current: boolean | ShadowMapType
+    set(value: boolean | ShadowMapType): void
+  }
+  dpr: {
+    readonly current: number
+    set(value: number): void
+  }
   autoRenderTask: Task
 }
 
-export type CreateRendererContextOptions<T extends Renderer> = {
+export interface CreateRendererContextOptions<T extends Renderer> {
   createRenderer?: CreateRenderer<T>
-  /**
-   * Colors supplied to three.js — from color pickers, textures, 3D models, and other sources —
-   * each have an associated color space. Those not already in the Linear-sRGB working color
-   * space must be converted, and textures be given the correct texture.colorSpace assignment.
-   *
-   * Set to true for certain conversions (for hexadecimal and CSS colors in sRGB) to be made automatically.
-   *
-   * This property is not reactive and must be enabled before initializing colors.
-   *
-   * @deprecated If you wish to set this to false, set THREE.ColorManagement.enabled = false
-   *
-   * @default true
-   */
-  colorManagementEnabled?: boolean
 
   /**
    * @default 'srgb'
@@ -90,15 +79,9 @@ export const createRendererContext = <T extends Renderer>(
   options: () => CreateRendererContextOptions<T>
 ): RendererContext<T> => {
   const { camera, manual } = useCamera()
-  const { scene } = useScene()
-  const {
-    invalidate,
-    mainStage,
-    renderStage,
-    autoRender: autoRenderStore,
-    scheduler,
-    frameInvalidated
-  } = useScheduler()
+  const scene = useScene()
+  const { invalidate, mainStage, renderStage, autoRender, scheduler, frameInvalidated } =
+    useScheduler()
   const { canvas, size, shouldUpdateSize } = useDOM()
 
   const opts = $derived(options())
@@ -157,31 +140,42 @@ export const createRendererContext = <T extends Renderer>(
 
   const context: RendererContext<T> = {
     renderer: renderer as T,
-    colorManagementEnabled: runeToCurrentReadable(() => opts.colorManagementEnabled ?? true),
-    colorSpace: runeToCurrentWritable(
-      () => colorSpace,
-      (value) => (colorSpace = value)
-    ),
-    dpr: runeToCurrentWritable(
-      () => dpr,
-      (value) => (dpr = value)
-    ),
-    shadows: runeToCurrentWritable(
-      () => shadows,
-      (value) => (shadows = value)
-    ),
-    toneMapping: runeToCurrentWritable(
-      () => toneMapping,
-      (value) => (toneMapping = value)
-    ),
+    colorSpace: {
+      get current() {
+        return colorSpace
+      },
+      set(value) {
+        colorSpace = value
+      }
+    },
+    dpr: {
+      get current() {
+        return dpr
+      },
+      set(value) {
+        dpr = value
+      }
+    },
+    shadows: {
+      get current() {
+        return shadows
+      },
+      set(value) {
+        shadows = value
+      }
+    },
+    toneMapping: {
+      get current() {
+        return toneMapping
+      },
+      set(value) {
+        toneMapping = value
+      }
+    },
     autoRenderTask
   }
 
   setContext<RendererContext<T>>('threlte-renderer-context', context)
-
-  const autoRender = fromStore(autoRenderStore)
-
-  ColorManagement.enabled = opts.colorManagementEnabled ?? true
 
   $effect.pre(() => {
     renderer.outputColorSpace = colorSpace

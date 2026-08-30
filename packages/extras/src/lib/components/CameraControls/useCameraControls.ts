@@ -1,6 +1,5 @@
 import type CameraControls from 'camera-controls'
-import { fromStore } from 'svelte/store'
-import { useControlsContext } from '../controls/useControlsContext.js'
+import { useControlsContext } from '../controls/useControlsContext.svelte.js'
 
 /**
  * ### `useCameraControls`
@@ -27,10 +26,6 @@ import { useControlsContext } from '../controls/useControlsContext.js'
  */
 export const useCameraControls = (): { readonly current: CameraControls | undefined } => {
   const { cameraControls } = useControlsContext()
-  const controls = fromStore(cameraControls)
-  return {
-    get current() {
-      return controls.current
-    }
-  }
+
+  return cameraControls
 }

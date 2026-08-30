@@ -177,7 +177,7 @@
   })
 
   $effect(() => {
-    uniforms.pixelRatio.value = $dpr
+    uniforms.pixelRatio.value = dpr.current
   })
 
   let elapsed = 0

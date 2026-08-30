@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { GLTF, type ThrelteGltf, useGltfAnimations } from '@threlte/extras'
+  import { GLTF, useGltfAnimations, type ThrelteGltf } from '@threlte/extras'
 
   interface Props {
     action: 'idle' | 'run' | 'walk'
@@ -13,7 +13,7 @@
   let currentAction = 'idle'
 
   $effect(() => {
-    $actions?.idle?.play()
+    actions.current?.idle?.play()
   })
 
   $effect(() => {
@@ -21,8 +21,8 @@
   })
 
   function transitionTo(next: string, duration = 0.2) {
-    const current = $actions[currentAction]
-    const nextAnim = $actions[next]
+    const current = actions.current[currentAction]
+    const nextAnim = actions.current[next]
     if (!nextAnim || current === nextAnim) return
     nextAnim.enabled = true
     if (current) {

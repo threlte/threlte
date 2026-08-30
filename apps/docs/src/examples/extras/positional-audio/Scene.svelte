@@ -16,7 +16,7 @@
 
   const { size } = useThrelte()
 
-  let zoom = $derived($size.width / 18)
+  let zoom = $derived(size.current.width / 18)
 
   interactivity({
     filter: (hits) => {

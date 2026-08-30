@@ -37,20 +37,20 @@
 
   $effect.pre(() => {
     // we don't have a parent, so we can't add ourselves to it
-    if (!$parent) return
+    if (!parent.current) return
 
     // if the component is suspended or has errors, we remove ourselves from the parent
     if ($suspended || $errors.length) {
-      $parent.remove(group)
+      parent.current.remove(group)
       invalidate()
       return
     }
 
-    $parent.add(group)
+    parent.current.add(group)
     invalidate()
 
     return () => {
-      $parent.remove(group)
+      parent.current.remove(group)
       invalidate()
     }
   })

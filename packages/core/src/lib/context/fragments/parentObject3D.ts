@@ -1,6 +1,5 @@
 import { getContext, setContext } from 'svelte'
 import type { Object3D } from 'three'
-import { runeToCurrentReadable } from '../../utilities/currentWritable.js'
 
 const parentObject3DContextKey = Symbol('threlte-parent-object3d-context')
 
@@ -46,21 +45,4 @@ export const createParentObject3DContext = (object: () => Object3D | undefined) 
  */
 export const useParentObject3D = () => {
   return getContext<ParentObject3DContext>(parentObject3DContextKey)
-}
-
-/*********************************/
-/** Will be removed in Threlte 9 */
-/*********************************/
-
-type MaybeParentObject3DGetter = Object3D | undefined | (() => Object3D | undefined)
-
-export const createParentObject3DContext_deprecated = (parent: MaybeParentObject3DGetter) => {
-  const getParent = typeof parent === 'function' ? parent : () => parent
-
-  return createParentObject3DContext(getParent)
-}
-
-export const useParentObject3D_deprecated = () => {
-  const parent = useParentObject3D()
-  return runeToCurrentReadable(() => parent.current)
 }

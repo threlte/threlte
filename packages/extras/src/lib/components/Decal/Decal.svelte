@@ -57,7 +57,7 @@
   }: Props = $props()
 
   const parent = useParent()
-  const parentNode = $derived(parentMesh ?? ($parent as Mesh))
+  const parentNode = $derived(parentMesh ?? (parent.current as Mesh))
   const mesh = new Mesh()
   const projectorPosition = new Vector3()
   const projectorRotation = new Euler()

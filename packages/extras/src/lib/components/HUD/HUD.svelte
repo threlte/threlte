@@ -13,7 +13,7 @@
     ...rest
   }: HUDProps = $props()
 
-  const { scene } = createSceneContext()
+  const scene = createSceneContext()
   const { camera } = createCameraContext()
 
   const key = Symbol('threlte-hud-render-stage')

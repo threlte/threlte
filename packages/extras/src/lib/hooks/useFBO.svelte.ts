@@ -1,10 +1,9 @@
 import type { RenderTargetOptions } from 'three'
 import { DepthTexture, WebGLRenderTarget } from 'three'
 import { isInstanceOf, useThrelte } from '@threlte/core'
-import { fromStore } from 'svelte/store'
 import { untrack } from 'svelte'
 
-export type UseFBOOptions = RenderTargetOptions & {
+export interface UseFBOOptions extends Omit<RenderTargetOptions, 'depth'> {
   /**
    * if set, the scene depth will be rendered into buffer.depthTexture
    */
@@ -14,9 +13,6 @@ export type UseFBOOptions = RenderTargetOptions & {
    */
   size?: { width?: number; height?: number }
 }
-
-const isGetter = (value: unknown): value is () => UseFBOOptions | undefined =>
-  typeof value === 'function'
 
 /**
  * Creates a `WebGLRenderTarget` whose `size` and `depth` configuration is
@@ -38,33 +34,10 @@ const isGetter = (value: unknown): value is () => UseFBOOptions | undefined =>
  * </script>
  * ```
  */
-export function useFBO(options?: () => UseFBOOptions | undefined): WebGLRenderTarget
-/**
- * @deprecated Pass `options` as a getter function instead. This signature will
- * be removed in Threlte 9.
- *
- * ```ts
- * // Before
- * const target = useFBO({ size: { width: 512, height: 512 } })
- *
- * // After
- * const target = useFBO(() => ({ size: { width: 512, height: 512 } }))
- * ```
- */
-export function useFBO(options?: UseFBOOptions): WebGLRenderTarget
+export function useFBO(options?: () => UseFBOOptions | undefined): WebGLRenderTarget {
+  const { dpr, size } = useThrelte()
 
-export function useFBO(
-  optionsArg?: UseFBOOptions | (() => UseFBOOptions | undefined)
-): WebGLRenderTarget {
-  const { dpr: dprStore, size: sizeStore } = useThrelte()
-  const dpr = fromStore(dprStore)
-  const size = fromStore(sizeStore)
-
-  const getOptions: () => UseFBOOptions = isGetter(optionsArg)
-    ? () => optionsArg() ?? {}
-    : () => optionsArg ?? {}
-
-  const { depth, size: userSize, ...targetOptions } = $derived(getOptions())
+  const { depth, size: userSize, ...targetOptions } = $derived(options?.() ?? {})
   const width = $derived(
     userSize ? Math.max(userSize.width ?? 1, 1) : dpr.current * size.current.width
   )

@@ -1,6 +1,5 @@
-import { fromStore } from 'svelte/store'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { useControlsContext } from '../useControlsContext.js'
+import { useControlsContext } from '../useControlsContext.svelte.js'
 
 /**
  * ### `useOrbitControls`
@@ -27,10 +26,6 @@ import { useControlsContext } from '../useControlsContext.js'
  */
 export const useOrbitControls = (): { readonly current: OrbitControls | undefined } => {
   const { orbitControls } = useControlsContext()
-  const controls = fromStore(orbitControls)
-  return {
-    get current() {
-      return controls.current
-    }
-  }
+
+  return orbitControls
 }

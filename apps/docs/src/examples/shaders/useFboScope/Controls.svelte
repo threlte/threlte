@@ -73,7 +73,7 @@
     cameraQuaternion.multiply(qx)
     cameraQuaternion.multiply(qz)
 
-    $camera.quaternion.copy(cameraQuaternion)
+    camera.current.quaternion.copy(cameraQuaternion)
   })
 
   $effect(() => {

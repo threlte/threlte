@@ -149,8 +149,8 @@
     zoom={100}
   />
   <T.Group
-    position.x={-1 * $viewport.width + 1}
-    position.y={1 * 0.5 * $viewport.height + 1}
+    position.x={-1 * viewport.current.width + 1}
+    position.y={1 * 0.5 * viewport.current.height + 1}
     visible={textureOverrideEnabled}
   >
     {#each names as text, index}

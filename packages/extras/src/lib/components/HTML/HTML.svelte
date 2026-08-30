@@ -109,7 +109,7 @@
   const viewportTarget = new Vector3()
 
   const isRayCastOcclusion = $derived(!!occlude && occlude !== 'blending')
-  const viewportFactor = $derived(getViewportFactor($camera, viewportTarget, $size))
+  const viewportFactor = $derived(getViewportFactor(camera.current, viewportTarget, size.current))
 
   // Stable zRange tuple — objectZIndex only reads zRange[0] and zRange[1].
   // Recomputes only when occlude/raycast/zIndexRange actually change.
@@ -133,7 +133,7 @@
   export const render = () => {
     camera.current.updateMatrixWorld()
     group.updateWorldMatrix(true, false)
-    const vec = transform ? null : calculatePosition(group, camera.current, $size)
+    const vec = transform ? null : calculatePosition(group, camera.current, size.current)
 
     if (
       transform ||
@@ -183,10 +183,10 @@
       if (transform && transformOuterRef && transformInnerRef) {
         const { isOrthographicCamera, top, left, bottom, right } =
           camera.current as OrthographicCamera
-        const { width, height } = $size
+        const { width, height } = size.current
         const halfWidth = width / 2
         const halfHeight = height / 2
-        const fov = $camera.projectionMatrix.elements[5] * halfHeight
+        const fov = camera.current.projectionMatrix.elements[5] * halfHeight
         const cameraMatrix = getCameraCSSMatrix(camera.current.matrixWorldInverse)
         const cameraTransform = isOrthographicCamera
           ? `scale(${fov})translate(${epsilon(-(right + left) / 2)}px,${epsilon(
@@ -298,7 +298,7 @@
 
   $effect(() => {
     // Track $size so resize updates the DOM synchronously, ahead of the next renderStage tick.
-    void $size
+    void size.current
     untrack(render)
   })
 
@@ -374,8 +374,8 @@
       style:left="0"
       style:transform-style="preserve-3d"
       style:pointer-events="none"
-      style:width={`${$size.width}px`}
-      style:height={`${$size.height}px`}
+      style:width={`${size.current.width}px`}
+      style:height={`${size.current.height}px`}
     >
       <div
         bind:this={transformInnerRef}
@@ -391,13 +391,14 @@
       </div>
     </div>
   {:else}
+    {@const { width, height } = size.current}
     <div
       style:position="absolute"
       style:transform={center ? 'translate3d(-50%,-50%,0)' : 'none'}
-      style:top={fullscreen ? `${-$size.height / 2}px` : undefined}
-      style:left={fullscreen ? `${-$size.width / 2}px` : undefined}
-      style:width={fullscreen ? `${$size.width}px` : undefined}
-      style:height={fullscreen ? `${$size.height}px` : undefined}
+      style:top={fullscreen ? `${-height / 2}px` : undefined}
+      style:left={fullscreen ? `${-width / 2}px` : undefined}
+      style:width={fullscreen ? `${width}px` : undefined}
+      style:height={fullscreen ? `${height}px` : undefined}
       style={props.style}
       class={props.class}
     >

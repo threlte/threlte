@@ -18,8 +18,8 @@
   // render scene at a lower resolution but multiple samples for antialiasing
   const renderTarget = useFBO({
     size: {
-      width: $size.width * 0.5,
-      height: $size.height * 0.5
+      width: size.current.width * 0.5,
+      height: size.current.height * 0.5
     },
     samples: 8
   })
@@ -38,7 +38,7 @@
 
   useTask(() => {
     if (!scope || !$scoping) return
-    const cam = $camera as PerspectiveCamera
+    const cam = camera.current as PerspectiveCamera
 
     scope.visible = false
     cam.fov = zoomedFov.current

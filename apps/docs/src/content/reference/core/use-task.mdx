@@ -175,13 +175,14 @@ scene.
 
 ```svelte title="CustomRenderer.svelte"
 <script>
+  import { untrack } from 'svelte'
   import { useTask, useThrelte } from '@threlte/core'
 
   const { renderStage, autoRender } = useThrelte()
 
   // disable auto rendering
   $effect(() => {
-    let before = autoRender.current
+    let before = untrack(() => autoRender.current)
     autoRender.set(false)
     return () => autoRender.set(before)
   })
@@ -207,6 +208,7 @@ effects using the library
 
 ```svelte title="Renderer.svelte"
 <script>
+  import { untrack } from 'svelte'
   import { useThrelte, useTask } from '@threlte/core'
   import {
     EffectComposer,
@@ -225,10 +227,10 @@ effects using the library
 
   const setupEffectComposer = (camera) => {
     composer.removeAllPasses()
-    composer.addPass(new RenderPass(scene, camera))
+    composer.addPass(new RenderPass(scene, camera.current))
     composer.addPass(
       new EffectPass(
-        camera,
+        camera.current,
         new BloomEffect({
           intensity: 1,
           luminanceThreshold: 0.15,
@@ -242,7 +244,7 @@ effects using the library
     )
     composer.addPass(
       new EffectPass(
-        camera,
+        camera.current,
         new SMAAEffect({
           preset: SMAAPreset.LOW
         })
@@ -252,11 +254,11 @@ effects using the library
 
   // We need to set up the passes according to the camera in use
   $effect(() => {
-    setupEffectComposer($camera)
+    setupEffectComposer(camera.current)
   })
 
   $effect(() => {
-    composer.setSize($size.width, $size.height)
+    composer.setSize(size.current.width, size.current.height)
   })
 
   const { renderStage, autoRender } = useThrelte()
@@ -264,7 +266,7 @@ effects using the library
   // We need to disable auto rendering as soon as this component is
   // mounted and restore the previous state when it is unmounted.
   $effect(() => {
-    let before = autoRender.current
+    let before = untrack(() => autoRender.current)
     autoRender.set(false)
     return () => autoRender.set(before)
   })

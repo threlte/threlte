@@ -14,7 +14,6 @@
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
   import { fragmentShader, vertexShader } from './shaders.js'
   import type { OutlinesProps } from './types.js'
-  import { fromStore } from 'svelte/store'
 
   let {
     color = 'black',
@@ -51,14 +50,14 @@
     fragmentShader
   })
 
-  let parent = fromStore(useParent())
+  const parent = useParent()
 
   let geometry = $derived.by(() => {
     if (!isInstanceOf(parent.current, 'Mesh')) return undefined
     return toCreasedNormals(parent.current.geometry, angle)
   })
 
-  let mesh: undefined | Mesh | SkinnedMesh | InstancedMesh = $derived.by(() => {
+  let mesh = $derived.by<undefined | Mesh | SkinnedMesh | InstancedMesh>(() => {
     if (!isInstanceOf(parent.current, 'Mesh')) return
     if (isInstanceOf(parent.current, 'SkinnedMesh')) {
       const nextMesh = new SkinnedMesh()
@@ -72,34 +71,34 @@
     return new Mesh()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     if (mesh) mesh.renderOrder = renderOrder
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.transparent = transparent
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.toneMapped = toneMapped
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.polygonOffset = polygonOffset
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.polygonOffsetFactor = polygonOffsetFactor
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.screenspace.value = screenspace
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.color.value.set(color)
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.opacity.value = opacity
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.thickness.value = thickness
   })
-  $effect.pre(() => {
+  $effect(() => {
     renderer.getDrawingBufferSize(material.uniforms.size.value)
   })
 </script>

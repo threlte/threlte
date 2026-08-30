@@ -204,7 +204,7 @@
             end: 4
           }}
         >
-          Threlte 8
+          Threlte 9
         </TextEffect>
       </h2>
     </Trigger>

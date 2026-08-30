@@ -2,6 +2,7 @@
   import { Environment } from '@threlte/extras'
   import { Color, PerspectiveCamera, Scene } from 'three'
   import { T, useTask, useThrelte } from '@threlte/core'
+  import { untrack } from 'svelte'
 
   type Side = 'left' | 'right'
 
@@ -43,12 +44,12 @@
   )
 
   $effect(() => {
-    camera.aspect = 0.5 * ($size.width / $size.height)
+    camera.aspect = 0.5 * (size.current.width / size.current.height)
     camera.updateProjectionMatrix()
   })
 
   $effect(() => {
-    const lastAutoRender = autoRender.current
+    const lastAutoRender = untrack(() => autoRender.current)
     const lastScissorTest = renderer.getScissorTest()
     autoRender.set(false)
     renderer.setScissorTest(true)

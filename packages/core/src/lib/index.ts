@@ -43,16 +43,13 @@ export { createCacheContext, useCache } from './context/fragments/cache.js'
 export { createCameraContext, useCamera } from './context/fragments/camera.svelte.js'
 export { createDOMContext, useDOM } from './context/fragments/dom.svelte.js'
 export { createDisposalContext, useDisposal } from './context/fragments/disposal.svelte.js'
+export { createParentContext, useParent } from './context/fragments/parent.js'
 export {
-  createParentContext_deprecated as createParentContext,
-  useParent_deprecated as useParent
-} from './context/fragments/parent.js'
-export {
-  createParentObject3DContext_deprecated as createParentObject3DContext,
-  useParentObject3D_deprecated as useParentObject3D
+  createParentObject3DContext,
+  useParentObject3D
 } from './context/fragments/parentObject3D.js'
 export { createRendererContext, useRenderer } from './context/fragments/renderer.svelte.js'
-export { createSceneContext, useScene } from './context/fragments/scene.js'
+export { createSceneContext, useScene } from './context/fragments/scene.svelte.js'
 export { createSchedulerContext, useScheduler } from './context/fragments/scheduler.svelte.js'
 export { createUserContext } from './context/fragments/user.js'
 
@@ -61,7 +58,6 @@ export { observe } from './utilities/observe.svelte.js'
 export { isInstanceOf } from './utilities/isInstanceOf.js'
 export { type AsyncWritable, asyncWritable } from './utilities/asyncWritable.js'
 export { revision } from './utilities/revision.js'
-export { watch } from './utilities/watch.js'
 export {
   type CurrentWritable,
   type CurrentReadable,

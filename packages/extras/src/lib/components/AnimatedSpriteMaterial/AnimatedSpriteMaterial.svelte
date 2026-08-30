@@ -81,7 +81,7 @@
   let spritesheetSize = { w: 0, h: 0 }
 
   let fpsInterval = $derived(1000 / fps)
-  let isMesh = $derived($parent !== undefined && isInstanceOf($parent, 'Mesh'))
+  let isMesh = $derived(isInstanceOf(parent.current, 'Mesh'))
 
   $effect.pre(() => {
     is ??= isMesh ? new MeshBasicMaterial() : new SpriteMaterial()

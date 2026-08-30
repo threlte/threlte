@@ -71,7 +71,7 @@ Command: npx @threlte/gltf@3.0.5 apps/docs/public/models/RobotExpressive.glb --t
     error?: Snippet<[{ error: Error }]>
   } = $props()
 
-  ref = new Group()
+  const group = new Group()
 
   const gltf = useGltf<GLTFResult>('/models/RobotExpressive.glb')
 
@@ -90,12 +90,13 @@ Command: npx @threlte/gltf@3.0.5 apps/docs/public/models/RobotExpressive.glb --t
   )
 
   $effect(() => {
-    if (action) $actions[action]?.play()
+    if (action) actions.current?.[action]?.play()
   })
 </script>
 
 <T
-  is={ref}
+  is={group}
+  bind:ref
   dispose={false}
   {...props}
 >

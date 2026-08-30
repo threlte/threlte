@@ -6,7 +6,7 @@
 
   const { size } = useThrelte()
 
-  let zoom = $derived($size.width / 50)
+  let zoom = $derived(size.current.width / 50)
 </script>
 
 <T.OrthographicCamera

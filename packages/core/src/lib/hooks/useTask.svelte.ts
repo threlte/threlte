@@ -1,71 +1,12 @@
-import { readable, toStore, type Readable } from 'svelte/store'
 import { useScheduler } from '../context/fragments/scheduler.svelte.js'
 import { DAG, type Key, type Stage, type Task } from '../frame-scheduling/index.js'
 import { browser } from '../utilities/browser.js'
 
 export interface ThrelteUseTask {
   task: Task
-
-  /**
-   * @deprecated pass the `running` option to `useTask` instead.
-   *
-   * To stop the task, set the options.running state variable to false
-   *
-   * ```ts
-   * let running = $state(true)
-   *
-   * useTask((delta) => {
-   *   // do something
-   * }, {
-   *   running: () => running
-   * })
-   *
-   * running = false
-   * ```
-   */
-  stop: () => void
-
-  /**
-   * @deprecated pass the `running` option to `useTask` instead.
-   *
-   * To start the task, set the options.running state variable to true
-   *
-   * ```ts
-   * let running = $state(false)
-   *
-   * useTask((delta) => {
-   *   // do something
-   * }, {
-   *   running: () => running
-   * })
-   *
-   * running = true
-   * ```
-   */
-  start: () => void
-
-  started: Readable<boolean>
 }
 
 export interface ThrelteUseTaskOptions {
-  /**
-   * @deprecated pass the `running` option to `useTask` instead.
-   *
-   * ```ts
-   * let running = $state(true)
-   *
-   * useTask((delta) => {
-   *   // do something
-   * }, {
-   *   running: () => running
-   * })
-   * ```
-   *
-   * If false, the task will not be started automatically and must be started
-   * by invoking the `start` function. Defaults to true.
-   */
-  autoStart?: boolean
-
   /**
    * If false, the task handler will not automatically invalidate the task.
    * This is useful if you want to manually invalidate the task. Defaults to
@@ -134,10 +75,7 @@ export function useTask(
 ): ThrelteUseTask {
   if (!browser) {
     return {
-      task: undefined as any,
-      start: () => undefined,
-      stop: () => undefined,
-      started: readable(false)
+      task: undefined as any
     }
   }
 
@@ -159,7 +97,7 @@ export function useTask(
 
   let stage: Stage = schedulerCtx.mainStage
 
-  let running = $derived(opts?.running?.() ?? opts?.autoStart ?? true)
+  const running = $derived(opts?.running?.() ?? true)
 
   if (opts) {
     if (opts.stage) {
@@ -227,13 +165,6 @@ export function useTask(
   })
 
   return {
-    task,
-    start: () => {
-      running = true
-    },
-    stop: () => {
-      running = false
-    },
-    started: toStore(() => running)
+    task
   }
 }

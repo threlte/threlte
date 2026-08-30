@@ -28,8 +28,8 @@
     }
 
     // Calculate pointer position in normalized device coordinates
-    pointer.x = (event.clientX / $size.width) * 2 - 1
-    pointer.y = -((event.clientY / $size.height) * 2) + 1
+    pointer.x = (event.clientX / size.current.width) * 2 - 1
+    pointer.y = -((event.clientY / size.current.height) * 2) + 1
 
     // Update the picking ray with the camera and pointer position
     raycaster.setFromCamera(pointer, camera.current)

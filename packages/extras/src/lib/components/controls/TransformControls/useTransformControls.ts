@@ -1,6 +1,5 @@
-import { fromStore } from 'svelte/store'
 import type { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
-import { useControlsContext } from '../useControlsContext.js'
+import { useControlsContext } from '../useControlsContext.svelte.js'
 
 /**
  * ### `useTransformControls`
@@ -27,10 +26,6 @@ import { useControlsContext } from '../useControlsContext.js'
  */
 export const useTransformControls = (): { readonly current: TransformControls | undefined } => {
   const { transformControls } = useControlsContext()
-  const controls = fromStore(transformControls)
-  return {
-    get current() {
-      return controls.current
-    }
-  }
+
+  return transformControls
 }

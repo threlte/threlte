@@ -1,21 +1,18 @@
 import { useTask, useThrelte } from '@threlte/core'
 import { getContext, setContext, tick } from 'svelte'
-import { fromStore } from 'svelte/store'
 import {
   Box3,
   Vector3,
   Group,
   Quaternion,
   Matrix4,
-  PerspectiveCamera,
-  OrthographicCamera,
   Vector2,
   Vector4,
   Spherical,
   Sphere,
   Raycaster
 } from 'three'
-import { useControlsContext } from '../controls/useControlsContext.js'
+import { useControlsContext } from '../controls/useControlsContext.svelte.js'
 import type { OrbitControls, TrackballControls } from 'three/examples/jsm/Addons.js'
 import CameraControls from 'camera-controls'
 
@@ -58,17 +55,8 @@ export const provideBounds = (
 ) => {
   install()
 
-  const { camera: cameraStore, dom, invalidate } = useThrelte()
-  const {
-    orbitControls: orbitStore,
-    trackballControls: trackballStore,
-    cameraControls: ccStore
-  } = useControlsContext()
-
-  const camera = fromStore(cameraStore) as { current: PerspectiveCamera | OrthographicCamera }
-  const orbitControls = fromStore(orbitStore)
-  const trackballControls = fromStore(trackballStore)
-  const cameraControls = fromStore(ccStore)
+  const { camera, dom, invalidate } = useThrelte()
+  const { orbitControls, trackballControls, cameraControls } = useControlsContext()
 
   const boundsControls = new CameraControls(camera.current, dom)
   boundsControls.disconnect()

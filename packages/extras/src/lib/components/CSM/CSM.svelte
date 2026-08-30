@@ -65,7 +65,7 @@
     ([enabled]) => {
       if (enabled) {
         const nextCSM = new CSM({
-          camera: camera ?? $defaultCamera,
+          camera: camera ?? defaultCamera.current,
           parent: scene,
           ...args
         })
@@ -83,7 +83,7 @@
   )
 
   observe(
-    () => [size, csm],
+    () => [size.current, csm],
     ([, csm]) => {
       csm?.updateFrustums()
     }
@@ -91,7 +91,7 @@
 
   // set any CSM props that require frustum updates
   observe(
-    () => [defaultCamera, camera, csm],
+    () => [defaultCamera.current, camera, csm],
     ([defaultCamera, camera, csm]) => {
       if (!csm) return
       csm.camera = camera ?? defaultCamera

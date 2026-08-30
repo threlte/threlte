@@ -6,9 +6,9 @@
   import { T, useThrelte } from '@threlte/core'
 
   const { size, scene } = useThrelte()
-  scene.background = new Color('black')
+  scene.current.background = new Color('black')
 
-  let zoom = $derived($size.width / 50)
+  let zoom = $derived(size.current.width / 50)
 
   type Ship = Required<Pick<SpaceshipProps, 'name' | 'position'>>
 

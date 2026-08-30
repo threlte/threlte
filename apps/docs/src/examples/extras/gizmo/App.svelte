@@ -103,7 +103,7 @@
     >
       <OrbitControls
         onchange={(event) => {
-          center = event.target.target.toArray()
+          event.target.target.toArray(center)
         }}
       >
         <Gizmo

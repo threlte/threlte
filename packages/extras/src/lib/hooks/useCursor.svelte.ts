@@ -1,5 +1,4 @@
 import { useThrelteUserContext } from '@threlte/core'
-import { fromStore, toStore, writable, type Readable, type Writable } from 'svelte/store'
 import type { LiteralUnion } from 'type-fest'
 
 type Cursor = LiteralUnion<
@@ -56,17 +55,12 @@ interface CursorContext {
 }
 
 export const useCursor = (
-  cursor: Cursor | Writable<Cursor> = 'pointer',
-
-  /**
-   * @deprecated Set the default cursor in CSS instead. This parameter will be removed in a future version.
-   */
-  onPointerOut?: Cursor | Writable<Cursor>,
+  cursor?: () => Cursor | undefined,
   target?: HTMLElement | undefined
 ): {
   onPointerEnter: () => void
   onPointerLeave: () => void
-  hovering: Readable<boolean>
+  hovering: { current: boolean }
 } => {
   let hovering = $state(false)
 
@@ -85,20 +79,17 @@ export const useCursor = (
   // Account for SSR
   if (typeof window === 'undefined') {
     return {
-      hovering: toStore(() => hovering),
+      hovering: {
+        get current() {
+          return hovering
+        }
+      },
       onPointerEnter,
       onPointerLeave
     }
   }
 
   const el: HTMLElement = target ?? document.body
-
-  if (onPointerOut !== undefined) {
-    console.warn(
-      'useCursor: onPointerOut is deprecated. Set the default cursor in CSS instead. ' +
-        'This parameter will be removed in a future version.'
-    )
-  }
 
   const ctx = useThrelteUserContext<CursorContext>('threlte-extras-use-cursor', () => {
     const originalCursor = el.style.cursor
@@ -130,20 +121,9 @@ export const useCursor = (
     }
   })
 
-  // Reactively track cursor values. If cursor or onPointerOut is a
-  // store, this effect re-runs when the store changes, keeping the instance
-  // in sync and refreshing the cursor if this instance is currently active.
-  const cursorStore = fromStore(typeof cursor === 'string' ? writable(cursor) : cursor)
-  const fallbackStore =
-    onPointerOut !== undefined
-      ? fromStore(typeof onPointerOut === 'string' ? writable(onPointerOut) : onPointerOut)
-      : undefined
-
   $effect.pre(() => {
-    instance.cursor = cursorStore.current
-    if (fallbackStore) {
-      instance.fallback = fallbackStore.current
-    }
+    const currentCursor = cursor?.() ?? 'pointer'
+    instance.cursor = currentCursor
     if (hovering) {
       ctx.refresh()
     }
@@ -157,7 +137,11 @@ export const useCursor = (
   })
 
   return {
-    hovering: toStore(() => hovering),
+    hovering: {
+      get current() {
+        return hovering
+      }
+    },
     onPointerEnter,
     onPointerLeave
   }

@@ -12,12 +12,11 @@
     Spherical,
     Vector2,
     Vector3,
-    Vector4,
-    type PerspectiveCamera
+    Vector4
   } from 'three'
   import type { CameraControlsProps } from './types.js'
   import CameraControls from 'camera-controls'
-  import { useControlsContext } from '../controls/useControlsContext.js'
+  import { useControlsContext } from '../controls/useControlsContext.svelte.js'
   import { untrack } from 'svelte'
 
   export { default as CameraControlsRef } from 'camera-controls'
@@ -68,11 +67,14 @@
       return userCamera
     }
 
-    if (isInstanceOf($parent, 'PerspectiveCamera') || isInstanceOf($parent, 'OrthographicCamera')) {
-      return $parent
+    if (
+      isInstanceOf(parent.current, 'PerspectiveCamera') ||
+      isInstanceOf(parent.current, 'OrthographicCamera')
+    ) {
+      return parent.current
     }
 
-    return $defaultCamera as PerspectiveCamera
+    return defaultCamera.current
   })
 
   const controls = new CameraControls(

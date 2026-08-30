@@ -5,18 +5,10 @@
 
   interface Props {
     id?: string
-    object?: never
     children?: Snippet
   }
 
-  let { id = 'default', object, children }: Props = $props()
-
-  // @Todo Remove in Threlte 9
-  $effect.pre(() => {
-    if (object) {
-      console.error('<Portal>: "object" prop has been removed. Use "attach" instead.')
-    }
-  })
+  let { id = 'default', children }: Props = $props()
 
   const portals = usePortalContext()
 

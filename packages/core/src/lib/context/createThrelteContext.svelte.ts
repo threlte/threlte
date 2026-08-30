@@ -1,3 +1,4 @@
+import type { Scene } from 'three'
 import { createCacheContext } from './fragments/cache.js'
 import { createCameraContext } from './fragments/camera.svelte.js'
 import { createDisposalContext } from './fragments/disposal.svelte.js'
@@ -9,34 +10,33 @@ import {
   type CreateRendererContextOptions,
   type Renderer
 } from './fragments/renderer.svelte.js'
-import { createSceneContext } from './fragments/scene.js'
+import { createSceneContext } from './fragments/scene.svelte.js'
 import {
   createSchedulerContext,
   type CreateSchedulerContextOptions
 } from './fragments/scheduler.svelte.js'
 import { createUserContext } from './fragments/user.js'
 
-export type CreateThrelteContextOptions<T extends Renderer> = CreateRendererContextOptions<T> &
-  CreateDOMContextOptions &
-  CreateSchedulerContextOptions
+export interface CreateThrelteContextOptions<T extends Renderer>
+  extends CreateRendererContextOptions<T>, CreateDOMContextOptions, CreateSchedulerContextOptions {
+  scene?: Scene
+}
 
 export const createThrelteContext = <T extends Renderer>(
-  options: CreateThrelteContextOptions<T> | (() => CreateThrelteContextOptions<T>)
+  options: () => CreateThrelteContextOptions<T>
 ) => {
-  const { scene } = createSceneContext()
-
-  const opts = typeof options === 'function' ? options : () => options
+  const scene = createSceneContext()
 
   return {
     scene,
-    ...createDOMContext(opts),
+    ...createDOMContext(options),
     ...createCacheContext(),
     ...createParentContext(() => scene),
     ...createParentObject3DContext(() => scene),
     ...createDisposalContext(),
-    ...createSchedulerContext(opts),
+    ...createSchedulerContext(options),
     ...createCameraContext(),
-    ...createRendererContext(opts),
+    ...createRendererContext(options),
     ...createUserContext()
   }
 }

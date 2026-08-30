@@ -1,6 +1,5 @@
-import { fromStore } from 'svelte/store'
 import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
-import { useControlsContext } from '../useControlsContext.js'
+import { useControlsContext } from '../useControlsContext.svelte.js'
 
 /**
  * ### `useTrackballControls`
@@ -27,10 +26,6 @@ import { useControlsContext } from '../useControlsContext.js'
  */
 export const useTrackballControls = (): { readonly current: TrackballControls | undefined } => {
   const { trackballControls } = useControlsContext()
-  const controls = fromStore(trackballControls)
-  return {
-    get current() {
-      return controls.current
-    }
-  }
+
+  return trackballControls
 }

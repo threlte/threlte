@@ -11,7 +11,7 @@
     SMAAEffect,
     SMAAPreset
   } from 'postprocessing'
-  import { onMount } from 'svelte'
+  import { untrack } from 'svelte'
   import { Tween } from 'svelte/motion'
   import { Vector2 } from 'three'
   import { game } from './game/Game.svelte'
@@ -31,7 +31,7 @@
   })
 
   $effect(() => {
-    if ($camera && game.arcadeMachineScene) {
+    if (camera.current && game.arcadeMachineScene) {
       addComposerAndPasses()
     }
   })
@@ -41,7 +41,7 @@
   const addComposerAndPasses = () => {
     composer.removeAllPasses()
 
-    composer.addPass(new RenderPass(game.arcadeMachineScene, $camera))
+    composer.addPass(new RenderPass(game.arcadeMachineScene, camera.current))
     bloomEffect = new BloomEffect({
       intensity: bloomIntensity.current,
       luminanceThreshold: 0.15,
@@ -53,10 +53,10 @@
     })
     bloomEffect.luminancePass.enabled = true
     ;(bloomEffect as any).ignoreBackground = true
-    composer.addPass(new EffectPass($camera, bloomEffect))
+    composer.addPass(new EffectPass(camera.current, bloomEffect))
     composer.addPass(
       new EffectPass(
-        $camera,
+        camera.current,
         new ChromaticAberrationEffect({
           offset: new Vector2(0.0005, 0.0005),
           modulationOffset: 0,
@@ -66,7 +66,7 @@
     )
     composer.addPass(
       new EffectPass(
-        $camera,
+        camera.current,
         new BrightnessContrastEffect({
           brightness: 0,
           contrast: 0.1
@@ -75,7 +75,7 @@
     )
     composer.addPass(
       new EffectPass(
-        $camera,
+        camera.current,
         new SMAAEffect({
           preset: SMAAPreset.LOW
         })
@@ -84,8 +84,8 @@
   }
 
   // When using PostProcessing, we need to disable autoRender
-  onMount(() => {
-    let before = autoRender.current
+  $effect(() => {
+    let before = untrack(() => autoRender.current)
     autoRender.set(false)
     return () => {
       autoRender.set(before)
