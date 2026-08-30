@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.21.2
+
+### Patch Changes
+
+- 6173d5d: [@threlte/extras] Fix initial value capture warnings
+- bf75879: [@threlte/extras] Type the scene graph `nodes`/`materials` (and `<GLTF>` props) concretely instead of `any`
+
 ## 9.21.1
 
 ### Patch Changes
