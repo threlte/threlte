@@ -118,7 +118,10 @@
     instanceMatrixNeedsUpdate = true
   }
 
-  // Context for user facing components and hooks
+  // Context for user facing components and hooks.
+  // The animation-name generic is erased here: it's only known at each consumer's
+  // call site, not at the provider, so `any` is the correct bound at this boundary.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic erased across context boundary
   setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
     sprite: mesh,
     count: initialOptions.count,

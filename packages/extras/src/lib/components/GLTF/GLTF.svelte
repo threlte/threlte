@@ -8,8 +8,15 @@
 
   type Props = GltfProps & {
     gltf?: ThrelteGltf | undefined
-    materials?: ThrelteGltf['materials']
-    nodes?: ThrelteGltf['nodes']
+    // `nodes`/`materials` are typed as `Record<string, any>` for the same
+    // reason as `useGltf`'s default `Graph`: they let consumers reach into the
+    // scene graph (e.g. `nodes.SomeMesh.geometry`) without casting. Unlike the
+    // hook, this component isn't generic, so there's no way to supply a typed
+    // `Graph` — a strict type here would be unusable and impossible to override.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    materials?: Record<string, any>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    nodes?: Record<string, any>
   }
 
   let {

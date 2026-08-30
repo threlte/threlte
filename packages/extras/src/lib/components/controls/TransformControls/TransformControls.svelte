@@ -148,6 +148,7 @@
       isDragging = false
     }
     // TODO: unfortunately the type of the event prop is not correct *yet*
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- upstream three TransformControls event type is wrong; revisit when fixed
     props.onchange?.(event as any)
   }
 </script>
