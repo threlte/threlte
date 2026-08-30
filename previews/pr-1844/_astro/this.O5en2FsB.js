@@ -1,1 +1,0 @@
-import{ap as h,an as k,M as q,q as M,ai as S}from"./runtime.zyo6wXBK.js";function u(i,s){return i===s||i?.[S]===s}function c(i={},s,f,b){return h(()=>{var a,r;return k(()=>{a=r,r=b?.()||[],q(()=>{i!==f(...r)&&(s(i,...r),a&&u(f(...a),i)&&s(null,...a))})}),()=>{M(()=>{r&&u(f(...r),i)&&s(null,...r)})}}),i}export{c as b};

@@ -1,1 +1,0 @@
-import{ax as n,g as c,k as i,an as f,M as u,ay as s,q as o}from"./runtime.zyo6wXBK.js";function k(a){let e=0,r=i(0),t;return()=>{n()&&(c(r),f(()=>(e===0&&(t=u(()=>a(()=>s(r)))),e+=1,()=>{o(()=>{e-=1,e===0&&(t?.(),t=void 0,s(r))})})))}}export{k as c};
