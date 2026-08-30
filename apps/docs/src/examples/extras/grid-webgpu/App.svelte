@@ -1,9 +1,9 @@
 <script lang="ts">
   import Scene from './Scene.svelte'
-  import { Canvas, T } from '@threlte/core'
+  import { Canvas, T } from '@threlte/core/webgpu'
   import { Checkbox, Color, Folder, Pane, List, Slider, Point } from 'svelte-tweakpane-ui'
-  import { Grid, TransformControls } from '@threlte/extras'
-  import { PlaneGeometry } from 'three'
+  import { Grid, TransformControls } from '@threlte/extras/webgpu'
+  import { PlaneGeometry } from 'three/webgpu'
   import { SimplexNoise } from 'three/examples/jsm/Addons.js'
 
   let cellSize = $state(1)
@@ -210,7 +210,7 @@
   <Canvas>
     {#if useFadeOrigin}
       <TransformControls
-        onchange={(e) => {
+        onobjectChange={(e) => {
           e.target.object.position.toArray(fadeOrigin)
         }}
       />

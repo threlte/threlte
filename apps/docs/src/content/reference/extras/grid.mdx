@@ -4,6 +4,7 @@ group: 'Staging'
 title: <Grid>
 sourcePath: 'packages/extras/src/lib/components/Grid/Grid.svelte'
 type: 'component'
+webgpu: true
 componentSignature:
   {
     extends: { type: 'Mesh', url: 'https://threejs.org/docs/index.html#api/en/objects/Mesh' },
@@ -58,7 +59,14 @@ componentSignature:
 
 A robust grid implementation with multiple tweakable parameters.
 
-<Example path="extras/grid" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/grid" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/grid-webgpu" />
+  </Tab>
+</Tabs>
 
 ## Usage
 

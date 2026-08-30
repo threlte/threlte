@@ -92,7 +92,12 @@ export const referenceCollection = defineCollection({
     category: z.enum(referenceCategories),
     group: z.string().optional(),
     componentSignature: componentSignature.optional(),
-    showInSidebar: z.boolean().optional().default(true)
+    showInSidebar: z.boolean().optional().default(true),
+    /**
+     * Shows a "webgpu" pill next to the title, marking this export as available
+     * from the package's `webgpu` entrypoint.
+     */
+    webgpu: z.boolean().optional().default(false)
   })
 })
 

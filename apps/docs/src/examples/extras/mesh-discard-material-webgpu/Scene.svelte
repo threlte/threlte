@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { T } from '@threlte/core'
-  import { BakeShadows, MeshDiscardMaterial, OrbitControls } from '@threlte/extras'
-  import { MeshStandardMaterial, SphereGeometry } from 'three'
+  import { T } from '@threlte/core/webgpu'
+  import { BakeShadows, MeshDiscardMaterial, OrbitControls } from '@threlte/extras/webgpu'
+  import { MeshStandardMaterial, SphereGeometry } from 'three/webgpu'
 
   const geometry = new SphereGeometry()
   const material = new MeshStandardMaterial({ color: 'orangered' })

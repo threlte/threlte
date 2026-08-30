@@ -1,0 +1,50 @@
+---
+interface Props {
+  /** Short text shown inside the pill. */
+  label: string
+  /** Explanation revealed on hover and keyboard focus. */
+  tooltip: string
+  /** Turns the pill into a link. Without it the pill is a focusable span. */
+  href?: string
+  color?: 'blue' | 'orange' | 'green'
+  class?: string
+}
+
+const { label, tooltip, href, color = 'blue', class: className } = Astro.props
+
+// Tailwind can't resolve dynamic class names, so every variant is spelled out.
+const colorStyles: Record<NonNullable<Props['color']>, string> = {
+  blue: 'bg-blue-800/40 border-blue-500/60 text-blue-100 hover:border-blue-400 hover:bg-blue-800/70',
+  orange:
+    'bg-orange-800/40 border-orange-500/60 text-orange-100 hover:border-orange-400 hover:bg-orange-800/70',
+  green:
+    'bg-green-800/40 border-green-500/60 text-green-100 hover:border-green-400 hover:bg-green-800/70'
+}
+
+const tooltipId = `pill-tooltip-${crypto.randomUUID().slice(0, 8)}`
+
+const Tag = href ? 'a' : 'span'
+---
+
+<span class:list={['not-content group relative inline-flex align-middle', className]}>
+  <Tag
+    {href}
+    tabindex="0"
+    aria-describedby={tooltipId}
+    class:list={[
+      'inline-flex cursor-default items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold no-underline transition-colors',
+      href && 'cursor-pointer',
+      colorStyles[color]
+    ]}
+  >
+    {label}
+  </Tag>
+
+  <span
+    id={tooltipId}
+    role="tooltip"
+    class="pointer-events-none absolute top-[calc(100%+0.5rem)] left-0 z-30 w-max max-w-xs rounded-md border border-white/15 bg-[#0A0F19] px-3 py-2 text-left text-xs leading-relaxed font-normal text-white opacity-0 shadow-lg transition-opacity duration-150 group-focus-within:opacity-100 group-hover:opacity-100"
+  >
+    {tooltip}
+  </span>
+</span>
