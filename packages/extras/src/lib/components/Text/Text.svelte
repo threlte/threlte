@@ -63,7 +63,7 @@
   ]
 
   observe(
-    () => propsToListenTo.map((key) => props[key]) as [any, ...any[]],
+    () => propsToListenTo.map((key) => props[key]) as [unknown, ...unknown[]],
     () => {
       onUpdate()
     }
@@ -72,7 +72,7 @@
   const suspend = useSuspense()
 
   $effect(() => {
-    suspend(new Promise<any>((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
+    suspend(new Promise((res) => preloadFont({ font, characters, sdfGlyphSize }, res)))
   })
 </script>
 

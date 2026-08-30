@@ -82,7 +82,7 @@ by demand invalidate the frame loop.
   const { trackballControls } = useControlsContext()
 
   $effect(() => {
-    const handleChange = (event: Event<any, ThreeTrackballControls>) => {
+    const handleChange = (event: Event<'change', ThreeTrackballControls>) => {
       invalidate()
       onchange?.(event)
     }

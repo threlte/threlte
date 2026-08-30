@@ -166,11 +166,11 @@
     if (frame) setFrame(frame)
   }
 
-  const resetCurrentFrame = () => {
+  const resetCurrentFrame = (nextStartFrame = startFrame, nextEndFrame = endFrame) => {
     currentFrame =
       direction === 'forward'
-        ? (frameTag?.from ?? startFrame ?? 0)
-        : (frameTag?.to ?? endFrame ?? numFrames - 1)
+        ? (frameTag?.from ?? nextStartFrame ?? 0)
+        : (frameTag?.to ?? nextEndFrame ?? numFrames - 1)
     setCurrentFrame()
   }
 
@@ -370,9 +370,9 @@
   })
 
   $effect(() => {
-    startFrame
-    endFrame
-    untrack(resetCurrentFrame)
+    const currentStartFrame = startFrame
+    const currentEndFrame = endFrame
+    untrack(() => resetCurrentFrame(currentStartFrame, currentEndFrame))
   })
 
   $effect(() => {

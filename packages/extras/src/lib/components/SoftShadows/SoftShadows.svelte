@@ -28,7 +28,7 @@
   lang="ts"
   module
 >
-  import { ShaderChunk } from 'three'
+  import { Material, Mesh, ShaderChunk } from 'three'
 
   // Captured once per page load.
   const original = ShaderChunk.shadowmap_pars_fragment
@@ -46,7 +46,7 @@
 </script>
 
 <script lang="ts">
-  import { useThrelte } from '@threlte/core'
+  import { isInstanceOf, useThrelte } from '@threlte/core'
   import { BasicShadowMap } from 'three'
 
   const { renderer, scene } = useThrelte()
@@ -144,22 +144,29 @@
   // we drop each material's renderer-side properties (which hold its program
   // ref) and empty the program cache. We avoid `material.dispose()` so user
   // `onBeforeCompile` injections and shared uniform references are preserved.
-  const forceFreshCompile = (material: any) => {
+  const forceFreshCompile = (material: Material) => {
     renderer.properties.remove(material)
     material.needsUpdate = true
   }
 
   const recompile = () => {
-    scene.traverse((object: any) => {
-      const material = object.material
-      if (!material) return
+    scene.traverse((object) => {
+      const material = (object as Mesh).material
+
+      if (material && !isInstanceOf(material, 'Material')) {
+        return
+      }
+
       if (Array.isArray(material)) {
         for (const m of material) forceFreshCompile(m)
       } else {
-        forceFreshCompile(material)
+        forceFreshCompile(material as Material)
       }
     })
-    renderer.info.programs!.length = 0
+
+    if (renderer.info.programs !== null) {
+      renderer.info.programs.length = 0
+    }
   }
 
   $effect(() => {
