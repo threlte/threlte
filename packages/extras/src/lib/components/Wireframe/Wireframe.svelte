@@ -130,7 +130,7 @@
     invalidate()
   })
 
-  $effect(() => {
+  $effect.pre(() => {
     const parentMesh = $parent as Mesh
 
     if (!isInstanceOf(parentMesh, 'Mesh')) {
