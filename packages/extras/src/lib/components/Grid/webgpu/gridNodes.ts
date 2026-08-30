@@ -167,9 +167,7 @@ export const createGridNodes = (uniforms: GridUniforms, options: GridNodeOptions
     const wrapped = vec2(radius.div(size), fract(angle.div(span)).mul(span))
     const half = dividers.mul(0.5)
     const beyondHalf = angle.lessThan(half.negate()).or(angle.greaterThan(half))
-    const width = select(beyondHalf, fwidth(wrapped), fwidth(coord)).mul(
-      thickness.mul(0.25).add(1)
-    )
+    const width = select(beyondHalf, fwidth(wrapped), fwidth(coord)).mul(thickness.mul(0.25).add(1))
 
     const grid = fract(coord.sub(0.5)).sub(0.5).abs().div(width)
     const circle = grid.x.min(1).oneMinus()
