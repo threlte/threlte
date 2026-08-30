@@ -16,12 +16,10 @@ function that injects a plugin.
 
   let { name, plugin, children }: { name: string; plugin: Plugin; children?: Snippet } = $props()
 
-  const initialPlugin = untrack(() => ({
-    name,
-    plugin
-  }))
-
-  injectPlugin(initialPlugin.name, initialPlugin.plugin)
+  injectPlugin(
+    untrack(() => name),
+    untrack(() => plugin)
+  )
 </script>
 
 {@render children?.()}

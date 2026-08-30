@@ -57,15 +57,20 @@
       return
     }
 
-    suspend(
-      textureLoader.load(currentUrl, {
+    const loadPromise = textureLoader
+      .load(currentUrl, {
         transform: (loadedTexture) => {
           loadedTexture.colorSpace = renderer.outputColorSpace
           loadedTexture.needsUpdate = true
           return loadedTexture
         }
       })
-    ).then(
+      .catch((error) => {
+        if (token === loadToken) throw error
+        return undefined
+      })
+
+    suspend(loadPromise).then(
       (loadedTexture) => {
         if (token === loadToken) {
           currentTexture = loadedTexture

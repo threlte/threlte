@@ -8,8 +8,7 @@
 
   let { id = useInstanceId(), ref = $bindable(), children, ...props }: InstanceProps = $props()
 
-  const initialId = untrack(() => id)
-  const { addInstance, removeInstance, instancedMesh, instances } = useApi(initialId)
+  const { addInstance, removeInstance, instancedMesh, instances } = useApi(untrack(() => id))
 
   const mesh = new PositionMesh(instancedMesh, instances)
 

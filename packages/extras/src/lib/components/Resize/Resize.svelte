@@ -35,8 +35,6 @@
     ...props
   }: ResizeProps = $props()
 
-  const initialStage = untrack(() => stage)
-
   const group = new Group()
   const inner = new Group()
   const outer = new Group()
@@ -72,7 +70,10 @@
       doResize()
       stop()
     },
-    { stage: initialStage, running: () => running }
+    {
+      stage: untrack(() => stage),
+      running: () => running
+    }
   )
 
   /** Manually trigger resizing */

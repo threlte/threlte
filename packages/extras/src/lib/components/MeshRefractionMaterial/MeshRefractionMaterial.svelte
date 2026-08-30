@@ -35,14 +35,27 @@
     projectionMatrixInverse: new Uniform(new Matrix4())
   }
 
-  let defines: Record<string, string> = {}
-
   const material = new ShaderMaterial({
     fragmentShader,
     vertexShader,
     uniforms,
-    defines
+    defines: {}
   })
+
+  const updateDefines = (nextDefines: Record<string, string>) => {
+    const currentDefines = material.defines ?? {}
+    const currentKeys = Object.keys(currentDefines)
+    const nextKeys = Object.keys(nextDefines)
+    const definesChanged =
+      currentKeys.length !== nextKeys.length ||
+      nextKeys.some((key) => currentDefines[key] !== nextDefines[key])
+
+    if (!definesChanged) return
+
+    material.defines = nextDefines
+    material.needsUpdate = true
+    invalidate()
+  }
 
   $effect(() => {
     // Sampler2D and SamplerCube need different defines
@@ -54,15 +67,19 @@
     const width = 3 * Math.max(_cubeSize, 16 * 7)
     const height = 4 * _cubeSize
 
-    if (isCubeMap) defines.ENVMAP_TYPE_CUBEM = ''
+    const nextDefines: Record<string, string> = {
+      CUBEUV_TEXEL_WIDTH: `${1.0 / width}`,
+      CUBEUV_TEXEL_HEIGHT: `${1.0 / height}`,
+      CUBEUV_MAX_MIP: `${lodMax}.0`
+    }
 
-    defines.CUBEUV_TEXEL_WIDTH = `${1.0 / width}`
-    defines.CUBEUV_TEXEL_HEIGHT = `${1.0 / height}`
-    defines.CUBEUV_MAX_MIP = `${lodMax}.0`
+    if (isCubeMap) nextDefines.ENVMAP_TYPE_CUBEM = ''
 
     // Add defines from chromatic aberration
-    if (aberrationStrength > 0) defines.CHROMATIC_ABERRATIONS = ''
-    if (fastChroma) defines.FAST_CHROMA = ''
+    if (aberrationStrength > 0) nextDefines.CHROMATIC_ABERRATIONS = ''
+    if (fastChroma) nextDefines.FAST_CHROMA = ''
+
+    updateDefines(nextDefines)
   })
 
   $effect(() => {
@@ -77,22 +94,6 @@
     }
   })
 
-  $effect(() => {
-    if (aberrationStrength > 0) {
-      defines.CHROMATIC_ABERRATIONS = ''
-    } else {
-      delete defines.CHROMATIC_ABERRATIONS
-    }
-    invalidate()
-  })
-  $effect(() => {
-    if (fastChroma) {
-      defines.FAST_CHROMA = ''
-    } else {
-      delete defines.FAST_CHROMA
-    }
-    invalidate()
-  })
   $effect(() => {
     uniforms.envMap.value = envMap
     invalidate()

@@ -28,8 +28,6 @@
     ...props
   }: AlignProps = $props()
 
-  const initialStage = untrack(() => stage)
-
   const group = new Group()
   const innerGroup = new Group()
   const outerGroup = new Group()
@@ -84,7 +82,10 @@
       calculate()
       scheduleAligning = false
     },
-    { stage: initialStage, running: () => scheduleAligning }
+    {
+      stage: untrack(() => stage),
+      running: () => scheduleAligning
+    }
   )
 
   /** Manually trigger aligning */
