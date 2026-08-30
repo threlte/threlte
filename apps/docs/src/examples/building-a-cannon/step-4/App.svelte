@@ -15,9 +15,14 @@
 
 <svelte:window
   onkeydown={(e) => {
+    // Ignore keys meant for the panel, or space would double-fire a focused button.
+    if (e.target instanceof HTMLElement && ['INPUT', 'BUTTON'].includes(e.target.tagName)) return
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
       e.preventDefault()
       aim = Math.min(85, Math.max(0, aim + (e.key === 'ArrowUp' ? 1 : -1)))
+    } else if (e.key === ' ') {
+      e.preventDefault()
+      fireSignal += 1
     }
   }}
 />
@@ -41,7 +46,7 @@
     bind:value={power}
     label="Power"
     min={0.1}
-    max={2}
+    max={1}
     step={0.05}
   />
   <Button
