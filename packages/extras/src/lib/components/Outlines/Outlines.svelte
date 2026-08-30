@@ -32,7 +32,7 @@
     ...props
   }: OutlinesProps = $props()
 
-  const { renderer } = useThrelte()
+  const { renderer, invalidate } = useThrelte()
 
   const uniforms = {
     screenspace: new Uniform(false),
@@ -54,7 +54,10 @@
   let parent = fromStore(useParent())
 
   let geometry = $derived.by(() => {
-    if (!isInstanceOf(parent.current, 'Mesh')) return undefined
+    if (!isInstanceOf(parent.current, 'Mesh')) {
+      return undefined
+    }
+
     return toCreasedNormals(parent.current.geometry, angle)
   })
 
@@ -72,35 +75,47 @@
     return new Mesh()
   })
 
-  $effect.pre(() => {
-    if (mesh) mesh.renderOrder = renderOrder
+  $effect(() => {
+    if (mesh) {
+      mesh.renderOrder = renderOrder
+      invalidate()
+    }
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.transparent = transparent
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.toneMapped = toneMapped
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.polygonOffset = polygonOffset
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.polygonOffsetFactor = polygonOffsetFactor
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.screenspace.value = screenspace
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.color.value.set(color)
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.opacity.value = opacity
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.thickness.value = thickness
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     renderer.getDrawingBufferSize(material.uniforms.size.value)
+    invalidate()
   })
 </script>
 

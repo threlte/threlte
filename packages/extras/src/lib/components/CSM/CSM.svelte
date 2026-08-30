@@ -122,7 +122,7 @@
     }
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     return disposeCsm
   })
 </script>

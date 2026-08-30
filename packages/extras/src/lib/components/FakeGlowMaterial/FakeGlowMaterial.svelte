@@ -1,25 +1,25 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
-  import { Color, AdditiveBlending, ShaderMaterial } from 'three'
+  import { Color, AdditiveBlending, ShaderMaterial, Uniform } from 'three'
   import type { FakeGlowMaterialProps } from './types.js'
   import { fragmentShader } from './fragment.js'
   import { vertexShader } from './vertex.js'
 
   let {
     falloff = 0.1,
-    glowInternalRadius = 6.0,
+    glowInternalRadius = 6,
     glowColor = 'green',
-    glowSharpness = 1.0,
+    glowSharpness = 1,
     ref = $bindable(),
     children,
     ...props
   }: FakeGlowMaterialProps = $props()
 
   const uniforms = {
-    falloff: { value: falloff },
-    glowInternalRadius: { value: glowInternalRadius },
-    glowColor: { value: new Color(glowColor) },
-    glowSharpness: { value: glowSharpness }
+    falloff: new Uniform(0.1),
+    glowInternalRadius: new Uniform(6),
+    glowColor: new Uniform(new Color('white')),
+    glowSharpness: new Uniform(1)
   }
 
   const material = new ShaderMaterial({
@@ -33,19 +33,19 @@
 
   const { invalidate } = useThrelte()
 
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.falloff.value = falloff
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.glowInternalRadius.value = glowInternalRadius
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.glowColor.value.set(glowColor)
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     material.uniforms.glowSharpness.value = glowSharpness
     invalidate()
   })

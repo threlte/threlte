@@ -53,7 +53,7 @@ by demand invalidate the frame loop.
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const controls = new ThreeTrackballControls(untrack(() => resolvedCamera))
-  $effect.pre(() => {
+  $effect(() => {
     controls.object = resolvedCamera
   })
 
@@ -81,8 +81,8 @@ by demand invalidate the frame loop.
 
   const { trackballControls } = useControlsContext()
 
-  $effect.pre(() => {
-    const handleChange = (event: Event<any, ThreeTrackballControls>) => {
+  $effect(() => {
+    const handleChange = (event: Event<'change', ThreeTrackballControls>) => {
       invalidate()
       onchange?.(event)
     }

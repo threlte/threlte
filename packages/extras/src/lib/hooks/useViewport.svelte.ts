@@ -82,7 +82,7 @@ export const useViewport = (
     }
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     const distance = camera.current.getWorldPosition(position).distanceTo(origin)
     updateViewport(size.current, camera.current, distance)
   })

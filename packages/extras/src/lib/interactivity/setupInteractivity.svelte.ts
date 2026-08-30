@@ -325,7 +325,7 @@ export const setupInteractivity = (context: InteractivityContext) => {
 
   const target = fromStore(context.target)
 
-  $effect.pre(() => {
+  $effect(() => {
     const { current } = target
 
     if (!current) return

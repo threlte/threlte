@@ -12,11 +12,14 @@ function that injects a plugin.
 
 <script lang="ts">
   import { injectPlugin, type Plugin } from '@threlte/core'
-  import type { Snippet } from 'svelte'
+  import { untrack, type Snippet } from 'svelte'
 
   let { name, plugin, children }: { name: string; plugin: Plugin; children?: Snippet } = $props()
 
-  injectPlugin(name, plugin)
+  injectPlugin(
+    untrack(() => name),
+    untrack(() => plugin)
+  )
 </script>
 
 {@render children?.()}

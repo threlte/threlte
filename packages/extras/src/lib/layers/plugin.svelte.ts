@@ -9,9 +9,12 @@ export const injectLayersPlugin = () => {
 
     const ctx = getContext<ThrelteLayersContext>('threlte-layers-context')
     const mergedLayers = $derived(args.props.layers ?? ctx?.layers)
-    const mergedCtx = $derived(mergedLayers ? { layers: mergedLayers } : undefined)
 
-    setContext<ThrelteLayersContext>('threlte-layers-context', mergedCtx)
+    setContext<ThrelteLayersContext>('threlte-layers-context', {
+      get layers() {
+        return mergedLayers as ThrelteLayers
+      }
+    })
 
     const applyLayers = (ref: Object3D, layers?: ThrelteLayers) => {
       if (layers === 'all') {
