@@ -53,7 +53,7 @@
   $effect.pre(() => {
     if (spritesheet) {
       mesh.spritesheet = spritesheet.spritesheet
-      animationMap.set(mesh.animationMap)
+      animationMap.set(mesh.animationMap as Map<string, number>)
       mesh.material.map = spritesheet.texture
       mesh.material.needsUpdate = true
     }

@@ -6,7 +6,11 @@
   import type { ThrelteGltf } from '../../types/types.js'
   import type { GltfProps } from './types.js'
 
-  type Props = GltfProps & { gltf?: ThrelteGltf | undefined } & ThrelteGltf['materials']
+  type Props = GltfProps & {
+    gltf?: ThrelteGltf | undefined
+    materials?: ThrelteGltf['materials']
+    nodes?: ThrelteGltf['nodes']
+  }
 
   let {
     url,
