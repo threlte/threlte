@@ -46,6 +46,7 @@ type ThreeClassTypes = OmitNever<{
  * @returns `true` if the object is an instance of the class, `false` otherwise.
  */
 export const isInstanceOf = <T extends keyof ThreeClassTypes>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   obj: any,
   type: T
 ): obj is InstanceType<ThreeClassTypes[T]> => {
