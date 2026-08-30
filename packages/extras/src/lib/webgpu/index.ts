@@ -7,10 +7,9 @@
  * Omitted from this entrypoint:
  * `AnimatedSpriteMaterial`, `InstancedSprite`, `useInstancedSprite`,
  * `buildSpritesheet`, `ContactShadows`, `CSM`, `FakeGlowMaterial`, `Gizmo`,
- * `Grid`, `ImageMaterial`, `MeshLineMaterial`, `MeshRefractionMaterial`,
- * `Outlines`, `PerfMonitor`, `PointsMaterial`, `ShadowAlpha`, `Sky`,
- * `SoftShadows`, `Sparkles`, `Stars`, `Text`, `UvMaterial`, `Wireframe` and
- * `Wobble`.
+ * `ImageMaterial`, `MeshLineMaterial`, `MeshRefractionMaterial`, `Outlines`,
+ * `PerfMonitor`, `PointsMaterial`, `ShadowAlpha`, `Sky`, `SoftShadows`,
+ * `Sparkles`, `Stars`, `Text`, `UvMaterial`, `Wireframe` and `Wobble`.
  *
  * Migrating these components to TSL is in progress. Each one gets a `webgpu`
  * folder next to its GLSL original, and is exported from here once it lands.
@@ -45,6 +44,7 @@ export {
 } from '../index.js'
 
 // abstractions migrated to TSL
+export { default as Grid } from '../components/Grid/webgpu/Grid.svelte'
 export { default as MeshDiscardMaterial } from '../components/MeshDiscardMaterial/webgpu/MeshDiscardMaterial.svelte'
 
 // abstractions
