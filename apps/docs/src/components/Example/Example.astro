@@ -20,19 +20,35 @@ interface Props {
 
 const allModules = getAllExamplesModules()
 
+/**
+ * Multi-step examples may keep files that are identical in every step in a
+ * `shared` directory next to the step directories. Those files are bundled
+ * with every step and are imported as e.g. `../shared/Component.svelte`.
+ */
+const parentDir = Astro.props.path.split('/').slice(0, -1).join('/')
+const sharedPrefix = parentDir ? `${parentDir}/shared/` : ''
+
+const relativize = (key: string) => {
+  const path = key.replace('../../examples/', '')
+  if (path.startsWith(Astro.props.path + '/')) {
+    return path.slice(Astro.props.path.length + 1)
+  }
+  // a file from the sibling `shared` directory
+  return `../shared/${path.slice(sharedPrefix.length)}`
+}
+
 const filteredModules = Object.fromEntries(
   Object.entries(allModules).filter(([key]) => {
-    return key.replace('../../examples/', '').startsWith(Astro.props.path + '/')
+    const path = key.replace('../../examples/', '')
+    return (
+      path.startsWith(Astro.props.path + '/') || (sharedPrefix && path.startsWith(sharedPrefix))
+    )
   })
 )
 
 const files: Record<string, string> = {}
 for (const path in filteredModules) {
-  let relativePath = path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)
-  if (relativePath.startsWith('/')) {
-    relativePath = relativePath.slice(1)
-  }
-  files[relativePath] = filteredModules[path] as string
+  files[relativize(path)] = filteredModules[path] as string
 }
 
 const hideCode = Astro.props.hideCode ?? false
@@ -58,17 +74,14 @@ const hidePreview = Astro.props.hidePreview ?? false
     !hideCode && (
       <CodeWrapper
         showFile={Astro.props.showFile}
-        exampleBasePath={Astro.props.path}
         expanded={hidePreview || (Astro.props.expandCode ?? false)}
         hidePreview={hidePreview}
         client:load
-        filePaths={Object.keys(filteredModules).map((path) =>
-          path.replace('../../examples/', '').replace(Astro.props.path, '').slice(1)
-        )}
+        filePaths={Object.keys(filteredModules).map(relativize)}
       >
         {Object.entries(filteredModules).map(([path, mod]) => (
           <div
-            data-path={path}
+            data-path={relativize(path)}
             class="h-full"
           >
             <Code
