@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core'
-  import { onDestroy } from 'svelte'
+  import { onDestroy, untrack } from 'svelte'
   import {
     Color,
     Group,
@@ -33,27 +33,33 @@
     ...props
   }: ContactShadowsProps = $props()
 
-  const { scene, renderer } = useThrelte()
+  const { scene, renderer, colorSpace } = useThrelte()
 
   const group = new Group()
   const scaledWidth = $derived(width * (Array.isArray(scale) ? scale[0] : scale || 1))
   const scaledHeight = $derived(height * (Array.isArray(scale) ? scale[1] : scale || 1))
 
-  const renderTarget = $derived.by(() => {
-    const rt = new WebGLRenderTarget(resolution, resolution)
-    rt.texture.generateMipmaps = false
-    rt.texture.colorSpace = renderer.outputColorSpace
-    return rt
+  const initialResolution = untrack(() => resolution)
+
+  const renderTarget = new WebGLRenderTarget(initialResolution, initialResolution)
+  renderTarget.texture.generateMipmaps = false
+  $effect(() => {
+    renderTarget.texture.colorSpace = $colorSpace
   })
 
-  const renderTargetBlur = $derived.by(() => {
-    const rt = new WebGLRenderTarget(resolution, resolution)
-    rt.texture.generateMipmaps = false
-    return rt
+  const renderTargetBlur = new WebGLRenderTarget(initialResolution, initialResolution)
+  renderTargetBlur.texture.generateMipmaps = false
+
+  $effect(() => {
+    renderTarget.setSize(resolution, resolution)
+    renderTargetBlur.setSize(resolution, resolution)
   })
 
   const planeGeometry = $derived(new PlaneGeometry(scaledWidth, scaledHeight).rotateX(Math.PI / 2))
-  const blurPlane = $derived(new Mesh(planeGeometry))
+  const blurPlane = new Mesh()
+  $effect(() => {
+    blurPlane.geometry = planeGeometry
+  })
 
   const depthMaterial = $derived.by(() => {
     const currentColor = color
@@ -105,7 +111,9 @@
       far
     )
   )
-  $effect.pre(() => shadowCamera.updateProjectionMatrix())
+  $effect(() => {
+    shadowCamera.updateProjectionMatrix()
+  })
 
   const shadowMaterial = $derived(
     new MeshBasicMaterial({

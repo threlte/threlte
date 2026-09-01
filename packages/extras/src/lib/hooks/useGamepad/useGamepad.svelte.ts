@@ -665,7 +665,7 @@ export function useGamepad(options: UseGamepadOptions = {}): StandardGamepad | S
     // Check if gamepads are already connected.
     handleGamepadConnected()
 
-    $effect.pre(() => {
+    $effect(() => {
       window.addEventListener('gamepadconnected', handleGamepadConnected)
       window.addEventListener('gamepaddisconnected', handleGamepadDisconnected)
 

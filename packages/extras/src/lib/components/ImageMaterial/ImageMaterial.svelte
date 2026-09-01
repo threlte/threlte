@@ -1,7 +1,15 @@
 <script lang="ts">
-  import { T, asyncWritable, isInstanceOf, useParent, useTask, useThrelte } from '@threlte/core'
-  import { Color, ShaderMaterial, Uniform, Vector2, Vector3, type Mesh, type Texture } from 'three'
-  import { useTexture } from '../../hooks/useTexture.js'
+  import { T, isInstanceOf, useLoader, useParent, useTask, useThrelte } from '@threlte/core'
+  import {
+    Color,
+    ShaderMaterial,
+    TextureLoader,
+    Uniform,
+    Vector2,
+    Vector3,
+    type Mesh,
+    type Texture
+  } from 'three'
   import { useSuspense } from '../../suspense/useSuspense.js'
   import { fragmentShader, vertexShader } from './shaders.js'
   import type { ImageMaterialProps } from './types.js'
@@ -32,11 +40,49 @@
     ...props
   }: ImageMaterialProps = $props()
 
-  const { invalidate, size } = useThrelte()
+  const { invalidate, renderer, size } = useThrelte()
 
   const suspend = useSuspense()
+  const textureLoader = useLoader(TextureLoader)
+  let currentTexture = $state<Texture | undefined>(undefined)
+  let loadToken = 0
 
-  const textureStore = suspend(url ? useTexture(url) : asyncWritable(Promise.resolve(texture)))
+  $effect(() => {
+    const currentUrl = url
+    const providedTexture = texture
+    const token = ++loadToken
+
+    if (!currentUrl) {
+      currentTexture = providedTexture
+      return
+    }
+
+    const loadPromise = textureLoader
+      .load(currentUrl, {
+        transform: (loadedTexture) => {
+          loadedTexture.colorSpace = renderer.outputColorSpace
+          loadedTexture.needsUpdate = true
+          return loadedTexture
+        }
+      })
+      .catch((error) => {
+        if (token === loadToken) throw error
+        return undefined
+      })
+
+    suspend(loadPromise).then(
+      (loadedTexture) => {
+        if (token === loadToken) {
+          currentTexture = loadedTexture
+        }
+      },
+      () => {
+        if (token === loadToken) {
+          currentTexture = undefined
+        }
+      }
+    )
+  })
 
   const parent = useParent()
 
@@ -68,80 +114,80 @@
     fragmentShader
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     if (side) {
       material.side = side
       invalidate()
     }
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.color.value.set(color)
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.imageBounds.value.set(
-      $textureStore?.image.width ?? 0,
-      $textureStore?.image.height ?? 0
+      currentTexture?.image.width ?? 0,
+      currentTexture?.image.height ?? 0
     )
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.resolution.value = Math.max($size.width, $size.height)
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.zoom.value = zoom
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.radius.value = radius
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.opacity.value = opacity
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.alphaThreshold.value = alphaThreshold
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.alphaSmoothing.value = alphaSmoothing
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.brightness.value = brightness
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.contrast.value = contrast
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.hsl.value.x = hue
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.hsl.value.z = lightness
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.negative.value = negative ? 1 : 0
     invalidate()
   })
-  $effect.pre(() => {
-    uniforms.map.value = $textureStore ?? null
+  $effect(() => {
+    uniforms.map.value = currentTexture ?? null
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.colorProccessingTexture.value = colorProcessingTexture ?? null
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.colorProcessingTextureOverride.value = colorProcessingTexture ? 1 : 0
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     if (monochromeColor !== undefined) {
       uniforms.monochromeColor.value.set(monochromeColor)
       uniforms.monochromeStrength.value = monochromeStrength ?? 1
@@ -150,7 +196,7 @@
     }
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     let colorProcessingEnabled = 0
 
     const monochromeCheck =

@@ -47,15 +47,15 @@
 
   const sizeStore = fromStore(size)
 
-  $effect.pre(() => {
+  $effect(() => {
     asciiEffect.setSize(sizeStore.current.width, sizeStore.current.height)
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     asciiEffect.domElement.style.color = fgColor
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     asciiEffect.domElement.style.backgroundColor = bgColor
   })
 

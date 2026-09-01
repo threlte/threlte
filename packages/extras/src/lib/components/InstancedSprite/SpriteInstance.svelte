@@ -16,6 +16,9 @@
     frameId
   }: SpriteInstanceProps = $props()
 
+  // Matches the provider's erased generic (see InstancedSprite.svelte); the
+  // concrete animation-name union isn't available at this boundary.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic erased across context boundary
   const { updatePosition, sprite } = getContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx')
 
   $effect.pre(() => {

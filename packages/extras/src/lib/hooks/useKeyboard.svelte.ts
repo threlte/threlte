@@ -149,7 +149,7 @@ export const useKeyboard = (optionsFn?: () => UseKeyboardOptions) => {
     { autoInvalidate: false }
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     const { target = window, capture = false } = optionsFn?.() ?? {}
     const listenerOptions = { capture }
 

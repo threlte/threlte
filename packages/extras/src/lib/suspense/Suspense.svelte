@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T, useParentObject3D, useThrelte } from '@threlte/core'
-  import type { Snippet } from 'svelte'
+  import { untrack, type Snippet } from 'svelte'
   import { Group } from 'three'
   import { createSuspenseContext } from './context.js'
 
@@ -18,7 +18,7 @@
 
   let { final = false, onload, onsuspend, onerror, error, fallback, children }: Props = $props()
 
-  const { suspended, errors, setFinal } = createSuspenseContext({ final })
+  const { suspended, errors, setFinal } = createSuspenseContext({ final: untrack(() => final) })
   $effect(() => setFinal(final))
   $effect(() => {
     if (!$suspended) onload?.()

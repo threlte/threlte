@@ -46,7 +46,7 @@
         )
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     return () => {
       for (const group of strokeGeometries) {
         if (group) {

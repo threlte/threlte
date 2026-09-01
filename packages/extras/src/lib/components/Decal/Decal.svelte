@@ -74,7 +74,7 @@
         : undefined
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     if (!('geometry' in parentNode)) {
       throw new Error('Decal must have a Mesh as parent or specify its "mesh" prop')
     }

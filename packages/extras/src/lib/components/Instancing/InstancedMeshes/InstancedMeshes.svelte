@@ -28,7 +28,7 @@
       (acc, [id, mesh]) => {
         // filter out non-mesh objects
         if (!mesh.isMesh) return acc
-        acc[id as any as keyof T] = getInstance(mesh.uuid)
+        acc[id as keyof T] = getInstance(mesh.uuid)
         return acc
       },
       {} as Record<keyof T, typeof Instance>

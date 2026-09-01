@@ -1,5 +1,6 @@
 <script lang="ts">
   import { useTask, useThrelte, useParent, observe } from '@threlte/core'
+  import { untrack } from 'svelte'
   import {
     NoToneMapping,
     Vector4,
@@ -44,9 +45,10 @@
   const viewport = new Vector4()
 
   const cameraControls = $derived(controls ?? ($parent as Controls))
+  const initialRenderTask = untrack(() => renderTask)
 
   useTask(
-    renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
+    initialRenderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
       if (shouldRender()) {
         const toneMapping = renderer.toneMapping
@@ -62,15 +64,15 @@
     },
     {
       autoInvalidate: false,
-      ...(renderTask ?? { after: autoRenderTask })
+      ...(initialRenderTask ?? { after: autoRenderTask })
     }
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     if (!cameraControls) return
 
     if (cameraControls instanceof OrbitControls || cameraControls instanceof TrackballControls) {
@@ -118,7 +120,7 @@
     onend?.(event)
   }
 
-  $effect.pre(() => {
+  $effect(() => {
     gizmo.addEventListener('start', handleStart)
     gizmo.addEventListener('change', handleChange)
     gizmo.addEventListener('end', handleEnd)
@@ -129,7 +131,7 @@
     }
   })
 
-  observe.pre(
+  observe(
     () => [size],
     () => {
       gizmo.update()
@@ -137,7 +139,7 @@
     }
   )
 
-  $effect.pre(() => {
+  $effect(() => {
     return () => gizmo.dispose()
   })
 </script>

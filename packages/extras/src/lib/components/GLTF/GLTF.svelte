@@ -1,11 +1,23 @@
 <script lang="ts">
   import { T } from '@threlte/core'
+  import { untrack } from 'svelte'
   import { useGltf } from '../../hooks/useGltf.js'
   import { useSuspense } from '../../suspense/useSuspense.js'
   import type { ThrelteGltf } from '../../types/types.js'
   import type { GltfProps } from './types.js'
 
-  type Props = GltfProps & { gltf?: ThrelteGltf | undefined } & ThrelteGltf['materials']
+  type Props = GltfProps & {
+    gltf?: ThrelteGltf | undefined
+    // `nodes`/`materials` are typed as `Record<string, any>` for the same
+    // reason as `useGltf`'s default `Graph`: they let consumers reach into the
+    // scene graph (e.g. `nodes.SomeMesh.geometry`) without casting. Unlike the
+    // hook, this component isn't generic, so there's no way to supply a typed
+    // `Graph` — a strict type here would be unusable and impossible to override.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    materials?: Record<string, any>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    nodes?: Record<string, any>
+  }
 
   let {
     url,
@@ -29,11 +41,13 @@
     ...props
   }: Props = $props()
 
-  const loader = useGltf({
-    dracoLoader,
-    meshoptDecoder,
-    ktx2Loader
-  })
+  const loader = useGltf(
+    untrack(() => ({
+      dracoLoader,
+      meshoptDecoder,
+      ktx2Loader
+    }))
+  )
 
   const onLoad = (data: ThrelteGltf) => {
     if (gltf) onunload?.()
@@ -78,7 +92,7 @@
     }
   }
 
-  $effect.pre(() => {
+  $effect(() => {
     loadGltf(url)
   })
 </script>

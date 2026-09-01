@@ -39,54 +39,54 @@
 
   export const material = new ShaderMaterial({ uniforms })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.lineWidth.value = width
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.opacity.value = opacity
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.resolution.value.set($size.width, $size.height)
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.sizeAttenuation.value = attenuate ? 1 : 0
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.dashArray.value = dashArray
     uniforms.useDash.value = dashArray > 0 ? 1 : 0
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.dashOffset.value = dashOffset
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.dashRatio.value = dashRatio
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.scaleDown.value = scaleDown / 10
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.alphaMap.value = alphaMap
     uniforms.useAlphaMap.value = alphaMap ? 1 : 0
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.color.value.set(color)
     invalidate()
   })

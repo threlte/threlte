@@ -22,7 +22,7 @@
     untrack(() => resolvedCamera),
     dom
   )
-  $effect.pre(() => {
+  $effect(() => {
     controls.object = resolvedCamera
   })
 
@@ -43,7 +43,7 @@
     props.onchange?.(event)
   }
 
-  $effect.pre(() => {
+  $effect(() => {
     orbitControls.set(controls)
     return () => {
       orbitControls.set(undefined)
