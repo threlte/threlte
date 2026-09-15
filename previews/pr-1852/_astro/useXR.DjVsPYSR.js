@@ -1,1 +1,0 @@
-import{x as s,s as n,i as e,a}from"./setup.svelte.CPawdK8U.js";import{r}from"./currentReadable.svelte.DVTJ-jle.js";const o=()=>({isPresenting:r(()=>a.current),isHandTracking:r(()=>e.current),session:r(()=>n.current),xr:r(()=>s.current)});export{o as u};
