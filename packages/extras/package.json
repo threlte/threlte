@@ -49,7 +49,7 @@
   },
   "peerDependencies": {
     "svelte": ">=5",
-    "three": ">=0.160"
+    "three": ">=0.172"
   },
   "type": "module",
   "keywords": [

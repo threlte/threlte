@@ -39,6 +39,7 @@
   const gridPlane = new Plane()
   const gridPlaneNormal = new Vector3(0, 1, 0)
   const zeroVector = new Vector3(0, 0, 0)
+  const cameraWorldPosition = new Vector3()
 
   const planeNormals = {
     xz: [0, 1, 0],
@@ -50,6 +51,7 @@
 
   const material = new NodeMaterial()
   material.transparent = true
+  material.fog = false
 
   // These props change the shape of the node graph rather than a uniform value,
   // so the material is rebuilt when any of them change.
@@ -57,7 +59,7 @@
     const { positionNode, fragmentNode } = createGridNodes(uniforms, {
       plane,
       type,
-      axis: axis as 'x' | 'y' | 'z',
+      axis: type === 'lines' ? (axis as 'x' | 'y' | 'z') : 'x',
       infiniteGrid,
       followCamera
     })
@@ -138,7 +140,7 @@
         .applyMatrix4(mesh.matrixWorld)
 
       const projectedPoint = gridPlane.projectPoint(
-        camera.current.position,
+        camera.current.getWorldPosition(cameraWorldPosition),
         uniforms.worldCamProjPosition.value
       )
       if (!fadeOrigin) {

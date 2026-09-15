@@ -13,17 +13,20 @@
 
 <script lang="ts">
   import { T, type Props as ThrelteProps } from '@threlte/core/webgpu'
-  import type { NodeMaterial } from 'three/webgpu'
+  import { NodeMaterial } from 'three/webgpu'
 
   type Props = Omit<ThrelteProps<NodeMaterial>, 'fragmentNode'>
 
   let { children, ref = $bindable(), ...props }: Props = $props()
+
+  const material = new NodeMaterial()
 </script>
 
-<T.NodeMaterial
+<T
+  is={material}
   bind:ref
   {fragmentNode}
   {...props}
 >
-  {@render children?.(ref)}
-</T.NodeMaterial>
+  {@render children?.({ ref: material })}
+</T>

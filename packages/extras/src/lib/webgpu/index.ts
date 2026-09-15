@@ -8,35 +8,36 @@
  */
 
 // Hooks
+export { useCursor } from '../hooks/useCursor.svelte.js'
+export { useGltf } from '../hooks/useGltf.js'
+export { useDraco } from '../hooks/useDraco.js'
+export { useMeshopt } from '../hooks/useMeshopt.js'
+export { useKtx2 } from '../hooks/useKtx2.js'
+export { useGltfAnimations } from '../hooks/useGltfAnimations.svelte.js'
+export { useProgress } from '../hooks/useProgress.js'
+export { useTexture } from '../hooks/useTexture.js'
+export { useFBO } from '../hooks/useFBO.svelte.js'
 export {
-  useCursor,
-  useGltf,
-  useDraco,
-  useMeshopt,
-  useKtx2,
-  useGltfAnimations,
-  useProgress,
-  useTexture,
-  useFBO,
   useGamepad,
   type StandardGamepadEvent,
   type StandardGamepad,
-  type StandardXRGamepad,
-  useKeyboard,
-  useInputMap,
-  useFollow,
-  useMask,
-  useViewport,
-  useTrailTexture,
-  useCameraControls,
-  useOrbitControls,
-  useTrackballControls,
-  useTransformControls,
-  meshBounds
-} from '../index.js'
+  type StandardXRGamepad
+} from '../hooks/useGamepad/useGamepad.svelte.js'
+export { useKeyboard } from '../hooks/useKeyboard.svelte.js'
+export { useInputMap } from '../hooks/useInputMap.svelte.js'
+export { useFollow } from '../hooks/useFollow.svelte.js'
+export { useMask } from '../hooks/useMask.js'
+export { useViewport } from '../hooks/useViewport.svelte.js'
+export { useTrailTexture } from '../hooks/useTrailTexture.svelte.js'
+export { useCameraControls } from '../components/CameraControls/useCameraControls.js'
+export { useOrbitControls } from '../components/controls/OrbitControls/useOrbitControls.js'
+export { useTrackballControls } from '../components/controls/TrackballControls/useTrackballControls.js'
+export { useTransformControls } from '../components/controls/TransformControls/useTransformControls.js'
+export { meshBounds } from '../utilities/meshBounds.js'
 
 // abstractions migrated to TSL
 export { default as Grid } from '../components/Grid/webgpu/Grid.svelte'
+export { default as HTML } from '../components/HTML/webgpu/HTML.svelte'
 export { default as MeshDiscardMaterial } from '../components/MeshDiscardMaterial/webgpu/MeshDiscardMaterial.svelte'
 
 // abstractions awaiting WebGPU implementations
@@ -66,58 +67,64 @@ export { default as Wireframe } from '../components/Wireframe/webgpu/Wireframe.s
 export { default as Wobble } from '../components/Wobble/webgpu/Wobble.svelte'
 
 // abstractions
-export {
-  BackdropGeometry,
-  Decal,
-  CameraControls,
-  CameraControlsRef,
-  Edges,
-  HTML,
-  HUD,
-  Float,
-  GLTF,
-  Gizmo,
-  type GizmoOptions,
-  CubeEnvironment,
-  Environment,
-  Bounds,
-  RoundedBoxGeometry,
-  TransformControls,
-  OrbitControls,
-  TrackballControls,
-  InstancedMesh,
-  Instance,
-  InstancedMeshes,
-  MeshLineGeometry,
-  Align,
-  Billboard,
-  ShadowMaterial,
-  SVG,
-  Text3DGeometry,
-  Mask,
-  Detailed,
-  Resize,
-  LinearGradientTexture,
-  RadialGradientTexture,
-  type ColorStop,
-  type RadialGradientOuterRadius,
-  View
-} from '../index.js'
+export { default as BackdropGeometry } from '../components/BackdropGeometry/BackdropGeometry.svelte'
+export { default as Decal } from '../components/Decal/Decal.svelte'
+export { default as CameraControls } from '../components/CameraControls/CameraControls.svelte'
+export { default as CameraControlsRef } from 'camera-controls'
+export { default as Edges } from '../components/Edges/Edges.svelte'
+export { default as HUD } from '../components/HUD/HUD.svelte'
+export { default as Float } from '../components/Float/Float.svelte'
+export { default as GLTF } from '../components/GLTF/GLTF.svelte'
+export { default as Gizmo } from '../components/Gizmo/Gizmo.svelte'
+export type { GizmoOptions } from 'three-viewport-gizmo'
+export { default as CubeEnvironment } from '../components/environment/CubeEnvironment/CubeEnvironment.svelte'
+export { default as Environment } from '../components/environment/Environment/Environment.svelte'
+export { default as Bounds } from '../components/Bounds/Bounds.svelte'
+export { default as RoundedBoxGeometry } from '../components/RoundedBoxGeometry/RoundedBoxGeometry.svelte'
+export { default as TransformControls } from '../components/controls/TransformControls/TransformControls.svelte'
+export { default as OrbitControls } from '../components/controls/OrbitControls/OrbitControls.svelte'
+export { default as TrackballControls } from '../components/controls/TrackballControls/TrackballControls.svelte'
+export { default as InstancedMesh } from '../components/Instancing/InstancedMesh.svelte'
+export { default as Instance } from '../components/Instancing/Instance.svelte'
+export { default as InstancedMeshes } from '../components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
+export { default as MeshLineGeometry } from '../components/MeshLine/MeshLineGeometry.svelte'
+export { default as Align } from '../components/Align/Align.svelte'
+export { default as Billboard } from '../components/Billboard/Billboard.svelte'
+export { default as ShadowMaterial } from '../components/ShadowMaterial/ShadowMaterial.svelte'
+export { default as SVG } from '../components/Svg/Svg.svelte'
+export { default as Text3DGeometry } from '../components/Text3DGeometry/Text3DGeometry.svelte'
+export { default as Mask } from '../components/Mask/Mask.svelte'
+export { default as Detailed } from '../components/Detailed/Detailed.svelte'
+export { default as Resize } from '../components/Resize/Resize.svelte'
+export { default as LinearGradientTexture } from '../components/GradientTexture/linear/LinearGradientTexture.svelte'
+export { default as RadialGradientTexture } from '../components/GradientTexture/radial/RadialGradientTexture.svelte'
+export type { ColorStop, RadialGradientOuterRadius } from '../components/GradientTexture/types.js'
+export { default as View } from '../components/View/View.svelte'
 
 // Transitions
-export { transitions, createTransition, global, type TransitionProps } from '../index.js'
+export { transitions } from '../transitions/transitions.svelte.js'
+export { createTransition } from '../transitions/createTransition.js'
+export { global } from '../transitions/global.js'
+export type { TransitionProps } from '../transitions/types.js'
 
 // suspense
-export { Suspense, useSuspense, onReveal, onSuspend } from '../index.js'
+export { default as Suspense } from '../suspense/Suspense.svelte'
+export { useSuspense } from '../suspense/useSuspense.js'
+export { onReveal } from '../suspense/onReveal.svelte.js'
+export { onSuspend } from '../suspense/onSuspend.svelte.js'
 
 // portals
-export { Portal, PortalTarget } from '../index.js'
+export { default as Portal } from '../components/portals/Portal.svelte'
+export { default as PortalTarget } from '../components/portals/PortalTarget.svelte'
 
 // audio components
-export { AudioListener, Audio, PositionalAudio } from '../index.js'
+export { default as AudioListener } from '../audio/AudioListener/AudioListener.svelte'
+export { default as Audio } from '../audio/Audio/Audio.svelte'
+export { default as PositionalAudio } from '../audio/PositionalAudio/PositionalAudio.svelte'
 
 // audio hooks
-export { useAudioListener, useThrelteAudio } from '../index.js'
+export { useAudioListener } from '../audio/useAudioListener.js'
+export { useThrelteAudio } from '../audio/useThrelteAudio.js'
 
 // interactivity
 export {
@@ -128,12 +135,14 @@ export {
   type Intersection,
   type IntersectionEvent,
   type InteractivityProps
-} from '../index.js'
+} from '../interactivity/index.js'
 
 // layers
-export { layers, type ThrelteLayers, type ThrelteLayersContext } from '../index.js'
+export { layers, type ThrelteLayers, type ThrelteLayersContext } from '../layers/index.js'
 
 // bvh
-export { bvh, type BVHOptions, type BVHProps, BVHSplitStrategy } from '../index.js'
+export { bvh } from '../bvh/bvh.svelte.js'
+export type { BVHOptions, BVHProps } from '../bvh/types.js'
+export { BVHSplitStrategy } from '../bvh/splitStrategy.js'
 
-export type { ThrelteGltf } from '../index.js'
+export type { ThrelteGltf } from '../types/types.js'

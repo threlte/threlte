@@ -64,9 +64,9 @@ type NarrowToInstance<Obj, Instance> =
  * @param type - The class name to check against.
  * @returns `true` if the object is an instance of the class, `false` otherwise.
  */
-export const isInstanceOf = <T extends keyof ThreeClassTypes, Obj>(
+export const isInstanceOf = <T extends keyof ThreeClassTypes, Obj = unknown>(
   obj: Obj,
   type: T
-): obj is Obj & NarrowToInstance<Obj, InstanceType<ThreeClassTypes[T]>> => {
+): obj is Extract<NarrowToInstance<Obj, InstanceType<ThreeClassTypes[T]>>, Obj> => {
   return (obj as Record<string, unknown> | null | undefined)?.[`is${type}`] === true
 }

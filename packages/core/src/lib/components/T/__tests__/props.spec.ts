@@ -79,6 +79,28 @@ describe('<T> props', () => {
     expect(group.visible).toBe(false)
   })
 
+  it('keeps a scalar prop changed after mount when a key is added to a spread', async () => {
+    const group = new Group()
+    const { rerender } = render(SpreadProps, { props: { is: group, extra: { visible: false } } })
+
+    group.visible = true
+    await rerender({ extra: { visible: false, castShadow: true } })
+
+    expect(group.castShadow).toBe(true)
+    expect(group.visible).toBe(true)
+  })
+
+  it('re-applies a prop whose key is removed from a spread and added back', async () => {
+    const group = new Group()
+    const { rerender } = render(SpreadProps, { props: { is: group, extra: { visible: false } } })
+
+    await rerender({ extra: {} })
+    group.visible = true
+    await rerender({ extra: { visible: false } })
+
+    expect(group.visible).toBe(false)
+  })
+
   it('applies setScalar for a numeric value on a Vector-like prop', () => {
     const group = new Group()
     render(T, { props: { is: group, scale: 2 } })

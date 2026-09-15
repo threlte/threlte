@@ -210,7 +210,7 @@
   <Canvas>
     {#if useFadeOrigin}
       <TransformControls
-        onchange={(e) => {
+        onobjectChange={(e) => {
           e.target.object.position.toArray(fadeOrigin)
         }}
       />

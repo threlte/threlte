@@ -1,6 +1,6 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { BakeShadows, MeshDiscardMaterial, OrbitControls } from '@threlte/extras'
+  import { MeshDiscardMaterial, OrbitControls } from '@threlte/extras'
   import { MeshStandardMaterial, SphereGeometry } from 'three'
 
   const geometry = new SphereGeometry()
@@ -52,5 +52,3 @@
   <T.MeshStandardMaterial />
   <T.CircleGeometry args={[5, 128]} />
 </T.Mesh>
-
-<BakeShadows />

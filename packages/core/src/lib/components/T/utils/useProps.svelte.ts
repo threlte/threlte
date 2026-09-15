@@ -137,15 +137,24 @@ export const useProps = <Type>(
     return previousKeys
   })
 
+  let previousObject: Type | undefined
+
   $effect.pre(() => {
     const _object = object()
     const _props = props()
     const _pluginProps = pluginProps()
     const _propKeys = propKeys
 
-    // Clear memoized props when the instance or prop keys change,
-    // preventing unbounded growth from previous instances.
-    memoizedProps.clear()
+    if (_object === previousObject) {
+      for (const path of memoizedProps.keys()) {
+        if (!_propKeys.includes(path)) memoizedProps.delete(path)
+      }
+    } else {
+      // Clear memoized props when the instance changes,
+      // preventing unbounded growth from previous instances.
+      memoizedProps.clear()
+      previousObject = _object
+    }
 
     untrack(() => {
       for (const key of _propKeys) {

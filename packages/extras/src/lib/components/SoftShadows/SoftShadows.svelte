@@ -154,8 +154,10 @@
       const material = (object as Mesh).material
 
       if (Array.isArray(material)) {
-        for (const m of material) {
-          forceFreshCompile(m)
+        for (const subMaterial of material) {
+          if (isInstanceOf(subMaterial, 'Material')) {
+            forceFreshCompile(subMaterial)
+          }
         }
       } else if (isInstanceOf(material, 'Material')) {
         forceFreshCompile(material)
