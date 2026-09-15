@@ -10,6 +10,7 @@
     type Mesh,
     type Texture
   } from 'three'
+  import { getImageSize } from '../../lib/getImageSize.js'
   import { useSuspense } from '../../suspense/useSuspense.js'
   import { fragmentShader, vertexShader } from './shaders.js'
   import type { ImageMaterialProps } from './types.js'
@@ -125,10 +126,8 @@
     invalidate()
   })
   $effect(() => {
-    uniforms.imageBounds.value.set(
-      currentTexture?.image.width ?? 0,
-      currentTexture?.image.height ?? 0
-    )
+    const image = getImageSize(currentTexture?.image)
+    uniforms.imageBounds.value.set(image?.width ?? 0, image?.height ?? 0)
     invalidate()
   })
   $effect(() => {

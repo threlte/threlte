@@ -90,7 +90,7 @@
    * Creates metadata if no JSON file is supplied.
    */
   const createData = (
-    texture: Texture,
+    texture: Texture<HTMLImageElement>,
     options: {
       columns?: number
       rows: number

@@ -6,7 +6,7 @@
   import { CSM } from 'three/examples/jsm/csm/CSM.js'
   import { useMaterials } from './useMaterials.svelte.js'
 
-  interface Props {
+  export interface CSMProps {
     /**
      * Whether or not CSM is enabled. If `enabled={false}`, a slot named
      * `"disabled"` will be rendered.
@@ -44,7 +44,7 @@
     lightDirection = [1, -1, 1],
     children,
     fallback
-  }: Props = $props()
+  }: CSMProps = $props()
 
   const { camera: defaultCamera, scene, size } = useThrelte()
 

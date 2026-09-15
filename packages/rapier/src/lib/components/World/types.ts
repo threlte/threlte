@@ -15,12 +15,12 @@ import type {
 } from '@dimforge/rapier3d-compat/raw.js'
 import type { Key, Stage } from '@threlte/core'
 import type { Snippet } from 'svelte'
-import type { Vector3 } from 'three'
+import type { Vector3Tuple } from 'three'
 
 export type WorldProps = {
   framerate?: number | 'varying'
   autoStart?: boolean
-  gravity?: Parameters<Vector3['set']>
+  gravity?: Vector3Tuple
   rawIntegrationParameters?: RawIntegrationParameters
   rawIslands?: RawIslandManager
   rawBroadPhase?: RawBroadPhase

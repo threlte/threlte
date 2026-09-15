@@ -15,7 +15,7 @@
   import vertexShader from './vertex.js'
   import type { Props } from '@threlte/core'
 
-  interface SparklesProps extends Props<Points> {
+  export interface SparklesProps extends Props<Points> {
     /**
      * Number of particles
      *

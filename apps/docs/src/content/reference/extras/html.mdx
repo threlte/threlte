@@ -4,6 +4,7 @@ group: 'Content'
 sourcePath: 'packages/extras/src/lib/components/HTML/HTML.svelte'
 title: <HTML>
 type: 'component'
+webgpu: true
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
@@ -117,7 +118,14 @@ Setting `occlude` to `"blending"` will allow objects to partially occlude the
 	automatically.
 </Tip>
 
-<Example path="extras/html/phone" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/html/phone" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/html/phone-webgpu" />
+  </Tab>
+</Tabs>
 
 ### Visibility change event
 

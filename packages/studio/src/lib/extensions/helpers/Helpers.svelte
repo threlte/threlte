@@ -1,6 +1,12 @@
 <script lang="ts">
   import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
-  import { Light, Object3D } from 'three'
+  import {
+    Light,
+    Object3D,
+    type DirectionalLight,
+    type PointLight,
+    type SpotLight
+  } from 'three'
   import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
@@ -67,8 +73,12 @@
     }
   }
 
-  const isLight = (object: any): object is Light => {
-    return object.isLight
+  const isLight = (object: Object3D): object is Light => {
+    return 'isLight' in object
+  }
+
+  const castsShadow = (light: Light): light is DirectionalLight | PointLight | SpotLight => {
+    return 'shadow' in light
   }
 
   let invalidations = $state(1)
@@ -116,7 +126,7 @@
         oncreate={onCreate}
       />
     {:else if isLight(object)}
-      {#if object.shadow && invalidations && object.castShadow}
+      {#if castsShadow(object) && invalidations && object.castShadow}
         <T.CameraHelper
           userData={{ ignoreOverrideMaterial: true }}
           args={[object.shadow.camera]}
