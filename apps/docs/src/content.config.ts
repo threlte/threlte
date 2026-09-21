@@ -94,9 +94,16 @@ export const referenceCollection = defineCollection({
     componentSignature: componentSignature.optional(),
     showInSidebar: z.boolean().optional().default(true),
     /**
-     * Shows a "webgpu" pill next to the title, marking this export as available
-     * from the package's `webgpu` entrypoint.
+     * Renderers this export works with, each shown as a pill next to the title.
+     * They are independent: an export can support one, both, or — while it is
+     * being ported — neither.
+     *
+     * Both default to `false` so pills only appear where support has actually
+     * been established. A lone `webgl` pill states that WebGPU is unsupported,
+     * which is only true of a package that has a `webgpu` entrypoint to be
+     * missing from.
      */
+    webgl: z.boolean().optional().default(false),
     webgpu: z.boolean().optional().default(false)
   })
 })

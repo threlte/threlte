@@ -50,6 +50,11 @@ export { default as CubeCamera } from '../components/CubeCamera/webgpu/CubeCamer
 export { default as FakeGlowMaterial } from '../components/FakeGlowMaterial/webgpu/FakeGlowMaterial.svelte'
 export { default as ImageMaterial } from '../components/ImageMaterial/webgpu/ImageMaterial.svelte'
 export { default as InstancedSprite } from '../components/InstancedSprite/webgpu/InstancedSprite.svelte'
+export {
+  useInstancedSprite,
+  buildSpritesheet,
+  type SpritesheetMetadata
+} from '../components/InstancedSprite/webgpu/instancedSpriteUtils.js'
 export { default as MeshLineMaterial } from '../components/MeshLine/webgpu/MeshLineMaterial.svelte'
 export { default as MeshRefractionMaterial } from '../components/MeshRefractionMaterial/webgpu/MeshRefractionMaterial.svelte'
 export { default as Outlines } from '../components/Outlines/webgpu/Outlines.svelte'
