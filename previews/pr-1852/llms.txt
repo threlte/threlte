@@ -133,6 +133,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 - [<UvMaterial>](https://threlte.xyz/previews/pr-1852/docs/reference/extras/uv-material)
 - [<View>](https://threlte.xyz/previews/pr-1852/docs/reference/extras/view)
 - [<VirtualEnvironment>](https://threlte.xyz/previews/pr-1852/docs/reference/extras/virtual-environment)
+- [WebGPU](https://threlte.xyz/previews/pr-1852/docs/reference/extras/webgpu)
 - [<Wireframe>](https://threlte.xyz/previews/pr-1852/docs/reference/extras/wireframe)
 - [<Wobble>](https://threlte.xyz/previews/pr-1852/docs/reference/extras/wobble)
 
