@@ -1,12 +1,6 @@
 <script lang="ts">
   import { isInstanceOf, T, useTask, useThrelte } from '@threlte/core'
-  import {
-    Light,
-    Object3D,
-    type DirectionalLight,
-    type PointLight,
-    type SpotLight
-  } from 'three'
+  import type { DirectionalLight, Light, Object3D, PointLight, SpotLight } from 'three'
   import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper.js'
   import HorizontalButtonGroup from '../../components/HorizontalButtonGroup.svelte'
   import ToolbarButton from '../../components/ToolbarButton.svelte'
@@ -73,12 +67,12 @@
     }
   }
 
-  const isLight = (object: Object3D): object is Light => {
-    return 'isLight' in object
-  }
-
   const castsShadow = (light: Light): light is DirectionalLight | PointLight | SpotLight => {
-    return 'shadow' in light
+    return (
+      isInstanceOf(light, 'DirectionalLight') ||
+      isInstanceOf(light, 'PointLight') ||
+      isInstanceOf(light, 'SpotLight')
+    )
   }
 
   let invalidations = $state(1)
@@ -125,7 +119,7 @@
         args={[object]}
         oncreate={onCreate}
       />
-    {:else if isLight(object)}
+    {:else if isInstanceOf(object, 'Light')}
       {#if castsShadow(object) && invalidations && object.castShadow}
         <T.CameraHelper
           userData={{ ignoreOverrideMaterial: true }}
@@ -134,31 +128,31 @@
         />
       {/if}
 
-      {#if 'isDirectionalLight' in object}
+      {#if isInstanceOf(object, 'DirectionalLight')}
         <T.DirectionalLightHelper
           userData={{ ignoreOverrideMaterial: true }}
           args={[object, 10]}
           oncreate={onCreate}
         />
-      {:else if 'isSpotLight' in object}
+      {:else if isInstanceOf(object, 'SpotLight')}
         <T.SpotLightHelper
           userData={{ ignoreOverrideMaterial: true }}
           args={[object]}
           oncreate={onCreate}
         />
-      {:else if 'isPointLight' in object}
+      {:else if isInstanceOf(object, 'PointLight')}
         <T.PointLightHelper
           userData={{ ignoreOverrideMaterial: true }}
           args={[object, 10]}
           oncreate={onCreate}
         />
-      {:else if 'isHemisphereLight' in object}
+      {:else if isInstanceOf(object, 'HemisphereLight')}
         <T.HemisphereLightHelper
           userData={{ ignoreOverrideMaterial: true }}
           args={[object, 10]}
           oncreate={onCreate}
         />
-      {:else if 'isRectAreaLight' in object}
+      {:else if isInstanceOf(object, 'RectAreaLight')}
         <T
           is={RectAreaLightHelper}
           userData={{ ignoreOverrideMaterial: true }}
