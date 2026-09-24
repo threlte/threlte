@@ -139,7 +139,6 @@ export {
 // bvh
 export { bvh } from './bvh/bvh.svelte.js'
 export type { BVHOptions, BVHProps } from './bvh/types.js'
-import { SAH, CENTER, AVERAGE } from 'three-mesh-bvh'
-export const BVHSplitStrategy = { SAH, CENTER, AVERAGE }
+export { BVHSplitStrategy } from './bvh/splitStrategy.js'
 
 export type { ThrelteGltf } from './types/types.js'

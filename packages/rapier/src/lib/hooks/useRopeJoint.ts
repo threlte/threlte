@@ -1,5 +1,5 @@
 import type { RopeImpulseJoint } from '@dimforge/rapier3d-compat'
-import { Vector3 } from 'three'
+import { Vector3, type Vector3Tuple } from 'three'
 import { useJoint } from './useJoint.svelte.js'
 import { isInstanceOf } from '@threlte/core'
 
@@ -7,8 +7,8 @@ import { isInstanceOf } from '@threlte/core'
  * The rope joint limits the max distance between two bodies.
  */
 export const useRopeJoint = (
-  anchorA: Parameters<Vector3['set']> | Vector3,
-  anchorB: Parameters<Vector3['set']> | Vector3,
+  anchorA: Vector3Tuple | Vector3,
+  anchorB: Vector3Tuple | Vector3,
   length: number
 ) => {
   return useJoint((rbA, rbB, { world, rapier }) => {

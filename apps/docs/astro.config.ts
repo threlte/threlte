@@ -38,7 +38,12 @@ export default defineConfig({
   },
   integrations: [
     AutoImport({
-      imports: ['$components/Example/Example.astro', '$components/Tip/Tip.astro']
+      imports: [
+        '$components/Example/Example.astro',
+        '$components/Tip/Tip.astro',
+        '$components/Tabs/Tabs.astro',
+        '$components/Tabs/Tab.astro'
+      ]
     }),
     svelte(),
     mdx({

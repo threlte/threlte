@@ -3,15 +3,17 @@
   import { fragmentShader } from './fragment.js'
   import { vertexShader } from './vertex.js'
   import { T } from '@threlte/core'
+  import { ShaderMaterial } from 'three'
 
   let { children, ref = $bindable(), ...props }: MeshDiscardMaterialProps = $props()
+
+  const material = new ShaderMaterial({ fragmentShader, vertexShader })
 </script>
 
-<T.ShaderMaterial
+<T
+  is={material}
   bind:ref
-  {fragmentShader}
-  {vertexShader}
   {...props}
 >
-  {@render children?.(ref)}
-</T.ShaderMaterial>
+  {@render children?.({ ref: material })}
+</T>

@@ -2,6 +2,7 @@ import { PerspectiveCamera, Group, MeshStandardMaterial, Color } from 'three'
 import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
+import SpreadProps from './__fixtures__/SpreadProps.svelte'
 
 describe('<T> props', () => {
   it('sets a prop on a Three.js instance', () => {
@@ -65,6 +66,39 @@ describe('<T> props', () => {
     await rerender({ name: 'group', castShadow: true })
     expect(group.name).toBe('group')
     expect(group.castShadow).toBe(true)
+  })
+
+  it('sets a prop whose key is added to a spread after mount', async () => {
+    const group = new Group()
+    const { rerender } = render(SpreadProps, { props: { is: group, extra: {} } })
+
+    expect(group.visible).toBe(true)
+
+    await rerender({ extra: { visible: false } })
+
+    expect(group.visible).toBe(false)
+  })
+
+  it('keeps a scalar prop changed after mount when a key is added to a spread', async () => {
+    const group = new Group()
+    const { rerender } = render(SpreadProps, { props: { is: group, extra: { visible: false } } })
+
+    group.visible = true
+    await rerender({ extra: { visible: false, castShadow: true } })
+
+    expect(group.castShadow).toBe(true)
+    expect(group.visible).toBe(true)
+  })
+
+  it('re-applies a prop whose key is removed from a spread and added back', async () => {
+    const group = new Group()
+    const { rerender } = render(SpreadProps, { props: { is: group, extra: { visible: false } } })
+
+    await rerender({ extra: {} })
+    group.visible = true
+    await rerender({ extra: { visible: false } })
+
+    expect(group.visible).toBe(false)
   })
 
   it('applies setScalar for a numeric value on a Vector-like prop', () => {

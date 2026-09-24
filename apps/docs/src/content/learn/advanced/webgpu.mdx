@@ -96,6 +96,22 @@ Alternatively,
 [`vite-plugin-top-level-await`](https://github.com/Menci/vite-plugin-top-level-await)
 can be used, although less success has been reported with this method.
 
+### Extras
+
+`@threlte/extras` ships a matching `webgpu` export. Import from it instead of
+the package root whenever your `<Canvas>` comes from `@threlte/core/webgpu`.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core/webgpu'
+  import { Grid, OrbitControls } from '@threlte/extras/webgpu'
+</script>
+```
+
+Most of the package is renderer-agnostic and works as-is, a few components have
+been rewritten in TSL, and the rest throw until they are migrated. See
+[`@threlte/extras` WebGPU](/docs/reference/extras/webgpu) for the full breakdown.
+
 ## TSL
 
 A question that comes up often in Three.js development is "How do I extend materials?". External libraries such as

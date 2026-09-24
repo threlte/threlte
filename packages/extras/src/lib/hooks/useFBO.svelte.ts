@@ -4,7 +4,7 @@ import { isInstanceOf, useThrelte } from '@threlte/core'
 import { fromStore } from 'svelte/store'
 import { untrack } from 'svelte'
 
-export type UseFBOOptions = RenderTargetOptions & {
+export type UseFBOOptions = Omit<RenderTargetOptions, 'depth'> & {
   /**
    * if set, the scene depth will be rendered into buffer.depthTexture
    */

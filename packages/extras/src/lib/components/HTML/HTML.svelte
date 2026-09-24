@@ -259,7 +259,7 @@
               if (!Array.isArray(scale)) {
                 occlusionMesh.scale.setScalar(1 / scale)
               } else {
-                occlusionMesh.scale.set(1 / scale[0], 1 / scale[1], 1 / scale[2])
+                occlusionMesh.scale.set(1 / scale[0], 1 / scale[1], 1 / (scale[2] ?? 1))
               }
             }
           } else {

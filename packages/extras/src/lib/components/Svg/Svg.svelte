@@ -1,8 +1,25 @@
 <script lang="ts">
   import { T, useLoader, type Props as ThrelteProps } from '@threlte/core'
-  import { DoubleSide, type Group, type Mesh, type MeshBasicMaterial } from 'three'
-  import { SVGLoader } from 'three/examples/jsm/loaders/SVGLoader.js'
+  import { DoubleSide, type Group, type Mesh, type MeshBasicMaterial, type ShapePath } from 'three'
+  import { SVGLoader, type StrokeStyle } from 'three/examples/jsm/loaders/SVGLoader.js'
   import { useSuspense } from '../../suspense/useSuspense.js'
+
+  /**
+   * The style `SVGLoader` writes to each path's `userData`. It is `StrokeStyle`
+   * minus `strokeColor` — which the loader never sets and `pointsToStroke`
+   * never reads — plus the fill properties, which three does not type.
+   */
+  type SvgPathStyle = Omit<StrokeStyle, 'strokeColor'> & {
+    fill?: string
+    fillOpacity?: number
+    fillRule?: string
+    opacity?: number
+    stroke?: string
+    strokeOpacity?: number
+    visibility?: string
+  }
+
+  const styleOf = (path: ShapePath) => path.userData?.style as SvgPathStyle | undefined
 
   interface Props extends ThrelteProps<typeof Group> {
     /** Can be a URL or SVG data */
@@ -37,13 +54,14 @@
   const strokeGeometries = $derived.by(() =>
     skipStrokes
       ? []
-      : paths.map((path) =>
-          path.userData?.style.stroke === undefined || path.userData.style.stroke === 'none'
+      : paths.map((path) => {
+          const style = styleOf(path)
+          return style?.stroke === undefined || style.stroke === 'none'
             ? null
             : path.subPaths.map((subPath) =>
-                SVGLoader.pointsToStroke(subPath.getPoints(), path.userData?.style)
+                SVGLoader.pointsToStroke(subPath.getPoints(), style as StrokeStyle)
               )
-        )
+        })
   )
 
   $effect(() => {
@@ -66,7 +84,8 @@
 >
   <T.Group scale.y={-1}>
     {#each paths as path, p (path)}
-      {#if !skipFill && path.userData?.style.fill !== undefined && path.userData.style.fill !== 'none'}
+      {@const style = styleOf(path)}
+      {#if !skipFill && style?.fill !== undefined && style.fill !== 'none'}
         {#each SVGLoader.createShapes(path) as shape (shape)}
           <T.Mesh
             {...fillMeshProps}
@@ -74,8 +93,8 @@
           >
             <T.ShapeGeometry args={[shape]} />
             <T.MeshBasicMaterial
-              color={path.userData?.style.fill}
-              opacity={path.userData?.style.fillOpacity}
+              color={style.fill}
+              opacity={style.fillOpacity}
               transparent={true}
               side={DoubleSide}
               depthWrite={false}
@@ -85,7 +104,7 @@
         {/each}
       {/if}
 
-      {#if !skipStrokes && path.userData?.style.stroke !== undefined && path.userData.style.stroke !== 'none'}
+      {#if !skipStrokes && style?.stroke !== undefined && style.stroke !== 'none'}
         {#each path.subPaths as _subPath, s (_subPath)}
           {#if strokeGeometries[p]}
             <T.Mesh
@@ -94,8 +113,8 @@
               renderOrder={renderOrder++}
             >
               <T.MeshBasicMaterial
-                color={path.userData?.style.stroke}
-                opacity={path.userData?.style.strokeOpacity}
+                color={style.stroke}
+                opacity={style.strokeOpacity}
                 transparent={true}
                 side={DoubleSide}
                 depthWrite={false}

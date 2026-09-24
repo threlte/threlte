@@ -2,7 +2,7 @@ import type { CanvasTexture } from 'three'
 import type { ColorStop } from '../types.js'
 import type { Props } from '@threlte/core'
 
-export type LinearGradientTextureProps = Props<CanvasTexture> & {
+export type LinearGradientTextureProps = Props<CanvasTexture<OffscreenCanvas>> & {
   /**
    * x-axis coordinate of the gradient's start point
    * @default 0

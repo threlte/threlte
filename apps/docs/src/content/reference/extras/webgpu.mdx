@@ -1,0 +1,67 @@
+---
+category: '@threlte/extras'
+sourcePath: 'packages/extras/src/lib/webgpu/index.ts'
+title: WebGPU
+---
+
+`@threlte/extras` ships a `webgpu` export that pairs with
+[`@threlte/core/webgpu`](/docs/learn/advanced/webgpu). Import from it instead of
+the package root whenever your `<Canvas>` comes from `@threlte/core/webgpu`.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core/webgpu'
+  import { Grid, OrbitControls } from '@threlte/extras/webgpu'
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[10, 10, 10]}
+>
+  <OrbitControls />
+</T.PerspectiveCamera>
+
+<Grid />
+```
+
+Mixing the two entrypoints is what to avoid. A component imported from
+`@threlte/extras` builds WebGL materials and holds classes from `three`, which
+are distinct from the ones in `three/webgpu` even when they share a name.
+
+## What is available
+
+Most of the package never touches the renderer and is re-exported unchanged —
+every hook, all transitions, suspense, portals, audio, interactivity, layers,
+and abstractions such as `<Float>`, `<Align>`, `<GLTF>`, `<InstancedMesh>`,
+`<SVG>` and `<View>`. These behave identically to their `@threlte/extras`
+counterparts, and you can read their regular reference pages.
+
+Components written against WebGL fall into two groups.
+
+### Rewritten in TSL
+
+These have a separate WebGPU implementation and match the behavior of their
+WebGL counterparts:
+
+- [`<Grid>`](/docs/reference/extras/grid)
+- [`<HTML>`](/docs/reference/extras/html)
+- [`<MeshDiscardMaterial>`](/docs/reference/extras/mesh-discard-material)
+
+### Awaiting a WebGPU implementation
+
+|                            |                            |                     |
+| -------------------------- | -------------------------- | ------------------- |
+| `<AnimatedSpriteMaterial>` | `<AsciiRenderer>`          | `<BakeShadows>`     |
+| `<ContactShadows>`         | `<CSM>`                    | `<CubeCamera>`      |
+| `<FakeGlowMaterial>`       | `<ImageMaterial>`          | `<InstancedSprite>` |
+| `<MeshLineMaterial>`       | `<MeshRefractionMaterial>` | `<Outlines>`        |
+| `<PerfMonitor>`            | `<PointsMaterial>`         | `<ShadowAlpha>`     |
+| `<Sky>`                    | `<SoftShadows>`            | `<Sparkles>`        |
+| `<Stars>`                  | `<Text>`                   | `<UvMaterial>`      |
+| `<VirtualEnvironment>`     | `<Wireframe>`              | `<Wobble>`          |
+
+<Tip type="note">
+  Migration to TSL is ongoing and each component is ported in place, so a future release can move
+  one of these into the list above without any change on your side. If one is blocking you, [open an
+  issue](https://github.com/threlte/threlte/issues) so it can be prioritized.
+</Tip>
