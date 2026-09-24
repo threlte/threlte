@@ -1,5 +1,21 @@
 # @threlte/extras
 
+## 9.22.0
+
+### Minor Changes
+
+- 7b42101: [@threlte/extras] Add a `@threlte/extras/webgpu` entrypoint with WebGPU-compatible implementations and explicit runtime errors for components awaiting WebGPU support
+
+### Patch Changes
+
+- e705eab: [@threlte/extras] Fix `<MeshDiscardMaterial>` children snippet not receiving `{ ref }`
+- e406193: [@threlte/extras] Fix type errors against three r183+
+- d6a9825: [@threlte/extras] Fix `<SoftShadows>` throwing on scene objects without a material
+- 1dfe40b: [@threlte/extras] Fix `<Grid>` fade using the camera's local instead of world position
+- 6173d5d: [@threlte/extras] Fix initial value capture warnings
+- ea24fdb: [@threlte/extras] Fix interactivity treating every `<BatchedMesh>` instance as one hover target
+- bf75879: [@threlte/extras] Type the scene graph `nodes`/`materials` (and `<GLTF>` props) concretely instead of `any`
+
 ## 9.21.1
 
 ### Patch Changes
