@@ -22,7 +22,7 @@
     onend,
     placement = 'bottom-left',
     size = 86,
-    offset = { top: 10, right: 10, bottom: 10, left: 10 },
+    offset,
     id,
     className,
     animated = true,
@@ -59,8 +59,15 @@
 
   ref = gizmo
 
+  let built = false
+
   $effect(() => {
     const options = { ...rest }
+
+    if (!built) {
+      built = true
+      return
+    }
 
     untrack(() => {
       gizmo.set({
@@ -81,12 +88,10 @@
   $effect(() => {
     gizmo.animated = animated
     gizmo.speed = speed
-    gizmo.size = size
-    gizmo.placement = placement
-    gizmo.offset = { top: 10, right: 10, bottom: 10, left: 10, ...offset }
+    gizmo.setLayout({ placement, size, offset })
 
     if (id !== undefined) gizmo.domElement.id = id
-    if (className !== undefined) gizmo.className = className
+    if (className !== undefined) gizmo.domElement.className = className
 
     invalidate()
   })

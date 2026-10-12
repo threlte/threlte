@@ -4,6 +4,7 @@ import {
   RepeatWrapping,
   SRGBColorSpace,
   type ColorRepresentation,
+  type Source,
   type Texture
 } from 'three'
 import { axisKeys } from './constants.js'
@@ -22,11 +23,17 @@ interface AtlasCell {
   }
 }
 
-export interface AtlasUserData {
+interface AtlasLayout {
   offsetX: number
   offsetY: number
   cellHeight: number
 }
+
+/**
+ * Keyed on the texture's source rather than the texture itself: every indicator
+ * holds a clone of the one atlas, and clones share their source.
+ */
+const layouts = new WeakMap<Source<unknown>, AtlasLayout>()
 
 /**
  * Draws every indicator state into a single canvas: one row per indicator, the
@@ -84,7 +91,7 @@ export const atlasTexture = (options: ResolvedOptions, padding = 2): Texture => 
   texture.colorSpace = SRGBColorSpace
   texture.wrapS = RepeatWrapping
   texture.wrapT = RepeatWrapping
-  texture.userData = { offsetX, offsetY, cellHeight } satisfies AtlasUserData
+  layouts.set(texture.source, { offsetX, offsetY, cellHeight })
 
   return texture
 
@@ -179,11 +186,18 @@ export const atlasTexture = (options: ResolvedOptions, padding = 2): Texture => 
 
 /** Shifts an atlas-backed texture between its resting and hovered column. */
 export const setAtlasHover = (texture: Texture, hovered: boolean) => {
-  texture.offset.x = (hovered ? 0.5 : 0) + (texture.userData as AtlasUserData).offsetX
+  const layout = layouts.get(texture.source)
+
+  if (layout) {
+    texture.offset.x = (hovered ? 0.5 : 0) + layout.offsetX
+  }
 }
 
 /** Points an atlas-backed texture at the row belonging to `index`. */
 export const setAtlasRow = (texture: Texture, index: number) => {
-  const { offsetY, cellHeight } = texture.userData as AtlasUserData
-  texture.offset.y = 1 - (index + 1) * cellHeight + offsetY
+  const layout = layouts.get(texture.source)
+
+  if (layout) {
+    texture.offset.y = 1 - (index + 1) * layout.cellHeight + layout.offsetY
+  }
 }

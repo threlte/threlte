@@ -34,6 +34,7 @@ import {
   turnRate
 } from './constants.js'
 import { resolveOptions, type GizmoOptions, type ResolvedOptions } from './options.js'
+import { fromYUpSpace, toYUpSpace } from './upSpace.js'
 
 export type { GizmoOptions, GizmoAxisOptions } from './options.js'
 
@@ -101,9 +102,10 @@ const applyBox = (element: HTMLElement, size: number, offset: ResolvedOptions['o
   })
 }
 
-const createDomElement = ({ placement, size, offset, id, className }: ResolvedOptions) => {
-  const element = document.createElement('div')
-
+const applyDomElement = (
+  element: HTMLElement,
+  { placement, size, offset, id, className }: ResolvedOptions
+) => {
   Object.assign(element.style, {
     position: 'absolute',
     zIndex: '1000',
@@ -230,10 +232,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   }
 
   set placement(placement: NonNullable<GizmoOptions['placement']>) {
-    this.#placement = applyPlacement(this.#domElement, placement) as NonNullable<
-      GizmoOptions['placement']
-    >
-    this.domUpdate()
+    this.setLayout({ placement })
   }
 
   /** The widget's size in pixels. */
@@ -242,9 +241,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   }
 
   set size(size: number) {
-    this.#options.size = size
-    applyBox(this.#domElement, size, this.#options.offset)
-    this.domUpdate()
+    this.setLayout({ size })
   }
 
   /** The widget's distance in pixels from its container's edges. */
@@ -252,23 +249,49 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     return this.#options.offset
   }
 
-  set offset(offset: ResolvedOptions['offset']) {
-    this.#options.offset = offset
-    applyBox(this.#domElement, this.#options.size, offset)
-    this.domUpdate()
+  set offset(offset: Partial<ResolvedOptions['offset']>) {
+    this.setLayout({ offset })
   }
 
+  /**
+   * Applies any of placement, size and offset together. The individual setters
+   * delegate here, so prefer this when changing more than one: each pass reads
+   * back the widget's rectangle, and batching keeps that to a single reflow.
+   */
+  setLayout(layout: {
+    placement?: NonNullable<GizmoOptions['placement']>
+    size?: number
+    offset?: Partial<ResolvedOptions['offset']>
+  }): this {
+    const { placement, size, offset } = layout
+
+    if (placement !== undefined) {
+      this.#options.placement = placement
+      this.#placement = applyPlacement(this.#domElement, placement) as NonNullable<
+        GizmoOptions['placement']
+      >
+    }
+
+    if (size !== undefined) {
+      this.#options.size = size
+    }
+
+    if (offset !== undefined) {
+      this.#options.offset = { ...this.#options.offset, ...offset }
+    }
+
+    if (size !== undefined || offset !== undefined) {
+      applyBox(this.#domElement, this.#options.size, this.#options.offset)
+    }
+
+    this.domUpdate()
+
+    return this
+  }
+
+  /** The element the widget is rendered into. */
   get domElement() {
     return this.#domElement
-  }
-
-  /** The `class` attribute of the widget's container element. */
-  get className() {
-    return this.#domElement.className
-  }
-
-  set className(className: string) {
-    this.#domElement.className = className
   }
 
   /**
@@ -277,10 +300,12 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
    * since those leave the gizmo's GPU resources in place.
    */
   set(options: GizmoOptions = {}): this {
+    const controls = this.#controls
+
     this.dispose()
 
     this.options = options
-    this.#options = resolveOptions(options)
+    this.#options = resolveOptions(options, this.camera.up)
     this.#placement = this.#options.placement
 
     const { isSphere, size, container, animated, speed } = this.#options
@@ -322,14 +347,18 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.speed = speed
 
     this.#container = container ? resolveContainer(container) : document.body
-    this.#domElement = createDomElement(this.#options)
+
+    // Reconfigured rather than replaced, so a reference held to `domElement`
+    // survives a rebuild.
+    this.#domElement ??= document.createElement('div')
+    applyDomElement(this.#domElement, this.#options)
     this.#domElement.onpointerdown = (event) => this.#onPointerDown(event)
     this.#domElement.onpointermove = (event) => this.#onPointerMove(event)
     this.#domElement.onpointerleave = () => this.#onPointerLeave()
     this.#container.appendChild(this.#domElement)
 
-    if (this.#controls) {
-      this.attachControls(this.#controls)
+    if (controls) {
+      this.attachControls(controls)
     }
 
     this.update()
@@ -604,7 +633,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.#pointerStart.set(event.clientX, event.clientY)
 
     const start = spherical.setFromVector3(
-      this.#toDefaultUp(offset.subVectors(this.camera.position, this.target))
+      toYUpSpace(offset.subVectors(this.camera.position, this.target), this.camera.up)
     )
     const { theta, phi } = start
     this.#distance = start.radius
@@ -624,13 +653,13 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
         .multiplyScalar((1 / this.#domRect.width) * Math.PI)
 
       const current = spherical.setFromVector3(
-        this.#toDefaultUp(offset.subVectors(this.camera.position, this.target))
+        toYUpSpace(offset.subVectors(this.camera.position, this.target), this.camera.up)
       )
 
       current.theta = theta - delta.x
       current.phi = Math.max(epsilon, Math.min(Math.PI - epsilon, phi - delta.y))
 
-      this.#toDefaultUp(this.camera.position.setFromSpherical(current), true).add(this.target)
+      fromYUpSpace(this.camera.position.setFromSpherical(current), this.camera.up).add(this.target)
       this.camera.lookAt(this.target)
       this.quaternion.copy(this.camera.quaternion).invert()
       this.#updateOrientation(false)
@@ -658,25 +687,6 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     document.addEventListener('pointermove', onPointerMove, false)
     document.addEventListener('pointerup', onPointerUp, false)
     this.dispatchEvent({ type: 'start' })
-  }
-
-  /**
-   * Remaps coordinates between the Y-up space `Spherical` assumes and the up
-   * vector of the camera being controlled.
-   */
-  #toDefaultUp(target: Vector3, toSpherical = false) {
-    const { x, y, z } = target
-    const up = this.camera.up
-
-    if (up.x === 1) {
-      return toSpherical ? target.set(y, z, x) : target.set(z, x, y)
-    }
-
-    if (up.z === 1) {
-      return toSpherical ? target.set(z, x, y) : target.set(y, z, x)
-    }
-
-    return target
   }
 
   #onPointerMove(event: PointerEvent) {

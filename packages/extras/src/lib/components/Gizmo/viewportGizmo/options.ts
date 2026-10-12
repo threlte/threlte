@@ -1,5 +1,6 @@
-import { Object3D, type ColorRepresentation } from 'three'
+import { type ColorRepresentation, type Vector3 } from 'three'
 import { axisKeys, axisKeysXUp, axisKeysZUp, faceAliases, positiveAxisKeys } from './constants.js'
+import { dominantAxis } from './upSpace.js'
 
 /**
  * Configuration options for individual gizmo axes.
@@ -296,14 +297,12 @@ const applyDefaults = <T extends Record<string, unknown>>(
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T
 
-export const resolveOptions = (options: GizmoOptions): ResolvedOptions => {
+export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOptions => {
   const type = options.type ?? 'sphere'
   const isSphere = type === 'sphere'
   const resolution = options.resolution ?? (isSphere ? 64 : 128)
 
-  const up = Object3D.DEFAULT_UP
-  const isZUp = up.z === 1
-  const isXUp = up.x === 1
+  const { isXUp, isZUp } = dominantAxis(up)
 
   const { container } = options
   const merged = clone({ ...options, container: undefined }) as GizmoOptions
