@@ -1,5 +1,12 @@
 import { type ColorRepresentation, type Vector3 } from 'three'
-import { axisKeys, axisKeysXUp, axisKeysZUp, faceAliases, positiveAxisKeys } from './constants.js'
+import {
+  axisKeys,
+  axisKeysXUp,
+  axisKeysZUp,
+  faceAliases,
+  faceLabels,
+  positiveAxisKeys
+} from './constants.js'
 import { dominantAxis } from './upSpace.js'
 
 /**
@@ -303,9 +310,19 @@ export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOpti
   const isSphere = type === 'sphere'
   const resolution = options.resolution ?? (isSphere ? 64 : 128)
 
-  const { isXUp, isZUp } = dominantAxis(up)
+  const { axis: upAxis, negative } = dominantAxis(up)
 
-  const orderedKeys = isZUp ? axisKeysZUp : isXUp ? axisKeysXUp : axisKeys
+  const orderedKeys = [
+    ...(upAxis === 'z' ? axisKeysZUp : upAxis === 'x' ? axisKeysXUp : axisKeys)
+  ]
+
+  // A negative up puts the top face on the other end of the up axis.
+  if (negative) {
+    const topKey = orderedKeys[1]
+    orderedKeys[1] = orderedKeys[4]
+    orderedKeys[4] = topKey
+  }
+
   const aliased: GizmoOptions = { ...options }
 
   faceAliases.forEach((alias, index) => {
@@ -315,12 +332,13 @@ export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOpti
     }
   })
 
-  const right = 'Right'
-  const top = 'Top'
-  const front = 'Front'
-  const left = 'Left'
-  const bottom = 'Bottom'
-  const back = 'Back'
+  // The alias order already encodes which axis each face is on, so reading it
+  // back the other way gives every axis its label without restating the rules.
+  const labels = {} as Record<(typeof axisKeys)[number], string>
+
+  orderedKeys.forEach((key, index) => {
+    labels[key] = faceLabels[index]
+  })
 
   const positiveAxisDefaults: GizmoAxisOptions = {
     enabled: true,
@@ -395,26 +413,19 @@ export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOpti
     },
     x: {
       ...positiveAxisDefaults,
-      ...(isSphere ? { label: 'X', color: 0xff3653, line: true } : { label: isXUp ? top : right })
+      ...(isSphere ? { label: 'X', color: 0xff3653, line: true } : { label: labels.x })
     },
     y: {
       ...positiveAxisDefaults,
-      ...(isSphere
-        ? { label: 'Y', color: 0x8adb00, line: true }
-        : { label: isZUp || isXUp ? front : top })
+      ...(isSphere ? { label: 'Y', color: 0x8adb00, line: true } : { label: labels.y })
     },
     z: {
       ...positiveAxisDefaults,
-      ...(isSphere
-        ? { label: 'Z', color: 0x2c8fff, line: true }
-        : { label: isZUp ? top : isXUp ? right : front })
+      ...(isSphere ? { label: 'Z', color: 0x2c8fff, line: true } : { label: labels.z })
     },
-    nx: { ...negativeAxisDefaults, label: isSphere ? '' : isXUp ? bottom : left },
-    ny: { ...negativeAxisDefaults, label: isSphere ? '' : isZUp || isXUp ? back : bottom },
-    nz: {
-      ...negativeAxisDefaults,
-      label: isSphere ? '' : isZUp ? bottom : isXUp ? left : back
-    }
+    nx: { ...negativeAxisDefaults, label: isSphere ? '' : labels.nx },
+    ny: { ...negativeAxisDefaults, label: isSphere ? '' : labels.ny },
+    nz: { ...negativeAxisDefaults, label: isSphere ? '' : labels.nz }
   } as unknown as Record<string, unknown>
 
   const resolved = merge(defaults, aliased)

@@ -14,6 +14,8 @@
   let right = $state(10)
   let bottom = $state(10)
   let center = $state<Vector3Tuple>([0, 0, 0])
+  let gizmoRef = $state<any>()
+  $effect(() => { (globalThis as any).__gizmo = gizmoRef })
 </script>
 
 <Pane
@@ -97,7 +99,8 @@
   <Canvas>
     <T.PerspectiveCamera
       makeDefault
-      position={[20, 20, 20]}
+      position={[20, -20, 20]}
+      up={[0, -1, 0]}
       fov={36}
       target={[0, 0, 0]}
     >
@@ -107,6 +110,7 @@
         }}
       >
         <Gizmo
+          bind:ref={gizmoRef}
           {type}
           {speed}
           {placement}

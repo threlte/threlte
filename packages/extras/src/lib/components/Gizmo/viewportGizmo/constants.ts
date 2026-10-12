@@ -5,6 +5,7 @@ export const positiveAxisKeys = ['x', 'y', 'z'] as const
 export const axisKeysZUp = ['x', 'z', 'y', 'nx', 'nz', 'ny'] as const
 export const axisKeysXUp = ['z', 'x', 'y', 'nz', 'nx', 'ny'] as const
 export const faceAliases = ['right', 'top', 'front', 'left', 'bottom', 'back'] as const
+export const faceLabels = ['Right', 'Top', 'Front', 'Left', 'Bottom', 'Back'] as const
 
 export const spherePointDistance = 1.3
 export const cameraDistance = 7
