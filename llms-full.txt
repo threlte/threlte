@@ -11997,9 +11997,14 @@ URL: https://threlte.xyz/docs/reference/extras/gizmo
 
 A gizmo for snap-to camera controls.
 
-Uses the [Three Viewport Gizmo library](https://fennec-hub.github.io/three-viewport-gizmo/).
-
-<Example path="extras/gizmo" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/gizmo" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/gizmo-webgpu" />
+  </Tab>
+</Tabs>
 
 Three's `OrbitControls` or yomotsu's [`CameraControls`](https://github.com/yomotsu/camera-controls) can be provided as a `controls` prop.
 
@@ -12012,9 +12017,45 @@ Alternatively, the `<Gizmo>` can be placed as a child of a controls component.
 </OrbitControls>
 ```
 
-In addition to the props listed below, `<Gizmo>` can accept [any of the options](https://fennec-hub.github.io/three-viewport-gizmo/api.html#gizmooptions) from the underlying Three Viewport Gizmo instance as a prop.
+### Configuring an axis
 
-<Tip type="warning">These props cause the gizmo to rebuild itself, so update them sparingly.</Tip>
+Each of `x`, `y`, `z`, `nx`, `ny` and `nz` takes a `GizmoAxisOptions` object:
+
+```ts
+type GizmoAxisOptions = {
+  enabled?: boolean
+  label?: string
+  color?: ColorRepresentation
+  labelColor?: ColorRepresentation
+  opacity?: number
+  scale?: number
+  line?: boolean
+  border?: {
+    size: number
+    color: ColorRepresentation
+  }
+  hover?: {
+    color?: ColorRepresentation
+    labelColor?: ColorRepresentation
+    opacity?: number
+    scale?: number
+    border?: {
+      size: number
+      color: ColorRepresentation
+    }
+  }
+}
+```
+
+The cube type accepts `right`, `top`, `front`, `left`, `bottom` and `back` as aliases for `x`, `y`, `z`, `nx`, `ny` and `nz` respectively, which reads more naturally when labelling faces.
+
+```svelte
+<Gizmo
+  type="cube"
+  right={{ label: 'R', color: '#ff3653' }}
+  top={{ label: 'U', color: '#8adb00' }}
+/>
+```
 
 ---
 
