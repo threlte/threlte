@@ -312,9 +312,7 @@ export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOpti
 
   const { axis: upAxis, negative } = dominantAxis(up)
 
-  const orderedKeys = [
-    ...(upAxis === 'z' ? axisKeysZUp : upAxis === 'x' ? axisKeysXUp : axisKeys)
-  ]
+  const orderedKeys = [...(upAxis === 'z' ? axisKeysZUp : upAxis === 'x' ? axisKeysXUp : axisKeys)]
 
   // A negative up puts the top face on the other end of the up axis.
   if (negative) {
