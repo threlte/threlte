@@ -437,9 +437,6 @@ importers:
       three-perf:
         specifier: ^1.0.11
         version: 1.0.11(three@0.185.1)
-      three-viewport-gizmo:
-        specifier: ^2.2.0
-        version: 2.2.0(three@0.185.1)
       troika-three-text:
         specifier: ^0.52.4
         version: 0.52.4(three@0.185.1)
@@ -7348,11 +7345,6 @@ packages:
     peerDependencies:
       three: '>=0.170'
 
-  three-viewport-gizmo@2.2.0:
-    resolution: {integrity: sha512-Jo9Liur1rUmdKk75FZumLU/+hbF+RtJHi1qsKZpntjKlCYScK6tjbYoqvJ9M+IJphrlQJF5oReFW7Sambh0N4Q==}
-    peerDependencies:
-      three: '>=0.162.0 <1.0.0'
-
   three.quarks@0.15.0:
     resolution: {integrity: sha512-+tJjtW0LnJwFbu+9CxcvEt2C0bcoU25uquai3EGiVPBS8yO3NH69mAZbGRm0nocFt9UvYlIwIm2u3hDfPAH9MQ==}
     peerDependencies:
@@ -7513,6 +7505,7 @@ packages:
   tsconfck@3.1.6:
     resolution: {integrity: sha512-ks6Vjr/jEw0P1gmOVwutM3B7fWxoWBL2KRDb1JfqGVawBmO5UsvmWOQFGHBPl5yxYz4eERr19E6L7NMv+Fej4w==}
     engines: {node: ^18 || >=20}
+    deprecated: unmaintained
     hasBin: true
     peerDependencies:
       typescript: ^5.0.0
@@ -15814,10 +15807,6 @@ snapshots:
       three: 0.185.1
       troika-three-text: 0.52.4(three@0.185.1)
       tweakpane: 3.1.10
-
-  three-viewport-gizmo@2.2.0(three@0.185.1):
-    dependencies:
-      three: 0.185.1
 
   three.quarks@0.15.0(three@0.185.1):
     dependencies:

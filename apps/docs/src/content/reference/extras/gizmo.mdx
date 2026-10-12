@@ -40,9 +40,14 @@ componentSignature:
 
 A gizmo for snap-to camera controls.
 
-Uses the [Three Viewport Gizmo library](https://fennec-hub.github.io/three-viewport-gizmo/).
-
-<Example path="extras/gizmo" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/gizmo" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/gizmo-webgpu" />
+  </Tab>
+</Tabs>
 
 Three's `OrbitControls` or yomotsu's [`CameraControls`](https://github.com/yomotsu/camera-controls) can be provided as a `controls` prop.
 
@@ -55,6 +60,6 @@ Alternatively, the `<Gizmo>` can be placed as a child of a controls component.
 </OrbitControls>
 ```
 
-In addition to the props listed below, `<Gizmo>` can accept [any of the options](https://fennec-hub.github.io/three-viewport-gizmo/api.html#gizmooptions) from the underlying Three Viewport Gizmo instance as a prop.
+In addition to the props listed below, `<Gizmo>` accepts any of the `GizmoOptions` as a prop — `type`, `size`, `placement`, `offset`, `animated`, `speed`, `background`, `corners`, `edges`, `font`, and per-axis configuration under `x`, `y`, `z`, `nx`, `ny` and `nz` (aliased as `right`, `top`, `front`, `left`, `bottom` and `back` for the cube type).
 
 <Tip type="warning">These props cause the gizmo to rebuild itself, so update them sparingly.</Tip>

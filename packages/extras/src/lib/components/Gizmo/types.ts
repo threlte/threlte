@@ -1,6 +1,6 @@
 import type { Key, ThrelteUseTaskOptions } from '@threlte/core'
 import type { EventListener } from 'three'
-import { ViewportGizmo, type GizmoOptions } from 'three-viewport-gizmo'
+import { ViewportGizmo, type GizmoOptions } from './viewportGizmo/index.js'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 import type CameraControls from 'camera-controls'

@@ -81,7 +81,10 @@ export { default as HUD } from '../components/HUD/HUD.svelte'
 export { default as Float } from '../components/Float/Float.svelte'
 export { default as GLTF } from '../components/GLTF/GLTF.svelte'
 export { default as Gizmo } from '../components/Gizmo/Gizmo.svelte'
-export type { GizmoOptions } from 'three-viewport-gizmo'
+export type {
+  GizmoOptions,
+  GizmoAxisOptions
+} from '../components/Gizmo/viewportGizmo/index.js'
 export { default as CubeEnvironment } from '../components/environment/CubeEnvironment/CubeEnvironment.svelte'
 export { default as Environment } from '../components/environment/Environment/Environment.svelte'
 export { default as Bounds } from '../components/Bounds/Bounds.svelte'

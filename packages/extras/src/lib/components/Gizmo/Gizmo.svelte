@@ -9,7 +9,7 @@
     type Event
   } from 'three'
   import type { GizmoProps, Controls } from './types.js'
-  import { ViewportGizmo } from 'three-viewport-gizmo'
+  import { ViewportGizmo } from './viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
