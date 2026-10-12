@@ -1,7 +1,13 @@
 <script lang="ts">
   import { useTask, useThrelte, useParent, observe } from '@threlte/core'
   import { untrack } from 'svelte'
-  import { Vector4, type OrthographicCamera, type PerspectiveCamera, type Event } from 'three'
+  import {
+    NoToneMapping,
+    Vector4,
+    type OrthographicCamera,
+    type PerspectiveCamera,
+    type Event
+  } from 'three'
   import type { GizmoProps, Controls } from './types.js'
   import { ViewportGizmo } from './viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -55,9 +61,15 @@
     initialRenderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
       if (gizmo && shouldRender()) {
+        const toneMapping = renderer.toneMapping
+
         renderer.getViewport(viewport)
+        renderer.toneMapping = NoToneMapping
+
         gizmo.render()
+
         renderer.setViewport(viewport)
+        renderer.toneMapping = toneMapping
       }
     },
     {
