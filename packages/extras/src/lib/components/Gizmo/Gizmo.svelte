@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useTask, useThrelte, useParent, observe } from '@threlte/core'
+  import { useTask, useThrelte, useParent } from '@threlte/core'
   import { untrack } from 'svelte'
   import {
     NoToneMapping,
@@ -9,7 +9,7 @@
     type Event
   } from 'three'
   import type { GizmoProps, Controls } from './types.js'
-  import { ViewportGizmo } from 'three-viewport-gizmo'
+  import { ViewportGizmo } from './viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
 
@@ -20,26 +20,84 @@
     onstart,
     onchange,
     onend,
+    placement = 'bottom-left',
+    size = 86,
+    offset,
+    id,
+    className,
+    animated = true,
+    speed = 1,
     ...rest
   }: GizmoProps = $props()
 
   const parent = useParent()
-  const { camera, renderer, dom, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
+  const {
+    camera,
+    renderer,
+    dom,
+    autoRenderTask,
+    shouldRender,
+    size: canvasSize,
+    invalidate
+  } = useThrelte()
 
-  const gizmo = $derived.by(() => {
-    invalidate()
-    return new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer, {
+  const gizmo = new ViewportGizmo(
+    camera.current as PerspectiveCamera | OrthographicCamera,
+    renderer,
+    untrack(() => ({
       container: dom,
-      placement: 'bottom-left',
-      size: 86,
+      placement,
+      size,
+      offset,
+      id,
+      className,
+      animated,
+      speed,
       ...rest
+    }))
+  )
+
+  ref = gizmo
+
+  let built = false
+
+  $effect(() => {
+    const options = { ...rest }
+
+    if (!built) {
+      built = true
+      return
+    }
+
+    untrack(() => {
+      gizmo.set({
+        container: dom,
+        placement,
+        size,
+        offset,
+        id,
+        className,
+        animated,
+        speed,
+        ...options
+      })
+      invalidate()
     })
   })
 
-  $effect.pre(() => {
-    if (ref !== gizmo) {
-      ref = gizmo
-    }
+  $effect(() => {
+    gizmo.animated = animated
+    gizmo.speed = speed
+    gizmo.setLayout({ placement, size, offset })
+
+    if (id !== undefined) gizmo.domElement.id = id
+    if (className !== undefined) gizmo.domElement.className = className
+
+    invalidate()
+  })
+
+  $effect(() => {
+    return () => gizmo.dispose()
   })
 
   const viewport = new Vector4()
@@ -131,15 +189,10 @@
     }
   })
 
-  observe(
-    () => [size],
-    () => {
+  $effect(() => {
+    if ($canvasSize) {
       gizmo.update()
       invalidate()
     }
-  )
-
-  $effect(() => {
-    return () => gizmo.dispose()
   })
 </script>

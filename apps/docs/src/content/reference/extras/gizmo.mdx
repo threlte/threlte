@@ -15,7 +15,129 @@ componentSignature:
           type: 'TaskOptions',
           description: 'Options for the task to render the gizmo scene in the viewport. By default, this happens after the `autoRenderTask`.'
         },
-        { name: 'controls', type: 'OrbitControls | CameraControls' }
+        { name: 'controls', type: 'OrbitControls | CameraControls' },
+        {
+          name: 'type',
+          type: "'sphere' | 'cube'",
+          default: "'sphere'",
+          description: 'The overall shape of the gizmo. The cube type labels its faces and adds corner and edge handles.'
+        },
+        {
+          name: 'size',
+          type: 'number',
+          default: '86',
+          description: 'Size of the widget in pixels.'
+        },
+        {
+          name: 'placement',
+          type: "'top-left' | 'top-center' | 'top-right' | 'center-left' | 'center-center' | 'center-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'",
+          default: "'bottom-left'",
+          description: 'Where the widget sits within its container.'
+        },
+        {
+          name: 'offset',
+          type: '{ top?: number, right?: number, bottom?: number, left?: number }',
+          default: '{ top: 10, right: 10, bottom: 10, left: 10 }',
+          description: 'Distance in pixels between the widget and the container edges.'
+        },
+        {
+          name: 'container',
+          type: 'HTMLElement | string',
+          default: 'the <Canvas> element',
+          description: 'Parent element for the widget, as an element or a CSS selector.'
+        },
+        {
+          name: 'animated',
+          type: 'boolean',
+          default: 'true',
+          description: 'Whether clicking an axis animates the camera to it rather than snapping.'
+        },
+        { name: 'speed', type: 'number', default: '1', description: 'Animation speed multiplier.' },
+        {
+          name: 'resolution',
+          type: 'number',
+          default: '64 sphere, 128 cube',
+          description: 'Texture resolution of the indicators. Higher values look sharper at a higher cost.'
+        },
+        {
+          name: 'lineWidth',
+          type: 'number',
+          default: '4',
+          description: 'Width of the axis lines in pixels.'
+        },
+        {
+          name: 'radius',
+          type: 'number',
+          default: '1 sphere, 0.2 cube',
+          description: 'Corner roundness applied to every axis indicator, in the range [0, 1].'
+        },
+        {
+          name: 'smoothness',
+          type: 'number',
+          default: '18',
+          description: 'Number of segments used to round the axis indicators.'
+        },
+        {
+          name: 'font',
+          type: '{ family?: string, weight?: string | number }',
+          default: "{ family: 'sans-serif', weight: 900 }",
+          description: 'Font used for the axis labels.'
+        },
+        {
+          name: 'background',
+          type: '{ enabled?: boolean, color?: ColorRepresentation, opacity?: number, hover?: { color?: ColorRepresentation, opacity?: number } }',
+          description: 'The sphere or cube drawn behind the indicators. Hidden by default on the sphere type until hovered.'
+        },
+        {
+          name: 'corners',
+          type: '{ enabled?: boolean, color?: ColorRepresentation, opacity?: number, scale?: number, radius?: number, smoothness?: number, hover?: { color?: ColorRepresentation, opacity?: number, scale?: number } }',
+          description: 'The eight corner handles. Enabled by default on the cube type only.'
+        },
+        {
+          name: 'edges',
+          type: '{ enabled?: boolean, color?: ColorRepresentation, opacity?: number, scale?: number, radius?: number, smoothness?: number, hover?: { color?: ColorRepresentation, opacity?: number, scale?: number } }',
+          description: 'The twelve edge handles. Enabled by default on the cube type only.'
+        },
+        {
+          name: 'id',
+          type: 'string',
+          description: "HTML `id` attribute for the widget's container element."
+        },
+        {
+          name: 'className',
+          type: 'string',
+          description: "HTML `class` attribute for the widget's container element."
+        },
+        {
+          name: 'x',
+          type: 'GizmoAxisOptions',
+          description: 'The positive X axis. Aliased as `right` for the cube type.'
+        },
+        {
+          name: 'y',
+          type: 'GizmoAxisOptions',
+          description: 'The positive Y axis. Aliased as `top` for the cube type.'
+        },
+        {
+          name: 'z',
+          type: 'GizmoAxisOptions',
+          description: 'The positive Z axis. Aliased as `front` for the cube type.'
+        },
+        {
+          name: 'nx',
+          type: 'GizmoAxisOptions',
+          description: 'The negative X axis. Aliased as `left` for the cube type.'
+        },
+        {
+          name: 'ny',
+          type: 'GizmoAxisOptions',
+          description: 'The negative Y axis. Aliased as `bottom` for the cube type.'
+        },
+        {
+          name: 'nz',
+          type: 'GizmoAxisOptions',
+          description: 'The negative Z axis. Aliased as `back` for the cube type.'
+        }
       ],
     events:
       [
@@ -40,9 +162,14 @@ componentSignature:
 
 A gizmo for snap-to camera controls.
 
-Uses the [Three Viewport Gizmo library](https://fennec-hub.github.io/three-viewport-gizmo/).
-
-<Example path="extras/gizmo" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/gizmo" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/gizmo-webgpu" />
+  </Tab>
+</Tabs>
 
 Three's `OrbitControls` or yomotsu's [`CameraControls`](https://github.com/yomotsu/camera-controls) can be provided as a `controls` prop.
 
@@ -55,6 +182,42 @@ Alternatively, the `<Gizmo>` can be placed as a child of a controls component.
 </OrbitControls>
 ```
 
-In addition to the props listed below, `<Gizmo>` can accept [any of the options](https://fennec-hub.github.io/three-viewport-gizmo/api.html#gizmooptions) from the underlying Three Viewport Gizmo instance as a prop.
+### Configuring an axis
 
-<Tip type="warning">These props cause the gizmo to rebuild itself, so update them sparingly.</Tip>
+Each of `x`, `y`, `z`, `nx`, `ny` and `nz` takes a `GizmoAxisOptions` object:
+
+```ts
+type GizmoAxisOptions = {
+  enabled?: boolean
+  label?: string
+  color?: ColorRepresentation
+  labelColor?: ColorRepresentation
+  opacity?: number
+  scale?: number
+  line?: boolean
+  border?: {
+    size: number
+    color: ColorRepresentation
+  }
+  hover?: {
+    color?: ColorRepresentation
+    labelColor?: ColorRepresentation
+    opacity?: number
+    scale?: number
+    border?: {
+      size: number
+      color: ColorRepresentation
+    }
+  }
+}
+```
+
+The cube type accepts `right`, `top`, `front`, `left`, `bottom` and `back` as aliases for `x`, `y`, `z`, `nx`, `ny` and `nz` respectively, which reads more naturally when labelling faces.
+
+```svelte
+<Gizmo
+  type="cube"
+  right={{ label: 'R', color: '#ff3653' }}
+  top={{ label: 'U', color: '#8adb00' }}
+/>
+```
