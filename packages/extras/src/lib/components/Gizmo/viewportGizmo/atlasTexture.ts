@@ -9,7 +9,7 @@ import {
 import { axisKeys } from './constants.js'
 import type { ResolvedBorder, ResolvedOptions } from './options.js'
 
-type AtlasCell = {
+interface AtlasCell {
   radius: number
   label?: string
   color: ColorRepresentation
@@ -22,7 +22,7 @@ type AtlasCell = {
   }
 }
 
-export type AtlasUserData = {
+export interface AtlasUserData {
   offsetX: number
   offsetY: number
   cellHeight: number
@@ -152,9 +152,9 @@ export const atlasTexture = (options: ResolvedOptions, padding = 2): Texture => 
    * baseline nudge that keeps sphere labels optically centered.
    */
   function resolveLabelFont(): [string, number] {
-    const longestLabel = [...cells].sort(
-      (a, b) => (a.label?.length ?? 0) - (b.label?.length ?? 0)
-    ).pop()?.label
+    const longestLabel = [...cells]
+      .sort((a, b) => (a.label?.length ?? 0) - (b.label?.length ?? 0))
+      .pop()?.label
     const { family, weight } = font
     const available = isSphere ? Math.sqrt(Math.pow(resolution * 0.7, 2) / 2) : resolution
 

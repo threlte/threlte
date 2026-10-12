@@ -1,13 +1,7 @@
 <script lang="ts">
   import { useTask, useThrelte, useParent, observe } from '@threlte/core'
   import { untrack } from 'svelte'
-  import {
-    NoToneMapping,
-    Vector4,
-    type OrthographicCamera,
-    type PerspectiveCamera,
-    type Event
-  } from 'three'
+  import { Vector4, type OrthographicCamera, type PerspectiveCamera, type Event } from 'three'
   import type { GizmoProps, Controls } from './types.js'
   import { ViewportGizmo } from './viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -26,18 +20,28 @@
   const parent = useParent()
   const { camera, renderer, dom, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
 
-  const gizmo = $derived.by(() => {
-    invalidate()
-    return new ViewportGizmo(camera.current as PerspectiveCamera | OrthographicCamera, renderer, {
-      container: dom,
-      placement: 'bottom-left',
-      size: 86,
-      ...rest
-    })
+  let gizmo = $state.raw<ViewportGizmo>()
+
+  $effect.pre(() => {
+    const instance = new ViewportGizmo(
+      camera.current as PerspectiveCamera | OrthographicCamera,
+      renderer,
+      {
+        container: dom,
+        placement: 'bottom-left',
+        size: 86,
+        ...rest
+      }
+    )
+
+    gizmo = instance
+    untrack(invalidate)
+
+    return () => instance.dispose()
   })
 
   $effect.pre(() => {
-    if (ref !== gizmo) {
+    if (gizmo && ref !== gizmo) {
       ref = gizmo
     }
   })
@@ -50,16 +54,10 @@
   useTask(
     initialRenderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
-      if (shouldRender()) {
-        const toneMapping = renderer.toneMapping
-
+      if (gizmo && shouldRender()) {
         renderer.getViewport(viewport)
-        renderer.toneMapping = NoToneMapping
-
         gizmo.render()
-
         renderer.setViewport(viewport)
-        renderer.toneMapping = toneMapping
       }
     },
     {
@@ -69,17 +67,19 @@
   )
 
   $effect(() => {
+    if (!gizmo) return
     gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
   })
 
   $effect(() => {
-    if (!cameraControls) return
+    const current = gizmo
+    if (!current || !cameraControls) return
 
     if (cameraControls instanceof OrbitControls || cameraControls instanceof TrackballControls) {
-      gizmo.target = cameraControls.target
+      current.target = cameraControls.target
 
       const handleChange = () => {
-        gizmo.update(false)
+        current.update(false)
       }
 
       cameraControls.addEventListener('change', handleChange)
@@ -87,8 +87,8 @@
     } else {
       const handleUpdate = () => {
         if ('getTarget' in cameraControls && typeof cameraControls.getTarget == 'function') {
-          cameraControls.getTarget(gizmo.target)
-          gizmo.update()
+          cameraControls.getTarget(current.target)
+          current.update()
         }
       }
 
@@ -96,10 +96,10 @@
         cameraControls.setPosition(...camera.current.position.toArray())
       }
 
-      gizmo.addEventListener('change', handleChange)
+      current.addEventListener('change', handleChange)
       cameraControls.addEventListener('update', handleUpdate)
       return () => {
-        gizmo.removeEventListener('change', handleChange)
+        current.removeEventListener('change', handleChange)
         cameraControls.removeEventListener('update', handleUpdate)
       }
     }
@@ -121,25 +121,24 @@
   }
 
   $effect(() => {
-    gizmo.addEventListener('start', handleStart)
-    gizmo.addEventListener('change', handleChange)
-    gizmo.addEventListener('end', handleEnd)
+    const current = gizmo
+    if (!current) return
+
+    current.addEventListener('start', handleStart)
+    current.addEventListener('change', handleChange)
+    current.addEventListener('end', handleEnd)
     return () => {
-      gizmo.removeEventListener('start', handleStart)
-      gizmo.removeEventListener('change', handleChange)
-      gizmo.removeEventListener('end', handleEnd)
+      current.removeEventListener('start', handleStart)
+      current.removeEventListener('change', handleChange)
+      current.removeEventListener('end', handleEnd)
     }
   })
 
   observe(
     () => [size],
     () => {
-      gizmo.update()
+      gizmo?.update()
       invalidate()
     }
   )
-
-  $effect(() => {
-    return () => gizmo.dispose()
-  })
 </script>

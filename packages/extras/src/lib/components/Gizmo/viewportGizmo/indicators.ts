@@ -98,7 +98,7 @@ const buildAxes = (options: ResolvedOptions, atlas: Texture): Indicator[] => {
     setAtlasRow(texture, index)
 
     const { enabled, scale, opacity, hover } = options[key]
-    const parameters = { map: texture, opacity, transparent: true }
+    const parameters = { map: texture, opacity, transparent: true, toneMapped: false }
 
     const indicator: Indicator = isSphere
       ? new Sprite(new SpriteMaterial(parameters))
@@ -136,9 +136,14 @@ const buildCorners = (options: ResolvedOptions, atlas: Texture): Indicator[] => 
     if (isSphere) {
       const texture = atlas.clone()
       setAtlasRow(texture, 6)
-      indicator = new Sprite(new SpriteMaterial({ transparent: true, opacity, map: texture }))
+      indicator = new Sprite(
+        new SpriteMaterial({ transparent: true, opacity, map: texture, toneMapped: false })
+      )
     } else {
-      indicator = new Mesh(geometry, new MeshBasicMaterial({ transparent: true, opacity, color }))
+      indicator = new Mesh(
+        geometry,
+        new MeshBasicMaterial({ transparent: true, opacity, color, toneMapped: false })
+      )
     }
 
     const offset = index * 3
@@ -161,11 +166,7 @@ const buildCorners = (options: ResolvedOptions, atlas: Texture): Indicator[] => 
   })
 }
 
-const buildEdges = (
-  options: ResolvedOptions,
-  atlas: Texture,
-  atlasRow: number
-): Indicator[] => {
+const buildEdges = (options: ResolvedOptions, atlas: Texture, atlasRow: number): Indicator[] => {
   const { isSphere, edges } = options
 
   if (!edges.enabled) {
@@ -181,9 +182,14 @@ const buildEdges = (
     if (isSphere) {
       const texture = atlas.clone()
       setAtlasRow(texture, atlasRow)
-      indicator = new Sprite(new SpriteMaterial({ transparent: true, opacity, map: texture }))
+      indicator = new Sprite(
+        new SpriteMaterial({ transparent: true, opacity, map: texture, toneMapped: false })
+      )
     } else {
-      indicator = new Mesh(geometry, new MeshBasicMaterial({ transparent: true, opacity, color }))
+      indicator = new Mesh(
+        geometry,
+        new MeshBasicMaterial({ transparent: true, opacity, color, toneMapped: false })
+      )
     }
 
     const offset = index * 3
@@ -228,7 +234,8 @@ const buildBackground = (
     side: BackSide,
     opacity,
     transparent: true,
-    depthWrite: false
+    depthWrite: false,
+    toneMapped: false
   })
 
   let mesh: Mesh<BufferGeometry, MeshBasicMaterial>
@@ -293,10 +300,7 @@ const buildAxisLines = (options: ResolvedOptions, worldPerPixel: number): Object
       0
     )
 
-    const mesh = new Mesh(
-      geometry,
-      new MeshBasicMaterial({ color: color.set(axisColor).getHex() })
-    )
+    const mesh = new Mesh(geometry, new MeshBasicMaterial({ color: color.set(axisColor).getHex() }))
 
     mesh.quaternion.setFromUnitVectors(yUp, lineDirection.normalize())
     lines.push(mesh)
@@ -320,9 +324,19 @@ export const buildGizmoObjects = (options: ResolvedOptions, worldPerPixel: numbe
     interactive.push(...buildEdges(options, atlas, corners.enabled ? 7 : 6))
   }
 
-  return {
-    interactive,
-    background: buildBackground(axes, options),
-    lines: buildAxisLines(options, worldPerPixel)
+  const background = buildBackground(axes, options)
+  const lines = buildAxisLines(options, worldPerPixel)
+
+  // Only the geometries built here may be disposed: every `Sprite` shares one
+  // module-level geometry owned by three, and freeing it breaks every other
+  // sprite in the application.
+  const geometries = new Set<BufferGeometry>()
+
+  for (const object of [...interactive, ...lines, background]) {
+    if (object && !(object as Sprite).isSprite) {
+      geometries.add((object as Mesh<BufferGeometry>).geometry)
+    }
   }
+
+  return { interactive, background, lines, geometries }
 }

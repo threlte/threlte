@@ -395,9 +395,7 @@ export const resolveOptions = (options: GizmoOptions): ResolvedOptions => {
     },
     x: {
       ...clone(positiveAxisDefaults),
-      ...(isSphere
-        ? { label: 'X', color: 0xff3653, line: true }
-        : { label: isXUp ? top : right })
+      ...(isSphere ? { label: 'X', color: 0xff3653, line: true } : { label: isXUp ? top : right })
     },
     y: {
       ...clone(positiveAxisDefaults),

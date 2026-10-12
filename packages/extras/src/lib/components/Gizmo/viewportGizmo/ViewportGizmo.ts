@@ -48,11 +48,11 @@ export type GizmoControls = {
 
 export interface ViewportGizmoEventMap extends Object3DEventMap {
   /** Fired when a view change interaction begins. */
-  start: {}
+  start: object
   /** Fired during view changes. */
-  change: {}
+  change: object
   /** Fired when a view change interaction completes. */
-  end: {}
+  end: object
 }
 
 const matrix = new Matrix4()
@@ -170,6 +170,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
 
   #options!: ResolvedOptions
   #indicators: Indicator[] = []
+  #geometries = new Set<BufferGeometry>()
   #background: Mesh<BufferGeometry, MeshBasicMaterial> | null = null
   #viewport: [number, number, number, number] = [0, 0, 0, 0]
   #originalViewport: [number, number, number, number] = [0, 0, 0, 0]
@@ -211,10 +212,9 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   }
 
   set placement(placement: NonNullable<GizmoOptions['placement']>) {
-    this.#placement = applyPlacement(
-      this.#domElement,
-      placement
-    ) as NonNullable<GizmoOptions['placement']>
+    this.#placement = applyPlacement(this.#domElement, placement) as NonNullable<
+      GizmoOptions['placement']
+    >
     this.domUpdate()
   }
 
@@ -249,7 +249,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
       ? orthographicExtent * 2
       : 2 * cameraDistance * Math.tan((perspectiveFov / 2) * (Math.PI / 180))
 
-    const { interactive, background, lines } = buildGizmoObjects(
+    const { interactive, background, lines, geometries } = buildGizmoObjects(
       this.#options,
       worldHeight / size
     )
@@ -262,6 +262,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
 
     this.#background = background
     this.#indicators = interactive
+    this.#geometries = geometries
 
     this.animated = animated
     this.speed = speed
@@ -408,7 +409,12 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   dispose() {
     this.detachControls()
 
-    const geometries = new Set<BufferGeometry>()
+    if (this.#domElement) {
+      this.#domElement.onpointerdown = null
+      this.#domElement.onpointermove = null
+      this.#domElement.onpointerleave = null
+      this.#domElement.remove()
+    }
 
     for (const child of [...this.children]) {
       this.remove(child)
@@ -417,18 +423,13 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
 
       mesh.material?.map?.dispose()
       mesh.material?.dispose()
-
-      if (mesh.geometry) {
-        geometries.add(mesh.geometry)
-      }
     }
 
-    // The cube's faces share one geometry, so collect before disposing.
-    for (const geometry of geometries) {
+    for (const geometry of this.#geometries) {
       geometry.dispose()
     }
 
-    this.#domElement?.remove()
+    this.#geometries.clear()
   }
 
   #updateOrientation(fromCamera = true) {
@@ -611,12 +612,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   }
 
   #handleClick(event: PointerEvent) {
-    const intersection = intersectIndicators(
-      event,
-      this.#domRect,
-      this.#camera,
-      this.#indicators
-    )
+    const intersection = intersectIndicators(event, this.#domRect, this.#camera, this.#indicators)
 
     if (this.#focus) {
       setIndicatorHover(this.#focus, false)
@@ -630,12 +626,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   }
 
   #handleHover(event: PointerEvent) {
-    const intersection = intersectIndicators(
-      event,
-      this.#domRect,
-      this.#camera,
-      this.#indicators
-    )
+    const intersection = intersectIndicators(event, this.#domRect, this.#camera, this.#indicators)
     const hovered = (intersection?.object as Indicator | undefined) ?? null
 
     if (this.#focus === hovered) {
