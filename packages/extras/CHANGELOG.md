@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.22.1
+
+### Patch Changes
+
+- 5e66429: [@threlte/extras] Add WebGPU support to `<Gizmo>` and drop the `three-viewport-gizmo` dependency
+
 ## 9.22.0
 
 ### Minor Changes
