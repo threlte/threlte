@@ -289,11 +289,6 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     return this
   }
 
-  get debugLabels() {
-    const o = this.#options as any
-    return { x: o.x.label, y: o.y.label, z: o.z.label, nx: o.nx.label, ny: o.ny.label, nz: o.nz.label }
-  }
-
   /** The element the widget is rendered into. */
   get domElement() {
     return this.#domElement
