@@ -5,7 +5,7 @@ import { axisKeys, axisKeysXUp, axisKeysZUp, faceAliases, positiveAxisKeys } fro
  * Configuration options for individual gizmo axes.
  * Each axis can be customized with its own appearance and behavior.
  */
-export type GizmoAxisOptions = {
+export interface GizmoAxisOptions {
   /** Whether to draw the axis. Default `true` */
   enabled?: boolean
   /** Custom text label for the axis. If not specified, defaults to the axis name */
@@ -51,7 +51,7 @@ export type GizmoAxisOptions = {
  * Configuration options for the `ViewportGizmo`.
  * All properties are optional and fall back to default values if not specified.
  */
-export type GizmoOptions = {
+export interface GizmoOptions {
   /** Parent element for the gizmo. Can be an HTMLElement or a CSS selector string */
   container?: HTMLElement | string
   /** The gizmo supports two types, a `sphere` and a `cube` configuration. Default `sphere` */
@@ -195,9 +195,12 @@ export type GizmoOptions = {
   back?: GizmoAxisOptions
 }
 
-export type ResolvedBorder = { size: number; color: ColorRepresentation }
+export interface ResolvedBorder {
+  size: number
+  color: ColorRepresentation
+}
 
-export type ResolvedAxis = {
+export interface ResolvedAxis {
   enabled: boolean
   label: string
   opacity: number
@@ -215,7 +218,7 @@ export type ResolvedAxis = {
   }
 }
 
-export type ResolvedIndicatorGroup = {
+export interface ResolvedIndicatorGroup {
   enabled: boolean
   color: ColorRepresentation
   opacity: number
@@ -225,7 +228,7 @@ export type ResolvedIndicatorGroup = {
   hover: { color: ColorRepresentation; opacity: number; scale: number }
 }
 
-export type ResolvedOptions = {
+export interface ResolvedOptions {
   isSphere: boolean
   type: 'sphere' | 'cube'
   container: HTMLElement | string

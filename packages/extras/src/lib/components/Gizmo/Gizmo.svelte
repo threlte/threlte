@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { useTask, useThrelte, useParent, observe } from '@threlte/core'
+  import { useTask, useThrelte, useParent } from '@threlte/core'
   import { untrack } from 'svelte'
   import {
     NoToneMapping,
@@ -20,36 +20,79 @@
     onstart,
     onchange,
     onend,
+    placement = 'bottom-left',
+    size = 86,
+    offset = { top: 10, right: 10, bottom: 10, left: 10 },
+    id,
+    className,
+    animated = true,
+    speed = 1,
     ...rest
   }: GizmoProps = $props()
 
   const parent = useParent()
-  const { camera, renderer, dom, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
+  const {
+    camera,
+    renderer,
+    dom,
+    autoRenderTask,
+    shouldRender,
+    size: canvasSize,
+    invalidate
+  } = useThrelte()
 
-  let gizmo = $state.raw<ViewportGizmo>()
+  const gizmo = new ViewportGizmo(
+    camera.current as PerspectiveCamera | OrthographicCamera,
+    renderer,
+    untrack(() => ({
+      container: dom,
+      placement,
+      size,
+      offset,
+      id,
+      className,
+      animated,
+      speed,
+      ...rest
+    }))
+  )
 
-  $effect.pre(() => {
-    const instance = new ViewportGizmo(
-      camera.current as PerspectiveCamera | OrthographicCamera,
-      renderer,
-      {
+  ref = gizmo
+
+  $effect(() => {
+    const options = { ...rest }
+
+    untrack(() => {
+      gizmo.set({
         container: dom,
-        placement: 'bottom-left',
-        size: 86,
-        ...rest
-      }
-    )
-
-    gizmo = instance
-    untrack(invalidate)
-
-    return () => instance.dispose()
+        placement,
+        size,
+        offset,
+        id,
+        className,
+        animated,
+        speed,
+        ...options
+      })
+      invalidate()
+    })
   })
 
-  $effect.pre(() => {
-    if (gizmo && ref !== gizmo) {
-      ref = gizmo
-    }
+  $effect(() => {
+    gizmo.animated = animated
+    gizmo.speed = speed
+    gizmo.size = size
+    gizmo.placement = placement
+    gizmo.offset = { top: 10, right: 10, bottom: 10, left: 10, ...offset }
+
+    if (id !== undefined) gizmo.domElement.id = id
+    if (className !== undefined) gizmo.className = className
+
+    invalidate()
+  })
+
+  $effect(() => {
+    return () => gizmo.dispose()
   })
 
   const viewport = new Vector4()
@@ -60,7 +103,7 @@
   useTask(
     initialRenderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
-      if (gizmo && shouldRender()) {
+      if (shouldRender()) {
         const toneMapping = renderer.toneMapping
 
         renderer.getViewport(viewport)
@@ -79,19 +122,17 @@
   )
 
   $effect(() => {
-    if (!gizmo) return
     gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
   })
 
   $effect(() => {
-    const current = gizmo
-    if (!current || !cameraControls) return
+    if (!cameraControls) return
 
     if (cameraControls instanceof OrbitControls || cameraControls instanceof TrackballControls) {
-      current.target = cameraControls.target
+      gizmo.target = cameraControls.target
 
       const handleChange = () => {
-        current.update(false)
+        gizmo.update(false)
       }
 
       cameraControls.addEventListener('change', handleChange)
@@ -99,8 +140,8 @@
     } else {
       const handleUpdate = () => {
         if ('getTarget' in cameraControls && typeof cameraControls.getTarget == 'function') {
-          cameraControls.getTarget(current.target)
-          current.update()
+          cameraControls.getTarget(gizmo.target)
+          gizmo.update()
         }
       }
 
@@ -108,10 +149,10 @@
         cameraControls.setPosition(...camera.current.position.toArray())
       }
 
-      current.addEventListener('change', handleChange)
+      gizmo.addEventListener('change', handleChange)
       cameraControls.addEventListener('update', handleUpdate)
       return () => {
-        current.removeEventListener('change', handleChange)
+        gizmo.removeEventListener('change', handleChange)
         cameraControls.removeEventListener('update', handleUpdate)
       }
     }
@@ -133,24 +174,20 @@
   }
 
   $effect(() => {
-    const current = gizmo
-    if (!current) return
-
-    current.addEventListener('start', handleStart)
-    current.addEventListener('change', handleChange)
-    current.addEventListener('end', handleEnd)
+    gizmo.addEventListener('start', handleStart)
+    gizmo.addEventListener('change', handleChange)
+    gizmo.addEventListener('end', handleEnd)
     return () => {
-      current.removeEventListener('start', handleStart)
-      current.removeEventListener('change', handleChange)
-      current.removeEventListener('end', handleEnd)
+      gizmo.removeEventListener('start', handleStart)
+      gizmo.removeEventListener('change', handleChange)
+      gizmo.removeEventListener('end', handleEnd)
     }
   })
 
-  observe(
-    () => [size],
-    () => {
-      gizmo?.update()
+  $effect(() => {
+    if ($canvasSize) {
+      gizmo.update()
       invalidate()
     }
-  )
+  })
 </script>

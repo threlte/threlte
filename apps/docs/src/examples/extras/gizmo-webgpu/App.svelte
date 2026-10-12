@@ -14,6 +14,8 @@
   let right = $state(10)
   let bottom = $state(10)
   let center = $state<Vector3Tuple>([0, 0, 0])
+  let gizmoRef = $state<any>()
+  $effect(() => { (globalThis as any).__gizmo = gizmoRef })
 </script>
 
 <Pane
@@ -107,6 +109,7 @@
         }}
       >
         <Gizmo
+          bind:ref={gizmoRef}
           {type}
           {speed}
           {placement}

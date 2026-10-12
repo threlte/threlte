@@ -36,6 +36,7 @@ export { useTransformControls } from '../components/controls/TransformControls/u
 export { meshBounds } from '../utilities/meshBounds.js'
 
 // abstractions migrated to TSL
+export { default as Gizmo } from '../components/Gizmo/Gizmo.svelte'
 export { default as Grid } from '../components/Grid/webgpu/Grid.svelte'
 export { default as HTML } from '../components/HTML/webgpu/HTML.svelte'
 export { default as MeshDiscardMaterial } from '../components/MeshDiscardMaterial/webgpu/MeshDiscardMaterial.svelte'
@@ -65,6 +66,7 @@ export { default as Sky } from '../components/Sky/webgpu/Sky.svelte'
 export { default as SoftShadows } from '../components/SoftShadows/webgpu/SoftShadows.svelte'
 export { default as Sparkles } from '../components/Sparkles/webgpu/Sparkles.svelte'
 export { default as Stars } from '../components/Stars/webgpu/Stars.svelte'
+// Implementation blocked on https://github.com/protectwise/troika/pull/393
 export { default as Text } from '../components/Text/webgpu/Text.svelte'
 export { default as UvMaterial } from '../components/UvMaterial/webgpu/UvMaterial.svelte'
 export { default as VirtualEnvironment } from '../components/environment/VirtualEnvironment/webgpu/VirtualEnvironment.svelte'
@@ -80,11 +82,7 @@ export { default as Edges } from '../components/Edges/Edges.svelte'
 export { default as HUD } from '../components/HUD/HUD.svelte'
 export { default as Float } from '../components/Float/Float.svelte'
 export { default as GLTF } from '../components/GLTF/GLTF.svelte'
-export { default as Gizmo } from '../components/Gizmo/Gizmo.svelte'
-export type {
-  GizmoOptions,
-  GizmoAxisOptions
-} from '../components/Gizmo/viewportGizmo/index.js'
+export type { GizmoOptions, GizmoAxisOptions } from '../components/Gizmo/viewportGizmo/index.js'
 export { default as CubeEnvironment } from '../components/environment/CubeEnvironment/CubeEnvironment.svelte'
 export { default as Environment } from '../components/environment/Environment/Environment.svelte'
 export { default as Bounds } from '../components/Bounds/Bounds.svelte'

@@ -9,7 +9,7 @@ export type Controls = OrbitControls | TrackballControls | InstanceType<typeof C
 
 type TaskOptions = Pick<ThrelteUseTaskOptions, 'after' | 'before' | 'stage'> & { key?: Key }
 
-export type GizmoProps = GizmoOptions & {
+export interface GizmoProps extends GizmoOptions {
   renderTask?: TaskOptions
   controls?: Controls
   ref?: ViewportGizmo

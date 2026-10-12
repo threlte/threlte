@@ -59,6 +59,18 @@ const matrix = new Matrix4()
 const spherical = new Spherical()
 const pointerDelta = new Vector2()
 const offset = new Vector3()
+const direction = new Vector3()
+const resolvedUp = new Vector3()
+const currentUp = new Vector3()
+
+const basisAxes = [
+  new Vector3(1, 0, 0),
+  new Vector3(-1, 0, 0),
+  new Vector3(0, 1, 0),
+  new Vector3(0, -1, 0),
+  new Vector3(0, 0, 1),
+  new Vector3(0, 0, -1)
+]
 const viewportTarget = new Vector4()
 const raycaster = new Raycaster()
 const pointer = new Vector2()
@@ -79,19 +91,26 @@ const applyPlacement = (element: HTMLElement, placement: string) => {
   return placement
 }
 
+const applyBox = (element: HTMLElement, size: number, offset: ResolvedOptions['offset']) => {
+  const { top, left, right, bottom } = offset
+
+  Object.assign(element.style, {
+    height: `${size}px`,
+    width: `${size}px`,
+    margin: `${top}px ${right}px ${bottom}px ${left}px`
+  })
+}
+
 const createDomElement = ({ placement, size, offset, id, className }: ResolvedOptions) => {
   const element = document.createElement('div')
-  const { top, left, right, bottom } = offset
 
   Object.assign(element.style, {
     position: 'absolute',
     zIndex: '1000',
-    height: `${size}px`,
-    width: `${size}px`,
-    margin: `${top}px ${right}px ${bottom}px ${left}px`,
     borderRadius: '100%'
   })
 
+  applyBox(element, size, offset)
   applyPlacement(element, placement)
 
   if (id) {
@@ -183,7 +202,6 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   #dragging = false
   #distance = 0
   #timer = new Timer()
-  #targetQuaternion = new Quaternion()
   #quaternionStart = new Quaternion()
   #quaternionEnd = new Quaternion()
   #pointerStart = new Vector2()
@@ -218,9 +236,45 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.domUpdate()
   }
 
+  /** The widget's size in pixels. */
+  get size() {
+    return this.#options.size
+  }
+
+  set size(size: number) {
+    this.#options.size = size
+    applyBox(this.#domElement, size, this.#options.offset)
+    this.domUpdate()
+  }
+
+  /** The widget's distance in pixels from its container's edges. */
+  get offset() {
+    return this.#options.offset
+  }
+
+  set offset(offset: ResolvedOptions['offset']) {
+    this.#options.offset = offset
+    applyBox(this.#domElement, this.#options.size, offset)
+    this.domUpdate()
+  }
+
+  get domElement() {
+    return this.#domElement
+  }
+
+  /** The `class` attribute of the widget's container element. */
+  get className() {
+    return this.#domElement.className
+  }
+
+  set className(className: string) {
+    this.#domElement.className = className
+  }
+
   /**
    * Rebuilds the gizmo with new options. Expensive — not intended for use in an
-   * animation loop.
+   * animation loop. Prefer the dedicated accessors for anything they cover,
+   * since those leave the gizmo's GPU resources in place.
    */
   set(options: GizmoOptions = {}): this {
     this.dispose()
@@ -441,14 +495,22 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     applyDepthFade(this.#options, this.#indicators, this.camera)
   }
 
+  /**
+   * Advances the single orientation being interpolated and derives the camera
+   * position from it. A `lookAt` rotation maps local +Z onto the direction from
+   * the target to the eye, so position and orientation cannot drift apart.
+   */
+  #applyQuaternion(quaternion: Quaternion) {
+    const { camera, target } = this
+
+    camera.quaternion.copy(quaternion)
+    direction.set(0, 0, 1).applyQuaternion(quaternion)
+    camera.position.copy(target).addScaledVector(direction, this.#distance)
+  }
+
   #animate() {
-    const { position, quaternion } = this.camera
-
-    position.set(0, 0, 1)
-
     if (!this.animated) {
-      position.applyQuaternion(this.#quaternionEnd).multiplyScalar(this.#distance).add(this.target)
-      quaternion.copy(this.#targetQuaternion)
+      this.#applyQuaternion(this.#quaternionEnd)
       this.#updateOrientation()
       this.animating = false
       this.dispatchEvent({ type: 'change' })
@@ -463,8 +525,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     const step = this.#timer.update().getDelta() * turnRate * this.speed
 
     this.#quaternionStart.rotateTowards(this.#quaternionEnd, step)
-    position.applyQuaternion(this.#quaternionStart).multiplyScalar(this.#distance).add(this.target)
-    quaternion.rotateTowards(this.#targetQuaternion, step)
+    this.#applyQuaternion(this.#quaternionStart)
     this.#updateOrientation()
 
     requestAnimationFrame(() => this.dispatchEvent({ type: 'change' }))
@@ -479,19 +540,55 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     }
   }
 
-  #setOrientation(position: Vector3) {
+  /**
+   * Picks the up vector for a camera looking along `direction`.
+   *
+   * The scene's own up works for every direction except one parallel to it,
+   * where `lookAt` is degenerate and any roll is geometrically valid. Rolling to
+   * wherever the camera happens to sit would leave a pole view tilted, so snap
+   * to the world axis that both squares the view up and sits closest to the
+   * camera's current screen-up — axis-aligned, and without an avoidable spin.
+   */
+  #resolveUp(direction: Vector3, from: Quaternion) {
+    const sceneUp = this.camera.up
+
+    if (Math.abs(direction.dot(sceneUp)) < 1 - epsilon) {
+      return sceneUp
+    }
+
+    currentUp.set(0, 1, 0).applyQuaternion(from)
+
+    let bestAlignment = -Infinity
+
+    for (const axis of basisAxes) {
+      if (Math.abs(axis.dot(direction)) > 1 - epsilon) {
+        continue
+      }
+
+      const alignment = axis.dot(currentUp)
+
+      if (alignment > bestAlignment) {
+        bestAlignment = alignment
+        resolvedUp.copy(axis)
+      }
+    }
+
+    return resolvedUp
+  }
+
+  #setOrientation(axis: Vector3) {
     const { camera, target } = this
 
-    offset.copy(position).multiplyScalar(this.#distance)
-    matrix.setPosition(offset).lookAt(offset, this.position, this.up)
-    this.#targetQuaternion.setFromRotationMatrix(matrix)
+    this.#distance = camera.position.distanceTo(target)
 
-    offset.add(target)
-    matrix.lookAt(offset, target, this.up)
+    // The camera's own orientation, not a reconstruction of it: any difference
+    // in roll between the two would show up as a jump on the first frame.
+    this.#quaternionStart.copy(camera.quaternion)
+
+    direction.copy(axis).normalize()
+    offset.copy(target).addScaledVector(direction, this.#distance)
+    matrix.lookAt(offset, target, this.#resolveUp(direction, this.#quaternionStart))
     this.#quaternionEnd.setFromRotationMatrix(matrix)
-
-    matrix.setPosition(camera.position).lookAt(camera.position, target, this.up)
-    this.#quaternionStart.setFromRotationMatrix(matrix)
 
     this.animating = true
     this.#timer.reset()
@@ -564,12 +661,12 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   }
 
   /**
-   * Remaps coordinates between the gizmo's Y-up space and whatever
-   * `Object3D.DEFAULT_UP` is set to.
+   * Remaps coordinates between the Y-up space `Spherical` assumes and the up
+   * vector of the camera being controlled.
    */
   #toDefaultUp(target: Vector3, toSpherical = false) {
     const { x, y, z } = target
-    const up = Object3D.DEFAULT_UP
+    const up = this.camera.up
 
     if (up.x === 1) {
       return toSpherical ? target.set(y, z, x) : target.set(z, x, y)
