@@ -261,41 +261,42 @@ export interface ResolvedOptions {
   nz: ResolvedAxis
 }
 
+/**
+ * Object literals only, so a value like a `Color` or an `HTMLElement` is carried
+ * through whole instead of being merged into field by field.
+ */
 const isPlainObject = (value: unknown): value is Record<string, unknown> => {
-  return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
-
-const applyDefaults = <T extends Record<string, unknown>>(
-  target: T,
-  ...sources: Record<string, unknown>[]
-): T => {
-  if (target instanceof HTMLElement || !isPlainObject(target)) {
-    return target
+  if (typeof value !== 'object' || value === null) {
+    return false
   }
 
-  for (const source of sources) {
-    for (const key in source) {
-      if (key === 'container' || !(key in source)) {
-        continue
-      }
+  const prototype = Object.getPrototypeOf(value)
 
-      const value = target[key as keyof T]
-
-      if (value === undefined) {
-        target[key as keyof T] = source[key] as T[keyof T]
-      } else if (isPlainObject(source[key])) {
-        target[key as keyof T] = applyDefaults(
-          (value ?? {}) as Record<string, unknown>,
-          source[key] as Record<string, unknown>
-        ) as T[keyof T]
-      }
-    }
-  }
-
-  return target
+  return prototype === Object.prototype || prototype === null
 }
 
-const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T
+/**
+ * Deep-merges `override` onto `base`, returning fresh objects and mutating
+ * neither. Leaving the caller's options untouched is what lets the resolved
+ * defaults be shared structurally instead of cloned.
+ */
+const merge = <T>(base: T, override: unknown): T => {
+  if (override === undefined) {
+    return base
+  }
+
+  if (!isPlainObject(base) || !isPlainObject(override)) {
+    return override as T
+  }
+
+  const result: Record<string, unknown> = { ...base }
+
+  for (const key in override) {
+    result[key] = merge(result[key], override[key])
+  }
+
+  return result as T
+}
 
 export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOptions => {
   const type = options.type ?? 'sphere'
@@ -304,16 +305,13 @@ export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOpti
 
   const { isXUp, isZUp } = dominantAxis(up)
 
-  const { container } = options
-  const merged = clone({ ...options, container: undefined }) as GizmoOptions
-  merged.container = container
-
   const orderedKeys = isZUp ? axisKeysZUp : isXUp ? axisKeysXUp : axisKeys
+  const aliased: GizmoOptions = { ...options }
 
   faceAliases.forEach((alias, index) => {
-    const value = merged[alias]
+    const value = aliased[alias]
     if (value) {
-      merged[orderedKeys[index]] = value
+      aliased[orderedKeys[index]] = value
     }
   })
 
@@ -396,37 +394,41 @@ export const resolveOptions = (options: GizmoOptions, up: Vector3): ResolvedOpti
       }
     },
     x: {
-      ...clone(positiveAxisDefaults),
+      ...positiveAxisDefaults,
       ...(isSphere ? { label: 'X', color: 0xff3653, line: true } : { label: isXUp ? top : right })
     },
     y: {
-      ...clone(positiveAxisDefaults),
+      ...positiveAxisDefaults,
       ...(isSphere
         ? { label: 'Y', color: 0x8adb00, line: true }
         : { label: isZUp || isXUp ? front : top })
     },
     z: {
-      ...clone(positiveAxisDefaults),
+      ...positiveAxisDefaults,
       ...(isSphere
         ? { label: 'Z', color: 0x2c8fff, line: true }
         : { label: isZUp ? top : isXUp ? right : front })
     },
-    nx: { ...clone(negativeAxisDefaults), label: isSphere ? '' : isXUp ? bottom : left },
-    ny: { ...clone(negativeAxisDefaults), label: isSphere ? '' : isZUp || isXUp ? back : bottom },
+    nx: { ...negativeAxisDefaults, label: isSphere ? '' : isXUp ? bottom : left },
+    ny: { ...negativeAxisDefaults, label: isSphere ? '' : isZUp || isXUp ? back : bottom },
     nz: {
-      ...clone(negativeAxisDefaults),
+      ...negativeAxisDefaults,
       label: isSphere ? '' : isZUp ? bottom : isXUp ? left : back
     }
   } as unknown as Record<string, unknown>
 
-  applyDefaults(merged as unknown as Record<string, unknown>, defaults)
+  const resolved = merge(defaults, aliased)
 
+  // A negative axis inherits whatever its positive counterpart resolved to,
+  // with the negative defaults and then the caller's own values on top.
   for (const key of positiveAxisKeys) {
-    applyDefaults(
-      merged[`n${key}`] as unknown as Record<string, unknown>,
-      clone(merged[key]) as unknown as Record<string, unknown>
+    const negativeKey = `n${key}`
+
+    resolved[negativeKey] = merge(
+      merge(resolved[key], defaults[negativeKey]),
+      aliased[negativeKey as keyof GizmoOptions]
     )
   }
 
-  return { ...merged, isSphere } as unknown as ResolvedOptions
+  return { ...resolved, isSphere } as unknown as ResolvedOptions
 }
