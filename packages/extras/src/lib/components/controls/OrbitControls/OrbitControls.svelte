@@ -22,10 +22,6 @@
     untrack(() => resolvedCamera),
     dom
   )
-  $effect(() => {
-    controls.object = resolvedCamera
-  })
-
   const { orbitControls } = useControlsContext()
 
   useTask(
@@ -37,6 +33,31 @@
       running: () => props.autoRotate || props.enableDamping || false
     }
   )
+
+  $effect(() => {
+    const pierced = props as Record<string, unknown>
+
+    controls.object = resolvedCamera
+
+    void props.target
+    void pierced['target.x']
+    void pierced['target.y']
+    void pierced['target.z']
+    void props.minDistance
+    void props.maxDistance
+    void props.minZoom
+    void props.maxZoom
+    void props.minPolarAngle
+    void props.maxPolarAngle
+    void props.minAzimuthAngle
+    void props.maxAzimuthAngle
+    void props.minTargetRadius
+    void props.maxTargetRadius
+    void props.enableDamping
+    void props.zoomToCursor
+
+    controls.update()
+  })
 
   const handleChange = (event: Event<keyof OrbitControlsEventMap, OrbitControls>) => {
     invalidate()

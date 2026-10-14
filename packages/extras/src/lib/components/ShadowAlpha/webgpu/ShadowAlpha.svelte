@@ -6,6 +6,6 @@
   untrack(() => props)
 
   throw new Error(
-    '<ShadowAlpha> is not yet supported with WebGPU. Please open a GitHub issue if you would like support to be prioritized.'
+    '<ShadowAlpha> is not needed with WebGPU. Set `castShadowNode` on the material instead: https://threlte.xyz/docs/reference/extras/shadow-alpha#webgpu'
   )
 </script>

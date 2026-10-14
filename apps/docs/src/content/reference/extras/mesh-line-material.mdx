@@ -5,6 +5,7 @@ title: <MeshLineMaterial>
 sourcePath: 'packages/extras/src/lib/components/MeshLine/MeshLineMaterial.svelte'
 type: 'component'
 webgl: true
+webgpu: true
 componentSignature:
   {
     extends:
@@ -65,7 +66,14 @@ componentSignature:
 
 Used in combination with [`<MeshLineGeometry>`](/docs/reference/extras/meshline-geometry) to create a line formed of a strip of billboarded triangles, based on <a href="https://github.com/spite/THREE.MeshLine" target="_blank">THREE.MeshLine</a>.
 
-<Example path="extras/meshline-material/animated" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/meshline-material/animated" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/meshline-material-webgpu/animated" />
+  </Tab>
+</Tabs>
 
 ## Usage
 
@@ -111,4 +119,11 @@ You can use a combination of `dashArray`, `dashRatio` and `dashOffset` to create
 You can pass a texture to the `alphaMap` property to use as an alpha mask along the length of the line, where black is invisible and white is visible.
 In the example below we load a paint brush texture with the `useTexture` hook.
 
-<Example path="extras/meshline-material/alpha-map" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/meshline-material/alpha-map" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/meshline-material-webgpu/alpha-map" />
+  </Tab>
+</Tabs>

@@ -78,4 +78,37 @@ You can override the alpha map or disable it:
   adds native support for shadows from transparent objects.
 </Tip>
 
+### WebGPU
+
+There is no WebGPU implementation it isn't needed. [Node
+materials](/docs/learn/advanced/webgpu#nodes) expose `castShadowNode`, which does the same job in a single
+prop and gives a true fractional shadow rather than a dither pattern:
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T, useThrelte } from '@threlte/core/webgpu'
+  import { uniform, vec4 } from 'three/tsl'
+
+  const { renderer } = useThrelte()
+
+  // Set this before the first render, because compiled shadow shaders are never invalidated.
+  renderer.shadowMap.transmitted = true
+
+  const shadowOpacity = uniform(0.5)
+</script>
+
+<T.Mesh castShadow>
+  <T.TorusKnotGeometry args={[0.6, 0.2, 128, 32]} />
+  <T.MeshStandardNodeMaterial
+    transparent
+    opacity={0.5}
+    castShadowNode={vec4(0, 0, 0, shadowOpacity)}
+  />
+</T.Mesh>
+```
+
+`castShadowNode` is the color the shadow is drawn with, so `vec4(1, 0, 0, shadowOpacity)` casts a
+red one. It's independent of the material's own `opacity` — nothing is inherited, so a fully opaque
+mesh can cast a half-strength shadow.
+
 <Example path="extras/shadow-alpha" />
