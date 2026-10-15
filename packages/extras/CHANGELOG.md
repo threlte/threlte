@@ -1,5 +1,14 @@
 # @threlte/extras
 
+## 9.22.2
+
+### Patch Changes
+
+- d9b906b: Add WebGPU support to `<CSM>` and give both renderers one reactive prop signature
+- d9b906b: Add WebGPU support to `<BakeShadows>`
+- d9b906b: Add WebGPU support to `<MeshLineMaterial>`
+- d9b906b: Add WebGPU support to `<CubeCamera>`
+
 ## 9.22.1
 
 ### Patch Changes
