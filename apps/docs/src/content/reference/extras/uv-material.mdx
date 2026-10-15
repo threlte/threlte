@@ -39,6 +39,27 @@ Simply import the component and add it as a child to a mesh
 </T.Mesh>
 ```
 
+## WebGPU
+
+There is no WebGPU implementation because it isn't needed. [Node
+materials](/docs/learn/advanced/webgpu#nodes) take the uvs as a `colorNode`:
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core/webgpu'
+  import { uv, vec3 } from 'three/tsl'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshBasicNodeMaterial colorNode={vec3(uv(), 0)} />
+</T.Mesh>
+```
+
+`<UvMaterial>` is a raw `ShaderMaterial`, which skips tone mapping on WebGL. WebGPU tone maps the
+whole frame in one pass once every material has drawn, so these uvs are tone mapped and the gradient
+reads a little differently between the two renderers.
+
 ## Caveats
 
 The mesh's geometry must have a "uv" attribute in order for `UvMaterial` to work properly. If

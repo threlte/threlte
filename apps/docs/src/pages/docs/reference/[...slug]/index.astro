@@ -27,11 +27,11 @@ const { Content } = await render(entry)
 const webgpuHref =
   category === '@threlte/extras'
     ? `${import.meta.env.BASE_URL}docs/reference/extras/webgpu`
-    : `${import.meta.env.BASE_URL}docs/learn/advanced/webgpu`
+    : `${import.meta.env.BASE_URL}docs/reference/core/webgpu`
 
 const webglTooltip = webgpu
   ? `${title} works with WebGL and is available from the ${category} export.`
-  : `${title} works with WebGL only. A WebGPU implementation is still to come.`
+  : `${title} works with WebGL only.`
 ---
 
 <DocsLayout

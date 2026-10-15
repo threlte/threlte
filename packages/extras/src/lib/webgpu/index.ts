@@ -36,18 +36,22 @@ export { useTransformControls } from '../components/controls/TransformControls/u
 export { meshBounds } from '../utilities/meshBounds.js'
 
 // abstractions migrated to TSL
+export { default as CSM } from '../components/CSM/webgpu/CSM.svelte'
+export { default as CubeCamera } from '../components/CubeCamera/webgpu/CubeCamera.svelte'
 export { default as Gizmo } from '../components/Gizmo/Gizmo.svelte'
 export { default as Grid } from '../components/Grid/webgpu/Grid.svelte'
+export { default as MeshLineMaterial } from '../components/MeshLine/webgpu/MeshLineMaterial.svelte'
 export { default as HTML } from '../components/HTML/webgpu/HTML.svelte'
 export { default as MeshDiscardMaterial } from '../components/MeshDiscardMaterial/webgpu/MeshDiscardMaterial.svelte'
+
+// abstractions replaced by a node material property on WebGPU
+export { default as ShadowAlpha } from '../components/ShadowAlpha/webgpu/ShadowAlpha.svelte'
+export { default as UvMaterial } from '../components/UvMaterial/webgpu/UvMaterial.svelte'
 
 // abstractions awaiting WebGPU implementations
 export { default as AnimatedSpriteMaterial } from '../components/AnimatedSpriteMaterial/webgpu/AnimatedSpriteMaterial.svelte'
 export { default as AsciiRenderer } from '../components/AsciiRenderer/webgpu/AsciiRenderer.svelte'
-export { default as BakeShadows } from '../components/BakeShadows/webgpu/BakeShadows.svelte'
 export { default as ContactShadows } from '../components/ContactShadows/webgpu/ContactShadows.svelte'
-export { default as CSM } from '../components/CSM/webgpu/CSM.svelte'
-export { default as CubeCamera } from '../components/CubeCamera/webgpu/CubeCamera.svelte'
 export { default as FakeGlowMaterial } from '../components/FakeGlowMaterial/webgpu/FakeGlowMaterial.svelte'
 export { default as ImageMaterial } from '../components/ImageMaterial/webgpu/ImageMaterial.svelte'
 export { default as InstancedSprite } from '../components/InstancedSprite/webgpu/InstancedSprite.svelte'
@@ -56,25 +60,23 @@ export {
   buildSpritesheet,
   type SpritesheetMetadata
 } from '../components/InstancedSprite/webgpu/instancedSpriteUtils.js'
-export { default as MeshLineMaterial } from '../components/MeshLine/webgpu/MeshLineMaterial.svelte'
 export { default as MeshRefractionMaterial } from '../components/MeshRefractionMaterial/webgpu/MeshRefractionMaterial.svelte'
 export { default as Outlines } from '../components/Outlines/webgpu/Outlines.svelte'
 export { default as PerfMonitor } from '../components/PerfMonitor/webgpu/PerfMonitor.svelte'
 export { default as PointsMaterial } from '../components/PointsMaterial/webgpu/PointsMaterial.svelte'
-export { default as ShadowAlpha } from '../components/ShadowAlpha/webgpu/ShadowAlpha.svelte'
 export { default as Sky } from '../components/Sky/webgpu/Sky.svelte'
 export { default as SoftShadows } from '../components/SoftShadows/webgpu/SoftShadows.svelte'
 export { default as Sparkles } from '../components/Sparkles/webgpu/Sparkles.svelte'
 export { default as Stars } from '../components/Stars/webgpu/Stars.svelte'
 // Implementation blocked on https://github.com/protectwise/troika/pull/393
 export { default as Text } from '../components/Text/webgpu/Text.svelte'
-export { default as UvMaterial } from '../components/UvMaterial/webgpu/UvMaterial.svelte'
 export { default as VirtualEnvironment } from '../components/environment/VirtualEnvironment/webgpu/VirtualEnvironment.svelte'
 export { default as Wireframe } from '../components/Wireframe/webgpu/Wireframe.svelte'
 export { default as Wobble } from '../components/Wobble/webgpu/Wobble.svelte'
 
 // abstractions
 export { default as BackdropGeometry } from '../components/BackdropGeometry/BackdropGeometry.svelte'
+export { default as BakeShadows } from '../components/BakeShadows/BakeShadows.svelte'
 export { default as Decal } from '../components/Decal/Decal.svelte'
 export { default as CameraControls } from '../components/CameraControls/CameraControls.svelte'
 export { default as CameraControlsRef } from 'camera-controls'

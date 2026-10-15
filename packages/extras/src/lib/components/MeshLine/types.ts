@@ -19,10 +19,7 @@ export type MeshLineGeometryProps = Props<BufferGeometry> & {
   shapeFunction?: (p: number) => number
 }
 
-export type MeshLineMaterialProps = Omit<
-  Props<ShaderMaterial>,
-  'uniforms' | 'fragmentShader' | 'vertexShader'
-> & {
+export type MeshLineMaterialOptions = {
   /**
    * @default 1
    */
@@ -64,3 +61,9 @@ export type MeshLineMaterialProps = Omit<
   scaleDown?: number
   alphaMap?: Texture | undefined
 }
+
+export type MeshLineMaterialProps = Omit<
+  Props<ShaderMaterial>,
+  'uniforms' | 'fragmentShader' | 'vertexShader'
+> &
+  MeshLineMaterialOptions

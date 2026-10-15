@@ -5,7 +5,7 @@ title: WebGPU
 ---
 
 `@threlte/extras` ships a `webgpu` export that pairs with
-[`@threlte/core/webgpu`](/docs/learn/advanced/webgpu). Import from it instead of
+[`@threlte/core/webgpu`](/docs/reference/core/webgpu). Import from it instead of
 the package root whenever your `<Canvas>` comes from `@threlte/core/webgpu`.
 
 ```svelte title="Scene.svelte"
@@ -36,29 +36,40 @@ and abstractions such as `<Float>`, `<Align>`, `<GLTF>`, `<InstancedMesh>`,
 `<SVG>` and `<View>`. These behave identically to their `@threlte/extras`
 counterparts, and you can read their regular reference pages.
 
-Components written against WebGL fall into two groups.
+Components written against WebGL fall into three groups.
 
-### Rewritten in TSL
+### Supported
 
-These have a separate WebGPU implementation and match the behavior of their
-WebGL counterparts:
+These match the behavior of their WebGL counterparts:
 
+- [`<BakeShadows>`](/docs/reference/extras/bake-shadows)
+- [`<CSM>`](/docs/reference/extras/csm)
+- [`<CubeCamera>`](/docs/reference/extras/cube-camera)
+- [`<Gizmo>`](/docs/reference/extras/gizmo)
 - [`<Grid>`](/docs/reference/extras/grid)
 - [`<HTML>`](/docs/reference/extras/html)
 - [`<MeshDiscardMaterial>`](/docs/reference/extras/mesh-discard-material)
+- [`<MeshLineMaterial>`](/docs/reference/extras/mesh-line-material)
+
+### Native on WebGPU
+
+These exist to work around a WebGL limitation that WebGPU doesn't have. Their reference pages carry
+a WebGPU section showing the node material property that replaces them, so there is nothing to
+import:
+
+- [`<ShadowAlpha>`](/docs/reference/extras/shadow-alpha#webgpu)
+- [`<UvMaterial>`](/docs/reference/extras/uv-material#webgpu)
 
 ### Awaiting a WebGPU implementation
 
-|                            |                            |                     |
-| -------------------------- | -------------------------- | ------------------- |
-| `<AnimatedSpriteMaterial>` | `<AsciiRenderer>`          | `<BakeShadows>`     |
-| `<ContactShadows>`         | `<CSM>`                    | `<CubeCamera>`      |
-| `<FakeGlowMaterial>`       | `<ImageMaterial>`          | `<InstancedSprite>` |
-| `<MeshLineMaterial>`       | `<MeshRefractionMaterial>` | `<Outlines>`        |
-| `<PerfMonitor>`            | `<PointsMaterial>`         | `<ShadowAlpha>`     |
-| `<Sky>`                    | `<SoftShadows>`            | `<Sparkles>`        |
-| `<Stars>`                  | `<Text>`                   | `<UvMaterial>`      |
-| `<VirtualEnvironment>`     | `<Wireframe>`              | `<Wobble>`          |
+|                            |                   |                     |
+| -------------------------- | ----------------- | ------------------- |
+| `<AnimatedSpriteMaterial>` | `<AsciiRenderer>` | `<ContactShadows>`  |
+| `<FakeGlowMaterial>`       | `<ImageMaterial>` | `<InstancedSprite>` |
+| `<MeshRefractionMaterial>` | `<Outlines>`      | `<PerfMonitor>`     |
+| `<PointsMaterial>`         | `<Sky>`           | `<SoftShadows>`     |
+| `<Sparkles>`               | `<Stars>`         | `<Text>`            |
+| `<VirtualEnvironment>`     | `<Wireframe>`     | `<Wobble>`          |
 
 <Tip type="note">
   Migration to TSL is ongoing and each component is ported in place, so a future release can move

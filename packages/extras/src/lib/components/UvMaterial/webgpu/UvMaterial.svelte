@@ -6,6 +6,6 @@
   untrack(() => props)
 
   throw new Error(
-    '<UvMaterial> is not yet supported with WebGPU. Please open a GitHub issue if you would like support to be prioritized.'
+    '<UvMaterial> is not needed with WebGPU. Set `colorNode` on the material instead: https://threlte.xyz/docs/reference/extras/uv-material#webgpu'
   )
 </script>
