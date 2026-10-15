@@ -2,4 +2,4 @@
 "@threlte/extras": patch
 ---
 
-[@threlte/extras] Add WebGPU support to `<CubeCamera>`
+Add WebGPU support to `<CubeCamera>`

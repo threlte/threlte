@@ -2,4 +2,4 @@
 "@threlte/extras": patch
 ---
 
-[@threlte/extras] Add WebGPU support to `<MeshLineMaterial>`
+Add WebGPU support to `<MeshLineMaterial>`

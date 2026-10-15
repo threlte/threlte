@@ -2,4 +2,4 @@
 "@threlte/extras": patch
 ---
 
-[@threlte/extras] Add WebGPU support to `<BakeShadows>`
+Add WebGPU support to `<BakeShadows>`

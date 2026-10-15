@@ -21,7 +21,11 @@
   })
 
   const orbs = Array.from({ length: 6 }, (_, index) => ({
-    position: [-index * 210 - 70, 30 + (index % 3) * 9, (index % 2 === 0 ? 1 : -1) * 12] as const,
+    position: [-index * 210 - 70, 30 + (index % 3) * 9, (index % 2 === 0 ? 1 : -1) * 12] as [
+      number,
+      number,
+      number
+    ],
     radius: 7 + (index % 3) * 2
   }))
 </script>
