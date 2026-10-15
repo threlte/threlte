@@ -25,7 +25,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 
 - [Plugins](https://threlte.xyz/docs/learn/advanced/plugins)
 - [Custom Abstractions](https://threlte.xyz/docs/learn/advanced/custom-abstractions)
-- [WebGPU and TSL](https://threlte.xyz/docs/learn/advanced/webgpu)
+- [TSL](https://threlte.xyz/docs/learn/advanced/webgpu)
 
 ### More
 
@@ -37,6 +37,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 ### @threlte/core
 
 - [Getting Started](https://threlte.xyz/docs/reference/core/getting-started)
+- [WebGPU](https://threlte.xyz/docs/reference/core/webgpu)
 - [<Canvas>](https://threlte.xyz/docs/reference/core/canvas)
 - [<T>](https://threlte.xyz/docs/reference/core/t)
 - [useThrelte](https://threlte.xyz/docs/reference/core/use-threlte)
