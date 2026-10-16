@@ -182,51 +182,7 @@ This is en example implementation that adds the property `lookAt` to all `<T>` c
 
 ### BVH raycast plugin
 
-A Plugin that implements [BVH raycasting](https://github.com/gkjohnson/three-mesh-bvh) on all child meshes and geometries.
-
-This plugin outlines the basic setup of the extras [bvh plugin](/docs/reference/extras/bvh).
-
-```ts title="bvhRaycasting.svelte.ts"
-import { injectPlugin, isInstanceOf } from '@threlte/core'
-import type { BufferGeometry, Mesh } from 'three'
-import { computeBoundsTree, disposeBoundsTree, acceleratedRaycast } from 'three-mesh-bvh'
-
-const bvhRaycasting = () => {
-  injectPlugin('bvh-raycast', (args) => {
-    $effect(() => {
-      if (isInstanceOf(args.ref, 'BufferGeometry')) {
-        args.ref.computeBoundsTree = computeBoundsTree
-        args.ref.disposeBoundsTree = disposeBoundsTree
-        args.ref.computeBoundsTree()
-      }
-      if (isInstanceOf(args.ref, 'Mesh')) {
-        args.ref.raycast = acceleratedRaycast
-      }
-      return () => {
-        if (isInstanceOf(args.ref, 'BufferGeometry')) {
-          args.ref.disposeBoundsTree()
-        }
-      }
-    })
-  })
-}
-```
-
-Implementing this plugin in your scene looks like this.
-
-```svelte title="Scene.svelte"
-<script lang="ts">
-  import { T } from '@threlte/core'
-  import bvhRaycasting from './plugins/bvhRaycasting.svelte'
-
-  bvhRaycasting()
-</script>
-
-<T.Mesh>
-  <T.MeshBasicMaterial />
-  <T.BoxGeometry />
-</T.Mesh>
-```
+Threlte's [bvh plugin](/docs/reference/extras/bvh) replaces three's default raycasting with a [bounding-volume heirachy](https://github.com/gkjohnson/three-mesh-bvh) implementation.
 
 ## TypeScript
 
