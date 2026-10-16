@@ -1,0 +1,253 @@
+---
+order: 0.05
+category: '@threlte/rapier'
+title: 'Your First Simulation'
+---
+
+In this tutorial we'll build a cannon, aim it at a brick wall, and knock the wall
+down. Along the way we'll meet every piece of the package you need for real work:
+[`<World>`](/docs/reference/rapier/world),
+[`<RigidBody>`](/docs/reference/rapier/rigid-body),
+[`<Collider>`](/docs/reference/rapier/collider),
+[`<Debug>`](/docs/reference/rapier/debug), impulses, and sensors.
+
+<Tip type="info">
+  This guide assumes you're comfortable with the [Your First
+  Scene](/docs/learn/getting-started/your-first-scene) basics. For installation and a
+  component-by-component overview of `@threlte/rapier`, see the [Getting
+  Started](/docs/reference/rapier/getting-started) page.
+</Tip>
+
+## The yard
+
+Before any physics, we need something to knock down. Here's the scene: a cannon, a
+brick wall, and a ground plane. Everything is an ordinary mesh, so nothing moves.
+
+<Example path="building-a-cannon/step-1" />
+
+The wall is laid in a running bond, with alternate courses offset so the joints
+don't line up. That detail matters more than it looks — we'll come back to it.
+
+## Adding physics
+
+Physics lives inside a [`<World>`](/docs/reference/rapier/world). Anything that
+should be simulated goes inside it, and everything else carries on being a plain
+mesh.
+
+```svelte title="App.svelte"
+<Canvas>
+  <World>
+    <Scene />
+  </World>
+</Canvas>
+```
+
+Two components make a mesh physical.
+[`<RigidBody>`](/docs/reference/rapier/rigid-body) hands it to the simulation, and
+[`<Collider>`](/docs/reference/rapier/collider) gives it a shape to collide with:
+
+```svelte title="Scene.svelte"
+<T.Group position={brick.position}>
+  <RigidBody>
+    <Collider
+      shape="cuboid"
+      args={[0.5, 0.5, 0.5]}
+    />
+    <T.Mesh castShadow>
+      <T.BoxGeometry args={[1, 1, 1]} />
+      <T.MeshStandardMaterial color="#9C6B4E" />
+    </T.Mesh>
+  </RigidBody>
+</T.Group>
+```
+
+Do that to the bricks and the wall falls straight through the floor:
+
+<Example path="building-a-cannon/step-2" />
+
+This is the single most useful thing to understand about a physics engine, so it's
+worth stating plainly: **a mesh is not a collider.** The ground still looks like
+solid ground, but we never gave it a body, so as far as the simulation is
+concerned there's nothing there. The cannon stays put for the opposite reason — it
+has no rigid body at all, so the simulation never touches it.
+
+Note too that the collider's `args` are _half_-extents. A brick drawn with
+`<T.BoxGeometry args={[1, 1, 1]} />` needs `args={[0.5, 0.5, 0.5]}` to match.
+
+## Giving the ground a body
+
+The ground never moves, which makes it a `fixed` body: it takes part in
+collisions, but gravity and impacts don't budge it.
+
+```svelte title="Scene.svelte"
+<RigidBody type="fixed">
+  <T.Group position.y={-0.5}>
+    <Collider
+      shape="cuboid"
+      args={[60, 0.5, 60]}
+      friction={1}
+    />
+  </T.Group>
+  <T.Mesh
+    receiveShadow
+    position.y={-0.5}
+  >
+    <T.BoxGeometry args={[120, 1, 120]} />
+    <T.MeshStandardMaterial color="#4E5A46" />
+  </T.Mesh>
+</RigidBody>
+```
+
+Look closely at that group: the collider is offset to `-0.5` to sit where the mesh
+sits. A collider doesn't follow its mesh — they're positioned independently, and
+lining them up is your job.
+
+Which is exactly why [`<Debug>`](/docs/reference/rapier/debug) exists. Drop it into
+the scene and it draws every collider in the world, so you can see what the
+simulation is actually working with rather than what you hoped you'd built. Toggle
+it on in the example below.
+
+<Example path="building-a-cannon/step-3" />
+
+The wall stands. If a brick topples on its own here, that's not a bug in the
+engine — it means the wall as built can't stand, usually because a course is
+offset far enough that a brick's centre of mass sits past the edge of the one
+below it.
+
+## Firing
+
+Now the fun part. A shot is a ball spawned at the muzzle, given a single shove
+with `applyImpulse`:
+
+```ts
+body.applyImpulse(
+  { x: Math.cos(aimRad) * power * FULL_POWER, y: Math.sin(aimRad) * power * FULL_POWER, z: 0 },
+  true
+)
+```
+
+Because we push along the barrel's own direction, the aim angle _is_ the launch
+angle — set the slider to 30° and the shot leaves at 30°. That's the whole
+trajectory model, and it's worth appreciating how little there is to it: gravity
+does the rest. The <kbd>↑</kbd> and <kbd>↓</kbd> arrow keys nudge the aim a
+degree at a time and <kbd>Space</kbd> fires the shot — click the scene once
+first so the keys reach it. The power slider is a multiplier on a tuned base
+impulse rather than a raw physics value, so its whole range stays perceptible:
+`1` is a full-strength shot and `0.1` barely clears the muzzle.
+
+<Example path="building-a-cannon/step-4" />
+
+The ball's `density` is doing quiet but important work here. At this radius,
+`density={30}` makes the shot slightly heavier than a brick. Give it a low density
+instead and it bounces off the wall like a ping-pong ball — mass ratios decide who
+wins a collision.
+
+## Making it behave
+
+The shot works, but it doesn't yet feel right. Four properties fix that:
+
+```svelte title="Scene.svelte"
+<RigidBody
+  ccd
+  linearDamping={0.05}
+  angularDamping={0.8}
+>
+  <Collider
+    shape="ball"
+    args={[BALL_RADIUS]}
+    density={30}
+    restitution={0}
+    friction={0.8}
+  />
+```
+
+`ccd` is [continuous collision
+detection](https://rapier.rs/docs/user_guides/javascript/rigid_bodies#continuous-collision-detection).
+Without it, a fast, small body can pass clean through a wall between two
+simulation steps — it's on one side at the end of one step and the far side at the
+end of the next, having never touched anything. `restitution` is bounciness, `0`
+meaning none; `friction` lets the shot bite instead of skating; and the damping
+values bleed off the energy that a clipped corner would otherwise turn into a wild
+ricochet.
+
+<Example path="building-a-cannon/step-5" />
+
+Try setting `restitution` to `2` and firing again. Physics parameters are much
+easier to understand once you've played with the extremes.
+
+## Keeping score
+
+Finally, something to aim _for_. A collider marked `sensor` doesn't push anything
+around — it reports what passes through it:
+
+```svelte title="Scene.svelte"
+<RigidBody type="fixed">
+  <Collider
+    shape="cuboid"
+    args={[0.15, 2.5, 4]}
+    sensor
+    {onsensorenter}
+  />
+</RigidBody>
+```
+
+```ts
+const scored = new Set<number>()
+
+const onsensorenter = (event) => {
+  const body = event.targetRigidBody
+  // The shot crosses the line too, so only tagged bricks count.
+  if (!body || !body.userData?.brick) return
+  if (scored.has(body.handle)) return
+  scored.add(body.handle)
+  onscore()
+}
+```
+
+Two guards there, and both exist because of something that actually went wrong.
+
+The `userData` check is the first. A sensor reports **everything** that crosses
+it, and the cannonball usually sails straight through — so without this, a shot
+that missed the wall entirely still scored a point. Tagging the bricks with
+`userData={{ brick: true }}` on their `<RigidBody>` is what tells them apart.
+
+The `Set` is the second. A tumbling brick crosses the plane several times, and
+without it a single brick can score four or five times over.
+
+Sensors tell you about every crossing. Deciding which ones _count_ is up to you,
+and it's usually more decisions than you expect.
+
+<Tip type="tip">
+  Think of the sensor as an invisible pane of glass standing in the gate. The score is how many
+  **different bricks have touched that pane** since the last reset. A brick counts if it crosses the
+  line or comes to rest against it; it does **not** count if it goes around the outside of the
+  posts, sails over the top of the pane, or stops short. Each brick counts once no matter how many
+  times it tumbles back and forth, a brick that crosses and then rolls back still counts, and the
+  cannonball never counts at all.
+</Tip>
+
+Sensors are invisible, so the finish line drawn in the same place is there purely
+to show the reader where the pane is — the posts mark its exact width.
+
+<Example path="building-a-cannon/step-6" />
+
+## Where to go next
+
+You now have the pieces that most physics work is built from: a world, fixed and
+dynamic bodies, colliders, impulses, material properties and sensors. From here:
+
+- **Let Threlte build your colliders.** [`<AutoColliders>`](/docs/reference/rapier/auto-colliders)
+  generates collider shapes from your meshes instead of you declaring them by hand.
+- **Connect bodies together.** [Joints](/docs/reference/rapier/joints) give you hinges,
+  ropes, sliders and motors — a catapult arm, a suspension, a swinging bridge.
+- **Decide what can hit what.** [`<CollisionGroups>`](/docs/reference/rapier/collision-groups)
+  controls which bodies are allowed to collide — how you'd stop a shot from knocking
+  over your own cannon.
+- **Turn it into a game.** The sensor and the `Set` in step 6 are already the skeleton
+  of a scoring system. Add a limited number of shots, a target to beat and a reset, and
+  you have a game loop. [`usePhysicsTask`](/docs/reference/rapier/use-physics-task) runs
+  your logic in step with the physics world rather than the render frame, and
+  [framerate](/docs/reference/rapier/framerate) covers the fixed-step setup you'll want
+  once the rules depend on the simulation being repeatable.
+- **Go deeper on the engine.** The [Rapier user guide](https://rapier.rs/docs/user_guides/javascript/getting_started_js)
+  covers the physics underneath in far more depth than we can here.
