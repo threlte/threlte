@@ -8,7 +8,6 @@ import {
   Raycaster,
   Scene,
   Spherical,
-  Timer,
   Vector2,
   Vector3,
   Vector4,
@@ -203,7 +202,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   #domRect!: DOMRect
   #dragging = false
   #distance = 0
-  #timer = new Timer()
+  #lastTime = 0
   #quaternionStart = new Quaternion()
   #quaternionEnd = new Quaternion()
   #pointerStart = new Vector2()
@@ -551,7 +550,9 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
       this.#controls.enabled = false
     }
 
-    const step = this.#timer.update().getDelta() * turnRate * this.speed
+    const now = performance.now()
+    const step = ((now - this.#lastTime) / 1000) * turnRate * this.speed
+    this.#lastTime = now
 
     this.#quaternionStart.rotateTowards(this.#quaternionEnd, step)
     this.#applyQuaternion(this.#quaternionStart)
@@ -620,7 +621,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.#quaternionEnd.setFromRotationMatrix(matrix)
 
     this.animating = true
-    this.#timer.reset()
+    this.#lastTime = performance.now()
     this.dispatchEvent({ type: 'start' })
   }
 
