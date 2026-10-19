@@ -28,6 +28,7 @@ import {
   cameraDistance,
   dragThreshold,
   epsilon,
+  maxDelta,
   orthographicExtent,
   perspectiveFov,
   turnRate
@@ -202,7 +203,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   #domRect!: DOMRect
   #dragging = false
   #distance = 0
-  #lastTime = 0
+  #lastTime = performance.now()
   #quaternionStart = new Quaternion()
   #quaternionEnd = new Quaternion()
   #pointerStart = new Vector2()
@@ -369,10 +370,13 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   /**
    * Renders the gizmo into its corner of the viewport, restoring the renderer's
    * viewport and scissor afterwards.
+   *
+   * @param delta Seconds since the last frame, used to advance a view change
+   * animation. Measured from `performance.now()` when omitted.
    */
-  render(): this {
+  render(delta?: number): this {
     if (this.animating) {
-      this.#animate()
+      this.#animate(delta ?? this.#measureDelta())
     }
 
     const { renderer } = this
@@ -536,7 +540,14 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     camera.position.copy(target).addScaledVector(direction, this.#distance)
   }
 
-  #animate() {
+  #measureDelta() {
+    const now = performance.now()
+    const delta = (now - this.#lastTime) / 1000
+    this.#lastTime = now
+    return delta
+  }
+
+  #animate(delta: number) {
     if (!this.animated) {
       this.#applyQuaternion(this.#quaternionEnd)
       this.#updateOrientation()
@@ -550,23 +561,28 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
       this.#controls.enabled = false
     }
 
-    const now = performance.now()
-    const step = ((now - this.#lastTime) / 1000) * turnRate * this.speed
-    this.#lastTime = now
+    const step = Math.min(delta, maxDelta) * turnRate * this.speed
 
     this.#quaternionStart.rotateTowards(this.#quaternionEnd, step)
     this.#applyQuaternion(this.#quaternionStart)
     this.#updateOrientation()
 
-    requestAnimationFrame(() => this.dispatchEvent({ type: 'change' }))
+    const finished = this.#quaternionStart.angleTo(this.#quaternionEnd) < epsilon
 
-    if (this.#quaternionStart.angleTo(this.#quaternionEnd) < epsilon) {
+    requestAnimationFrame(() => {
+      this.dispatchEvent({ type: 'change' })
+
+      if (finished) {
+        this.dispatchEvent({ type: 'end' })
+      }
+    })
+
+    if (finished) {
       if (this.#controls) {
         this.#controls.enabled = true
       }
 
       this.animating = false
-      this.dispatchEvent({ type: 'end' })
     }
   }
 
@@ -730,6 +746,8 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     if (intersection) {
       this.#setOrientation(intersection.object.position)
       this.dispatchEvent({ type: 'change' })
+    } else {
+      this.dispatchEvent({ type: 'end' })
     }
   }
 

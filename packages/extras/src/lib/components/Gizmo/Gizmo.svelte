@@ -107,14 +107,14 @@
 
   useTask(
     initialRenderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
-    () => {
+    (delta) => {
       if (shouldRender()) {
         const toneMapping = renderer.toneMapping
 
         renderer.getViewport(viewport)
         renderer.toneMapping = NoToneMapping
 
-        gizmo.render()
+        gizmo.render(delta)
 
         renderer.setViewport(viewport)
         renderer.toneMapping = toneMapping
