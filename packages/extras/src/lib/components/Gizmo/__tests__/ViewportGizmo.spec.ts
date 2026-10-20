@@ -114,7 +114,7 @@ describe('ViewportGizmo without THREE.Timer', () => {
     }
   })
 
-  it('advances by the delta the render task passes in', () => {
+  it('advances by a supplied delta', () => {
     const { camera, gizmo, clickXAxis } = setup()
     camera.lookAt(new Vector3())
     gizmo.cameraUpdate().render()
@@ -216,7 +216,7 @@ describe('ViewportGizmo without THREE.Timer', () => {
     expect(camera.position.z).toBeCloseTo(0)
   })
 
-  it('honors a large supplied delta', () => {
+  it('does not clamp a supplied delta', () => {
     const { camera, gizmo, clickXAxis } = setup()
     camera.lookAt(new Vector3())
     gizmo.cameraUpdate().render()
