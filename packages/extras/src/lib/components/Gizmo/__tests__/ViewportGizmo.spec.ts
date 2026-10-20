@@ -70,7 +70,7 @@ const setup = (speed = 1, animated = true) => {
   return { camera, gizmo, clickAt, clickXAxis }
 }
 
-describe('ViewportGizmo timing without THREE.Timer', () => {
+describe('ViewportGizmo without THREE.Timer', () => {
   it('keeps the extras root import usable without Timer', () => {
     expect(OrbitControls).toBeDefined()
   })
@@ -197,5 +197,178 @@ describe('ViewportGizmo timing without THREE.Timer', () => {
     expect(gizmo.animating).toBe(false)
     expect(camera.position.x).toBeCloseTo(5)
     expect(camera.position.z).toBeCloseTo(0)
+  })
+
+  it('honors a supplied delta larger than the measurement clamp', () => {
+    const { camera, gizmo, clickXAxis } = setup()
+    camera.lookAt(new Vector3())
+    gizmo.cameraUpdate().render()
+    const start = camera.quaternion.clone()
+
+    clickXAxis()
+    gizmo.render(2 * maxDelta)
+
+    expect(camera.quaternion.angleTo(start)).toBeCloseTo(2 * maxDelta * turnRate)
+  })
+
+  it('dispatches one start per axis click', () => {
+    const { gizmo, clickXAxis } = setup()
+    const start = vi.fn()
+    gizmo.addEventListener('start', start)
+
+    clickXAxis()
+
+    expect(gizmo.animating).toBe(true)
+    expect(start).toHaveBeenCalledTimes(1)
+  })
+
+  it('drops the pending end when a new interaction starts in the same frame', async () => {
+    let now = 1000
+    vi.spyOn(performance, 'now').mockImplementation(() => now)
+    const { gizmo, clickXAxis } = setup()
+    const events: string[] = []
+    gizmo.addEventListener('start', () => events.push('start'))
+    gizmo.addEventListener('end', () => events.push('end'))
+
+    clickXAxis()
+
+    let frames = 0
+    while (gizmo.animating && frames < 200) {
+      now += 100
+      gizmo.render()
+      frames += 1
+    }
+
+    // `animating` clears synchronously, so a second click is accepted before
+    // the first animation's deferred `end` has run.
+    clickXAxis()
+    expect(gizmo.animating).toBe(true)
+
+    await nextFrame()
+
+    // The superseded animation's `end` is dropped, and the one the second click
+    // is still running has not arrived, so each `start` is matched exactly once.
+    expect(events).toEqual(['start', 'end', 'start'])
+  })
+
+  it('ends an interaction interrupted by dispose', () => {
+    const { gizmo, clickXAxis } = setup()
+    const end = vi.fn()
+    gizmo.addEventListener('end', end)
+
+    clickXAxis()
+    expect(gizmo.animating).toBe(true)
+
+    gizmo.dispose()
+
+    expect(end).toHaveBeenCalledTimes(1)
+    expect(gizmo.animating).toBe(false)
+  })
+
+  it('stops tracking the pointer once disposed mid-drag', () => {
+    const { camera, gizmo } = setup()
+    const rect = gizmo.domElement.getBoundingClientRect()
+    const center = {
+      bubbles: true,
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 2
+    }
+    const end = vi.fn()
+    gizmo.addEventListener('end', end)
+
+    const beforeDrag = camera.quaternion.clone()
+
+    gizmo.domElement.dispatchEvent(new PointerEvent('pointerdown', center))
+    document.dispatchEvent(
+      new PointerEvent('pointermove', { ...center, clientX: center.clientX + 100 })
+    )
+
+    // Past the drag threshold, so the gizmo is orbiting the camera.
+    expect(camera.quaternion.angleTo(beforeDrag)).toBeGreaterThan(0.1)
+
+    gizmo.dispose()
+    expect(end).toHaveBeenCalledTimes(1)
+
+    const afterDispose = camera.quaternion.clone()
+
+    document.dispatchEvent(
+      new PointerEvent('pointermove', { ...center, clientX: center.clientX + 200 })
+    )
+    document.dispatchEvent(new PointerEvent('pointerup', center))
+
+    expect(camera.quaternion.angleTo(afterDispose)).toBeCloseTo(0)
+    expect(end).toHaveBeenCalledTimes(1)
+  })
+
+  it('stops orbiting and closes the interaction when disabled mid-drag', () => {
+    const { camera, gizmo } = setup()
+    const rect = gizmo.domElement.getBoundingClientRect()
+    const center = {
+      bubbles: true,
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 2
+    }
+    const end = vi.fn()
+    gizmo.addEventListener('end', end)
+
+    gizmo.domElement.dispatchEvent(new PointerEvent('pointerdown', center))
+    document.dispatchEvent(
+      new PointerEvent('pointermove', { ...center, clientX: center.clientX + 100 })
+    )
+
+    gizmo.enabled = false
+    const whenDisabled = camera.quaternion.clone()
+
+    document.dispatchEvent(
+      new PointerEvent('pointermove', { ...center, clientX: center.clientX + 200 })
+    )
+
+    expect(camera.quaternion.angleTo(whenDisabled)).toBeCloseTo(0)
+
+    document.dispatchEvent(new PointerEvent('pointerup', center))
+
+    expect(end).toHaveBeenCalledTimes(1)
+    expect(gizmo.animating).toBe(false)
+  })
+
+  it('closes the interaction when the pointer is cancelled', () => {
+    const { gizmo } = setup()
+    const rect = gizmo.domElement.getBoundingClientRect()
+    const center = {
+      bubbles: true,
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 2
+    }
+    const end = vi.fn()
+    gizmo.addEventListener('end', end)
+
+    gizmo.domElement.dispatchEvent(new PointerEvent('pointerdown', center))
+    document.dispatchEvent(new PointerEvent('pointercancel', center))
+
+    expect(end).toHaveBeenCalledTimes(1)
+  })
+
+  it('releases every pointer it tracked when they overlap', () => {
+    const { camera, gizmo } = setup()
+    const rect = gizmo.domElement.getBoundingClientRect()
+    const center = {
+      bubbles: true,
+      clientX: rect.left + rect.width / 2,
+      clientY: rect.top + rect.height / 2
+    }
+
+    // A second finger lands before the first is lifted, so two pointer
+    // interactions register document listeners.
+    gizmo.domElement.dispatchEvent(new PointerEvent('pointerdown', center))
+    gizmo.domElement.dispatchEvent(new PointerEvent('pointerdown', center))
+    document.dispatchEvent(new PointerEvent('pointerup', center))
+
+    const settled = camera.quaternion.clone()
+
+    document.dispatchEvent(
+      new PointerEvent('pointermove', { ...center, clientX: center.clientX + 200 })
+    )
+
+    expect(camera.quaternion.angleTo(settled)).toBeCloseTo(0)
   })
 })
