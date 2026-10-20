@@ -8,7 +8,6 @@ import {
   Raycaster,
   Scene,
   Spherical,
-  Timer,
   Vector2,
   Vector3,
   Vector4,
@@ -203,7 +202,10 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   #domRect!: DOMRect
   #dragging = false
   #distance = 0
-  #timer = new Timer()
+  #interactionId = 0
+  #interactionOpen = false
+  #releasePointer: (() => void) | null = null
+  #lastTime = performance.now()
   #quaternionStart = new Quaternion()
   #quaternionEnd = new Quaternion()
   #pointerStart = new Vector2()
@@ -211,6 +213,12 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   #placement!: NonNullable<GizmoOptions['placement']>
   #controls?: GizmoControls
   #controlsListeners?: { start: () => void; end: () => void; change: () => void }
+
+  #onVisibilityChange = () => {
+    if (!document.hidden) {
+      this.#lastTime = performance.now()
+    }
+  }
 
   constructor(
     camera: OrthographicCamera | PerspectiveCamera,
@@ -357,6 +365,8 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.#domElement.onpointerleave = () => this.#onPointerLeave()
     this.#container.appendChild(this.#domElement)
 
+    document.addEventListener('visibilitychange', this.#onVisibilityChange, false)
+
     if (controls) {
       this.attachControls(controls)
     }
@@ -370,10 +380,13 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   /**
    * Renders the gizmo into its corner of the viewport, restoring the renderer's
    * viewport and scissor afterwards.
+   *
+   * @param delta Seconds since the last frame, used to advance a view change
+   * animation. Measured from `performance.now()` when omitted.
    */
-  render(): this {
+  render(delta?: number): this {
     if (this.animating) {
-      this.#animate()
+      this.#animate(delta ?? this.#measureDelta())
     }
 
     const { renderer } = this
@@ -490,6 +503,18 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
 
   /** Frees geometries, materials, textures and listeners. */
   dispose() {
+    document.removeEventListener('visibilitychange', this.#onVisibilityChange, false)
+
+    this.#releasePointer?.()
+    this.#dragging = false
+    this.#focus = null
+    this.animating = false
+    this.#interactionId += 1
+
+    if (this.#interactionOpen) {
+      this.#endInteraction()
+    }
+
     this.detachControls()
 
     if (this.#domElement) {
@@ -537,13 +562,25 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     camera.position.copy(target).addScaledVector(direction, this.#distance)
   }
 
-  #animate() {
+  #endInteraction() {
+    this.#interactionOpen = false
+    this.dispatchEvent({ type: 'end' })
+  }
+
+  #measureDelta() {
+    const now = performance.now()
+    const delta = (now - this.#lastTime) / 1000
+    this.#lastTime = now
+    return delta
+  }
+
+  #animate(delta: number) {
     if (!this.animated) {
       this.#applyQuaternion(this.#quaternionEnd)
       this.#updateOrientation()
       this.animating = false
       this.dispatchEvent({ type: 'change' })
-      this.dispatchEvent({ type: 'end' })
+      this.#endInteraction()
       return
     }
 
@@ -551,21 +588,29 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
       this.#controls.enabled = false
     }
 
-    const step = this.#timer.update().getDelta() * turnRate * this.speed
+    const step = delta * turnRate * this.speed
 
     this.#quaternionStart.rotateTowards(this.#quaternionEnd, step)
     this.#applyQuaternion(this.#quaternionStart)
     this.#updateOrientation()
 
-    requestAnimationFrame(() => this.dispatchEvent({ type: 'change' }))
+    const finished = this.#quaternionStart.angleTo(this.#quaternionEnd) < epsilon
+    const interactionId = this.#interactionId
 
-    if (this.#quaternionStart.angleTo(this.#quaternionEnd) < epsilon) {
+    requestAnimationFrame(() => {
+      this.dispatchEvent({ type: 'change' })
+
+      if (finished && interactionId === this.#interactionId) {
+        this.#endInteraction()
+      }
+    })
+
+    if (finished) {
       if (this.#controls) {
         this.#controls.enabled = true
       }
 
       this.animating = false
-      this.dispatchEvent({ type: 'end' })
     }
   }
 
@@ -620,8 +665,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.#quaternionEnd.setFromRotationMatrix(matrix)
 
     this.animating = true
-    this.#timer.reset()
-    this.dispatchEvent({ type: 'start' })
+    this.#lastTime = performance.now()
   }
 
   #onPointerDown(event: PointerEvent) {
@@ -639,6 +683,10 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.#distance = start.radius
 
     const onPointerMove = (moveEvent: PointerEvent) => {
+      if (!this.enabled) {
+        return
+      }
+
       if (!this.#dragging) {
         if (withinClickThreshold(moveEvent, this.#pointerStart)) {
           return
@@ -666,14 +714,18 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
       this.dispatchEvent({ type: 'change' })
     }
 
-    const onPointerUp = () => {
+    const releasePointer = () => {
       document.removeEventListener('pointermove', onPointerMove, false)
       document.removeEventListener('pointerup', onPointerUp, false)
+      document.removeEventListener('pointercancel', cancelInteraction, false)
 
-      if (!this.#dragging) {
-        this.#handleClick(event)
-        return
+      if (this.#releasePointer === releasePointer) {
+        this.#releasePointer = null
       }
+    }
+
+    const cancelInteraction = () => {
+      releasePointer()
 
       if (this.#focus) {
         setIndicatorHover(this.#focus, false)
@@ -681,11 +733,30 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
       }
 
       this.#dragging = false
-      this.dispatchEvent({ type: 'end' })
+      this.#endInteraction()
+    }
+
+    const onPointerUp = () => {
+      if (this.enabled && !this.#dragging) {
+        releasePointer()
+        this.#handleClick(event)
+        return
+      }
+
+      cancelInteraction()
     }
 
     document.addEventListener('pointermove', onPointerMove, false)
     document.addEventListener('pointerup', onPointerUp, false)
+    document.addEventListener('pointercancel', cancelInteraction, false)
+    this.#releasePointer = releasePointer
+
+    if (this.#interactionOpen) {
+      this.#endInteraction()
+    }
+
+    this.#interactionId += 1
+    this.#interactionOpen = true
     this.dispatchEvent({ type: 'start' })
   }
 
@@ -729,6 +800,8 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     if (intersection) {
       this.#setOrientation(intersection.object.position)
       this.dispatchEvent({ type: 'change' })
+    } else {
+      this.#endInteraction()
     }
   }
 
