@@ -33,7 +33,7 @@
     label="speed"
     bind:value={speed}
     min={0.1}
-    max={1}
+    max={2}
   />
   <List
     label="placement"

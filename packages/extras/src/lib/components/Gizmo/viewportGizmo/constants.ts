@@ -13,7 +13,6 @@ export const orthographicExtent = 1.8
 export const perspectiveFov = 26
 export const epsilon = 1e-6
 export const turnRate = 2 * Math.PI
-export const maxDelta = 0.1
 export const dragThreshold = 10
 
 export const cornerPositions = [

@@ -2,12 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { PerspectiveCamera, Vector3, WebGLRenderer } from 'three'
 import { OrbitControls } from '../../../index.js'
 import { ViewportGizmo } from '../viewportGizmo/ViewportGizmo.js'
-import {
-  maxDelta,
-  orthographicExtent,
-  spherePointDistance,
-  turnRate
-} from '../viewportGizmo/constants.js'
+import { orthographicExtent, spherePointDistance, turnRate } from '../viewportGizmo/constants.js'
 
 // The supported Three r172–r178 releases do not export Timer. Keep that
 // constraint even when running the suite with the workspace's newer Three.
@@ -132,7 +127,7 @@ describe('ViewportGizmo without THREE.Timer', () => {
     expect(camera.quaternion.angleTo(start)).toBeCloseTo(0.02 * turnRate)
   })
 
-  it('clamps a long gap between frames instead of snapping to the target', () => {
+  it('advances by the whole measured frame at a low frame rate', () => {
     let now = 1000
     vi.spyOn(performance, 'now').mockImplementation(() => now)
     const { camera, gizmo, clickXAxis } = setup()
@@ -143,12 +138,34 @@ describe('ViewportGizmo without THREE.Timer', () => {
     clickXAxis()
     gizmo.render()
 
-    // A backgrounded tab stops rendering while the clock keeps running.
-    now += 10_000
+    // A 5fps frame has to count for its full duration, or the view change
+    // takes longer in wall-clock terms the heavier the scene gets.
+    now += 200
     gizmo.render()
 
     expect(gizmo.animating).toBe(true)
-    expect(camera.quaternion.angleTo(start)).toBeCloseTo(maxDelta * turnRate)
+    expect(camera.quaternion.angleTo(start)).toBeCloseTo(0.2 * turnRate)
+  })
+
+  it('restarts the clock when the page becomes visible again', () => {
+    let now = 1000
+    vi.spyOn(performance, 'now').mockImplementation(() => now)
+    const { camera, gizmo, clickXAxis } = setup()
+    camera.lookAt(new Vector3())
+    gizmo.cameraUpdate().render()
+    const start = camera.quaternion.clone()
+
+    clickXAxis()
+    gizmo.render()
+
+    // A hidden tab stops rendering while the clock keeps running, so the gap
+    // must not be charged to the first frame back.
+    now += 10_000
+    document.dispatchEvent(new Event('visibilitychange'))
+    gizmo.render()
+
+    expect(gizmo.animating).toBe(true)
+    expect(camera.quaternion.angleTo(start)).toBeCloseTo(0)
   })
 
   it('dispatches the final change before end', async () => {
@@ -199,16 +216,16 @@ describe('ViewportGizmo without THREE.Timer', () => {
     expect(camera.position.z).toBeCloseTo(0)
   })
 
-  it('honors a supplied delta larger than the measurement clamp', () => {
+  it('honors a large supplied delta', () => {
     const { camera, gizmo, clickXAxis } = setup()
     camera.lookAt(new Vector3())
     gizmo.cameraUpdate().render()
     const start = camera.quaternion.clone()
 
     clickXAxis()
-    gizmo.render(2 * maxDelta)
+    gizmo.render(0.2)
 
-    expect(camera.quaternion.angleTo(start)).toBeCloseTo(2 * maxDelta * turnRate)
+    expect(camera.quaternion.angleTo(start)).toBeCloseTo(0.2 * turnRate)
   })
 
   it('dispatches one start per axis click', () => {

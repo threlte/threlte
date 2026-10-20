@@ -28,7 +28,6 @@ import {
   cameraDistance,
   dragThreshold,
   epsilon,
-  maxDelta,
   orthographicExtent,
   perspectiveFov,
   turnRate
@@ -215,6 +214,12 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
   #controls?: GizmoControls
   #controlsListeners?: { start: () => void; end: () => void; change: () => void }
 
+  #onVisibilityChange = () => {
+    if (!document.hidden) {
+      this.#lastTime = performance.now()
+    }
+  }
+
   constructor(
     camera: OrthographicCamera | PerspectiveCamera,
     renderer: WebGLRenderer | WebGPURenderer,
@@ -360,6 +365,8 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     this.#domElement.onpointerleave = () => this.#onPointerLeave()
     this.#container.appendChild(this.#domElement)
 
+    document.addEventListener('visibilitychange', this.#onVisibilityChange, false)
+
     if (controls) {
       this.attachControls(controls)
     }
@@ -496,6 +503,8 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
 
   /** Frees geometries, materials, textures and listeners. */
   dispose() {
+    document.removeEventListener('visibilitychange', this.#onVisibilityChange, false)
+
     this.#releasePointer?.()
     this.#dragging = false
     this.#focus = null
@@ -562,7 +571,7 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     const now = performance.now()
     const delta = (now - this.#lastTime) / 1000
     this.#lastTime = now
-    return Math.min(delta, maxDelta)
+    return delta
   }
 
   #animate(delta: number) {
