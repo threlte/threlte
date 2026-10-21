@@ -1,6 +1,6 @@
 import type { CoefficientCombineRule, Collider } from '@dimforge/rapier3d-compat'
 import type { Snippet } from 'svelte'
-import type { Euler, Vector3 } from 'three'
+import type { Euler, Vector3Tuple } from 'three'
 import type { AutoCollidersShapes, ColliderEvents, CreateEvent } from '../../../types/types.js'
 
 // ------------------ BASE ------------------
@@ -55,9 +55,9 @@ interface MassProperties {
   /** The mass of this collider. */
   mass: number
   /** The center of mass of this collider. */
-  centerOfMass: Parameters<Vector3['set']>
+  centerOfMass: Vector3Tuple
   /** The principal angular inertia of this collider. */
-  principalAngularInertia: Parameters<Vector3['set']>
+  principalAngularInertia: Vector3Tuple
   /** The angular inertia local frame of this collider. */
   angularInertiaLocalFrame: Parameters<Euler['set']>
   density?: never

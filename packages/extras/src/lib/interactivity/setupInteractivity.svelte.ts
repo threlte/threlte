@@ -9,8 +9,9 @@ import type { DomEvent, DomEventName, Intersection, IntersectionEvent } from './
 // frame.
 function createIntersectionId(intersection: Intersection) {
   const target = intersection.eventObject ?? intersection.object
-  if (intersection.instanceId !== undefined) {
-    return `${target.uuid}|${intersection.instanceId}`
+  const instanceId = intersection.instanceId ?? intersection.batchId
+  if (instanceId !== undefined) {
+    return `${target.uuid}|${instanceId}`
   }
   if ((intersection.object as Points).isPoints) {
     return `${target.uuid}|${intersection.index}`
@@ -78,12 +79,14 @@ export const setupInteractivity = (context: InteractivityContext) => {
     // appears once per registered ancestor — causing duplicate events. The key is
     // context-sensitive so that legitimate multi-hit objects are preserved:
     //   InstancedMesh — each instance is a distinct target, key by instanceId
+    //   BatchedMesh   — each instance is a distinct target, key by batchId
     //   Points        — each point is a distinct target, key by point index
     //   Mesh / other  — uuid only; multiple face hits are the same surface
     const hits = rawHits.filter((hit) => {
+      const instanceId = hit.instanceId ?? hit.batchId
       const key =
-        hit.instanceId !== undefined
-          ? `${hit.object.uuid}|${hit.instanceId}`
+        instanceId !== undefined
+          ? `${hit.object.uuid}|${instanceId}`
           : (hit.object as Points).isPoints
             ? `${hit.object.uuid}|${hit.index}`
             : hit.object.uuid

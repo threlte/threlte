@@ -29,6 +29,25 @@ type ThreeClassTypes = OmitNever<{
       : never
 }>
 
+type IsAny<T> = 0 extends 1 & T ? true : false
+
+/**
+ * `InstanceType` resolves a generic class' type parameters to their constraint
+ * — or to `unknown` when they have none — never to their defaults, which
+ * TypeScript cannot read. `InstanceType<typeof Texture>` is therefore
+ * `Texture<unknown>`, and narrowing to it discards the image type an object
+ * already had.
+ *
+ * So prefer the constituents of `Obj` that are already instances of the class,
+ * and fall back to the widened instance type only when `Obj` has none.
+ */
+type NarrowToInstance<Obj, Instance> =
+  IsAny<Obj> extends true
+    ? Instance
+    : [Extract<Obj, Instance>] extends [never]
+      ? Obj & Instance
+      : Extract<Obj, Instance>
+
 /**
  * Check if an object is an instance of a given THREE class. Can be used as a
  * type guard and as an alternative to `instanceof` which is prone to error and
@@ -45,9 +64,9 @@ type ThreeClassTypes = OmitNever<{
  * @param type - The class name to check against.
  * @returns `true` if the object is an instance of the class, `false` otherwise.
  */
-export const isInstanceOf = <T extends keyof ThreeClassTypes>(
-  obj: any,
+export const isInstanceOf = <T extends keyof ThreeClassTypes, Obj = unknown>(
+  obj: Obj,
   type: T
-): obj is InstanceType<ThreeClassTypes[T]> => {
-  return obj?.[`is${type}`] === true
+): obj is Extract<NarrowToInstance<Obj, InstanceType<ThreeClassTypes[T]>>, Obj> => {
+  return (obj as Record<string, unknown> | null | undefined)?.[`is${type}`] === true
 }

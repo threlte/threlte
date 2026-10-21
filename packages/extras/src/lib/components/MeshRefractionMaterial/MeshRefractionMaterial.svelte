@@ -2,6 +2,7 @@
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { Color, Matrix4, ShaderMaterial, Texture, Uniform, Vector2 } from 'three'
   import { MeshBVH, MeshBVHUniformStruct, SAH } from 'three-mesh-bvh'
+  import { getImageSize } from '../../lib/getImageSize.js'
   import type { MeshRefractionMaterialProps } from './types.js'
   import { fragmentShader } from './fragment.js'
   import { vertexShader } from './vertex.js'
@@ -60,7 +61,8 @@
   $effect(() => {
     // Sampler2D and SamplerCube need different defines
     const isCubeMap = isInstanceOf(envMap, 'CubeTexture')
-    const w = (isCubeMap ? envMap.image[0]?.width : envMap?.image.width) ?? 1024
+    const image = getImageSize(isCubeMap ? envMap.image[0] : envMap?.image)
+    const w = image?.width ?? 1024
     const cubeSize = w / 4
     const lodMax = Math.floor(Math.log2(cubeSize))
     const _cubeSize = Math.pow(2, lodMax)

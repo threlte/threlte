@@ -117,17 +117,47 @@ export const useProps = <Type>(
     return
   }
 
+  /**
+   * Prop keys are tracked separately from their values, so a key added after
+   * mount (e.g. to a spread object) still gets its own effect below. The same
+   * array is returned while the keys are unchanged, so value changes don't
+   * re-run that effect. `Reflect.ownKeys` avoids reading values where it can.
+   */
+  let previousKeys: string[] = []
+  const propKeys = $derived.by(() => {
+    const nextKeys = Reflect.ownKeys(props()).filter(
+      (key): key is string => typeof key === 'string'
+    )
+    if (
+      nextKeys.length !== previousKeys.length ||
+      nextKeys.some((key, index) => key !== previousKeys[index])
+    ) {
+      previousKeys = nextKeys
+    }
+    return previousKeys
+  })
+
+  let previousObject: Type | undefined
+
   $effect.pre(() => {
     const _object = object()
     const _props = props()
     const _pluginProps = pluginProps()
+    const _propKeys = propKeys
 
-    // Clear memoized props when the instance or props reference changes,
-    // preventing unbounded growth from previous instances.
-    memoizedProps.clear()
+    if (_object === previousObject) {
+      for (const path of memoizedProps.keys()) {
+        if (!_propKeys.includes(path)) memoizedProps.delete(path)
+      }
+    } else {
+      // Clear memoized props when the instance changes,
+      // preventing unbounded growth from previous instances.
+      memoizedProps.clear()
+      previousObject = _object
+    }
 
     untrack(() => {
-      for (const key in _props) {
+      for (const key of _propKeys) {
         // Skip plugin-reserved props at setup time. `pluginProps` is captured
         // once at component init and never mutates, so there's no reason to
         // re-check on every prop change.

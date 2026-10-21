@@ -41,6 +41,12 @@ export interface RendererContext<T extends Renderer> {
   autoRenderTask: Task
 }
 
+const isRenderableSize = (size: { width: number; height: number }) => {
+  return (
+    Number.isFinite(size.width) && Number.isFinite(size.height) && size.width > 0 && size.height > 0
+  )
+}
+
 export type CreateRendererContextOptions<T extends Renderer> = {
   createRenderer?: CreateRenderer<T>
   /**
@@ -102,16 +108,15 @@ export const createRendererContext = <T extends Renderer>(
   const { canvas, size, shouldUpdateSize } = useDOM()
 
   const opts = $derived(options())
-  const renderer = untrack(() =>
-    opts.createRenderer
-      ? opts.createRenderer(canvas)
-      : new WebGLRenderer({
-          canvas,
-          powerPreference: 'high-performance',
-          antialias: true,
-          alpha: true
-        })
-  )
+  const initialOptions = untrack(options)
+  const renderer = initialOptions.createRenderer
+    ? initialOptions.createRenderer(canvas)
+    : new WebGLRenderer({
+        canvas,
+        powerPreference: 'high-performance',
+        antialias: true,
+        alpha: true
+      })
 
   const resizeStage = scheduler.createStage(Symbol('threlte-resize-stage'), {
     before: mainStage
@@ -120,6 +125,7 @@ export const createRendererContext = <T extends Renderer>(
   resizeStage.createTask(Symbol('threlte-resize-task'), () => {
     if (renderer.xr.isPresenting) return
     if (!shouldUpdateSize()) return
+    if (!isRenderableSize(size.current)) return
 
     renderer.setSize(size.current.width, size.current.height)
 
@@ -135,6 +141,7 @@ export const createRendererContext = <T extends Renderer>(
   })
 
   const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), () => {
+    if (!renderer.xr.isPresenting && !isRenderableSize(size.current)) return
     renderer.render(scene, camera.current)
   })
 
@@ -181,7 +188,7 @@ export const createRendererContext = <T extends Renderer>(
 
   const autoRender = fromStore(autoRenderStore)
 
-  ColorManagement.enabled = opts.colorManagementEnabled ?? true
+  ColorManagement.enabled = initialOptions.colorManagementEnabled ?? true
 
   $effect.pre(() => {
     renderer.outputColorSpace = colorSpace

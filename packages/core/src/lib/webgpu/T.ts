@@ -16,6 +16,7 @@ type TComponentProxy = {
 }
 
 const catalogue: Extensions = {}
+const threeCatalogue = THREE as Record<string, unknown>
 
 /**
  * Extends the WebGPU `three/webgpu` namespace and allows using custom Three.js
@@ -54,7 +55,7 @@ export const T = new Proxy(TComp, {
       return Reflect.get(_target, is)
     }
 
-    const module = catalogue[is] || THREE[is]
+    const module = catalogue[is] || threeCatalogue[is]
 
     if (module === undefined) {
       throw new Error(`No Three.js module found for ${is}. Did you forget to extend the catalogue?`)

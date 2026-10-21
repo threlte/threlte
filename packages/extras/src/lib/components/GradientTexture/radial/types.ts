@@ -2,7 +2,7 @@ import type { CanvasTexture } from 'three'
 import type { ColorStop, RadialGradientOuterRadius } from '../types.js'
 import type { Props } from '@threlte/core'
 
-export type RadialGradientTextureProps = Props<CanvasTexture> & {
+export type RadialGradientTextureProps = Props<CanvasTexture<OffscreenCanvas>> & {
   /**
    * inner radius of the gradient
    * @default 0

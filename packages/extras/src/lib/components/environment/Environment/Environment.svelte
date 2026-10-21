@@ -11,7 +11,7 @@
 
 <script lang="ts">
   import { T, useCache, useThrelte } from '@threlte/core'
-  import { EquirectangularReflectionMapping, TextureLoader } from 'three'
+  import { EquirectangularReflectionMapping, TextureLoader, type Texture } from 'three'
   import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js'
   import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
   import { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.js'
@@ -64,7 +64,7 @@
     if (url === undefined) return
 
     const suspendedTexture = suspend(
-      cache.remember(() => {
+      cache.remember((): Promise<Texture> => {
         return loader.loadAsync(url)
       }, [url])
     )

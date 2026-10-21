@@ -125,7 +125,7 @@
     />
   {/if}
 
-  {#if haveProperty(lights, 'shadow')}
+  {#if haveProperty<DirectionalLight | PointLight | SpotLight>(lights, 'shadow')}
     <Folder
       expanded={false}
       title="Shadow"

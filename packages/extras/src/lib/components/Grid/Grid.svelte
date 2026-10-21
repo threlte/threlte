@@ -39,6 +39,7 @@
   const gridPlane = new Plane()
   const gridPlaneNormal = new Vector3(0, 1, 0)
   const zeroVector = new Vector3(0, 0, 0)
+  const cameraWorldPosition = new Vector3()
 
   const axisToInt = {
     x: 0,
@@ -178,7 +179,7 @@
       const uFadeOrigin = material.uniforms.fadeOrigin as Uniform<Vector3>
 
       const projectedPoint = gridPlane.projectPoint(
-        camera.current.position,
+        camera.current.getWorldPosition(cameraWorldPosition),
         worldCamProjPosition.value
       )
       if (!fadeOrigin) {

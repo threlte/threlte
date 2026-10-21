@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.4.4
+
+### Patch Changes
+
+- f85bc6d: [@threlte/studio] Fix light shadow type errors against three r183+
+
 ## 0.4.3
 
 ### Patch Changes

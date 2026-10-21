@@ -1,5 +1,49 @@
 # @threlte/extras
 
+## 9.22.3
+
+### Patch Changes
+
+- 6723ed3: Fix `<Gizmo>` skipping its view change animation after returning from a hidden tab
+- 816512c: Fix `<Gizmo>` continuing to orbit the camera after being disabled mid-drag
+- 816512c: Fix `<Gizmo>` leaving camera controls disabled when destroyed mid-interaction
+- 816512c: Fix `<Gizmo>` dispatching `start` twice for a single axis click
+- 6723ed3: Fix `<Gizmo>` dispatching `end` before the final `change` of a view change
+- 6723ed3: Fix `<Gizmo>` leaving camera controls disabled after a click that misses every axis
+- 816512c: Fix `<Gizmo>` leaving camera controls disabled when a pointer interaction is cancelled
+- 94c8c71: Fix imports of `@threlte/extras` with Three.js r172–r178
+
+## 9.22.2
+
+### Patch Changes
+
+- d9b906b: Add WebGPU support to `<CSM>` and give both renderers one reactive prop signature
+- d9b906b: Add WebGPU support to `<BakeShadows>`
+- d9b906b: Add WebGPU support to `<MeshLineMaterial>`
+- d9b906b: Add WebGPU support to `<CubeCamera>`
+
+## 9.22.1
+
+### Patch Changes
+
+- 5e66429: [@threlte/extras] Add WebGPU support to `<Gizmo>` and drop the `three-viewport-gizmo` dependency
+
+## 9.22.0
+
+### Minor Changes
+
+- 7b42101: [@threlte/extras] Add a `@threlte/extras/webgpu` entrypoint with WebGPU-compatible implementations and explicit runtime errors for components awaiting WebGPU support
+
+### Patch Changes
+
+- e705eab: [@threlte/extras] Fix `<MeshDiscardMaterial>` children snippet not receiving `{ ref }`
+- e406193: [@threlte/extras] Fix type errors against three r183+
+- d6a9825: [@threlte/extras] Fix `<SoftShadows>` throwing on scene objects without a material
+- 1dfe40b: [@threlte/extras] Fix `<Grid>` fade using the camera's local instead of world position
+- 6173d5d: [@threlte/extras] Fix initial value capture warnings
+- ea24fdb: [@threlte/extras] Fix interactivity treating every `<BatchedMesh>` instance as one hover target
+- bf75879: [@threlte/extras] Type the scene graph `nodes`/`materials` (and `<GLTF>` props) concretely instead of `any`
+
 ## 9.21.1
 
 ### Patch Changes

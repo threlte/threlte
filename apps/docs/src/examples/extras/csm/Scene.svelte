@@ -1,53 +1,95 @@
 <script lang="ts">
   import { T } from '@threlte/core'
-  import { OrbitControls } from '@threlte/extras'
-  import { DoubleSide, MathUtils } from 'three'
+  import { Float, OrbitControls } from '@threlte/extras'
+  import { MathUtils } from 'three'
+
+  const threlteOrange = '#ff3e00'
+  const cream = '#fff3e0'
+
+  const monoliths = Array.from({ length: 56 }, (_, index) => {
+    const random = MathUtils.seededRandom(index)
+    const depth = -index * 26
+    const height = 14 + Math.sin(index * 0.45) * 10 + random * 18
+
+    return {
+      height,
+      width: 5 + random * 4,
+      depth,
+      lean: (random - 0.5) * 0.12,
+      color: index % 3 === 0 ? threlteOrange : cream
+    }
+  })
+
+  const orbs = Array.from({ length: 6 }, (_, index) => ({
+    position: [-index * 210 - 70, 30 + (index % 3) * 9, (index % 2 === 0 ? 1 : -1) * 12] as [
+      number,
+      number,
+      number
+    ],
+    radius: 7 + (index % 3) * 2
+  }))
 </script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[45, 40, -45]}
-  fov={90}
+  position={[120, 45, 0]}
+  fov={70}
+  near={0.5}
+  far={5000}
 >
   <OrbitControls
-    autoRotate
-    autoRotateSpeed={0.1}
-    target.y={-10}
+    maxPolarAngle={Math.PI / 2.05}
+    target.y={38}
   />
 </T.PerspectiveCamera>
 
-<T.AmbientLight intensity={1} />
+<T.Color
+  args={['#0e0e12']}
+  attach="background"
+/>
+
+<T.AmbientLight intensity={1.2} />
 
 <T.Mesh
   rotation.x={MathUtils.DEG2RAD * -90}
-  castShadow
   receiveShadow
 >
-  <T.PlaneGeometry args={[1000, 1000]} />
-  <T.MeshStandardMaterial color={'#fa992a'} />
+  <T.PlaneGeometry args={[10_000, 10_000]} />
+  <T.MeshStandardMaterial color="#16161a" />
 </T.Mesh>
 
-<T.Mesh>
-  <T.SphereGeometry args={[400]} />
-  <T.MeshBasicMaterial
-    color="#0057fa"
-    side={DoubleSide}
-  />
-</T.Mesh>
+{#each monoliths as monolith}
+  {#each [1, -1] as side}
+    <T.Mesh
+      castShadow
+      receiveShadow
+      position={[monolith.depth, monolith.height / 2, side * 30]}
+      rotation.z={monolith.lean * side}
+    >
+      <T.BoxGeometry args={[monolith.width, monolith.height, monolith.width]} />
+      <T.MeshStandardMaterial
+        color={monolith.color}
+        roughness={0.6}
+      />
+    </T.Mesh>
+  {/each}
+{/each}
 
-{#each { length: 120 } as _, x}
-  {@const distance = Math.abs(Math.sin(x)) * 50 + 10}
-  {@const height = Math.abs((30 - distance) / 2)}
-  {@const posX = distance * Math.cos(MathUtils.DEG2RAD * ((360 / 120) * x))}
-  {@const posY = distance * Math.sin(MathUtils.DEG2RAD * ((360 / 120) * x))}
-  <T.Mesh
-    castShadow
-    receiveShadow
-    position.x={posX}
-    position.y={height / 2}
-    position.z={posY}
+{#each orbs as orb}
+  <Float
+    floatingRange={[-10, 10]}
+    rotationIntensity={0.6}
   >
-    <T.CapsuleGeometry args={[3, height, 12, 32]} />
-    <T.MeshStandardMaterial color={'#45c1ff'} />
-  </T.Mesh>
+    <T.Mesh
+      castShadow
+      position={orb.position}
+    >
+      <T.IcosahedronGeometry args={[orb.radius, 0]} />
+      <T.MeshStandardMaterial
+        color={threlteOrange}
+        flatShading
+        roughness={0.35}
+      />
+    </T.Mesh>
+  </Float>
 {/each}

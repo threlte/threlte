@@ -35,10 +35,7 @@
     </T.Mesh>
     <T.LineSegments>
       <T.EdgesGeometry args={[new BoxGeometry()]} />
-      <T.LineBasicMaterial
-        color="black"
-        linewidth={2}
-      />
+      <T.LineBasicMaterial color="black" />
     </T.LineSegments>
   </T.Group>
 {/each}
