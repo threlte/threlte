@@ -1647,104 +1647,10 @@ type checking.
 
 ---
 
-## WebGPU and TSL
+## TSL
 
 Category: Advanced  
 URL: https://threlte.xyz/previews/pr-1844/docs/learn/advanced/webgpu
-
-## WebGPU
-
-`@threlte/core` ships a `webgpu` export that mirrors the regular library but
-swaps the default renderer for `WebGPURenderer`, awaits `renderer.init()`
-internally, and points `<T>` at `three/webgpu` so node materials (e.g.
-`<T.MeshPhysicalNodeMaterial />`) resolve out of the box.
-
-`useThrelte` from the `webgpu` export is also updated to have `WebGPURenderer` types.
-
-```svelte title="App.svelte"
-<script>
-  import Scene from './Scene.svelte'
-  import { Canvas } from '@threlte/core/webgpu'
-</script>
-
-<Canvas>
-  <Scene />
-</Canvas>
-```
-
-```svelte title="Scene.svelte"
-<script>
-  import { T } from '@threlte/core/webgpu'
-</script>
-
-<T.Mesh>
-  <T.BoxGeometry />
-  <T.MeshPhysicalNodeMaterial />
-</T.Mesh>
-```
-
-<Example path="renderers/WebGPU" />
-
-<small>
-  Adapted from [this Three.js
-  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle), demonstrating
-  WebGPU [render bundles](https://developer.mozilla.org/en-US/docs/Web/API/GPURenderBundle).
-</small>
-
-<Tip type="note">
-  WebGPU is still young and has [limited availability across major
-  browsers](https://caniuse.com/?search=webgpu). Three.js's `WebGPURenderer` will fall back to WebGL
-  when WebGPU is not available.
-</Tip>
-
-### Customizing the renderer
-
-To configure the renderer (e.g. force a specific backend), pass a `createRenderer`
-factory. The `<Canvas>` still awaits `init()` for you.
-
-```svelte title="App.svelte"
-<script>
-  import Scene from './Scene.svelte'
-  import { Canvas } from '@threlte/core/webgpu'
-  import { WebGPURenderer } from 'three/webgpu'
-</script>
-
-<Canvas
-  createRenderer={(canvas) => {
-    return new WebGPURenderer({
-      canvas,
-      antialias: true,
-      forceWebGL: false
-    })
-  }}
->
-  <Scene />
-</Canvas>
-```
-
-### Vite
-
-WebGPU uses top-level async to determine WebGPU compatibility. Vite will often
-throw an error when it detects this.
-
-To circumvent this issue, the following can be added to your Vite config.
-
-```js title=vite.config.js
-optimizeDeps: {
-  esbuildOptions: {
-    target: 'esnext'
-  }
-},
-build: {
-  target: 'esnext'
-}
-```
-
-Alternatively,
-[`vite-plugin-top-level-await`](https://github.com/Menci/vite-plugin-top-level-await)
-can be used, although less success has been reported with this method.
-
-## TSL
 
 A question that comes up often in Three.js development is "How do I extend materials?". External libraries such as
 [three-custom-shader-material](https://www.npmjs.com/package/three-custom-shader-material)
@@ -1752,6 +1658,10 @@ use a find and replace solution to get this job done. Three.js has identified
 that it's not an ideal solution and recommends using the [Three.js Shading
 Language](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language) or
 TSL for short.
+
+TSL is written against node materials, which Threlte reaches through the
+`webgpu` export of `@threlte/core` — see
+[WebGPU](/docs/reference/core/webgpu) for setting that up.
 
 The example below is an adaptation of
 [this](https://threejs.org/examples/?q=tsl#webgpu_tsl_angular_slicing) Three.js
@@ -1761,7 +1671,7 @@ or adapt for your project.
 
 <Example path="shaders/webgpu/slice" />
 
-### Nodes
+## Nodes
 
 The material's
 [nodes](https://github.com/mrdoob/three.js/wiki/Three.js-Shading-Language#nodematerial)
@@ -3673,6 +3583,124 @@ responsive layouts in WebGL.
 The left side is the CSS implementation, the right side is using `@threlte/flex`.
 
 <Example path="flex/examples" />
+
+---
+
+## WebGPU
+
+Package: @threlte/core  
+URL: https://threlte.xyz/previews/pr-1844/docs/reference/core/webgpu
+
+`@threlte/core` ships a `webgpu` export that mirrors the regular library but
+swaps the default renderer for `WebGPURenderer`, awaits `renderer.init()`
+internally, and points `<T>` at `three/webgpu` so node materials (e.g.
+`<T.MeshPhysicalNodeMaterial />`) resolve out of the box.
+
+`useThrelte` from the `webgpu` export is also updated to have `WebGPURenderer` types.
+
+```svelte title="App.svelte"
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core/webgpu'
+</script>
+
+<Canvas>
+  <Scene />
+</Canvas>
+```
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core/webgpu'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshPhysicalNodeMaterial />
+</T.Mesh>
+```
+
+<Example path="renderers/WebGPU" />
+
+<small>
+  Adapted from [this Three.js
+  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle), demonstrating
+  WebGPU [render bundles](https://developer.mozilla.org/en-US/docs/Web/API/GPURenderBundle).
+</small>
+
+<Tip type="note">
+  WebGPU is still young and has [limited availability across major
+  browsers](https://caniuse.com/?search=webgpu). Three.js's `WebGPURenderer` will fall back to WebGL
+  when WebGPU is not available.
+</Tip>
+
+## Customizing the renderer
+
+To configure the renderer (e.g. force a specific backend), pass a `createRenderer`
+factory. The `<Canvas>` still awaits `init()` for you.
+
+```svelte title="App.svelte"
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core/webgpu'
+  import { WebGPURenderer } from 'three/webgpu'
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+## Vite
+
+WebGPU uses top-level async to determine WebGPU compatibility. Vite will often
+throw an error when it detects this.
+
+To circumvent this issue, the following can be added to your Vite config.
+
+```js title=vite.config.js
+optimizeDeps: {
+  esbuildOptions: {
+    target: 'esnext'
+  }
+},
+build: {
+  target: 'esnext'
+}
+```
+
+Alternatively,
+[`vite-plugin-top-level-await`](https://github.com/Menci/vite-plugin-top-level-await)
+can be used, although less success has been reported with this method.
+
+## Extras
+
+`@threlte/extras` ships a matching `webgpu` export. Import from it instead of
+the package root whenever your `<Canvas>` comes from `@threlte/core/webgpu`.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core/webgpu'
+  import { Grid, OrbitControls } from '@threlte/extras/webgpu'
+</script>
+```
+
+Most of the package is renderer-agnostic and works as-is, a few components have
+been rewritten in TSL, and the rest throw until they are migrated. See
+[`@threlte/extras` WebGPU](/docs/reference/extras/webgpu) for the full breakdown.
+
+## TSL
+
+Materials on WebGPU are extended with nodes rather than string shaders. See
+[TSL](/docs/learn/advanced/webgpu) for what that looks like in Threlte.
 
 ---
 
@@ -11424,7 +11452,14 @@ URL: https://threlte.xyz/previews/pr-1844/docs/reference/extras/csm
 
 The `<CSM/>` component offers a streamlined convenience integration of the Cascaded Shadow Maps technique, sourced from the Three.js addon.
 
-<Example path="extras/csm" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/csm" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/csm-webgpu" />
+  </Tab>
+</Tabs>
 
 Cascaded Shadow Maps (CSM) are a technique employed to render shadows with varying levels of
 detail based on their distance from the camera. CSMs utilize multiple shadow maps to produce
@@ -11437,14 +11472,12 @@ shadows over vast terrains, ensuring detailed and performance-optimized shadow r
 ```svelte title="Scene.svelte"
 <script lang="ts">
   import { CSM } from '@threlte/extras'
-  import { Vector3 } from 'three'
 </script>
 
 <CSM
-  enabled
-  args={{
-    lightDirection: new Vector3(1, -1, 1).normalize()
-  }}
+  cascades={4}
+  maxFar={1000}
+  lightDirection={[1, -1, 1]}
 >
   <!-- Your scene goes here -->
 </CSM>
@@ -11452,60 +11485,73 @@ shadows over vast terrains, ensuring detailed and performance-optimized shadow r
 
 For CSM to work, shadow maps must be enabled. Threlte does this by default. **Do not disable shadowmaps** by [`<Canvas shadows={false}>`](/docs/reference/core/canvas#component-signature).
 
-Then, wrap all of the objects that you wish to use CSM on (typically your entire scene) with the `<CSM>` component.
+Every prop is reactive. Changing `cascades` recreates the underlying instance, as is changing `fade`
+on WebGPU, since both are baked into the generated shader; the rest are applied in place.
 
-Internally, the `<CSM>` component modifies the shader code of all materials inside the component.
-Currently, support is limited only to `THREE.MeshStandardMaterial` and `THREE.MeshPhongMaterial`.
+<Tip type="tip">
+  With `fade` enabled, shadows subtly diminish close to `maxFar` distance, presenting a more
+  aesthetic transition compared to an abrupt cut-off. It may be more visually pleasing, but it's
+  important to consider potential performance implications. While typically minimal, the
+  computational complexity can escalate based on the number of cascades and lights present in the
+  scene.
+</Tip>
+
+## Renderer differences
+
+Three.js ships a separate CSM implementation per renderer — `CSM` for WebGL and `CSMShadowNode` for
+WebGPU — and `@threlte/extras` presents both through the signature above, so switching renderers
+does not mean rewriting your markup. One difference is worth knowing:
+
+**WebGL** patches the shader code of every material inside the component, and support is limited to
+`THREE.MeshStandardMaterial` and `THREE.MeshPhongMaterial`. **WebGPU** drives a single
+`THREE.DirectionalLight` through a shadow node instead, so every material that receives shadows
+works.
+
+Wrapping your scene in `<CSM>` is only required on WebGL, where the component collects the
+materials to patch. The `children` snippet exists on both so the same markup works either way.
 
 <Tip type="warning">Setting `castShadow` property on any lights in a scene with `<CSM>` enabled leads to crashes.</Tip>
 
-## CSM Parameters
+## Custom splits
 
-The `<CSM>` component exposes an optional `args` prop which is used to instantiate the class `CSM`. These arguments are not reactive and are only updated when CSM is enabled.
-
-### Parameters explained
-
-| Name                 | Type                                                                                   | Description                                                                                                                                                                                                                                                                                                                                                                                                                                   |
-| -------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| camera               | `THREE.Camera`                                                                         | Camera which is currently used for rendering, defaults to the camera set via `makeDefault`.                                                                                                                                                                                                                                                                                                                                                   |
-| parent               | `THREE.Object3D`                                                                       | `THREE.Object3D` where lights will be stored.                                                                                                                                                                                                                                                                                                                                                                                                 |
-| cascades             | number                                                                                 | Number of shadow cascades.                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| maxFar               | number                                                                                 | Frustum far plane distance (i.e. shadows are not visible farther this distance from camera). May be smaller than `camera.far` value.                                                                                                                                                                                                                                                                                                          |
-| mode                 | `"uniform" \| "logarithmic" \| "practical" \| "custom"`                                | Defines a split scheme (~ how the large frustum is splitted into smaller ones). Can be `'uniform'`(linear), `'logarithmic'`, `'practical'` or `'custom'`. For most cases `'practical'` may be the best choice. Equations used for each scheme can be found in [GPU Gems 3. Chapter 10.](https://developer.nvidia.com/gpugems/GPUGems3/gpugems3_ch10.html) If mode is set to `'custom'`, you'll need to define your own `customSplitsCallback` |
-| shadowMapSize        | number                                                                                 | Resolution of shadow maps (one per cascade).                                                                                                                                                                                                                                                                                                                                                                                                  |
-| shadowBias           | number                                                                                 | Serves the same purpose as `THREE.LightShadow.bias`, but most likely you will need to use much smaller values.                                                                                                                                                                                                                                                                                                                                |
-| lightDirection       | `THREE.Vector3`                                                                        | Normalized `THREE.Vector3`. Should be set by the prop `lightDirection`                                                                                                                                                                                                                                                                                                                                                                        |
-| lightIntensity       | number                                                                                 | Same as `THREE.DirectionalLight.intensity`. Should be set by the prop `lightIntensity`                                                                                                                                                                                                                                                                                                                                                        |
-| lightNear            | number                                                                                 | Shadow camera frustum near plane.                                                                                                                                                                                                                                                                                                                                                                                                             |
-| lightFar             | number                                                                                 | Shadow camera frustum far plane.                                                                                                                                                                                                                                                                                                                                                                                                              |
-| lightMargin          | number                                                                                 | Defines how far the shadow camera is moved along the z-axis in cascade frustum space. The larger the value is, the more space `LightShadow` will be able to cover. Should be set to a higher values for larger scenes.                                                                                                                                                                                                                        |
-| customSplitsCallback | `(cascades: number, cameraNear: number, cameraFar: number, breaks: number[]) => void;` | A callback to compute custom cascade splits when `mode` is set to `'custom'`. The callback should accept three number parameters: `cascadeCount`, `nearDistance`, `farDistance` and return an array of split distances ranging from 0 to 1, where 0 is equal to `nearDistance` and 1 is equal to `farDistance`.                                                                                                                               |
-
-For implementation details, refer to [the Three.js GitHub repository](https://github.com/mrdoob/three.js/blob/dev/examples/jsm/csm/CSM.js).
-
-## Custom configuration
-
-The `<CSM>` component offers a configuration callback, which is called when CSM is activated.
-This callback facilitates advanced configurations, such as enabling the fade feature.
+Pass a function as `mode` to compute the cascade splits yourself. It receives the cascade count and
+the near and far plane of the camera, and returns one split per cascade as a fraction of the frustum
+depth, the last of which should be `1`:
 
 ```svelte title="Scene.svelte"
 <CSM
-  configure={(csm) => {
-    // advanced CSM configuration can be handle here.
-    csm.fade = true
-  }}
+  cascades={3}
+  mode={() => [0.05, 0.3, 1]}
 >
   <!-- Your scene goes here -->
 </CSM>
 ```
 
-<Tip type="tip">
-  With fade enabled, shadows subtly diminish close to `maxFar` distance, presenting a more aesthetic
-  transition compared to an abrupt cut-off. It may be more visually pleasing, but it's important to
-  consider potential performance implications. While typically minimal, the computational complexity
-  can escalate based on the number of cascades and lights present in the scene. Fade is disabled by
-  default.
-</Tip>
+## Visualizing the cascades
+
+Bind `csm` to get at the underlying Three.js instance, for instance to drive a `CSMHelper`:
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T, useTask } from '@threlte/core'
+  import { CSM } from '@threlte/extras'
+  import type { CSM as CSMRef } from 'three/examples/jsm/csm/CSM.js'
+  import { CSMHelper } from 'three/examples/jsm/csm/CSMHelper.js'
+
+  let csm = $state.raw<CSMRef>()
+  const helper = $derived(csm ? new CSMHelper(csm) : undefined)
+
+  useTask(() => helper?.update(), { autoInvalidate: false })
+</script>
+
+<CSM bind:csm>
+  <!-- Your scene goes here -->
+</CSM>
+
+{#if helper}
+  <T is={helper} />
+{/if}
+```
 
 ## Providing a fallback
 
@@ -12236,9 +12282,14 @@ URL: https://threlte.xyz/previews/pr-1844/docs/reference/extras/gizmo
 
 A gizmo for snap-to camera controls.
 
-Uses the [Three Viewport Gizmo library](https://fennec-hub.github.io/three-viewport-gizmo/).
-
-<Example path="extras/gizmo" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/gizmo" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/gizmo-webgpu" />
+  </Tab>
+</Tabs>
 
 Three's `OrbitControls` or yomotsu's [`CameraControls`](https://github.com/yomotsu/camera-controls) can be provided as a `controls` prop.
 
@@ -12251,9 +12302,45 @@ Alternatively, the `<Gizmo>` can be placed as a child of a controls component.
 </OrbitControls>
 ```
 
-In addition to the props listed below, `<Gizmo>` can accept [any of the options](https://fennec-hub.github.io/three-viewport-gizmo/api.html#gizmooptions) from the underlying Three Viewport Gizmo instance as a prop.
+### Configuring an axis
 
-<Tip type="warning">These props cause the gizmo to rebuild itself, so update them sparingly.</Tip>
+Each of `x`, `y`, `z`, `nx`, `ny` and `nz` takes a `GizmoAxisOptions` object:
+
+```ts
+type GizmoAxisOptions = {
+  enabled?: boolean
+  label?: string
+  color?: ColorRepresentation
+  labelColor?: ColorRepresentation
+  opacity?: number
+  scale?: number
+  line?: boolean
+  border?: {
+    size: number
+    color: ColorRepresentation
+  }
+  hover?: {
+    color?: ColorRepresentation
+    labelColor?: ColorRepresentation
+    opacity?: number
+    scale?: number
+    border?: {
+      size: number
+      color: ColorRepresentation
+    }
+  }
+}
+```
+
+The cube type accepts `right`, `top`, `front`, `left`, `bottom` and `back` as aliases for `x`, `y`, `z`, `nx`, `ny` and `nz` respectively, which reads more naturally when labelling faces.
+
+```svelte
+<Gizmo
+  type="cube"
+  right={{ label: 'R', color: '#ff3653' }}
+  top={{ label: 'U', color: '#8adb00' }}
+/>
+```
 
 ---
 
@@ -12363,7 +12450,14 @@ URL: https://threlte.xyz/previews/pr-1844/docs/reference/extras/grid
 
 A robust grid implementation with multiple tweakable parameters.
 
-<Example path="extras/grid" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/grid" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/grid-webgpu" />
+  </Tab>
+</Tabs>
 
 ## Usage
 
@@ -12487,7 +12581,14 @@ Setting `occlude` to `"blending"` will allow objects to partially occlude the
 	automatically.
 </Tip>
 
-<Example path="extras/html/phone" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/html/phone" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/html/phone-webgpu" />
+  </Tab>
+</Tabs>
 
 ### Visibility change event
 
@@ -14001,7 +14102,14 @@ URL: https://threlte.xyz/previews/pr-1844/docs/reference/extras/mesh-discard-mat
 
 `<MeshDiscardMaterial>` is a material that renders nothing. It does so by discarding everything in the fragment shader. The difference between `<T.Mesh visible={false} />` and `<MeshDiscardMaterial>` is that shadows and children are still visible when using `<MeshDiscardMaterial>`.
 
-<Example path="extras/mesh-discard-material" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/mesh-discard-material" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/mesh-discard-material-webgpu" />
+  </Tab>
+</Tabs>
 
 In the example above, the visible mesh does not use `<MeshDiscardMaterial>` nor sets `visible={false}`. The center mesh sets `visible={false}`. Notice how its shadow is missing. The final mesh uses `<MeshDiscardMaterial>` and its shadow is visible even though the mesh itself isn't.
 
@@ -14079,7 +14187,14 @@ URL: https://threlte.xyz/previews/pr-1844/docs/reference/extras/mesh-line-materi
 
 Used in combination with [`<MeshLineGeometry>`](/docs/reference/extras/meshline-geometry) to create a line formed of a strip of billboarded triangles, based on <a href="https://github.com/spite/THREE.MeshLine" target="_blank">THREE.MeshLine</a>.
 
-<Example path="extras/meshline-material/animated" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/meshline-material/animated" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/meshline-material-webgpu/animated" />
+  </Tab>
+</Tabs>
 
 ## Usage
 
@@ -14125,7 +14240,14 @@ You can use a combination of `dashArray`, `dashRatio` and `dashOffset` to create
 You can pass a texture to the `alphaMap` property to use as an alpha mask along the length of the line, where black is invisible and white is visible.
 In the example below we load a paint brush texture with the `useTexture` hook.
 
-<Example path="extras/meshline-material/alpha-map" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/meshline-material/alpha-map" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/meshline-material-webgpu/alpha-map" />
+  </Tab>
+</Tabs>
 
 ---
 
@@ -14832,6 +14954,39 @@ You can override the alpha map or disable it:
   limitation](https://github.com/mrdoob/three.js/issues/10600). It will be deprecated when Three.js
   adds native support for shadows from transparent objects.
 </Tip>
+
+### WebGPU
+
+There is no WebGPU implementation it isn't needed. [Node
+materials](/docs/learn/advanced/webgpu#nodes) expose `castShadowNode`, which does the same job in a single
+prop and gives a true fractional shadow rather than a dither pattern:
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T, useThrelte } from '@threlte/core/webgpu'
+  import { uniform, vec4 } from 'three/tsl'
+
+  const { renderer } = useThrelte()
+
+  // Set this before the first render, because compiled shadow shaders are never invalidated.
+  renderer.shadowMap.transmitted = true
+
+  const shadowOpacity = uniform(0.5)
+</script>
+
+<T.Mesh castShadow>
+  <T.TorusKnotGeometry args={[0.6, 0.2, 128, 32]} />
+  <T.MeshStandardNodeMaterial
+    transparent
+    opacity={0.5}
+    castShadowNode={vec4(0, 0, 0, shadowOpacity)}
+  />
+</T.Mesh>
+```
+
+`castShadowNode` is the color the shadow is drawn with, so `vec4(1, 0, 0, shadowOpacity)` casts a
+red one. It's independent of the material's own `opacity` — nothing is inherited, so a fully opaque
+mesh can cast a half-strength shadow.
 
 <Example path="extras/shadow-alpha" />
 
@@ -17721,6 +17876,27 @@ Simply import the component and add it as a child to a mesh
 </T.Mesh>
 ```
 
+## WebGPU
+
+There is no WebGPU implementation because it isn't needed. [Node
+materials](/docs/learn/advanced/webgpu#nodes) take the uvs as a `colorNode`:
+
+```svelte title="Scene.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core/webgpu'
+  import { uv, vec3 } from 'three/tsl'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshBasicNodeMaterial colorNode={vec3(uv(), 0)} />
+</T.Mesh>
+```
+
+`<UvMaterial>` is a raw `ShaderMaterial`, which skips tone mapping on WebGL. WebGPU tone maps the
+whole frame in one pass once every material has drawn, so these uvs are tone mapped and the gradient
+reads a little differently between the two renderers.
+
 ## Caveats
 
 The mesh's geometry must have a "uv" attribute in order for `UvMaterial` to work properly. If
@@ -17919,6 +18095,86 @@ You can also mix `<VirtualEnvironment>` with `<Environment>` or
 ```
 
 <Example path="extras/virtual-environment/mix" />
+
+---
+
+## WebGPU
+
+Package: @threlte/extras  
+URL: https://threlte.xyz/previews/pr-1844/docs/reference/extras/webgpu
+
+`@threlte/extras` ships a `webgpu` export that pairs with
+[`@threlte/core/webgpu`](/docs/reference/core/webgpu). Import from it instead of
+the package root whenever your `<Canvas>` comes from `@threlte/core/webgpu`.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core/webgpu'
+  import { Grid, OrbitControls } from '@threlte/extras/webgpu'
+</script>
+
+<T.PerspectiveCamera
+  makeDefault
+  position={[10, 10, 10]}
+>
+  <OrbitControls />
+</T.PerspectiveCamera>
+
+<Grid />
+```
+
+Mixing the two entrypoints is what to avoid. A component imported from
+`@threlte/extras` builds WebGL materials and holds classes from `three`, which
+are distinct from the ones in `three/webgpu` even when they share a name.
+
+## What is available
+
+Most of the package never touches the renderer and is re-exported unchanged —
+every hook, all transitions, suspense, portals, audio, interactivity, layers,
+and abstractions such as `<Float>`, `<Align>`, `<GLTF>`, `<InstancedMesh>`,
+`<SVG>` and `<View>`. These behave identically to their `@threlte/extras`
+counterparts, and you can read their regular reference pages.
+
+Components written against WebGL fall into three groups.
+
+### Supported
+
+These match the behavior of their WebGL counterparts:
+
+- [`<BakeShadows>`](/docs/reference/extras/bake-shadows)
+- [`<CSM>`](/docs/reference/extras/csm)
+- [`<CubeCamera>`](/docs/reference/extras/cube-camera)
+- [`<Gizmo>`](/docs/reference/extras/gizmo)
+- [`<Grid>`](/docs/reference/extras/grid)
+- [`<HTML>`](/docs/reference/extras/html)
+- [`<MeshDiscardMaterial>`](/docs/reference/extras/mesh-discard-material)
+- [`<MeshLineMaterial>`](/docs/reference/extras/mesh-line-material)
+
+### Native on WebGPU
+
+These exist to work around a WebGL limitation that WebGPU doesn't have. Their reference pages carry
+a WebGPU section showing the node material property that replaces them, so there is nothing to
+import:
+
+- [`<ShadowAlpha>`](/docs/reference/extras/shadow-alpha#webgpu)
+- [`<UvMaterial>`](/docs/reference/extras/uv-material#webgpu)
+
+### Awaiting a WebGPU implementation
+
+|                            |                   |                     |
+| -------------------------- | ----------------- | ------------------- |
+| `<AnimatedSpriteMaterial>` | `<AsciiRenderer>` | `<ContactShadows>`  |
+| `<FakeGlowMaterial>`       | `<ImageMaterial>` | `<InstancedSprite>` |
+| `<MeshRefractionMaterial>` | `<Outlines>`      | `<PerfMonitor>`     |
+| `<PointsMaterial>`         | `<Sky>`           | `<SoftShadows>`     |
+| `<Sparkles>`               | `<Stars>`         | `<Text>`            |
+| `<VirtualEnvironment>`     | `<Wireframe>`     | `<Wobble>`          |
+
+<Tip type="note">
+  Migration to TSL is ongoing and each component is ported in place, so a future release can move
+  one of these into the list above without any change on your side. If one is blocking you, [open an
+  issue](https://github.com/threlte/threlte/issues) so it can be prioritized.
+</Tip>
 
 ---
 
