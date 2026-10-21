@@ -1,5 +1,18 @@
 # @threlte/extras
 
+## 9.22.3
+
+### Patch Changes
+
+- 6723ed3: Fix `<Gizmo>` skipping its view change animation after returning from a hidden tab
+- 816512c: Fix `<Gizmo>` continuing to orbit the camera after being disabled mid-drag
+- 816512c: Fix `<Gizmo>` leaving camera controls disabled when destroyed mid-interaction
+- 816512c: Fix `<Gizmo>` dispatching `start` twice for a single axis click
+- 6723ed3: Fix `<Gizmo>` dispatching `end` before the final `change` of a view change
+- 6723ed3: Fix `<Gizmo>` leaving camera controls disabled after a click that misses every axis
+- 816512c: Fix `<Gizmo>` leaving camera controls disabled when a pointer interaction is cancelled
+- 94c8c71: Fix imports of `@threlte/extras` with Three.js r172–r178
+
 ## 9.22.2
 
 ### Patch Changes
