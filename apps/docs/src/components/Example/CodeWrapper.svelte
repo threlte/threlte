@@ -7,30 +7,21 @@
 
   interface Props {
     filePaths: string[]
-    exampleBasePath: string
     hidePreview: boolean
     showFile: string | null
     expanded?: boolean
     children: Snippet
   }
 
-  let {
-    filePaths,
-    hidePreview,
-    showFile,
-    exampleBasePath,
-    children,
-    expanded = $bindable(false)
-  }: Props = $props()
+  let { filePaths, hidePreview, showFile, children, expanded = $bindable(false) }: Props = $props()
 
   let childrenElements = $state<HTMLElement[]>([])
 
   const initialFilePath = untrack(() =>
     showFile ? (filePaths.includes(showFile) ? showFile : 'App.svelte') : 'App.svelte'
   )
-  const initialFileName = initialFilePath.split('/').pop() || 'App.svelte'
 
-  let context = $state({ currentFilePath: initialFileName })
+  let context = $state({ currentFilePath: initialFilePath })
   setCodeExampleContext(context)
 
   const setChildren = (node: HTMLDivElement) => {
@@ -44,14 +35,13 @@
   }
 
   $effect(() => {
-    const fullPath = `../../examples/${exampleBasePath}/${context.currentFilePath}`
     // hide all children except the one that was selected
     childrenElements.forEach((child) => {
       const elPath = child.dataset.path
       if (!elPath) return
 
       // path is relative to the root of the example directory
-      if (elPath === fullPath) {
+      if (elPath === context.currentFilePath) {
         child.style.display = 'block'
       } else {
         child.style.display = 'none'

@@ -8,11 +8,28 @@
 
   let { files }: Props = $props()
 
+  /**
+   * Resolves `..` segments so that files from a `shared` directory
+   * (keyed e.g. `../shared/Component.svelte`) land at `src/shared/...`,
+   * where the relative imports in the example resolve to.
+   */
+  const normalize = (path: string) => {
+    const segments: string[] = []
+    for (const segment of path.split('/')) {
+      if (segment === '..') {
+        segments.pop()
+      } else if (segment !== '.') {
+        segments.push(segment)
+      }
+    }
+    return segments.join('/')
+  }
+
   const projectFiles = $derived.by(() => {
     const results: Record<string, string> = {}
 
     for (const path in files) {
-      const newPath = `src/example/${path}`
+      const newPath = normalize(`src/example/${path}`)
       results[newPath] = files[path] as string
     }
 
