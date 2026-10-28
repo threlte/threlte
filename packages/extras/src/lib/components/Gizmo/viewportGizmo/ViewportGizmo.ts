@@ -428,12 +428,19 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     }
 
     const { renderer } = this
-    const { autoClear } = renderer
+    const { autoClear, autoClearColor, autoClearDepth, autoClearStencil } = renderer
 
-    renderer.autoClear = false
-    renderer.clear()
+    renderer.autoClear = true
+    renderer.autoClearColor = true
+    renderer.autoClearDepth = true
+    renderer.autoClearStencil = true
+
     renderer.render(this.#scene, this.#camera)
+
     renderer.autoClear = autoClear
+    renderer.autoClearColor = autoClearColor
+    renderer.autoClearDepth = autoClearDepth
+    renderer.autoClearStencil = autoClearStencil
 
     return this
   }

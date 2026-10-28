@@ -103,7 +103,7 @@
     return () => gizmo.dispose()
   })
 
-  const useCanvasTarget = !('isWebGLBackend' in renderer.backend) && renderer.alpha
+  const overlaySupported = !('isWebGLBackend' in renderer.backend) && renderer.alpha
 
   let gizmoTarget: CanvasTarget | undefined
   let targetWidth = 0
@@ -111,14 +111,12 @@
   let targetResized = false
 
   $effect(() => {
-    if (!useCanvasTarget) return
+    if (!overlaySupported) return
 
     const overlay = document.createElement('canvas')
 
     Object.assign(overlay.style, {
-      display: 'block',
-      width: '100%',
-      height: '100%',
+      position: 'absolute',
       pointerEvents: 'none'
     })
 
@@ -127,19 +125,33 @@
     const target = new CanvasTarget(overlay)
     gizmoTarget = target
 
-    const observer = new ResizeObserver(([entry]) => {
-      if (!entry) return
+    const syncOverlay = () => {
+      const element = gizmo.domElement
+      const { width, height } = element.getBoundingClientRect()
 
-      targetWidth = entry.contentRect.width
-      targetHeight = entry.contentRect.height
+      targetWidth = width
+      targetHeight = height
       targetResized = true
-      invalidate()
-    })
 
-    observer.observe(gizmo.domElement)
+      Object.assign(overlay.style, {
+        top: `${-element.clientTop}px`,
+        left: `${-element.clientLeft}px`,
+        width: `${width}px`,
+        height: `${height}px`
+      })
+
+      invalidate()
+    }
+
+    const borderBoxObserver = new ResizeObserver(syncOverlay)
+    const contentBoxObserver = new ResizeObserver(syncOverlay)
+
+    borderBoxObserver.observe(gizmo.domElement, { box: 'border-box' })
+    contentBoxObserver.observe(gizmo.domElement)
 
     return () => {
-      observer.disconnect()
+      borderBoxObserver.disconnect()
+      contentBoxObserver.disconnect()
       gizmoTarget = undefined
       target.dispose()
       overlay.remove()
