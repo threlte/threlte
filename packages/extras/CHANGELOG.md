@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.22.4
+
+### Patch Changes
+
+- 23d2626: Fix `<Gizmo>` recompiling the output pipeline every frame and clearing tone mapping behind the widget under `WebGPURenderer`
+- 23d2626: Fix `<View>` rendering vertically mirrored under `WebGPURenderer`
+
 ## 9.22.3
 
 ### Patch Changes
