@@ -36,7 +36,14 @@ per normal.
 The following example is equivalent to three.js's [multiple elements
 example](https://threejs.org/examples/#webgl_multiple_elements).
 
-<Example path="extras/view/multiple-scenes" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/view/multiple-scenes" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/view/multiple-scenes-webgpu" />
+  </Tab>
+</Tabs>
 
 Under the hood, this component uses the renderer's [scissor-cut
 method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setScissor).

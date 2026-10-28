@@ -60,10 +60,14 @@
     () => {
       if (isOffscreen) return
 
-      const { left: trackLeft, bottom: trackBottom, width, height } = dom.getBoundingClientRect()
-      const { bottom: canvasBottom, left: canvasLeft } = canvas.getBoundingClientRect()
-      const bottom = canvasBottom - trackBottom
-      const left = trackLeft - canvasLeft
+      const track = dom.getBoundingClientRect()
+      const bounds = canvas.getBoundingClientRect()
+      const left = track.left - bounds.left
+      const y =
+        'isWebGPURenderer' in renderer && renderer.isWebGPURenderer
+          ? track.top - bounds.top
+          : bounds.bottom - track.bottom
+      const { width, height } = track
 
       // save original state
       renderer.getScissor(originalScissor)
@@ -71,8 +75,8 @@
       originalScissorTest = renderer.getScissorTest()
 
       // apply scissor
-      renderer.setViewport(left, bottom, width, height)
-      renderer.setScissor(left, bottom, width, height)
+      renderer.setViewport(left, y, width, height)
+      renderer.setScissor(left, y, width, height)
       renderer.setScissorTest(true)
 
       // render

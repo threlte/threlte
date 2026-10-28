@@ -38,7 +38,7 @@ export { meshBounds } from '../utilities/meshBounds.js'
 // abstractions migrated to TSL
 export { default as CSM } from '../components/CSM/webgpu/CSM.svelte'
 export { default as CubeCamera } from '../components/CubeCamera/webgpu/CubeCamera.svelte'
-export { default as Gizmo } from '../components/Gizmo/Gizmo.svelte'
+export { default as Gizmo } from '../components/Gizmo/webgpu/Gizmo.svelte'
 export { default as Grid } from '../components/Grid/webgpu/Grid.svelte'
 export { default as MeshLineMaterial } from '../components/MeshLine/webgpu/MeshLineMaterial.svelte'
 export { default as HTML } from '../components/HTML/webgpu/HTML.svelte'
