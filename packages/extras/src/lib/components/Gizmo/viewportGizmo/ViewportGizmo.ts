@@ -414,6 +414,30 @@ export class ViewportGizmo extends Object3D<ViewportGizmoEventMap> {
     return this
   }
 
+  /**
+   * Renders the gizmo across the whole of the renderer's current canvas target,
+   * clearing it first. Intended for a `WebGPURenderer` drawing the gizmo into a
+   * dedicated `CanvasTarget` that overlays the widget.
+   *
+   * @param delta Seconds since the last frame, used to advance a view change
+   * animation. Measured from `performance.now()` when omitted.
+   */
+  renderToCanvasTarget(delta?: number): this {
+    if (this.animating) {
+      this.#animate(delta ?? this.#measureDelta())
+    }
+
+    const { renderer } = this
+    const { autoClear } = renderer
+
+    renderer.autoClear = false
+    renderer.clear()
+    renderer.render(this.#scene, this.#camera)
+    renderer.autoClear = autoClear
+
+    return this
+  }
+
   /** Recomputes the gizmo's viewport rectangle from its DOM position. */
   domUpdate(): this {
     this.#domRect = this.#domElement.getBoundingClientRect()
