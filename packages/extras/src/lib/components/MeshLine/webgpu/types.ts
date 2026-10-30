@@ -1,4 +1,4 @@
-import type { OmitProps, Props } from '@threlte/core'
+import type { OmitProps, Props } from '@threlte/core/webgpu'
 import type { NodeMaterial } from 'three/webgpu'
 import type { MeshLineMaterialOptions } from '../types.js'
 

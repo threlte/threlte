@@ -40,6 +40,7 @@ export interface TransformControlsProps
   cameraControls?: { enabled: boolean }
 
   object?: Object3D
+  /** @deprecated Use `bind:ref` instead. */
   group?: Group
   controls?: TransformControls
 }

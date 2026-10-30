@@ -54,7 +54,7 @@ export interface InstancedSpriteOptions {
    * Number of instances
    * @default 1000
    */
-  count: number
+  count?: number
 
   /**
    * Base material used to construct the sprite material.

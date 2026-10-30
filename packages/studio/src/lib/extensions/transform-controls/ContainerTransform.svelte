@@ -174,5 +174,5 @@
   }}
   {mode}
   bind:controls
-  bind:group={group.ref}
+  bind:ref={group.ref}
 />
