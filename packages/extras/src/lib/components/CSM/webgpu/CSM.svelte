@@ -4,15 +4,7 @@
   import { CSMShadowNode } from 'three/examples/jsm/csm/CSMShadowNode.js'
   import { DirectionalLight } from 'three/webgpu'
   import { cascadeShadowBiases } from '../cascadeShadowBiases.js'
-  import type { CSMProps as BaseProps } from '../types.js'
-
-  export interface CSMProps extends BaseProps {
-    /**
-     * The underlying three.js shadow node, bindable for advanced use such as
-     * visualizing the cascades with a `CSMHelper`.
-     */
-    csm?: CSMShadowNode
-  }
+  import type { CSMWebGPUProps } from './types.js'
 
   let {
     enabled = true,
@@ -36,7 +28,7 @@
     csm = $bindable(),
     children,
     fallback
-  }: CSMProps = $props()
+  }: CSMWebGPUProps = $props()
 
   const { camera: defaultCamera, invalidate, size } = useThrelte()
 

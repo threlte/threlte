@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { Group } from 'three'
 
-export type FloatProps = Props<Group> & {
+export interface FloatProps extends Props<Group> {
   /**
    * @default 1
    */

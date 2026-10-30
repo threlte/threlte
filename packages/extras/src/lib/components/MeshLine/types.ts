@@ -1,8 +1,8 @@
-import type { Props } from '@threlte/core'
+import type { OmitProps, Props } from '@threlte/core'
 import type { BufferGeometry, Vector3 } from 'three'
 import type { ShaderMaterial, ColorRepresentation, Texture } from 'three'
 
-export type MeshLineGeometryProps = Props<BufferGeometry> & {
+export interface MeshLineGeometryProps extends Props<BufferGeometry> {
   /**
    * @default []
    */
@@ -19,7 +19,7 @@ export type MeshLineGeometryProps = Props<BufferGeometry> & {
   shapeFunction?: (p: number) => number
 }
 
-export type MeshLineMaterialOptions = {
+export interface MeshLineMaterialOptions {
   /**
    * @default 1
    */
@@ -62,8 +62,7 @@ export type MeshLineMaterialOptions = {
   alphaMap?: Texture | undefined
 }
 
-export type MeshLineMaterialProps = Omit<
-  Props<ShaderMaterial>,
-  'uniforms' | 'fragmentShader' | 'vertexShader'
-> &
-  MeshLineMaterialOptions
+export interface MeshLineMaterialProps
+  extends
+    OmitProps<Props<ShaderMaterial>, 'uniforms' | 'fragmentShader' | 'vertexShader'>,
+    MeshLineMaterialOptions {}

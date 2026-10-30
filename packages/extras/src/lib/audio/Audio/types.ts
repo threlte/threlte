@@ -1,8 +1,8 @@
-import type { Props } from '@threlte/core'
+import type { OmitProps, Props } from '@threlte/core'
 import type { Audio as ThreeAudio } from 'three'
 import type { AudioProps as CommonAudioProps } from '../utils/useAudio.svelte.js'
 
-export type AudioProps = Props<ThreeAudio<GainNode>> &
-  CommonAudioProps & {
-    id?: string
-  }
+export interface AudioProps
+  extends OmitProps<Props<ThreeAudio<GainNode>>, keyof CommonAudioProps>, CommonAudioProps {
+  id?: string
+}

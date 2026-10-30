@@ -2,7 +2,7 @@ import type { Props } from '@threlte/core'
 import { Sky } from 'three/examples/jsm/objects/Sky.js'
 import type { RenderTargetOptions, Vector3, WebGLCubeRenderTarget } from 'three'
 
-export type SkyProps = Props<
+export interface SkyProps extends Props<
   Sky,
   [
     {
@@ -11,7 +11,7 @@ export type SkyProps = Props<
       renderTarget: WebGLCubeRenderTarget | undefined
     }
   ]
-> & {
+> {
   /**
    * The scale of the cuboid skybox along every axis
    * @default 1000

@@ -5,7 +5,7 @@ export { default as Canvas } from './Canvas.svelte'
 
 // components (v6)
 export { T, extend } from './components/T/T.js'
-export type { Props } from './components/T/types.js'
+export type { Props, OmitProps } from './components/T/types.js'
 
 // plugins
 export { injectPlugin } from './plugins/injectPlugin.js'

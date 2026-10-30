@@ -6,7 +6,7 @@ import type { ColorRepresentation, CubeTexture, ShaderMaterial, Texture } from '
 	please run `npm install three-mesh-bhv` before adding this component to your project.
 */
 
-export type MeshRefractionMaterialProps = Props<ShaderMaterial> & {
+export interface MeshRefractionMaterialProps extends Props<ShaderMaterial> {
   envMap?: CubeTexture | Texture
   /**
    * Number of ray-cast bounces, it can be expensive to have too many

@@ -1,7 +1,7 @@
-import type { Props } from '@threlte/core'
+import type { OmitProps, Props } from '@threlte/core'
 import type { Camera, Group, Object3D } from 'three'
 
-export type HTMLProps = Props<Group, [{ render(): void }]> & {
+export interface HTMLProps extends OmitProps<Props<Group, [{ render(): void }]>, 'pointerEvents'> {
   /**
    * @default true
    */

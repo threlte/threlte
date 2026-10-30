@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { ColorRepresentation, Group } from 'three'
 
-export type OutlinesProps = Props<Group> & {
+export interface OutlinesProps extends Props<Group> {
   /**
    * Outline color
    * @default black

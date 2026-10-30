@@ -1,20 +1,19 @@
 import type { Props } from '@threlte/core'
 import type { Group, Scene, CubeCamera } from 'three'
 
+export type CubeCameraChildrenArgs<Camera, RenderTarget> = [
+  {
+    camera: Camera
+    renderTarget: RenderTarget
+    ref: Group
+    restart(): void
+    update(): void
+  }
+]
+
 export interface CubeCameraProps
   extends
-    Props<
-      Group,
-      [
-        {
-          camera: CubeCamera
-          renderTarget: CubeCamera['renderTarget']
-          ref: Group
-          restart(): void
-          update(): void
-        }
-      ]
-    >,
+    Props<Group, CubeCameraChildrenArgs<CubeCamera, CubeCamera['renderTarget']>>,
     CubeCameraOptions {}
 
 export interface CubeCameraOptions {

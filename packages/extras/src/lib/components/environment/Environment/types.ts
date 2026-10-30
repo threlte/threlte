@@ -4,7 +4,9 @@ import type { GroundedSkybox } from 'three/examples/jsm/objects/GroundedSkybox.j
 
 type GroundedSkyboxOptions = Partial<{ height: number; radius: number; resolution: number }>
 
-export type EquirectangularEnvironmentProps = CommonEnvironmentProps<DataTexture | Texture> & {
+export interface EquirectangularEnvironmentProps extends CommonEnvironmentProps<
+  DataTexture | Texture
+> {
   /**
    * Bindable skybox ref if a `ground` options are passed in
    * @default undefined - ground is false by default

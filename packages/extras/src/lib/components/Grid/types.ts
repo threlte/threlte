@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { ColorRepresentation, Mesh, Side, Vector3, Vector3Tuple } from 'three'
 
-export type GridProps = Props<Mesh> & {
+export interface GridBaseProps extends Props<Mesh> {
   /**
    * @default 'xz'
    */
@@ -89,7 +89,10 @@ export type GridProps = Props<Mesh> & {
    * @default false
    */
   depthWrite?: boolean
-} & (
+}
+
+export type GridProps = GridBaseProps &
+  (
     | {
         type?: 'grid'
       }

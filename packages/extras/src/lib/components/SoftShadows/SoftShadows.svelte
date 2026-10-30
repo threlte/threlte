@@ -48,17 +48,9 @@
 <script lang="ts">
   import { isInstanceOf, useThrelte } from '@threlte/core'
   import { BasicShadowMap } from 'three'
+  import type { SoftShadowsProps } from './types.js'
 
   const { renderer, scene } = useThrelte()
-
-  export interface SoftShadowsProps {
-    /** Size of the light source (the larger the softer the light), default: 25 */
-    size?: number
-    /** Depth focus, use it to shift the focal point (where the shadow is the sharpest), default: 0 (the beginning) */
-    focus?: number
-    /** Number of samples (more samples less noise but more expensive), default: 10 */
-    samples?: number
-  }
 
   let { size = 25, focus = 0, samples = 10 }: SoftShadowsProps = $props()
 

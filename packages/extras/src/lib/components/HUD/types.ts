@@ -1,7 +1,7 @@
 import type { Props, Stage } from '@threlte/core'
 import type { Scene, ToneMapping } from 'three'
 
-export type HUDProps = Props<Scene> & {
+export interface HUDProps extends Props<Scene> {
   /**
    * @default true
    */

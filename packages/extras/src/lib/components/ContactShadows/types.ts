@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { Group, ColorRepresentation } from 'three'
 
-export type ContactShadowsProps = Props<Group> & {
+export interface ContactShadowsProps extends Props<Group> {
   /**
    * @default 1
    */

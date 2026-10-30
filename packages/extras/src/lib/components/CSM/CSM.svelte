@@ -1,36 +1,11 @@
 <script lang="ts">
   import { useTask, useThrelte } from '@threlte/core'
   import { untrack } from 'svelte'
-  import type { ColorRepresentation, Material } from 'three'
-  import type { CSMParameters } from 'three/examples/jsm/csm/CSM.js'
+  import type { Material } from 'three'
   import { CSM } from 'three/examples/jsm/csm/CSM.js'
   import { cascadeShadowBiases } from './cascadeShadowBiases.js'
-  import type { CSMProps as BaseProps } from './types.js'
+  import type { CSMProps } from './types.js'
   import { useMaterials } from './useMaterials.svelte.js'
-
-  export interface CSMProps extends BaseProps {
-    /**
-     * The underlying three.js CSM instance, bindable for advanced use such as
-     * visualizing the cascades with a `CSMHelper`.
-     */
-    csm?: CSM
-    /**
-     * @deprecated Set the equivalent props directly, they are reactive.
-     */
-    args?: Partial<CSMParameters>
-    /**
-     * @deprecated Bind to `csm` instead.
-     */
-    configure?: ((csm: CSM) => void) | undefined
-    /**
-     * @deprecated Use `intensity`, which is not divided by `Math.PI`.
-     */
-    lightIntensity?: number | undefined
-    /**
-     * @deprecated Use `color` instead.
-     */
-    lightColor?: ColorRepresentation | undefined
-  }
 
   let {
     enabled = true,

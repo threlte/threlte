@@ -1,14 +1,8 @@
 <script lang="ts">
-  import { T, useThrelte, type Props as ThrelteProps } from '@threlte/core/webgpu'
+  import { T, useThrelte } from '@threlte/core/webgpu'
   import { NodeMaterial } from 'three/webgpu'
-  import type { MeshLineMaterialOptions } from '../types.js'
+  import type { MeshLineMaterialWebGPUProps } from './types.js'
   import { createMeshLineNodes, createMeshLineUniforms } from './meshLineNodes.js'
-
-  type MeshLineMaterialProps = Omit<
-    ThrelteProps<NodeMaterial>,
-    'vertexNode' | 'colorNode' | 'opacityNode'
-  > &
-    MeshLineMaterialOptions
 
   let {
     opacity = 1,
@@ -23,7 +17,7 @@
     ref = $bindable(),
     children,
     ...props
-  }: MeshLineMaterialProps = $props()
+  }: MeshLineMaterialWebGPUProps = $props()
 
   const { invalidate } = useThrelte()
 

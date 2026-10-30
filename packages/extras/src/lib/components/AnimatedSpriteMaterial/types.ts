@@ -28,7 +28,7 @@ export type SpriteJsonHashData = {
   }
 }
 
-export type AnimatedSpriteProps = Props<Material> & {
+export interface AnimatedSpriteProps extends Props<Material> {
   /** The URL of the spritesheet texture image. */
   textureUrl: string
 

@@ -1,22 +1,8 @@
 <script lang="ts">
-  import { T, useTask, useThrelte, type Props } from '@threlte/core/webgpu'
-  import { Group, type CubeCamera, type CubeRenderTarget } from 'three/webgpu'
-  import type { CubeCameraOptions } from '../types.js'
+  import { T, useTask, useThrelte } from '@threlte/core/webgpu'
+  import { Group } from 'three/webgpu'
+  import type { CubeCameraWebGPUProps } from './types.js'
   import { useCubeCamera } from './useCubeCamera.svelte.js'
-
-  type CubeCameraProps = Props<
-    Group,
-    [
-      {
-        camera: CubeCamera
-        renderTarget: CubeRenderTarget
-        ref: Group
-        restart(): void
-        update(): void
-      }
-    ]
-  > &
-    CubeCameraOptions
 
   let {
     background = 'auto',
@@ -30,7 +16,7 @@
     children,
     ref = $bindable(),
     ...props
-  }: CubeCameraProps = $props()
+  }: CubeCameraWebGPUProps = $props()
 
   export const { camera, renderTarget } = useCubeCamera(
     () => near,
