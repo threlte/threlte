@@ -22,6 +22,7 @@
     infiniteGrid = false,
     fadeOrigin,
     side = DoubleSide,
+    depthWrite = false,
     type = 'grid',
     axis = 'x',
     maxRadius = 0,
@@ -204,6 +205,10 @@
     {vertexShader}
     {uniforms}
     transparent
+    {depthWrite}
+    polygonOffset
+    polygonOffsetFactor={1}
+    polygonOffsetUnits={1}
     {side}
   />
   {#if children}
