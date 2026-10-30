@@ -200,7 +200,8 @@ export const createGridNodes = (uniforms: GridUniforms, options: GridNodeOptions
     const sections = gridFor(sectionSize, sectionThickness, sectionDividers)
 
     const falloff = distance(fadeOrigin, worldPosition.xyz).div(fadeDistance).min(1).oneMinus()
-    const fadeFactor = pow(falloff, fadeStrength).mul(0.95)
+    const fade = pow(falloff, fadeStrength)
+    const fadeFactor = fade.mul(0.95)
 
     const color = mix(cellColor, sectionColor, sectionThickness.mul(sections).min(1))
     const lines = cells.add(sections)
@@ -210,7 +211,7 @@ export const createGridNodes = (uniforms: GridUniforms, options: GridNodeOptions
     const overBackground = mix(backgroundColor, color, linesAlpha)
     const backgroundAlpha = max(linesAlpha, backgroundOpacity.mul(fadeFactor))
 
-    const plainAlpha = lines.mul(pow(falloff, fadeStrength))
+    const plainAlpha = lines.mul(fade)
     const softenedAlpha = mix(plainAlpha.mul(0.75), plainAlpha, sections)
 
     const hasBackground = backgroundOpacity.greaterThan(0)
