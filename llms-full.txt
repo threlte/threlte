@@ -12253,6 +12253,12 @@ You have the option to insert your own custom geometry into the `<Grid/>` slot. 
 
 Setting `followCamera` to true applies a transform that moves the grid to the camera's position on the chosen `plane`.
 
+### Depth
+
+The grid doesn't write to the depth buffer by default, so transparent objects rendered after it aren't hidden behind it. Set `depthWrite` to `true` if you want the grid to occlude them.
+
+The grid also loses depth ties with geometry lying on the same plane, so objects resting on it render cleanly along their base edges.
+
 ---
 
 ## <HTML>
