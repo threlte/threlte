@@ -6,6 +6,7 @@ import type {
 import type { OmitProps, Props } from '@threlte/core'
 import type { Writable } from 'svelte/store'
 import {
+  InstancedMesh,
   Material,
   MeshBasicMaterial,
   MeshLambertMaterial,
@@ -26,16 +27,8 @@ type SpriteMesh = InstancedSpriteMesh<
 export interface InstancedSpriteProps
   extends
     OmitProps<
-      Props<SpriteMesh, [{ Instance: typeof SpriteInstance }]>,
-      | keyof InstancedSpriteOptions
-      | 'compute'
-      | 'animationMap'
-      | 'animation'
-      | 'frame'
-      | 'offset'
-      | 'loop'
-      | 'flipX'
-      | 'flipY'
+      Props<InstancedMesh, [{ Instance: typeof SpriteInstance }]>,
+      keyof InstancedSpriteOptions | 'ref' | 'material'
     >,
     InstancedSpriteOptions {
   ref?: SpriteMesh
