@@ -1,5 +1,12 @@
 # @threlte/extras
 
+## 9.23.1
+
+### Patch Changes
+
+- f451d41: Declare component props as interfaces, restoring typed props on components that used `Omit<Props<…>>` and on the `webgpu` entrypoint
+- 748196a: Fix `bind:ref` on `<TransformControls>`
+
 ## 9.23.0
 
 ### Minor Changes
