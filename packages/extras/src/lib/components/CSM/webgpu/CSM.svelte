@@ -4,7 +4,7 @@
   import { CSMShadowNode } from 'three/examples/jsm/csm/CSMShadowNode.js'
   import { DirectionalLight } from 'three/webgpu'
   import { cascadeShadowBiases } from '../cascadeShadowBiases.js'
-  import type { CSMWebGPUProps } from '../types.js'
+  import type { CSMWebGPUProps } from './types.js'
 
   let {
     enabled = true,

@@ -218,6 +218,7 @@ export type TProps<Type> = {
  *
  * `Omit` for `Props<Type>`. The built-in `Omit` drops every typed prop, because
  * the arbitrary-props index signature collapses `keyof Props<Type>` to `string`.
+ * The index signature is kept, so omitted keys are untyped rather than rejected.
  *
  * @example OmitProps<Props<ShaderMaterial>, 'vertexShader' | 'fragmentShader'>
  */

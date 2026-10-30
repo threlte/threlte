@@ -1,7 +1,6 @@
 import type { OmitProps, Props } from '@threlte/core'
 import type { BufferGeometry, Vector3 } from 'three'
 import type { ShaderMaterial, ColorRepresentation, Texture } from 'three'
-import type { NodeMaterial } from 'three/webgpu'
 
 export interface MeshLineGeometryProps extends Props<BufferGeometry> {
   /**
@@ -66,9 +65,4 @@ export interface MeshLineMaterialOptions {
 export interface MeshLineMaterialProps
   extends
     OmitProps<Props<ShaderMaterial>, 'uniforms' | 'fragmentShader' | 'vertexShader'>,
-    MeshLineMaterialOptions {}
-
-export interface MeshLineMaterialWebGPUProps
-  extends
-    OmitProps<Props<NodeMaterial>, 'vertexNode' | 'colorNode' | 'opacityNode'>,
     MeshLineMaterialOptions {}

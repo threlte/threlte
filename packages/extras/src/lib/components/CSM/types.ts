@@ -1,7 +1,6 @@
 import type { Snippet } from 'svelte'
 import type { Camera, ColorRepresentation, Vector3Tuple } from 'three'
 import type { CSM, CSMParameters } from 'three/examples/jsm/csm/CSM.js'
-import type { CSMShadowNode } from 'three/examples/jsm/csm/CSMShadowNode.js'
 
 /**
  * Props shared by the WebGL and WebGPU implementations of `<CSM>`. Three.js
@@ -123,12 +122,4 @@ export interface CSMProps extends CSMBaseProps {
    * @deprecated Use `color` instead.
    */
   lightColor?: ColorRepresentation | undefined
-}
-
-export interface CSMWebGPUProps extends CSMBaseProps {
-  /**
-   * The underlying three.js shadow node, bindable for advanced use such as
-   * visualizing the cascades with a `CSMHelper`.
-   */
-  csm?: CSMShadowNode
 }

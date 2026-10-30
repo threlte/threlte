@@ -16,6 +16,7 @@
     object,
     controls = $bindable(),
     group = $bindable(),
+    ref = $bindable(),
     children,
     ...props
   }: TransformControlsProps = $props()
@@ -85,6 +86,7 @@
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const transformControls = new TransformControls(camera.current, dom)
   const attachGroup = new Group()
+  ref = attachGroup
 
   $effect(() => {
     transformControls.camera = $camera

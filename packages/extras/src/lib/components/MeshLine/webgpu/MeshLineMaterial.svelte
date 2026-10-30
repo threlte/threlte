@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core/webgpu'
   import { NodeMaterial } from 'three/webgpu'
-  import type { MeshLineMaterialWebGPUProps } from '../types.js'
+  import type { MeshLineMaterialWebGPUProps } from './types.js'
   import { createMeshLineNodes, createMeshLineUniforms } from './meshLineNodes.js'
 
   let {

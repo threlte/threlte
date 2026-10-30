@@ -27,7 +27,15 @@ export interface InstancedSpriteProps
   extends
     OmitProps<
       Props<SpriteMesh, [{ Instance: typeof SpriteInstance }]>,
-      keyof InstancedSpriteOptions
+      | keyof InstancedSpriteOptions
+      | 'compute'
+      | 'animationMap'
+      | 'animation'
+      | 'frame'
+      | 'offset'
+      | 'loop'
+      | 'flipX'
+      | 'flipY'
     >,
     InstancedSpriteOptions {
   ref?: SpriteMesh

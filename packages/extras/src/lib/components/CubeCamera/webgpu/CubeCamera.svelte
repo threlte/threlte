@@ -1,7 +1,7 @@
 <script lang="ts">
   import { T, useTask, useThrelte } from '@threlte/core/webgpu'
   import { Group } from 'three/webgpu'
-  import type { CubeCameraWebGPUProps } from '../types.js'
+  import type { CubeCameraWebGPUProps } from './types.js'
   import { useCubeCamera } from './useCubeCamera.svelte.js'
 
   let {

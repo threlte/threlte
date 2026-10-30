@@ -14,7 +14,7 @@
 <script lang="ts">
   import { T } from '@threlte/core/webgpu'
   import { NodeMaterial } from 'three/webgpu'
-  import type { MeshDiscardMaterialWebGPUProps } from '../types.js'
+  import type { MeshDiscardMaterialWebGPUProps } from './types.js'
 
   let { children, ref = $bindable(), ...props }: MeshDiscardMaterialWebGPUProps = $props()
 

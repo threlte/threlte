@@ -1,40 +1,19 @@
 import type { Props } from '@threlte/core'
 import type { Group, Scene, CubeCamera } from 'three'
-import type {
-  CubeCamera as WebGPUCubeCamera,
-  CubeRenderTarget as WebGPUCubeRenderTarget
-} from 'three/webgpu'
+
+export type CubeCameraChildrenArgs<Camera, RenderTarget> = [
+  {
+    camera: Camera
+    renderTarget: RenderTarget
+    ref: Group
+    restart(): void
+    update(): void
+  }
+]
 
 export interface CubeCameraProps
   extends
-    Props<
-      Group,
-      [
-        {
-          camera: CubeCamera
-          renderTarget: CubeCamera['renderTarget']
-          ref: Group
-          restart(): void
-          update(): void
-        }
-      ]
-    >,
-    CubeCameraOptions {}
-
-export interface CubeCameraWebGPUProps
-  extends
-    Props<
-      Group,
-      [
-        {
-          camera: WebGPUCubeCamera
-          renderTarget: WebGPUCubeRenderTarget
-          ref: Group
-          restart(): void
-          update(): void
-        }
-      ]
-    >,
+    Props<Group, CubeCameraChildrenArgs<CubeCamera, CubeCamera['renderTarget']>>,
     CubeCameraOptions {}
 
 export interface CubeCameraOptions {
