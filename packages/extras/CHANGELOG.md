@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 9.23.0
+
+### Minor Changes
+
+- 4ae9faa: Fix `<Grid>` z-fighting with geometry resting on the grid plane and add a `depthWrite` prop that defaults to `false`
+
 ## 9.22.4
 
 ### Patch Changes
