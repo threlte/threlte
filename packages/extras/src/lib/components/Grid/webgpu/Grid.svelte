@@ -22,6 +22,7 @@
     infiniteGrid = false,
     fadeOrigin,
     side = DoubleSide,
+    depthWrite = false,
     type = 'grid',
     axis = 'x',
     maxRadius = 0,
@@ -34,7 +35,7 @@
 
   const mesh = new Mesh()
 
-  const { invalidate, camera } = useThrelte()
+  const { invalidate, camera, renderer } = useThrelte()
 
   const gridPlane = new Plane()
   const gridPlaneNormal = new Vector3(0, 1, 0)
@@ -51,6 +52,10 @@
 
   const material = new NodeMaterial()
   material.transparent = true
+  material.polygonOffset = true
+  const depthBias = renderer.reversedDepthBuffer ? -1 : 1
+  material.polygonOffsetFactor = depthBias
+  material.polygonOffsetUnits = depthBias
   material.fog = false
 
   // These props change the shape of the node graph rather than a uniform value,
@@ -163,6 +168,7 @@
   <T
     is={material}
     {side}
+    {depthWrite}
   />
   {#if children}
     {@render children({ ref: mesh })}

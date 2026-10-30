@@ -81,6 +81,14 @@ export type GridProps = Props<Mesh> & {
    * @default Three.DoubleSide
    */
   side?: Side
+
+  /**
+   * Whether the grid writes to the depth buffer. Enable to make it occlude
+   * transparent objects rendered after it.
+   *
+   * @default false
+   */
+  depthWrite?: boolean
 } & (
     | {
         type?: 'grid'
