@@ -2,7 +2,7 @@ import type { AsciiEffect, AsciiEffectOptions } from 'three/examples/jsm/effects
 import type { Camera, Scene } from 'three'
 import type { Snippet } from 'svelte'
 
-export type AsciiRendererProps = {
+export interface AsciiRendererProps {
   /**
    * controls whether the render task will automatically render
    * @default true

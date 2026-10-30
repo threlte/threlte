@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { Points } from 'three'
 
-export type StarsProps = Props<Points> & {
+export interface StarsProps extends Props<Points> {
   /**
    * @default 50
    */

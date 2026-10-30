@@ -1,7 +1,7 @@
 import type { Props, Stage } from '@threlte/core'
 import type { Box3, Group, Object3D, Sphere, Vector3 } from 'three'
 
-export type AlignProps = Props<Group, [{ align: () => void; ref: Group }]> & {
+export interface AlignProps extends Props<Group, [{ align: () => void; ref: Group }]> {
   /**
    * Align the object on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis.
    * @default 0

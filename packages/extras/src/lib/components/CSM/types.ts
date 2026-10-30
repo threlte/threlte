@@ -1,12 +1,14 @@
 import type { Snippet } from 'svelte'
 import type { Camera, ColorRepresentation, Vector3Tuple } from 'three'
+import type { CSM, CSMParameters } from 'three/examples/jsm/csm/CSM.js'
+import type { CSMShadowNode } from 'three/examples/jsm/csm/CSMShadowNode.js'
 
 /**
  * Props shared by the WebGL and WebGPU implementations of `<CSM>`. Three.js
  * ships a separate implementation per renderer, but both are configured
  * through this signature.
  */
-export interface CSMProps {
+export interface CSMBaseProps {
   /**
    * Whether or not CSM is enabled. If `enabled={false}`, the `fallback`
    * snippet is rendered instead of the cascaded light.
@@ -97,4 +99,36 @@ export interface CSMProps {
   shadowFar?: number
   children?: Snippet
   fallback?: Snippet
+}
+
+export interface CSMProps extends CSMBaseProps {
+  /**
+   * The underlying three.js CSM instance, bindable for advanced use such as
+   * visualizing the cascades with a `CSMHelper`.
+   */
+  csm?: CSM
+  /**
+   * @deprecated Set the equivalent props directly, they are reactive.
+   */
+  args?: Partial<CSMParameters>
+  /**
+   * @deprecated Bind to `csm` instead.
+   */
+  configure?: ((csm: CSM) => void) | undefined
+  /**
+   * @deprecated Use `intensity`, which is not divided by `Math.PI`.
+   */
+  lightIntensity?: number | undefined
+  /**
+   * @deprecated Use `color` instead.
+   */
+  lightColor?: ColorRepresentation | undefined
+}
+
+export interface CSMWebGPUProps extends CSMBaseProps {
+  /**
+   * The underlying three.js shadow node, bindable for advanced use such as
+   * visualizing the cascades with a `CSMHelper`.
+   */
+  csm?: CSMShadowNode
 }

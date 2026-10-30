@@ -212,3 +212,15 @@ export type Props<
 export type TProps<Type> = {
   is: Type
 } & Props<Type>
+
+/**
+ * ### `OmitProps<Type, Keys>`
+ *
+ * `Omit` for `Props<Type>`. The built-in `Omit` drops every typed prop, because
+ * the arbitrary-props index signature collapses `keyof Props<Type>` to `string`.
+ *
+ * @example OmitProps<Props<ShaderMaterial>, 'vertexShader' | 'fragmentShader'>
+ */
+export type OmitProps<Type, Keys extends PropertyKey> = {
+  [Key in keyof Type as Key extends Keys ? never : Key]: Type[Key]
+}

@@ -242,4 +242,4 @@ export interface TextMesh extends Mesh {
   onsync?: () => void
 }
 
-export type TextProps = Props<TextMesh>
+export interface TextProps extends Props<TextMesh> {}

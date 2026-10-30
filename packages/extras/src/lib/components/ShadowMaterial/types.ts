@@ -1,11 +1,9 @@
-import type { Props as ThrelteProps } from '@threlte/core'
+import type { Props } from '@threlte/core'
 import type { MeshBasicMaterial } from 'three'
 
-type Props = {
+export interface ShadowProps extends Props<MeshBasicMaterial> {
   /**
    * the color of the gradient
    */
-  color: string
+  color?: string
 }
-
-export type ShadowProps = Partial<Props> & ThrelteProps<MeshBasicMaterial>

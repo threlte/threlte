@@ -48,6 +48,7 @@ export default ts.config(
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-empty-object-type': ['error', { allowInterfaces: 'with-single-extends' }],
       '@typescript-eslint/ban-ts-comment': 'warn',
       'svelte/no-svelte-internal': 'warn'
     }

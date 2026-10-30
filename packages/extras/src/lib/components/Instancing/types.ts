@@ -3,12 +3,12 @@ import type { PositionMesh } from './PositionMesh.js'
 import type { ColorRepresentation } from 'three'
 import type { InstancedMesh as ThreeInstancedMesh } from 'three'
 
-export type InstanceProps = Props<PositionMesh> & {
+export interface InstanceProps extends Props<PositionMesh> {
   id?: string
   color?: ColorRepresentation
 }
 
-export type InstancedMeshProps = Props<ThreeInstancedMesh> & {
+export interface InstancedMeshProps extends Props<ThreeInstancedMesh> {
   /**
    * @default 'default'
    */

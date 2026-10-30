@@ -1,7 +1,7 @@
 import type { ShaderMaterial, ColorRepresentation, Side, Texture, VideoTexture } from 'three'
 import type { Props } from '@threlte/core'
 
-export type ImageMaterialProps = Props<ShaderMaterial> & {
+export interface ImageMaterialBaseProps extends Props<ShaderMaterial> {
   /**
    * @default 'white'
    */
@@ -114,7 +114,10 @@ export type ImageMaterialProps = Props<ShaderMaterial> & {
    * @default Three.FrontSide
    */
   side?: Side
-} & (
+}
+
+export type ImageMaterialProps = ImageMaterialBaseProps &
+  (
     | {
         texture: Texture
         url?: never

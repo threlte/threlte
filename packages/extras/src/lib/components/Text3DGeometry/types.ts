@@ -2,7 +2,7 @@ import type { Props } from '@threlte/core'
 import type { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 import type { Font } from 'three/examples/jsm/loaders/FontLoader.js'
 
-export type Text3DProps = Props<TextGeometry> & {
+export interface Text3DProps extends Props<TextGeometry> {
   /**
    * The text to display
    */

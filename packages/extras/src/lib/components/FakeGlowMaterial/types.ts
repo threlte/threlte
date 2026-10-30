@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { ShaderMaterial, ColorRepresentation } from 'three'
 
-export type FakeGlowMaterialProps = Props<ShaderMaterial> & {
+export interface FakeGlowMaterialProps extends Props<ShaderMaterial> {
   /**
    * @default 0.1
    */

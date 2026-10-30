@@ -3,10 +3,9 @@ import type {
   PLAY_MODE,
   SpritesheetFormat
 } from '@threejs-kit/instanced-sprite-mesh'
-import type { Props } from '@threlte/core'
+import type { OmitProps, Props } from '@threlte/core'
 import type { Writable } from 'svelte/store'
 import {
-  InstancedMesh,
   Material,
   MeshBasicMaterial,
   MeshLambertMaterial,
@@ -19,17 +18,23 @@ import {
 import type SpriteInstance from './SpriteInstance.svelte'
 import type { Snippet } from 'svelte'
 
-export type InstancedSpriteProps = Omit<
-  Props<InstancedMesh, [{ Instance: typeof SpriteInstance }]>,
-  'ref'
-> & {
-  ref?: InstancedSpriteMesh<
-    MeshBasicMaterial | MeshStandardMaterial | MeshLambertMaterial | MeshPhongMaterial,
-    unknown
-  >
+type SpriteMesh = InstancedSpriteMesh<
+  MeshBasicMaterial | MeshStandardMaterial | MeshLambertMaterial | MeshPhongMaterial,
+  unknown
+>
 
+export interface InstancedSpriteProps
+  extends
+    OmitProps<
+      Props<SpriteMesh, [{ Instance: typeof SpriteInstance }]>,
+      keyof InstancedSpriteOptions
+    >,
+    InstancedSpriteOptions {
+  ref?: SpriteMesh
   children?: Snippet<[{ Instance: typeof SpriteInstance }]>
+}
 
+export interface InstancedSpriteOptions {
   /**
    * update animations automatically
    *
@@ -122,7 +127,7 @@ export type InstancedSpriteUserCtx<T> = {
   updatePosition: (id: number, position: Vector3Tuple, scale?: Vector2Tuple) => void
 }
 
-export type SpriteInstanceProps = {
+export interface SpriteInstanceProps {
   /**
    * @default 0
    */

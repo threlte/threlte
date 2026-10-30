@@ -1,7 +1,7 @@
 import type { Props, Stage } from '@threlte/core'
 import type { Box3, Group } from 'three'
 
-export type ResizeProps = Props<Group, [{ ref: Group; resize(): void }]> & {
+export interface ResizeProps extends Props<Group, [{ ref: Group; resize(): void }]> {
   /**
    * If true, will automatically resize when children are added or removed
    * @default false

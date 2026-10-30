@@ -1,7 +1,7 @@
 import type { Props } from '@threlte/core'
 import type { Mesh } from 'three'
 
-export type MaskProps = Props<Mesh> & {
+export interface MaskProps extends Props<Mesh> {
   /**
    * Each mask must have an id, you can have compound masks referring to the same id
    * @default 1

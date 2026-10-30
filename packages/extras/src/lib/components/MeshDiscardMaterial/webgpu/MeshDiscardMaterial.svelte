@@ -12,12 +12,11 @@
 </script>
 
 <script lang="ts">
-  import { T, type Props as ThrelteProps } from '@threlte/core/webgpu'
+  import { T } from '@threlte/core/webgpu'
   import { NodeMaterial } from 'three/webgpu'
+  import type { MeshDiscardMaterialWebGPUProps } from '../types.js'
 
-  type Props = Omit<ThrelteProps<NodeMaterial>, 'fragmentNode'>
-
-  let { children, ref = $bindable(), ...props }: Props = $props()
+  let { children, ref = $bindable(), ...props }: MeshDiscardMaterialWebGPUProps = $props()
 
   const material = new NodeMaterial()
 </script>

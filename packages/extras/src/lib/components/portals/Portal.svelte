@@ -1,15 +1,10 @@
 <script lang="ts">
-  import { untrack, type Snippet } from 'svelte'
+  import { untrack } from 'svelte'
   import { usePortalContext } from './usePortalContext.svelte.js'
   import { SvelteSet } from 'svelte/reactivity'
+  import type { PortalProps } from './types.js'
 
-  interface Props {
-    id?: string
-    object?: never
-    children?: Snippet
-  }
-
-  let { id = 'default', object, children }: Props = $props()
+  let { id = 'default', object, children }: PortalProps = $props()
 
   // @Todo Remove in Threlte 9
   $effect.pre(() => {

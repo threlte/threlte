@@ -11,10 +11,11 @@ function that injects a plugin.
 -->
 
 <script lang="ts">
-  import { injectPlugin, type Plugin } from '@threlte/core'
-  import { untrack, type Snippet } from 'svelte'
+  import { injectPlugin } from '@threlte/core'
+  import { untrack } from 'svelte'
+  import type { InjectPluginProps } from './types.js'
 
-  let { name, plugin, children }: { name: string; plugin: Plugin; children?: Snippet } = $props()
+  let { name, plugin, children }: InjectPluginProps = $props()
 
   injectPlugin(
     untrack(() => name),

@@ -1,4 +1,4 @@
-export type PerfMonitorProps = {
+export interface PerfMonitorProps {
   /**
    * Dom element to which stats block will be attached to.
    * @default `document.body`
