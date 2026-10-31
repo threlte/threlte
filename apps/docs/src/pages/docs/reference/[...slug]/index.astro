@@ -5,6 +5,7 @@ import MdxCode from '$components/Code/MdxCode.astro'
 import ComponentSignature from '$components/ComponentSignature/ComponentSignature.astro'
 import QuickNav from '$components/QuickNav/QuickNav.astro'
 import Pill from '$components/Pill/Pill.astro'
+import { getComponentSignature } from '$lib/getComponentSignature'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('reference')
@@ -21,8 +22,9 @@ interface Props {
 }
 
 const { entry } = Astro.props
-const { title, category, componentSignature, description, webgl, webgpu } = entry.data
+const { title, category, description, webgl, webgpu } = entry.data
 const { Content } = await render(entry)
+const componentSignature = await getComponentSignature(entry)
 
 const webgpuHref =
   category === '@threlte/extras'

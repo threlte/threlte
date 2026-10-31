@@ -6,37 +6,6 @@ sourcePath: 'packages/extras/src/lib/components/Text3DGeometry/Text3DGeometry.sv
 type: 'component'
 webgl: true
 webgpu: true
-componentSignature:
-  {
-    'props':
-      [
-        {
-          name: 'font',
-          type: 'Font | string',
-          required: true,
-          description: 'Either a loaded font or a path to a font file.'
-        },
-        { name: 'text', type: 'string', required: true, description: 'The text to display.' },
-        { name: 'size', type: 'number', default: '100' },
-        { name: 'height', type: 'number', default: '50' },
-        { name: 'curveSegments', type: 'number', default: '12' },
-        { name: 'bevelEnabled', type: 'boolean', default: 'false' },
-        { name: 'bevelThickness', type: 'number', default: '10' },
-        { name: 'bevelSize', type: 'number', default: '8' },
-        { name: 'bevelOffset', type: 'number', default: '0' },
-        { name: 'bevelSegments', type: 'number', default: '3' },
-        {
-          name: 'smooth',
-          type: 'number',
-          default: '0',
-          description: 'Smooth all edges where the angle between faces is less than value'
-        },
-        { name: 'depth', type: 'number', default: '1' },
-        { name: 'extrudePath', type: 'Curve<Vector3>' },
-        { name: 'steps', type: 'number', default: '1' },
-        { name: 'UVGenerator', type: 'UVGenerator' }
-      ]
-  }
 ---
 
 Render 3D text as a geometry using Three.js' [TextGeometry](https://threejs.org/docs/index.html#examples/en/geometries/TextGeometry).

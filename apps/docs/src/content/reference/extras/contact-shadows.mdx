@@ -8,20 +8,6 @@ webgl: true
 componentSignature:
   {
     extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-    props:
-      [
-        { name: 'opacity', type: 'number' },
-        { name: 'width', type: 'number' },
-        { name: 'height', type: 'number' },
-        { name: 'blur', type: 'number' },
-        { name: 'far', type: 'number' },
-        { name: 'smooth', type: 'boolean' },
-        { name: 'resolution', type: 'number' },
-        { name: 'frames', type: 'number' },
-        { name: 'scale', type: 'number | [x: number, y: number]' },
-        { name: 'color', type: 'THREE.ColorRepresentation' },
-        { name: 'depthWrite', type: 'boolean' }
-      ],
     exports: [{ name: 'refresh', type: '() => void' }]
   }
 ---

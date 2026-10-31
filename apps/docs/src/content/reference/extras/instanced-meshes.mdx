@@ -2,7 +2,7 @@
 category: '@threlte/extras'
 group: 'Performance'
 title: '<InstancedMeshes>'
-sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes'
+sourcePath: 'packages/extras/src/lib/components/Instancing/InstancedMeshes/InstancedMeshes.svelte'
 type: 'component'
 webgl: true
 webgpu: true
@@ -12,29 +12,7 @@ componentSignature:
       {
         type: 'InstancedMesh',
         url: 'https://threejs.org/docs/index.html#api/en/objects/InstancedMesh'
-      },
-    props:
-      [
-        {
-          name: 'limit',
-          type: 'number',
-          default: '1000',
-          description: 'Limits the amount of possible <Instance> components.'
-        },
-        {
-          name: 'range',
-          type: 'number',
-          default: '1000',
-          description: 'Limits the amount of drawn <Instance> components.'
-        },
-        {
-          name: 'update',
-          type: 'boolean',
-          default: 'true',
-          description: 'Whether the THREE.InstancedMesh should be updated.'
-        },
-        { name: 'meshes', type: 'THREE.Mesh[] | Record<string, THREE.Mesh>', required: true }
-      ]
+      }
   }
 ---
 

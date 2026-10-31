@@ -15,47 +15,7 @@ componentSignature:
         type: '() => void',
         description: 'Manually trigger a resize.'
       }
-    ],
-    props:
-      [
-        {
-          description: 'Specifies which axis to constrain. If not provided, the maximum axis is used.',
-          name: 'axis',
-          type: "'x' | 'y' | 'z'",
-          default: 'undefined'
-        },
-        {
-          default: 'false',
-          description: 'When true, will automatically resize when children are added or removed.',
-          name: 'auto',
-          type: 'boolean'
-        },
-        {
-          name: 'stage',
-          type: 'Stage',
-          default: 'useStage("<Resize>", { before: renderStage })',
-          description: 'Bring your own stage to control when resizing occurs. If not provided, resizing will occur before the main render stage.',
-
-        },
-        {
-          default: 'undefined',
-          description: 'A callback function to run whenever resizing is done.',
-          name: 'onresize',
-          type: '() => void'
-        },
-        {
-          description: 'Bring your own box to capture the bounding box.',
-          name: 'box',
-          default: 'new Box3()',
-          type: 'THREE.Box3'
-        },
-        {
-          description: 'If true, use precise bounding box calculation when resizing',
-          name: 'precise',
-          default: 'undefined',
-          type: 'boolean'
-        }
-      ]
+    ]
   }
 ---
 

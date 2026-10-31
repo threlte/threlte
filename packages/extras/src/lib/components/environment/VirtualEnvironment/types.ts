@@ -2,6 +2,11 @@ import type { Snippet } from 'svelte'
 import type { CubeCamera, Scene } from 'three'
 
 export interface VirtualEnvironmentProps {
+  /**
+   * The objects that make up the environment, such as light formers, which
+   * are rendered into the environment cube map. Receives the cube camera and
+   * functions to `update` or `restart` the rendering.
+   */
   children?: Snippet<
     [
       {
@@ -14,60 +19,60 @@ export interface VirtualEnvironmentProps {
   >
 
   /**
-   * The scene to apply the virtual environment to
+   * The scene to apply the environment to.
    * @default useThrelte().scene
    */
   scene?: Scene
 
   /**
-   * Whether to set the `scene`'s background to the loaded environment
+   * Sets the environment as `scene.background`. The previous background is
+   * restored on unmount.
    * @default false
    */
   isBackground?: boolean
 
   /**
-   * Whether to set the `scene`'s environment to the virtual environment
+   * Sets the environment as `scene.environment`, lighting physically based
+   * materials. The previous environment is restored on unmount.
    * @default true
    */
   isEnvironment?: boolean
 
   /**
-   * Passed along to the internal CubeCamera
+   * The far plane of the cube camera.
    * @default 1000
    */
   far?: number
 
   /**
-   * Controls how many times camera will be updated
+   * How many frames the cube map is rendered for before stopping. `Infinity`
+   * renders it every frame.
    * @default Infinity
    */
   frames?: number
 
   /**
-   * Passed along to the internal CubeCamera
+   * The near plane of the cube camera.
    * @default 0.1
    */
   near?: number
 
-  /**
-   * A function that will be called anytime the update task has been started
-   */
+  /** Called whenever rendering of the cube map starts or restarts. */
   onupdatestart?: () => void
 
-  /**
-   * A function that will be called anytime the update task has been stopped
-   */
+  /** Called when rendering stops after `frames` frames, or before a restart. */
   onupdatestop?: () => void
 
   /**
-   * Size of the render target. a higher resolution should have more detail
+   * The width and height in pixels of each face of the cube map.
    * @default 256
    */
   resolution?: number
 
   /**
-   * Whether to show the virtual environment in the scene
-   * @default true
+   * Also adds the environment's objects to the scene, where they're visible
+   * like any other object. Useful for positioning them.
+   * @default false
    */
   visible?: boolean
 }

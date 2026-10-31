@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
+import { componentProps } from './loaders/componentProps'
 
 export const componentSignature = z.object({
   pretext: z.string().optional(),
@@ -57,7 +58,8 @@ export const componentSignature = z.object({
             name: z.string(),
             url: z.string()
           })
-        )
+        ),
+        description: z.string().optional()
       })
     )
     .optional()
@@ -184,5 +186,6 @@ export const collections = {
   showcase: showcaseCollection,
   examples: examplesCollection,
   blog: blogCollection,
-  authors: authorsCollection
+  authors: authorsCollection,
+  componentProps: defineCollection({ loader: componentProps(['extras']) })
 }

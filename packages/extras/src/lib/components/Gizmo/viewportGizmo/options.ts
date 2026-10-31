@@ -60,13 +60,26 @@ export interface GizmoAxisOptions {
  * All properties are optional and fall back to default values if not specified.
  */
 export interface GizmoOptions {
-  /** Parent element for the gizmo. Can be an HTMLElement or a CSS selector string */
+  /**
+   * Parent element for the gizmo, as an element or a CSS selector.
+   * @default document.body
+   */
   container?: HTMLElement | string
-  /** The gizmo supports two types, a `sphere` and a `cube` configuration. Default `sphere` */
+  /**
+   * The shape of the gizmo. The cube type labels its faces and adds corner
+   * and edge handles.
+   * @default 'sphere'
+   */
   type?: 'sphere' | 'cube'
-  /** Size of the gizmo widget in pixels. Default `128` */
+  /**
+   * Size of the gizmo widget in pixels.
+   * @default 128
+   */
   size?: number
-  /** Placement of the gizmo widget within its container. Default `top-right` */
+  /**
+   * Placement of the gizmo widget within its container.
+   * @default 'top-right'
+   */
   placement?:
     | 'top-left'
     | 'top-center'
@@ -77,7 +90,10 @@ export interface GizmoOptions {
     | 'bottom-left'
     | 'bottom-center'
     | 'bottom-right'
-  /** Offset of the gizmo from the container edges in pixels. */
+  /**
+   * Distance in pixels between the gizmo and each edge of its container.
+   * @default { top: 10, right: 10, bottom: 10, left: 10 }
+   */
   offset?: {
     /** Offset from the left edge in pixels. Default `10` */
     left?: number
@@ -88,29 +104,45 @@ export interface GizmoOptions {
     /** Offset from the bottom edge in pixels. Default `10` */
     bottom?: number
   }
-  /** Whether view changes should be animated. Default `true` */
+  /**
+   * Animates the camera to a clicked axis instead of snapping to it.
+   * @default true
+   */
   animated?: boolean
-  /** Animation speed multiplier. Higher values result in faster animations. Default `1` */
+  /**
+   * Animation speed multiplier. Higher values result in faster animations.
+   * @default 1
+   */
   speed?: number
   /**
-   * The texture resolution. Higher values improve quality at the cost of performance.
-   * Default `64` for a `sphere` type, and `128` for the cube.
+   * The texture resolution of the indicators. Higher values look sharper at
+   * a higher cost.
+   * @default 64 for the sphere type, 128 for the cube type
    */
   resolution?: number
-  /** The width of the axes lines in pixels. Default `4` */
+  /**
+   * The width of the axis lines in pixels.
+   * @default 4
+   */
   lineWidth?: number
-  /** HTML `id` attribute for the gizmo container */
+  /** HTML `id` attribute for the gizmo's container element. */
   id?: string
-  /** HTML `class` attribute for the gizmo container */
+  /** HTML `class` attribute for the gizmo's container element. */
   className?: string
-  /** Font configuration for axis labels. Follows standard CSS font properties. */
+  /**
+   * Font used for the axis labels. Follows standard CSS font properties.
+   * @default { family: 'sans-serif', weight: 900 }
+   */
   font?: {
     /** Font family for axis labels */
     family?: string
     /** Font weight for axis labels */
     weight?: string | number
   }
-  /** The gizmo background configuration. */
+  /**
+   * The sphere or cube drawn behind the indicators. On the sphere type it's
+   * transparent until hovered.
+   */
   background?: {
     /** Whether to display the background */
     enabled?: boolean
@@ -125,7 +157,7 @@ export interface GizmoOptions {
       opacity?: number
     }
   }
-  /** Configuration for the corner indicators of the gizmo. */
+  /** The eight corner handles. Shown by default on the cube type only. */
   corners?: {
     /** Whether to display corner indicators. Default `true` for the cube type */
     enabled?: boolean
@@ -149,7 +181,7 @@ export interface GizmoOptions {
       scale?: number
     }
   }
-  /** Configuration for the edge indicators of the gizmo. */
+  /** The twelve edge handles. Shown by default on the cube type only. */
   edges?: {
     /** Whether to display edge indicators. Default `true` for the cube type */
     enabled?: boolean
@@ -173,33 +205,58 @@ export interface GizmoOptions {
       scale?: number
     }
   }
-  /** The axes edge radius, applied to all axes */
+  /**
+   * Corner roundness of every axis indicator, from `0` (square) to `1`
+   * (circle).
+   * @default 1 for the sphere type, 0.2 for the cube type
+   */
   radius?: number
-  /** The axes edge smoothness, applied to all axes */
+  /**
+   * The number of segments used to round the axis indicators.
+   * @default 18
+   */
   smoothness?: number
-  /** Configuration for the positive `X` axis or the `Right` face. */
+  /** The positive X axis. */
   x?: GizmoAxisOptions
-  /** Configuration for the positive `Y` axis or the `Top` face. */
+  /** The positive Y axis. */
   y?: GizmoAxisOptions
-  /** Configuration for the positive `Z` axis or the `Front` face. */
+  /** The positive Z axis. */
   z?: GizmoAxisOptions
-  /** Configuration for the negative `X` axis or the `Left` face. */
+  /** The negative X axis. Inherits anything not set from `x`. */
   nx?: GizmoAxisOptions
-  /** Configuration for the negative `Y` axis or the `Bottom` face. */
+  /** The negative Y axis. Inherits anything not set from `y`. */
   ny?: GizmoAxisOptions
-  /** Configuration for the negative `Z` axis or the `Back` face. */
+  /** The negative Z axis. Inherits anything not set from `z`. */
   nz?: GizmoAxisOptions
-  /** An alias for the `x` axis configuration, clearer with a cube configuration. */
+  /**
+   * The right face of the cube type, which follows the camera's up axis. With
+   * y up, an alias for `x`.
+   */
   right?: GizmoAxisOptions
-  /** An alias for the `y` axis configuration, clearer with a cube configuration. */
+  /**
+   * The top face of the cube type, the positive end of the camera's up axis.
+   * With y up, an alias for `y`.
+   */
   top?: GizmoAxisOptions
-  /** An alias for the `z` axis configuration, clearer with a cube configuration. */
+  /**
+   * The front face of the cube type, which follows the camera's up axis.
+   * With y up, an alias for `z`.
+   */
   front?: GizmoAxisOptions
-  /** An alias for the `nx` axis configuration, clearer with a cube configuration. */
+  /**
+   * The left face of the cube type, which follows the camera's up axis. With
+   * y up, an alias for `nx`.
+   */
   left?: GizmoAxisOptions
-  /** An alias for the `ny` axis configuration, clearer with a cube configuration. */
+  /**
+   * The bottom face of the cube type, the negative end of the camera's up
+   * axis. With y up, an alias for `ny`.
+   */
   bottom?: GizmoAxisOptions
-  /** An alias for the `nz` axis configuration, clearer with a cube configuration. */
+  /**
+   * The back face of the cube type, which follows the camera's up axis. With
+   * y up, an alias for `nz`.
+   */
   back?: GizmoAxisOptions
 }
 
