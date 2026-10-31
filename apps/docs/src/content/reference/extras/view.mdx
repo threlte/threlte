@@ -6,24 +6,6 @@ sourcePath: 'packages/extras/src/lib/components/View/View.svelte'
 type: 'component'
 webgl: true
 webgpu: true
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'dom',
-          type: 'HTMLElement',
-          default: '',
-          description: 'The target DOM to scissor-cut and attach events. Does nothing if none given.'
-        },
-        {
-          name: 'scene',
-          type: 'THREE.Scene',
-          default: 'new THREE.Scene()',
-          description: 'An existing scene to render. If omitted, `<View>` creates a new scene and any children are added to it.'
-        }
-      ]
-  }
 ---
 
 This is a port of [drei's `<View/>`

@@ -5,28 +5,6 @@ title: '<Wireframe>'
 sourcePath: 'packages/extras/src/lib/components/Wireframe/Wireframe.svelte'
 type: 'component'
 webgl: true
-componentSignature:
-  {
-    props:
-      [
-        { name: 'simplify', type: 'boolean', default: 'false' },
-        { name: 'thickness', type: 'number', default: '1' },
-        { name: 'squeeze', type: 'boolean', default: 'false' },
-        { name: 'squeezeMin', type: 'number', default: '0.2' },
-        { name: 'squeezeMax', type: 'number', default: '1' },
-        { name: 'stroke', type: 'THREE.ColorRepresentation', default: '"#ff0000"' },
-        { name: 'backfaceStroke', type: 'THREE.ColorRepresentation', default: '"#0000ff"' },
-        { name: 'strokeOpacity', type: 'number', default: '1' },
-        { name: 'fill', type: 'THREE.ColorRepresentation', default: '"#00ff00"' },
-        { name: 'fillOpacity', type: 'number', default: '0' },
-        { name: 'fillMix', type: 'number', default: '0' },
-        { name: 'colorBackfaces', type: 'boolean', default: 'false' },
-        { name: 'dash', type: 'boolean', default: 'false' },
-        { name: 'dashRepeats', type: 'number', default: '4' },
-        { name: 'dashLength', type: 'number', default: '0.5' },
-        { name: 'dashInvert', type: 'boolean', default: 'true' }
-      ]
-  }
 ---
 
 `<Wireframe>` patches the material of its parent to render an antialiased, shader based wireframe on a geometry.

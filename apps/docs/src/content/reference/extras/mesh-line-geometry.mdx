@@ -12,29 +12,7 @@ componentSignature:
       {
         type: 'BufferGeometry',
         url: 'https://threejs.org/docs/index.html#api/en/core/BufferGeometry'
-      },
-    props:
-      [
-        {
-          name: 'points',
-          type: 'THREE.Vector3[]',
-          default: '[]',
-          required: true,
-          description: 'The array of points that form the line.'
-        },
-        {
-          name: 'shape',
-          type: "'none' | 'taper' | 'custom'",
-          default: "'none'",
-          description: "The shape of the line. Use 'custom' to use your own function."
-        },
-        {
-          name: 'shapeFunction',
-          type: '(p:number) => number',
-          default: 'p => 1',
-          description: 'A function to define the width of each point along the line. For example `p => 1 - p` will make the line taper.'
-        }
-      ]
+      }
   }
 ---
 

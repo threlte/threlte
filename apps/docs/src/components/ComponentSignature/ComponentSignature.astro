@@ -2,6 +2,8 @@
 import type { TypeOf } from 'astro/zod'
 import type { componentSignature } from '../../content.config'
 import { getShiki } from '$lib/highlighter'
+import { inlineMarkdown } from '$lib/inlineMarkdown'
+import { isExpression } from '$lib/isExpression'
 
 interface Props {
   titleOverride?: string
@@ -25,6 +27,9 @@ const anyEventHasDescription = events.some((event) => event.description)
 
 const exports = Astro.props.signature.exports ?? []
 const anyExportHasDescription = exports.some((e) => !!e.description)
+
+const bindings = Astro.props.signature.bindings ?? []
+const anyBindingHasDescription = bindings.some((binding) => binding.description)
 
 const hasEvents = !!Astro.props.signature.events?.length
 const hasExports = !!exports.length
@@ -155,21 +160,26 @@ const id = Astro.props.idOverride ?? 'component-signature'
                           <div
                             class="text-faded"
                             set:html={
-                              prop.default
-                                ? shiki
-                                    .codeToHtml(prop.default, {
-                                      lang: 'typescript',
-                                      theme: 'dracula-soft'
-                                    })
-                                    .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
-                                    .replace('</pre>', '')
-                                : ''
+                              !prop.default
+                                ? ''
+                                : isExpression(prop.default)
+                                  ? shiki
+                                      .codeToHtml(prop.default, {
+                                        lang: 'typescript',
+                                        theme: 'dracula-soft'
+                                      })
+                                      .replace(/<pre(.*?)class="shiki(.*?)>/g, '')
+                                      .replace('</pre>', '')
+                                  : inlineMarkdown(prop.default)
                             }
                           />
                         )}
 
                         {anyPropHasDescription && (
-                          <div class="text-faded my-[0.2em] text-xs">{prop.description}</div>
+                          <div
+                            class="text-faded my-[0.2em] text-xs"
+                            set:html={inlineMarkdown(prop.description)}
+                          />
                         )}
 
                         {index !== arr.length - 1 && (
@@ -234,7 +244,12 @@ const id = Astro.props.idOverride ?? 'component-signature'
                           </a>
                         )}
 
-                        {event.description && <div class="text-faded">{event.description}</div>}
+                        {anyEventHasDescription && (
+                          <div
+                            class="text-faded my-[0.2em] text-xs"
+                            set:html={inlineMarkdown(event.description)}
+                          />
+                        )}
 
                         {index !== arr.length - 1 && (
                           <hr class="col-span-full my-1 border-gray-700" />
@@ -250,14 +265,23 @@ const id = Astro.props.idOverride ?? 'component-signature'
               <div>
                 <h3 class="text-xl font-semibold">Bindings</h3>
 
-                <div class="scrollbar-hide grid grid-cols-[auto_auto] items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!">
+                <div
+                  class:list={[
+                    'scrollbar-hide grid items-start gap-x-3 overflow-x-auto [&_code]:bg-transparent!',
+                    anyBindingHasDescription
+                      ? 'grid-cols-[auto_auto_auto]'
+                      : 'grid-cols-[auto_auto]'
+                  ]}
+                >
                   <div class="font-bold">name</div>
 
                   <div class="font-bold">type</div>
 
+                  {anyBindingHasDescription && <div class="font-bold">description</div>}
+
                   <hr class="col-span-full my-1 border-gray-700" />
 
-                  {(Astro.props.signature.bindings ?? []).map((binding, index, arr) => {
+                  {bindings.map((binding, index, arr) => {
                     return (
                       <>
                         <div class="text-faded">{binding.name}</div>
@@ -289,6 +313,13 @@ const id = Astro.props.idOverride ?? 'component-signature'
                                 .replace('</pre>', '')}
                             />
                           </a>
+                        )}
+
+                        {anyBindingHasDescription && (
+                          <div
+                            class="text-faded my-[0.2em] text-xs"
+                            set:html={inlineMarkdown(binding.description)}
+                          />
                         )}
 
                         {index !== arr.length - 1 && (
@@ -336,7 +367,10 @@ const id = Astro.props.idOverride ?? 'component-signature'
                         />
 
                         {anyExportHasDescription && (
-                          <div class="text-faded my-[0.2em] text-xs">{prop.description}</div>
+                          <div
+                            class="text-faded my-[0.2em] text-xs"
+                            set:html={inlineMarkdown(prop.description)}
+                          />
                         )}
 
                         {index !== arr.length - 1 && (
