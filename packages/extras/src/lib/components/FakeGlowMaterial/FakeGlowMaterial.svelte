@@ -16,7 +16,7 @@
   }: FakeGlowMaterialProps = $props()
 
   const uniforms = {
-    falloff: new Uniform(0.1),
+    falloffAmount: new Uniform(0.1),
     glowInternalRadius: new Uniform(6),
     glowColor: new Uniform(new Color('white')),
     glowSharpness: new Uniform(1)
@@ -34,7 +34,7 @@
   const { invalidate } = useThrelte()
 
   $effect(() => {
-    material.uniforms.falloff.value = falloff
+    material.uniforms.falloffAmount.value = falloff
     invalidate()
   })
   $effect(() => {

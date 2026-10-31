@@ -39,8 +39,15 @@ export interface TransformControlsProps
    */
   cameraControls?: { enabled: boolean }
 
+  /**
+   * The object to transform. Without it, the controls transform their own
+   * group, so the children move with it.
+   */
   object?: Object3D
+
   /** @deprecated Use `bind:ref` instead. */
   group?: Group
+
+  /** The underlying three.js `TransformControls` instance. */
   controls?: TransformControls
 }

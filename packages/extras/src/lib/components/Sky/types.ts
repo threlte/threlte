@@ -13,60 +13,65 @@ export interface SkyProps extends Props<
   ]
 > {
   /**
-   * The scale of the cuboid skybox along every axis
+   * The size of the sky box along every axis. It needs to enclose the scene
+   * and fit within the camera's far plane.
    * @default 1000
    */
   scale?: number
 
   /**
-   * Relative clarity of the sky
+   * How hazy the atmosphere is. Higher values look more overcast.
    * @default 10
    */
   turbidity?: number
 
   /**
-   * Amount of rayleigh scattering
+   * The amount of Rayleigh scattering, which tints the sky blue and the
+   * sunset red.
    * @default 3
    */
   rayleigh?: number
 
-  /** Mie scattering coefficient
+  /**
+   * The amount of Mie scattering, which creates the glow around the sun.
    * @default 0.005
    */
   mieCoefficient?: number
 
   /**
-   * Mie scattering directionality
+   * How concentrated the glow around the sun is, from `0` to `1`.
    * @default 0.7
    */
   mieDirectionalG?: number
 
   /**
-   * Elevation angle
+   * The sun's height above the horizon, in degrees.
    * @default 2
    */
   elevation?: number
 
   /**
-   * Azimuthal angle
+   * The sun's horizontal direction, in degrees.
    * @default 180
    */
   azimuth?: number
 
   /**
-   * Render the sky to the scene environment
+   * Renders the sky into a cube map and sets it as `scene.environment`, so
+   * it lights the scene.
    * @default true
    */
   setEnvironment?: boolean
 
   /**
-   * The size of the cube map
+   * The width and height in pixels of each face of the environment cube
+   * map.
    * @default 128
    */
   cubeMapSize?: number
 
   /**
-   * The options for the WebGLCubeRenderTarget
+   * Options for the environment cube map's `WebGLCubeRenderTarget`.
    * @default {}
    */
   webGLRenderTargetOptions?: RenderTargetOptions

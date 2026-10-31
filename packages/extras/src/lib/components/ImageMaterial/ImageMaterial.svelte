@@ -167,6 +167,10 @@
     invalidate()
   })
   $effect(() => {
+    uniforms.hsl.value.y = saturation
+    invalidate()
+  })
+  $effect(() => {
     uniforms.hsl.value.z = lightness
     invalidate()
   })
