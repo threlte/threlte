@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 8.7.0
+
+### Minor Changes
+
+- f451d41: Add `OmitProps`, an `Omit` that keeps the typed props of `Props<Type>`
+
 ## 8.6.1
 
 ### Patch Changes
