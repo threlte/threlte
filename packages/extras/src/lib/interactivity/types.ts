@@ -36,17 +36,29 @@ export interface PointerCaptureTarget {
 }
 
 export type ThrelteEvents = {
+  /** Called when the object is clicked. */
   onclick: IntersectionEvent<MouseEvent>
+  /** Called when the object is right-clicked. */
   oncontextmenu: IntersectionEvent<MouseEvent>
+  /** Called when the object is double-clicked. */
   ondblclick: IntersectionEvent<MouseEvent>
+  /** Called when the mouse wheel is used over the object. */
   onwheel: IntersectionEvent<WheelEvent>
+  /** Called when a pointer is released over the object. */
   onpointerup: IntersectionEvent<PointerEvent>
+  /** Called when a pointer is pressed over the object. */
   onpointerdown: IntersectionEvent<PointerEvent>
+  /** Called when a pointer moves onto the object or one of its children. */
   onpointerover: IntersectionEvent<PointerEvent>
+  /** Called when a pointer moves off the object or one of its children. */
   onpointerout: IntersectionEvent<PointerEvent>
+  /** Called when a pointer moves onto the object. Doesn't bubble. */
   onpointerenter: IntersectionEvent<PointerEvent>
+  /** Called when a pointer moves off the object. Doesn't bubble. */
   onpointerleave: IntersectionEvent<PointerEvent>
+  /** Called when a pointer moves over the object. */
   onpointermove: IntersectionEvent<PointerEvent>
+  /** Called when a click lands anywhere but on the object. */
   onpointermissed: MouseEvent
 }
 

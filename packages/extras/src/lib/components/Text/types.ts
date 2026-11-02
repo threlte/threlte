@@ -239,6 +239,10 @@ export interface TextMesh extends Mesh {
    */
   colorRanges?: { [key: `${number}`]: ColorRepresentation } | null
 
+  /**
+   * Called after the text has been laid out and its geometry updated, for
+   * example to measure it.
+   */
   onsync?: () => void
 }
 

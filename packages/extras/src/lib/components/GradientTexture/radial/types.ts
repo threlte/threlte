@@ -4,28 +4,36 @@ import type { Props } from '@threlte/core'
 
 export interface RadialGradientTextureProps extends Props<CanvasTexture<OffscreenCanvas>> {
   /**
-   * inner radius of the gradient
+   * The radius of the circle the gradient starts at, in canvas pixels,
+   * centered on the canvas.
    * @default 0
    */
   innerRadius?: number
+
   /**
-   * outer radius of the gradient
+   * The radius of the circle the gradient ends at, in canvas pixels.
+   * `'auto'` reaches the canvas corners.
    * @default 'auto'
    */
   outerRadius?: RadialGradientOuterRadius
+
   /**
-   * height of the underlying canvas
+   * The width of the canvas the gradient is drawn on, in pixels.
    * @default 1024
    */
   width?: number
+
   /**
-   * width of the underlying canvas
+   * The height of the canvas the gradient is drawn on, in pixels.
    * @default 1024
    */
   height?: number
+
   /**
-   * stop offsets for the gradient. @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createLinearGradient
-   * @default [ { offset: 0, color: 'black' }, { offset: 1, color: 'white' } ]
+   * The colors of the gradient, each at an `offset` from `0` (inner circle)
+   * to `1` (outer circle).
+   * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasGradient/addColorStop
+   * @default [{ offset: 0, color: 'black' }, { offset: 1, color: 'white' }]
    */
   stops?: ColorStop[]
 }

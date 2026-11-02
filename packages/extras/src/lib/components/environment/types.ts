@@ -5,26 +5,28 @@ import type { Scene, Texture } from 'three'
  */
 export interface CommonEnvironmentProps<T extends Texture> {
   /**
-   * Whether to set the `scene`'s background to the loaded environment
+   * Sets the texture as `scene.background`. The previous background is
+   * restored on unmount.
    * @default false
    */
   isBackground?: boolean
 
   /**
-   * Whether to set the `scene`'s environment to the loaded environment
+   * Sets the texture as `scene.environment`, lighting physically based
+   * materials. The previous environment is restored on unmount.
    * @default true
    */
   isEnvironment?: boolean
 
   /**
-   * The scene to apply the environment to
+   * The scene to apply the texture to.
    * @default useThrelte().scene
    */
   scene?: Scene
 
   /**
-   * A bindable of the loaded texture
-   * @default null
+   * The environment texture. Bind to it to read the texture loaded from a
+   * URL, or pass a texture to use it directly without loading anything.
    */
   texture?: T | null | undefined
 }

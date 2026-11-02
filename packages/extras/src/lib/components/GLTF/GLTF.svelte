@@ -21,6 +21,7 @@
     parser = $bindable(),
     materials = $bindable(),
     nodes = $bindable(),
+    ref = $bindable(),
     onload,
     onunload,
     onerror,
@@ -87,6 +88,7 @@
 {#if scene}
   <T
     is={scene}
+    bind:ref
     {...props}
   >
     {@render children?.({ ref: scene })}

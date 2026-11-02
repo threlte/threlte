@@ -6,33 +6,6 @@ sourcePath: 'packages/extras/src/lib/suspense/Suspense.svelte'
 type: 'component'
 webgl: true
 webgpu: true
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'final',
-          type: 'boolean',
-          default: 'false',
-          description: 'If final is set to true, components cannot re-suspend the suspended state.'
-        },
-        {
-          name: 'onload',
-          type: 'Function',
-          description: 'Fires when all child components wrapped in `suspend` have finished loading.'
-        },
-        {
-          name: 'onsuspend',
-          type: 'Function',
-          description: 'Fires when a child component suspends.'
-        },
-        {
-          name: 'onerror',
-          type: 'Function',
-          description: 'Fires when an error is thrown in a child component wrapped in `suspend`.'
-        }
-      ]
-  }
 ---
 
 The component `<Suspense>` allows you to orchestrate the loading of resources

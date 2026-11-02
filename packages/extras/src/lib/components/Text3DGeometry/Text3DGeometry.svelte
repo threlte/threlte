@@ -3,6 +3,7 @@
   import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
   import { FontLoader, type Font } from 'three/examples/jsm/loaders/FontLoader.js'
   import { toCreasedNormals } from 'three/examples/jsm/utils/BufferGeometryUtils.js'
+  import { untrack } from 'svelte'
   import { useSuspense } from '../../suspense/useSuspense.js'
   import type { Text3DProps } from './types.js'
 
@@ -21,6 +22,7 @@
     extrudePath,
     steps,
     UVGenerator,
+    onrendered,
     ref = $bindable(),
     children,
     ...props
@@ -60,6 +62,12 @@
     if (!baseGeometry) return
     if (smooth === 0) return baseGeometry
     return toCreasedNormals(baseGeometry, smooth) as TextGeometry
+  })
+
+  $effect(() => {
+    if (!creasedGeometry) return
+    const geometry = creasedGeometry
+    untrack(() => onrendered?.(geometry))
   })
 </script>
 

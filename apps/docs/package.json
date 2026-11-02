@@ -17,7 +17,8 @@
     "create:example": "tsx ./scripts/createExample",
     "create:example-page": "tsx ./scripts/createExamplePage",
     "lint": "prettier --check .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "vitest run src/loaders"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.4",
@@ -89,7 +90,8 @@
     "three.quarks": "^0.15.0",
     "tsx": "^4.8.1",
     "vite": "catalog:",
-    "vite-plugin-mkcert": "^1.17.5"
+    "vite-plugin-mkcert": "^1.17.5",
+    "vitest": "catalog:"
   },
   "overrides": {
     "react": "npm:@preact/compat@latest",

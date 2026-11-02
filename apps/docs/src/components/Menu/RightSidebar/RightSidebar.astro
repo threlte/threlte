@@ -2,12 +2,14 @@
 import { render, type CollectionEntry } from 'astro:content'
 import RightSidebarInner from './RightSidebar.svelte'
 import { getGithubEditUrl } from '$lib/getGithubEditUrl'
+import type { ComponentSignature } from '$lib/getComponentSignature'
 
 interface Props {
   entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
+  componentSignature?: ComponentSignature
 }
 
-const { entry } = Astro.props
+const { entry, componentSignature: signature } = Astro.props
 
 const content = await render(entry)
 
@@ -21,15 +23,17 @@ const entryIsReference = (e: typeof entry): e is CollectionEntry<'reference'> =>
   return (e && e.data && (e.data as any)).schemaType === 'reference'
 }
 
-if (entryIsReference(entry) && entry.data.componentSignature) {
-  const hasEvents = !!entry.data.componentSignature.events?.length
-  const hasProps = !!entry.data.componentSignature.props?.length
-  const hasBindings = !!entry.data.componentSignature.bindings?.length
+if (signature) {
+  const hasEvents = !!signature.events?.length
+  const hasProps = !!signature.props?.length
+  const hasBindings = !!signature.bindings?.length
 
   if (hasEvents || hasProps || hasBindings) {
     // we're adding a new heading for the component signature
     // with the lowest depth of the filtered headings
-    const lowestHeadingDepth = Math.min(...headings.map((heading) => heading.depth))
+    const lowestHeadingDepth = headings.length
+      ? Math.min(...headings.map((heading) => heading.depth))
+      : 2
     headings.push({
       depth: lowestHeadingDepth,
       slug: 'component-signature',

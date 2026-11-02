@@ -3,30 +3,33 @@ import type { Box3, Group } from 'three'
 
 export interface ResizeProps extends Props<Group, [{ ref: Group; resize(): void }]> {
   /**
-   * If true, will automatically resize when children are added or removed
+   * Resizes again whenever a child `<T>` component mounts or unmounts.
    * @default false
    */
   auto?: boolean
   /**
-   * Specifies which axis to constrain. If not provided, the maximum axis is
-   * used
+   * The axis scaled to 1 unit. The children are scaled uniformly, so the
+   * other axes keep their proportions.
+   * @default the axis the children are largest along
    */
   axis?: 'x' | 'y' | 'z'
   /**
-   * Bring your own box to capture the bounding box.
+   * The `Box3` the children's bounding box is written to. Pass your own to
+   * read the measured box.
+   * @default a Box3 shared by every <Resize>
    */
   box?: Box3
   /**
-   * If true, use precise bounding box calculation.
+   * Computes the bounding box from every vertex instead of each geometry's
+   * bounding box. More accurate for rotated objects, but slower.
+   * @default false
    */
   precise?: boolean
   /**
-   * Bring your own stage to control when resizing occurs. If not provided,
-   * resizing will occur before the main render stage.
+   * The stage the resizing runs in. Resizing happens at most once per frame.
+   * @default useStage('<Resize>', { before: renderStage })
    */
   stage?: Stage
-  /**
-   * A callback function to run whenever resizing is done
-   */
+  /** Called after every resize. */
   onresize?: () => void
 }

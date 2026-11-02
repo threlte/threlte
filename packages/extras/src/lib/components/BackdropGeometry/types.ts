@@ -3,13 +3,15 @@ import type { PlaneGeometry } from 'three'
 
 export interface BackdropGeometryProps extends Props<PlaneGeometry> {
   /**
-   * Length of the flat floor section before the curve
-   * @default 0.25
+   * How far the flat floor extends in front of the curve. The backdrop itself
+   * is one unit wide, deep and tall, so scale the mesh to resize it.
+   * @default 1
    */
   length?: number
 
   /**
-   * Number of segments
+   * The number of segments along each axis. More segments make the curve
+   * smoother.
    * @default 20
    */
   segments?: number

@@ -21,7 +21,8 @@ export interface TransformControlsProps
     Props<Group> {
   /**
    * Automatically pause any registered camera controls (OrbitControls,
-   * TrackballControls, CameraControls) while dragging. @default true
+   * TrackballControls, CameraControls) while dragging.
+   * @default true
    */
   autoPauseControls?: boolean
 
@@ -39,8 +40,18 @@ export interface TransformControlsProps
    */
   cameraControls?: { enabled: boolean }
 
+  /**
+   * The object to transform. Without it, the controls transform their own
+   * group, so the children move with it.
+   */
   object?: Object3D
+
+  /** The group the controls transform when no `object` is given. */
+  ref?: Group
+
   /** @deprecated Use `bind:ref` instead. */
   group?: Group
+
+  /** The underlying three.js `TransformControls` instance. */
   controls?: TransformControls
 }

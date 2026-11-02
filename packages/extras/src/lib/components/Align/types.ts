@@ -3,45 +3,59 @@ import type { Box3, Group, Object3D, Sphere, Vector3 } from 'three'
 
 export interface AlignProps extends Props<Group, [{ align: () => void; ref: Group }]> {
   /**
-   * Align the object on the x-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the x-axis.
+   * Alignment of the children on the x-axis, from `-1` (their right edge at
+   * the origin) through `0` (centered) to `1` (their left edge at the origin).
+   * `false` leaves the x-axis untouched.
    * @default 0
    */
   x?: false | number
 
   /**
-   * Align the object on the y-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the y-axis.
+   * Alignment of the children on the y-axis, from `-1` (their top edge at the
+   * origin) through `0` (centered) to `1` (their bottom edge at the origin).
+   * `false` leaves the y-axis untouched.
    * @default 0
    */
   y?: false | number
 
   /**
-   * Align the object on the z-axis. If a number between -1 and 1 is provided, it will be used as the alignment on the z-axis.
+   * Alignment of the children on the z-axis, from `-1` (their front edge at
+   * the origin) through `0` (centered) to `1` (their back edge at the origin).
+   * `false` leaves the z-axis untouched.
    * @default 0
    */
   z?: false | number
 
   /**
-   * @see https://threejs.org/docs/index.html?q=box3#api/en/math/Box3.setFromObject
+   * Computes the bounding box from every vertex instead of each geometry's
+   * bounding box. More accurate for rotated objects, but slower.
+   * @see https://threejs.org/docs/#api/en/math/Box3.setFromObject
    * @default false
    */
   precise?: boolean
 
   /**
-   * Injects a plugin in all child `<T>` components to automatically align whenever a component mounts or unmounts, defaults to false
+   * Realigns automatically whenever a child `<T>` component mounts or
+   * unmounts.
    * @default false
    */
   auto?: boolean
 
+  /**
+   * Called after every alignment with the measured bounding box and the
+   * offsets that were applied.
+   */
   onalign?: (event: AlignEventData) => void
 
   /**
-   * @default useStage('<Align'>, { before: useThrelte().renderStage })
+   * The stage the alignment runs in. Aligning happens at most once per frame.
+   * @default useStage('<Align>', { before: renderStage })
    */
   stage?: Stage
 }
 
 type AlignEventData = {
-  /** The outmost container group of the <Align> component */
+  /** The outermost group of the `<Align>` component */
   container: Object3D
   /** The width of the bounding box */
   width: number
@@ -49,11 +63,17 @@ type AlignEventData = {
   height: number
   /** The depth of the bounding box */
   depth: number
+  /** The bounding box of the children before aligning */
   boundingBox: Box3
+  /** The bounding sphere of the children before aligning */
   boundingSphere: Sphere
+  /** The offset applied to the children */
   center: Vector3
+  /** The y-axis share of the offset, `y * height / 2` */
   verticalAlignment: number
+  /** The x-axis share of the offset, `x * width / 2` */
   horizontalAlignment: number
+  /** The z-axis share of the offset, `z * depth / 2` */
   depthAlignment: number
 }
 

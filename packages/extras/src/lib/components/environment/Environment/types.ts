@@ -8,24 +8,29 @@ export interface EquirectangularEnvironmentProps extends CommonEnvironmentProps<
   DataTexture | Texture
 > {
   /**
-   * Bindable skybox ref if a `ground` options are passed in
-   * @default undefined - ground is false by default
+   * The `GroundedSkybox` created when `ground` is set. Bind to it to access
+   * the instance.
    */
   skybox?: GroundedSkybox | undefined
 
   /**
-   * Used to instantiate a Three.GroundedSkybox instance
+   * Projects the environment onto a ground plane with a `GroundedSkybox`, so
+   * objects appear to stand on it. `true` uses a height and radius of `1` and
+   * a resolution of `128`, and an object overrides any of them.
    * @default false
    */
   ground?: boolean | GroundedSkyboxOptions
 
   /**
-   * The texture to use for the skybox
+   * The equirectangular environment texture. Bind to it to read the texture
+   * loaded from `url`, or pass a texture to use it directly without loading
+   * anything.
    */
   texture?: Texture
 
   /**
-   * Optional url to the environment map to fetch and load
+   * The URL of an equirectangular image to load. `.hdr` and `.exr` files are
+   * loaded as HDR, anything else with three's `TextureLoader`.
    */
   url?: string
 }

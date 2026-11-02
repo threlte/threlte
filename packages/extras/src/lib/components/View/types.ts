@@ -6,7 +6,8 @@ import type { Scene } from 'three'
  */
 export interface ViewProps {
   /**
-   * The target dom element.
+   * The element whose area on screen the view renders into, and which
+   * receives its pointer events. Nothing renders until it's set.
    */
   dom: HTMLElement | undefined
 
@@ -16,5 +17,6 @@ export interface ViewProps {
    */
   scene?: Scene
 
+  /** The content of the view's scene, including its camera. */
   children?: Snippet
 }

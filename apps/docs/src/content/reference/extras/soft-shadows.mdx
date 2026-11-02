@@ -5,30 +5,6 @@ sourcePath: 'packages/extras/src/lib/components/SoftShadows/SoftShadows.svelte'
 title: '<SoftShadows>'
 type: 'component'
 webgl: true
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'size',
-          type: 'number',
-          default: '25',
-          description: 'Size of the light source – the larger the softer the light'
-        },
-        {
-          name: 'focus',
-          type: 'number',
-          default: '0',
-          description: 'Depth focus, use it to shift the focal point (where the shadow is the sharpest)'
-        },
-        {
-          name: 'samples',
-          type: 'number',
-          default: '10',
-          description: 'Number of samples (more samples less noise but more expensive)'
-        }
-      ]
-  }
 ---
 
 `<SoftShadows>` replaces Three.js's default hard shadows with Percentage-Closer Soft Shadows (PCSS): shadows that are sharp where they touch their caster and soften with distance. Mount it alongside the rest of your scene — adding or removing it after the first render recompiles every shadow-receiving material.

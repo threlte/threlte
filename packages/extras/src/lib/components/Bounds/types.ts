@@ -24,19 +24,26 @@ export interface Goal {
 
 export interface BoundsProps extends Props<Group> {
   /**
-   * @default false
+   * Fits the camera to the children automatically, and refits whenever the
+   * canvas size, camera, controls, `margin` or `animate` change. When `false`,
+   * fit manually with the component's `fit` export.
+   * @default true
    */
   enabled?: boolean
 
   /**
+   * Space left around the children on every side when fitting, in world
+   * units.
    * @default 1
    */
   margin?: number
 
   /**
+   * Animates the camera to the fitted position instead of jumping to it.
    * @default true
    */
   animate?: boolean
 
+  /** Called when a fit has finished, after any animation. */
   onFit?: () => void
 }

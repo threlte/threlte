@@ -4,14 +4,53 @@ import { AudioLoader, type Audio, type PositionalAudio } from 'three'
 type AudioSource = string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream
 
 export interface AudioProps {
+  /**
+   * The audio to play: a URL (loaded with three's `AudioLoader`), a decoded
+   * `AudioBuffer`, an `<audio>` or `<video>` element, an
+   * `AudioBufferSourceNode`, or a `MediaStream` such as a microphone.
+   */
   src: AudioSource
+
+  /**
+   * Starts playing as soon as `src` has loaded, resuming the audio context
+   * if needed.
+   * @default false
+   */
   autoplay?: boolean
+
+  /**
+   * Restarts playback when the end is reached.
+   * @default false
+   */
   loop?: boolean
+
+  /**
+   * The gain, where `1` is the original volume and `0` is silent. Values
+   * above `1` amplify and can clip.
+   * @default 1
+   */
   volume?: number
+
+  /**
+   * Playback speed, where `1` is normal speed. Also shifts the pitch.
+   * @default 1
+   */
   playbackRate?: number
+
+  /**
+   * Pitch shift in cents, where `100` is one semitone. Only applies once a
+   * source is playing.
+   * @default 0
+   */
   detune?: number
+
+  /** Called when `src` has loaded, with its buffer when it has one. */
   onload?: (buffer: AudioBuffer | null) => void
+
+  /** Called when `src` fails to load. */
   onerror?: (event: ErrorEvent) => void
+
+  /** Called with loading progress while a URL `src` downloads. */
   onprogress?: (event: ProgressEvent) => void
 }
 

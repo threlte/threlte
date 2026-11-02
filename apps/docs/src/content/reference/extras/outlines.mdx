@@ -5,31 +5,6 @@ title: <Outlines>
 sourcePath: 'packages/extras/src/lib/components/Outlines/Outlines.svelte'
 type: 'component'
 webgl: true
-componentSignature:
-  {
-    'props':
-      [
-        {
-          name: 'color',
-          type: 'THREE.ColorRepresentation',
-          default: 'black',
-          description: 'Outline color'
-        },
-        {
-          name: 'screenspace',
-          type: 'boolean',
-          default: 'false',
-          description: 'Line thickness is independent of zoom'
-        },
-        { name: 'opacity', type: 'boolean', default: '1', description: 'Outline transparency' },
-        { name: 'thickness', type: 'number', default: '0.05', description: 'Outline thickness' },
-        { name: 'toneMapped', type: 'boolean', default: 'true' },
-        { name: 'angle', type: 'number', default: 'Math.PI' },
-        { name: 'polygonOffset', type: 'boolean', default: 'false' },
-        { name: 'polygonOffsetFactor', type: 'number', default: '0' },
-        { name: 'renderOrder', type: 'number', default: '0' }
-      ]
-  }
 ---
 
 A port of the drei [`<Outlines>`](https://github.com/pmndrs/drei?tab=readme-ov-file#outlines) component.

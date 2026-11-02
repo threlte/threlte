@@ -7,41 +7,7 @@ type: 'component'
 webgl: true
 webgpu: true
 componentSignature:
-  {
-    extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' },
-    props:
-      [
-        { name: url, type: 'string', required: true },
-        { name: 'dracoLoader', type: 'DRACOLoader' },
-        { name: 'meshoptDecoder', type: 'MeshoptDecoder' },
-        { name: 'ktx2Loader', type: 'KTX2Loader' }
-      ],
-    events:
-      [
-        {
-          name: 'load',
-          payload: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
-        },
-        { name: 'unload', payload: 'void' },
-        { name: 'error', payload: 'string' }
-      ],
-    bindings:
-      [
-        {
-          name: 'gltf',
-          type: 'GLTF & { materials: Record<string, THREE.Material>, nodes: Record<string, THREE.Object3D> }'
-        },
-        { name: 'scene', type: 'THREE.Group' },
-        { name: 'animations', type: 'THREE.AnimationClip[]' },
-        { name: 'asset', type: "GLTF['asset']" },
-        { name: 'cameras', type: 'THREE.Camera[]' },
-        { name: 'scenes', type: 'THREE.Group[]' },
-        { name: 'userData', type: 'any' },
-        { name: 'parser', type: 'GLTFParser' },
-        { name: 'materials', type: 'Record<string, THREE.Material>' },
-        { name: 'nodes', type: 'Record<string, THREE.Object3D>' }
-      ]
-  }
+  { extends: { type: 'Group', url: 'https://threejs.org/docs/index.html#api/en/objects/Group' } }
 ---
 
 `<GLTF />` loads a single model from a url. The `url` property is reactive and will load new 3D content if changed. The new content will be swapped as soon as loading is finished.

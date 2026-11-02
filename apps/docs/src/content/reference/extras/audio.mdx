@@ -9,39 +9,6 @@ webgpu: true
 componentSignature:
   {
     extends: { type: 'Audio', url: 'https://threejs.org/docs/index.html#api/en/audio/Audio' },
-    props:
-      [
-        {
-          name: 'src',
-          type: 'string | AudioBuffer | HTMLMediaElement | AudioBufferSourceNode | MediaStream',
-          required: true
-        },
-        {
-          name: 'id',
-          type: 'string',
-          default: 'default',
-          description: 'The id of the AudioListener this Audio will be attached to.'
-        },
-        { name: 'autoplay', type: 'boolean' },
-        { name: 'loop', type: 'boolean' },
-        {
-          name: 'volume',
-          type: 'number',
-          description: 'The value should range between 0 to 1. Be cautious, values outside this range might cause unintended loudness.'
-        },
-        { name: 'playbackRate', type: 'number' },
-        { name: 'detune', type: 'number' }
-      ],
-    events:
-      [
-        { name: 'load', payload: 'AudioBuffer', description: 'Fired when the audio has loaded.' },
-        {
-          name: 'progress',
-          payload: 'ProgressEvent<EventTarget>',
-          description: 'Fired when the audio is loading.'
-        },
-        { name: 'error', payload: 'ErrorEvent', description: 'Fired when the audio fails to load.' }
-      ],
     exports:
       [
         { name: play, type: '(delay?: number) => Promise<THREE.Audio>' },

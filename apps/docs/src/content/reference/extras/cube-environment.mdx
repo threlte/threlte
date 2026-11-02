@@ -6,40 +6,6 @@ title: <CubeEnvironment>
 type: 'component'
 webgl: true
 webgpu: true
-componentSignature:
-  {
-    props:
-      [
-        {
-          description: 'a six-tuple of urls to load',
-          name: 'urls',
-          type: '[positiveX: string, negativeX: string, positiveY: string, negativeY: string, positiveZ: string, negativeZ: string]'
-        },
-        {
-          default: 'false',
-          description: 'whether to set `scene.background` to the loaded environment texture',
-          name: 'isBackground',
-          type: 'boolean'
-        },
-        {
-          default: 'true',
-          description: 'whether to set `scene.environment` to the loaded environment texture',
-          name: 'isEnvironment',
-          type: 'boolean'
-        },
-        {
-          default: 'useThrelte().scene',
-          description: 'the scene that will have its environment and/or background set',
-          name: 'scene',
-          type: 'THREE.Scene'
-        },
-        {
-          description: 'a bindable of the loaded cube texture.',
-          name: 'texture',
-          type: 'THREE.CubeTexture'
-        }
-      ]
-  }
 ---
 
 `<CubeEnvironment>` is almost exactly like \<Enviroment> but it has a few key
