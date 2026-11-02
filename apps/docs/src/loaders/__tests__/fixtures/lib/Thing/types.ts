@@ -11,6 +11,15 @@ export interface SharedOptions {
    * @default 2
    */
   shared?: number
+
+  /**
+   * The base tint.
+   * @default 'red'
+   */
+  tint?: string
+
+  /** Hidden by the derived interface. */
+  hidden?: number
 }
 
 export interface Holder<T> {
@@ -64,6 +73,27 @@ export interface ThingBaseProps
     gap: number
     align: 'start' | 'end'
   }
+
+  /**
+   * The derived tint.
+   * @default 'blue'
+   */
+  tint?: 'blue' | 'green'
+
+  hidden?: never
+
+  /** An optional label. */
+  label?: string | undefined
+
+  /**
+   * Where to read more.
+   * @see https://example.com/docs
+   * @see Other
+   */
+  link?: string
+
+  /** Toggles the thing. @default true */
+  toggled?: boolean
 
   /** Not supported. */
   material?: never

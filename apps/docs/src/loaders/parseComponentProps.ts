@@ -39,6 +39,8 @@ interface Destructured {
 interface JsDoc {
   description: string
   tags: Map<string, string>
+  see: string[]
+  strayTags: string[]
 }
 
 interface CollectedProp {
@@ -58,9 +60,10 @@ const BEFORE_REGEX = /(?:^|[=(,:[!&|?{};+\-*%~^]|=>|\b(?:return|typeof|void|in|o
 const AFTER_POSTFIX = /(?:\+\+|--)\s*$/
 const BLOCK_TAG = /^@([A-Za-z]+)(?:\s+([\s\S]*))?$/
 const INLINE_LINK = /\{@link(?:code|plain)?\s+([^}\s|]+)(?:[\s|]+([^}]*))?\}/g
+const STRAY_TAG =
+  /(?:^|\s)@(default|see|deprecated|example|param|returns|since|throws|type)(?=\s|$)/g
 const SENTENCE_BREAK = /(?<=[.!?])\s+/
 
-const programs = new Map<string, ts.Program>()
 const printer = ts.createPrinter({ removeComments: true })
 
 const walk = (dir: string): string[] =>
@@ -233,15 +236,22 @@ export const parseJsDoc = (comment: string): JsDoc => {
     .map((line) => line.replace(/^\s*\*? ?/, ''))
   const description: string[] = []
   const tags = new Map<string, string>()
+  const see: string[] = []
+  const strayTags: string[] = []
   let tag: { name: string; lines: string[] } | undefined
   const closeTag = () => {
-    if (tag && !tags.has(tag.name)) tags.set(tag.name, normalizeText(tag.lines.join('\n')))
+    if (!tag) return
+    const text = normalizeText(tag.lines.join('\n'))
+    if (tag.name === 'see') see.push(text)
+    else if (!tags.has(tag.name)) tags.set(tag.name, text)
   }
   for (const line of lines) {
     const match = BLOCK_TAG.exec(line.trim())
+    const content = match ? (match[2] ?? '') : line
+    for (const stray of content.matchAll(STRAY_TAG)) strayTags.push(stray[1])
     if (match) {
       closeTag()
-      tag = { name: match[1], lines: [match[2] ?? ''] }
+      tag = { name: match[1], lines: [content] }
     } else if (tag) {
       tag.lines.push(line)
     } else {
@@ -249,8 +259,22 @@ export const parseJsDoc = (comment: string): JsDoc => {
     }
   }
   closeTag()
-  return { description: normalizeText(renderInlineTags(description.join('\n'))), tags }
+  return {
+    description: normalizeText(renderInlineTags(description.join('\n'))),
+    tags,
+    see,
+    strayTags
+  }
 }
+
+const seeText = (see: string[]) =>
+  see.length === 0
+    ? ''
+    : `See ${see
+        .map((reference) =>
+          /^https?:\/\/\S+$/.test(reference) ? `[${reference}](${reference})` : reference
+        )
+        .join(', ')}.`
 
 const mergeDescriptions = (descriptions: string[]) => {
   const sentences: string[] = []
@@ -262,7 +286,11 @@ const mergeDescriptions = (descriptions: string[]) => {
   return sentences.join(' ')
 }
 
-export const parsePackageComponents = (repoRoot: string, lib: string): GeneratedSignature[] => {
+export const parsePackageComponents = (
+  repoRoot: string,
+  lib: string,
+  onWarning: (message: string) => void = () => {}
+): GeneratedSignature[] => {
   const files = walk(lib)
   const libPrefix = `${normalizePath(lib)}/`
   const program = ts.createProgram(
@@ -274,11 +302,8 @@ export const parsePackageComponents = (repoRoot: string, lib: string): Generated
       strict: true,
       skipLibCheck: true,
       noEmit: true
-    },
-    undefined,
-    programs.get(lib)
+    }
   )
-  programs.set(lib, program)
   const checker = program.getTypeChecker()
 
   const findExport = (directory: string, name: string) => {
@@ -297,9 +322,24 @@ export const parsePackageComponents = (repoRoot: string, lib: string): Generated
     return undefined
   }
 
+  const warned = new Set<ts.JSDoc>()
+
   const readJsDoc = (declaration: ts.Node): JsDoc => {
     const jsDoc = ts.getJSDocCommentsAndTags(declaration).filter(ts.isJSDoc).at(-1)
-    return jsDoc ? parseJsDoc(jsDoc.getText()) : { description: '', tags: new Map() }
+    if (!jsDoc) return { description: '', tags: new Map(), see: [], strayTags: [] }
+    const parsed = parseJsDoc(jsDoc.getText())
+    if (warned.has(jsDoc)) return parsed
+    warned.add(jsDoc)
+    for (const stray of parsed.strayTags) {
+      const sourceFile = declaration.getSourceFile()
+      const { line } = sourceFile.getLineAndCharacterOfPosition(jsDoc.getStart())
+      onWarning(
+        `@${stray} is not at the start of a line, so it is not read as a tag (${normalizePath(
+          relative(repoRoot, sourceFile.fileName)
+        )}:${line + 1})`
+      )
+    }
+    return parsed
   }
 
   const typeString = (type: ts.Type) => {
@@ -321,7 +361,11 @@ export const parsePackageComponents = (repoRoot: string, lib: string): Generated
     ts.forEachChild(node, referencesTypeParameter) === true
 
   const nodeText = (node: ts.TypeNode) =>
-    normalizeType(printer.printNode(ts.EmitHint.Unspecified, node, node.getSourceFile()))
+    normalizeType(
+      unionParts(printer.printNode(ts.EmitHint.Unspecified, node, node.getSourceFile()))
+        .filter((part) => part !== 'undefined')
+        .join(' | ')
+    )
 
   const declaredType = (node: ts.TypeNode | undefined, symbol: ts.Symbol) => {
     if (node && !referencesTypeParameter(node) && !ts.isIndexedAccessTypeNode(node)) {
@@ -403,42 +447,51 @@ export const parsePackageComponents = (repoRoot: string, lib: string): Generated
       return collected
     }
 
-    if (
-      type.flags & ts.TypeFlags.Object &&
-      (type as ts.ObjectType).objectFlags & ts.ObjectFlags.Interface
-    ) {
-      for (const base of checker.getBaseTypes(type as ts.InterfaceType)) {
-        for (const prop of collect(base).values()) {
-          merge(collected, prop, (existing) => existing.required || prop.required)
-        }
-      }
-    }
-
     for (const symbol of checker.getPropertiesOfType(type)) {
-      const localDeclarations =
-        symbol.declarations
-          ?.filter((declaration) =>
-            normalizePath(declaration.getSourceFile().fileName).startsWith(libPrefix)
-          )
-          .map((declaration) => ({ declaration, jsDoc: readJsDoc(declaration) }))
-          .filter(({ jsDoc }) => !jsDoc.tags.has('deprecated')) ?? []
-      if (localDeclarations.length === 0) continue
-      const { declaration, jsDoc } =
-        localDeclarations.find(({ jsDoc }) => jsDoc.description || jsDoc.tags.size > 0) ??
-        localDeclarations[0]
-      const { description, tags } = jsDoc
-      const text = declaredType((declaration as ts.PropertySignature).type, symbol)
-      const prop: CollectedProp = {
-        name: symbol.name,
-        types: text === 'never' ? [] : [text],
-        payloads: EVENT_PROP.test(symbol.name) ? callPayloads(symbol) : [],
-        required: !(symbol.flags & ts.SymbolFlags.Optional),
-        default: tags.get('default') || undefined,
-        descriptions: description ? [description] : []
-      }
-      merge(collected, prop, (existing) => existing.required || prop.required)
+      const prop = collectSymbol(symbol) ?? collectFromBases(type, symbol.name)
+      if (prop) merge(collected, prop, (existing) => existing.required || prop.required)
     }
     return collected
+  }
+
+  const isLocal = (declaration: ts.Declaration) =>
+    normalizePath(declaration.getSourceFile().fileName).startsWith(libPrefix)
+
+  const collectSymbol = (symbol: ts.Symbol): CollectedProp | null | undefined => {
+    const localDeclarations =
+      symbol.declarations?.filter(isLocal).map((declaration) => ({
+        declaration,
+        jsDoc: readJsDoc(declaration)
+      })) ?? []
+    if (localDeclarations.length === 0) return undefined
+    const supported = localDeclarations.filter(({ jsDoc }) => !jsDoc.tags.has('deprecated'))
+    if (supported.length === 0) return null
+    const { declaration, jsDoc } =
+      supported.find(({ jsDoc }) => jsDoc.description || jsDoc.tags.size > 0) ?? supported[0]
+    const description = [jsDoc.description, seeText(jsDoc.see)].filter(Boolean).join(' ')
+    const text = declaredType((declaration as ts.PropertySignature).type, symbol)
+    return {
+      name: symbol.name,
+      types: text === 'never' ? [] : [text],
+      payloads: EVENT_PROP.test(symbol.name) ? callPayloads(symbol) : [],
+      required: !(symbol.flags & ts.SymbolFlags.Optional),
+      default: jsDoc.tags.get('default') || undefined,
+      descriptions: description ? [description] : []
+    }
+  }
+
+  const collectFromBases = (type: ts.Type, name: string): CollectedProp | undefined => {
+    if (!(type.flags & ts.TypeFlags.Object)) return undefined
+    if (!((type as ts.ObjectType).objectFlags & ts.ObjectFlags.ClassOrInterface)) return undefined
+    for (const base of checker.getBaseTypes(type as ts.InterfaceType)) {
+      const symbol = checker.getPropertyOfType(base, name)
+      if (!symbol) continue
+      const prop = collectSymbol(symbol)
+      if (prop === null) return undefined
+      const found = prop ?? collectFromBases(base, name)
+      if (found) return found
+    }
+    return undefined
   }
 
   const signatures: GeneratedSignature[] = []
@@ -465,17 +518,19 @@ export const parsePackageComponents = (repoRoot: string, lib: string): Generated
 
       if (prop.payloads.length > 0) {
         signature.events.push({ name: prop.name, payload: prop.payloads.join(' | '), description })
-      } else if (destructured.bindable.has(prop.name)) {
-        signature.bindings.push({ name: prop.name, type, description })
-      } else {
-        signature.props.push({
-          name: prop.name,
-          type,
-          required: prop.required,
-          default: prop.default ?? destructured.defaults.get(prop.name),
-          description
-        })
+        continue
       }
+      if (destructured.bindable.has(prop.name)) {
+        signature.bindings.push({ name: prop.name, type, description })
+        if (prop.name === 'ref') continue
+      }
+      signature.props.push({
+        name: prop.name,
+        type,
+        required: prop.required,
+        default: prop.default ?? destructured.defaults.get(prop.name),
+        description
+      })
     }
 
     signatures.push(signature)

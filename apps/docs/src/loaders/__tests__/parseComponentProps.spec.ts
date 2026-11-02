@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest'
 import { parseDestructuring, parseJsDoc, parsePackageComponents } from '../parseComponentProps'
 
 const fixtures = fileURLToPath(new URL('./fixtures/', import.meta.url))
-const [thing] = parsePackageComponents(fixtures, `${fixtures}lib`)
+const warnings: string[] = []
+const [thing] = parsePackageComponents(fixtures, `${fixtures}lib`, (message) =>
+  warnings.push(message)
+)
 
 const prop = (name: string) => thing.props.find((p) => p.name === name)
 
@@ -262,7 +265,37 @@ describe('parsePackageComponents', () => {
       { name: 'value', type: 'number', description: 'A bound output.' },
       { name: 'ref', type: 'HTMLButtonElement', description: 'The underlying element.' }
     ])
-    expect(prop('value')).toBeUndefined()
+  })
+
+  it('also lists $bindable props other than ref as props', () => {
+    expect(prop('value')).toMatchObject({ type: 'number', default: '3', required: false })
     expect(prop('ref')).toBeUndefined()
+  })
+
+  it('uses the derived declaration when a base prop in the package is redeclared', () => {
+    expect(prop('tint')).toMatchObject({
+      type: "'blue' | 'green'",
+      default: "'blue'",
+      description: 'The derived tint.'
+    })
+  })
+
+  it('hides a base prop in the package that the derived interface types never', () => {
+    expect(prop('hidden')).toBeUndefined()
+  })
+
+  it('strips undefined from declared types', () => {
+    expect(prop('label')).toMatchObject({ type: 'string' })
+  })
+
+  it('appends @see references to the description', () => {
+    expect(prop('link')?.description).toBe(
+      'Where to read more. See [https://example.com/docs](https://example.com/docs), Other.'
+    )
+  })
+
+  it('warns about a known tag in the middle of a line', () => {
+    expect(warnings).toHaveLength(1)
+    expect(warnings[0]).toMatch(/^@default is not at the start of a line.*Thing\/types\.ts:\d+\)$/)
   })
 })

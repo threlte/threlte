@@ -185,6 +185,7 @@
     }
 
     resetCurrentFrame()
+    timerOffset = performance.now() + delay
 
     onstart?.()
   }

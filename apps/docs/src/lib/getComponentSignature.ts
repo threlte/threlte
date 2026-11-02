@@ -14,3 +14,5 @@ export const getComponentSignature = async (entry: CollectionEntry<'reference'>)
   const { props, events, bindings } = generated.data
   return { ...signature, props, events, bindings }
 }
+
+export type ComponentSignature = Awaited<ReturnType<typeof getComponentSignature>>

@@ -45,7 +45,9 @@ export const componentProps = (packages: string[]): Loader => ({
     const sync = async () => {
       const entries = []
       for (const lib of libs) {
-        for (const signature of parsePackageComponents(repoRoot, lib)) {
+        for (const signature of parsePackageComponents(repoRoot, lib, (message) =>
+          logger.warn(message)
+        )) {
           const data = await parseData({ id: signature.sourcePath, data: { ...signature } })
           entries.push({ id: signature.sourcePath, data, digest: generateDigest(data) })
         }

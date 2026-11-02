@@ -21,7 +21,8 @@ export interface TransformControlsProps
     Props<Group> {
   /**
    * Automatically pause any registered camera controls (OrbitControls,
-   * TrackballControls, CameraControls) while dragging. @default true
+   * TrackballControls, CameraControls) while dragging.
+   * @default true
    */
   autoPauseControls?: boolean
 
