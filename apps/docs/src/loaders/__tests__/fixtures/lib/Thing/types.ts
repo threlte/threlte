@@ -18,7 +18,13 @@ export interface Holder<T> {
   item?: T | null
 }
 
-export interface ThingBaseProps extends ExternalBase, SharedOptions, Holder<number> {
+export interface LocalMaterialOptions {
+  /** The package-local opacity. */
+  opacity?: number
+}
+
+export interface ThingBaseProps
+  extends ExternalBase, SharedOptions, Holder<number>, LocalMaterialOptions {
   /** The thing's name. */
   name: string
 

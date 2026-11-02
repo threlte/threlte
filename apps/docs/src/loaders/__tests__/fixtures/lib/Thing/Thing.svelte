@@ -4,6 +4,7 @@
   let {
     name,
     size = 1,
+    opacity = 0.5,
     speed = 0.5,
     // an arrow function default
     shape = (progress) => progress * 2,
@@ -25,6 +26,7 @@
   oncontextmenu={() => onclear?.()}
 >
   {name}
+  {opacity}
   {speed}
   {value}
   {@render children?.()}

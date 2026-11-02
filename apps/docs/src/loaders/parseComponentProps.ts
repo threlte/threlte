@@ -403,20 +403,40 @@ export const parsePackageComponents = (repoRoot: string, lib: string): Generated
       return collected
     }
 
+    if (
+      type.flags & ts.TypeFlags.Object &&
+      (type as ts.ObjectType).objectFlags & ts.ObjectFlags.Interface
+    ) {
+      for (const base of checker.getBaseTypes(type as ts.InterfaceType)) {
+        for (const prop of collect(base).values()) {
+          merge(collected, prop, (existing) => existing.required || prop.required)
+        }
+      }
+    }
+
     for (const symbol of checker.getPropertiesOfType(type)) {
-      const declaration = symbol.declarations?.[0]
-      if (!declaration?.getSourceFile().fileName.startsWith(libPrefix)) continue
-      const { description, tags } = readJsDoc(declaration)
-      if (tags.has('deprecated')) continue
+      const localDeclarations =
+        symbol.declarations
+          ?.filter((declaration) =>
+            normalizePath(declaration.getSourceFile().fileName).startsWith(libPrefix)
+          )
+          .map((declaration) => ({ declaration, jsDoc: readJsDoc(declaration) }))
+          .filter(({ jsDoc }) => !jsDoc.tags.has('deprecated')) ?? []
+      if (localDeclarations.length === 0) continue
+      const { declaration, jsDoc } =
+        localDeclarations.find(({ jsDoc }) => jsDoc.description || jsDoc.tags.size > 0) ??
+        localDeclarations[0]
+      const { description, tags } = jsDoc
       const text = declaredType((declaration as ts.PropertySignature).type, symbol)
-      collected.set(symbol.name, {
+      const prop: CollectedProp = {
         name: symbol.name,
         types: text === 'never' ? [] : [text],
         payloads: EVENT_PROP.test(symbol.name) ? callPayloads(symbol) : [],
         required: !(symbol.flags & ts.SymbolFlags.Optional),
         default: tags.get('default') || undefined,
         descriptions: description ? [description] : []
-      })
+      }
+      merge(collected, prop, (existing) => existing.required || prop.required)
     }
     return collected
   }

@@ -170,6 +170,14 @@ describe('parsePackageComponents', () => {
     expect(prop('position')).toBeUndefined()
   })
 
+  it('prefers a package-local declaration when an inherited prop name overlaps', () => {
+    expect(prop('opacity')).toMatchObject({
+      type: 'number',
+      default: '0.5',
+      description: 'The package-local opacity.'
+    })
+  })
+
   it('leaves out deprecated props and children', () => {
     expect(prop('scale')).toBeUndefined()
     expect(prop('children')).toBeUndefined()

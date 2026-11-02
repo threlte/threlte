@@ -1,10 +1,13 @@
-import { getEntry, type CollectionEntry } from 'astro:content'
+import { getCollection, type CollectionEntry } from 'astro:content'
 
 export const getComponentSignature = async (entry: CollectionEntry<'reference'>) => {
   const signature = entry.data.componentSignature
-  const generated = entry.data.sourcePath
-    ? await getEntry('componentProps', entry.data.sourcePath)
-    : undefined
+  if (!entry.data.sourcePath) return signature
+
+  const [generated] = await getCollection(
+    'componentProps',
+    ({ id }) => id === entry.data.sourcePath
+  )
 
   if (!generated) return signature
 
