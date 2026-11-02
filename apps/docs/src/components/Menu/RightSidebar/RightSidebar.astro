@@ -32,7 +32,9 @@ if (signature) {
   if (hasEvents || hasProps || hasBindings) {
     // we're adding a new heading for the component signature
     // with the lowest depth of the filtered headings
-    const lowestHeadingDepth = Math.min(...headings.map((heading) => heading.depth))
+    const lowestHeadingDepth = headings.length
+      ? Math.min(...headings.map((heading) => heading.depth))
+      : 2
     headings.push({
       depth: lowestHeadingDepth,
       slug: 'component-signature',

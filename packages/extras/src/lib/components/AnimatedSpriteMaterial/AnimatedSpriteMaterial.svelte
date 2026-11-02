@@ -248,7 +248,7 @@
       if (promise === loadPromise) break
     }
     if (!playQueued || !texture || !json) return
-    timerOffset = performance.now() + delay
+    if (!running) timerOffset = performance.now() + delay
     running = true
   }
 

@@ -45,6 +45,9 @@ export interface TransformControlsProps
    */
   object?: Object3D
 
+  /** The group the controls transform when no `object` is given. */
+  ref?: Group
+
   /** @deprecated Use `bind:ref` instead. */
   group?: Group
 

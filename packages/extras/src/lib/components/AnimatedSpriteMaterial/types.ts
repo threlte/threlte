@@ -82,7 +82,7 @@ export interface AnimatedSpriteProps extends Props<Material> {
   alphaTest?: number
 
   /**
-   * Time in milliseconds to wait before the first frame advances.
+   * Time in milliseconds to wait before playback starts.
    * @default 0
    */
   delay?: number

@@ -14,14 +14,6 @@ A mesh of a curved plane designed to look like a studio backdrop. Its intent is 
 
 <Example path="extras/backdrop" />
 
-## Props
-
-`floor` controls the length of the "floor" segment of the geometry. The higher the value, the longer the segment.
-
-`receiveShadow` controls whether the mesh receives shadows or not.
-
-`segments` controls the resolution of the mesh.
-
 <Tip type="warning">
   Be aware that updating the `segments` prop causes the geometry to be rebuilt. It's advised not to
   update `segments` in hot-code paths such as [`useTask()`](/docs/reference/core/use-task).

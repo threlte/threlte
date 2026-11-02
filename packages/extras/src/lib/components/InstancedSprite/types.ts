@@ -19,11 +19,6 @@ import {
 import type SpriteInstance from './SpriteInstance.svelte'
 import type { Snippet } from 'svelte'
 
-type SpriteMesh = InstancedSpriteMesh<
-  MeshBasicMaterial | MeshStandardMaterial | MeshLambertMaterial | MeshPhongMaterial,
-  unknown
->
-
 export interface InstancedSpriteProps
   extends
     OmitProps<
@@ -32,7 +27,10 @@ export interface InstancedSpriteProps
     >,
     InstancedSpriteOptions {
   /** The underlying `InstancedSpriteMesh`. */
-  ref?: SpriteMesh
+  ref?: InstancedSpriteMesh<
+    MeshBasicMaterial | MeshStandardMaterial | MeshLambertMaterial | MeshPhongMaterial,
+    unknown
+  >
 
   /** Receives the `Instance` component used to place each sprite. */
   children?: Snippet<[{ Instance: typeof SpriteInstance }]>
