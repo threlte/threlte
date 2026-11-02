@@ -1,5 +1,18 @@
 # @threlte/extras
 
+## 9.23.1
+
+### Patch Changes
+
+- 2a08a85: Fix `delay` on `<AnimatedSpriteMaterial>` starting the animation early, and restart its timing when the animation changes
+- f451d41: Declare component props as interfaces, restoring typed props on components that used `Omit<Props<…>>` and on the `webgpu` entrypoint
+- 2a08a85: Document every component prop with accurate JSDoc and defaults
+- 2a08a85: Fix `falloff` having no effect on `<FakeGlowMaterial>`
+- 2a08a85: Fix `bind:ref` on `<GLTF>`
+- 2a08a85: Fix `saturation` having no effect on `<ImageMaterial>`
+- 2a08a85: Fix `onrendered` never being called on `<Text3DGeometry>`
+- 748196a: Fix `bind:ref` on `<TransformControls>`
+
 ## 9.23.0
 
 ### Minor Changes
