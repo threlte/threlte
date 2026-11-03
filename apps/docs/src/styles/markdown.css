@@ -157,6 +157,17 @@ https://github.com/withastro/starlight/blob/main/packages/starlight/style/markdo
     font-family: var(--font-mono);
   }
 
+  .markdown-content kbd:not(:where(.not-content *)) {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    margin-block: -0.125rem;
+    padding: 0.125rem 0.4375rem;
+    border: 1px solid rgb(255 255 255 / 0.25);
+    border-bottom-width: 2px;
+    border-radius: 0.25rem;
+    background-color: rgb(255 255 255 / 0.06);
+  }
+
   .markdown-content blockquote:not(:where(.not-content *)) {
     border-inline-start: 1px solid var(--color-gray);
     padding-inline-start: 1rem;
