@@ -28,7 +28,7 @@
   lang="ts"
   module
 >
-  import { ShaderChunk } from 'three'
+  import { Material, Mesh, ShaderChunk } from 'three'
 
   // Captured once per page load.
   const original = ShaderChunk.shadowmap_pars_fragment
@@ -46,21 +46,13 @@
 </script>
 
 <script lang="ts">
-  import { useThrelte } from '@threlte/core'
+  import { isInstanceOf, useThrelte } from '@threlte/core'
   import { BasicShadowMap } from 'three'
+  import type { SoftShadowsProps } from './types.js'
 
   const { renderer, scene } = useThrelte()
 
-  interface Props {
-    /** Size of the light source (the larger the softer the light), default: 25 */
-    size?: number
-    /** Depth focus, use it to shift the focal point (where the shadow is the sharpest), default: 0 (the beginning) */
-    focus?: number
-    /** Number of samples (more samples less noise but more expensive), default: 10 */
-    samples?: number
-  }
-
-  let { size = 25, focus = 0, samples = 10 }: Props = $props()
+  let { size = 25, focus = 0, samples = 10 }: SoftShadowsProps = $props()
 
   // 1.25 is folded into `size` so the inner filter loop avoids one multiply.
   const filterScale = $derived(size * 1.25)
@@ -144,22 +136,29 @@
   // we drop each material's renderer-side properties (which hold its program
   // ref) and empty the program cache. We avoid `material.dispose()` so user
   // `onBeforeCompile` injections and shared uniform references are preserved.
-  const forceFreshCompile = (material: any) => {
+  const forceFreshCompile = (material: Material) => {
     renderer.properties.remove(material)
     material.needsUpdate = true
   }
 
   const recompile = () => {
-    scene.traverse((object: any) => {
-      const material = object.material
-      if (!material) return
+    scene.traverse((object) => {
+      const material = (object as Mesh).material
+
       if (Array.isArray(material)) {
-        for (const m of material) forceFreshCompile(m)
-      } else {
+        for (const subMaterial of material) {
+          if (isInstanceOf(subMaterial, 'Material')) {
+            forceFreshCompile(subMaterial)
+          }
+        }
+      } else if (isInstanceOf(material, 'Material')) {
         forceFreshCompile(material)
       }
     })
-    renderer.info.programs!.length = 0
+
+    if (renderer.info.programs !== null) {
+      renderer.info.programs.length = 0
+    }
   }
 
   $effect(() => {

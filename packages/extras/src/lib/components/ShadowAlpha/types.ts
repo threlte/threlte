@@ -1,6 +1,6 @@
 import type { Texture } from 'three'
 
-export type ShadowAlphaProps = {
+export interface ShadowAlphaProps {
   /**
    * Shadow opacity. If not set, reads from the parent mesh's material opacity.
    */

@@ -49,7 +49,7 @@
   </div>
   <div
     id="canvas"
-    class="absolute top-0 h-full"
+    class="absolute top-0 left-0 h-full w-full"
   >
     <Canvas>
       {#each items as item}

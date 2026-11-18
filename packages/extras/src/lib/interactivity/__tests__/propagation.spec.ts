@@ -147,7 +147,7 @@ describe('event propagation', () => {
     // Now Front's pointermove handler starts calling stopPropagation.
     // On the next move, Back should receive pointerout because it is
     // no longer reachable.
-    onpointermoveFront.mockImplementation((e: any) => e.stopPropagation())
+    onpointermoveFront.mockImplementation((e) => e.stopPropagation())
 
     // Move slightly so the throttle doesn't ignore it
     pointer(target, 'pointermove', 101, 100)

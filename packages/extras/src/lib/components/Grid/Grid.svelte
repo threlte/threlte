@@ -22,6 +22,7 @@
     infiniteGrid = false,
     fadeOrigin,
     side = DoubleSide,
+    depthWrite = false,
     type = 'grid',
     axis = 'x',
     maxRadius = 0,
@@ -39,6 +40,7 @@
   const gridPlane = new Plane()
   const gridPlaneNormal = new Vector3(0, 1, 0)
   const zeroVector = new Vector3(0, 0, 0)
+  const cameraWorldPosition = new Vector3()
 
   const axisToInt = {
     x: 0,
@@ -85,7 +87,7 @@
     worldPlanePosition: new Uniform(new Vector3())
   }
 
-  $effect.pre(() => {
+  $effect(() => {
     // convert axis string to int indexes xzy = [0,2,1]
     const { axes, normal } = planeConfig[plane]
     const c0 = axes.charAt(0) as 'x' | 'y' | 'z'
@@ -98,39 +100,39 @@
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.cellSize.value = cellSize
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.sectionSize.value = sectionSize
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.cellColor.value.set(cellColor)
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.sectionColor.value.set(sectionColor)
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.backgroundColor.value.set(backgroundColor)
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.backgroundOpacity.value = backgroundOpacity
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.fadeDistance.value = fadeDistance
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.fadeStrength.value = fadeStrength
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     if (fadeOrigin) {
       if (isInstanceOf(fadeOrigin, 'Vector3')) {
         uniforms.fadeOrigin.value.copy(fadeOrigin)
@@ -140,24 +142,24 @@
     }
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.cellThickness.value = cellThickness
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.sectionThickness.value = sectionThickness
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.followCamera.value = followCamera
     invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.infiniteGrid.value = infiniteGrid
     invalidate()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     uniforms.gridType.value = gridType[type]
     uniforms.lineGridCoord.value = axisToInt[axis as 'x' | 'y' | 'z']
     uniforms.circleGridMaxRadius.value = maxRadius
@@ -178,7 +180,7 @@
       const uFadeOrigin = material.uniforms.fadeOrigin as Uniform<Vector3>
 
       const projectedPoint = gridPlane.projectPoint(
-        camera.current.position,
+        camera.current.getWorldPosition(cameraWorldPosition),
         worldCamProjPosition.value
       )
       if (!fadeOrigin) {
@@ -203,6 +205,10 @@
     {vertexShader}
     {uniforms}
     transparent
+    {depthWrite}
+    polygonOffset
+    polygonOffsetFactor={1}
+    polygonOffsetUnits={1}
     {side}
   />
   {#if children}

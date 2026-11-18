@@ -8,7 +8,7 @@
     type Vector2Tuple,
     type Vector3Tuple
   } from 'three'
-  import { setContext } from 'svelte'
+  import { setContext, untrack } from 'svelte'
   import { writable } from 'svelte/store'
   import type { InstancedSpriteProps, InstancedSpriteUserCtx } from './types.js'
   import SpriteInstance from './SpriteInstance.svelte'
@@ -30,23 +30,30 @@
     ...props
   }: InstancedSpriteProps = $props()
 
-  const spriteBaseMaterial = new baseMaterial({
-    transparent: transparent,
-    alphaTest: alphaTest,
+  const initialOptions = untrack(() => ({
+    baseMaterial,
+    alphaTest,
+    transparent,
+    count
+  }))
+
+  const spriteBaseMaterial = new initialOptions.baseMaterial({
+    transparent: initialOptions.transparent,
+    alphaTest: initialOptions.alphaTest,
     // needs to be double side for shading
     side: DoubleSide
   })
 
   const { renderer } = useThrelte()
 
-  const mesh = new InstancedSpriteMesh(spriteBaseMaterial, count, renderer)
+  const mesh = new InstancedSpriteMesh(spriteBaseMaterial, initialOptions.count, renderer)
 
   const animationMap = writable<Map<string, number>>(new Map())
 
   $effect.pre(() => {
     if (spritesheet) {
       mesh.spritesheet = spritesheet.spritesheet
-      animationMap.set(mesh.animationMap as any)
+      animationMap.set(mesh.animationMap as Map<string, number>)
       mesh.material.map = spritesheet.texture
       mesh.material.needsUpdate = true
     }
@@ -93,7 +100,7 @@
 
     // going from random offset to none
     if (previousRndOffset === true && !randomPlaybackOffset) {
-      for (let i = 0; i < count; i++) {
+      for (let i = 0; i < initialOptions.count; i++) {
         mesh.offset.setAt(i, 0)
       }
     }
@@ -111,10 +118,13 @@
     instanceMatrixNeedsUpdate = true
   }
 
-  // Context for user facing components and hooks
+  // Context for user facing components and hooks.
+  // The animation-name generic is erased here: it's only known at each consumer's
+  // call site, not at the provider, so `any` is the correct bound at this boundary.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- generic erased across context boundary
   setContext<InstancedSpriteUserCtx<any>>('instanced-sprite-ctx', {
     sprite: mesh,
-    count,
+    count: initialOptions.count,
     animationMap,
     updatePosition
   })

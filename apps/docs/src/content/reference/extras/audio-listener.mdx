@@ -3,6 +3,8 @@ category: '@threlte/extras'
 group: 'Audio'
 title: '<AudioListener>'
 type: 'component'
+webgl: true
+webgpu: true
 sourcePath: 'packages/extras/src/lib/audio/AudioListener/AudioListener.svelte'
 componentSignature:
   {
@@ -11,7 +13,6 @@ componentSignature:
         type: 'AudioListener',
         url: 'https://threejs.org/docs/index.html#api/en/audio/AudioListener'
       },
-    props: [{ name: 'id', type: 'string' }, { name: 'masterVolume', type: 'number' }],
     exports:
       [
         { name: 'resumeContext', type: '() => Promise<void>' },

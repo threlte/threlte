@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content'
 import { glob } from 'astro/loaders'
+import { componentProps } from './loaders/componentProps'
 
 export const componentSignature = z.object({
   pretext: z.string().optional(),
@@ -57,7 +58,8 @@ export const componentSignature = z.object({
             name: z.string(),
             url: z.string()
           })
-        )
+        ),
+        description: z.string().optional()
       })
     )
     .optional()
@@ -92,7 +94,19 @@ export const referenceCollection = defineCollection({
     category: z.enum(referenceCategories),
     group: z.string().optional(),
     componentSignature: componentSignature.optional(),
-    showInSidebar: z.boolean().optional().default(true)
+    showInSidebar: z.boolean().optional().default(true),
+    /**
+     * Renderers this export works with, each shown as a pill next to the title.
+     * They are independent: an export can support one, both, or — while it is
+     * being ported — neither.
+     *
+     * Both default to `false` so pills only appear where support has actually
+     * been established. A lone `webgl` pill states that WebGPU is unsupported,
+     * which is only true of a package that has a `webgpu` entrypoint to be
+     * missing from.
+     */
+    webgl: z.boolean().optional().default(false),
+    webgpu: z.boolean().optional().default(false)
   })
 })
 
@@ -172,5 +186,6 @@ export const collections = {
   showcase: showcaseCollection,
   examples: examplesCollection,
   blog: blogCollection,
-  authors: authorsCollection
+  authors: authorsCollection,
+  componentProps: defineCollection({ loader: componentProps(['extras']) })
 }

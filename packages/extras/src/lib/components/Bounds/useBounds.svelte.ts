@@ -61,7 +61,7 @@ export const provideBounds = (
   const boundsControls = new CameraControls(camera.current, dom)
   boundsControls.disconnect()
 
-  $effect.pre(() => {
+  $effect(() => {
     boundsControls.camera = camera.current
   })
 

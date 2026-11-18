@@ -31,7 +31,7 @@
     ...props
   }: OutlinesProps = $props()
 
-  const { renderer } = useThrelte()
+  const { renderer, invalidate } = useThrelte()
 
   const uniforms = {
     screenspace: new Uniform(false),
@@ -53,7 +53,10 @@
   const parent = useParent()
 
   let geometry = $derived.by(() => {
-    if (!isInstanceOf(parent.current, 'Mesh')) return undefined
+    if (!isInstanceOf(parent.current, 'Mesh')) {
+      return undefined
+    }
+
     return toCreasedNormals(parent.current.geometry, angle)
   })
 
@@ -72,34 +75,46 @@
   })
 
   $effect(() => {
-    if (mesh) mesh.renderOrder = renderOrder
+    if (mesh) {
+      mesh.renderOrder = renderOrder
+      invalidate()
+    }
   })
   $effect(() => {
     material.transparent = transparent
+    invalidate()
   })
   $effect(() => {
     material.toneMapped = toneMapped
+    invalidate()
   })
   $effect(() => {
     material.polygonOffset = polygonOffset
+    invalidate()
   })
   $effect(() => {
     material.polygonOffsetFactor = polygonOffsetFactor
+    invalidate()
   })
   $effect(() => {
     material.uniforms.screenspace.value = screenspace
+    invalidate()
   })
   $effect(() => {
     material.uniforms.color.value.set(color)
+    invalidate()
   })
   $effect(() => {
     material.uniforms.opacity.value = opacity
+    invalidate()
   })
   $effect(() => {
     material.uniforms.thickness.value = thickness
+    invalidate()
   })
   $effect(() => {
     renderer.getDrawingBufferSize(material.uniforms.size.value)
+    invalidate()
   })
 </script>
 

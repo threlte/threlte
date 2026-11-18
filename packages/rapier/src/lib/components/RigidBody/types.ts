@@ -1,10 +1,8 @@
 import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
 import type { Snippet } from 'svelte'
-import type { Euler, Vector3 } from 'three'
+import type { Euler, Vector3Tuple } from 'three'
 import type { RigidBodyTypeString } from '../../lib/parseRigidBodyType.js'
 import type { CreateEvent, RigidBodyEvents } from '../../types/types.js'
-
-export type Boolean3Array = [x: boolean, y: boolean, z: boolean]
 
 export interface RigidBodyProps extends CreateEvent<RapierRigidBody>, RigidBodyEvents {
   rigidBody?: RapierRigidBody | undefined
@@ -25,7 +23,7 @@ export interface RigidBodyProps extends CreateEvent<RapierRigidBody>, RigidBodyE
    *
    * @default [0, 0, 0]
    */
-  linearVelocity?: Parameters<Vector3['set']>
+  linearVelocity?: Vector3Tuple
 
   /**
    * The angular velocity of this body.
@@ -62,12 +60,12 @@ export interface RigidBodyProps extends CreateEvent<RapierRigidBody>, RigidBodyE
   /**
    * Allow rotation of this rigid-body only along specific axes.
    */
-  enabledRotations?: Boolean3Array
+  enabledRotations?: [x: boolean, y: boolean, z: boolean]
 
   /**
    * Allow translations of this rigid-body only along specific axes.
    */
-  enabledTranslations?: Boolean3Array
+  enabledTranslations?: [x: boolean, y: boolean, z: boolean]
 
   /**
    * Dominance is a non-realistic, but sometimes useful, feature.

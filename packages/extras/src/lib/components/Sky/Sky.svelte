@@ -50,7 +50,7 @@
 
   const originalEnvironment = scene.environment
 
-  $effect.pre(() => {
+  $effect(() => {
     if (setEnvironment && renderTarget) {
       scene.environment = renderTarget.texture
       invalidate()

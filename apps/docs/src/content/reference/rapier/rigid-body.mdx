@@ -20,8 +20,16 @@ componentSignature:
         { name: 'ccd', type: 'boolean', default: 'false' },
         { name: 'lockRotations', type: 'boolean', default: 'false' },
         { name: 'lockTranslations', type: 'boolean', default: 'false' },
-        { name: 'enabledRotations', type: 'Boolean3Array', default: '[true, true, true]' },
-        { name: 'enabledTranslations', type: 'Boolean3Array', default: '[true, true, true]' },
+        {
+          name: 'enabledRotations',
+          type: '[boolean, boolean, boolean]',
+          default: '[true, true, true]'
+        },
+        {
+          name: 'enabledTranslations',
+          type: '[boolean, boolean, boolean]',
+          default: '[true, true, true]'
+        },
         { name: 'dominance', type: 'number', default: '0' },
         { name: 'linearDamping', type: 'number', default: '0' },
         { name: 'angularDamping', type: 'number', default: '0' },

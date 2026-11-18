@@ -18,7 +18,7 @@ void main()
 	vec3 viewDirection = normalize(cameraPosition - vPosition);
 	float fresnel = dot(viewDirection, normal);
 	fresnel = pow(fresnel, glowInternalRadius + 0.1);
-	float falloff = smoothstep(0., falloffAmount, fresnel);
+	float falloff = smoothstep(0., max(falloffAmount, 1e-5), fresnel);
 	float fakeGlow = fresnel;
 	fakeGlow += fresnel * glowSharpness;
 	fakeGlow *= falloff;

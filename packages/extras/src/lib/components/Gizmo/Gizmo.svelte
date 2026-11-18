@@ -1,11 +1,17 @@
 <script lang="ts">
-  import { useTask, useThrelte, useParent, observe } from '@threlte/core'
-  import { NoToneMapping, Vector4, type Event } from 'three'
+  import { useTask, useThrelte, useParent } from '@threlte/core'
+  import { untrack } from 'svelte'
+  import {
+    NoToneMapping,
+    Vector4,
+    type OrthographicCamera,
+    type PerspectiveCamera,
+    type Event
+  } from 'three'
   import type { GizmoProps, Controls } from './types.js'
-  import { ViewportGizmo } from 'three-viewport-gizmo'
+  import { ViewportGizmo } from './viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
   import { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
-  import { untrack } from 'svelte'
 
   let {
     controls,
@@ -14,38 +20,93 @@
     onstart,
     onchange,
     onend,
+    placement = 'bottom-left',
+    size = 86,
+    offset,
+    id,
+    className,
+    animated = true,
+    speed = 1,
     ...rest
   }: GizmoProps = $props()
 
   const parent = useParent()
-  const { camera, renderer, dom, autoRenderTask, shouldRender, size, invalidate } = useThrelte()
+  const {
+    camera,
+    renderer,
+    dom,
+    autoRenderTask,
+    shouldRender,
+    size: canvasSize,
+    invalidate
+  } = useThrelte()
 
-  const gizmo = $derived.by(() => {
-    invalidate()
-    return new ViewportGizmo(
-      untrack(() => camera.current),
-      renderer,
-      {
+  const gizmo = new ViewportGizmo(
+    camera.current as PerspectiveCamera | OrthographicCamera,
+    renderer,
+    untrack(() => ({
+      container: dom,
+      placement,
+      size,
+      offset,
+      id,
+      className,
+      animated,
+      speed,
+      ...rest
+    }))
+  )
+
+  ref = gizmo
+
+  let built = false
+
+  $effect(() => {
+    const options = { ...rest }
+
+    if (!built) {
+      built = true
+      return
+    }
+
+    untrack(() => {
+      gizmo.set({
         container: dom,
-        placement: 'bottom-left',
-        size: 86,
-        ...rest
-      }
-    )
+        placement,
+        size,
+        offset,
+        id,
+        className,
+        animated,
+        speed,
+        ...options
+      })
+      invalidate()
+    })
   })
 
-  $effect.pre(() => {
-    if (ref !== gizmo) {
-      ref = gizmo
-    }
+  $effect(() => {
+    gizmo.animated = animated
+    gizmo.speed = speed
+    gizmo.setLayout({ placement, size, offset })
+
+    if (id !== undefined) gizmo.domElement.id = id
+    if (className !== undefined) gizmo.domElement.className = className
+
+    invalidate()
+  })
+
+  $effect(() => {
+    return () => gizmo.dispose()
   })
 
   const viewport = new Vector4()
 
   const cameraControls = $derived(controls ?? (parent.current as Controls))
+  const initialRenderTask = untrack(() => renderTask)
 
   useTask(
-    renderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
+    initialRenderTask?.key ?? Symbol('threlte-extras-gizmo-render'),
     () => {
       if (shouldRender()) {
         const toneMapping = renderer.toneMapping
@@ -61,15 +122,15 @@
     },
     {
       autoInvalidate: false,
-      ...(renderTask ?? { after: autoRenderTask })
+      ...(initialRenderTask ?? { after: autoRenderTask })
     }
   )
 
   $effect(() => {
-    gizmo.camera = camera.current
+    gizmo.camera = camera.current as PerspectiveCamera | OrthographicCamera
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     if (!cameraControls) return
 
     if (cameraControls instanceof OrbitControls || cameraControls instanceof TrackballControls) {
@@ -117,7 +178,7 @@
     onend?.(event)
   }
 
-  $effect.pre(() => {
+  $effect(() => {
     gizmo.addEventListener('start', handleStart)
     gizmo.addEventListener('change', handleChange)
     gizmo.addEventListener('end', handleEnd)
@@ -128,15 +189,10 @@
     }
   })
 
-  observe.pre(
-    () => [size],
-    () => {
+  $effect(() => {
+    if (canvasSize.current) {
       gizmo.update()
       invalidate()
     }
-  )
-
-  $effect.pre(() => {
-    return () => gizmo.dispose()
   })
 </script>

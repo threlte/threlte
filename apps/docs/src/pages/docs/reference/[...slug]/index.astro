@@ -4,6 +4,8 @@ import DocsLayout from '$layouts/DocsLayout.astro'
 import MdxCode from '$components/Code/MdxCode.astro'
 import ComponentSignature from '$components/ComponentSignature/ComponentSignature.astro'
 import QuickNav from '$components/QuickNav/QuickNav.astro'
+import Pill from '$components/Pill/Pill.astro'
+import { getComponentSignature } from '$lib/getComponentSignature'
 
 export async function getStaticPaths() {
   const blogEntries = await getCollection('reference')
@@ -20,21 +22,56 @@ interface Props {
 }
 
 const { entry } = Astro.props
-const { title, category, componentSignature, description } = entry.data
+const { title, category, description, webgl, webgpu } = entry.data
 const { Content } = await render(entry)
+const componentSignature = await getComponentSignature(entry)
+
+const webgpuHref =
+  category === '@threlte/extras'
+    ? `${import.meta.env.BASE_URL}docs/reference/extras/webgpu`
+    : `${import.meta.env.BASE_URL}docs/reference/core/webgpu`
+
+const webglTooltip = webgpu
+  ? `${title} works with WebGL and is available from the ${category} export.`
+  : `${title} works with WebGL only.`
 ---
 
 <DocsLayout
   {entry}
+  {componentSignature}
   title={`${title} | ${category}`}
   {description}
 >
   <h6>
     {category}
   </h6>
-  <h1>
-    {title}
-  </h1>
+  <div class="flex flex-wrap items-center gap-1">
+    <h1>
+      {title}
+    </h1>
+
+    {
+      webgl && (
+        <Pill
+          label="webgl"
+          color="orange"
+          href={webgpu ? undefined : webgpuHref}
+          tooltip={webglTooltip}
+        />
+      )
+    }
+
+    {
+      webgpu && (
+        <Pill
+          label="webgpu"
+          color="blue"
+          href={webgpuHref}
+          tooltip={`${title} works with WebGPU and is available from the ${category}/webgpu export.`}
+        />
+      )
+    }
+  </div>
 
   <Content components={{ pre: MdxCode }} />
 

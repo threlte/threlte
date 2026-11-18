@@ -4,8 +4,10 @@ group: 'Performance'
 sourcePath: 'packages/extras/src/lib/components/Detailed/Detailed.svelte'
 title: '<Detailed>'
 type: 'component'
+webgl: true
+webgpu: true
 componentSignature:
-  { extends: { type: 'LOD', url: 'https://threejs.org/docs/#api/en/objects/LOD' }, props: [] }
+  { extends: { type: 'LOD', url: 'https://threejs.org/docs/#api/en/objects/LOD' } }
 ---
 
 `<Detailed>` is an abstraction around Three.js' [LOD](https://threejs.org/docs/#api/en/objects/LOD). A common technique to improve performance is to swap out high-detail models or meshes for low-detail ones at large distances.

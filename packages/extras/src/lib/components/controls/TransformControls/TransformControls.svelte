@@ -14,6 +14,7 @@
     object,
     controls = $bindable(),
     group = $bindable(),
+    ref = $bindable(),
     children,
     ...props
   }: TransformControlsProps = $props()
@@ -47,8 +48,9 @@
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const transformControls = new TransformControls(camera.current, dom)
   const attachGroup = new Group()
+  ref = attachGroup
 
-  $effect.pre(() => {
+  $effect(() => {
     transformControls.camera = camera.current
   })
 
@@ -57,7 +59,7 @@
     return () => transformControls?.detach()
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     transformControlsContext.set(transformControls)
     return () => {
       transformControlsContext.set(undefined)
@@ -87,12 +89,12 @@
   let transformProps = $state<Props<TransformControls>>({})
   let objectProps = $state<Props<Group>>({})
 
-  $effect.pre(() => {
+  $effect(() => {
     transformProps = {}
     objectProps = {}
 
     Object.keys(props).forEach((key) => {
-      $effect.pre(() => {
+      $effect(() => {
         if (transformOnlyPropNames.includes(key)) {
           transformProps[key] = props[key]
         } else {
@@ -110,6 +112,7 @@
       isDragging = false
     }
     // TODO: unfortunately the type of the event prop is not correct *yet*
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- upstream three TransformControls event type is wrong; revisit when fixed
     props.onchange?.(event as any)
   }
 </script>

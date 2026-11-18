@@ -44,15 +44,15 @@
 
   export const getEffect = () => asciiEffect
 
-  $effect.pre(() => {
+  $effect(() => {
     asciiEffect.setSize(size.current.width, size.current.height)
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     asciiEffect.domElement.style.color = fgColor
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     asciiEffect.domElement.style.backgroundColor = bgColor
   })
 

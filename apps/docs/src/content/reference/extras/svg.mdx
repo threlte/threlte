@@ -4,19 +4,8 @@ group: 'Content'
 title: '<SVG>'
 sourcePath: 'packages/extras/src/lib/components/Svg/Svg.svelte'
 type: 'component'
-componentSignature:
-  {
-    'props':
-      [
-        { name: 'src', type: 'string', required: true, description: 'Can be a URL or SVG data.' },
-        { name: 'skipFill', type: 'boolean', default: 'false' },
-        { name: 'skipStrokes', type: 'boolean', default: 'false' },
-        { name: 'fillMaterialProps', type: 'Props<typeof MeshBasicMaterial>', default: '{}' },
-        { name: 'strokeMaterialProps', type: 'Props<typeof MeshBasicMaterial>', default: '{}' },
-        { name: 'fillMeshProps', type: 'Props<typeof Mesh>', default: '{}' },
-        { name: 'strokeMeshProps', type: 'Props<typeof Mesh>', default: '{}' }
-      ]
-  }
+webgl: true
+webgpu: true
 ---
 
 Renders an SVG using Three.js' SVGLoader.

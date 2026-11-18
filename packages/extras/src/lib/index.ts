@@ -39,7 +39,7 @@ export { default as HUD } from './components/HUD/HUD.svelte'
 export { default as Float } from './components/Float/Float.svelte'
 export { default as GLTF } from './components/GLTF/GLTF.svelte'
 export { default as Gizmo } from './components/Gizmo/Gizmo.svelte'
-export type { GizmoOptions } from 'three-viewport-gizmo'
+export type { GizmoOptions, GizmoAxisOptions } from './components/Gizmo/viewportGizmo/index.js'
 export { default as ContactShadows } from './components/ContactShadows/ContactShadows.svelte'
 export { default as CubeEnvironment } from './components/environment/CubeEnvironment/CubeEnvironment.svelte'
 export { default as Environment } from './components/environment/Environment/Environment.svelte'
@@ -139,7 +139,6 @@ export {
 // bvh
 export { bvh } from './bvh/bvh.svelte.js'
 export type { BVHOptions, BVHProps } from './bvh/types.js'
-import { SAH, CENTER, AVERAGE } from 'three-mesh-bvh'
-export const BVHSplitStrategy = { SAH, CENTER, AVERAGE }
+export { BVHSplitStrategy } from './bvh/splitStrategy.js'
 
 export type { ThrelteGltf } from './types/types.js'

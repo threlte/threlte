@@ -16,6 +16,7 @@ import Book from '$components/Icons/Book.astro'
 import Circles from '$components/Icons/Circles.astro'
 import Search from '$components/Search/Search.svelte'
 import Markprompt from '$components/Search/Markprompt'
+import type { ComponentSignature } from '$lib/getComponentSignature'
 
 export interface Props {
   title: string
@@ -23,6 +24,7 @@ export interface Props {
   image?: string
   canonical?: string
   entry: CollectionEntry<'learn'> | CollectionEntry<'reference'>
+  componentSignature?: ComponentSignature
 }
 
 const { title, description, image, canonical } = Astro.props
@@ -226,7 +228,10 @@ const activeLinkStyles = 'text-orange!'
       class="fixed top-0 right-0 z-10 row-span-2 hidden h-[calc(100vh-var(--docs-navbar-height))] place-self-start justify-self-stretch overflow-hidden lg:top-(--docs-navbar-height) lg:block lg:w-(--right-sidebar-width)"
       transition:name="right_sidebar"
     >
-      <RightSidebar entry={Astro.props.entry}>
+      <RightSidebar
+        entry={Astro.props.entry}
+        componentSignature={Astro.props.componentSignature}
+      >
         <Socials />
       </RightSidebar>
     </aside>

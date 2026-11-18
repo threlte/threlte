@@ -116,7 +116,7 @@ export const transitions = () => {
 
     // For new Svelte (PR #17293+): ensure nodes exists on the component effect.
     // In old Svelte, effects have a 'transitions' property; in new Svelte they don't.
-    const componentEffect = active_effect as any
+    const componentEffect = active_effect
     if (componentEffect && !('transitions' in componentEffect) && componentEffect.nodes == null) {
       componentEffect.nodes = { start: null, end: null, a: null, t: null }
     }

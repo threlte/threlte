@@ -1,0 +1,117 @@
+---
+category: '@threlte/core'
+title: WebGPU
+sourcePath: 'packages/core/src/lib/webgpu'
+order: -0.75
+---
+
+`@threlte/core` ships a `webgpu` export that mirrors the regular library but
+swaps the default renderer for `WebGPURenderer`, awaits `renderer.init()`
+internally, and points `<T>` at `three/webgpu` so node materials (e.g.
+`<T.MeshPhysicalNodeMaterial />`) resolve out of the box.
+
+`useThrelte` from the `webgpu` export is also updated to have `WebGPURenderer` types.
+
+```svelte title="App.svelte"
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core/webgpu'
+</script>
+
+<Canvas>
+  <Scene />
+</Canvas>
+```
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core/webgpu'
+</script>
+
+<T.Mesh>
+  <T.BoxGeometry />
+  <T.MeshPhysicalNodeMaterial />
+</T.Mesh>
+```
+
+<Example path="renderers/WebGPU" />
+
+<small>
+  Adapted from [this Three.js
+  example](https://threejs.org/examples/?q=webgpu#webgpu_performance_renderbundle), demonstrating
+  WebGPU [render bundles](https://developer.mozilla.org/en-US/docs/Web/API/GPURenderBundle).
+</small>
+
+<Tip type="note">
+  WebGPU is still young and has [limited availability across major
+  browsers](https://caniuse.com/?search=webgpu). Three.js's `WebGPURenderer` will fall back to WebGL
+  when WebGPU is not available.
+</Tip>
+
+## Customizing the renderer
+
+To configure the renderer (e.g. force a specific backend), pass a `createRenderer`
+factory. The `<Canvas>` still awaits `init()` for you.
+
+```svelte title="App.svelte"
+<script>
+  import Scene from './Scene.svelte'
+  import { Canvas } from '@threlte/core/webgpu'
+  import { WebGPURenderer } from 'three/webgpu'
+</script>
+
+<Canvas
+  createRenderer={(canvas) => {
+    return new WebGPURenderer({
+      canvas,
+      antialias: true,
+      forceWebGL: false
+    })
+  }}
+>
+  <Scene />
+</Canvas>
+```
+
+## Vite
+
+WebGPU uses top-level async to determine WebGPU compatibility. Vite will often
+throw an error when it detects this.
+
+To circumvent this issue, the following can be added to your Vite config.
+
+```js title=vite.config.js
+optimizeDeps: {
+  esbuildOptions: {
+    target: 'esnext'
+  }
+},
+build: {
+  target: 'esnext'
+}
+```
+
+Alternatively,
+[`vite-plugin-top-level-await`](https://github.com/Menci/vite-plugin-top-level-await)
+can be used, although less success has been reported with this method.
+
+## Extras
+
+`@threlte/extras` ships a matching `webgpu` export. Import from it instead of
+the package root whenever your `<Canvas>` comes from `@threlte/core/webgpu`.
+
+```svelte title="Scene.svelte"
+<script>
+  import { T } from '@threlte/core/webgpu'
+  import { Grid, OrbitControls } from '@threlte/extras/webgpu'
+</script>
+```
+
+Most of the package is renderer-agnostic and works as-is, a few components have
+been rewritten in TSL, and the rest throw until they are migrated. See
+[`@threlte/extras` WebGPU](/docs/reference/extras/webgpu) for the full breakdown.
+
+## TSL
+
+Materials on WebGPU are extended with nodes rather than string shaders. See
+[TSL](/docs/learn/advanced/webgpu) for what that looks like in Threlte.

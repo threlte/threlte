@@ -21,9 +21,9 @@
 <script lang="ts">
   import { ShaderMaterial } from 'three'
   import { T } from '@threlte/core'
-  import type { Props } from '@threlte/core'
+  import type { UvMaterialProps } from './types.js'
 
-  let { children, ref = $bindable(), ...restProps }: Props<ShaderMaterial> = $props()
+  let { children, ref = $bindable(), ...restProps }: UvMaterialProps = $props()
 
   const material = new ShaderMaterial({
     fragmentShader,

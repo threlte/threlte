@@ -58,12 +58,12 @@ export const useMaterials = () => {
   injectPlugin('csm', (args) => {
     // we need to wait for mounting since otherwise the meshes probably have
     // default materials applied
-    $effect.pre(() => {
+    $effect(() => {
       extractMaterials(args.ref)
     })
   })
 
-  $effect.pre(() => {
+  $effect(() => {
     return () => (setupCallback = undefined)
   })
 

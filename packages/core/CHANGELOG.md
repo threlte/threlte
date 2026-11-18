@@ -1,5 +1,19 @@
 # @threlte/core
 
+## 8.7.0
+
+### Minor Changes
+
+- f451d41: Add `OmitProps`, an `Omit` that keeps the typed props of `Props<Type>`
+
+## 8.6.1
+
+### Patch Changes
+
+- 1dfe40b: [@threlte/core] Skip resizing and auto-rendering while the canvas has no size
+- e406193: [@threlte/core] Preserve an object's own type when narrowing with `isInstanceOf`
+- a33300a: [@threlte/core] Fix `<T>` ignoring props added after mount, such as new keys in a spread object
+
 ## 8.6.0
 
 ### Minor Changes

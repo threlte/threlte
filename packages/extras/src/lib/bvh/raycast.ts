@@ -37,7 +37,7 @@ const closestOnRay = new Vector3()
 const pointsToMesh = new WeakMap<Points, Mesh>()
 const objectToHelper = new WeakMap<Points | Mesh, MeshBVHHelper>()
 
-const createGeometryBVH = (geometry: BufferGeometry<any>, opts: BVHOptions) => {
+const createGeometryBVH = (geometry: BufferGeometry, opts: BVHOptions) => {
   geometry.computeBoundsTree = computeBoundsTree
   geometry.disposeBoundsTree = disposeBoundsTree
   geometry.computeBoundsTree(opts)
@@ -102,7 +102,7 @@ export const createBatchedMeshBVH = (mesh: BatchedMesh, opts: BVHOptions) => {
   }
 }
 
-export const createPointsBVH = (points: Points<any>, opts: BVHOptions) => {
+export const createPointsBVH = (points: Points, opts: BVHOptions) => {
   const geometry = new BufferGeometry()
   const positions = points.geometry.getAttribute('position')
   const indices = new Uint32Array(positions.count * 3)

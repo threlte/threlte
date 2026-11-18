@@ -88,6 +88,7 @@
       bind:this={iframeElement}
       src="{import.meta.env.BASE_URL}examples/{path}"
       title={path}
+      loading="lazy"
       class="h-full w-full border-none"
       onload={attachIframeEscapeListener}
     ></iframe>

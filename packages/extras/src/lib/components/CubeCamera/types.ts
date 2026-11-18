@@ -1,60 +1,63 @@
 import type { Props } from '@threlte/core'
 import type { Group, Scene, CubeCamera } from 'three'
 
-export interface CubeCameraProps extends Props<
-  Group,
-  [
-    {
-      camera: CubeCamera
-      renderTarget: CubeCamera['renderTarget']
-      ref: Group
-      restart(): void
-      update(): void
-    }
-  ]
-> {
+export type CubeCameraChildrenArgs<Camera, RenderTarget> = [
+  {
+    camera: Camera
+    renderTarget: RenderTarget
+    ref: Group
+    restart(): void
+    update(): void
+  }
+]
+
+export interface CubeCameraProps
+  extends
+    Props<Group, CubeCameraChildrenArgs<CubeCamera, CubeCamera['renderTarget']>>,
+    CubeCameraOptions {}
+
+export interface CubeCameraOptions {
   /**
-   * background that will be set before rendering to the render target. a value of `'auto'` will use the current background
+   * The scene background used while rendering the cube map. `'auto'` keeps
+   * the scene's current background.
    * @default 'auto'
    */
   background?: Scene['background'] | 'auto'
 
   /**
-   * passed along to the internal CubeCamera
+   * The far plane of the cube camera.
    * @default 1000
    */
   far?: number
 
   /**
-   * fog that will be set before rendering to the render target. a value of `'auto'` will use the current fog
+   * The scene fog used while rendering the cube map. `'auto'` keeps the
+   * scene's current fog.
    * @default 'auto'
    */
   fog?: Scene['fog'] | 'auto'
 
   /**
-   * controls how many times camera will be updated
+   * How many frames the cube map is rendered for before stopping. `Infinity`
+   * renders it every frame. Changing any prop restarts the count.
    * @default Infinity
    */
   frames?: number
 
   /**
-   * passed along to the internal CubeCamera
+   * The near plane of the cube camera.
    * @default 0.1
    */
   near?: number
 
-  /**
-   * a callback that is ran when the update task has been started
-   */
+  /** Called whenever rendering of the cube map starts or restarts. */
   onupdatestart?: () => void
 
-  /**
-   * a callback that is ran when the update task has been stopped
-   */
+  /** Called when rendering stops after `frames` frames, or before a restart. */
   onupdatestop?: () => void
 
   /**
-   * size of the render target. a higher resolution should have more detail
+   * The width and height in pixels of each face of the cube map.
    * @default 256
    */
   resolution?: number

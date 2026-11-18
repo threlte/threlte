@@ -6,7 +6,7 @@
 
   import type { WireframeProps } from './types.js'
   import { setWireframeOverride } from './material.js'
-  import { isInstanceOf, useParent } from '@threlte/core'
+  import { isInstanceOf, useParent, useThrelte } from '@threlte/core'
 
   const getBarycentricCoordinates = (geometry: BufferGeometry, removeEdge?: boolean) => {
     const position = geometry.getAttribute('position')
@@ -50,7 +50,9 @@
 <script lang="ts">
   let { simplify = false, ...rest }: WireframeProps = $props()
 
+  const { invalidate } = useThrelte()
   const parent = useParent()
+
   const fillOpacity = new Uniform(0)
   const strokeOpacity = new Uniform(0)
   const fillMix = new Uniform(0)
@@ -67,50 +69,65 @@
   const backfaceStroke = new Uniform(new Color())
   const fill = new Uniform(new Color())
 
-  $effect.pre(() => {
+  $effect(() => {
     fillOpacity.value = rest.fillOpacity ?? 0
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     fillMix.value = rest.fillMix ?? 0
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     strokeOpacity.value = rest.strokeOpacity ?? 1
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     thickness.value = rest.thickness ?? 1
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     colorBackfaces.value = rest.colorBackfaces ?? false
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     dash.value = rest.dash ?? false
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     dashInvert.value = rest.dashInvert ?? true
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     dashRepeats.value = rest.dashRepeats ?? 4
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     dashLength.value = rest.dashLength ?? 0.5
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     squeeze.value = rest.squeeze ?? false
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     squeezeMin.value = rest.squeezeMin ?? 0.2
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     squeezeMax.value = rest.squeezeMax ?? 1
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     stroke.value.set(rest.stroke ?? '#ff0000')
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     fill.value.set(rest.fill ?? '#00ff00')
+    invalidate()
   })
-  $effect.pre(() => {
+  $effect(() => {
     backfaceStroke.value.set(rest.backfaceStroke ?? '#0000ff')
+    invalidate()
   })
 
   $effect.pre(() => {

@@ -12,6 +12,7 @@ export const useRenderer = useRendererGeneric<WebGPURenderer>
 export {
   VERSION,
   type Props,
+  type OmitProps,
   injectPlugin,
   type Plugin,
   useStage,

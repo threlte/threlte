@@ -2,6 +2,7 @@ import { injectPlugin, isInstanceOf } from '@threlte/core'
 import { SAH } from 'three-mesh-bvh'
 import type { BVHOptions } from './types.js'
 import { createBatchedMeshBVH, createMeshBVH, createPointsBVH } from './raycast.js'
+import type { Points } from 'three'
 
 export const bvh = (options?: () => BVHOptions) => {
   const bvhOptions = $derived<BVHOptions>({
@@ -32,7 +33,7 @@ export const bvh = (options?: () => BVHOptions) => {
       } else if (isInstanceOf(ref, 'BatchedMesh')) {
         return createBatchedMeshBVH(ref, opts)
       } else if (isInstanceOf(ref, 'Points')) {
-        return createPointsBVH(ref, opts)
+        return createPointsBVH(ref as Points, opts)
       }
 
       return

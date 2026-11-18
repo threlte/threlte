@@ -4,24 +4,8 @@ group: 'Staging'
 title: '<View>'
 sourcePath: 'packages/extras/src/lib/components/View/View.svelte'
 type: 'component'
-componentSignature:
-  {
-    props:
-      [
-        {
-          name: 'dom',
-          type: 'HTMLElement',
-          default: '',
-          description: 'The target DOM to scissor-cut and attach events. Does nothing if none given.'
-        },
-        {
-          name: 'scene',
-          type: 'THREE.Scene',
-          default: 'new THREE.Scene()',
-          description: 'An existing scene to render. If omitted, `<View>` creates a new scene and any children are added to it.'
-        }
-      ]
-  }
+webgl: true
+webgpu: true
 ---
 
 This is a port of [drei's `<View/>`
@@ -34,7 +18,14 @@ per normal.
 The following example is equivalent to three.js's [multiple elements
 example](https://threejs.org/examples/#webgl_multiple_elements).
 
-<Example path="extras/view/multiple-scenes" />
+<Tabs>
+  <Tab name="WebGL">
+    <Example path="extras/view/multiple-scenes" />
+  </Tab>
+  <Tab name="WebGPU">
+    <Example path="extras/view/multiple-scenes-webgpu" />
+  </Tab>
+</Tabs>
 
 Under the hood, this component uses the renderer's [scissor-cut
 method](https://threejs.org/docs/index.html#api/en/renderers/WebGLRenderer.setScissor).

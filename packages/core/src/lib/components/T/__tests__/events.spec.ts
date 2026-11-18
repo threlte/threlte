@@ -4,6 +4,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { render } from '@threlte/test'
 import { T } from '../T.js'
 import { tick } from 'svelte'
+import SpreadProps from './__fixtures__/SpreadProps.svelte'
 
 describe('<T> events', () => {
   it('fires an oncreate event', () => {
@@ -72,5 +73,19 @@ describe('<T> events', () => {
     await tick()
     controls.dispatchEvent({ type: 'change' })
     expect(onchange).toHaveBeenCalledTimes(0)
+  })
+
+  it('adds and removes an event listener whose key changes in a spread after mount', async () => {
+    const onchange = vi.fn()
+    const controls = new OrbitControls(new PerspectiveCamera())
+    const { rerender } = render(SpreadProps, { props: { is: controls, extra: {} } })
+
+    await rerender({ extra: { onchange } })
+    controls.dispatchEvent({ type: 'change' })
+    expect(onchange).toHaveBeenCalledOnce()
+
+    await rerender({ extra: {} })
+    controls.dispatchEvent({ type: 'change' })
+    expect(onchange).toHaveBeenCalledOnce()
   })
 })

@@ -1,7 +1,7 @@
-<script lang="ts">
+<script>
   import { onDestroy, onMount } from 'svelte'
 
-  let sim: any
+  let sim
 
   onMount(async () => {
     sim = (await import('./gamepadSimulator.js')).default

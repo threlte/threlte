@@ -1,14 +1,10 @@
 <script lang="ts">
-  import { untrack, type Snippet } from 'svelte'
+  import { untrack } from 'svelte'
   import { usePortalContext } from './usePortalContext.svelte.js'
   import { SvelteSet } from 'svelte/reactivity'
+  import type { PortalProps } from './types.js'
 
-  interface Props {
-    id?: string
-    children?: Snippet
-  }
-
-  let { id = 'default', children }: Props = $props()
+  let { id = 'default', children }: PortalProps = $props()
 
   const portals = usePortalContext()
 
