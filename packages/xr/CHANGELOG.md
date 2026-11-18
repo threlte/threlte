@@ -1,5 +1,11 @@
 # @threlte/xr
 
+## 2.0.0
+
+### Major Changes
+
+- f8f0a3c: Require `@threlte/core` 9
+
 ## 1.6.1
 
 ### Patch Changes

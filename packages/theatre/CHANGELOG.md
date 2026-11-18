@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 4.0.0
+
+### Major Changes
+
+- f8f0a3c: Require `@threlte/core` 9
+
 ## 3.2.2
 
 ### Patch Changes
