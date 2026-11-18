@@ -20,7 +20,7 @@ export const setupTeleportControls = (
     teleportIntersection[handedness] = undefined
   }
 
-  const { start, stop } = useFixed(
+  useFixed(
     () => {
       const gamepad = controller.current?.inputSource.gamepad
 
@@ -67,15 +67,7 @@ export const setupTeleportControls = (
     },
     {
       fixedStep,
-      autoStart: false
+      running: () => isPresenting.current && enabled.current
     }
   )
-
-  $effect.pre(() => {
-    if (isPresenting.current && enabled.current) {
-      start()
-    } else {
-      stop()
-    }
-  })
 }

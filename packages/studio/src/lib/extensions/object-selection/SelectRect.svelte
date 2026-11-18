@@ -30,7 +30,7 @@
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
   $effect.pre(() => {
-    selectionBox.camera = $camera
+    selectionBox.camera = camera.current
   })
 
   const filter = (objects: Object3D[]): Object3D[] => {

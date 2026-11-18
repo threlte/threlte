@@ -63,7 +63,7 @@ scene root (existing behaviour, unchanged).
   $effect.pre(() => {
     if (!isPresenting.current) return
 
-    const userCamera = $camera
+    const userCamera = camera.current
     const previousParent = userCamera.parent ?? scene
     group.add(userCamera)
 

@@ -12,19 +12,20 @@
 
   // note that the renderer won't be reactive if `element` updates
   // you'd have to do `$derived(new CSS2DRenderer({element}))` if you'd want that to be the case
-  const cssRenderer = new CSS2DRenderer({ element })
+  const cssRenderer = $derived(new CSS2DRenderer({ element }))
 
   $effect(() => {
-    cssRenderer.setSize($size.width, $size.height)
+    cssRenderer.setSize(size.current.width, size.current.height)
   })
 
   // We are running two renderers, and don't want to run
   // updateMatrixWorld twice; tell the renderers that we'll handle
   // it manually.
   // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
-  const last = scene.matrixWorldAutoUpdate
-  scene.matrixWorldAutoUpdate = false
+
   $effect(() => {
+    const last = scene.matrixWorldAutoUpdate
+    scene.matrixWorldAutoUpdate = false
     return () => {
       scene.matrixWorldAutoUpdate = last
     }

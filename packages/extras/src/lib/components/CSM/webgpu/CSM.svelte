@@ -115,7 +115,7 @@
   })
 
   $effect(() => {
-    void [camera, $defaultCamera, $size]
+    void [camera, defaultCamera.current, size.current]
     frustumsNeedUpdate = true
     invalidate()
   })

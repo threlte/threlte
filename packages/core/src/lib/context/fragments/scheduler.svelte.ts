@@ -1,5 +1,4 @@
 import { getContext, setContext } from 'svelte'
-import { type CurrentWritable, runeToCurrentWritable } from '../../utilities/currentWritable.js'
 import { Scheduler, type Stage } from '../../frame-scheduling/index.js'
 
 export type SchedulerContext = {
@@ -13,7 +12,10 @@ export type SchedulerContext = {
    *
    * @default 'on-demand'
    */
-  renderMode: CurrentWritable<'always' | 'on-demand' | 'manual'>
+  renderMode: {
+    readonly current: 'always' | 'on-demand' | 'manual'
+    set(value: 'always' | 'on-demand' | 'manual'): void
+  }
 
   /**
    * By default, Threlte will automatically render the scene. To implement
@@ -21,10 +23,15 @@ export type SchedulerContext = {
    *
    * @default true
    */
-  autoRender: CurrentWritable<boolean>
+  autoRender: {
+    readonly current: boolean
+    set(value: boolean): void
+  }
 
   /** A flag to indicate whether the current frame has been invalidated */
-  frameInvalidated: { current: boolean }
+  frameInvalidated: {
+    current: boolean
+  }
 
   /** If anything is in this set, the frame will be considered invalidated */
   autoInvalidations: Set<unknown>
@@ -49,19 +56,9 @@ export type SchedulerContext = {
    * on-demand rendering.
    */
   renderStage: Stage
-
-  /**
-   * @deprecated Use invalidate()
-   */
-  advance: () => void
-
-  /**
-   * @deprecated Use frameInvalidated.current = false
-   */
-  resetFrameInvalidation: () => void
 }
 
-export type CreateSchedulerContextOptions = {
+export interface CreateSchedulerContextOptions {
   autoRender?: boolean
   renderMode?: 'always' | 'on-demand' | 'manual'
 }
@@ -102,17 +99,22 @@ export const createSchedulerContext = (
         frameInvalidated = value
       }
     },
-    advance: () => {
-      frameInvalidated = true
+    autoRender: {
+      get current() {
+        return autoRender
+      },
+      set(value) {
+        autoRender = value
+      }
     },
-    autoRender: runeToCurrentWritable(
-      () => autoRender,
-      (value) => (autoRender = value)
-    ),
-    renderMode: runeToCurrentWritable(
-      () => renderMode,
-      (value) => (renderMode = value)
-    ),
+    renderMode: {
+      get current() {
+        return renderMode
+      },
+      set(value) {
+        renderMode = value
+      }
+    },
     invalidate() {
       frameInvalidated = true
     },
@@ -123,10 +125,7 @@ export const createSchedulerContext = (
       callback(_, runTasks) {
         if (context.shouldRender()) runTasks()
       }
-    }),
-    resetFrameInvalidation() {
-      frameInvalidated = false
-    }
+    })
   }
 
   $effect(() => {

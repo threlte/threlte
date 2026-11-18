@@ -86,10 +86,10 @@
 
   $effect(() => {
     // Update the BVH
-    if (isInstanceOf($parent, 'Mesh')) {
+    if (isInstanceOf(parent.current, 'Mesh')) {
       uniforms.bvh.value = new MeshBVHUniformStruct()
       uniforms.bvh.value.updateFrom(
-        new MeshBVH($parent.geometry.clone().toNonIndexed(), {
+        new MeshBVH(parent.current.geometry.clone().toNonIndexed(), {
           strategy: SAH
         })
       )

@@ -102,7 +102,7 @@
 
   const viewport = new Vector4()
 
-  const cameraControls = $derived(controls ?? ($parent as Controls))
+  const cameraControls = $derived(controls ?? (parent.current as Controls))
   const initialRenderTask = untrack(() => renderTask)
 
   useTask(
@@ -127,7 +127,7 @@
   )
 
   $effect(() => {
-    gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
+    gizmo.camera = camera.current as PerspectiveCamera | OrthographicCamera
   })
 
   $effect(() => {
@@ -190,7 +190,7 @@
   })
 
   $effect(() => {
-    if ($canvasSize) {
+    if (canvasSize.current) {
       gizmo.update()
       invalidate()
     }

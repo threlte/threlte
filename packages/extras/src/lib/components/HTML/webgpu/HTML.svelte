@@ -55,7 +55,7 @@
   $effect(() => {
     occlusionMaterial.vertexNode = transform
       ? null
-      : createSpriteVertexNode(isInstanceOf($camera, 'PerspectiveCamera'))
+      : createSpriteVertexNode(isInstanceOf(camera.current, 'PerspectiveCamera'))
     occlusionMaterial.needsUpdate = true
   })
 </script>

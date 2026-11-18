@@ -86,18 +86,18 @@ Command: npx @threlte/gltf@latest ./stacy.glb
 
   let { fallback, error, children, ref = $bindable(), ...props } = $props()
 
-  ref = new Group()
+  const group = new Group()
 
   const gltf = useGltf('/stacy.glb')
-
   export const { actions, mixer } = useGltfAnimations(
     () => $gltf,
-    () => ref
+    () => group
   )
 </script>
 
 <T
-  is={ref}
+  is={group}
+  bind:ref
   dispose={false}
   {...props}
 >
@@ -301,17 +301,14 @@ extracts all clips and prepares them as actions:
 ```ts
 const gltf = useGltf('/stacy.glb')
 
-export const { actions, mixer } = useGltfAnimations(
-  () => $gltf,
-  () => ref
-)
+export const { actions, mixer } = useGltfAnimations(() => $gltf)
 ```
 
 If you want to play an animation you can do so at any time:
 
 ```ts
 const onEvent = () => {
-  $actions.jump.play()
+  actions.current.jump.play()
 }
 ```
 

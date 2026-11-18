@@ -810,7 +810,7 @@ const { actions } = useGltfAnimations(gltf)
 // and the actions store has been set, effectively replacing the
 // callback.
 $effect(() => {
-  $actions.Greet?.play()
+  actions.current.Greet?.play()
 })
 ```
 

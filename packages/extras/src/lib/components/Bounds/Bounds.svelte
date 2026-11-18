@@ -2,7 +2,7 @@
   /* eslint-disable @typescript-eslint/no-unused-expressions */
   import { Group } from 'three'
   import { T, useThrelte } from '@threlte/core'
-  import { useControlsContext } from '../controls/useControlsContext.js'
+  import { useControlsContext } from '../controls/useControlsContext.svelte.js'
   import type { BoundsProps } from './types.js'
   import type { OrbitControls, TrackballControls } from 'three/examples/jsm/Addons.js'
   import type CameraControls from 'camera-controls'
@@ -31,7 +31,7 @@
   )
 
   const controls = $derived<OrbitControls | CameraControls | TrackballControls | undefined>(
-    $cameraControls ?? $orbitControls ?? $trackballControls
+    cameraControls.current ?? orbitControls.current ?? trackballControls.current
   )
 
   export const fit = () => {
@@ -43,10 +43,10 @@
   }
 
   $effect(() => {
-    $size
+    size.current
     enabled
     margin
-    $camera
+    camera.current
     controls
     animate
 

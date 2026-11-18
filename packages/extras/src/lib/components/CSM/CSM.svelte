@@ -113,9 +113,9 @@
   $effect(() => {
     if (csm === undefined) return
 
-    void $size
+    void size.current
 
-    csm.camera = camera ?? $defaultCamera
+    csm.camera = camera ?? defaultCamera.current
     csm.maxFar = resolvedMaxFar
     if (fade !== undefined) csm.fade = fade
     applyMode(csm)

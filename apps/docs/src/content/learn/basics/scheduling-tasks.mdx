@@ -162,19 +162,13 @@ argument. By default, the created task is added to [Threlte's
 `mainStage`](#default-stages) in an arbitrary order (i.e. without dependencies).
 
 ```ts
-const { task, started } = useTask((delta) => {
+const { task } = useTask((delta) => {
   // This function will be executed on every frame
 })
 ```
 
-It returns an object with the following properties:
+It returns an object with the following property:
 
-- `start`: A function that starts the task. It will be executed on the next
-  frame. Note that by default a task is started automatically.
-- `stop`: A function that stops the task. It will not be executed on the next
-  frame.
-- `started`: A boolean Svelte `Readable` store indicating whether the task is
-  started or not.
 - `task`: The task itself. You can use it to indicate a dependency to this task
   on another task.
 
@@ -185,7 +179,7 @@ makes referencing this task easier across your app. The key can be any `string`
 or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
-const { task, started } = useTask('some-task', (delta) => {
+const { task } = useTask('some-task', (delta) => {
   // This function will be executed on every frame
 })
 ```

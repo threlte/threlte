@@ -6,10 +6,12 @@
 </script>
 
 {#if dom}
-  <InnerView
-    {dom}
-    {scene}
-  >
-    {@render children?.()}
-  </InnerView>
+  {#key scene}
+    <InnerView
+      {dom}
+      {scene}
+    >
+      {@render children?.()}
+    </InnerView>
+  {/key}
 {/if}

@@ -22,12 +22,12 @@
 
   const { size, renderer, autoRenderTask, scene, camera } = useThrelte()
 
-  const renderTarget = new WebGLRenderTarget($size.width, $size.height, {
+  const renderTarget = new WebGLRenderTarget(size.current.width, size.current.height, {
     format: RGBAFormat
   })
 
   $effect.pre(() => {
-    renderTarget.setSize($size.width, $size.height)
+    renderTarget.setSize(size.current.width, size.current.height)
   })
 
   const numberSeedToHexColor = (seed: number) => {
@@ -124,12 +124,12 @@
 
       let scaleX = getMesh().scale.x
       let scaleY = getMesh().scale.y
-      if (isInstanceOf($camera, 'PerspectiveCamera')) {
-        scaleY = Math.tan((($camera.fov * Math.PI) / 180) * 0.5) * 5 * 2 // 5 being the distance of the camera to the plane
-        scaleX = scaleY * $camera.aspect
-      } else if (isInstanceOf($camera, 'OrthographicCamera')) {
-        scaleY = ($camera.top - $camera.bottom) / $camera.zoom
-        scaleX = ($camera.right - $camera.left) / $camera.zoom
+      if (isInstanceOf(camera.current, 'PerspectiveCamera')) {
+        scaleY = Math.tan(((camera.current.fov * Math.PI) / 180) * 0.5) * 5 * 2 // 5 being the distance of the camera to the plane
+        scaleX = scaleY * camera.current.aspect
+      } else if (isInstanceOf(camera.current, 'OrthographicCamera')) {
+        scaleY = (camera.current.top - camera.current.bottom) / camera.current.zoom
+        scaleX = (camera.current.right - camera.current.left) / camera.current.zoom
       }
       if (scaleX !== getMesh().scale.x || scaleY !== getMesh().scale.y) {
         getMesh().scale.x = scaleX
@@ -150,8 +150,8 @@
   })
 </script>
 
-{#key $camera.uuid}
-  <T is={selectionMesh} attach={$camera}>
+{#key camera.current.uuid}
+  <T is={selectionMesh} attach={camera.current}>
     <T.PlaneGeometry />
 
     <T.ShaderMaterial

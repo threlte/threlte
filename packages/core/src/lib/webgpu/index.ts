@@ -52,7 +52,6 @@ export {
   type AsyncWritable,
   asyncWritable,
   revision,
-  watch,
   type CurrentWritable,
   type CurrentReadable,
   currentWritable,
@@ -60,11 +59,8 @@ export {
   resolvePropertyPath
 } from '../index.js'
 
+export { createParentContext, useParent } from '../context/fragments/parent.js'
 export {
-  createParentContext_deprecated as createParentContext,
-  useParent_deprecated as useParent
-} from '../context/fragments/parent.js'
-export {
-  createParentObject3DContext_deprecated as createParentObject3DContext,
-  useParentObject3D_deprecated as useParentObject3D
+  createParentObject3DContext,
+  useParentObject3D
 } from '../context/fragments/parentObject3D.js'

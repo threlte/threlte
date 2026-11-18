@@ -5,7 +5,7 @@ export { useDraco } from './hooks/useDraco.js'
 export { useMeshopt } from './hooks/useMeshopt.js'
 export { useKtx2 } from './hooks/useKtx2.js'
 export { useGltfAnimations } from './hooks/useGltfAnimations.svelte.js'
-export { useProgress } from './hooks/useProgress.js'
+export { useProgress } from './hooks/useProgress.svelte.js'
 export { useTexture } from './hooks/useTexture.js'
 export { useFBO } from './hooks/useFBO.svelte.js'
 export {

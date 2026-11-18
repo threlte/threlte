@@ -131,7 +131,7 @@
     invalidate()
   })
   $effect(() => {
-    uniforms.resolution.value = Math.max($size.width, $size.height)
+    uniforms.resolution.value = Math.max(size.current.width, size.current.height)
     invalidate()
   })
   $effect(() => {

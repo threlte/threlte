@@ -44,7 +44,7 @@
   const renderTarget = new WebGLRenderTarget(initialResolution, initialResolution)
   renderTarget.texture.generateMipmaps = false
   $effect(() => {
-    renderTarget.texture.colorSpace = $colorSpace
+    renderTarget.texture.colorSpace = colorSpace.current
   })
 
   const renderTargetBlur = new WebGLRenderTarget(initialResolution, initialResolution)

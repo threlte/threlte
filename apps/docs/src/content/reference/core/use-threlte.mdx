@@ -18,7 +18,7 @@ invalidate()
 
 ```ts
 const { renderer, camera } = useThrelte()
-console.log(renderer, $camera)
+console.log(renderer, camera.current)
 ```
 
 … or update render properties:
@@ -37,25 +37,23 @@ toneMapping.set(THREE.LinearToneMapping)
 ```ts
 const {
   dom, // HTMLElement
-  size, // Readable<DOMRect>
+  size, // { current: { width: number; height: number } }
   canvas, // HTMLCanvasElement
-  camera, // CurrentWritable<Camera>
+  camera, // { current: Camera; set(camera) }
   scene, // Scene
-  dpr, // CurrentWritable<number>
+  dpr, // { current: number; set(dpr) }
   renderer, // WebGLRenderer
-  renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
-  autoRender, // CurrentWritable<boolean>
+  renderMode, // { current: 'always' | 'on-demand' | 'manual'; set(mode) }
+  autoRender, // { current: boolean; set(autoRender) }
   invalidate, // () => void
-  advance, // () => void
   scheduler, // Scheduler
   mainStage, // Stage
   renderStage, // Stage
   autoRenderTask, // Task
   shouldRender, // () => boolean
-  colorManagementEnabled, // CurrentReadable<boolean>
-  colorSpace, // CurrentWritable<ColorSpace>
-  toneMapping, // CurrentWritable<ToneMapping>
-  shadows // CurrentWritable<boolean | ShadowMapType>
+  colorSpace, // { current: ColorSpace; set(colorSpace) }
+  toneMapping, // { current: ToneMapping; set(toneMapping) }
+  shadows // { current: boolean | ShadowMapType; set(shadows) }
 } = useThrelte()
 ```
 
@@ -72,9 +70,9 @@ invalidate()
 If the [renderMode is set to `'manual'`](/docs/reference/core/canvas) you must manually trigger a re-render:
 
 ```ts
-const { advance } = useThrelte()
+const { invalidate } = useThrelte()
 
-advance()
+invalidate()
 ```
 
 The property can be changed at any time, but it will only take effect on the next frame.
