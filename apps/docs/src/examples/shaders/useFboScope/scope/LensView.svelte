@@ -16,13 +16,13 @@
   let { scope = $bindable() }: Props = $props()
 
   // render scene at a lower resolution but multiple samples for antialiasing
-  const renderTarget = useFBO({
+  const renderTarget = useFBO(() => ({
     size: {
       width: size.current.width * 0.5,
       height: size.current.height * 0.5
     },
     samples: 8
-  })
+  }))
 
   const uniforms = {
     viewTexture: new Uniform(renderTarget.texture),

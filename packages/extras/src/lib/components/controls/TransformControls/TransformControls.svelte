@@ -30,20 +30,23 @@
 
   let isDragging = $state(false)
 
-  $effect(() => {
-    const controls =
-      customCameraControls ??
-      orbitControls.current ??
-      trackballControls.current ??
-      cameraControls.current
+  const pauseWhileDragging = (getControls: () => { enabled: boolean } | undefined) => {
+    $effect(() => {
+      const controls = getControls()
 
-    if (!controls || (!controls.enabled && isDragging)) return
+      if (!controls || (!controls.enabled && isDragging)) return
 
-    controls.enabled = !(isDragging && autoPauseControls)
-    return () => {
-      controls.enabled = true
-    }
-  })
+      controls.enabled = !(isDragging && autoPauseControls)
+      return () => {
+        controls.enabled = true
+      }
+    })
+  }
+
+  pauseWhileDragging(() => customCameraControls)
+  pauseWhileDragging(() => orbitControls.current)
+  pauseWhileDragging(() => trackballControls.current)
+  pauseWhileDragging(() => cameraControls.current)
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const transformControls = new TransformControls(camera.current, dom)

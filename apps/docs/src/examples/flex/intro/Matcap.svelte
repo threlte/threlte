@@ -35,7 +35,7 @@
   const scale = new Spring(0.9)
 
   $effect(() => {
-    scale.set($hovering ? 1 : 0.9)
+    scale.set(hovering.current ? 1 : 0.9)
   })
 
   const matcapRoot =

@@ -22,7 +22,7 @@ interface UseGltfAnimationsReturnType<Actions> {
  *
  *   // play them whenever you need
  *   export const triggerAnimation = () => {
- *     $actions['All Animations']?.play()
+ *     actions.current['All Animations']?.play()
  *   }
  * </script>
  *

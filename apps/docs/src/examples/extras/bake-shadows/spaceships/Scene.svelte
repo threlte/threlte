@@ -6,7 +6,7 @@
   import { T, useThrelte } from '@threlte/core'
 
   const { size, scene } = useThrelte()
-  scene.current.background = new Color('black')
+  scene.background = new Color('black')
 
   let zoom = $derived(size.current.width / 50)
 

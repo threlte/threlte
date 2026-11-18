@@ -59,6 +59,8 @@
     "vitest": "catalog:"
   },
   "peerDependencies": {
+    "@threlte/core": ">=9.0.0-next.0",
+    "@threlte/extras": ">=10.0.0-next.0",
     "svelte": ">=5",
     "three": ">=0.152",
     "vite": ">=5"

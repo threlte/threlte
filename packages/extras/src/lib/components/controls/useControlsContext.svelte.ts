@@ -1,8 +1,8 @@
 import { useThrelteUserContext } from '@threlte/core'
-import CameraControls from 'camera-controls'
+import type CameraControls from 'camera-controls'
 import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import type { TrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
-import { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
+import type { TransformControls } from 'three/examples/jsm/controls/TransformControls.js'
 
 interface ControlsContext {
   orbitControls: {
@@ -39,42 +39,44 @@ interface ControlsContext {
  *   code.
  */
 export const useControlsContext = (): ControlsContext => {
-  let orbitControls = $state.raw<OrbitControls>()
-  let trackballControls = $state.raw<TrackballControls>()
-  let cameraControls = $state.raw<CameraControls>()
-  let transformControls = $state.raw<TransformControls>()
+  return useThrelteUserContext<ControlsContext>('threlte-controls', () => {
+    let orbitControls = $state.raw<OrbitControls>()
+    let trackballControls = $state.raw<TrackballControls>()
+    let cameraControls = $state.raw<CameraControls>()
+    let transformControls = $state.raw<TransformControls>()
 
-  return useThrelteUserContext<ControlsContext>('threlte-controls', {
-    orbitControls: {
-      get current() {
-        return orbitControls
+    return {
+      orbitControls: {
+        get current() {
+          return orbitControls
+        },
+        set(value) {
+          orbitControls = value
+        }
       },
-      set(value) {
-        orbitControls = value
-      }
-    },
-    trackballControls: {
-      get current() {
-        return trackballControls
+      trackballControls: {
+        get current() {
+          return trackballControls
+        },
+        set(value) {
+          trackballControls = value
+        }
       },
-      set(value) {
-        trackballControls = value
-      }
-    },
-    cameraControls: {
-      get current() {
-        return cameraControls
+      cameraControls: {
+        get current() {
+          return cameraControls
+        },
+        set(value) {
+          cameraControls = value
+        }
       },
-      set(value) {
-        cameraControls = value
-      }
-    },
-    transformControls: {
-      get current() {
-        return transformControls
-      },
-      set(value) {
-        transformControls = value
+      transformControls: {
+        get current() {
+          return transformControls
+        },
+        set(value) {
+          transformControls = value
+        }
       }
     }
   })

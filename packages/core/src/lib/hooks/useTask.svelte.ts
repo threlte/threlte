@@ -49,8 +49,7 @@ export interface ThrelteUseTaskOptions {
 /**
  * Adds a handler to threltes unified render loop.
  *
- * `start` and `stop` functions are returned and the options allow setting the
- * handler to not start automatically.
+ * Use the option `running` to start and stop the task.
  *
  * Use the options `after` and `before` to control the order of execution. Add
  * the task to a specific stage with the option `stage`.

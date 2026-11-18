@@ -11,7 +11,7 @@
     useThrelte
   } from '@threlte/core'
   import { untrack, type Snippet } from 'svelte'
-  import { Scene, Vector4 } from 'three'
+  import { Vector4, type Scene } from 'three'
 
   let {
     dom,

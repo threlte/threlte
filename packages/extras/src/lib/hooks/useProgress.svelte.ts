@@ -50,8 +50,8 @@ DefaultLoadingManager.onProgress = (url: string, _loaded: number, _total: number
   onProgress?.(url, _loaded, _total)
 
   untrack(() => {
-    if (loaded === total) {
-      previousTotalLoaded = total
+    if (_loaded === _total) {
+      previousTotalLoaded = _total
     }
 
     active = true

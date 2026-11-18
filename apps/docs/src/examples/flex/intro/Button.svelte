@@ -35,7 +35,7 @@
         args={[width, height, 10]}
         radius={5}
       />
-      <T.MeshBasicMaterial color={$hovering ? '#9D9FA3' : '#404550'} />
+      <T.MeshBasicMaterial color={hovering.current ? '#9D9FA3' : '#404550'} />
 
       <Label
         z={5.1}

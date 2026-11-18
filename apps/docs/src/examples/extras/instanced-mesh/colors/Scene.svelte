@@ -28,7 +28,7 @@
   })
 
   const { size: viewportSize } = useThrelte()
-  const zoom = $derived($viewportSize.width / (1.5 * gap * size))
+  const zoom = $derived(viewportSize.current.width / (1.5 * gap * size))
 
   interactivity({
     filter(items) {

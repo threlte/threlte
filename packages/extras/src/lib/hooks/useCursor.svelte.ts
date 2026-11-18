@@ -42,7 +42,6 @@ type Cursor = LiteralUnion<
 
 interface CursorInstance {
   cursor: string
-  fallback: string | undefined
 }
 
 interface CursorContext {
@@ -64,7 +63,7 @@ export const useCursor = (
 } => {
   let hovering = $state(false)
 
-  const instance: CursorInstance = { cursor: '', fallback: undefined }
+  const instance: CursorInstance = { cursor: '' }
 
   const onPointerEnter = () => {
     hovering = true
@@ -110,7 +109,7 @@ export const useCursor = (
         if (active.length > 0) {
           el.style.cursor = active[active.length - 1]?.cursor
         } else {
-          el.style.cursor = instance.fallback ?? originalCursor
+          el.style.cursor = originalCursor
         }
       },
       refresh() {

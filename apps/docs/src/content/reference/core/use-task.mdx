@@ -27,10 +27,8 @@ const { task } = useTask((delta) => {
 })
 ```
 
-It returns an object with the following properties:
+It returns an object with the following property:
 
-- `started`: A boolean Svelte `Readable` store indicating whether the task has been
-  added to the scheduler and is started.
 - `task`: The task itself. You can use it to indicate a dependency to this task
   on another task.
 
@@ -41,7 +39,7 @@ makes referencing this task easier across your app. The key can be any `string`
 or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
-const { task, started } = useTask('some-task', (delta) => {
+const { task } = useTask('some-task', (delta) => {
   // This function will be executed on every frame
 })
 ```
@@ -227,10 +225,10 @@ effects using the library
 
   const setupEffectComposer = (camera) => {
     composer.removeAllPasses()
-    composer.addPass(new RenderPass(scene, camera.current))
+    composer.addPass(new RenderPass(scene, camera))
     composer.addPass(
       new EffectPass(
-        camera.current,
+        camera,
         new BloomEffect({
           intensity: 1,
           luminanceThreshold: 0.15,
@@ -244,7 +242,7 @@ effects using the library
     )
     composer.addPass(
       new EffectPass(
-        camera.current,
+        camera,
         new SMAAEffect({
           preset: SMAAPreset.LOW
         })

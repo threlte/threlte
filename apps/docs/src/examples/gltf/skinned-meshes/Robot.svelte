@@ -157,5 +157,5 @@ Command: npx @threlte/gltf@3.0.5 apps/docs/public/models/RobotExpressive.glb --t
     {@render error?.({ error: err })}
   {/await}
 
-  {@render children?.({ ref })}
+  {@render children?.({ ref: group })}
 </T>
