@@ -1,5 +1,11 @@
 # @threlte/core
 
+## 9.0.0
+
+### Major Changes
+
+- f8f0a3c: Replace stores with runes in `useThrelte`, `useParent`, `useParentObject3D` and `useScene`, and remove `watch` and `advance`
+
 ## 8.7.0
 
 ### Minor Changes

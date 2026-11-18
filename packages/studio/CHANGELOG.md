@@ -1,5 +1,11 @@
 # @threlte/studio
 
+## 0.5.0
+
+### Minor Changes
+
+- f8f0a3c: Require `@threlte/core` 9
+
 ## 0.4.4
 
 ### Patch Changes

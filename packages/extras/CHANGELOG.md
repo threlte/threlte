@@ -1,5 +1,11 @@
 # @threlte/extras
 
+## 10.0.0
+
+### Major Changes
+
+- f8f0a3c: Replace stores with runes and remove deprecated props
+
 ## 9.23.1
 
 ### Patch Changes
