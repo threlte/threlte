@@ -690,19 +690,13 @@ argument. By default, the created task is added to [Threlte's
 `mainStage`](#default-stages) in an arbitrary order (i.e. without dependencies).
 
 ```ts
-const { task, started } = useTask((delta) => {
+const { task } = useTask((delta) => {
   // This function will be executed on every frame
 })
 ```
 
-It returns an object with the following properties:
+It returns an object with the following property:
 
-- `start`: A function that starts the task. It will be executed on the next
-  frame. Note that by default a task is started automatically.
-- `stop`: A function that stops the task. It will not be executed on the next
-  frame.
-- `started`: A boolean Svelte `Readable` store indicating whether the task is
-  started or not.
 - `task`: The task itself. You can use it to indicate a dependency to this task
   on another task.
 
@@ -713,7 +707,7 @@ makes referencing this task easier across your app. The key can be any `string`
 or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
-const { task, started } = useTask('some-task', (delta) => {
+const { task } = useTask('some-task', (delta) => {
   // This function will be executed on every frame
 })
 ```
@@ -7107,25 +7101,23 @@ toneMapping.set(THREE.LinearToneMapping)
 ```ts
 const {
   dom, // HTMLElement
-  size, // Readable<DOMRect>
+  size, // { current: { width: number; height: number } }
   canvas, // HTMLCanvasElement
-  camera, // CurrentWritable<Camera>
+  camera, // { current: Camera; set(camera) }
   scene, // Scene
-  dpr, // CurrentWritable<number>
+  dpr, // { current: number; set(dpr) }
   renderer, // WebGLRenderer
-  renderMode, // CurrentWritable<'always' | 'on-demand' | 'manual'>
-  autoRender, // CurrentWritable<boolean>
+  renderMode, // { current: 'always' | 'on-demand' | 'manual'; set(mode) }
+  autoRender, // { current: boolean; set(autoRender) }
   invalidate, // () => void
-  advance, // () => void
   scheduler, // Scheduler
   mainStage, // Stage
   renderStage, // Stage
   autoRenderTask, // Task
   shouldRender, // () => boolean
-  colorManagementEnabled, // CurrentReadable<boolean>
-  colorSpace, // CurrentWritable<ColorSpace>
-  toneMapping, // CurrentWritable<ToneMapping>
-  shadows // CurrentWritable<boolean | ShadowMapType>
+  colorSpace, // { current: ColorSpace; set(colorSpace) }
+  toneMapping, // { current: ToneMapping; set(toneMapping) }
+  shadows // { current: boolean | ShadowMapType; set(shadows) }
 } = useThrelte()
 ```
 
@@ -7142,9 +7134,9 @@ invalidate()
 If the [renderMode is set to `'manual'`](/docs/reference/core/canvas) you must manually trigger a re-render:
 
 ```ts
-const { advance } = useThrelte()
+const { invalidate } = useThrelte()
 
-advance()
+invalidate()
 ```
 
 The property can be changed at any time, but it will only take effect on the next frame.
@@ -7295,10 +7287,8 @@ const { task } = useTask((delta) => {
 })
 ```
 
-It returns an object with the following properties:
+It returns an object with the following property:
 
-- `started`: A boolean Svelte `Readable` store indicating whether the task has been
-  added to the scheduler and is started.
 - `task`: The task itself. You can use it to indicate a dependency to this task
   on another task.
 
@@ -7309,7 +7299,7 @@ makes referencing this task easier across your app. The key can be any `string`
 or `symbol` value that is unique across all tasks in the stage it is added to.
 
 ```ts
-const { task, started } = useTask('some-task', (delta) => {
+const { task } = useTask('some-task', (delta) => {
   // This function will be executed on every frame
 })
 ```
@@ -7495,10 +7485,10 @@ effects using the library
 
   const setupEffectComposer = (camera) => {
     composer.removeAllPasses()
-    composer.addPass(new RenderPass(scene, camera.current))
+    composer.addPass(new RenderPass(scene, camera))
     composer.addPass(
       new EffectPass(
-        camera.current,
+        camera,
         new BloomEffect({
           intensity: 1,
           luminanceThreshold: 0.15,
@@ -7512,7 +7502,7 @@ effects using the library
     )
     composer.addPass(
       new EffectPass(
-        camera.current,
+        camera,
         new SMAAEffect({
           preset: SMAAPreset.LOW
         })
@@ -17476,10 +17466,10 @@ The `width` and `height` properties provide the screen size in Three.js units. F
   import { T } from '@threlte/core'
   import { useViewport } from '@threlte/extras'
 
-  const viewport = useViewport() // currentWritable<Viewport>
+  const viewport = useViewport() // { current: Viewport }
 </script>
 
-<T.Mesh scale={[$viewport.width, $viewport.height, 1]}>
+<T.Mesh scale={[viewport.current.width, viewport.current.height, 1]}>
   <T.PlaneGeometry />
   <T.MeshStandardMaterial />
 </T.Mesh>
