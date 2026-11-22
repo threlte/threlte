@@ -274,14 +274,12 @@ export const setupPointerControls = (
   )
 
   $effect.pre(() => {
-    if (isPresenting.current && enabled.current) {
-      // Do nothing
-    } else {
-      hits = []
-      handContext.currentIntersection = undefined
-      cancelPointer([])
-      handContext.syncSharedState()
-    }
+    if (isPresenting.current && enabled.current) return
+
+    hits = []
+    handContext.currentIntersection = undefined
+    cancelPointer([])
+    handContext.syncSharedState()
   })
 
   $effect.pre(() => {

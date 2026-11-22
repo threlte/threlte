@@ -8,9 +8,29 @@ interface UseGltfAnimationsReturnType<Actions> {
 }
 
 /**
- * Convenience hook to use animations loaded with a <GLTF> Threlte component.
+ * Convenience hook to use animations loaded with the `<GLTF>` component or the
+ * `useGltf` hook.
  *
- * ### Example
+ * Pass `gltf` as a getter so reads are tracked through runes automatically.
+ * The optional `root` getter binds animations to a different `Object3D` than
+ * the gltf's own scene — useful when retargeting clips onto a separate rig.
+ *
+ * ### Example with `useGltf`
+ *
+ * ```svelte
+ * <script lang="ts">
+ *   import { useGltf, useGltfAnimations } from '@threlte/extras'
+ *
+ *   const gltf = useGltf('/Bengal.glb')
+ *   const { actions } = useGltfAnimations<'Run' | 'Idle'>(() => $gltf)
+ *
+ *   $effect(() => {
+ *     actions.current.Run?.play()
+ *   })
+ * </script>
+ * ```
+ *
+ * ### Example with `<GLTF>` and `bind:gltf`
  *
  * ```svelte
  * <script lang="ts">
@@ -28,8 +48,6 @@ interface UseGltfAnimationsReturnType<Actions> {
  *
  * <GLTF bind:gltf url="/Bengal.glb" />
  * ```
- * @param callback
- * @returns
  */
 export function useGltfAnimations<
   T extends string,
@@ -40,7 +58,7 @@ export function useGltfAnimations<
 ): UseGltfAnimationsReturnType<Actions> {
   const mixer = new AnimationMixer(undefined as unknown as Object3D)
 
-  let actions = $state<Actions>({} as Actions)
+  let actions = $state.raw<Actions>({} as Actions)
 
   $effect(() => {
     const currentGltf = gltf()

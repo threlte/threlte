@@ -116,7 +116,7 @@ Command: npx gltfjsx@0.0.1 ./stacy.glb
   const gltf = useGltf('/stacy.glb')
   export const { actions, mixer } = useGltfAnimations(
     () => $gltf,
-    () => ref
+    () => group
   )
 </script>
 

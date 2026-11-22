@@ -86,7 +86,7 @@ Command: npx @threlte/gltf@3.0.5 apps/docs/public/models/RobotExpressive.glb --t
 
   export const { actions, mixer } = useGltfAnimations<ActionName>(
     () => $gltf,
-    () => ref
+    () => group
   )
 
   $effect(() => {
