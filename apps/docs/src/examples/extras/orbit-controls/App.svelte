@@ -5,6 +5,7 @@
   import Settings from './Settings.svelte'
 
   let autoRotate = $state(false)
+  let autoRotateSpeed = $state(2)
   let enableDamping = $state(true)
   let rotateSpeed = $state(1)
   let zoomToCursor = $state(false)
@@ -19,6 +20,7 @@
     <Scene
       {enableDamping}
       {autoRotate}
+      {autoRotateSpeed}
       {rotateSpeed}
       {zoomToCursor}
       {zoomSpeed}
@@ -32,6 +34,7 @@
 <Settings
   bind:enableDamping
   bind:autoRotate
+  bind:autoRotateSpeed
   bind:rotateSpeed
   bind:zoomToCursor
   bind:zoomSpeed
