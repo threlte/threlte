@@ -1,0 +1,1 @@
+const a=()=>performance.now(),s={tick:e=>requestAnimationFrame(e),now:()=>a(),tasks:new Set};function n(){const e=s.now();s.tasks.forEach(t=>{t.c(e)||(s.tasks.delete(t),t.f())}),s.tasks.size!==0&&s.tick(n)}function i(e){let t;return s.tasks.size===0&&s.tick(n),{promise:new Promise(o=>{s.tasks.add(t={c:e,f:o})}),abort(){s.tasks.delete(t)}}}export{i as l,s as r};
