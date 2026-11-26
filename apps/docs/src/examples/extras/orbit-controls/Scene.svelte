@@ -4,6 +4,7 @@
 
   interface Props {
     autoRotate: boolean
+    autoRotateSpeed: number
     enableDamping: boolean
     rotateSpeed: number
     zoomToCursor: boolean
@@ -15,6 +16,7 @@
 
   let {
     autoRotate,
+    autoRotateSpeed,
     enableDamping,
     rotateSpeed,
     zoomToCursor,
@@ -33,6 +35,7 @@
   <OrbitControls
     {enableDamping}
     {autoRotate}
+    {autoRotateSpeed}
     {rotateSpeed}
     {zoomToCursor}
     {zoomSpeed}
