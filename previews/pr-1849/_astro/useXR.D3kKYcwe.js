@@ -1,0 +1,1 @@
+import{x as s,s as n,i as e,a}from"./setup.svelte.D5Tk8Dkl.js";import{r}from"./currentReadable.svelte.DRgOeD5M.js";const o=()=>({isPresenting:r(()=>a.current),isHandTracking:r(()=>e.current),session:r(()=>n.current),xr:r(()=>s.current)});export{o as u};
