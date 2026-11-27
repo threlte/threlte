@@ -38,7 +38,7 @@ export class CameraPositionTourStop extends TourStop {
     super(mask, instructions)
 
     const { scene } = useThrelte()
-    const camera = scene.getObjectByName('Camera') as Camera
+    const camera = scene.current.getObjectByName('Camera') as Camera
 
     useTask(() => {
       if (!this.isActive) return

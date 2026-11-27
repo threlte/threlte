@@ -8,48 +8,6 @@ order: 6.2
 Threlte comes with a few utilities that are catered towards the use in a Threlte
 application but can also be used in other projects.
 
-## `watch`
-
-Watch a single store or multiple stores and call a callback when they change to
-trigger side effects. The callback will be called immediately with the current
-value of the store.
-
-```ts
-const store = writable(0)
-
-watch(store, (value) => {
-  console.log(value) // 0
-})
-```
-
-<Tip type="info">This utility function needs to be called during component initialization.</Tip>
-
-You can also watch multiple stores:
-
-```ts
-const store1 = writable(0)
-const store2 = writable(1)
-
-watch([store1, store2], ([value1, value2]) => {
-  console.log(value1, value2) // 0 1
-})
-```
-
-The callback can return a cleanup function that will be called when the stores change again.
-
-```ts
-const store = writable(0)
-
-watch(store, (value) => {
-  console.log(value) // 0
-  return () => {
-    console.log('cleanup')
-  }
-})
-```
-
----
-
 ## `observe`
 
 Watch a single or multiple reactive values or stores and call a callback when

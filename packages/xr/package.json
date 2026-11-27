@@ -42,6 +42,7 @@
     "vite-plugin-mkcert": "^1.17.5"
   },
   "peerDependencies": {
+    "@threlte/core": ">=9.0.0",
     "svelte": ">=5",
     "three": ">=0.160"
   },

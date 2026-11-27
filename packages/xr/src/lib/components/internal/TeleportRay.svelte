@@ -91,7 +91,7 @@
 {:else}
   <T
     is={Line2}
-    attach={scene}
+    attach={scene.current}
     visible={intersection !== undefined}
     position.z={-0.01}
   >

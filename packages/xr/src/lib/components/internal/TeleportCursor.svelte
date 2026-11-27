@@ -65,7 +65,7 @@
 
 <T
   is={ref}
-  attach={scene}
+  attach={scene.current}
   visible={intersection !== undefined}
 >
   {#if children}

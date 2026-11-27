@@ -15,7 +15,7 @@
     onupdatestart,
     onupdatestop,
     resolution = 256,
-    scene: parentScene = ctx.scene,
+    scene: parentScene = ctx.scene.current,
     visible,
     children
   }: VirtualEnvironmentProps = $props()
@@ -37,7 +37,7 @@
   )
 
   export const update = () => {
-    camera.update(ctx.renderer, scene)
+    camera.update(ctx.renderer, scene.current)
   }
 
   let running = $state(false)
@@ -71,7 +71,7 @@
 </script>
 
 <T
-  is={scene}
+  is={scene.current}
   attach={visible ? undefined : false}
 >
   <T is={camera} />

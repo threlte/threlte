@@ -38,7 +38,7 @@ by demand invalidate the frame loop.
 <script lang="ts">
   import { isInstanceOf, T, useParent, useTask, useThrelte } from '@threlte/core'
   import { TrackballControls as ThreeTrackballControls } from 'three/examples/jsm/controls/TrackballControls.js'
-  import { useControlsContext } from '../useControlsContext.js'
+  import { useControlsContext } from '../useControlsContext.svelte.js'
   import type { TrackballControlsProps } from './types.js'
   import type { Event } from 'three'
   import { untrack } from 'svelte'
@@ -48,7 +48,11 @@ by demand invalidate the frame loop.
   const { dom, camera: defaultCamera, invalidate, size } = useThrelte()
   const parent = useParent()
   const resolvedCamera = $derived(
-    camera ? camera : isInstanceOf($parent, 'Camera') ? $parent : $defaultCamera
+    camera
+      ? camera
+      : isInstanceOf(parent.current, 'Camera')
+        ? parent.current
+        : defaultCamera.current
   )
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
@@ -72,7 +76,7 @@ by demand invalidate the frame loop.
   })
 
   $effect(() => {
-    const { width, height } = $size
+    const { width, height } = size.current
 
     if (width && height) {
       controls.handleResize()

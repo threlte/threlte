@@ -4,14 +4,7 @@
   import { SvelteSet } from 'svelte/reactivity'
   import type { PortalProps } from './types.js'
 
-  let { id = 'default', object, children }: PortalProps = $props()
-
-  // @Todo Remove in Threlte 9
-  $effect.pre(() => {
-    if (object) {
-      console.error('<Portal>: "object" prop has been removed. Use "attach" instead.')
-    }
-  })
+  let { id = 'default', children }: PortalProps = $props()
 
   const portals = usePortalContext()
 

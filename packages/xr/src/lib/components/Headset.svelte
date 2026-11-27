@@ -16,7 +16,7 @@
 
 <T
   is={headset}
-  attach={scene}
+  attach={scene.current}
 >
   {@render children?.({ ref: headset })}
 </T>

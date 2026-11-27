@@ -31,7 +31,7 @@
   useTask(
     async () => {
       await tick()
-      renderer.render(scene, camera.current)
+      renderer.render(scene.current, camera.current)
     },
     { stage: renderStage, autoInvalidate: false }
   )

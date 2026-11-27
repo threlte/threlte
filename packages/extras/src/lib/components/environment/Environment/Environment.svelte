@@ -27,7 +27,7 @@
     ground = false,
     isBackground = false,
     isEnvironment = true,
-    scene = ctx.scene,
+    scene = ctx.scene.current,
     url
   }: EquirectangularEnvironmentProps = $props()
 

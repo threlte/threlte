@@ -63,7 +63,7 @@
     { running: () => running }
   )
 
-  scene.backgroundBlurriness = 0.5
+  scene.current.backgroundBlurriness = 0.5
 </script>
 
 {#if (mode === 'object' || mode === 'object-env') && $splats?.[0]}

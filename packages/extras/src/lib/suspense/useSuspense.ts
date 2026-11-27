@@ -1,6 +1,5 @@
 import { getContext, onDestroy } from 'svelte'
-import { derived, readable, type Writable } from 'svelte/store'
-import { suspenseContextIdentifier, type SuspenseContext } from './context.js'
+import { suspenseContextIdentifier, type SuspenseContext } from './context.svelte.js'
 
 type Suspend = <T extends Promise<unknown>>(promise: T) => T
 
@@ -8,7 +7,7 @@ type Suspend = <T extends Promise<unknown>>(promise: T) => T
  * This hook is used to suspend the component until the promise is resolved.
  * It also works outside the boundaries of the <Suspense> component.
  */
-export const useSuspense = () => {
+export const useSuspense = (): Suspend & { suspended: { readonly current: boolean } } => {
   const ctx = getContext<SuspenseContext | undefined>(suspenseContextIdentifier)
 
   const promises = new Set<Promise<unknown>>()
@@ -21,8 +20,10 @@ export const useSuspense = () => {
     return promise
   }
 
-  const state = {
-    suspended: derived(ctx?.suspended ?? readable(false), (suspended) => suspended)
+  const suspended = {
+    get current() {
+      return ctx?.suspended.current ?? false
+    }
   }
 
   onDestroy(() => {
@@ -33,7 +34,5 @@ export const useSuspense = () => {
     promises.clear()
   })
 
-  return Object.assign(suspend, state) as unknown as Suspend & {
-    suspended: Writable<boolean>
-  }
+  return Object.assign(suspend, { suspended })
 }

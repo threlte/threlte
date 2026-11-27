@@ -73,7 +73,7 @@
 
 <T
   is={ref}
-  attach={scene}
+  attach={scene.current}
   visible={hovering}
 >
   {#if children}

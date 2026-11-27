@@ -6,7 +6,7 @@
   let { minimap } = $props()
 
   const { scene } = useThrelte()
-  scene.background = new Color('white')
+  scene.current.background = new Color('white')
 </script>
 
 <T.HemisphereLight args={[0xaaaaaa, 0x444444, 3]} />
@@ -28,7 +28,7 @@
 
 <View
   dom={minimap}
-  {scene}
+  scene={scene.current}
 >
   <OrbitControls autoRotate />
 </View>

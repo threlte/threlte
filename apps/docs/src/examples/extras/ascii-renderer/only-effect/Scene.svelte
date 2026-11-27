@@ -1,5 +1,6 @@
 <script lang="ts">
   import { T, useThrelte } from '@threlte/core'
+  import { untrack } from 'svelte'
   import type { AsciiEffect } from 'three/examples/jsm/Addons.js'
 
   let { asciiEffect }: { asciiEffect: AsciiEffect } = $props()
@@ -7,7 +8,7 @@
   const { autoRender, camera, scene } = useThrelte()
 
   $effect(() => {
-    const lastAutoRender = autoRender.current
+    const lastAutoRender = untrack(() => autoRender.current)
     autoRender.set(false)
     return () => {
       autoRender.set(lastAutoRender)
@@ -16,7 +17,7 @@
 
   // render once
   $effect(() => {
-    asciiEffect.render(scene, camera.current)
+    asciiEffect.render(scene.current, camera.current)
   })
 </script>
 

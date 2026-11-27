@@ -80,18 +80,18 @@
   $effect(() => {
     switch (extension.state.renderMode) {
       case 'rendered': {
-        scene.overrideMaterial = null
+        scene.current.overrideMaterial = null
         break
       }
       case 'wireframe': {
-        scene.overrideMaterial = new MeshBasicMaterial({
+        scene.current.overrideMaterial = new MeshBasicMaterial({
           wireframe: true,
           color: '#ffffff'
         })
         break
       }
       case 'solid': {
-        scene.overrideMaterial = new MeshMatcapMaterial({
+        scene.current.overrideMaterial = new MeshMatcapMaterial({
           color: '#ffffff',
           flatShading: true
         })

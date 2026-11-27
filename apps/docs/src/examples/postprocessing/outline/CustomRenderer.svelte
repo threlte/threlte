@@ -8,6 +8,7 @@
     OutlineEffect,
     RenderPass
   } from 'postprocessing'
+  import { untrack } from 'svelte'
 
   type Props = {
     mesh: Mesh
@@ -19,11 +20,11 @@
 
   const composer = new EffectComposer(renderer)
 
-  const renderPass = new RenderPass(scene)
+  const renderPass = new RenderPass(scene.current)
   composer.addPass(renderPass)
 
   $effect(() => {
-    composer.setSize($size.width, $size.height)
+    composer.setSize(size.current.width, size.current.height)
   })
 
   export const outlineEffectOptions: ConstructorParameters<typeof OutlineEffect>[2] = {
@@ -34,7 +35,7 @@
     blur: true
   }
 
-  const outlineEffect = new OutlineEffect(scene, undefined, outlineEffectOptions)
+  const outlineEffect = new OutlineEffect(scene.current, undefined, outlineEffectOptions)
   $effect(() => {
     outlineEffect.selection.add(mesh)
     return () => {
@@ -46,9 +47,9 @@
   composer.addPass(outlineEffectPass)
 
   $effect(() => {
-    renderPass.mainCamera = $camera
-    outlineEffect.mainCamera = $camera
-    outlineEffectPass.mainCamera = $camera
+    renderPass.mainCamera = camera.current
+    outlineEffect.mainCamera = camera.current
+    outlineEffectPass.mainCamera = camera.current
   })
 
   $effect(() => {
@@ -61,7 +62,7 @@
   })
 
   $effect(() => {
-    const last = autoRender.current
+    const last = untrack(() => autoRender.current)
     autoRender.set(false)
     return () => {
       autoRender.set(last)

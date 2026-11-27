@@ -1,13 +1,7 @@
 <script lang="ts">
   import { useTask, useThrelte, useParent } from '@threlte/core'
   import { untrack } from 'svelte'
-  import {
-    NoToneMapping,
-    Vector4,
-    type OrthographicCamera,
-    type PerspectiveCamera,
-    type Event
-  } from 'three'
+  import { NoToneMapping, Vector4, type Event } from 'three'
   import type { GizmoProps, Controls } from './types.js'
   import { ViewportGizmo } from './viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -42,7 +36,7 @@
   } = useThrelte()
 
   const gizmo = new ViewportGizmo(
-    camera.current as PerspectiveCamera | OrthographicCamera,
+    camera.current,
     renderer,
     untrack(() => ({
       container: dom,
@@ -102,7 +96,7 @@
 
   const viewport = new Vector4()
 
-  const cameraControls = $derived(controls ?? ($parent as Controls))
+  const cameraControls = $derived(controls ?? (parent.current as Controls))
   const initialRenderTask = untrack(() => renderTask)
 
   useTask(
@@ -127,7 +121,7 @@
   )
 
   $effect(() => {
-    gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
+    gizmo.camera = camera.current
   })
 
   $effect(() => {
@@ -190,7 +184,7 @@
   })
 
   $effect(() => {
-    if ($canvasSize) {
+    if (canvasSize.current) {
       gizmo.update()
       invalidate()
     }

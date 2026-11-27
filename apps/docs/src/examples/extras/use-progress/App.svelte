@@ -3,13 +3,11 @@
   import { Canvas } from '@threlte/core'
   import { Tween } from 'svelte/motion'
   import { fade } from 'svelte/transition'
-  import { fromStore } from 'svelte/store'
   import { useProgress } from '@threlte/extras'
 
   const { progress } = useProgress()
-  const p = fromStore(progress)
 
-  const tweenedProgress = Tween.of(() => p.current, {
+  const tweenedProgress = Tween.of(() => progress.current, {
     duration: 150
   })
 

@@ -50,7 +50,7 @@
   })
 
   $effect(() => {
-    uniforms.resolution.value.set($size.width, $size.height)
+    uniforms.resolution.value.set(size.current.width, size.current.height)
     invalidate()
   })
 

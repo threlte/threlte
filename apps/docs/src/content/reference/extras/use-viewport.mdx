@@ -17,10 +17,10 @@ The `width` and `height` properties provide the screen size in Three.js units. F
   import { T } from '@threlte/core'
   import { useViewport } from '@threlte/extras'
 
-  const viewport = useViewport() // currentWritable<Viewport>
+  const viewport = useViewport() // { current: Viewport }
 </script>
 
-<T.Mesh scale={[$viewport.width, $viewport.height, 1]}>
+<T.Mesh scale={[viewport.current.width, viewport.current.height, 1]}>
   <T.PlaneGeometry />
   <T.MeshStandardMaterial />
 </T.Mesh>

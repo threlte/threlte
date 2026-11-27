@@ -21,7 +21,7 @@
   let {
     isBackground = false,
     isEnvironment = true,
-    scene = ctx.scene,
+    scene = ctx.scene.current,
     texture = $bindable(),
     urls
   }: CubeEnvironmentProps = $props()

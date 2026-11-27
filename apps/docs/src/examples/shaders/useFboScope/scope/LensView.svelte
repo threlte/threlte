@@ -16,13 +16,13 @@
   let { scope = $bindable() }: Props = $props()
 
   // render scene at a lower resolution but multiple samples for antialiasing
-  const renderTarget = useFBO({
+  const renderTarget = useFBO(() => ({
     size: {
-      width: $size.width * 0.5,
-      height: $size.height * 0.5
+      width: size.current.width * 0.5,
+      height: size.current.height * 0.5
     },
     samples: 8
-  })
+  }))
 
   const uniforms = {
     viewTexture: new Uniform(renderTarget.texture),
@@ -38,14 +38,14 @@
 
   useTask(() => {
     if (!scope || !$scoping) return
-    const cam = $camera as PerspectiveCamera
+    const cam = camera.current as PerspectiveCamera
 
     scope.visible = false
     cam.fov = zoomedFov.current
     cam.updateProjectionMatrix()
     cam.matrixWorldNeedsUpdate = true
     renderer.setRenderTarget(renderTarget)
-    renderer.render(scene, cam)
+    renderer.render(scene.current, cam)
 
     renderer.setRenderTarget(null)
     cam.fov = baseFov

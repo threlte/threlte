@@ -28,8 +28,8 @@
     cubeGeometry.set(gltf.nodes.Cube.geometry)
   })
   env.then((texture) => {
-    scene.environment = texture
-    scene.environmentIntensity = 10
+    scene.current.environment = texture
+    scene.current.environmentIntensity = 10
   })
 </script>
 
@@ -49,9 +49,9 @@
       }
     }}
     onchange={(values) => {
-      scene.environmentRotation.x = values.rotation.x
-      scene.environmentRotation.y = values.rotation.y
-      scene.environmentRotation.z = values.rotation.z
+      scene.current.environmentRotation.x = values.rotation.x
+      scene.current.environmentRotation.y = values.rotation.y
+      scene.current.environmentRotation.z = values.rotation.z
     }}
   />
 </ScrollSheet>

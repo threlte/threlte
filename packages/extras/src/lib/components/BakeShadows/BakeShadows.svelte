@@ -1,6 +1,5 @@
 <script lang="ts">
   import { useThrelte } from '@threlte/core'
-  import { fromStore } from 'svelte/store'
   import { useSuspense } from '../../suspense/useSuspense.js'
 
   type UpdatableShadow = {
@@ -8,7 +7,7 @@
     needsUpdate: boolean
   }
 
-  const suspended = fromStore(useSuspense().suspended)
+  const { suspended } = useSuspense()
 
   const { renderer, scene } = useThrelte()
 
@@ -39,7 +38,7 @@
       restore.push(freeze(shadowMap as UpdatableShadow))
     }
 
-    scene.traverse((object) => {
+    scene.current.traverse((object) => {
       const { shadow } = object as { shadow?: UpdatableShadow }
 
       if (shadow !== undefined) {

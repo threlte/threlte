@@ -45,21 +45,21 @@ adding a task that runs right _before_ Threlte's `autoRenderTask`.
   const element = document.querySelector('#css-renderer-target') as HTMLElement
   const cssRenderer = new CSS2DRenderer({ element })
   $effect(() => {
-    cssRenderer.setSize($size.width, $size.height)
+    cssRenderer.setSize(size.current.width, size.current.height)
   })
 
   // We are running two renderers, and don't want to run
   // updateMatrixWorld twice; tell the renderers that we'll handle
   // it manually.
   // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
-  scene.matrixWorldAutoUpdate = false
+  scene.current.matrixWorldAutoUpdate = false
 
   // To update the matrices *once* per frame, we'll use a task that is added
   // right before the autoRenderTask. This way, we can be sure that the
   // matrices are updated before the renderers run.
   useTask(
     () => {
-      scene.updateMatrixWorld()
+      scene.current.updateMatrixWorld()
     },
     { before: autoRenderTask }
   )
@@ -69,7 +69,7 @@ adding a task that runs right _before_ Threlte's `autoRenderTask`.
   useTask(
     () => {
       // Update the DOM
-      cssRenderer.render(scene, camera.current)
+      cssRenderer.render(scene.current, camera.current)
     },
     {
       after: autoRenderTask,

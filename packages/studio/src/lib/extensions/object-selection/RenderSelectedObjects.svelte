@@ -22,12 +22,12 @@
 
   const { size, renderer, autoRenderTask, scene, camera } = useThrelte()
 
-  const renderTarget = new WebGLRenderTarget($size.width, $size.height, {
+  const renderTarget = new WebGLRenderTarget(size.current.width, size.current.height, {
     format: RGBAFormat
   })
 
   $effect.pre(() => {
-    renderTarget.setSize($size.width, $size.height)
+    renderTarget.setSize(size.current.width, size.current.height)
   })
 
   const numberSeedToHexColor = (seed: number) => {
@@ -71,7 +71,7 @@
       const originalRenderTarget = renderer.getRenderTarget()
       const currentCameraMask = camera.current.layers.mask
       camera.current.layers.set(31)
-      const currentSceneBackground = scene.background
+      const currentSceneBackground = scene.current.background
       objectSelection.selectedObjects.forEach((object, i) => {
         if (object === camera.current) return
         object.userData.originalLayer = object.layers.mask
@@ -83,16 +83,16 @@
           object.material = getOverrideMaterial(i)
         }
       })
-      const originalOverrideMaterial = scene.overrideMaterial
-      scene.overrideMaterial = null
-      scene.background = null
+      const originalOverrideMaterial = scene.current.overrideMaterial
+      scene.current.overrideMaterial = null
+      scene.current.background = null
       const currentClearAlpha = renderer.getClearAlpha()
       renderer.setRenderTarget(renderTarget)
-      renderer.render(scene, camera.current)
+      renderer.render(scene.current, camera.current)
       renderer.setRenderTarget(originalRenderTarget)
       camera.current.layers.mask = currentCameraMask
       renderer.setClearAlpha(currentClearAlpha)
-      scene.background = currentSceneBackground
+      scene.current.background = currentSceneBackground
       objectSelection.selectedObjects.forEach((object) => {
         if (object === camera.current) return
         object.layers.mask = object.userData.originalLayer
@@ -101,7 +101,7 @@
           object.material = originalMaterials.get(object.id)
         }
       })
-      scene.overrideMaterial = originalOverrideMaterial
+      scene.current.overrideMaterial = originalOverrideMaterial
     },
     {
       before: autoRenderTask,
@@ -124,12 +124,12 @@
 
       let scaleX = getMesh().scale.x
       let scaleY = getMesh().scale.y
-      if (isInstanceOf($camera, 'PerspectiveCamera')) {
-        scaleY = Math.tan((($camera.fov * Math.PI) / 180) * 0.5) * 5 * 2 // 5 being the distance of the camera to the plane
-        scaleX = scaleY * $camera.aspect
-      } else if (isInstanceOf($camera, 'OrthographicCamera')) {
-        scaleY = ($camera.top - $camera.bottom) / $camera.zoom
-        scaleX = ($camera.right - $camera.left) / $camera.zoom
+      if (isInstanceOf(camera.current, 'PerspectiveCamera')) {
+        scaleY = Math.tan(((camera.current.fov * Math.PI) / 180) * 0.5) * 5 * 2 // 5 being the distance of the camera to the plane
+        scaleX = scaleY * camera.current.aspect
+      } else if (isInstanceOf(camera.current, 'OrthographicCamera')) {
+        scaleY = (camera.current.top - camera.current.bottom) / camera.current.zoom
+        scaleX = (camera.current.right - camera.current.left) / camera.current.zoom
       }
       if (scaleX !== getMesh().scale.x || scaleY !== getMesh().scale.y) {
         getMesh().scale.x = scaleX
@@ -150,8 +150,8 @@
   })
 </script>
 
-{#key $camera.uuid}
-  <T is={selectionMesh} attach={$camera}>
+{#key camera.current.uuid}
+  <T is={selectionMesh} attach={camera.current}>
     <T.PlaneGeometry />
 
     <T.ShaderMaterial

@@ -43,6 +43,7 @@
   },
   "peerDependencies": {
     "@dimforge/rapier3d-compat": ">=0.16",
+    "@threlte/core": ">=9.0.0",
     "svelte": ">=5",
     "three": ">=0.152"
   },

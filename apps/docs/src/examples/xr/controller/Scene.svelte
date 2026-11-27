@@ -6,8 +6,8 @@
 
   const { scene } = useThrelte()
 
-  scene.fog = new Fog('black', 1.5, 2)
-  scene.background = new Color('black')
+  scene.current.fog = new Fog('black', 1.5, 2)
+  scene.current.background = new Color('black')
 </script>
 
 <XR>

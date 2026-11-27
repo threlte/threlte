@@ -1,15 +1,7 @@
 <script lang="ts">
   import { useTask, useThrelte, useParent, useScheduler } from '@threlte/core/webgpu'
   import { untrack } from 'svelte'
-  import {
-    CanvasTarget,
-    Color,
-    NoToneMapping,
-    Vector4,
-    type OrthographicCamera,
-    type PerspectiveCamera,
-    type Event
-  } from 'three/webgpu'
+  import { CanvasTarget, Color, NoToneMapping, Vector4, type Event } from 'three/webgpu'
   import type { GizmoProps, Controls } from '../types.js'
   import { ViewportGizmo } from '../viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -45,7 +37,7 @@
   const { autoInvalidations } = useScheduler()
 
   const gizmo = new ViewportGizmo(
-    camera.current as PerspectiveCamera | OrthographicCamera,
+    camera.current,
     renderer,
     untrack(() => ({
       container: dom,
@@ -201,7 +193,7 @@
     renderer.toneMapping = toneMapping
   }
 
-  const cameraControls = $derived(controls ?? ($parent as Controls))
+  const cameraControls = $derived(controls ?? (parent.current as Controls))
   const initialRenderTask = untrack(() => renderTask)
 
   useTask(
@@ -231,7 +223,7 @@
   })
 
   $effect(() => {
-    gizmo.camera = $camera as PerspectiveCamera | OrthographicCamera
+    gizmo.camera = camera.current
   })
 
   $effect(() => {
@@ -296,7 +288,7 @@
   })
 
   $effect(() => {
-    if ($canvasSize) {
+    if (canvasSize.current) {
       gizmo.update()
       invalidate()
     }

@@ -12,7 +12,9 @@
 
   const q = new Quaternion()
 
-  let followObject = $derived(follow === true ? $camera : follow === false ? undefined : follow)
+  const followObject = $derived(
+    follow === true ? camera.current : follow === false ? undefined : follow
+  )
 
   const stage = useStage('<Billboard>', { before: renderStage })
 

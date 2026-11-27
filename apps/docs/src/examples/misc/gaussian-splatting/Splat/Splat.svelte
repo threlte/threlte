@@ -3,14 +3,7 @@
   import { T, useLoader, useTask, useThrelte } from '@threlte/core'
   import type { SplatProps } from './types'
 
-  let {
-    src,
-    alphaHash = false,
-    alphaTest = undefined,
-    toneMapped = undefined,
-    children,
-    ...rest
-  }: SplatProps = $props()
+  let { src, alphaHash = false, alphaTest, toneMapped, children, ...rest }: SplatProps = $props()
 
   const { renderer, camera } = useThrelte()
 
@@ -40,7 +33,7 @@
     is={Splat}
     args={[
       splat,
-      $camera,
+      camera.current,
       {
         alphaHash,
         alphaTest,

@@ -24,13 +24,13 @@
     objectSelectionScope
   )
 
-  let selectionBox = new SelectionBox(camera.current, scene)
+  let selectionBox = new SelectionBox(camera.current, scene.current)
   let selectionHelper = new SelectionHelper(renderer, 'selectBox')
 
   const studioObjectsRegistry = useStudioObjectsRegistry()
 
   $effect.pre(() => {
-    selectionBox.camera = $camera
+    selectionBox.camera = camera.current
   })
 
   const filter = (objects: Object3D[]): Object3D[] => {

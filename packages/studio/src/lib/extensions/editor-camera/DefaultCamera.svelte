@@ -112,12 +112,12 @@
         obj.visible = false
       }
 
-      const originalOverrideMaterial = scene.overrideMaterial
-      scene.overrideMaterial = null
+      const originalOverrideMaterial = scene.current.overrideMaterial
+      scene.current.overrideMaterial = null
 
-      renderer.render(scene, defaultCamera)
+      renderer.render(scene.current, defaultCamera)
 
-      scene.overrideMaterial = originalOverrideMaterial
+      scene.current.overrideMaterial = originalOverrideMaterial
 
       for (let index = 0; index < studioObjectsArray.length; index++) {
         const obj = studioObjectsArray[index]

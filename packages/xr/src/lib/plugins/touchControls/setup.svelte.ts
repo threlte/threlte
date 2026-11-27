@@ -1,5 +1,4 @@
 import { Matrix4, Mesh, Ray, Sphere, Vector3, type Event, type Object3D, type Points } from 'three'
-import { observe } from '@threlte/core'
 import { fromStore } from 'svelte/store'
 import type {
   ControlsContext,
@@ -272,7 +271,7 @@ export const setupTouchControls = (
     )
   }
 
-  const { start, stop } = useFixed(
+  useFixed(
     () => {
       handContext.compute(context, handContext)
       hits = getHits()
@@ -300,18 +299,7 @@ export const setupTouchControls = (
     },
     {
       fixedStep,
-      autoStart: false
-    }
-  )
-
-  observe.pre(
-    () => [isPresenting.current, enabled.current],
-    ([presenting, active]) => {
-      if (presenting && active) {
-        start()
-      } else {
-        stop()
-      }
+      running: () => isPresenting.current && enabled.current
     }
   )
 }

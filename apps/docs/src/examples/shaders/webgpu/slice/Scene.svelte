@@ -21,7 +21,7 @@
   )
 
   const { scene } = useThrelte()
-  scene.backgroundBlurriness = 0.5
+  scene.current.backgroundBlurriness = 0.5
 
   let rotation = $state(0)
 

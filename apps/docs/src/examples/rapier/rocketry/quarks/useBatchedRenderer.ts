@@ -8,7 +8,7 @@ export const useBatchedRenderer = () => {
     const { autoRenderTask, scene } = useThrelte()
     const renderer = new BatchedRenderer()
 
-    scene.add(renderer)
+    scene.current.add(renderer)
 
     useTask(
       (delta) => {

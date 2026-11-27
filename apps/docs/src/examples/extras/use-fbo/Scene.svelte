@@ -46,7 +46,7 @@
     const lastRenderTarget = renderer.getRenderTarget()
 
     renderer.setRenderTarget(fbo)
-    renderer.render(scene, rotatingCamera)
+    renderer.render(scene.current, rotatingCamera)
 
     helper.visible = true
     planeMesh.visible = true
@@ -73,7 +73,7 @@
 />
 <T
   is={helper}
-  attach={scene}
+  attach={scene.current}
 />
 
 <T is={planeMesh} />

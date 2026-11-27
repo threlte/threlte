@@ -1,17 +1,15 @@
 <script lang="ts">
-  import { T, observe, useThrelte, type Props } from '@threlte/core'
+  import { T, useThrelte, type Props } from '@threlte/core'
   import { Group } from 'three'
   import {
     TransformControls,
     type TransformControlsEventMap
   } from 'three/examples/jsm/controls/TransformControls.js'
-  import { useControlsContext } from '../useControlsContext.js'
+  import { useControlsContext } from '../useControlsContext.svelte.js'
   import type { TransformControlsProps } from './types.js'
 
   let {
     autoPauseControls = true,
-    autoPauseOrbitControls,
-    autoPauseTrackballControls,
     cameraControls: customCameraControls,
     object,
     controls = $bindable(),
@@ -32,56 +30,23 @@
 
   let isDragging = $state(false)
 
-  // Resolve effective pause state: deprecated per-control props take
-  // precedence if explicitly set, otherwise fall back to autoPauseControls.
-  const shouldPauseOrbit = $derived(autoPauseOrbitControls ?? autoPauseControls)
-  const shouldPauseTrackball = $derived(autoPauseTrackballControls ?? autoPauseControls)
-  const shouldPauseCamera = $derived(autoPauseControls)
+  const pauseWhileDragging = (getControls: () => { enabled: boolean } | undefined) => {
+    $effect(() => {
+      const controls = getControls()
 
-  observe(
-    () => [orbitControls, isDragging, shouldPauseOrbit],
-    ([orbitControls, isDragging, shouldPause]) => {
-      if (!orbitControls || (!orbitControls.enabled && isDragging)) return
-      orbitControls.enabled = !(isDragging && shouldPause)
-      return () => {
-        orbitControls.enabled = true
-      }
-    }
-  )
-
-  observe(
-    () => [trackballControls, isDragging, shouldPauseTrackball],
-    ([trackballControls, isDragging, shouldPause]) => {
-      if (!trackballControls || (!trackballControls.enabled && isDragging)) return
-      trackballControls.enabled = !(isDragging && shouldPause)
-      return () => {
-        trackballControls.enabled = true
-      }
-    }
-  )
-
-  observe(
-    () => [cameraControls, isDragging, shouldPauseCamera],
-    ([cameraControls, isDragging, shouldPause]) => {
-      if (!cameraControls || (!cameraControls.enabled && isDragging)) return
-      cameraControls.enabled = !(isDragging && shouldPause)
-      return () => {
-        cameraControls.enabled = true
-      }
-    }
-  )
-
-  // Custom/third-party controls passed via the cameraControls prop
-  observe(
-    () => [customCameraControls, isDragging, autoPauseControls],
-    ([controls, isDragging, shouldPause]) => {
       if (!controls || (!controls.enabled && isDragging)) return
-      controls.enabled = !(isDragging && shouldPause)
+
+      controls.enabled = !(isDragging && autoPauseControls)
       return () => {
         controls.enabled = true
       }
-    }
-  )
+    })
+  }
+
+  pauseWhileDragging(() => customCameraControls)
+  pauseWhileDragging(() => orbitControls.current)
+  pauseWhileDragging(() => trackballControls.current)
+  pauseWhileDragging(() => cameraControls.current)
 
   // `<HTML> sets canvas pointer-events to "none" if occluding, so events must be placed on the canvas parent.
   const transformControls = new TransformControls(camera.current, dom)
@@ -89,7 +54,7 @@
   ref = attachGroup
 
   $effect(() => {
-    transformControls.camera = $camera
+    transformControls.camera = camera.current
   })
 
   $effect.pre(() => {
@@ -163,9 +128,10 @@
   {...transformProps}
   attach={({ ref }) => {
     const helper = ref.getHelper()
-    scene.add(helper)
+    const target = scene.current
+    target.add(helper)
     return () => {
-      scene.remove(helper)
+      target.remove(helper)
     }
   }}
   dispose={false}

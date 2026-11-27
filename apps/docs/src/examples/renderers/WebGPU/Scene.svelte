@@ -6,7 +6,7 @@
 
   const { scene, dom, invalidate } = useThrelte()
 
-  scene.background = new THREE.Color(0xc1c1c1)
+  scene.current.background = new THREE.Color(0xc1c1c1)
 
   let geometries: THREE.BufferGeometry[] = [
     new THREE.ConeGeometry(1.0, 2.0, 3, 1),

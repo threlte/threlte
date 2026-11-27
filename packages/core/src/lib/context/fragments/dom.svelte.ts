@@ -1,12 +1,13 @@
 import { getContext, setContext } from 'svelte'
-import { runeToCurrentReadable, type CurrentReadable } from '../../utilities/currentWritable.js'
 import { useMeasure } from '../../utilities/useMeasure.svelte.js'
 
 export interface DOMContext {
   /** The canvas wrapper element */
   dom: HTMLElement
   canvas: HTMLCanvasElement
-  size: CurrentReadable<{ width: number; height: number }>
+  size: {
+    readonly current: { width: number; height: number }
+  }
   shouldUpdateSize: () => boolean
 }
 
@@ -26,7 +27,7 @@ export const createDOMContext = (
   const context: DOMContext = {
     dom,
     canvas,
-    size: runeToCurrentReadable(() => size.current),
+    size,
     shouldUpdateSize
   }
 

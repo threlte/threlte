@@ -1,15 +1,16 @@
 import { getContext, setContext } from 'svelte'
-import { OrthographicCamera, PerspectiveCamera, type Camera } from 'three'
-import { runeToCurrentWritable, type CurrentWritable } from '../../utilities/currentWritable.js'
+import { OrthographicCamera, PerspectiveCamera } from 'three'
 import { useDOM } from './dom.svelte.js'
 import { useScheduler } from './scheduler.svelte.js'
-import { fromStore } from 'svelte/store'
 import { SvelteSet } from 'svelte/reactivity'
 
 export interface CameraContext {
-  camera: CurrentWritable<Camera>
-  makeDefaultCameras: SvelteSet<Camera>
-  makeDefaultCameraManual: WeakMap<Camera, boolean>
+  camera: {
+    readonly current: PerspectiveCamera | OrthographicCamera
+    set(value: PerspectiveCamera | OrthographicCamera): void
+  }
+  makeDefaultCameras: SvelteSet<PerspectiveCamera | OrthographicCamera>
+  makeDefaultCameraManual: WeakMap<PerspectiveCamera | OrthographicCamera, boolean>
   manual: {
     current: boolean
     set(value: boolean): void
@@ -17,12 +18,11 @@ export interface CameraContext {
 }
 
 export const createCameraContext = (): CameraContext => {
-  const { size: sizeStore } = useDOM()
-  const size = fromStore(sizeStore)
+  const { size } = useDOM()
   const { invalidate } = useScheduler()
 
-  const makeDefaultCameras = new SvelteSet<Camera>()
-  const makeDefaultCameraManual = new WeakMap<Camera, boolean>()
+  const makeDefaultCameras = new SvelteSet<PerspectiveCamera | OrthographicCamera>()
+  const makeDefaultCameraManual = new WeakMap<PerspectiveCamera | OrthographicCamera, boolean>()
 
   // Create a default camera to use when no camera is defined by the user.
   // Aspect is 1 (not 0) to avoid a NaN projection matrix before the first resize.
@@ -67,10 +67,14 @@ export const createCameraContext = (): CameraContext => {
   const context: CameraContext = {
     makeDefaultCameras,
     makeDefaultCameraManual,
-    camera: runeToCurrentWritable(
-      () => camera,
-      (value) => (camera = value)
-    ),
+    camera: {
+      get current() {
+        return camera
+      },
+      set(value) {
+        camera = value
+      }
+    },
     manual: {
       get current() {
         return manual

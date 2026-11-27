@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { AsciiRendererProps } from './types.js'
   import { AsciiEffect } from 'three/examples/jsm/effects/AsciiEffect.js'
-  import { fromStore } from 'svelte/store'
   import { useTask, useThrelte } from '@threlte/core'
 
   const defaultCharacters = ' .:-+*=%@#'
@@ -45,10 +44,8 @@
 
   export const getEffect = () => asciiEffect
 
-  const sizeStore = fromStore(size)
-
   $effect(() => {
-    asciiEffect.setSize(sizeStore.current.width, sizeStore.current.height)
+    asciiEffect.setSize(size.current.width, size.current.height)
   })
 
   $effect(() => {
@@ -72,7 +69,7 @@
   let running = $state(false)
   useTask(
     () => {
-      asciiEffect.render(scene ?? defaultScene, camera ?? defaultCamera.current)
+      asciiEffect.render(scene ?? defaultScene.current, camera ?? defaultCamera.current)
     },
     { autoInvalidate: false, stage: renderStage, running: () => running }
   )

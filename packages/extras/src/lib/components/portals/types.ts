@@ -7,9 +7,6 @@ export interface PortalProps {
    */
   id?: string
 
-  /** @deprecated Removed. Use `attach` on the children instead. */
-  object?: never
-
   /** The content to render at the `<PortalTarget>`. */
   children?: Snippet
 }
