@@ -1,5 +1,11 @@
 # @threlte/test
 
+## 3.0.0
+
+### Major Changes
+
+- f8f0a3c: Require `@threlte/core` 9
+
 ## 2.1.0
 
 ### Minor Changes
