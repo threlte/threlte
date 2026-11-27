@@ -34,7 +34,7 @@
     // Update the picking ray with the camera and pointer position
     raycaster.setFromCamera(pointer, camera.current)
 
-    let hits = raycaster.intersectObject(scene, true)
+    let hits = raycaster.intersectObject(scene.current, true)
     let hit = hits.shift()
 
     const isOrIsChildOfStudioObject = (object: THREE.Object3D): boolean => {

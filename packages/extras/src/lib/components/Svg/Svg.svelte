@@ -37,8 +37,12 @@
   const suspend = useSuspense()
   const loader = useLoader(SVGLoader)
   const svg = $derived(
-    suspend(loader.load(src.startsWith('<svg') ? `data:image/svg+xml;utf8,${src}` : src))
+    loader.load(src.startsWith('<svg') ? `data:image/svg+xml;utf8,${src}` : src)
   )
+
+  $effect(() => {
+    suspend(svg)
+  })
   const paths = $derived($svg?.paths ?? [])
 
   const strokeGeometries = $derived.by(() =>

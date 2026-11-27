@@ -64,7 +64,7 @@ scene root (existing behaviour, unchanged).
     if (!isPresenting.current) return
 
     const userCamera = camera.current
-    const previousParent = userCamera.parent ?? scene
+    const previousParent = userCamera.parent ?? scene.current
     group.add(userCamera)
 
     return () => {

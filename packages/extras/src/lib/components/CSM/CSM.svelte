@@ -73,7 +73,7 @@
       const nextCSM = new CSM({
         ...args,
         camera: camera ?? args.camera ?? defaultCamera.current,
-        parent: args.parent ?? scene,
+        parent: args.parent ?? scene.current,
         cascades,
         maxFar: resolvedMaxFar,
         lightMargin: resolvedLightMargin,

@@ -69,7 +69,7 @@
   let running = $state(false)
   useTask(
     () => {
-      asciiEffect.render(scene ?? defaultScene, camera ?? defaultCamera.current)
+      asciiEffect.render(scene ?? defaultScene.current, camera ?? defaultCamera.current)
     },
     { autoInvalidate: false, stage: renderStage, running: () => running }
   )

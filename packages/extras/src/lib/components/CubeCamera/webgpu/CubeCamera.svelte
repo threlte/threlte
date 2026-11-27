@@ -35,17 +35,19 @@
   export const update = () => {
     // if frames === Infinity, the task will run indefinitely
     if (count < frames) {
-      const lastBackground = scene.background
-      if (background !== 'auto') scene.background = background
+      const currentScene = scene.current
 
-      const lastFog = scene.fog
-      if (fog !== 'auto') scene.fog = fog
+      const lastBackground = currentScene.background
+      if (background !== 'auto') currentScene.background = background
+
+      const lastFog = currentScene.fog
+      if (fog !== 'auto') currentScene.fog = fog
 
       inner.visible = false
-      camera.update(renderer, scene)
+      camera.update(renderer, currentScene)
 
-      scene.background = lastBackground
-      scene.fog = lastFog
+      currentScene.background = lastBackground
+      currentScene.fog = lastFog
       inner.visible = true
       count += 1
     } else {

@@ -149,7 +149,7 @@
         if (Array.isArray(occlude)) {
           raytraceTarget = occlude as Object3D[]
         } else if (occlude !== 'blending') {
-          raytraceTarget = [scene]
+          raytraceTarget = [scene.current]
         }
       }
 
@@ -364,7 +364,7 @@
   style:pointer-events={transform ? 'none' : undefined}
   style:overflow={transform ? 'hidden' : undefined}
   style:transform-origin={transform ? undefined : '0 0'}
-  style:display={$suspended ? 'none' : undefined}
+  style:display={suspended.current ? 'none' : undefined}
 >
   {#if transform}
     <div

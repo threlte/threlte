@@ -58,8 +58,8 @@ max-height: 50vh;
   const treeItemToObject = new WeakMap<TreeViewItem, THREE.Object3D>()
   const selectedItems = new Set<TreeViewItem>()
 
-  treeItemToObject.set(treeroot, scene)
-  objectToTreeItem.set(scene, treeroot)
+  treeItemToObject.set(treeroot, scene.current)
+  objectToTreeItem.set(scene.current, treeroot)
 
   const deregister = (object: THREE.Object3D) => {
     if (studioObjectsRegistry.isOrIsChildOfStudioObject(object)) return
@@ -99,7 +99,7 @@ max-height: 50vh;
 
     const { parent } = object
     const name = object.name
-    const parentItem = parent === scene ? treeroot : objectToTreeItem.get(parent!)
+    const parentItem = parent === scene.current ? treeroot : objectToTreeItem.get(parent!)
     const text = `${name ? `${name} ` : ''}(${object.type})`
     const icons = {
       isCamera: '🎥',
@@ -149,7 +149,7 @@ max-height: 50vh;
   let initialized = false
   onMount(() => {
     tick().then(() => {
-      scene.children.forEach((object) => {
+      scene.current.children.forEach((object) => {
         register(object)
       })
       initialized = true

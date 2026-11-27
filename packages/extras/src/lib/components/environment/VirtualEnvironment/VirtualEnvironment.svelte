@@ -15,13 +15,13 @@
     onupdatestart,
     onupdatestop,
     resolution = 256,
-    scene: parentScene = ctx.scene,
+    scene: parentScene = ctx.scene.current,
     visible,
     children
   }: VirtualEnvironmentProps = $props()
 
   // Create a parent scene to render the virtual environment into
-  const scene = createSceneContext()
+  const { scene } = createSceneContext()
 
   export const { camera, renderTarget } = useCubeCamera(
     () => near,
@@ -37,7 +37,7 @@
   )
 
   export const update = () => {
-    camera.update(ctx.renderer, scene)
+    camera.update(ctx.renderer, scene.current)
   }
 
   let running = $state(false)
@@ -71,7 +71,7 @@
 </script>
 
 <T
-  is={scene}
+  is={scene.current}
   attach={visible ? undefined : false}
 >
   <T is={camera} />

@@ -10,7 +10,7 @@
     useTask,
     useThrelte
   } from '@threlte/core'
-  import { untrack, type Snippet } from 'svelte'
+  import type { Snippet } from 'svelte'
   import { Vector4, type Scene } from 'three'
 
   let {
@@ -37,9 +37,9 @@
 
   createDOMContext(() => ({ dom, canvas: parentContext.canvas }))
   createCacheContext()
-  const scene = createSceneContext(untrack(() => providedScene))
-  createParentContext(() => scene)
-  createParentObject3DContext(() => scene)
+  const { scene } = createSceneContext(() => providedScene)
+  createParentContext(() => scene.current)
+  createParentObject3DContext(() => scene.current)
   const { camera } = createCameraContext()
   createUserContext()
 
@@ -74,7 +74,7 @@
       renderer.setScissorTest(true)
 
       // render
-      renderer.render(scene, camera.current)
+      renderer.render(scene.current, camera.current)
 
       // reset state
       renderer.setViewport(originalViewport)

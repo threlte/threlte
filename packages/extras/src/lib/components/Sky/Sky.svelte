@@ -48,14 +48,14 @@
     cubeCamera = new CubeCamera(1, 1.1, renderTarget)
   }
 
-  const originalEnvironment = scene.environment
+  const originalEnvironment = scene.current.environment
 
   $effect(() => {
     if (setEnvironment && renderTarget) {
-      scene.environment = renderTarget.texture
+      scene.current.environment = renderTarget.texture
       invalidate()
     } else if (!setEnvironment) {
-      scene.environment = originalEnvironment
+      scene.current.environment = originalEnvironment
       invalidate()
     }
   })
@@ -101,7 +101,7 @@
   $effect(() => {
     return () => {
       sky.material.dispose()
-      scene.environment = originalEnvironment
+      scene.current.environment = originalEnvironment
 
       try {
         renderTarget?.dispose()

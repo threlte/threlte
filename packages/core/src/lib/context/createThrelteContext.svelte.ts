@@ -1,4 +1,3 @@
-import { untrack } from 'svelte'
 import type { Scene } from 'three'
 import { createCacheContext } from './fragments/cache.js'
 import { createCameraContext } from './fragments/camera.svelte.js'
@@ -26,14 +25,14 @@ export interface CreateThrelteContextOptions<T extends Renderer>
 export const createThrelteContext = <T extends Renderer>(
   options: () => CreateThrelteContextOptions<T>
 ) => {
-  const scene = createSceneContext(untrack(options).scene)
+  const { scene } = createSceneContext(() => options().scene)
 
   return {
     scene,
     ...createDOMContext(options),
     ...createCacheContext(),
-    ...createParentContext(() => scene),
-    ...createParentObject3DContext(() => scene),
+    ...createParentContext(() => scene.current),
+    ...createParentObject3DContext(() => scene.current),
     ...createDisposalContext(),
     ...createSchedulerContext(options),
     ...createCameraContext(),

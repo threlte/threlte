@@ -71,7 +71,7 @@
       const originalRenderTarget = renderer.getRenderTarget()
       const currentCameraMask = camera.current.layers.mask
       camera.current.layers.set(31)
-      const currentSceneBackground = scene.background
+      const currentSceneBackground = scene.current.background
       objectSelection.selectedObjects.forEach((object, i) => {
         if (object === camera.current) return
         object.userData.originalLayer = object.layers.mask
@@ -83,16 +83,16 @@
           object.material = getOverrideMaterial(i)
         }
       })
-      const originalOverrideMaterial = scene.overrideMaterial
-      scene.overrideMaterial = null
-      scene.background = null
+      const originalOverrideMaterial = scene.current.overrideMaterial
+      scene.current.overrideMaterial = null
+      scene.current.background = null
       const currentClearAlpha = renderer.getClearAlpha()
       renderer.setRenderTarget(renderTarget)
-      renderer.render(scene, camera.current)
+      renderer.render(scene.current, camera.current)
       renderer.setRenderTarget(originalRenderTarget)
       camera.current.layers.mask = currentCameraMask
       renderer.setClearAlpha(currentClearAlpha)
-      scene.background = currentSceneBackground
+      scene.current.background = currentSceneBackground
       objectSelection.selectedObjects.forEach((object) => {
         if (object === camera.current) return
         object.layers.mask = object.userData.originalLayer
@@ -101,7 +101,7 @@
           object.material = originalMaterials.get(object.id)
         }
       })
-      scene.overrideMaterial = originalOverrideMaterial
+      scene.current.overrideMaterial = originalOverrideMaterial
     },
     {
       before: autoRenderTask,

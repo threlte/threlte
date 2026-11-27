@@ -45,11 +45,15 @@
   const suspend = useSuspense()
   const map = $derived(
     typeof src === 'string'
-      ? suspend(useTexture(src))
+      ? useTexture(src)
       : src
         ? asyncWritable<Texture>(Promise.resolve(src))
         : undefined
   )
+
+  $effect(() => {
+    if (typeof src === 'string' && map) suspend(map)
+  })
 
   $effect(() => {
     if (!('geometry' in parentNode)) {

@@ -4,6 +4,166 @@ title: Migration Guides
 order: 2
 ---
 
+## Threlte 9
+
+Upgrade `@threlte/core` to v9 and `@threlte/extras` to v10 if you use it. Upgrade Rapier, XR, Theatre, and Studio to their Core 9-compatible releases at the same time. Studio and Theatre also require Extras 10.
+
+### Replace context store reads with `.current`
+
+`useThrelte()` now exposes rune-backed context values. The same changes apply when you get these values directly from `useCamera()`, `useDOM()`, `useRenderer()`, or `useScheduler()`.
+
+| Value                                     | Threlte 8                                         | Threlte 9                                                                     |
+| ----------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------- |
+| Active camera                             | `$camera`                                         | `camera.current`                                                              |
+| Canvas dimensions                         | `$size.width`                                     | `size.current.width`                                                          |
+| Renderer settings                         | `$dpr`, `$colorSpace`, `$toneMapping`, `$shadows` | `dpr.current`, `colorSpace.current`, `toneMapping.current`, `shadows.current` |
+| Scheduler settings                        | `$renderMode`, `$autoRender`                      | `renderMode.current`, `autoRender.current`                                    |
+| Scene from `useThrelte()` or `useScene()` | `scene`                                           | `scene.current`                                                               |
+| Parent from `useParent()`                 | `$parent`                                         | `parent.current`                                                              |
+| Parent from `useParentObject3D()`         | `$parentObject3D`                                 | `parentObject3D.current`                                                      |
+
+Read `.current` inside a template, `$derived`, or `$effect` to react to changes. An assignment like `const activeCamera = camera.current` captures the camera at that moment.
+
+```ts
+const { camera, size, scene } = useThrelte()
+
+const width = $derived(size.current.width)
+
+useTask(() => {
+  updateScene(scene.current, camera.current)
+})
+```
+
+Replace `get(camera)` and `fromStore(camera).current` with `camera.current`. Writable context values still expose `.set(value)`. Replace calls to `.update(fn)` with a read followed by a write, such as `dpr.set(dpr.current * 2)`. If an integration requires a Svelte store, adapt the value with `toStore(() => camera.current)` from `svelte/store`.
+
+The camera context is typed as `PerspectiveCamera | OrthographicCamera`. If you pass a variable typed as Three.js `Camera` to `camera.set(...)`, narrow it to one of those types first.
+
+### Pass getters when creating contexts
+
+If you build a custom canvas, portal, or component that provides its own context, wrap the input in a getter.
+
+| Threlte 8                            | Threlte 9                                  |
+| ------------------------------------ | ------------------------------------------ |
+| `createThrelteContext(options)`      | `createThrelteContext(() => options)`      |
+| `createParentContext(parent)`        | `createParentContext(() => parent)`        |
+| `createParentObject3DContext(group)` | `createParentObject3DContext(() => group)` |
+| `createSceneContext(myScene)`        | `createSceneContext(() => myScene)`        |
+
+To replace a scene through its context, call `scene.set(nextScene)`. If a prop or local rune owns the scene, pass a getter and update that source. A custom Threlte context can also provide a scene through `createThrelteContext(() => ({ ...options, scene: myScene }))`.
+
+### Migrate task controls and render invalidation
+
+Replace `autoStart`, the returned `start()` and `stop()` methods, and the `started` store with a rune you own.
+
+```ts
+// Threlte 8
+const { start, stop, started } = useTask(update, { autoStart: false })
+```
+
+```ts
+// Threlte 9
+let running = $state(false)
+const { task } = useTask(update, { running: () => running })
+
+// Start in an event handler with running = true.
+// Stop with running = false.
+// Use running wherever you previously read $started.
+```
+
+If you previously called `advance()` to request a frame in manual mode, call `invalidate()`. If you use the low-level scheduler context and previously called `resetFrameInvalidation()`, assign `frameInvalidated.current = false`.
+
+### Replace `watch`
+
+Use `$effect` when the callback should react to the values it reads. Use `observe` when you want to specify which values trigger the callback. If the old `watch` callback returned cleanup, return it from the effect or observer as well.
+
+```ts
+// Threlte 8
+watch([camera, size], ([activeCamera, dimensions]) => {
+  updateProjection(activeCamera, dimensions)
+})
+```
+
+```ts
+// Threlte 9
+observe(
+  () => [camera.current, size.current] as const,
+  ([activeCamera, dimensions]) => {
+    updateProjection(activeCamera, dimensions)
+  }
+)
+```
+
+### Update GLTF animations
+
+`useGltfAnimations` now requires a GLTF getter. The optional animation root is also supplied as a getter. The hook returns `mixer` and `actions`. If you previously bound to the returned `gltf` store or wrote to the returned `root` store, keep that state in the component.
+
+When using `useGltf`, continue unwrapping its store with `$gltf` inside the getter.
+
+```ts
+const gltf = useGltf('/model.glb')
+const { actions } = useGltfAnimations<'Idle'>(() => $gltf)
+
+$effect(() => {
+  actions.current.Idle?.play()
+})
+```
+
+When using `<GLTF bind:gltf>`, bind to a local rune.
+
+```svelte
+<script lang="ts">
+  import { GLTF, useGltfAnimations, type ThrelteGltf } from '@threlte/extras'
+
+  let gltf = $state<ThrelteGltf>()
+  const { actions } = useGltfAnimations<'Idle'>(() => gltf)
+
+  $effect(() => {
+    actions.current.Idle?.play()
+  })
+</script>
+
+<GLTF
+  url="/model.glb"
+  bind:gltf
+/>
+```
+
+For a custom root, use `useGltfAnimations(() => gltf, () => root)`.
+
+### Update the remaining Extras hooks
+
+| API           | Migration                                                                                                                                                                                                                                                                          |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `useFBO`      | Pass options as a getter. Change `useFBO({ depth: true })` to `useFBO(() => ({ depth: true }))`.                                                                                                                                                                                   |
+| `useCursor`   | Pass the cursor as a getter and read `hovering.current`. Change `useCursor('grab', 'default', element)` to `useCursor(() => 'grab', element)` and set the fallback cursor in CSS. If you previously passed a cursor store, use a getter that reads it.                             |
+| `useProgress` | Read `.current` on each returned field (`active`, `item`, `loaded`, `total`, `errors`, `progress`, and `finishedOnce`). For example, change `$progress` to `progress.current`.                                                                                                     |
+| `useViewport` | Change `$viewport.width` to `viewport.current.width`.                                                                                                                                                                                                                              |
+| `useGamepad`  | Call `gamepad.button(name)` or `gamepad.stick(name)` in place of the named properties. For example, use `gamepad.button('leftTrigger')` and `gamepad.stick('leftStick')` on a standard gamepad, or `gamepad.button('trigger')` and `gamepad.stick('thumbstick')` on an XR gamepad. |
+
+### Read Suspense state with `.current`
+
+The `suspended` value returned by `useSuspense()` is now rune-backed. Replace `$suspended` with `suspended.current`, including in templates, effects, and task conditions. If you used `.subscribe()`, read `suspended.current` inside an effect.
+
+```ts
+// Threlte 8
+const { suspended } = useSuspense()
+useTask(update, { running: () => !$suspended })
+```
+
+```ts
+// Threlte 9
+const { suspended } = useSuspense()
+useTask(update, { running: () => !suspended.current })
+```
+
+Keep calling the function returned by `useSuspense()` to register a promise. Inside a `<Suspense>` snippet, `suspended` and `errors` are passed as a boolean and an array, so read those arguments directly. See the [`useSuspense` reference](/docs/reference/extras/use-suspense) for more examples.
+
+### Update component props
+
+- **`<Canvas>` color management.** Remove `colorManagementEnabled`. To disable color management, set `ColorManagement.enabled = false` from Three.js before creating colors. The setting applies to the Three.js instance. If you previously read `colorManagementEnabled` from the renderer context, read `ColorManagement.enabled` instead.
+- **`<TransformControls>` camera controls.** Replace `autoPauseOrbitControls` and `autoPauseTrackballControls` with `autoPauseControls` if all camera controls should behave the same way. If you need different behavior per control, set `autoPauseControls={false}` and handle the gizmo’s drag state explicitly for the controls you want to pause.
+- **`<Portal>` attachment.** If older code still passes `object` to `<Portal>`, move custom attachment logic to `attach` on the portal’s children.
+
 ## Threlte 8
 
 Threlte 8 adds Svelte 5 support and removes Svelte 4 support.
@@ -810,7 +970,7 @@ const { actions } = useGltfAnimations(gltf)
 // and the actions store has been set, effectively replacing the
 // callback.
 $effect(() => {
-  actions.current.Greet?.play()
+  $actions.Greet?.play()
 })
 ```
 

@@ -69,7 +69,7 @@
 
   const { scene } = useThrelte()
   const xrOrigin = useXROrigin()
-  const attachTarget = $derived(xrOrigin.current ?? scene)
+  const attachTarget = $derived(xrOrigin.current ?? scene.current)
   const handedness: 'left' | 'right' = left ? 'left' : right ? 'right' : (hand ?? 'left')
   const controller = useController(handedness)
 

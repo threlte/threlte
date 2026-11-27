@@ -6,9 +6,7 @@ import {
   WebGLRenderer,
   type ColorSpace,
   type ShadowMapType,
-  type ToneMapping,
-  OrthographicCamera,
-  PerspectiveCamera
+  type ToneMapping
 } from 'three'
 import type { Task } from '../../frame-scheduling/index.js'
 import { useCamera } from './camera.svelte.js'
@@ -85,7 +83,7 @@ export const createRendererContext = <T extends Renderer>(
   options: () => CreateRendererContextOptions<T>
 ): RendererContext<T> => {
   const { camera, manual } = useCamera()
-  const scene = useScene()
+  const { scene } = useScene()
   const { invalidate, mainStage, renderStage, autoRender, scheduler, frameInvalidated } =
     useScheduler()
   const { canvas, size, shouldUpdateSize } = useDOM()
@@ -113,11 +111,7 @@ export const createRendererContext = <T extends Renderer>(
     renderer.setSize(size.current.width, size.current.height)
 
     if (!manual.current) {
-      updateCamera(
-        camera.current as PerspectiveCamera | OrthographicCamera,
-        size.current.width,
-        size.current.height
-      )
+      updateCamera(camera.current, size.current.width, size.current.height)
     }
 
     invalidate()
@@ -125,7 +119,7 @@ export const createRendererContext = <T extends Renderer>(
 
   const autoRenderTask = renderStage.createTask(Symbol('threlte-auto-render-task'), () => {
     if (!renderer.xr.isPresenting && !isRenderableSize(size.current)) return
-    renderer.render(scene, camera.current)
+    renderer.render(scene.current, camera.current)
   })
 
   const optsColorSpace = $derived(opts.colorSpace)

@@ -1,8 +1,7 @@
 <script lang="ts">
   import { T, useParentObject3D, useThrelte } from '@threlte/core'
-  import { untrack } from 'svelte'
   import { Group } from 'three'
-  import { createSuspenseContext } from './context.js'
+  import { createSuspenseContext } from './context.svelte.js'
   import type { SuspenseProps } from './types.js'
 
   let {
@@ -15,16 +14,15 @@
     children
   }: SuspenseProps = $props()
 
-  const { suspended, errors, setFinal } = createSuspenseContext({ final: untrack(() => final) })
-  $effect(() => setFinal(final))
+  const { suspended, errors } = createSuspenseContext(() => final)
   $effect(() => {
-    if (!$suspended) onload?.()
+    if (!suspended.current) onload?.()
   })
   $effect(() => {
-    if ($suspended) onsuspend?.()
+    if (suspended.current) onsuspend?.()
   })
   $effect(() => {
-    if ($errors.length > 0) onerror?.($errors)
+    if (errors.current.length > 0) onerror?.(errors.current)
   })
 
   const { invalidate } = useThrelte()
@@ -37,7 +35,7 @@
     if (!parent.current) return
 
     // if the component is suspended or has errors, we remove ourselves from the parent
-    if ($suspended || $errors.length) {
+    if (suspended.current || errors.current.length) {
       parent.current.remove(group)
       invalidate()
       return
@@ -58,11 +56,11 @@
   is={group}
   attach={false}
 >
-  {@render children?.({ suspended: $suspended, errors: $errors })}
+  {@render children?.({ suspended: suspended.current, errors: errors.current })}
 </T>
 
-{#if $errors.length}
-  {@render error?.({ errors: $errors })}
-{:else if $suspended}
+{#if errors.current.length}
+  {@render error?.({ errors: errors.current })}
+{:else if suspended.current}
   {@render fallback?.()}
 {/if}

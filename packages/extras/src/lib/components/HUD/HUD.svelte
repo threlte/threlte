@@ -13,7 +13,7 @@
     ...rest
   }: HUDProps = $props()
 
-  const scene = createSceneContext()
+  const { scene } = createSceneContext()
   const { camera } = createCameraContext()
 
   const key = Symbol('threlte-hud-render-stage')
@@ -30,7 +30,7 @@
       renderer.toneMapping = hudToneMapping ?? toneMapping.current
 
       renderer.clearDepth()
-      renderer.render(scene, camera.current)
+      renderer.render(scene.current, camera.current)
 
       renderer.autoClear = autoClear
       renderer.toneMapping = toneMapping.current
@@ -41,10 +41,10 @@
 </script>
 
 <T
-  is={scene}
+  is={scene.current}
   bind:ref
   attach={false}
   {...rest}
 >
-  {@render children?.({ ref: scene })}
+  {@render children?.({ ref: scene.current })}
 </T>

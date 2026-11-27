@@ -24,7 +24,7 @@
     objectSelectionScope
   )
 
-  let selectionBox = new SelectionBox(camera.current, scene)
+  let selectionBox = new SelectionBox(camera.current, scene.current)
   let selectionHelper = new SelectionHelper(renderer, 'selectBox')
 
   const studioObjectsRegistry = useStudioObjectsRegistry()

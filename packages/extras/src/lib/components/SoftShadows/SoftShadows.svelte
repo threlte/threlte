@@ -142,7 +142,7 @@
   }
 
   const recompile = () => {
-    scene.traverse((object) => {
+    scene.current.traverse((object) => {
       const material = (object as Mesh).material
 
       if (Array.isArray(material)) {

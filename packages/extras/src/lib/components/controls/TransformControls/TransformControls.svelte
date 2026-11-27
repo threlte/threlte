@@ -128,9 +128,10 @@
   {...transformProps}
   attach={({ ref }) => {
     const helper = ref.getHelper()
-    scene.add(helper)
+    const target = scene.current
+    target.add(helper)
     return () => {
-      scene.remove(helper)
+      target.remove(helper)
     }
   }}
   dispose={false}

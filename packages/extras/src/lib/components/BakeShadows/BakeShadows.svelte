@@ -24,7 +24,7 @@
   }
 
   $effect(() => {
-    if ($suspended) {
+    if (suspended.current) {
       return
     }
 
@@ -38,7 +38,7 @@
       restore.push(freeze(shadowMap as UpdatableShadow))
     }
 
-    scene.traverse((object) => {
+    scene.current.traverse((object) => {
       const { shadow } = object as { shadow?: UpdatableShadow }
 
       if (shadow !== undefined) {
