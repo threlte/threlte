@@ -1,0 +1,104 @@
+---
+category: Getting Started
+title: Testing
+order: 1
+---
+
+Use `@threlte/test` to render a Threlte component in Vitest, inspect its Three.js scene, and step through frames. The test renderer provides the Threlte context, so pass the component you would normally place inside `<Canvas>`.
+
+## Set up Vitest
+
+For Threlte 9, use `@threlte/test` v3 with Core 9, Extras 10, and Svelte 5. To run tests in Chromium, install Vitest and its Playwright provider as development dependencies.
+
+```sh
+npm install -D @threlte/test@^3 vitest @vitest/browser-playwright playwright
+npx playwright install chromium
+```
+
+Add `threlteTesting()` alongside your existing Svelte plugin in your Vite or Vitest config. This example uses the SvelteKit plugin. For a plain Svelte app, use `svelte()` from `@sveltejs/vite-plugin-svelte` instead of `sveltekit()`.
+
+```ts title="vite.config.ts"
+import { playwright } from '@vitest/browser-playwright'
+import { sveltekit } from '@sveltejs/kit/vite'
+import { threlteTesting } from '@threlte/test/vite'
+import { defineConfig } from 'vitest/config'
+
+export default defineConfig({
+  plugins: [sveltekit(), threlteTesting()],
+  test: {
+    browser: {
+      enabled: true,
+      provider: playwright(),
+      instances: [{ browser: 'chromium' }]
+    }
+  }
+})
+```
+
+Run the tests with `npx vitest run`. For tests that only inspect the scene graph or exercise component logic, you can also use a DOM environment such as `happy-dom`. Use browser mode when you want to exercise real pointer input or WebGL.
+
+## Test a scene component
+
+Give the object a name so the test can find it in the scene graph.
+
+```svelte title="Box.svelte"
+<script lang="ts">
+  import { T } from '@threlte/core'
+
+  let { x = 0 }: { x?: number } = $props()
+</script>
+
+<T.Mesh
+  name="box"
+  position.x={x}
+>
+  <T.BoxGeometry />
+  <T.MeshStandardMaterial />
+</T.Mesh>
+```
+
+```ts title="Box.test.ts"
+import { render } from '@threlte/test'
+import { expect, test } from 'vitest'
+import Box from './Box.svelte'
+
+test('moves the box when x changes', async () => {
+  const { scene, rerender } = render(Box, { x: 1 })
+  const box = scene.getObjectByName('box')
+
+  expect(box?.position.x).toBe(1)
+
+  await rerender({ x: 2 })
+
+  expect(box?.position.x).toBe(2)
+})
+```
+
+`render()` returns a Three.js `scene`. To read the active camera, use `camera.current` on the result.
+
+## Advance the scheduler
+
+Call `advance()` to run tasks registered with `useTask`. Pass `delta` in milliseconds and `count` to run multiple frames. The returned `frameInvalidated` indicates whether the scheduler requested a render on the last frame.
+
+```ts
+const { advance } = render(Box)
+const { frameInvalidated } = advance({ count: 3, delta: 16 })
+```
+
+`render()` runs one initial frame with a delta of zero. To change that first delta, pass a third argument, for example `render(Box, {}, { delta: 16 })`.
+
+## Test pointer interactions
+
+Use `fireEvent(object, 'click', payload)` to call a Threlte interactivity handler directly. Supply a payload if the handler reads event properties.
+
+In browser mode, use `toCanvasPosition(object)` with Vitest’s `userEvent` to send pointer input through the canvas. For a component with a visible mesh named `box` and a click handler, use:
+
+```ts
+import { userEvent } from 'vitest/browser'
+
+const { container, toCanvasPosition } = render(InteractiveBox)
+
+await userEvent.click(container, {
+  position: toCanvasPosition('box')
+})
+```
