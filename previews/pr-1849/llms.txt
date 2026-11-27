@@ -9,6 +9,7 @@ These docs describe Threlte 8, the current stable major version. Threlte 7 docs 
 ### Getting Started
 
 - [Introduction](https://threlte.xyz/previews/pr-1849/docs/learn/getting-started/introduction)
+- [Testing](https://threlte.xyz/previews/pr-1849/docs/learn/getting-started/testing)
 - [Installation](https://threlte.xyz/previews/pr-1849/docs/learn/getting-started/installation)
 - [Your First Scene](https://threlte.xyz/previews/pr-1849/docs/learn/getting-started/your-first-scene)
 
