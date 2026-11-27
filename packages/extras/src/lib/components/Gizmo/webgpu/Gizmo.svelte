@@ -1,13 +1,7 @@
 <script lang="ts">
   import { useTask, useThrelte, useParent, useScheduler } from '@threlte/core/webgpu'
   import { untrack } from 'svelte'
-  import {
-    CanvasTarget,
-    Color,
-    NoToneMapping,
-    Vector4,
-    type Event
-  } from 'three/webgpu'
+  import { CanvasTarget, Color, NoToneMapping, Vector4, type Event } from 'three/webgpu'
   import type { GizmoProps, Controls } from '../types.js'
   import { ViewportGizmo } from '../viewportGizmo/index.js'
   import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'

@@ -36,9 +36,7 @@
 
   const suspend = useSuspense()
   const loader = useLoader(SVGLoader)
-  const svg = $derived(
-    loader.load(src.startsWith('<svg') ? `data:image/svg+xml;utf8,${src}` : src)
-  )
+  const svg = $derived(loader.load(src.startsWith('<svg') ? `data:image/svg+xml;utf8,${src}` : src))
 
   $effect(() => {
     suspend(svg)
