@@ -3,6 +3,7 @@
 
   interface Props {
     autoRotate: boolean
+    autoRotateSpeed: number
     enableDamping: boolean
     rotateSpeed: number
     zoomToCursor: boolean
@@ -14,6 +15,7 @@
 
   let {
     autoRotate = $bindable(),
+    autoRotateSpeed = $bindable(),
     enableDamping = $bindable(),
     rotateSpeed = $bindable(),
     zoomToCursor = $bindable(),
@@ -32,6 +34,13 @@
   <Checkbox
     bind:value={autoRotate}
     label="autoRotate"
+  />
+  <Slider
+    label="autoRotateSpeed"
+    bind:value={autoRotateSpeed}
+    min={0}
+    max={5}
+    step={0.1}
   />
   <Checkbox
     bind:value={enableDamping}
