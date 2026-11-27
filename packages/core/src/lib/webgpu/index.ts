@@ -55,7 +55,6 @@ export {
   type CurrentWritable,
   type CurrentReadable,
   currentWritable,
-  toCurrentReadable,
   resolvePropertyPath
 } from '../index.js'
 

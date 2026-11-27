@@ -61,7 +61,6 @@ export { revision } from './utilities/revision.js'
 export {
   type CurrentWritable,
   type CurrentReadable,
-  currentWritable,
-  toCurrentReadable
+  currentWritable
 } from './utilities/currentWritable.js'
 export { resolvePropertyPath } from './utilities/resolvePropertyPath.js'

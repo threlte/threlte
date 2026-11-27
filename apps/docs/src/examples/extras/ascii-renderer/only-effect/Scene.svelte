@@ -17,7 +17,7 @@
 
   // render once
   $effect(() => {
-    asciiEffect.render(scene, camera.current)
+    asciiEffect.render(scene.current, camera.current)
   })
 </script>
 

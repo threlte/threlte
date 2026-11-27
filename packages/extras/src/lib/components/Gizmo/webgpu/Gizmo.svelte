@@ -6,8 +6,6 @@
     Color,
     NoToneMapping,
     Vector4,
-    type OrthographicCamera,
-    type PerspectiveCamera,
     type Event
   } from 'three/webgpu'
   import type { GizmoProps, Controls } from '../types.js'
@@ -45,7 +43,7 @@
   const { autoInvalidations } = useScheduler()
 
   const gizmo = new ViewportGizmo(
-    camera.current as PerspectiveCamera | OrthographicCamera,
+    camera.current,
     renderer,
     untrack(() => ({
       container: dom,
@@ -231,7 +229,7 @@
   })
 
   $effect(() => {
-    gizmo.camera = camera.current as PerspectiveCamera | OrthographicCamera
+    gizmo.camera = camera.current
   })
 
   $effect(() => {

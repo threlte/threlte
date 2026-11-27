@@ -33,7 +33,7 @@
   let angleZ = $state(0)
 
   const composer = new EffectComposer(renderer)
-  const renderPass = new RenderPass(scene, camera.current)
+  const renderPass = new RenderPass(scene.current, camera.current)
   const bloomPass = new UnrealBloomPass(
     new Vector2(size.current.width, size.current.height),
     0.275,
@@ -83,9 +83,9 @@
 
       if (spaceShipRef) {
         spaceShipRef.visible = false
-        scene.background = null
-        envMapRT = pmrem.fromScene(scene, 0, 0.1, 1000)
-        scene.background = new Color('#598889').multiplyScalar(0.05)
+        scene.current.background = null
+        envMapRT = pmrem.fromScene(scene.current, 0, 0.1, 1000)
+        scene.current.background = new Color('#598889').multiplyScalar(0.05)
         spaceShipRef.visible = true
 
         spaceShipRef.traverse((child) => {

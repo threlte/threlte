@@ -1,0 +1,86 @@
+{
+  "name": "@threlte/test",
+  "license": "MIT",
+  "description": "Threlte component testing utilities.",
+  "version": "2.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build && pnpm run package",
+    "preview": "vite preview",
+    "package": "svelte-kit sync && svelte-package && node ./scripts/cleanupPackage.js && publint",
+    "prepare": "svelte-kit sync",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write . && eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "cleanup": "rimraf node_modules .svelte-kit dist"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/lib/index.js"
+    },
+    "./vite": {
+      "import": "./src/lib/plugin.js"
+    }
+  },
+  "publishOverrides": {
+    "files": [
+      "dist"
+    ],
+    "exports": {
+      ".": {
+        "types": "./dist/index.d.ts",
+        "import": "./dist/index.js"
+      },
+      "./vite": {
+        "types": "./dist/plugin.d.ts",
+        "import": "./dist/plugin.js"
+      }
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/threlte/threlte",
+    "directory": "packages/test"
+  },
+  "peerDependencies": {
+    "@threlte/core": ">=9.0.0",
+    "@threlte/extras": ">=10.0.0",
+    "svelte": ">=5"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@sveltejs/adapter-auto": "catalog:",
+    "@sveltejs/adapter-static": "^3.0.10",
+    "@sveltejs/kit": "catalog:",
+    "@sveltejs/package": "catalog:",
+    "@sveltejs/vite-plugin-svelte": "catalog:",
+    "@testing-library/dom": "^10.4.1",
+    "@types/three": "catalog:",
+    "@vitest/browser": "^4.1.2",
+    "@vitest/browser-playwright": "^4.1.2",
+    "@vitest/ui": "4.1.2",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-perfectionist": "^5.8.0",
+    "eslint-plugin-svelte": "catalog:",
+    "globals": "catalog:",
+    "happy-dom": "^20.8.9",
+    "playwright": "catalog:",
+    "prettier": "catalog:",
+    "prettier-plugin-svelte": "catalog:",
+    "publint": "catalog:",
+    "rimraf": "catalog:",
+    "svelte": "catalog:",
+    "svelte-check": "catalog:",
+    "three": "catalog:",
+    "tslib": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}

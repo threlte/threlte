@@ -2,14 +2,7 @@
 import { addCleanupTask } from './cleanup.js'
 
 /** Allowed options for the Svelte 5 `mount` call. */
-const ALLOWED_MOUNT_OPTIONS = [
-  'target',
-  'anchor',
-  'props',
-  'events',
-  'context',
-  'intro',
-]
+const ALLOWED_MOUNT_OPTIONS = ['target', 'anchor', 'props', 'events', 'context', 'intro']
 
 class UnknownSvelteOptionsError extends TypeError {
   /**
@@ -37,9 +30,7 @@ class UnknownSvelteOptionsError extends TypeError {
  * @param {*} options - props or mount options
  */
 const validateOptions = (options) => {
-  const isProps = !Object.keys(options).some((option) =>
-    ALLOWED_MOUNT_OPTIONS.includes(option)
-  )
+  const isProps = !Object.keys(options).some((option) => ALLOWED_MOUNT_OPTIONS.includes(option))
 
   if (isProps) {
     return { props: options }
@@ -69,15 +60,13 @@ const setup = (componentOptions = {}, setupOptions = {}) => {
   const mountOptions = validateOptions(componentOptions)
 
   /** @type {HTMLElement} */
-  const baseElement =
-    setupOptions.baseElement ?? mountOptions.target ?? document.body
+  const baseElement = setupOptions.baseElement ?? mountOptions.target ?? document.body
 
   const defaultTarget = document.createElement('div')
   defaultTarget.style = 'width:200px;height:200px'
 
   /** @type {HTMLElement} */
-  const container =
-    mountOptions.target ?? baseElement.appendChild(defaultTarget)
+  const container = mountOptions.target ?? baseElement.appendChild(defaultTarget)
 
   /** @type {HTMLCanvasElement} */
   const canvas = setupOptions.canvas ?? document.createElement('canvas')
@@ -93,7 +82,7 @@ const setup = (componentOptions = {}, setupOptions = {}) => {
     baseElement,
     container,
     canvas,
-    mountOptions: { ...mountOptions, target: container },
+    mountOptions: { ...mountOptions, target: container }
   }
 }
 

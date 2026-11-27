@@ -45,7 +45,7 @@
     cam.updateProjectionMatrix()
     cam.matrixWorldNeedsUpdate = true
     renderer.setRenderTarget(renderTarget)
-    renderer.render(scene, cam)
+    renderer.render(scene.current, cam)
 
     renderer.setRenderTarget(null)
     cam.fov = baseFov

@@ -4,8 +4,6 @@
   import {
     NoToneMapping,
     Vector4,
-    type OrthographicCamera,
-    type PerspectiveCamera,
     type Event
   } from 'three'
   import type { GizmoProps, Controls } from './types.js'
@@ -42,7 +40,7 @@
   } = useThrelte()
 
   const gizmo = new ViewportGizmo(
-    camera.current as PerspectiveCamera | OrthographicCamera,
+    camera.current,
     renderer,
     untrack(() => ({
       container: dom,
@@ -127,7 +125,7 @@
   )
 
   $effect(() => {
-    gizmo.camera = camera.current as PerspectiveCamera | OrthographicCamera
+    gizmo.camera = camera.current
   })
 
   $effect(() => {

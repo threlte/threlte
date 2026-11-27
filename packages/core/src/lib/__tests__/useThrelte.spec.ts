@@ -53,11 +53,13 @@ describe('useThrelte', () => {
     expect(context.camera.current).toBe(camera)
   })
 
-  it('allows setting a custom scene', () => {
+  it('allows setting a custom scene', async () => {
     const { context } = render(T.Group)
     const scene = new Scene()
-    context.scene = scene
-    expect(context.scene).toBe(scene)
+    context.scene.set(scene)
+    await tick()
+    expect(context.scene.current).toBe(scene)
+    expect(scene.getObjectByProperty('type', 'Group')).toBeDefined()
   })
 
   it('allows switching renderMode', () => {
@@ -81,7 +83,7 @@ describe('useThrelte', () => {
 
   it('invalidates the frame for on-demand rendering', () => {
     const { context } = render(T.Group)
-    expect(context.shouldRender()).toBe(true)
+    expect(context.shouldRender()).toBe(false)
 
     context.invalidate()
     expect(context.shouldRender()).toBe(true)
@@ -90,9 +92,9 @@ describe('useThrelte', () => {
   it('shouldRender reflects the current renderMode', () => {
     const { context } = render(T.Group)
 
-    // on-demand: shouldRender is true when frame is invalidated (initial state)
+    // on-demand: shouldRender is false until the frame is invalidated
     expect(context.renderMode.current).toBe('on-demand')
-    expect(context.shouldRender()).toBe(true)
+    expect(context.shouldRender()).toBe(false)
 
     // always: shouldRender is always true
     context.renderMode.set('always')

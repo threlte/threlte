@@ -21,7 +21,7 @@ import { setup } from './setup.js'
  *   container: HTMLElement
  *   baseElement: HTMLElement
  *   canvas: HTMLCanvasElement
- *   camera: import('@threlte/core').CurrentWritable<import('three').Camera>
+ *   camera: import('@threlte/core').ThrelteContext<import('three').WebGLRenderer>['camera']
  *   scene: import('three').Scene
  *   context: import('@threlte/core').ThrelteContext<import('three').WebGLRenderer>
  *   component: import('./component-types.js').Exports<C>
@@ -43,8 +43,7 @@ import { setup } from './setup.js'
  * @returns {{ x: number; y: number }}
  */
 function getObject3dCanvasPosition(input, scene, el, camera) {
-  const object3D =
-    typeof input === 'string' ? scene.getObjectByName(input) : input
+  const object3D = typeof input === 'string' ? scene.getObjectByName(input) : input
 
   if (object3D === undefined) {
     throw new Error(`${input} not found in scene.`)
@@ -61,7 +60,7 @@ function getObject3dCanvasPosition(input, scene, el, camera) {
 
   const position = {
     x: viewportX - rect.left,
-    y: viewportY - rect.top,
+    y: viewportY - rect.top
   }
 
   return position
@@ -84,10 +83,7 @@ function getObject3dCanvasPosition(input, scene, el, camera) {
  * @returns {RenderResult<C, Q>} The rendered component and bound testing functions.
  */
 const render = (Component, options = {}, renderOptions = {}) => {
-  const { baseElement, container, canvas, mountOptions } = setup(
-    options,
-    renderOptions
-  )
+  const { baseElement, container, canvas, mountOptions } = setup(options, renderOptions)
 
   const { component, unmount, rerender } = mount(Container, {
     ...mountOptions,
@@ -96,8 +92,8 @@ const render = (Component, options = {}, renderOptions = {}) => {
       container,
       component: 'default' in Component ? Component.default : Component,
       contextOptions: renderOptions.context,
-      ...mountOptions.props,
-    },
+      ...mountOptions.props
+    }
   })
 
   component.advance({ delta: renderOptions.delta ?? 0 })
@@ -113,12 +109,12 @@ const render = (Component, options = {}, renderOptions = {}) => {
     toCanvasPosition: (input) =>
       getObject3dCanvasPosition(
         input,
-        component.context.scene,
+        component.context.scene.current,
         component.context.dom,
         component.context.camera.current
       ),
     context: component.context,
-    scene: component.context.scene,
+    scene: component.context.scene.current,
     advance: component.advance,
 
     fireEvent: async (object3D, event, payload) => {
@@ -138,7 +134,7 @@ const render = (Component, options = {}, renderOptions = {}) => {
       await Svelte.tick()
     },
 
-    unmount,
+    unmount
   }
 }
 

@@ -20,8 +20,8 @@
   const { scene } = useThrelte()
   const { isPresenting } = useXR()
 
-  scene.environmentIntensity = 2
-  scene.background = new Color('#0e1625')
+  scene.current.environmentIntensity = 2
+  scene.current.background = new Color('#0e1625')
 
   teleportControls('left')
   teleportControls('right')

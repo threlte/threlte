@@ -19,9 +19,9 @@ export default defineConfig(
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.node,
-      },
-    },
+        ...globals.node
+      }
+    }
   },
   {
     name: 'ignores',
@@ -34,16 +34,11 @@ export default defineConfig(
       'package',
       '.env',
       '.env.*',
-      'pnpm-lock.yaml',
-    ],
+      'pnpm-lock.yaml'
+    ]
   },
   {
-    files: [
-      '**/*.svelte',
-      '**/*.svelte.js',
-      '**/*.svelte.ts',
-      '../*.svelte.config.ts',
-    ],
+    files: ['**/*.svelte', '**/*.svelte.js', '**/*.svelte.ts', '../*.svelte.config.ts'],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -60,9 +55,9 @@ export default defineConfig(
         // By doing so, some rules in eslint-plugin-svelte will automatically read the configuration and adjust their behavior accordingly.
         // While certain Svelte settings may be statically loaded from svelte.config.js even if you don’t specify it,
         // explicitly specifying it ensures better compatibility and functionality.
-        svelteConfig,
-      },
-    },
+        svelteConfig
+      }
+    }
   },
   {
     name: 'perfectionist',
@@ -90,9 +85,9 @@ export default defineConfig(
       'perfectionist/sort-imports': [
         'error',
         {
-          internalPattern: [String.raw`^\$`],
-        },
-      ],
-    },
+          internalPattern: [String.raw`^\$`]
+        }
+      ]
+    }
   }
 )

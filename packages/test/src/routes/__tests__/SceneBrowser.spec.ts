@@ -8,14 +8,14 @@ describe('SceneBrowser', () => {
   it('calls the onclick callback when the box mesh is clicked', async () => {
     const onclick = vi.fn()
     const { container, rerender, toCanvasPosition } = render(Subject, {
-      props: { onclick },
+      props: { onclick }
     })
 
     const rerenderAndClickBox = async (x: number) => {
       await rerender({ x })
 
       await userEvent.click(container, {
-        position: toCanvasPosition('box-1'),
+        position: toCanvasPosition('box-1')
       })
     }
 

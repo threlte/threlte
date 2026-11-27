@@ -14,7 +14,7 @@
 
   useTask(() => {}, {
     running: () => autoStart,
-    autoInvalidate: untrack(() => autoInvalidate),
+    autoInvalidate: untrack(() => autoInvalidate)
   })
 
   $effect.pre(() => {

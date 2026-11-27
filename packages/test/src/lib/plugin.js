@@ -13,7 +13,7 @@ import url from 'node:url'
 export const threlteTesting = ({
   resolveBrowser = true,
   autoCleanup = true,
-  noExternal = true,
+  noExternal = true
 } = {}) => {
   return {
     name: 'vite-plugin-threlte-test-renderer',
@@ -34,7 +34,7 @@ export const threlteTesting = ({
       if (noExternal) {
         addNoExternal(config)
       }
-    },
+    }
   }
 }
 
@@ -80,9 +80,7 @@ const addAutoCleanup = (config) => {
     setupFiles = [setupFiles]
   }
 
-  setupFiles.push(
-    path.join(path.dirname(url.fileURLToPath(import.meta.url)), './vitest.js')
-  )
+  setupFiles.push(path.join(path.dirname(url.fileURLToPath(import.meta.url)), './vitest.js'))
 
   test.setupFiles = setupFiles
   config.test = test

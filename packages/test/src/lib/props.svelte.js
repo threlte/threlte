@@ -25,7 +25,7 @@ const createProps = (initialProps = {}) => {
     },
     ownKeys() {
       return Reflect.ownKeys(currentProps)
-    },
+    }
   })
 
   /** @param {Partial<Props>} nextProps */

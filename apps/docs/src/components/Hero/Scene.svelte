@@ -66,7 +66,7 @@
                 {#if $debug}
                   <T.CameraHelper
                     args={[camera]}
-                    attach={scene}
+                    attach={scene.current}
                   />
                 {/if}
               {/snippet}

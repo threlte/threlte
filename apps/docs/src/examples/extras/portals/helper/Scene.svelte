@@ -23,7 +23,7 @@
 >
   {#snippet children({ ref })}
     <T.DirectionalLightHelper
-      attach={scene}
+      attach={scene.current}
       args={[ref]}
     >
       {#snippet children({ ref: helperA })}
@@ -44,7 +44,7 @@
 >
   {#snippet children({ ref })}
     <T.DirectionalLightHelper
-      attach={scene}
+      attach={scene.current}
       args={[ref]}
     >
       {#snippet children({ ref: helperB })}

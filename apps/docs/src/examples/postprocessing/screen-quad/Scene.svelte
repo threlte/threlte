@@ -78,7 +78,7 @@
     () => {
       const last = renderer.getRenderTarget()
       renderer.setRenderTarget(target)
-      renderer.render(scene, camera.current)
+      renderer.render(scene.current, camera.current)
       renderer.setRenderTarget(last)
       quad.render(renderer)
     },

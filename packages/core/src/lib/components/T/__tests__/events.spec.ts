@@ -35,6 +35,7 @@ describe('<T> events', () => {
     const reference = new PerspectiveCamera()
     reference.position.set(5, 5, 5)
     reference.lookAt(0, 0, 0)
+    reference.updateMatrix()
 
     const oncreate = (ref: PerspectiveCamera) => ref.lookAt(0, 0, 0)
     const { scene } = render(T.PerspectiveCamera, { props: { position: [5, 5, 5], oncreate } })

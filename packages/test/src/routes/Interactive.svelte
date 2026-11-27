@@ -16,7 +16,11 @@
 </script>
 
 {#each positions as position (position)}
-  <T.Mesh onclick={() => spawnCube()} scale={0.2} {position}>
+  <T.Mesh
+    onclick={() => spawnCube()}
+    scale={0.2}
+    {position}
+  >
     <T.BoxGeometry />
   </T.Mesh>
 {/each}

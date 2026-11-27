@@ -23,7 +23,7 @@
     "@sveltejs/package": "catalog:",
     "@sveltejs/vite-plugin-svelte": "catalog:",
     "@threlte/core": "workspace:*",
-    "@threlte/test": "catalog:",
+    "@threlte/test": "workspace:*",
     "@types/node": "catalog:",
     "@types/three": "catalog:",
     "@vitest/browser-playwright": "^4.1.2",

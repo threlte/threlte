@@ -95,7 +95,7 @@
   })
 
   $effect(() => {
-    composer.addPass(new RenderPass(scene, camera.current))
+    composer.addPass(new RenderPass(scene.current, camera.current))
     composer.addPass(new EffectPass(camera.current, fxaaEffect))
     composer.addPass(
       new EffectPass(camera.current, noiseEffect, bcEffect, bloomEffect, toneMappingEffect)

@@ -3,7 +3,7 @@
   import { injectPlugin, isInstanceOf, T, useThrelte } from '../lib/index.js'
 
   const { scene } = useThrelte()
-  scene.background = new Color('black')
+  scene.current.background = new Color('black')
 
   let posY = $state(0)
   let makeDefault = $state(false)

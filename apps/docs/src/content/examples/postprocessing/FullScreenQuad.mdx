@@ -40,12 +40,12 @@ renderer.setRenderTarget(target)
 3. render the main scene using the main camera
 
 ```ts
-const { camera } = useThrelte()
+const { camera, renderer, scene } = useThrelte()
 
-renderer.render(scene, camera.current)
+renderer.render(scene.current, camera.current)
 ```
 
-Threlte's camera is a [currentWritable](/reference/core/utilities#currentwritable) so we can use its **.current** property to get the instance. Its important to use the **current** property to avoid having to read from the store every frame.
+Threlte's camera and scene are reactive values, so we use their **.current** property to get the instances.
 
 4. restore the last render target
 

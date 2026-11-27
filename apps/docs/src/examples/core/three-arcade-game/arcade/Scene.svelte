@@ -102,7 +102,7 @@
   }
 
   $effect(() => {
-    scene.background = new Color(backgroundColor.current)
+    scene.current.background = new Color(backgroundColor.current)
   })
 </script>
 

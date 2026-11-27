@@ -8,8 +8,8 @@ describe('<Invalidate>', () => {
     const { advance } = render(Subject, {
       props: {
         autoStart: false,
-        autoInvalidate: false,
-      },
+        autoInvalidate: false
+      }
     })
 
     const { frameInvalidated } = advance()
@@ -20,8 +20,8 @@ describe('<Invalidate>', () => {
     const { advance } = render(Subject, {
       props: {
         autoStart: true,
-        autoInvalidate: true,
-      },
+        autoInvalidate: true
+      }
     })
 
     const { frameInvalidated } = advance()
@@ -32,8 +32,8 @@ describe('<Invalidate>', () => {
     const { advance } = render(Subject, {
       props: {
         autoInvalidate: false,
-        autoStart: true,
-      },
+        autoStart: true
+      }
     })
 
     const { frameInvalidated } = advance()
@@ -44,8 +44,8 @@ describe('<Invalidate>', () => {
     const { advance, rerender } = render(Subject, {
       props: {
         autoInvalidate: false,
-        autoStart: false,
-      },
+        autoStart: false
+      }
     })
 
     const first = advance()

@@ -10,8 +10,6 @@
 
   const { autoRenderTask, camera, scene, size } = useThrelte()
 
-  // note that the renderer won't be reactive if `element` updates
-  // you'd have to do `$derived(new CSS2DRenderer({element}))` if you'd want that to be the case
   const cssRenderer = $derived(new CSS2DRenderer({ element }))
 
   $effect(() => {
@@ -24,10 +22,11 @@
   // https://threejs.org/docs/#api/en/core/Object3D.updateWorldMatrix
 
   $effect(() => {
-    const last = scene.matrixWorldAutoUpdate
-    scene.matrixWorldAutoUpdate = false
+    const currentScene = scene.current
+    const last = currentScene.matrixWorldAutoUpdate
+    currentScene.matrixWorldAutoUpdate = false
     return () => {
-      scene.matrixWorldAutoUpdate = last
+      currentScene.matrixWorldAutoUpdate = last
     }
   })
 
@@ -36,7 +35,7 @@
   // matrices are updated before the renderers run.
   useTask(
     () => {
-      scene.updateMatrixWorld()
+      scene.current.updateMatrixWorld()
     },
     { before: autoRenderTask }
   )
@@ -46,7 +45,7 @@
   useTask(
     () => {
       // Update the DOM
-      cssRenderer.render(scene, camera.current)
+      cssRenderer.render(scene.current, camera.current)
     },
     {
       after: autoRenderTask,

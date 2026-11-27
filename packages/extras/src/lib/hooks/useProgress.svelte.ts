@@ -105,13 +105,13 @@ const states = {
 }
 
 export const useProgress = (): {
-  active: { current: boolean }
-  item: { current: string | undefined }
-  loaded: { current: number }
-  total: { current: number }
-  errors: { current: string[] }
-  progress: { current: number }
-  finishedOnce: { current: boolean }
+  active: { readonly current: boolean }
+  item: { readonly current: string | undefined }
+  loaded: { readonly current: number }
+  total: { readonly current: number }
+  errors: { readonly current: string[] }
+  progress: { readonly current: number }
+  finishedOnce: { readonly current: boolean }
 } => {
   return states
 }

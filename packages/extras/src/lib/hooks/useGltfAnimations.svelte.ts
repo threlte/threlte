@@ -81,6 +81,8 @@ export function useGltfAnimations<
         action.stop()
         mixer.uncacheClip(action.getClip())
       }
+
+      actions = {} as Actions
     }
   })
 

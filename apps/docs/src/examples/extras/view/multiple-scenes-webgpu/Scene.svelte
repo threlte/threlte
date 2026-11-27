@@ -8,7 +8,7 @@
   const { scene } = useThrelte()
   let rotation = $state(0)
 
-  scene.background = new Color(0xe0e0e0)
+  scene.current.background = new Color(0xe0e0e0)
 
   useTask((delta) => {
     rotation += delta

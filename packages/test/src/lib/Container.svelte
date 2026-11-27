@@ -25,8 +25,7 @@
   } = $props()
 
   $effect.pre(() => {
-    canvas.style =
-      'display: block; position: relative; width: 100%; height: 100%;'
+    canvas.style = 'display: block; position: relative; width: 100%; height: 100%;'
     mockCanvas(canvas)
   })
 
@@ -36,7 +35,7 @@
     autoRender: true,
     ...contextOptions,
     canvas,
-    dom: container,
+    dom: container
   }))
   export const scheduler = useScheduler()
   scheduler.frameInvalidated.current = false
@@ -45,4 +44,7 @@
   export const interactivityContext = interactivity()
 </script>
 
-<Component bind:this={ref} {...rest} />
+<Component
+  bind:this={ref}
+  {...rest}
+/>

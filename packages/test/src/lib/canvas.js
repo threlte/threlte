@@ -241,7 +241,7 @@ const functions = [
   'vertexAttribI4uiv',
   'vertexAttribPointer',
   'viewport',
-  'makeXRCompatible',
+  'makeXRCompatible'
 ]
 
 const enums = {
@@ -693,7 +693,7 @@ const enums = {
   MAX_ELEMENT_INDEX: 36203,
   TEXTURE_IMMUTABLE_LEVELS: 33503,
   TIMEOUT_IGNORED: -1,
-  MAX_CLIENT_WAIT_TIMEOUT_WEBGL: 37447,
+  MAX_CLIENT_WAIT_TIMEOUT_WEBGL: 37447
 }
 
 const extensions = {
@@ -701,13 +701,13 @@ const extensions = {
   OES_texture_float: {},
   OES_texture_half_float: {},
   WEBGL_lose_context: {
-    loseContext: () => {},
+    loseContext: () => {}
   },
   OES_standard_derivatives: {},
   OES_vertex_array_object: {
     createVertexArrayOES: () => {},
     bindVertexArrayOES: () => {},
-    deleteVertexArrayOES: () => {},
+    deleteVertexArrayOES: () => {}
   },
   WEBGL_debug_renderer_info: null,
   WEBGL_debug_shaders: null,
@@ -728,7 +728,7 @@ const extensions = {
   EXT_color_buffer_half_float: null,
   WEBGL_color_buffer_float: null,
   EXT_sRGB: null,
-  WEBGL_compressed_texture_etc1: null,
+  WEBGL_compressed_texture_etc1: null
 }
 
 export class WebGL2RenderingContext {
@@ -752,7 +752,7 @@ export class WebGL2RenderingContext {
     return {
       rangeMin: 127,
       rangeMax: 127,
-      precision: 23,
+      precision: 23
     }
   }
 

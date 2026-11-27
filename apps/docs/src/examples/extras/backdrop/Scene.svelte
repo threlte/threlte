@@ -63,7 +63,7 @@
       <T.DirectionalLightHelper
         bind:ref={helper}
         args={[ref]}
-        attach={scene}
+        attach={scene.current}
       />
       <T.CameraHelper args={[ref.shadow.camera]} />
     {/if}

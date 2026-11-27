@@ -59,7 +59,7 @@ export const useCursor = (
 ): {
   onPointerEnter: () => void
   onPointerLeave: () => void
-  hovering: { current: boolean }
+  hovering: { readonly current: boolean }
 } => {
   let hovering = $state(false)
 

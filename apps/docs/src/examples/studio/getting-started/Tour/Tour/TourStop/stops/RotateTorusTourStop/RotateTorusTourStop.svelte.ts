@@ -10,7 +10,7 @@ export class RotateTorusTourStop extends TourStop {
 
   constructor() {
     const { scene } = useThrelte()
-    const torus = scene.getObjectByName('Torus')
+    const torus = scene.current.getObjectByName('Torus')
     if (!torus) throw new Error('Torus not found')
     if (!(torus instanceof Mesh)) throw new Error('Torus is not a Mesh')
     const mask = new MaskThreeObject(torus, 'circle', 0, 'mask', false, false)

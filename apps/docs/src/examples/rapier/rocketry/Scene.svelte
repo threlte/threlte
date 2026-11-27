@@ -17,7 +17,7 @@
 
   const { scene } = useThrelte()
 
-  scene.background = new Color('black')
+  scene.current.background = new Color('black')
 </script>
 
 <PortalTarget id="scene" />

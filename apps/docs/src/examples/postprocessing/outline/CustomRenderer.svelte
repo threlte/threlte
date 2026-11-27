@@ -20,7 +20,7 @@
 
   const composer = new EffectComposer(renderer)
 
-  const renderPass = new RenderPass(scene)
+  const renderPass = new RenderPass(scene.current)
   composer.addPass(renderPass)
 
   $effect(() => {
@@ -35,7 +35,7 @@
     blur: true
   }
 
-  const outlineEffect = new OutlineEffect(scene, undefined, outlineEffectOptions)
+  const outlineEffect = new OutlineEffect(scene.current, undefined, outlineEffectOptions)
   $effect(() => {
     outlineEffect.selection.add(mesh)
     return () => {
