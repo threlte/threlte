@@ -1,11 +1,12 @@
 <script lang="ts">
   import { Canvas } from '@threlte/core'
   import { Debug, World } from '@threlte/rapier'
-  import { Pane, Slider, Textarea } from 'svelte-tweakpane-ui'
+  import { Button, Pane, Slider, Textarea } from 'svelte-tweakpane-ui'
   import Scene from './Scene.svelte'
 
   let minFramerate = 5
   let framerate = $state(minFramerate)
+  let scene = $state<ReturnType<typeof Scene>>()
 </script>
 
 <Pane
@@ -21,6 +22,11 @@
     step={1}
   />
 
+  <Button
+    title="Reset box"
+    on:click={() => scene?.reset()}
+  />
+
   <Textarea
     disabled
     rows={1}
@@ -32,7 +38,7 @@
   <Canvas>
     <World {framerate}>
       <Debug />
-      <Scene />
+      <Scene bind:this={scene} />
     </World>
   </Canvas>
 </main>
