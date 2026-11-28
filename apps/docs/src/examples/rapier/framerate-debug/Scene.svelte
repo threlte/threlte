@@ -1,27 +1,25 @@
 <script lang="ts">
   import type { RigidBody as RapierRigidBody } from '@dimforge/rapier3d-compat'
   import { T } from '@threlte/core'
-  import { Attractor, AutoColliders, RigidBody } from '@threlte/rapier'
+  import { AutoColliders, RigidBody } from '@threlte/rapier'
 
   let rb = $state<RapierRigidBody>()
-</script>
 
-<svelte:window
-  onkeydown={(e) => {
-    if (e.key === 'p') {
-      if (!rb) return
-      const x = Math.random() * 3 - 1.5
-      const y = Math.random() * 3 - 1.5
-      const z = Math.random() * 3 - 1.5
-      rb.setNextKinematicTranslation({ x, y, z })
-    }
-  }}
-/>
+  export function reset() {
+    if (!rb) return
+
+    const zero = { x: 0, y: 0, z: 0 }
+    rb.setTranslation(zero, true)
+    rb.setRotation({ ...zero, w: 1 }, true)
+    rb.setLinvel(zero, true)
+    rb.setAngvel(zero, true)
+  }
+</script>
 
 <T.PerspectiveCamera
   makeDefault
-  position={[3, 3, 3]}
-  oncreate={(ref) => ref.lookAt(0, 0, 0.3)}
+  position={[4, 3.5, 4]}
+  oncreate={(ref) => ref.lookAt(0, -0.6, 0)}
 />
 
 <T.Group position={[0, 0, 0]}>
@@ -45,12 +43,15 @@
   </RigidBody>
 </T.Group>
 
-<Attractor
-  position={[0, 0, 0.3]}
-  strength={0.2}
-  range={2}
-  gravityType="linear"
-/>
+<AutoColliders shape="cuboid">
+  <T.Mesh
+    receiveShadow
+    position.y={-2}
+  >
+    <T.MeshStandardMaterial color="#64748b" />
+    <T.BoxGeometry args={[3, 0.2, 3]} />
+  </T.Mesh>
+</AutoColliders>
 
 <T.AmbientLight />
 <T.DirectionalLight
